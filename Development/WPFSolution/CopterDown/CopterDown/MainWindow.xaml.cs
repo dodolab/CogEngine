@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CopterDown.Core;
 
 namespace CopterDown
 {
@@ -20,10 +21,35 @@ namespace CopterDown
     /// </summary>
     public partial class MainWindow : Window
     {
+        private GameLoop loop;
+
         public MainWindow()
         {
             InitializeComponent();
-            new GameLoop(Dispatcher,MyCanvas,20, 20).Start();
+            this.KeyDown += MainWindow_KeyDown;
+            loop = new GameLoop(Dispatcher, MyCanvas, 20, 20);
+            loop.Start();
+        }
+
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Right)
+            {
+                // posleme 12tku, aby si to odcyhtil ten MovementBehavior
+                loop.root.SendMessage(new Message(MessageCat.MODEL,TraverseMode.NOTRAV,new float[]{20,0}){TypeId=12});
+            }
+            if (e.Key == Key.Left)
+            {
+                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { -20, 00 }) { TypeId = 12 });
+            }
+            if (e.Key == Key.Up)
+            {
+                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { 0, -20 }) { TypeId = 12 });
+            }
+            if (e.Key == Key.Down)
+            {
+                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { 0, 20 }) { TypeId = 12 });
+            }
         }
     }
 }

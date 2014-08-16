@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -21,7 +17,7 @@ namespace CopterDown
         private int _updateInterval;
         private Timer _drawTimer;
         private Timer _updateTimer;
-        private GameObject root;
+        public GameObject root;
         private Dispatcher _disp;
 
         public static Canvas _canvas;
@@ -39,9 +35,13 @@ namespace CopterDown
             rect.Width = 100;
             rect.Height = 200;
             root.AddViewBehavior(new RenderBehavior(rect));
-            root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(100,0),1));
+            root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(200,0),0.1f,true));
+            root.AddModelBehavior(new RotateAnim(0,180f,0.1f,true));
 
             root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d(0,0)),AttributeList.ATTR_POSITION);
+            root.AddModelAttribute(new SimpleValAttribute<float>(0), AttributeList.ATTR_ROTATION);
+        
+            root.AddModelBehavior(new MovementBehavior());
         }
 
         private DateTime start;
