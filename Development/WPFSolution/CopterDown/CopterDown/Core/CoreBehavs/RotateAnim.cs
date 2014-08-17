@@ -31,6 +31,19 @@ namespace CopterDown.Core.CoreBehavs
             
         }
 
+        protected SimpleValAttribute<float> GetRotation(GameObject obj)
+        {
+            var rotation =
+                obj.FindModelAttributeById( AttributeList.ATTR_ROTATION) as SimpleValAttribute<float>;
+
+            if (rotation == null)
+            {
+                rotation = new SimpleValAttribute<float>(0);
+                obj.AddModelAttribute(rotation,  AttributeList.ATTR_ROTATION);
+            }
+            return rotation;
+        }
+
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             if (Active)
@@ -51,7 +64,7 @@ namespace CopterDown.Core.CoreBehavs
                 if (actual >= to) actual = to;
 
                 var rotation =
-                    this.GameObject.FindModelAttributeById(AttributeList.ATTR_ROTATION) as SimpleValAttribute<float>;
+                    GetRotation(GameObject);
 
                 rotation.Value += diff;
             }

@@ -36,6 +36,18 @@ namespace CopterDown.Core.CoreBehavs
             
         }
 
+        protected SimpleValAttribute<Vector2d> GetPosition(GameObject obj)
+        {
+            var position =
+                obj.FindModelAttributeById(AttributeList.ATTR_POSITION) as SimpleValAttribute<Vector2d>;
+            if (position == null)
+            {
+                position = new SimpleValAttribute<Vector2d>(new Vector2d(0, 0));
+                obj.AddModelAttribute(position, AttributeList.ATTR_POSITION);
+            }
+            return position;
+        }
+
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             if (Active)
@@ -59,7 +71,7 @@ namespace CopterDown.Core.CoreBehavs
                 actual.Y += diffY;
 
                 var position =
-                    this.GameObject.FindModelAttributeById(AttributeList.ATTR_POSITION) as SimpleValAttribute<Vector2d>;
+                    GetPosition(GameObject);
 
                 position.Value.X += diffX;
                 position.Value.Y += diffY;
