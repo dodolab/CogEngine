@@ -11,9 +11,9 @@ namespace CopterDown.Core
         public int Key { get; set; }
     }
 
-    public class SimpleValAttribute<T> : Attribute
+    public class Attribute<T> : Attribute
     {
-        public SimpleValAttribute(T val)
+        public Attribute(T val)
     {
         this.Value = val;
     } 

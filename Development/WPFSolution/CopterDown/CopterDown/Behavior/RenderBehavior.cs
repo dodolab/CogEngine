@@ -14,73 +14,78 @@ namespace CopterDown.Behavior
 {
     public class RenderBehavior : ABehavior
     {
-        private Rectangle _rect;
+        private UIElement _rect;
 
-        public RenderBehavior(Rectangle rect)
+        public RenderBehavior(UIElement rect)
         {
             this._rect = rect;
+        }
+
+        public UIElement Element
+        {
+            get { return _rect; }
         }
 
         public override void OnMessage(Message msg)
         {
             
         }
-
-        protected SimpleValAttribute<Vector2d> GetPosition(GameObject obj, bool absolute)
+/*
+        protected Attribute<Vector2d> GetPosition(GameObject obj, bool absolute)
         {
             var position =
-                obj.FindModelAttributeById(absolute ? AttributeList.ATTR_ABS_POSITION : AttributeList.ATTR_POSITION) as SimpleValAttribute<Vector2d>;
+                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION) as Attribute<Vector2d>;
             if (position == null)
             {
-                position = new SimpleValAttribute<Vector2d>(new Vector2d(0, 0));
-                obj.AddModelAttribute(position, absolute ? AttributeList.ATTR_ABS_POSITION : AttributeList.ATTR_POSITION);
+                position = new Attribute<Vector2d>(new Vector2d(0, 0));
+                obj.AddModelAttribute(position, absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION);
             }
             return position;
         }
 
-        protected SimpleValAttribute<Vector2d> GetOrigin(GameObject obj, bool absolute)
+        protected Attribute<Vector2d> GetOrigin(GameObject obj, bool absolute)
         {
             var origin =
-                obj.FindModelAttributeById(absolute ? AttributeList.ATTR_ABS_ORIGIN : AttributeList.ATTR_ORIGIN) as SimpleValAttribute<Vector2d>;
+                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN) as Attribute<Vector2d>;
             if (origin == null)
             {
-                origin = new SimpleValAttribute<Vector2d>(new Vector2d(0, 0));
-                obj.AddModelAttribute(origin,absolute ? AttributeList.ATTR_ABS_ORIGIN : AttributeList.ATTR_ORIGIN);
+                origin = new Attribute<Vector2d>(new Vector2d(0, 0));
+                obj.AddModelAttribute(origin,absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN);
             }
             return origin;
         }
 
-        protected SimpleValAttribute<float> GetRotation(GameObject obj, bool absolute)
+        protected Attribute<float> GetRotation(GameObject obj, bool absolute)
         {
             var rotation =
-                obj.FindModelAttributeById(absolute ? AttributeList.ATTR_ABS_ROTATION : AttributeList.ATTR_ROTATION) as SimpleValAttribute<float>;
+                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION) as Attribute<float>;
 
             if (rotation == null)
             {
-                rotation = new SimpleValAttribute<float>(0);
-                obj.AddModelAttribute(rotation, absolute ? AttributeList.ATTR_ABS_ROTATION : AttributeList.ATTR_ROTATION);
+                rotation = new Attribute<float>(0);
+                obj.AddModelAttribute(rotation, absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION);
             }
             return rotation;
         }
 
-        protected SimpleValAttribute<int> GetZIndex(GameObject obj)
+        protected Attribute<int> GetZIndex(GameObject obj)
         {
             var zindex =
-                obj.FindModelAttributeById(AttributeList.ATTR_ZINDEX) as SimpleValAttribute<int>;
+                obj.FindModelAtt(AT.AT_COM_ZINDEX) as Attribute<int>;
 
             if (zindex == null)
             {
-                zindex = new SimpleValAttribute<int>(0);
-                obj.AddModelAttribute(zindex, AttributeList.ATTR_ZINDEX);
+                zindex = new Attribute<int>(0);
+                obj.AddModelAttribute(zindex, AT.AT_COM_ZINDEX);
             }
             return zindex;
         } 
 
-
+        */
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var position = GetPosition(GameObject,false).Value;
+        /*    var position = GetPosition(GameObject,false).Value;
             var rotation = GetRotation(GameObject,false).Value;
             var zindex = GetZIndex(GameObject).Value;
             var origin = GetOrigin(GameObject,false).Value;
@@ -109,7 +114,7 @@ namespace CopterDown.Behavior
 
             _rect.RenderTransform = new RotateTransform(rotation, origin.X, origin.Y);
 
-            cnv.Children.Add(_rect);
+            cnv.Children.Add(_rect);*/
         }
     }
 }

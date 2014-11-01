@@ -35,9 +35,10 @@ namespace CopterDown.Behavior
             if (lastMovement != null)
             {
                 var position =
-              this.GameObject.FindModelAttributeById(AttributeList.ATTR_POSITION) as SimpleValAttribute<Vector2d>;
-                position.Value.X += lastMovement[0];
-                position.Value.Y += lastMovement[1];
+                    GameObject.GetTransform();
+
+                position.LocalPos.X += lastMovement[0];
+                position.LocalPos.Y += lastMovement[1];
 
                 lastMovement = null;
             }  

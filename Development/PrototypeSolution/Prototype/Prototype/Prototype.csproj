@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{02473918-A23B-460E-B84B-CB939959D3A9}</ProjectGuid>
+    <ProjectGuid>{A8E4214B-CC95-492B-9976-91EAE5E36517}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CopterDown</RootNamespace>
-    <AssemblyName>CopterDown</AssemblyName>
+    <RootNamespace>Prototype</RootNamespace>
+    <AssemblyName>Prototype</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,30 +61,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behavior\MovementBehavior.cs" />
-    <Compile Include="Core\ABehavior.cs" />
-    <Compile Include="Behavior\RenderBehavior.cs" />
-    <Compile Include="Core\Attribute.cs" />
-    <Compile Include="Core\AT.cs" />
-    <Compile Include="Core\CoreAttribs\State.cs" />
-    <Compile Include="Core\CoreAttribs\Transform.cs" />
-    <Compile Include="Core\CoreAttribs\Vector2d.cs" />
-    <Compile Include="Core\CoreBehavs\RotateAnim.cs" />
-    <Compile Include="Core\CoreBehavs\TranslateAnim.cs" />
-    <Compile Include="Core\GameObject.cs" />
-    <Compile Include="Core\Message.cs" />
-    <Compile Include="Core\ObjectType.cs" />
-    <Compile Include="Core\Utils\VectorUt.cs" />
-    <Compile Include="GameLoop.cs" />
-    <Compile Include="Game\BackgroundBehavior.cs" />
-    <Compile Include="Game\BulletBehavior.cs" />
-    <Compile Include="Game\CanonBehaviour.cs" />
-    <Compile Include="Game\CopterBehavior.cs" />
-    <Compile Include="Game\GameBuilder.cs" />
-    <Compile Include="Game\Helper.cs" />
-    <Compile Include="Game\IntroBehavior.cs" />
-    <Compile Include="Game\ParaBehavior.cs" />
-    <Compile Include="Game\PlayerBehavior.cs" />
+    <Compile Include="Core\Bullet.cs" />
+    <Compile Include="Core\Copter.cs" />
+    <Compile Include="Core\GameController.cs" />
+    <Compile Include="Core\GameLoop.cs" />
+    <Compile Include="Core\Parashooter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -124,10 +105,12 @@
     <Resource Include="Images\copter1.png" />
     <Resource Include="Images\copter2.png" />
     <Resource Include="Images\explosion.png" />
-    <Resource Include="Images\explosion2.png" />
     <Resource Include="Images\intro.png" />
     <Resource Include="Images\para.png" />
     <Resource Include="Images\soldier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\explosion2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

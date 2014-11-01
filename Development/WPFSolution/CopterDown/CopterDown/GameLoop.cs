@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -8,6 +10,7 @@ using CopterDown.Behavior;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
 using CopterDown.Core.CoreBehavs;
+using CopterDown.Game;
 
 namespace CopterDown
 {
@@ -22,15 +25,22 @@ namespace CopterDown
 
         public static Canvas _canvas;
 
+        public List<Key> KeysPressed
+        {
+            get { return ((Attribute<List<Key>>)root.FindModelAtt(AT.AT_COPTER_KEYINPUT)).Value; }
+        } 
+
         public GameLoop(Dispatcher disp, Canvas canvas, int drawInterval, int updateInterval)
         {
             this._drawInterval = drawInterval;
             this._updateInterval = updateInterval;
             _canvas = canvas;
-            this.root = new GameObject(1);
+            this.root = new GameObject(ObjectType.OTHER, "root");
+            this.root.AddModelAttribute(new Attribute<List<Key>>(new List<Key>()), AT.AT_COPTER_KEYINPUT);
+
             this._disp = disp;
 
-            Rectangle rect = new Rectangle();
+      /*      Rectangle rect = new Rectangle();
             rect.Fill = Brushes.Black;
             rect.Width = 100;
             rect.Height = 200;
@@ -38,35 +48,35 @@ namespace CopterDown
             root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(200,0),0.1f,true));
             root.AddModelBehavior(new RotateAnim(0,180f,0.1f,true));
 
-            root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d(0,0)),AttributeList.ATTR_POSITION);
-            root.AddModelAttribute(new SimpleValAttribute<float>(0), AttributeList.ATTR_ROTATION);
-            root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.ATTR_ORIGIN);
+            root.AddModelAttribute(new Attribute<Vector2d>(new Vector2d(0,0)),AttributeList.AT_COM_POSITION);
+            root.AddModelAttribute(new Attribute<float>(0), AttributeList.AT_COM_ROTATION);
+            root.AddModelAttribute(new Attribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.AT_COM_ORIGIN);
         
             root.AddModelBehavior(new MovementBehavior());
 
-            var innerRect = new GameObject(2);
+            var innerRect = new GameObject();
             rect = new Rectangle();
             rect.Fill = Brushes.Red;
             rect.Width = 50;
             rect.Height = 80;
             innerRect.AddViewBehavior(new RenderBehavior(rect));
             innerRect.AddModelBehavior(new TranslateAnim(new Vector2d(0, 0), new Vector2d(200, 0), 0.1f, true));
-            innerRect.AddModelAttribute(new SimpleValAttribute<int>(1000),AttributeList.ATTR_ZINDEX);
+            innerRect.AddModelAttribute(new Attribute<int>(1000),AttributeList.AT_COM_ZINDEX);
 
             root.AddChild(innerRect);
+            */
+            root.AddChild(new GameBuilder().CreateIntroScene());
 
-
-
-            var innerInnerRect = new GameObject(3);
+        /*    var innerInnerRect = new GameObject();
             rect = new Rectangle();
             rect.Fill = Brushes.Green;
             rect.Width = 25;
             rect.Height = 40;
             innerInnerRect.AddViewBehavior(new RenderBehavior(rect));
 
-            innerInnerRect.AddModelAttribute(new SimpleValAttribute<int>(2000), AttributeList.ATTR_ZINDEX);
+            innerInnerRect.AddModelAttribute(new Attribute<int>(2000), AttributeList.AT_COM_ZINDEX);
 
-            innerRect.AddChild(innerInnerRect);
+            innerRect.AddChild(innerInnerRect);*/
         }
 
         private DateTime start;
