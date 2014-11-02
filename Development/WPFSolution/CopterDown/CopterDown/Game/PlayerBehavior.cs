@@ -24,20 +24,17 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var lives =
-                this.GameObject.FindModelAtt(AT.AT_COPTER_PLAYER_LIVES) as Attribute<int>;
+            var lives = GameObject.FindModelAtt<int>(AT.AT_COPTER_PLAYER_LIVES);
 
             if (lives.Value == 0)
             {
                 var root = GameObject.GetParent();
-                root.RemoveChild(GameObject);
+                GameObject.Destroy();
                 root.AddChild(new GameBuilder().CreateIntroScene());
                 return;
             }
 
-
-            var score =
-                this.GameObject.FindModelAtt(AT.AT_COPTER_PLAYER_SCORE) as Attribute<int>;
+            var score = GameObject.FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE);
 
             TextBlock text = new TextBlock();
             text.Text = "Score: " + score.Value.ToString();
@@ -55,11 +52,8 @@ namespace CopterDown.Game
             Canvas.SetTop(text, 20);
             Canvas.SetZIndex(text, 10);
 
-            var spawnInterval =
-                GameObject.FindModelAtt(AT.AT_COPTER_SPAWNINTERVAL) as
-                    Attribute<float>;
-            var lastSpawn =
-                GameObject.FindModelAtt(AT.AT_COPTER_ACTUALSPAWN) as Attribute<DateTime>;
+            var spawnInterval = GameObject.FindModelAtt<float>(AT.AT_COPTER_SPAWNINTERVAL);
+            var lastSpawn = GameObject.FindModelAtt<DateTime>(AT.AT_COPTER_ACTUALSPAWN);
 
             if ((GameObject.GetChildren() == null || GameObject.GetChildren().Where(child => child.GetObjectType() == ObjectType.COPTER).Count() < 6 )
                 && ((DateTime.Now - lastSpawn.Value).TotalSeconds > 1.0 / spawnInterval.Value))
@@ -74,10 +68,10 @@ namespace CopterDown.Game
 
                 GameObject copter = new GameObject(ObjectType.COPTER, "copter");
                 copter.SetTransform(new Core.CoreAttribs.Transform(posX, posY));
-                copter.AddModelAttribute(new Attribute<bool>(leftdirection),AT.AT_COPTER_LEFTDIRECTION);
-                copter.AddViewAttribute(new Attribute<int>(0), AT.AT_COM_FRAME);
-                copter.AddModelAttribute(new Attribute<bool>(false), AT.AT_COPTER_PARA_ISHIT);
-                copter.AddViewAttribute(new Attribute<int>(0), AT.AT_COPTER_HITFRAME);
+                copter.AddModelAttribute<bool>(AT.AT_COPTER_LEFTDIRECTION, leftdirection);
+                copter.AddViewAttribute<int>(AT.AT_COM_FRAME, 0);
+                copter.AddModelAttribute<bool>(AT.AT_COPTER_PARA_ISHIT, false);
+                copter.AddViewAttribute<int>(AT.AT_COPTER_HITFRAME, 0);
 
                 copter.AddViewBehavior(new CopterBehavior());
 

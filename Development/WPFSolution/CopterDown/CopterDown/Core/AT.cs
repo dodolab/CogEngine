@@ -25,10 +25,10 @@ namespace CopterDown.Core
         public const int AT_COPTER_CANON_CADENCY = 11;
         public const int AT_COPTER_PLAYER_SCORE = 12;
         public const int AT_COPTER_PLAYER_LIVES = 13;
-        public const int AT_COPTER_CANON_ROTATION = 14;
 
         public const int AT_COPTER_KEYINPUT = 16;
         public const int AT_COPTER_BULLETSPEED = 18;
+        public const int AT_COPTER_COPTERSPEED = 25;
 
         public const int AT_COPTER_LEFTDIRECTION = 20;
 
@@ -36,5 +36,7 @@ namespace CopterDown.Core
         public const int AT_COPTER_ACTUALSPAWN = 22;
 
         public const int AT_COPTER_HITFRAME = 23;
+
+        public const int AT_COM_IMGSOURCE = 24;
     }
 }

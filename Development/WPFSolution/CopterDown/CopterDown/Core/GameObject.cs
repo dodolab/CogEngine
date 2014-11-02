@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using CopterDown.Behavior;
 using CopterDown.Core.CoreAttribs;
@@ -27,7 +28,6 @@ namespace CopterDown.Core
         private int _id;
         private string _tag;
         private ObjectType type;
-        private bool isSceneRoot;
 
         private static int ids = 0;
 
@@ -44,7 +44,7 @@ namespace CopterDown.Core
         /// </summary>
         public void Destroy()
         {
-           // todo: destroy logic here
+           GetParent().RemoveChild(this);
         }
 
         public void SendMessage(Message msg)
@@ -120,25 +120,9 @@ namespace CopterDown.Core
             _viewBehavToRemove.Add(beh);
         }
 
-        public void AddModelAttribute(Attribute attr, int key)
-        {
-            attr.Key = key;
-
-            if (_modelAttributes == null) _modelAttributes = new Dictionary<int, Attribute>();
-            _modelAttributes[attr.Key] = attr;
-        }
-
         public void RemoveModelAttribute(Attribute attr)
         {
             _modelAttribToRemove.Add(attr);
-        }
-
-        public void AddViewAttribute(Attribute attr, int key)
-        {
-            attr.Key = key;
-
-            if (_viewAttributes == null) _viewAttributes = new Dictionary<int, Attribute>();
-            _viewAttributes[attr.Key] = attr;
         }
 
         public void RemoveViewAttribute(Attribute attr)
@@ -146,14 +130,14 @@ namespace CopterDown.Core
             _viewAttribToRemove.Add(attr);
         }
 
-        public Attribute FindModelAtt(int id)
+        public Attribute<T> FindModelAtt<T>(int id)
         {
-            return (_modelAttributes != null && _modelAttributes.ContainsKey(id)) ? _modelAttributes[id] : null;
+            return (_modelAttributes != null && _modelAttributes.ContainsKey(id)) ? (Attribute<T>)_modelAttributes[id] : null;
         }
 
-        public Attribute FindViewAtt(int id)
+        public Attribute<T> FindViewAtt<T>(int id)
         {
-            return (_viewAttributes != null && _viewAttributes.ContainsKey(id)) ? _viewAttributes[id] : null;
+            return (_viewAttributes != null && _viewAttributes.ContainsKey(id)) ? (Attribute<T>)_viewAttributes[id] : null;
         }
 
         public IReadOnlyCollection<Attribute> GetModelAttributes()
@@ -191,7 +175,6 @@ namespace CopterDown.Core
         public void RemoveChild(GameObject child)
         {
             child.SetParent(null);
-            child.Destroy();
             _children.Remove(child);
         }
 
@@ -225,83 +208,48 @@ namespace CopterDown.Core
             return type;
         }
 
-        public void SetIsSceneRoot(bool val)
+        public GameObject FindParent(ObjectType type)
         {
-            isSceneRoot = val;
-        }
-
-        public bool GetIsSceneRoot()
-        {
-            return isSceneRoot;
+            var parent = GetParent();
+            while (parent != null && parent.type != type) parent = parent.GetParent();
+            return parent;
         }
 
         public GameObject GetSceneRoot()
         {
-            var parent = GetParent();
-
-            while (parent != null)
-            {
-                if (parent.isSceneRoot) return parent;
-                parent = parent.GetParent();
-            }
-            return parent;
+            return FindParent(ObjectType.SCENE_ROOT);
         }
 
         public GameObject GetRoot()
         {
-            var parent = GetParent();
-            while (parent != null && parent.GetParent() != null) parent = parent.GetParent();
-            return parent;
+            return FindParent(ObjectType.ROOT);
         }
 
         public void SetTransform(Transform transform)
         {
-            AddModelAttribute(new Attribute<Transform>(transform),AT.AT_COM_TRANSFORM);
+            AddModelAttribute(AT.AT_COM_TRANSFORM, transform);
         }
 
         public Transform GetTransform()
         {
-            return ((Attribute<Transform>)FindModelAtt(AT.AT_COM_TRANSFORM)).Value;
+            return FindModelAtt<Transform>(AT.AT_COM_TRANSFORM).Value;
         }
 
-        public Attribute<int> GetIntModelAttr(int key)
+        public void AddModelAttribute<T>(int key, T value)
         {
-            return FindModelAtt(key) as Attribute<int>;
+            var newAttrib = new Attribute<T>(value);
+            newAttrib.Key = key;
+            if (_modelAttributes == null) _modelAttributes = new Dictionary<int, Attribute>();
+            _modelAttributes[newAttrib.Key] = newAttrib;
+        
         }
 
-        public Attribute<int> GetIntViewAttr(int key)
+        public void AddViewAttribute<T>(int key, T value)
         {
-            return FindViewAtt(key) as Attribute<int>;
-        }
-
-        public Attribute<float> GetFloatModelAttr(int key)
-        {
-            return FindModelAtt(key) as Attribute<float>;
-        }
-
-        public Attribute<float> GetFloatViewAttr(int key)
-        {
-            return FindViewAtt(key) as Attribute<float>;
-        }
-
-        public Attribute<bool> GetBoolModelAttr(int key)
-        {
-            return FindModelAtt(key) as Attribute<bool>;
-        }
-
-        public Attribute<bool> GetBoolViewAttr(int key)
-        {
-            return FindViewAtt(key) as Attribute<bool>;
-        }
-
-        public Attribute<Vector2d> GetVectorModelAttr(int key)
-        {
-            return FindModelAtt(key) as Attribute<Vector2d>;
-        }
-
-        public Attribute<Vector2d> GetVectorViewAttr(int key)
-        {
-            return FindViewAtt(key) as Attribute<Vector2d>;
+            var newAttrib = new Attribute<T>(value);
+            newAttrib.Key = key;
+            if (_viewAttributes == null) _viewAttributes = new Dictionary<int, Attribute>();
+            _viewAttributes[newAttrib.Key] = newAttrib;
         }
     }
 }

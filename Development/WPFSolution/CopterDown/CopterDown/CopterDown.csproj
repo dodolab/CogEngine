@@ -76,7 +76,7 @@
     <Compile Include="Core\ObjectType.cs" />
     <Compile Include="Core\Utils\VectorUt.cs" />
     <Compile Include="GameLoop.cs" />
-    <Compile Include="Game\BackgroundBehavior.cs" />
+    <Compile Include="Core\CoreBehavs\ImageRenderBehavior.cs" />
     <Compile Include="Game\BulletBehavior.cs" />
     <Compile Include="Game\CanonBehaviour.cs" />
     <Compile Include="Game\CopterBehavior.cs" />

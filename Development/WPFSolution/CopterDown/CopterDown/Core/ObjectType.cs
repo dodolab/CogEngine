@@ -8,6 +8,7 @@ namespace CopterDown.Core
 {
     public enum ObjectType
     {
-        OTHER, CANON, COPTER, BULLET, PARA
+        OTHER, CANON, COPTER, BULLET, PARA,
+        ROOT, SCENE_ROOT
     }
 }

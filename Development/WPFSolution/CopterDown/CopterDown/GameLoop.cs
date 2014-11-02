@@ -27,7 +27,7 @@ namespace CopterDown
 
         public List<Key> KeysPressed
         {
-            get { return ((Attribute<List<Key>>)root.FindModelAtt(AT.AT_COPTER_KEYINPUT)).Value; }
+            get { return root.FindModelAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value; }
         } 
 
         public GameLoop(Dispatcher disp, Canvas canvas, int drawInterval, int updateInterval)
@@ -35,8 +35,8 @@ namespace CopterDown
             this._drawInterval = drawInterval;
             this._updateInterval = updateInterval;
             _canvas = canvas;
-            this.root = new GameObject(ObjectType.OTHER, "root");
-            this.root.AddModelAttribute(new Attribute<List<Key>>(new List<Key>()), AT.AT_COPTER_KEYINPUT);
+            this.root = new GameObject(ObjectType.ROOT, "root");
+            this.root.AddModelAttribute(AT.AT_COPTER_KEYINPUT, new List<Key>());
 
             this._disp = disp;
 
