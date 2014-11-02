@@ -20,8 +20,6 @@ namespace CopterDown.Game
 
             var bulletSpeed = GameObject.FindModelAtt<float>(AT.AT_COPTER_BULLETSPEED);
 
-            Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/bullet.png", transform.LocalPos.X, transform.LocalPos.Y, transform.Rotation,
-    0.5f, 0.5f,6,1,1);
 
             transform.LocalPos.X += velocity.Value.X * bulletSpeed.Value;
             transform.LocalPos.Y += velocity.Value.Y * bulletSpeed.Value;

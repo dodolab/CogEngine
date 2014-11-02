@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
+using CopterDown.Core.CoreBehavs;
 
 namespace CopterDown.Game
 {
@@ -58,6 +59,7 @@ namespace CopterDown.Game
             bullet.AddModelAttribute(AT.AT_COM_VELOCITY,new Vector2d(velX, velY));
             bullet.AddModelAttribute(AT.AT_COPTER_BULLETSPEED, 5f);
             bullet.AddViewBehavior(new BulletBehavior());
+            bullet.AddViewBehavior(new ImageRenderBehavior());
 
             GameObject.AddChild(bullet);
         }

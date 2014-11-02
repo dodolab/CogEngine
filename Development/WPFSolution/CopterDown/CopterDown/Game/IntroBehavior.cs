@@ -29,7 +29,6 @@ namespace CopterDown.Game
             {
                 Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/intro.png", 0, 0, 0, 0, 0,1,1,1);
             }
-
         }
     }
 }
