@@ -20,32 +20,34 @@ namespace CopterDown.Game
             player.AddModelAttribute(AT.AT_COPTER_SPAWNINTERVAL, 0.3f);
             player.AddModelAttribute(AT.AT_COPTER_ACTUALSPAWN, DateTime.Now);
             player.AddModelAttribute(AT.AT_COPTER_COPTERSPEED, 6f);
+            player.AddModelBehavior(new ScoreB());
+            player.AddModelBehavior(new ColliderB());
 
             GameObject background = new GameObject(ObjectType.OTHER, "background");
             background.SetTransform(new Transform(0, 0, 0));
             background.AddViewAttribute(AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/background.png");
-            background.AddViewBehavior(new ImageRenderBehavior());
+            background.AddViewBehavior(new ImageRenderB());
             player.AddChild(background);
 
 
             GameObject canon = new GameObject(ObjectType.OTHER, "canon");
             canon.SetTransform(new Transform(318, 223, 0, 2, 0.5f, 1));
             canon.AddViewAttribute(AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/canon.png");
-            canon.AddViewBehavior(new ImageRenderBehavior());
-            canon.AddModelBehavior(new CanonBehaviour());
+            canon.AddViewBehavior(new ImageRenderB());
+            canon.AddModelBehavior(new CanonB());
             canon.AddModelAttribute(AT.AT_COPTER_CANON_CADENCY, 5f);
             canon.AddModelAttribute(AT.AT_COPTER_CANON_LASTSHOT, DateTime.Now);
             player.AddChild(canon);
 
 
-            player.AddViewBehavior(new PlayerBehavior());
+            player.AddViewBehavior(new PlayerB());
             return player;
         }
 
         public GameObject CreateIntroScene()
         {
             GameObject intro = new GameObject(ObjectType.SCENE_ROOT, "intro");
-            intro.AddViewBehavior(new IntroBehavior());
+            intro.AddViewBehavior(new IntroB());
             return intro;
         }
     }

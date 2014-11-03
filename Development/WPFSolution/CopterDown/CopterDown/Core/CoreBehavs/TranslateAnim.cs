@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core.CoreAttribs;
 using CopterDown.Core.Utils;
+using CopterDown.Messages;
 
 namespace CopterDown.Core.CoreBehavs
 {

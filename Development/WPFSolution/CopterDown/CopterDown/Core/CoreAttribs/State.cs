@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Core.CoreAttribs
 {
-    public class State : Attribute
+    public class State 
     {
         private int _state;
 

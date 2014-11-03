@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
+using CopterDown.Messages;
 
 namespace CopterDown.Behavior
 {

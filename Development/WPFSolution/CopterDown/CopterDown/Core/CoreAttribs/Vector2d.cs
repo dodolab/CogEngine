@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Core.CoreAttribs
 {
-    public class Vector2d : Attribute
+    public class Vector2d
     {
         public Vector2d(float x, float y)
         {

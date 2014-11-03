@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CopterDown.Core;
+using CopterDown.Messages;
 
 namespace CopterDown.Game
 {
-    public class IntroBehavior : ABehavior
+    public class IntroB : ABehavior
     {
         public override void OnMessage(Message msg)
         {

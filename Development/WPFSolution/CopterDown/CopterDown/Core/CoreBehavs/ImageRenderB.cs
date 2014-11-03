@@ -9,10 +9,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CopterDown.Core;
 using CopterDown.Game;
+using CopterDown.Messages;
 
 namespace CopterDown.Core.CoreBehavs
 {
-    public class ImageRenderBehavior : ABehavior
+    public class ImageRenderB : ABehavior
     {
         public override void OnMessage(Message msg)
         {

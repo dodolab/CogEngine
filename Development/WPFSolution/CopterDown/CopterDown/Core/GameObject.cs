@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CopterDown.Behavior;
 using CopterDown.Core.CoreAttribs;
+using CopterDown.Messages;
 
 namespace CopterDown.Core
 {
@@ -28,12 +29,14 @@ namespace CopterDown.Core
         private int _id;
         private string _tag;
         private ObjectType type;
+        private List<Group> _groups; 
 
         private static int ids = 0;
 
 
         public GameObject(ObjectType type, string tag)
         {
+            SetTransform(new Transform(0,0));
             this.type = type;
             _id = ids++;
             this._tag = tag;
@@ -51,28 +54,41 @@ namespace CopterDown.Core
         {
             if (msg.Traverse == TraverseMode.TRAV_CHILDFIRST)
             {
-                if (_children != null) foreach (var child in _children) child.SendMessage(msg);
+                if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
             }
 
             if (msg.Category == MessageCat.MODEL)
             {
-                if (_modelBehaviors != null) foreach (var beh in _modelBehaviors) beh.OnMessage(msg);
+                if (_modelBehaviors != null) foreach (var beh in _modelBehaviors.ToList()) beh.OnMessage(msg);
             }
             else if (msg.Category == MessageCat.VIEW)
             {
-                if (_viewBehaviors != null) foreach (var beh in _viewBehaviors) beh.OnMessage(msg);
+                if (_viewBehaviors != null) foreach (var beh in _viewBehaviors.ToList()) beh.OnMessage(msg);
             }
 
             if (msg.Traverse == TraverseMode.TRAV_BEHFIRST)
             {
-                if (_children != null) foreach (var child in _children) child.SendMessage(msg);
+                if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
             }
         }
 
         public void Update(TimeSpan delta, TimeSpan absolute)
         {
 
-            if(_children != null) foreach (var child in _children.ToList()) child.Update(delta, absolute);
+            if (_children != null)
+            {
+                foreach (var child in _children.ToList())
+                {
+                    // make transformation node
+                    child.GetTransform().UpdateTransform(GetTransform());
+                }
+
+                foreach (var child in _children.ToList())
+                {
+                    // update children
+                    child.Update(delta, absolute);
+                }
+            }
 
             if(_modelBehaviors != null) foreach (var beh in _modelBehaviors) beh.Update(delta, absolute);
 
@@ -217,12 +233,12 @@ namespace CopterDown.Core
 
         public GameObject GetSceneRoot()
         {
-            return FindParent(ObjectType.SCENE_ROOT);
+            return type == ObjectType.SCENE_ROOT ? this : FindParent(ObjectType.SCENE_ROOT);
         }
 
         public GameObject GetRoot()
         {
-            return FindParent(ObjectType.ROOT);
+            return type == ObjectType.ROOT ? this : FindParent(ObjectType.ROOT);
         }
 
         public void SetTransform(Transform transform)
@@ -250,6 +266,22 @@ namespace CopterDown.Core
             newAttrib.Key = key;
             if (_viewAttributes == null) _viewAttributes = new Dictionary<int, Attribute>();
             _viewAttributes[newAttrib.Key] = newAttrib;
+        }
+
+        public void SetGroup(Group group)
+        {
+            if(_groups == null) _groups = new List<Group>();
+            if(!_groups.Contains(group)) _groups.Add(group);
+        }
+
+        public void RemoveGroup(Group group)
+        {
+            if (_groups != null) _groups.Remove(group);
+        }
+
+        public bool IsInGroup(Group group)
+        {
+            return (_groups != null && _groups.Contains(group));
         }
     }
 }

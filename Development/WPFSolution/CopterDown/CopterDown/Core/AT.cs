@@ -38,5 +38,7 @@ namespace CopterDown.Core
         public const int AT_COPTER_HITFRAME = 23;
 
         public const int AT_COM_IMGSOURCE = 24;
+
+        public const int AT_COM_BOUNDS = 26;
     }
 }

@@ -9,10 +9,11 @@ using System.Windows.Media;
 using CopterDown.Behavior;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
+using CopterDown.Messages;
 
 namespace CopterDown.Game
 {
-    public class PlayerBehavior : ABehavior
+    public class PlayerB : ABehavior
     {
 
         public override void OnMessage(Message msg)
@@ -72,10 +73,15 @@ namespace CopterDown.Game
                 copter.AddViewAttribute(AT.AT_COM_FRAME, 0);
                 copter.AddModelAttribute(AT.AT_COPTER_PARA_ISHIT, false);
                 copter.AddViewAttribute(AT.AT_COPTER_HITFRAME, 0);
+                copter.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+                {
+                    Width=115,
+                    Height = 51
+                });
+                copter.SetGroup(Group.COLLIDABLE);
+                copter.AddViewBehavior(new CopterB());
 
-                copter.AddViewBehavior(new CopterBehavior());
-
-                GameObject.AddChild(copter);
+                GameObject.GetSceneRoot().AddChild(copter);
             }
 
         }
