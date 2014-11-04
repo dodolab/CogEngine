@@ -21,7 +21,7 @@ namespace CopterDown.Core.CoreBehavs
         // 0 to 1
         private Vector2d actual;
 
-        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish)
+        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish) : base(ElementType.MODEL)
         {
             this.from = from;
             this.to = to;

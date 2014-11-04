@@ -18,7 +18,7 @@ namespace CopterDown.Core.CoreBehavs
         // 0 to 1
         private float actual;
 
-        public RotateAnim(float from, float to, float speed, bool removeAfterFinish)
+        public RotateAnim(float from, float to, float speed, bool removeAfterFinish) : base(ElementType.MODEL)
         {
             this.from = from;
             this.to = to;
@@ -35,12 +35,12 @@ namespace CopterDown.Core.CoreBehavs
   /*      protected Attribute<float> GetRotation(GameObject obj)
         {
             var rotation =
-                obj.FindModelAtt( AT.AT_COM_ROTATION) as Attribute<float>;
+                obj.FindAtt( AT.AT_COM_ROTATION) as Attribute<float>;
 
             if (rotation == null)
             {
                 rotation = new Attribute<float>(0);
-                obj.AddModelAttribute(rotation,  AT.AT_COM_ROTATION);
+                obj.AddAttribute(ElementType.MODELrotation,  AT.AT_COM_ROTATION);
             }
             return rotation;
         }

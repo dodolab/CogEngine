@@ -15,6 +15,7 @@ namespace CopterDown.Game
 {
     public class PlayerB : ABehavior
     {
+        public PlayerB() : base(ElementType.MODEL){}
 
         public override void OnMessage(Message msg)
         {
@@ -25,8 +26,7 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var lives = GameObject.FindModelAtt<int>(AT.AT_COPTER_PLAYER_LIVES);
-
+            var lives = GameObject.FindAtt<int>(AT.AT_COPTER_PLAYER_LIVES);
             if (lives.Value == 0)
             {
                 var root = GameObject.GetParent();
@@ -35,28 +35,10 @@ namespace CopterDown.Game
                 return;
             }
 
-            var score = GameObject.FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE);
+            var spawnInterval = GameObject.FindAtt<float>(AT.AT_COPTER_SPAWNINTERVAL);
+            var lastSpawn = GameObject.FindAtt<DateTime>(AT.AT_COPTER_ACTUALSPAWN);
 
-            TextBlock text = new TextBlock();
-            text.Text = "Score: " + score.Value;
-            text.FontSize = 20;
-            GameLoop._canvas.Children.Add(text);
-            Canvas.SetLeft(text, 20);
-            Canvas.SetTop(text, 20);
-            Canvas.SetZIndex(text,10);
-
-            text = new TextBlock();
-            text.Text = "Lives: " + lives.Value;
-            text.FontSize = 20;
-            GameLoop._canvas.Children.Add(text);
-            Canvas.SetLeft(text, 500);
-            Canvas.SetTop(text, 20);
-            Canvas.SetZIndex(text, 10);
-
-            var spawnInterval = GameObject.FindModelAtt<float>(AT.AT_COPTER_SPAWNINTERVAL);
-            var lastSpawn = GameObject.FindModelAtt<DateTime>(AT.AT_COPTER_ACTUALSPAWN);
-
-            if ((GameObject.GetChildren() == null || GameObject.GetChildren().Where(child => child.GetObjectType() == ObjectType.COPTER).Count() < 6 )
+            if ((GameObject.GetChildren() == null || GameObject.GetChildren().Where(child => child.GetObjectCategory() == ObjTypes.COPTER).Count() < 6 )
                 && ((DateTime.Now - lastSpawn.Value).TotalSeconds > 1.0 / spawnInterval.Value))
             {
                 // spawn helicopter
@@ -67,19 +49,21 @@ namespace CopterDown.Game
 
                 bool leftdirection = posX == 640;
 
-                GameObject copter = new GameObject(ObjectType.COPTER, "copter");
+                GameObject copter = new GameObject(ObjectType.OBJECT, "copter");
+                copter.SetObjectCategory(ObjTypes.COPTER);
                 copter.SetTransform(new Core.CoreAttribs.Transform(posX, posY));
-                copter.AddModelAttribute(AT.AT_COPTER_LEFTDIRECTION, leftdirection);
-                copter.AddViewAttribute(AT.AT_COM_FRAME, 0);
-                copter.AddModelAttribute(AT.AT_COPTER_PARA_ISHIT, false);
-                copter.AddViewAttribute(AT.AT_COPTER_HITFRAME, 0);
-                copter.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+                copter.AddAttribute(ElementType.MODEL, AT.AT_COPTER_LEFTDIRECTION, leftdirection);
+                copter.AddAttribute(ElementType.VIEW, AT.AT_COM_FRAME, 0);
+                copter.AddAttribute(ElementType.MODEL, AT.AT_COPTER_PARA_ISHIT, false);
+                copter.AddAttribute(ElementType.VIEW, AT.AT_COPTER_HITFRAME, 0);
+                copter.AddBehavior(new CopterDrawB());
+                copter.AddAttribute(ElementType.MODEL, AT.AT_COM_BOUNDS, new Bounds()
                 {
                     Width=115,
                     Height = 51
                 });
                 copter.SetGroup(Group.COLLIDABLE);
-                copter.AddViewBehavior(new CopterB());
+                copter.AddBehavior(new CopterB());
 
                 GameObject.GetSceneRoot().AddChild(copter);
             }

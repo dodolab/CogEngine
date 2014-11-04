@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Core
 {
-    public enum ObjectType
+    public enum ElementType
     {
-        ROOT, SCENE, OBJECT, HUD
+        VIEW, MODEL
     }
 }

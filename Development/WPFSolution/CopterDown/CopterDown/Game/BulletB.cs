@@ -9,6 +9,8 @@ namespace CopterDown.Game
 {
     public class BulletB : ABehavior
     {
+        public BulletB() : base(ElementType.MODEL){}
+
         public override void OnMessage(Message msg)
         {
             if (msg.Type == MessageType.COLISION_OCURRED)
@@ -22,13 +24,13 @@ namespace CopterDown.Game
                                                                                      ? collision.SecondId
                                                                                      : collision.FirstId));
 
-                    var isHit = second.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
+                    var isHit = second.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
 
                     if (isHit != null && !isHit.Value)
                     {
-                        second.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT).Value = true;
+                        second.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT).Value = true;
                         GameObject.GetSceneRoot()
-                            .SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV,
+                            .SendMessage(new Message(ElementType.MODEL, TraverseMode.NOTRAV,
                                 MessageType.GAMEOBJECT_DESTROYED, second));
                         GameObject.Destroy();
                     }
@@ -40,9 +42,9 @@ namespace CopterDown.Game
         {
 
             var transform = GameObject.GetTransform();
-            var velocity = GameObject.FindModelAtt<Vector2d>(AT.AT_COM_VELOCITY);
+            var velocity = GameObject.FindAtt<Vector2d>(AT.AT_COM_VELOCITY);
 
-            var bulletSpeed = GameObject.FindModelAtt<float>(AT.AT_COPTER_BULLETSPEED);
+            var bulletSpeed = GameObject.FindAtt<float>(AT.AT_COPTER_BULLETSPEED);
 
 
             transform.LocalPos.X += velocity.Value.X * bulletSpeed.Value;

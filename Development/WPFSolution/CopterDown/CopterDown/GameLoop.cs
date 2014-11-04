@@ -27,7 +27,7 @@ namespace CopterDown
 
         public List<Key> KeysPressed
         {
-            get { return root.FindModelAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value; }
+            get { return root.FindAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value; }
         } 
 
         public GameLoop(Dispatcher disp, Canvas canvas, int drawInterval, int updateInterval)
@@ -36,7 +36,7 @@ namespace CopterDown
             this._updateInterval = updateInterval;
             _canvas = canvas;
             this.root = new GameObject(ObjectType.ROOT, "root");
-            this.root.AddModelAttribute(AT.AT_COPTER_KEYINPUT, new List<Key>());
+            this.root.AddAttribute(ElementType.MODEL, AT.AT_COPTER_KEYINPUT, new List<Key>());
 
             this._disp = disp;
 
@@ -48,9 +48,9 @@ namespace CopterDown
             root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(200,0),0.1f,true));
             root.AddModelBehavior(new RotateAnim(0,180f,0.1f,true));
 
-            root.AddModelAttribute(new Attribute<Vector2d>(new Vector2d(0,0)),AttributeList.AT_COM_POSITION);
-            root.AddModelAttribute(new Attribute<float>(0), AttributeList.AT_COM_ROTATION);
-            root.AddModelAttribute(new Attribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.AT_COM_ORIGIN);
+            root.AddAttribute(ElementType.MODELnew Attribute<Vector2d>(new Vector2d(0,0)),AttributeList.AT_COM_POSITION);
+            root.AddAttribute(ElementType.MODELnew Attribute<float>(0), AttributeList.AT_COM_ROTATION);
+            root.AddAttribute(ElementType.MODELnew Attribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.AT_COM_ORIGIN);
         
             root.AddModelBehavior(new MovementBehavior());
 
@@ -61,7 +61,7 @@ namespace CopterDown
             rect.Height = 80;
             innerRect.AddViewBehavior(new RenderBehavior(rect));
             innerRect.AddModelBehavior(new TranslateAnim(new Vector2d(0, 0), new Vector2d(200, 0), 0.1f, true));
-            innerRect.AddModelAttribute(new Attribute<int>(1000),AttributeList.AT_COM_ZINDEX);
+            innerRect.AddAttribute(ElementType.MODELnew Attribute<int>(1000),AttributeList.AT_COM_ZINDEX);
 
             root.AddChild(innerRect);
             */
@@ -74,7 +74,7 @@ namespace CopterDown
             rect.Height = 40;
             innerInnerRect.AddViewBehavior(new RenderBehavior(rect));
 
-            innerInnerRect.AddModelAttribute(new Attribute<int>(2000), AttributeList.AT_COM_ZINDEX);
+            innerInnerRect.AddAttribute(ElementType.MODELnew Attribute<int>(2000), AttributeList.AT_COM_ZINDEX);
 
             innerRect.AddChild(innerInnerRect);*/
         }

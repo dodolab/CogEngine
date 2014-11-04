@@ -13,25 +13,18 @@ namespace CopterDown.Core
 {
     public class GameObject
     {
-        private Dictionary<int, Attribute> _modelAttributes;
-        private Dictionary<int, Attribute> _viewAttributes;
+        protected Dictionary<int, Attribute> _attributes;
+        protected List<ABehavior> _behaviors;
 
-        private List<ABehavior> _modelBehaviors;
-        private List<ABehavior> _viewBehaviors;
+        protected GameObject _parent;
+        protected List<GameObject> _children;
+        protected int _id;
+        protected string _tag;
+        protected ObjectType type;
+        protected int category;
+        protected List<Group> _groups;
 
-        private List<Attribute> _viewAttribToRemove = new List<Attribute>();
-        private List<Attribute> _modelAttribToRemove = new List<Attribute>(); 
-        private List<ABehavior> _viewBehavToRemove = new List<ABehavior>();
-        private List<ABehavior> _modelBehavToRemove = new List<ABehavior>(); 
-
-        private GameObject _parent;
-        private List<GameObject> _children;
-        private int _id;
-        private string _tag;
-        private ObjectType type;
-        private List<Group> _groups; 
-
-        private static int ids = 0;
+        protected static int ids = 0;
 
 
         public GameObject(ObjectType type, string tag)
@@ -52,20 +45,18 @@ namespace CopterDown.Core
 
         public void SendMessage(Message msg)
         {
+            // traverse children at first
             if (msg.Traverse == TraverseMode.TRAV_CHILDFIRST)
             {
                 if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
             }
 
-            if (msg.Category == MessageCat.MODEL)
+            foreach (var behavior in _behaviors)
             {
-                if (_modelBehaviors != null) foreach (var beh in _modelBehaviors.ToList()) beh.OnMessage(msg);
-            }
-            else if (msg.Category == MessageCat.VIEW)
-            {
-                if (_viewBehaviors != null) foreach (var beh in _viewBehaviors.ToList()) beh.OnMessage(msg);
+                if(behavior.ElementType == msg.Category) behavior.OnMessage(msg);
             }
 
+            // traverse children at last
             if (msg.Traverse == TraverseMode.TRAV_BEHFIRST)
             {
                 if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
@@ -90,90 +81,72 @@ namespace CopterDown.Core
                 }
             }
 
-            if(_modelBehaviors != null) foreach (var beh in _modelBehaviors) beh.Update(delta, absolute);
-
-            foreach (var modelAttrib in _modelAttribToRemove) _modelAttributes[modelAttrib.Key] = null;
-            foreach (var viewAttrib in _viewAttribToRemove) _viewAttributes[viewAttrib.Key] = null;
-            foreach (var behav in _modelBehavToRemove) _modelBehaviors.Remove(behav);
-            foreach (var behav in _viewBehavToRemove) _viewBehaviors.Remove(behav);
-
-            _viewAttribToRemove.Clear();
-            _modelAttribToRemove.Clear();
-            _viewBehavToRemove.Clear();
-            _modelBehavToRemove.Clear();
+            if (_behaviors != null)
+            {
+                foreach (var beh in _behaviors)
+                {
+                    if (beh.ElementType == ElementType.MODEL)
+                    {
+                        beh.Update(delta, absolute);
+                    }
+                }
+            }
         }
 
         public void Draw(TimeSpan delta, TimeSpan absolute)
         {
             if (_children != null) foreach (var child in _children.ToList()) child.Draw(delta, absolute);
 
-            if(_viewBehaviors != null) foreach (var beh in _viewBehaviors) beh.Update(delta, absolute);
+            if (_behaviors != null)
+            {
+                foreach (var beh in _behaviors)
+                {
+                    if (beh.ElementType == ElementType.VIEW)
+                    {
+                        beh.Update(delta, absolute);
+                    }
+                }
+            }
         }
 
-        public void AddModelBehavior(ABehavior beh)
+        public void AddBehavior(ABehavior beh)
         {
-            if (_modelBehaviors == null) _modelBehaviors = new List<ABehavior>();
+            if (_behaviors == null) _behaviors = new List<ABehavior>();
             beh.GameObject = this;
-            _modelBehaviors.Add(beh);
-            SendMessage(new Message(MessageCat.MODEL, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_CREATED, beh));
+            _behaviors.Add(beh);
+            SendMessage(new Message(beh.ElementType, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_CREATED, beh));
         }
 
-        public void RemoveModelBehavior(ABehavior beh)
+        public void RemoveBehavior(ABehavior beh)
         {
-            _modelBehavToRemove.Add(beh);
-            SendMessage(new Message(MessageCat.MODEL, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_REMOVED, beh));
+            _behaviors.Remove(beh);
+            SendMessage(new Message(beh.ElementType, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_REMOVED, beh));
         }
 
-        public void AddViewBehavior(ABehavior beh)
+        public void RemoveAttribute(int key)
         {
-            if (_viewBehaviors == null) _viewBehaviors = new List<ABehavior>();
-            beh.GameObject = this;
-            _viewBehaviors.Add(beh);
+            _attributes.Remove(key);
         }
 
-        public void RemoveViewBehavior(ABehavior beh)
+        public Attribute<T> FindAtt<T>(int id)
         {
-            _viewBehavToRemove.Add(beh);
+            return (_attributes != null && _attributes.ContainsKey(id)) ? (Attribute<T>)_attributes[id] : null;
         }
 
-        public void RemoveModelAttribute(Attribute attr)
+        public T FindAttValue<T>(int id)
         {
-            _modelAttribToRemove.Add(attr);
+            var output = FindAtt<T>(id);
+            return output == null ? default(T) : output.Value;
         }
 
-        public void RemoveViewAttribute(Attribute attr)
+        public IReadOnlyCollection<Attribute> GetAttributes()
         {
-            _viewAttribToRemove.Add(attr);
+            return _attributes.Values.ToList().AsReadOnly();
         }
 
-        public Attribute<T> FindModelAtt<T>(int id)
+        public IReadOnlyCollection<ABehavior> GetBehaviors()
         {
-            return (_modelAttributes != null && _modelAttributes.ContainsKey(id)) ? (Attribute<T>)_modelAttributes[id] : null;
-        }
-
-        public Attribute<T> FindViewAtt<T>(int id)
-        {
-            return (_viewAttributes != null && _viewAttributes.ContainsKey(id)) ? (Attribute<T>)_viewAttributes[id] : null;
-        }
-
-        public IReadOnlyCollection<Attribute> GetModelAttributes()
-        {
-            return _modelAttributes.Values.ToList().AsReadOnly();
-        }
-
-        public IReadOnlyCollection<Attribute> GetViewAttributes()
-        {
-            return _viewAttributes.Values.ToList().AsReadOnly();
-        }
-
-        public IReadOnlyCollection<ABehavior> GetModelBehaviors()
-        {
-            return _modelBehaviors;
-        }
-
-        public IReadOnlyCollection<ABehavior> GetViewBehaviors()
-        {
-            return _viewBehaviors;
+            return _behaviors;
         }
 
         public IReadOnlyCollection<GameObject> GetChildren()
@@ -224,6 +197,16 @@ namespace CopterDown.Core
             return type;
         }
 
+        public int GetObjectCategory()
+        {
+            return category;
+        }
+
+        public void SetObjectCategory(int value)
+        {
+            this.category = value;
+        }
+
         public GameObject FindParent(ObjectType type)
         {
             var parent = GetParent();
@@ -233,7 +216,7 @@ namespace CopterDown.Core
 
         public GameObject GetSceneRoot()
         {
-            return type == ObjectType.SCENE_ROOT ? this : FindParent(ObjectType.SCENE_ROOT);
+            return type == ObjectType.SCENE ? this : FindParent(ObjectType.SCENE);
         }
 
         public GameObject GetRoot()
@@ -243,29 +226,21 @@ namespace CopterDown.Core
 
         public void SetTransform(Transform transform)
         {
-            AddModelAttribute(AT.AT_COM_TRANSFORM, transform);
+            AddAttribute(ElementType.MODEL, AT.AT_COM_TRANSFORM, transform);
         }
 
         public Transform GetTransform()
         {
-            return FindModelAtt<Transform>(AT.AT_COM_TRANSFORM).Value;
+            return FindAtt<Transform>(AT.AT_COM_TRANSFORM).Value;
         }
 
-        public void AddModelAttribute<T>(int key, T value)
+        public void AddAttribute<T>(ElementType type, int key, T value)
         {
-            var newAttrib = new Attribute<T>(value);
+            var newAttrib = new Attribute<T>(type, value);
             newAttrib.Key = key;
-            if (_modelAttributes == null) _modelAttributes = new Dictionary<int, Attribute>();
-            _modelAttributes[newAttrib.Key] = newAttrib;
+            if (_attributes == null) _attributes = new Dictionary<int, Attribute>();
+            _attributes[newAttrib.Key] = newAttrib;
         
-        }
-
-        public void AddViewAttribute<T>(int key, T value)
-        {
-            var newAttrib = new Attribute<T>(value);
-            newAttrib.Key = key;
-            if (_viewAttributes == null) _viewAttributes = new Dictionary<int, Attribute>();
-            _viewAttributes[newAttrib.Key] = newAttrib;
         }
 
         public void SetGroup(Group group)

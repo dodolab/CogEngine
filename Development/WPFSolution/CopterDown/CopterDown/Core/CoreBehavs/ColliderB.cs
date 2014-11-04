@@ -11,6 +11,8 @@ namespace CopterDown.Core.CoreBehavs
 {
     public class ColliderB : ABehavior
     {
+        public ColliderB() : base(ElementType.MODEL){}
+
         public override void OnMessage(Message msg)
         {
             
@@ -29,7 +31,7 @@ namespace CopterDown.Core.CoreBehavs
                     var second = allChildren[j];
                     if (Collides(first, second))
                     {
-                        GameObject.SendMessage(new Message(MessageCat.MODEL, TraverseMode.TRAV_BEHFIRST,
+                        GameObject.SendMessage(new Message(ElementType.MODEL, TraverseMode.TRAV_BEHFIRST,
                             MessageType.COLISION_OCURRED, new Collision()
                             {
                                 FirstId = first.GetId(),
@@ -45,8 +47,8 @@ namespace CopterDown.Core.CoreBehavs
         {
             var transformFirst = first.GetTransform();
             var transformSecond = second.GetTransform();
-            var boundsFirst = first.FindModelAtt<Bounds>(AT.AT_COM_BOUNDS);
-            var boundsSecond = second.FindModelAtt<Bounds>(AT.AT_COM_BOUNDS);
+            var boundsFirst = first.FindAtt<Bounds>(AT.AT_COM_BOUNDS);
+            var boundsSecond = second.FindAtt<Bounds>(AT.AT_COM_BOUNDS);
 
             if (transformFirst != null && transformSecond != null && boundsFirst != null && boundsSecond != null)
             {

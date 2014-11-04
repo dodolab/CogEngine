@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Core.CoreAttribs
 {
-    public class State 
+    public class SimpleState
     {
         private int _state;
 
         public bool HasState(int state)
         {
-            return (_state & state) == state;
+            int offset = 1 << state;
+            return (_state & offset) == state;
         }
 
         public void SetState(int state)
         {
-            _state = _state | state;
+            int offset = 1 << state;
+            _state = _state | offset;
         }
 
         public void ResetState(int state)
         {
-            _state = _state ^ state;
+            int offset = 1 << state;
+            _state = _state ^ offset;
         }
     }
 }

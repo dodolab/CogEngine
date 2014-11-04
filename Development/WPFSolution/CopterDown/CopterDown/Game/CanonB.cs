@@ -13,6 +13,8 @@ namespace CopterDown.Game
 {
     public class CanonB : ABehavior
     {
+        public CanonB() : base(ElementType.MODEL){}
+
         public override void OnMessage(Message msg)
         {
             
@@ -20,10 +22,10 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var keys = GameObject.GetRoot().FindModelAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value;
+            var keys = GameObject.GetRoot().FindAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value;
 
-            var lastShot = GameObject.FindModelAtt <DateTime>(AT.AT_COPTER_CANON_LASTSHOT);
-            var actualCadency = GameObject.FindModelAtt<float>(AT.AT_COPTER_CANON_CADENCY);
+            var lastShot = GameObject.FindAtt <DateTime>(AT.AT_COPTER_CANON_LASTSHOT);
+            var actualCadency = GameObject.FindAtt<float>(AT.AT_COPTER_CANON_CADENCY);
             var transform = GameObject.GetTransform();
 
             if (keys.Contains(Key.Left))
@@ -53,15 +55,16 @@ namespace CopterDown.Game
             float velX = (float)Math.Sin(rotation / 180 * Math.PI);
             float velY = -(float)Math.Cos(rotation / 180 * Math.PI);
 
-            var bullet = new GameObject(ObjectType.BULLET, "bullet");
+            var bullet = new GameObject(ObjectType.OBJECT, "bullet");
+            bullet.SetObjectCategory(ObjTypes.BULLET);
             bullet.SetTransform(new Transform(posX, posY, rotation, 6));
 
-            bullet.AddViewAttribute(AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/bullet.png");
-            bullet.AddModelAttribute(AT.AT_COM_VELOCITY,new Vector2d(velX, velY));
-            bullet.AddModelAttribute(AT.AT_COPTER_BULLETSPEED, 5f);
-            bullet.AddModelBehavior(new BulletB());
-            bullet.AddViewBehavior(new ImageRenderB());
-            bullet.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+            bullet.AddAttribute(ElementType.VIEW, AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/bullet.png");
+            bullet.AddAttribute(ElementType.MODEL, AT.AT_COM_VELOCITY,new Vector2d(velX, velY));
+            bullet.AddAttribute(ElementType.MODEL, AT.AT_COPTER_BULLETSPEED, 5f);
+            bullet.AddBehavior(new BulletB());
+            bullet.AddBehavior(new ImageRenderB());
+            bullet.AddAttribute(ElementType.MODEL, AT.AT_COM_BOUNDS, new Bounds()
             {
                 Width = 5,
                 Height = 5

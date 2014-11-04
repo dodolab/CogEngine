@@ -15,9 +15,11 @@ namespace CopterDown.Behavior
 {
     public class RenderBehavior : ABehavior
     {
+        public RenderBehavior(ElementType type) : base(type){}
+
         private UIElement _rect;
 
-        public RenderBehavior(UIElement rect)
+        public RenderBehavior(UIElement rect) : base(ElementType.MODEL)
         {
             this._rect = rect;
         }
@@ -35,11 +37,11 @@ namespace CopterDown.Behavior
         protected Attribute<Vector2d> GetPosition(GameObject obj, bool absolute)
         {
             var position =
-                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION) as Attribute<Vector2d>;
+                obj.FindAtt(absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION) as Attribute<Vector2d>;
             if (position == null)
             {
                 position = new Attribute<Vector2d>(new Vector2d(0, 0));
-                obj.AddModelAttribute(position, absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION);
+                obj.AddAttribute(ElementType.MODELposition, absolute ? AT.AT_COM_ABS_POSITION : AT.AT_COM_POSITION);
             }
             return position;
         }
@@ -47,11 +49,11 @@ namespace CopterDown.Behavior
         protected Attribute<Vector2d> GetOrigin(GameObject obj, bool absolute)
         {
             var origin =
-                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN) as Attribute<Vector2d>;
+                obj.FindAtt(absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN) as Attribute<Vector2d>;
             if (origin == null)
             {
                 origin = new Attribute<Vector2d>(new Vector2d(0, 0));
-                obj.AddModelAttribute(origin,absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN);
+                obj.AddAttribute(ElementType.MODELorigin,absolute ? AT.AT_COM_ABS_ORIGIN : AT.AT_COM_ORIGIN);
             }
             return origin;
         }
@@ -59,12 +61,12 @@ namespace CopterDown.Behavior
         protected Attribute<float> GetRotation(GameObject obj, bool absolute)
         {
             var rotation =
-                obj.FindModelAtt(absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION) as Attribute<float>;
+                obj.FindAtt(absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION) as Attribute<float>;
 
             if (rotation == null)
             {
                 rotation = new Attribute<float>(0);
-                obj.AddModelAttribute(rotation, absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION);
+                obj.AddAttribute(ElementType.MODELrotation, absolute ? AT.AT_COM_ABS_ROTATION : AT.AT_COM_ROTATION);
             }
             return rotation;
         }
@@ -72,12 +74,12 @@ namespace CopterDown.Behavior
         protected Attribute<int> GetZIndex(GameObject obj)
         {
             var zindex =
-                obj.FindModelAtt(AT.AT_COM_ZINDEX) as Attribute<int>;
+                obj.FindAtt(AT.AT_COM_ZINDEX) as Attribute<int>;
 
             if (zindex == null)
             {
                 zindex = new Attribute<int>(0);
-                obj.AddModelAttribute(zindex, AT.AT_COM_ZINDEX);
+                obj.AddAttribute(ElementType.MODELzindex, AT.AT_COM_ZINDEX);
             }
             return zindex;
         } 

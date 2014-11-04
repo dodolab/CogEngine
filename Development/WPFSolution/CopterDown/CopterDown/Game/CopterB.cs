@@ -11,6 +11,8 @@ namespace CopterDown.Game
 {
     public class CopterB : ABehavior
     {
+        public CopterB() : base(ElementType.MODEL){}
+
         public override void OnMessage(Message msg)
         {
             
@@ -20,28 +22,12 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var frame = GameObject.FindViewAtt<int>(AT.AT_COM_FRAME);
             var transform = GameObject.GetTransform();
-            var isHit = GameObject.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
-            var leftDirection =GameObject.FindModelAtt<bool>(AT.AT_COPTER_LEFTDIRECTION);
+            var isHit = GameObject.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
+            var leftDirection =GameObject.FindAtt<bool>(AT.AT_COPTER_LEFTDIRECTION);
 
-            if (frame.Value++ % 10 < 5)
-            {
-                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/copter1.png", leftDirection.Value ? transform.LocalPos.X : transform.LocalPos.X + 111, transform.LocalPos.Y, 0, 0.0f, 0.0f,
-                    5,!leftDirection.Value ? -1 : 1,1);
-
-            }
-            else
-            {
-                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/copter2.png", leftDirection.Value ? transform.LocalPos.X : transform.LocalPos.X + 111, transform.LocalPos.Y, 0, 0.5f, 0.0f,
-                    5,!leftDirection.Value ? -1 : 1,1);
-
-            }
-
-            if (isHit.Value) Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/explosion.png", transform.LocalPos.X, transform.LocalPos.Y, 0, 0.5f, 0.0f, 5,1,1);
-
-            var copterSpeed = GameObject.GetSceneRoot().FindModelAtt<float>(AT.AT_COPTER_COPTERSPEED);
-            var hitFrame = GameObject.FindViewAtt<int>(AT.AT_COPTER_HITFRAME);
+            var copterSpeed = GameObject.GetSceneRoot().FindAtt<float>(AT.AT_COPTER_COPTERSPEED);
+            var hitFrame = GameObject.FindAtt<int>(AT.AT_COPTER_HITFRAME);
 
             // update copter
 
@@ -60,14 +46,16 @@ namespace CopterDown.Game
 
         private void SpawnParatrooper(float x, float y)
         {
-            GameObject para = new GameObject(ObjectType.PARA, "para");
+            GameObject para = new GameObject(ObjectType.OBJECT, "para");
+            para.SetObjectCategory(ObjTypes.PARA);
             para.SetTransform(new Transform(x,y));
 
-            para.AddModelAttribute(AT.AT_COPTER_PARA_ISGROUNDED,false);
-            para.AddModelAttribute(AT.AT_COPTER_PARA_ISHIT, false);
-            para.AddViewAttribute(AT.AT_COPTER_HITFRAME, 0);
-            para.AddViewBehavior(new ParaB());
-            para.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+            para.AddAttribute(ElementType.MODEL, AT.AT_COPTER_PARA_ISGROUNDED,false);
+            para.AddAttribute(ElementType.MODEL, AT.AT_COPTER_PARA_ISHIT, false);
+            para.AddAttribute(ElementType.VIEW, AT.AT_COPTER_HITFRAME, 0);
+            para.AddBehavior(new ParaB());
+            para.AddBehavior(new ParaDrawB());
+            para.AddAttribute(ElementType.MODEL, AT.AT_COM_BOUNDS, new Bounds()
             {
                 Width=20,
                 Height = 20
