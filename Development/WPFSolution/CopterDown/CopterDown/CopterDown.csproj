@@ -61,6 +61,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Entities\InputAct.cs" />
     <Compile Include="Core\Entities\Pair.cs" />
     <Compile Include="Core\CoreBehavs\MoveB.cs" />
     <Compile Include="Core\ABehavior.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Game\ParaDrawB.cs" />
     <Compile Include="Game\PlayerB.cs" />
     <Compile Include="Game\ScoreB.cs" />
+    <Compile Include="Game\Weapon.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -145,6 +147,15 @@
     <Resource Include="Images\intro.png" />
     <Resource Include="Images\para.png" />
     <Resource Include="Images\soldier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

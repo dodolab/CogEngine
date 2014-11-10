@@ -11,5 +11,6 @@ namespace CopterDown.Core.Types
         public const int IS_GROUNDED = 0;
         public const int IS_HIT = 1;
         public const int LEFT_DIR = 2;
+        public const int IS_IMMORTAL = 3;
     }
 }

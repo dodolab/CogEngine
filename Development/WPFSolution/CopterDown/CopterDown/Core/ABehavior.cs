@@ -15,6 +15,8 @@ namespace CopterDown.Core
     {
         private static int idCounter;
 
+        protected Random rnd = new Random();
+
         protected ABehavior(ElementType elemType, State messageListeners)
         {
             this.Active = true;

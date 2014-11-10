@@ -93,14 +93,17 @@ namespace CopterDown.Core
                         }
                 }
 
-                foreach (var behavior in _behaviors)
+                if (_behaviors != null)
                 {
-                    if (behavior.Id != msg.OwnerId &&
-                        (msg.Category == ElementType.ALL || behavior.ElemType == msg.Category))
+                    foreach (var behavior in _behaviors)
                     {
-                        if (behavior.MessageListeners.HasState(msg.Action))
+                        if (behavior.Id != msg.OwnerId &&
+                            (msg.Category == ElementType.ALL || behavior.ElemType == msg.Category))
                         {
-                            behavior.OnMessage(msg);
+                            if (behavior.MessageListeners.HasState(msg.Action))
+                            {
+                                behavior.OnMessage(msg);
+                            }
                         }
                     }
                 }

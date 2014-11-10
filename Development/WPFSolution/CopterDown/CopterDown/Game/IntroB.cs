@@ -20,7 +20,7 @@ namespace CopterDown.Game
         {
             var keys = GameObject.Root.FindAtt<UserAction>(Attr.USERACTION);
 
-            if (keys.Value.ActionsStarted.Any())
+            if (keys.Value.KeyActions.Any())
             {
                 var root = GameObject.Root;
                 GameObject.Destroy();

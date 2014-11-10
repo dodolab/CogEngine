@@ -21,7 +21,7 @@ namespace CopterDown.Game
             }
         }
 
-        private Random rnd = new Random();
+        
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {

@@ -21,7 +21,12 @@ namespace CopterDown.Game
             GameObject background = CreateBackground();
             player.AddChild(background);
 
-            GameObject canon = CreateCanon(new Transform(318, 223, 0, 2, 0.5f, 1));
+            GameObject info = CreateInfoObject();
+            player.AddChild(info);
+
+            var weapons = info.FindAttValue<List<Weapon>>(Attr.WEAPONINFO);
+
+            GameObject canon = CreateCanon(new Transform(318, 223, 0, 2, 0.5f, 1), weapons.FirstOrDefault());
             player.AddChild(canon);
             return player;
         }
@@ -50,14 +55,15 @@ namespace CopterDown.Game
             return background;
         }
 
-        public GameObject CreateCanon(Transform transform)
+        public GameObject CreateCanon(Transform transform, Weapon weapon)
         {
-            GameObject canon = new GameObject(ObjectType.OBJECT, Subtypes.OTHER, "canon");
+            GameObject canon = new GameObject(ObjectType.OBJECT, Subtypes.CANON, "canon");
             canon.Transform = transform;
+            canon.AddAttribute(ElementType.MODEL, Attr.WEAPON, weapon);
             canon.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/canon.png");
             canon.AddBehavior(new ImageRenderB());
             canon.AddBehavior(new CanonB());
-            canon.AddAttribute(ElementType.MODEL, Attr.CANON_CADENCY, 15f);
+            canon.AddAttribute(ElementType.MODEL, Attr.CANON_LASTSHOT, DateTime.Now);
             canon.AddAttribute(ElementType.MODEL, Attr.CANON_LASTSHOT, DateTime.Now);
             canon.AddAttribute(ElementType.MODEL, Attr.CANON_MINMAXANGLE, new Pair<float>(-75, 75));
             return canon;
@@ -72,12 +78,14 @@ namespace CopterDown.Game
             return intro;
         }
 
-        public GameObject CreateBullet(Transform transform, Vector2d velocity)
+        public GameObject CreateBullet(Transform transform, Vector2d velocity, string imgSource, bool isImmortal)
         {
             var bullet = new GameObject(ObjectType.OBJECT, Subtypes.BULLET, "bullet");
             bullet.Transform = transform;
 
-            bullet.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/bullet.png");
+                bullet.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, imgSource);
+
+            if(isImmortal) bullet.States.SetState(States.IS_IMMORTAL);
             bullet.AddAttribute(ElementType.MODEL, Attr.VELOCITY, velocity);
             bullet.AddBehavior(new BulletB());
             bullet.AddBehavior(new ImageRenderB());
@@ -97,6 +105,8 @@ namespace CopterDown.Game
             para.AddBehavior(new ParaB());
             para.AddBehavior(new ParaDrawB());
             para.AddAttribute(ElementType.MODEL, Attr.BOUNDS, new Bounds(20, 20));
+            para.AddAttribute(ElementType.MODEL, Attr.PPLIVES, 10);
+            para.AddAttribute(ElementType.MODEL, Attr.PPARMOR, 5);
             para.Groups.SetState(Groups.PARA);
             return para;
         }
@@ -110,9 +120,32 @@ namespace CopterDown.Game
             copter.AddAttribute(ElementType.VIEW, Attr.HITFRAME, 0);
             copter.AddBehavior(new CopterDrawB());
             copter.AddAttribute(ElementType.MODEL, Attr.BOUNDS, new Bounds(115, 51));
+            copter.AddAttribute(ElementType.MODEL, Attr.PPLIVES, 100);
+            copter.AddAttribute(ElementType.MODEL, Attr.PPARMOR, 100);
             copter.Groups.SetState(Groups.COPTER);
             copter.AddBehavior(new CopterB());
             return copter;
+        }
+
+        public GameObject CreateInfoObject()
+        {
+            GameObject root = new GameObject(ObjectType.INFO, Subtypes.INFO, "info");
+
+            var canon = new Weapon("canon", 3, 155, 1, "pack://application:,,,/Images/bullet.png", false, 0);
+            var machineGun = new Weapon("machinegun", 15, 3, 3, "pack://application:,,,/Images/bullet2.png", false, 0);
+            var mortar = new Weapon("mortar", 1, 153, 1, "pack://application:,,,/Images/bullet3.png", true,0);
+            var bobo = new Weapon("shotgun", 2, 3, 3, "pack://application:,,,/Images/bullet4.png", false, 10);
+
+            var weaponList = new List<Weapon>();
+            weaponList.Add(canon);
+            weaponList.Add(machineGun);
+            weaponList.Add(mortar);
+            weaponList.Add(bobo);
+
+            root.AddAttribute(ElementType.ALL, Attr.WEAPONINFO, weaponList);
+
+        
+            return root;
         }
     }
 }

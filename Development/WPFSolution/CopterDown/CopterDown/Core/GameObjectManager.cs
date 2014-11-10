@@ -99,6 +99,16 @@ namespace CopterDown.Core
             return allGameObjects.Where(gm => gm.Tag == tag).ToList();
         }
 
+        public GameObject FindGameObjectBySubType(int subtype)
+        {
+            return allGameObjects.FirstOrDefault(gm => gm.SubType == subtype);
+        }
+
+        public List<GameObject> FindGameObjectsBySubType(int subtype)
+        {
+            return allGameObjects.Where(gm => gm.SubType == subtype).ToList();
+        }
+
         public void OnMessage(Message msg)
         {
             // todo some log here

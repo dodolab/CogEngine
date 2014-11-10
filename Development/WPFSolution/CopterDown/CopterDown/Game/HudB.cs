@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Types;
 using CopterDown.Enums;
 using CopterDown.Types;
 
@@ -26,6 +27,7 @@ namespace CopterDown.Game
         {
             var lives = GameObject.FindAtt<int>(Attr.LIVES);
             var score = GameObject.FindAtt<int>(Attr.SCORE);
+            var weapon = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAtt<Weapon>(Attr.WEAPON);
 
             TextBlock text = new TextBlock();
             text.Text = "Score: " + score.Value;
@@ -41,6 +43,14 @@ namespace CopterDown.Game
             GameLoop._canvas.Children.Add(text);
             Canvas.SetLeft(text, 500);
             Canvas.SetTop(text, 20);
+            Canvas.SetZIndex(text, 10);
+
+            text = new TextBlock();
+            text.Text = "Weapon: " + weapon.Value.Name;
+            text.FontSize = 20;
+            GameLoop._canvas.Children.Add(text);
+            Canvas.SetLeft(text, 20);
+            Canvas.SetTop(text, 60);
             Canvas.SetZIndex(text, 10);
         }
     }
