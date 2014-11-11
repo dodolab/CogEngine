@@ -44,11 +44,20 @@ namespace CopterDown.Core.Entities
             ParentTransform = parent;
         }
 
-        public Vector2d GetAbsolutePosition()
+        public Transform GetAbsoluteTransform()
         {
-            //todo
-            return null;
+            if (ParentTransform != null) return ParentTransform.GetAbsoluteTransform()*this;
+            else return this;
         }
 
+        public static Transform operator *(Transform first, Transform second)
+        {
+            var output = new Transform(0, 0);
+            output.Rotation = first.Rotation + second.Rotation;
+            output.Scale = new Vector2d(first.Scale.X*second.Scale.X, first.Scale.Y*second.Scale.Y);
+            output.ZIndex = first.ZIndex;
+            output.LocalPos = new Vector2d(output.Scale.X*second.LocalPos.X, output.Scale.Y*second.LocalPos.Y);
+            return output;
+        }
     }
 }

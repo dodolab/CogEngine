@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CopterDown.Core.Entities;
 using CopterDown.Core.Enums;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Core
 {
@@ -48,8 +48,10 @@ namespace CopterDown.Core
         public void Destroy()
         {
             Parent.RemoveChild(this);
-            foreach(var beh in _behaviors) GameObjectManager.Get.RemoveBehavior(beh);
+            if(_behaviors != null) foreach(var beh in _behaviors) GameObjectManager.Get.RemoveBehavior(beh);
             GameObjectManager.Get.RemoveGameObject(this);
+
+            if(_children != null) foreach(var child in _children.ToList()) child.Destroy();
             SendMessage(new Message(ElementType.ALL, new State(Traverses.SCENEROOT), Actions.GAMEOBJECT_DESTROYED, SenderType.GAMEOBJECT, Id, this));
         }
 
@@ -97,7 +99,8 @@ namespace CopterDown.Core
                 {
                     foreach (var behavior in _behaviors)
                     {
-                        if (behavior.Id != msg.OwnerId &&
+                        if ((behavior.BehState == BehaviorState.ACTIVE_MESSAGES || behavior.BehState == BehaviorState.ACTIVE_ALL) &&
+                            (msg.SenderType != SenderType.BEHAVIOR || behavior.Id != msg.OwnerId) &&
                             (msg.Category == ElementType.ALL || behavior.ElemType == msg.Category))
                         {
                             if (behavior.MessageListeners.HasState(msg.Action))
@@ -138,7 +141,8 @@ namespace CopterDown.Core
             {
                 foreach (var beh in _behaviors)
                 {
-                    if (beh.ElemType == ElementType.MODEL)
+                    if ((beh.BehState == BehaviorState.ACTIVE_ALL || beh.BehState == BehaviorState.ACTIVE_UPDATES) 
+                        && beh.ElemType == ElementType.MODEL)
                     {
                         beh.Update(delta, absolute);
                     }
@@ -154,7 +158,8 @@ namespace CopterDown.Core
             {
                 foreach (var beh in _behaviors)
                 {
-                    if (beh.ElemType == ElementType.VIEW)
+                    if ((beh.BehState == BehaviorState.ACTIVE_ALL || beh.BehState == BehaviorState.ACTIVE_UPDATES)
+                       && beh.ElemType == ElementType.VIEW)
                     {
                         beh.Update(delta, absolute);
                     }

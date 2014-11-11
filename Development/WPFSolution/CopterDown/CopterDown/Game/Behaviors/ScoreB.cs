@@ -1,9 +1,8 @@
 ﻿using System;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Game
 {

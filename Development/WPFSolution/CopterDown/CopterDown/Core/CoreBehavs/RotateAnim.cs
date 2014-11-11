@@ -9,20 +9,19 @@ namespace CopterDown.Core.CoreBehavs
         private float from;
         private float to;
         private float speed;
-
-        private bool removeAfterFinish;
+        private bool additive;
 
         // 0 to 1
         private float actual;
 
-        public RotateAnim(float from, float to, float speed, bool removeAfterFinish)
+        public RotateAnim(float from, float to, float speed, bool additive)
             : base(ElementType.MODEL, new State())
         {
             this.from = from;
             this.to = to;
             this.speed = speed;
             this.actual = from;
-            this.removeAfterFinish = removeAfterFinish;
+            this.additive = additive;
         }
 
         public override void OnMessage(Message msg)
@@ -30,43 +29,24 @@ namespace CopterDown.Core.CoreBehavs
             
         }
 
-  /*      protected Attribute<float> GetRotation(GameObject obj)
-        {
-            var rotation =
-                obj.FindAtt( Attr.AT_COM_ROTATION) as Attribute<float>;
+        private bool stopped = false;
 
-            if (rotation == null)
-            {
-                rotation = new Attribute<float>(0);
-                obj.AddAttribute(ElementType.MODELrotation,  Attr.AT_COM_ROTATION);
-            }
-            return rotation;
-        }
-        */
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            /*if (Active)
+            if (stopped) return;
+            float diff = (float) ((to == from ? 1 : (to - from))/1000*speed*delta.TotalMilliseconds);
+            actual += diff;
+            // if to == from, it is infinite rotation
+            if (to != from && ((to >= from && actual >= to) || (to < from && actual < to)))
             {
-                // toto je diskutabilni
-                if (actual >= to)
-                {
-                    if (removeAfterFinish)
-                    {
-                        GameObject.RemoveModelBehavior(this);
-                    }
-                    Active = false;
-                    return;
-                }
+                actual = to;
+                stopped = true;
+            }
 
-                float diff = (float) ((to-from)/1000*speed*delta.TotalMilliseconds);
-                actual += diff;
-                if (actual >= to) actual = to;
+            var transform = GameObject.Transform;
 
-                var rotation =
-                    GetRotation(GameObject);
-
-                rotation.Value += diff;
-            }*/
+            if (additive) transform.Rotation += diff;  
+            else transform.Rotation = actual; 
         }
     }
 }

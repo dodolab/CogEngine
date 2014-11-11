@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using CopterDown.Core.Entities;
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
+
 
 namespace CopterDown.Core.CoreBehavs
 {
-    /// <summary>
-    /// Takovy pokus na ovladani klavesnici
-    /// </summary>
     public class MoveB : ABehavior
     {
         public MoveB() : base(ElementType.MODEL, new State()) { }

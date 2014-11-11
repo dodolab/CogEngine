@@ -68,9 +68,10 @@
     <Compile Include="Core\Attribute.cs" />
     <Compile Include="Core\Entities\UserAction.cs" />
     <Compile Include="Core\Enums\Act.cs" />
+    <Compile Include="Core\Enums\BehaviorState.cs" />
     <Compile Include="Core\Enums\SenderType.cs" />
     <Compile Include="Core\Enums\Traverses.cs" />
-    <Compile Include="Core\Types\Attr.cs" />
+    <Compile Include="Game\Types\Attr.cs" />
     <Compile Include="Core\Entities\Bounds.cs" />
     <Compile Include="Core\Entities\State.cs" />
     <Compile Include="Core\Entities\Transform.cs" />
@@ -81,28 +82,29 @@
     <Compile Include="Core\Enums\ElementType.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\GameObjectManager.cs" />
-    <Compile Include="Core\Types\Groups.cs" />
+    <Compile Include="Game\Types\Groups.cs" />
     <Compile Include="Core\Entities\Collision.cs" />
     <Compile Include="Core\Message.cs" />
-    <Compile Include="Core\Types\Actions.cs" />
+    <Compile Include="Game\Types\Actions.cs" />
     <Compile Include="Core\Enums\ObjectType.cs" />
-    <Compile Include="Core\Types\States.cs" />
+    <Compile Include="Game\Types\States.cs" />
     <Compile Include="Core\Utils\VectorUt.cs" />
     <Compile Include="GameLoop.cs" />
     <Compile Include="Core\CoreBehavs\ImageRenderB.cs" />
-    <Compile Include="Game\BulletB.cs" />
-    <Compile Include="Game\CanonB.cs" />
-    <Compile Include="Game\CopterB.cs" />
-    <Compile Include="Game\CopterDrawB.cs" />
+    <Compile Include="Game\Behaviors\BulletB.cs" />
+    <Compile Include="Game\Behaviors\CanonB.cs" />
+    <Compile Include="Game\Behaviors\CopterB.cs" />
+    <Compile Include="Game\Behaviors\CopterDrawB.cs" />
+    <Compile Include="Game\GameActions.cs" />
     <Compile Include="Game\GameBuilder.cs" />
     <Compile Include="Core\Utils\Helper.cs" />
-    <Compile Include="Game\HudB.cs" />
-    <Compile Include="Game\IntroB.cs" />
-    <Compile Include="Core\Types\Subtypes.cs" />
-    <Compile Include="Game\ParaB.cs" />
-    <Compile Include="Game\ParaDrawB.cs" />
-    <Compile Include="Game\PlayerB.cs" />
-    <Compile Include="Game\ScoreB.cs" />
+    <Compile Include="Game\Behaviors\HudB.cs" />
+    <Compile Include="Game\Behaviors\IntroB.cs" />
+    <Compile Include="Game\Types\Subtypes.cs" />
+    <Compile Include="Game\Behaviors\ParaB.cs" />
+    <Compile Include="Game\Behaviors\ParaDrawB.cs" />
+    <Compile Include="Game\Behaviors\PlayerB.cs" />
+    <Compile Include="Game\Behaviors\ScoreB.cs" />
     <Compile Include="Game\Weapon.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -156,6 +158,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\bullet4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cloud.png" />
+    <Resource Include="Images\sun.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

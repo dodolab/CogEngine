@@ -2,68 +2,82 @@
 using System.Collections.Generic;
 using System.Linq;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Utils;
 using CopterDown.Enums;
 
 namespace CopterDown.Core.CoreBehavs
 {
     public class TranslateAnim : ABehavior
     {
-        private Vector2d from;
-        private Vector2d to;
         private float speed;
         private float distX;
         private float distY;
-        private bool removeAfterFinish;
+        private bool additive;
+        private Vector2d to;
+        private Vector2d from;
+        private bool repeat;
 
         // 0 to 1
         private Vector2d actual;
 
-        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish)
+        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool additive, bool repeat)
             : base(ElementType.MODEL, new State())
         {
-            this.from = from;
-            this.to = to;
             this.speed = speed;
             this.actual = new Vector2d(from);
             this.distX = to.X - from.X;
             this.distY = to.Y - from.Y;
-            this.removeAfterFinish = removeAfterFinish;
+            this.additive = additive;
+            this.to = to;
+            this.from = from;
+            this.repeat = repeat;
         }
 
         public override void OnMessage(Message msg)
         {
-            
+
         }
 
+        private bool stopped = false;
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
-        {/*
-            if (Active)
+        {
+            if (stopped) return;
+
+            float diffX = (float) (distX/1000*speed*delta.TotalMilliseconds);
+            float diffY = (float) (distY/1000*speed*delta.TotalMilliseconds);
+
+            if (VectorUt.DistSquare(from, to) < VectorUt.DistSquare(from, actual))
             {
-                // toto je diskutabilni
-                if (VectorUt.DistSquare(from, to) < VectorUt.DistSquare(from, actual))
+                actual = new Vector2d(to.X, to.Y);
+                if (repeat)
                 {
-                    if (removeAfterFinish)
-                    {
-                        GameObject.RemoveModelBehavior(this);
-                    }
-                    Active = false;
-                    return;
+                    var temp = from;
+                    from = new Vector2d(to.X,to.Y);
+                    to = new Vector2d(temp.X,temp.Y);
+                    this.distX = to.X - from.X;
+                    this.distY = to.Y - from.Y;
                 }
+                else
+                {
+                    stopped = true;
+                }
+            }
 
-                float diffX = (float) (distX/1000*speed*delta.TotalMilliseconds);
-                float diffY = (float) (distY/1000*speed*delta.TotalMilliseconds);
+            actual.X += diffX;
+            actual.Y += diffY;
 
+            var transform = GameObject.Transform;
 
-                actual.X += diffX;
-                actual.Y += diffY;
-
-                var position =
-                    GetPosition(GameObject);
-
-                position.Value.X += diffX;
-                position.Value.Y += diffY;
-            }*/
+            if (additive)
+            {
+                transform.LocalPos.X += diffX;
+                transform.LocalPos.Y += diffY;
+            }
+            else
+            {
+                transform.LocalPos = new Vector2d(actual.X, actual.Y);
+            }
         }
     }
 }

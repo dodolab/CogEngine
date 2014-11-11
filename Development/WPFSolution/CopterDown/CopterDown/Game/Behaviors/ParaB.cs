@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
 using CopterDown.Core.Enums;
-using CopterDown.Core.Types;
+
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Game
 {
@@ -32,7 +32,7 @@ namespace CopterDown.Game
             if (!isGrounded && transform.LocalPos.Y > 264)
             {
                 GameObject.States.SetState(States.IS_GROUNDED);
-                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.PARA_GROUNDED, GameObject);
+                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), GameActions.PARA_GROUNDED, GameObject);
             }
             else if (!isGrounded) transform.LocalPos.Y += (float)Math.Sqrt(transform.LocalPos.Y / 50) * 0.5f;
 

@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Game
 {
     public class PlayerB : ABehavior
     {
-        public PlayerB() : base(ElementType.MODEL, new State(Actions.PARA_GROUNDED)){}
+        public PlayerB() : base(ElementType.MODEL, new State(GameActions.PARA_GROUNDED)){}
 
         public override void OnMessage(Message msg)
         {
-            if (msg.Action == Actions.PARA_GROUNDED)
+            if (msg.Action == GameActions.PARA_GROUNDED)
             {
                 GameObject.SceneRoot.FindAtt<int>(Attr.LIVES).Value--;
             }

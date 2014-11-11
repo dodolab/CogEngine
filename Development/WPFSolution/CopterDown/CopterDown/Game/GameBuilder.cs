@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.CoreBehavs;
 using CopterDown.Core.Entities;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Game
 {
@@ -52,6 +51,21 @@ namespace CopterDown.Game
             background.Transform = new Transform(0, 0, 0);
             background.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/background.png");
             background.AddBehavior(new ImageRenderB());
+
+            GameObject cloud = new GameObject(ObjectType.ROOT, Subtypes.OTHER, "cloud");
+            cloud.Transform = new Transform(0, 0, 0, 2);
+            cloud.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/cloud.png");
+            cloud.AddBehavior(new ImageRenderB());
+            cloud.AddBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(500,0), 0.03f, true, true));
+            background.AddChild(cloud);
+
+            GameObject sun = new GameObject(ObjectType.ROOT, Subtypes.OTHER, "sun");
+            sun.Transform = new Transform(350, 6, 0, 1);
+            sun.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/sun.png");
+            sun.AddBehavior(new ImageRenderB());
+            sun.AddBehavior(new RotateAnim(0,0,5,true));
+            background.AddChild(sun);
+
             return background;
         }
 

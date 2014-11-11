@@ -19,7 +19,7 @@ namespace CopterDown.Core
 
         protected ABehavior(ElementType elemType, State messageListeners)
         {
-            this.Active = true;
+            this.BehState = BehaviorState.ACTIVE_ALL;
             this.Id = idCounter++;
             this.ElemType = elemType;
             this.MessageListeners = messageListeners;
@@ -28,7 +28,7 @@ namespace CopterDown.Core
         public ElementType ElemType { get; private set; }
 
         public int Id { get; protected set; }
-        public bool Active { get; set; }
+        public BehaviorState BehState { get; set; }
         public State MessageListeners { get; protected set; }
 
         public GameObject GameObject { get; set; }
