@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace CopterDown.Core.Entities
 {
     public class Transform
     {
+        private Matrix matrix;
+
         public Transform(float posX, float posY)
         {
             LocalPos = new Vector2d(posX, posY);
@@ -44,20 +47,25 @@ namespace CopterDown.Core.Entities
             ParentTransform = parent;
         }
 
-        public Transform GetAbsoluteTransform()
+        public int GetAbsoluteZIndex()
         {
-            if (ParentTransform != null) return ParentTransform.GetAbsoluteTransform()*this;
-            else return this;
+            if (ParentTransform != null) return ParentTransform.ZIndex*10 + ZIndex;
+            else return ZIndex;
         }
 
-        public static Transform operator *(Transform first, Transform second)
+        public Matrix GetAbsoluteMatrix()
         {
-            var output = new Transform(0, 0);
-            output.Rotation = first.Rotation + second.Rotation;
-            output.Scale = new Vector2d(first.Scale.X*second.Scale.X, first.Scale.Y*second.Scale.Y);
-            output.ZIndex = first.ZIndex;
-            output.LocalPos = new Vector2d(output.Scale.X*second.LocalPos.X, output.Scale.Y*second.LocalPos.Y);
-            return output;
+            matrix = new Matrix();
+            matrix.Translate(-RotationOrigin.X, -RotationOrigin.Y);
+            matrix.Scale(Scale.X, Scale.Y);
+            matrix.Rotate(Rotation);
+            matrix.Translate(LocalPos.X, LocalPos.Y);
+
+            if (ParentTransform != null)
+            {
+                return matrix * ParentTransform.GetAbsoluteMatrix();
+            }
+            else return matrix;
         }
     }
 }

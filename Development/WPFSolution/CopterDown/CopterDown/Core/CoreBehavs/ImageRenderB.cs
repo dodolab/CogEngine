@@ -21,11 +21,10 @@ namespace CopterDown.Core.CoreBehavs
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             var imgSource = GameObject.FindAtt<string>(Attr.IMGSOURCE);
-            var transform = GameObject.Transform;
+            var transform = GameObject.Transform.GetAbsoluteMatrix();
+            var zindex = GameObject.Transform.GetAbsoluteZIndex();
 
-            Helper.DrawImage(GameLoop._canvas, imgSource.Value, transform.LocalPos.X, transform.LocalPos.Y, 
-                transform.Rotation, transform.RotationOrigin.X, 
-                transform.RotationOrigin.Y, transform.ZIndex, transform.Scale.X, transform.Scale.Y);
+            Helper.DrawImage(GameLoop._canvas, imgSource.Value, transform, zindex);
         }
 
     }

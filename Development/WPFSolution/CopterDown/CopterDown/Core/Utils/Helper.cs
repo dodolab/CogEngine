@@ -12,8 +12,7 @@ namespace CopterDown.Utils
 {
     public static class Helper
     {
-        public static void DrawImage(Canvas canvas, string path, float x, float y, float rotation, float rotOriginX,
-    float rotOriginY, int zIndex, float scaleX, float scaleY)
+        public static void DrawImage(Canvas canvas, string path, Matrix matrix, int zIndex)
         {
             var finalImage = new Image();
             var logo = new BitmapImage();
@@ -23,24 +22,10 @@ namespace CopterDown.Utils
             finalImage.Source = logo;
 
             canvas.Children.Add(finalImage);
-            Canvas.SetLeft(finalImage, x);
-            Canvas.SetTop(finalImage, y);
             Canvas.SetZIndex(finalImage,zIndex);
 
-            if (rotation != 0)
-            {
-                var rotate = new RotateTransform(rotation);
 
-                finalImage.RenderTransform = rotate;
-
-                //origin for object
-                finalImage.RenderTransformOrigin = new Point(rotOriginX, rotOriginY);
-            }
-
-            if (scaleX != 1 || scaleY != 1)
-            {
-                finalImage.RenderTransform = new ScaleTransform(scaleX, scaleY);
-            }
+            finalImage.RenderTransform = new MatrixTransform(matrix);
         }
     }
 }
