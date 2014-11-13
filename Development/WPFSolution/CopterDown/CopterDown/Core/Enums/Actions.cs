@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Game.Types
+namespace CopterDown.Core.Enums
 {
     public class Actions
     {
@@ -16,6 +16,5 @@ namespace CopterDown.Game.Types
         public const int COLISION_OCURRED = 5;
         public const int GAMEOBJECT_DESTROYED = 6;
         public const int ATTRIBUTE_CHANGED = 7;
-        public const int GAMEOBJECT_KILLED = 8;
     }
 }

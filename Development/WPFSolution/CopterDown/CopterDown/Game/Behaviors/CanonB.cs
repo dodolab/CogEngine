@@ -22,10 +22,10 @@ namespace CopterDown.Game
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             var userActions = GameObject.Root.FindAtt<UserAction>(Attr.USERACTION).Value;
-            var actualWeapon = GameObject.FindAtt<Weapon>(Attr.WEAPON);
-            var lastShot = GameObject.FindAtt <DateTime>(Attr.CANON_LASTSHOT);
+            var actualWeapon = GameObject.FindAtt<Weapon>(GameAttr.WEAPON);
+            var lastShot = GameObject.FindAtt<DateTime>(GameAttr.CANON_LASTSHOT);
             var actualCadency = actualWeapon.Value.Cadency;
-            var angle = GameObject.FindAtt<Pair<float>>(Attr.CANON_MINMAXANGLE);
+            var angle = GameObject.FindAtt<Pair<float>>(GameAttr.CANON_MINMAXANGLE);
             var transform = GameObject.Transform;
 
             if (userActions.KeyActions.Any(k => k.ActValue == Act.LEFT))
@@ -61,7 +61,7 @@ namespace CopterDown.Game
                 userActions.KeyActions.FirstOrDefault(k => k.ActValue == Act.SWITCH).Handled = true;
 
                 var info = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.INFO);
-                var allWeapons = info.FindAttValue <List<Weapon>>(Attr.WEAPONINFO);
+                var allWeapons = info.FindAttValue<List<Weapon>>(GameAttr.WEAPONINFO);
 
                 int index = 0;
 

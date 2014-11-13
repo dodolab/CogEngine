@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
 using CopterDown.Enums;
 using CopterDown.Game;
 using CopterDown.Game.Types;

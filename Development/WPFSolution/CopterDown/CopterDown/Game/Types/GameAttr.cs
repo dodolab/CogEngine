@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Game.Types
 {
-    public class Attr
+    public class GameAttr
     {
-        // common attributes
-        public const int VELOCITY = 17;
         public const int FRAME = 19;
 
         // copterdown attributes
@@ -18,17 +16,13 @@ namespace CopterDown.Game.Types
         public const int SCORE = 12;
         public const int LIVES = 13;
 
-        public const int USERACTION = 16;
+        
         public const int COPTERSPEED = 25;
 
         public const int SPAWNINTERVAL = 21;
         public const int ACTUALSPAWN = 22;
 
         public const int HITFRAME = 23;
-
-        public const int IMGSOURCE = 24;
-
-        public const int BOUNDS = 26;
 
         public const int CANON_MINMAXANGLE = 27;
         public const int PPLIVES = 28;

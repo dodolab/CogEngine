@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<game>
+  <node tag="intro" type="scene" subtype="other">
+    <behavior name="ImageRenderB"/>
+    <behavior name="IntroB"/>
+    <attribute type="view" key="IMGSOURCE" value="pack://application:,,,/Images/intro.png" />
+  </node>
+  <node tag="player" type="scene" subtype="player">
+    <attribute type="model" key="LIVES" value="12"/>
+    <attribute type="model" key="SCORE" value="0"/>
+    <attribute type="model" key="SPAWNINTERVAL" value="0.3f"/>
+    <attribute type="model" key="ACTUALSPAWN" value="3.3.2000"/>
+    <attribute type="model" key="COPTERSPEED" value="6f"/>
+  </node>
+</game>

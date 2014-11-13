@@ -22,7 +22,7 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var frame = GameObject.FindAtt<int>(Attr.FRAME);
+            var frame = GameObject.FindAtt<int>(GameAttr.FRAME);
                         var leftDirection = GameObject.States.HasState(States.LEFT_DIR);
             var transform = GameObject.Transform;
             if (!leftDirection) transform.Scale.X = -1;

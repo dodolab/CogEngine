@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
 using CopterDown.Core.Enums;
@@ -26,8 +22,8 @@ namespace CopterDown.Game
             var isHit = GameObject.States.HasState(States.IS_HIT);
             var leftDirection = GameObject.States.HasState(States.LEFT_DIR);
 
-            var copterSpeed = GameObject.SceneRoot.FindAtt<float>(Attr.COPTERSPEED);
-            var hitFrame = GameObject.FindAtt<int>(Attr.HITFRAME);
+            var copterSpeed = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.INFO).FindAtt<float>(GameAttr.COPTERSPEED);
+            var hitFrame = GameObject.FindAtt<int>(GameAttr.HITFRAME);
 
             // update copter
 
@@ -39,10 +35,10 @@ namespace CopterDown.Game
                 GameObject.States.ResetState(States.IS_HIT);
                 hitFrame.Value = 0;
 
-                var targetLives = GameObject.FindAtt<int>(Attr.PPLIVES);
+                var targetLives = GameObject.FindAtt<int>(GameAttr.PPLIVES);
                 if (targetLives.Value == 0)
                 {
-                    SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.GAMEOBJECT_KILLED, GameObject);
+                    SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), GameActions.GAMEOBJECT_KILLED, GameObject);
                     GameObject.Destroy();
                 }
             }

@@ -16,7 +16,7 @@ namespace CopterDown.Game
         {
             if (msg.Action == GameActions.PARA_GROUNDED)
             {
-                GameObject.SceneRoot.FindAtt<int>(Attr.LIVES).Value--;
+                GameObject.SceneRoot.FindAtt<int>(GameAttr.LIVES).Value--;
             }
         }
 
@@ -24,7 +24,7 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var lives = GameObject.FindAtt<int>(Attr.LIVES);
+            var lives = GameObject.FindAtt<int>(GameAttr.LIVES);
             if (lives.Value == 0)
             {
                 var root = GameObject.Parent;
@@ -33,8 +33,8 @@ namespace CopterDown.Game
                 return;
             }
 
-            var spawnInterval = GameObject.FindAtt<float>(Attr.SPAWNINTERVAL);
-            var lastSpawn = GameObject.FindAtt<DateTime>(Attr.ACTUALSPAWN);
+            var spawnInterval = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.INFO).FindAtt<float>(GameAttr.SPAWNINTERVAL);
+            var lastSpawn = GameObject.FindAtt<DateTime>(GameAttr.ACTUALSPAWN);
 
             if ((GameObject.Children == null || GameObjectManager.Get.GetGameObjectCountBySubType(Subtypes.COPTER) < 6)
                 && ((DateTime.Now - lastSpawn.Value).TotalSeconds > 1.0 / spawnInterval.Value))

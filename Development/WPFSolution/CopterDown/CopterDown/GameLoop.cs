@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
 using CopterDown.Enums;
 using CopterDown.Game;
 using CopterDown.Game.Types;

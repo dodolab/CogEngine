@@ -24,9 +24,9 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var lives = GameObject.FindAtt<int>(Attr.LIVES);
-            var score = GameObject.FindAtt<int>(Attr.SCORE);
-            var weapon = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAtt<Weapon>(Attr.WEAPON);
+            var lives = GameObject.FindAtt<int>(GameAttr.LIVES);
+            var score = GameObject.FindAtt<int>(GameAttr.SCORE);
+            var weapon = GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAtt<Weapon>(GameAttr.WEAPON);
 
             TextBlock text = new TextBlock();
             text.Text = "Score: " + score.Value;
