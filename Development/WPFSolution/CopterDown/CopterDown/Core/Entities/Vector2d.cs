@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core.CoreAttribs
+namespace CopterDown.Core.Entities
 {
     public class Vector2d
     {

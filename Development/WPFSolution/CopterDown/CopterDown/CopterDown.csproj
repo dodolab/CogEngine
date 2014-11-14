@@ -61,25 +61,31 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behavior\MovementBehavior.cs" />
+    <Compile Include="Core\Entities\Pair.cs" />
+    <Compile Include="Core\CoreBehavs\MoveB.cs" />
     <Compile Include="Core\ABehavior.cs" />
-    <Compile Include="Behavior\RenderBehavior.cs" />
     <Compile Include="Core\Attribute.cs" />
-    <Compile Include="Core\AT.cs" />
-    <Compile Include="Core\CoreAttribs\Bounds.cs" />
-    <Compile Include="Core\CoreAttribs\ComplexState.cs" />
-    <Compile Include="Core\CoreAttribs\SimpleState.cs" />
-    <Compile Include="Core\CoreAttribs\Transform.cs" />
-    <Compile Include="Core\CoreAttribs\Vector2d.cs" />
+    <Compile Include="Core\Entities\UserAction.cs" />
+    <Compile Include="Core\Enums\Act.cs" />
+    <Compile Include="Core\Enums\SenderType.cs" />
+    <Compile Include="Core\Enums\Traverses.cs" />
+    <Compile Include="Core\Types\Attr.cs" />
+    <Compile Include="Core\Entities\Bounds.cs" />
+    <Compile Include="Core\Entities\State.cs" />
+    <Compile Include="Core\Entities\Transform.cs" />
+    <Compile Include="Core\Entities\Vector2d.cs" />
     <Compile Include="Core\CoreBehavs\ColliderB.cs" />
     <Compile Include="Core\CoreBehavs\RotateAnim.cs" />
     <Compile Include="Core\CoreBehavs\TranslateAnim.cs" />
-    <Compile Include="Core\ElementType.cs" />
+    <Compile Include="Core\Enums\ElementType.cs" />
     <Compile Include="Core\GameObject.cs" />
-    <Compile Include="Core\Group.cs" />
-    <Compile Include="Core\Messages\Collision.cs" />
-    <Compile Include="Core\Messages\Message.cs" />
-    <Compile Include="Core\ObjectType.cs" />
+    <Compile Include="Core\GameObjectManager.cs" />
+    <Compile Include="Core\Types\Groups.cs" />
+    <Compile Include="Core\Entities\Collision.cs" />
+    <Compile Include="Core\Message.cs" />
+    <Compile Include="Core\Types\Actions.cs" />
+    <Compile Include="Core\Enums\ObjectType.cs" />
+    <Compile Include="Core\Types\States.cs" />
     <Compile Include="Core\Utils\VectorUt.cs" />
     <Compile Include="GameLoop.cs" />
     <Compile Include="Core\CoreBehavs\ImageRenderB.cs" />
@@ -88,10 +94,10 @@
     <Compile Include="Game\CopterB.cs" />
     <Compile Include="Game\CopterDrawB.cs" />
     <Compile Include="Game\GameBuilder.cs" />
-    <Compile Include="Game\Helper.cs" />
+    <Compile Include="Core\Utils\Helper.cs" />
     <Compile Include="Game\HudB.cs" />
     <Compile Include="Game\IntroB.cs" />
-    <Compile Include="Game\ObjTypes.cs" />
+    <Compile Include="Core\Types\Subtypes.cs" />
     <Compile Include="Game\ParaB.cs" />
     <Compile Include="Game\ParaDrawB.cs" />
     <Compile Include="Game\PlayerB.cs" />

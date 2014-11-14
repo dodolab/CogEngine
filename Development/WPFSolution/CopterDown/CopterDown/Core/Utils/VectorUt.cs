@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using CopterDown.Core.CoreAttribs;
+using CopterDown.Core.Entities;
 
 namespace CopterDown.Core.Utils
 {

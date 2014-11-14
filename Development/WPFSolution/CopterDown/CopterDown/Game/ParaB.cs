@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Game
 {
     public class ParaB : ABehavior
     {
-        public ParaB() : base(ElementType.MODEL){}
+        public ParaB() : base(ElementType.MODEL, new State()){}
 
         public override void OnMessage(Message msg)
         {
@@ -20,20 +23,24 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var isGrounded = GameObject.FindAtt<bool>(AT.AT_COPTER_PARA_ISGROUNDED);
-            var transform = GameObject.GetTransform();
-            var isHit = GameObject.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
+            var isGrounded = GameObject.States.HasState(States.IS_GROUNDED);
+            var transform = GameObject.Transform;
+            var isHit = GameObject.States.HasState(States.IS_HIT);
 
-            var hitFrame =  GameObject.FindAtt<int>(AT.AT_COPTER_HITFRAME);
+            var hitFrame =  GameObject.FindAtt<int>(Attr.HITFRAME);
 
-            if (!isGrounded.Value && transform.LocalPos.Y > 264)
+            if (!isGrounded && transform.LocalPos.Y > 264)
             {
-                GameObject.GetSceneRoot().FindAtt<int>(AT.AT_COPTER_PLAYER_LIVES).Value--;
-                isGrounded.Value = true;
+                GameObject.States.SetState(States.IS_GROUNDED);
+                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.PARA_GROUNDED, GameObject);
             }
-            else if (!isGrounded.Value) transform.LocalPos.Y += (float)Math.Sqrt(transform.LocalPos.Y / 50) * 0.5f;
+            else if (!isGrounded) transform.LocalPos.Y += (float)Math.Sqrt(transform.LocalPos.Y / 50) * 0.5f;
 
-            if (isHit.Value && hitFrame.Value++ > 10) GameObject.Destroy();
+            if (isHit && hitFrame.Value++ > 10)
+            {
+                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.GAMEOBJECT_KILLED, GameObject);
+                GameObject.Destroy();
+            }
         }
     }
 }

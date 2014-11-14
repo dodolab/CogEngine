@@ -1,37 +1,33 @@
 ﻿using System;
 using System.Linq;
 using CopterDown.Core;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Core.Messages;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
 
 namespace CopterDown.Game
 {
     public class BulletB : ABehavior
     {
-        public BulletB() : base(ElementType.MODEL){}
+        public BulletB() : base(ElementType.MODEL, new State(Actions.COLISION_OCURRED)){}
 
         public override void OnMessage(Message msg)
         {
-            if (msg.Type == MessageType.COLISION_OCURRED)
+            if (msg.Action == Actions.COLISION_OCURRED)
             {
-                    var collision = msg.Data as Collision;
-                if (collision.FirstId == GameObject.GetId() || collision.SecondId == GameObject.GetId())
+                var collision = msg.Data as Collision;
+                if (collision.FirstId == GameObject.Id || collision.SecondId == GameObject.Id)
                 {
-                    var second = GameObject.GetSceneRoot().GetChildren().FirstOrDefault(chld => chld.GetId() ==
-                                                                                 (collision.FirstId ==
-                                                                                  GameObject.GetId()
-                                                                                     ? collision.SecondId
-                                                                                     : collision.FirstId));
+                    var second =
+                        GameObjectManager.Get.FindGameObjectById(collision.FirstId == GameObject.Id
+                            ? collision.SecondId
+                            : collision.FirstId);
 
-                    var isHit = second.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
+                    var isHit = second.States.HasState(States.IS_HIT);
 
-                    if (isHit != null && !isHit.Value)
+                    if (!isHit)
                     {
-                        second.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT).Value = true;
-                        GameObject.GetSceneRoot()
-                            .SendMessage(new Message(ElementType.MODEL, TraverseMode.NOTRAV,
-                                MessageType.GAMEOBJECT_DESTROYED, second));
+                        second.States.SetState(States.IS_HIT);
                         GameObject.Destroy();
                     }
                 }
@@ -40,16 +36,7 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-
-            var transform = GameObject.GetTransform();
-            var velocity = GameObject.FindAtt<Vector2d>(AT.AT_COM_VELOCITY);
-
-            var bulletSpeed = GameObject.FindAtt<float>(AT.AT_COPTER_BULLETSPEED);
-
-
-            transform.LocalPos.X += velocity.Value.X * bulletSpeed.Value;
-            transform.LocalPos.Y += velocity.Value.Y * bulletSpeed.Value;
-
+            var transform = GameObject.Transform;
             if (transform.LocalPos.X < 0 || transform.LocalPos.X > 640 || transform.LocalPos.Y < 0 || transform.LocalPos.Y > 340)
             {
                 GameObject.Destroy();

@@ -3,15 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Core.Messages;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Core.CoreBehavs
 {
     public class ColliderB : ABehavior
     {
-        public ColliderB() : base(ElementType.MODEL){}
+        protected State firstCollidableGroups;
+        protected State secondCollidableGroups;
+
+        public ColliderB(State firstCollidableGroups, State secondCollidableGroups) : base(ElementType.MODEL, new State())
+        {
+            this.firstCollidableGroups = firstCollidableGroups;
+            this.secondCollidableGroups = secondCollidableGroups;
+        }
+
+        public ColliderB(int collidableGroup) : this(new State(collidableGroup), new State(collidableGroup)){}
+
+        public ColliderB(int firstCollidableGroup, int secondCollidableGroup) : this(new State(firstCollidableGroup), new State(secondCollidableGroup)) { }
+
 
         public override void OnMessage(Message msg)
         {
@@ -20,55 +34,35 @@ namespace CopterDown.Core.CoreBehavs
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var allChildren = GameObject.GetChildren().Where(child => child.IsInGroup(Group.COLLIDABLE)).ToList();
+            var allChildren = GameObject.Children.ToList();
 
-            for (int i = 0; i < allChildren.Count-1; i++)
+            for (int i = 0; i < allChildren.Count - 1; i++)
             {
                 var first = allChildren[i];
+                bool isInFirstGroup = first.Groups.ContainsAtLeastOne(firstCollidableGroups);
+                bool isInSecondGroup = first.Groups.ContainsAtLeastOne(secondCollidableGroups);
 
-                for (int j = i + 1; j < allChildren.Count; j++)
+                if (isInFirstGroup || isInSecondGroup)
                 {
-                    var second = allChildren[j];
-                    if (Collides(first, second))
+                    for (int j = i + 1; j < allChildren.Count; j++)
                     {
-                        GameObject.SendMessage(new Message(ElementType.MODEL, TraverseMode.TRAV_BEHFIRST,
-                            MessageType.COLISION_OCURRED, new Collision()
+                        var second = allChildren[j];
+                        bool isSecondInFirstGroup = second.Groups.ContainsAtLeastOne(firstCollidableGroups);
+                        bool isSecondInSecondGroup = second.Groups.ContainsAtLeastOne(secondCollidableGroups);
+
+                        if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup))
+                        {
+                            var firstBounds = first.FindAtt<Bounds>(Attr.BOUNDS);
+
+                            if (firstBounds!= null && firstBounds.Value.Collides(first, second))
                             {
-                                FirstId = first.GetId(),
-                                SecondId = second.GetId()
-                            }));
+                                GameObject.SendMessage(new Message(ElementType.MODEL, Traverses.BEH_FIRST,
+                                    Actions.COLISION_OCURRED, SenderType.BEHAVIOR, Id, new Collision(first.Id,second.Id)));
+                            }
+                        }
                     }
                 }
             }
-
-        }
-
-        private bool Collides(GameObject first, GameObject second)
-        {
-            var transformFirst = first.GetTransform();
-            var transformSecond = second.GetTransform();
-            var boundsFirst = first.FindAtt<Bounds>(AT.AT_COM_BOUNDS);
-            var boundsSecond = second.FindAtt<Bounds>(AT.AT_COM_BOUNDS);
-
-            if (transformFirst != null && transformSecond != null && boundsFirst != null && boundsSecond != null)
-            {
-                var xDiff = Math.Abs(transformFirst.LocalPos.X - transformSecond.LocalPos.X);
-                var yDiff = Math.Abs(transformFirst.LocalPos.Y - transformSecond.LocalPos.Y);
-
-                bool hasXIntersect = (transformFirst.LocalPos.X > transformSecond.LocalPos.X &&
-                                      xDiff < boundsSecond.Value.Width) ||
-                                     (transformFirst.LocalPos.X < transformSecond.LocalPos.X &&
-                                      xDiff < boundsFirst.Value.Width);
-
-                bool hasYIntersect = (transformFirst.LocalPos.Y > transformSecond.LocalPos.Y &&
-                                      yDiff < boundsSecond.Value.Height) ||
-                                     (transformFirst.LocalPos.Y < transformSecond.LocalPos.Y &&
-                                      yDiff < boundsFirst.Value.Height);
-
-                return hasXIntersect && hasYIntersect;
-            }
-
-            return false;
         }
     }
 }

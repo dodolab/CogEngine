@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using CopterDown.Behavior;
 using CopterDown.Core;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Core.CoreBehavs;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
 using CopterDown.Game;
+using CopterDown.Types;
 
 namespace CopterDown
 {
@@ -25,9 +24,9 @@ namespace CopterDown
 
         public static Canvas _canvas;
 
-        public List<Key> KeysPressed
+        public UserAction KeysPressed
         {
-            get { return root.FindAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value; }
+            get { return root.FindAtt<UserAction>(Attr.USERACTION).Value; }
         } 
 
         public GameLoop(Dispatcher disp, Canvas canvas, int drawInterval, int updateInterval)
@@ -35,8 +34,8 @@ namespace CopterDown
             this._drawInterval = drawInterval;
             this._updateInterval = updateInterval;
             _canvas = canvas;
-            this.root = new GameObject(ObjectType.ROOT, "root");
-            this.root.AddAttribute(ElementType.MODEL, AT.AT_COPTER_KEYINPUT, new List<Key>());
+            this.root = new GameObject(ObjectType.ROOT, Subtypes.OTHER, "root");
+            this.root.AddAttribute(ElementType.MODEL, Attr.USERACTION, new UserAction());
 
             this._disp = disp;
 
@@ -94,22 +93,31 @@ namespace CopterDown
 
         private void Draw(object state)
         {
-            
-            _disp.Invoke(() =>
+            try
             {
-                var now = DateTime.Now;
-                _canvas.Children.Clear();
-                root.Draw(now - lastDraw, now - start);
-                lastDraw = DateTime.Now;
-            });
+                _disp.Invoke(() =>
+                {
+                    var now = DateTime.Now;
+                    _canvas.Children.Clear();
+                    root.Draw(now - lastDraw, now - start);
+                    lastDraw = DateTime.Now;
+                });
+            }
+            catch
+            {
+                
+            }
         }
 
         private void Update(object state)
         {
-            var now = DateTime.Now;
-            root.Update(now - lastUpdate, now - start);
-            lastUpdate = DateTime.Now;
+            lock (this)
+            {
+                var now = DateTime.Now;
+                root.Update(now - lastUpdate, now - start);
+                lastUpdate = DateTime.Now;
+            }
         }
-       
+
     }
 }

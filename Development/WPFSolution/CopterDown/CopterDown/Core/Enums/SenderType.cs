@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core
+namespace CopterDown.Core.Enums
 {
-    public enum ElementType
+    public enum SenderType
     {
-        VIEW, MODEL
+        GAMEOBJECT, BEHAVIOR, ATTRIBUTE
     }
 }

@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CopterDown.Core;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Game
 {
     public class ScoreB : ABehavior
     {
-        public ScoreB() : base(ElementType.MODEL){}
+        public ScoreB() : base(ElementType.MODEL, new State(Actions.GAMEOBJECT_KILLED)) { }
 
-        public override void OnMessage(Messages.Message msg)
+        public override void OnMessage(Message msg)
         {
-            if (msg.Type == MessageType.GAMEOBJECT_DESTROYED)
+            if (msg.Action == Actions.GAMEOBJECT_KILLED)
             {
                 var gameObj = msg.Data as GameObject;
-                if (gameObj.GetObjectCategory() == ObjTypes.COPTER)
+                if (gameObj.SubType == Subtypes.COPTER)
                 {
-                    GameObject.GetSceneRoot().FindAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 100;
+                    GameObject.SceneRoot.FindAtt<int>(Attr.SCORE).Value += 100;
                 }
-                else if (gameObj.GetObjectCategory() == ObjTypes.PARA)
+                else if (gameObj.SubType == Subtypes.PARA)
                 {
-                    GameObject.GetSceneRoot().FindAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 20;
+                    GameObject.SceneRoot.FindAtt<int>(Attr.SCORE).Value += 20;
                 }
                 
             }

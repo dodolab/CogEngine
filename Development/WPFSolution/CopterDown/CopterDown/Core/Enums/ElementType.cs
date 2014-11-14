@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core
+namespace CopterDown.Enums
 {
-    public enum ObjectType
+    public enum ElementType
     {
-        ROOT, SCENE, OBJECT, HUD
+        ALL, VIEW, MODEL
     }
 }

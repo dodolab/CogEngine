@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Game
 {
     public class CopterB : ABehavior
     {
-        public CopterB() : base(ElementType.MODEL){}
+        public CopterB() : base(ElementType.MODEL, new State()){}
 
         public override void OnMessage(Message msg)
         {
@@ -22,46 +25,37 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var transform = GameObject.GetTransform();
-            var isHit = GameObject.FindAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
-            var leftDirection =GameObject.FindAtt<bool>(AT.AT_COPTER_LEFTDIRECTION);
+            var transform = GameObject.Transform;
+            var isHit = GameObject.States.HasState(States.IS_HIT);
+            var leftDirection = GameObject.States.HasState(States.LEFT_DIR);
 
-            var copterSpeed = GameObject.GetSceneRoot().FindAtt<float>(AT.AT_COPTER_COPTERSPEED);
-            var hitFrame = GameObject.FindAtt<int>(AT.AT_COPTER_HITFRAME);
+            var copterSpeed = GameObject.SceneRoot.FindAtt<float>(Attr.COPTERSPEED);
+            var hitFrame = GameObject.FindAtt<int>(Attr.HITFRAME);
 
             // update copter
 
             int next = rnd.Next(0, 60);
-            transform.LocalPos.X += copterSpeed.Value * (leftDirection.Value ? -1 : 1);
+            transform.LocalPos.X += copterSpeed.Value * (leftDirection ? -1 : 1);
 
-            if (isHit.Value && hitFrame.Value++ > 10) GameObject.Destroy();
-
-            if (transform.LocalPos.X < -111 || transform.LocalPos.X > 640) leftDirection.Value = !leftDirection.Value;
-
-            if (!isHit.Value && next == 15 && (transform.LocalPos.X <= 280 || transform.LocalPos.X >= 340) && (transform.LocalPos.X > 50 || transform.LocalPos.X < 580))
+            if (isHit && hitFrame.Value++ > 10)
             {
-                SpawnParatrooper(transform.LocalPos.X + 55, transform.LocalPos.Y + 50);
+                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.GAMEOBJECT_KILLED, GameObject);
+                GameObject.Destroy();
             }
-        }
 
-        private void SpawnParatrooper(float x, float y)
-        {
-            GameObject para = new GameObject(ObjectType.OBJECT, "para");
-            para.SetObjectCategory(ObjTypes.PARA);
-            para.SetTransform(new Transform(x,y));
-
-            para.AddAttribute(ElementType.MODEL, AT.AT_COPTER_PARA_ISGROUNDED,false);
-            para.AddAttribute(ElementType.MODEL, AT.AT_COPTER_PARA_ISHIT, false);
-            para.AddAttribute(ElementType.VIEW, AT.AT_COPTER_HITFRAME, 0);
-            para.AddBehavior(new ParaB());
-            para.AddBehavior(new ParaDrawB());
-            para.AddAttribute(ElementType.MODEL, AT.AT_COM_BOUNDS, new Bounds()
+            if (transform.LocalPos.X < -111 || transform.LocalPos.X > 640)
             {
-                Width=20,
-                Height = 20
-            });
-            para.SetGroup(Group.COLLIDABLE);
-            GameObject.GetParent().AddChild(para);
+                if (leftDirection) GameObject.States.ResetState(States.LEFT_DIR);
+                else GameObject.States.SetState(States.LEFT_DIR);
+            }
+
+            if (!isHit && next == 15 && (transform.LocalPos.X <= 280 || transform.LocalPos.X >= 340) && (transform.LocalPos.X > 150 || transform.LocalPos.X < 580))
+            {
+                GameObject para =
+                    new GameBuilder().CreatePara(new Transform(transform.LocalPos.X + 55, transform.LocalPos.Y + 50));
+
+                GameObject.Parent.AddChild(para);
+            }
         }
     }
 }
