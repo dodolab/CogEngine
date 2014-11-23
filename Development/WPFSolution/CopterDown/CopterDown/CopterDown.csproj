@@ -73,7 +73,6 @@
     <Compile Include="Core\Enums\BehaviorState.cs" />
     <Compile Include="Core\Enums\SenderType.cs" />
     <Compile Include="Core\Enums\Traverses.cs" />
-    <Compile Include="Core\Wrappers\WrapManager.cs" />
     <Compile Include="Game\Types\GameAttr.cs" />
     <Compile Include="Core\Entities\Bounds.cs" />
     <Compile Include="Core\Entities\State.cs" />
