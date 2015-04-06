@@ -1,6 +1,0 @@
-ofxNetwork
-ofxOpenCv
-ofxSvg
-ofxThreadedImageLoader
-ofxVectorGraphics
-ofxXmlSettings
