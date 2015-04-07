@@ -22,4 +22,16 @@ public:
 };
 
 
+BeRotateAnim::BeRotateAnim(float from, float to, float speed, bool additive) : ABehavior(ElemType::MODEL, EnFlags()), _from(from), _to(to), _speed(speed), _additive(additive), _stopped(false){
+
+}
+
+void BeRotateAnim::OnMessage(Msg msg){
+
+}
+
+void BeRotateAnim::Update(int delta, int absolute){
+
+}
+
 #endif
