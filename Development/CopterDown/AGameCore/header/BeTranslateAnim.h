@@ -22,7 +22,7 @@ private:
 public:
 	BeTranslateAnim(CIwFVec2 from, CIwFVec2 to, float speed, bool additive, bool repeat);
 	void OnMessage(Msg msg);
-	void Update(int delta, int absolute);
+	void Update(uint64 delta, uint64 absolute);
 };
 
 
@@ -38,7 +38,7 @@ void BeTranslateAnim::OnMessage(Msg msg){
 
 }
 
-void BeTranslateAnim::Update(int delta, int absolute){
+void BeTranslateAnim::Update(uint64 delta, uint64 absolute){
 
 }
 

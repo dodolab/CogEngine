@@ -8,7 +8,7 @@ class BeRender : public ABehavior{
 public:
 	BeRender();
 	void OnMessage(Msg msg);
-	void Update(int delta, int absolute);
+	void Update(uint64 delta, uint64 absolute);
 };
 
 
@@ -21,7 +21,7 @@ void BeRender::OnMessage(Msg msg){
 
 }
 
-void BeRender::Update(int delta, int absolute){
+void BeRender::Update(uint64 delta, uint64 absolute){
 
 }
 

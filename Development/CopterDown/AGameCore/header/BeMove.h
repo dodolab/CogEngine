@@ -10,7 +10,7 @@ public:
 	BeMove();
 
 	void OnMessage(Msg msg);
-	void Update(int delta, int absolute);
+	void Update(uint64 delta, uint64 absolute);
 };
 
 
@@ -22,8 +22,12 @@ void BeMove::OnMessage(Msg msg){
 
 }
 
-void BeMove::Update(int delta, int absolute){
+void BeMove::Update(uint64 delta, uint64 absolute){
+	CIwFMat2D transform =_node->GetTransform();
+	CIwVec2 velocity = _node->FindAtt<CIwVec2>(Attrs::VELOCITY).GetValue();
 
+	transform.t.x += velocity.x * delta;
+	transform.t.y += velocity.y * delta;
 }
 
 #endif

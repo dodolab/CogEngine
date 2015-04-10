@@ -8,7 +8,8 @@
 #include "Msg.h"
 
 class ABehavior{
-private:
+
+protected:
 	static int idCounter;
 	ElemType _elemType;
 	int _id;
@@ -16,7 +17,6 @@ private:
 	EnFlags _msgInvoker;
 	GNode* _node;
 
-protected:
 	ABehavior(ElemType elemType, EnFlags msgInvoker);
 
 	Msg* SendMessage(EnFlags traverse, int action, void* data);
@@ -37,7 +37,7 @@ public:
 	void SetGNode(GNode* node);
 
 	virtual void OnMessage(Msg msg) const = 0;
-	virtual void Update(int delta, int absolute) const = 0;
+	virtual void Update(uint64 delta, uint64 absolute) const = 0;
 };
 
 
