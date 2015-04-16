@@ -5,23 +5,31 @@
 template<class T>
 class EnInputAct{
 private:
-	T _actValue;
+	T* _actValue;
 	bool _handled;
 	bool _ended;
 	int _cycleNumber;
 
 public:
+	EnInputAct();
+
 	EnInputAct(T actValue);
 
-	bool GetHandled();
+	bool GetHandled() const;
 	void SetHandled(bool val);
 
-	bool GetEnded();
+	bool GetEnded() const;
 	void SetEnded(bool val);
 
-	int GetCycleNumber();
+	int GetCycleNumber() const;
 	void SetCycleNumber(int val);
 };
+
+// need to be implemented
+template<class T>
+EnInputAct<T>::EnInputAct(){
+
+}
 
 
 #endif

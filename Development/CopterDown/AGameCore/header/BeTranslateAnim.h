@@ -21,8 +21,8 @@ private:
 
 public:
 	BeTranslateAnim(CIwFVec2 from, CIwFVec2 to, float speed, bool additive, bool repeat);
-	void OnMessage(Msg msg);
-	void Update(uint64 delta, uint64 absolute);
+	void OnMessage(Msg& msg);
+	void Update(const uint64 delta, const uint64 absolute);
 };
 
 
@@ -34,11 +34,11 @@ _additive(additive), _to(to), _from(from), _repeat(repeat){
 	this->_distY = to.y - from.y;
 }
 
-void BeTranslateAnim::OnMessage(Msg msg){
+void BeTranslateAnim::OnMessage(Msg& msg){
 
 }
 
-void BeTranslateAnim::Update(uint64 delta, uint64 absolute){
+void BeTranslateAnim::Update(const uint64 delta, const uint64 absolute){
 
 }
 

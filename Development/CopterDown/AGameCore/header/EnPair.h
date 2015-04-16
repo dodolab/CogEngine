@@ -10,13 +10,13 @@ private:
 
 public:
 
-	Pair1(T* item1, T* item2);
+	Pair1(T& item1, T& item2);
 
-	T* GetItem1();
-	void SetItem1(T* val);
+	T& GetItem1() const;
+	void SetItem1(T& val);
 
-	T* GetItem2();
-	void SetItem2(T* val);
+	T& GetItem2() const;
+	void SetItem2(T& val);
 };
 
 template<class T, class M>
@@ -27,13 +27,13 @@ private:
 
 public:
 
-	Pair2(T* item1, M* item2);
+	Pair2(T& item1, M& item2);
 
-	T* GetItem1();
-	void SetItem1(T* val);
+	T& GetItem1() const;
+	void SetItem1(T& val);
 
-	M* GetItem2();
-	void SetItem2(M* val);
+	M& GetItem2() const;
+	void SetItem2(M& val);
 };
 
 
