@@ -19,14 +19,16 @@ protected:
 
 	ABehavior(ElemType elemType, EnFlags msgInvoker);
 
-	void SendMessage(EnFlags traverse, int action, Msg& msg, void* data) const;
+	void SendMessage(EnFlags traverse, int action, void* data, Msg& resp) const;
+
+	void SendMessageNoResp(EnFlags traverse, int action, void* data) const;
 
 public:
-	ElemType GetElemType() const;
+	const ElemType GetElemType() const;
 
-	int GetId() const;
+	const int GetId() const;
 
-	BehState GetBehState() const;
+	const BehState GetBehState() const;
 
 	void SetBehState(BehState val) ;
 
@@ -34,13 +36,13 @@ public:
 
 	const GNode* GetGNode() const;
 
+	GNode* GetGNode();
+
 	void SetGNode(const GNode* node);
 
 	virtual void OnMessage(Msg& msg) const = 0;
 	virtual void Update(const uint64 delta, const uint64 absolute) const = 0;
 };
-
-
 
 
 int ABehavior::idCounter = 0;
@@ -50,27 +52,25 @@ _elemType(elemType), _msgInvoker(msgInvoker), _id(idCounter++) {
 
 }
 
-void ABehavior::SendMessage(EnFlags traverse, int action, Msg& msg, void* data) const{
-	msg.SetCategory(_elemType);
-	msg.SetTraverse(traverse);
-	msg.SetAction(action);
-	msg.SetSenderType(SenderType::BEHAVIOR);
-	msg.SetOwnerId(_id);
-	msg.SetData(data);
-	
-	_node->SendMessage(msg);
+void ABehavior::SendMessage(EnFlags traverse, int action, void* data, Msg& resp) const{
+	Msg msg(_elemType,traverse, action,SenderType::BEHAVIOR,_id,data);
+	_node->SendMessage(msg, resp);
 }
 
+void ABehavior::SendMessageNoResp(EnFlags traverse, int action, void* data) const{
+	Msg resp;
+	SendMessage(traverse, action, data, resp);
+}
 
-ElemType ABehavior::GetElemType() const{
+const ElemType ABehavior::GetElemType() const{
 		return _elemType;
 	}
 
-int ABehavior::GetId() const{
+const int ABehavior::GetId() const{
 		return _id;
 	}
 
-BehState ABehavior::GetBehState() const{
+const BehState ABehavior::GetBehState() const{
 		return _behState;
 	}
 
@@ -83,8 +83,12 @@ EnFlags& ABehavior::GetMessageInvoker(){
 	}
 
 const GNode* ABehavior::GetGNode() const{
-		return _node;
-	}
+	return _node;
+}
+
+GNode* ABehavior::GetGNode(){
+	return _node;
+}
 
 void ABehavior::SetGNode(const GNode* node){
 	this->_node = const_cast<GNode*>(node);
