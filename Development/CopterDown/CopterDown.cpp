@@ -154,6 +154,22 @@ void Terminate(){
 
 int main()
 {
+	// enflags test
+	EnFlags flags;
+	flags.SetState(1);
+	flags.SetState(1234);
+	bool has = flags.HasState(1);
+	has = flags.HasState(1234);
+	flags.ResetState(1);
+	flags.ResetState(1234);
+	has = flags.HasState(1);
+	has = flags.HasState(1234);
+
+	flags = 12;
+	flags = 13;
+
+	int gnodeSize = sizeof(GNode);
+
 	// initialize
 	Init();
 	// register input events

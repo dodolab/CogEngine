@@ -31,19 +31,22 @@ class Attrx : public Attr{
 protected:
 	T* _value;
 	bool isEmpty;
-	void OnAttrChanged(T& old, T& newAt);
+
+	void OnAttrChanged(T& old, T& newAt){
+		auto value = std::make_pair<T, T>(old, newAt);
+		Msg msg(this->_elemType, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
+		this->_owner->SendMessageNoResp(msg, resp)
+	}
 
 public:
-	Attrx() : Attr(){
-
-	}
 
 	Attrx(ElemType type, GNode* owner, int key, T& val) : Attr(type, owner, key), _value(val){
 
 	}
 
 	T& GetValue(){
-		return *_value;
+		// pointer musn't be null!
+		return (*_value);
 	}
 
 	void SetValue(T& val){
@@ -55,7 +58,8 @@ public:
 	}
 };
 
-Attr::Attr() : _elemType(ElemType::ALL), _key(0){
+
+Attr::Attr() : _elemType(ElemType::ALL), _owner(nullptr), _key(0){
 
 }
 
