@@ -6,15 +6,13 @@
 #include "Attr.h"
 #include "ABehavior.h"
 #include "Msg.h"
+#include "IwGeomFMat2D.h"
 
 using namespace std;
 
-class Attr;
-class ABehavior;
-
 class GNode{
 protected:
-	map<int, Attr*> _attributes;
+	map<int, Attr> _attributes;
 	CIwArray<ABehavior*> _behaviors;
 	GNode* _parent;
 	CIwArray<GNode*> _children;
@@ -34,6 +32,8 @@ public:
 
 	GNode(ObjType type, int subType, char* tag);
 
+	GNode(const GNode& copy);
+
 	~GNode();
 
 	void SendMessage(Msg& msg, Msg& resp) const;
@@ -50,9 +50,13 @@ public:
 
 	void RemoveAttr(int key);
 
-	template<class T> Attrx<T>* FindAtt(int id) const;
+	template<class T> Attrx<T>* FindAtt(int id) const{
+		return nullptr;
+	}
 
-	template<class T> T* FindAttValue(int id) const;
+	template<class T> T* FindAttValue(int id) const{
+		return nullptr;
+	}
 
 	const CIwArray<ABehavior*> GetBehaviors() const;
 
@@ -85,6 +89,7 @@ public:
 
 	CIwFMat2D GetTransform() const;
 	CIwFMat2D SetTransform(CIwFMat2D val);
+	void UpdateTransform(CIwFMat2D& parent);
 
 	template<class T> void AddAttribute(ElemType elemType, int key, T& value);
 
@@ -95,145 +100,5 @@ public:
 	void SetStates(EnFlags val);
 };
 
-
-GNode::GNode(ObjType type, int subType, char* tag){
-
-}
-
-GNode::~GNode(){
-
-}
-
-void GNode::SendMessage(Msg& msg, Msg& resp) const{
-
-}
-
-void GNode::SendMessageNoResp(Msg& msg) const{
-	Msg resp;
-	SendMessage(msg, resp);
-}
-
-void GNode::Update(const uint64 delta, const uint64 absolute){
-
-}
-
-void GNode::Draw(const uint64 delta, const uint64 absolute){
-
-}
-
-void GNode::AddBehavior(ABehavior* beh){
-
-}
-
-void GNode::RemoveBehavior(ABehavior* beh){
-}
-
-void GNode::RemoveAttr(int key){
-
-}
-
-template<typename T> Attrx<T>* GNode::FindAtt(int id) const{
-	return nullptr;
-}
-
-template<class T> T* GNode::FindAttValue(int id) const{
-	return nullptr;
-}
-
-const CIwArray<ABehavior*> GNode::GetBehaviors() const{
-	return _behaviors;
-}
-
-const CIwArray<GNode*> GNode::GetChildren() const{
-	return _children;
-}
-
-void GNode::AddChild(GNode* child){
-
-}
-
-void GNode::RemoveChild(GNode* child){
-
-}
-
-GNode* GNode::GetParent() const{
-	return nullptr;
-}
-
-void GNode::SetParent(GNode* val){
-
-}
-
-int GNode::GetId() const{
-	return 0;
-}
-
-void GNode::SetId(int val){
-
-}
-
-char* GNode::GetTag() const{
-	return new char[5];
-}
-
-void GNode::SetTag(char* tag){
-
-}
-
-ObjType GNode::GetType() const{
-	return ObjType::HUD;
-}
-
-void GNode::SetType(ObjType val){
-
-}
-
-int GNode::GetSubType() const{
-	return 0;
-}
-
-void GNode::SetSubType(int val){
-
-}
-
-GNode* GNode::FindParent(ObjType type) const{
-	return nullptr;
-}
-
-GNode* GNode::GetSceneRoot() const{
-	return nullptr;
-}
-
-GNode* GNode::GetRoot() const{
-	return nullptr;
-}
-
-CIwFMat2D GNode::GetTransform() const{
-	return CIwFMat2D();
-}
-
-CIwFMat2D GNode::SetTransform(CIwFMat2D val){
-	return CIwFMat2D();
-}
-
-template<class T> void GNode::AddAttribute(ElemType elemType, int key, T& value){
-
-}
-
-EnFlags GNode::GetGroups() const{
-	return EnFlags();
-}
-
-void GNode::SetGroups(EnFlags val){
-
-}
-
-EnFlags GNode::GetStates() const{
-	return EnFlags();
-}
-
-void GNode::SetStates(EnFlags val){
-
-}
 
 #endif
