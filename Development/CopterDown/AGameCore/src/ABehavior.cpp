@@ -3,20 +3,20 @@
 #include "GNode.h"
 
 int ABehavior::idCounter = 0;
+Msg ABehavior::_dummyMsg = Msg();
 
-ABehavior::ABehavior(ElemType elemType, EnFlags msgInvoker) : _behState(BehState::ACTIVE_ALL), 
-_elemType(elemType), _msgInvoker(msgInvoker), _id(idCounter++) {
+ABehavior::ABehavior(ElemType elemType, EnFlags msgFlags) : _behState(BehState::ACTIVE_ALL),
+_elemType(elemType), _msgFlags(msgFlags), _id(idCounter++) {
 
 }
 
 void ABehavior::SendMessage(EnFlags traverse, int action, void* data, Msg& resp) const{
 	Msg msg(_elemType,traverse, action,SenderType::BEHAVIOR,_id,data);
-	_node->SendMessage(msg, resp);
+	_owner->SendMessage(msg, resp);
 }
 
 void ABehavior::SendMessageNoResp(EnFlags traverse, int action, void* data) const{
-	Msg resp;
-	SendMessage(traverse, action, data, resp);
+	SendMessage(traverse, action, data, _dummyMsg);
 }
 
 const ElemType ABehavior::GetElemType() const{
@@ -31,20 +31,15 @@ const BehState ABehavior::GetBehState() const{
 		return _behState;
 	}
 
-void ABehavior::SetBehState(BehState val){
-		_behState = val;
-	}
+const GNode* ABehavior::GetOwnerNode() const{
+	return _owner;
+}
 
-EnFlags& ABehavior::GetMessageInvoker(){
-		return _msgInvoker;
-	}
-
-const GNode* ABehavior::GetGNode() const{
-	return _node;
+const EnFlags& ABehavior::GetMessageFlags() const{
+	return _msgFlags;
 }
 
 
-void ABehavior::SetGNode(GNode* node){
-	this->_node = node;
+void ABehavior::SetBehState(BehState val){
+		_behState = val;
 	}
-

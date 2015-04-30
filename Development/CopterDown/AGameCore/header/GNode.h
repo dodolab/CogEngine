@@ -7,25 +7,28 @@
 #include "ABehavior.h"
 #include "Msg.h"
 #include "IwGeomFMat2D.h"
+#include "EnBounds.h"
 
 using namespace std;
 
 class GNode{
 protected:
+	static Msg _dummyMsg;
+	static int idCounter;
+	
 	map<int, Attr> _attributes;
 	CIwArray<ABehavior*> _behaviors;
 	GNode* _parent;
 	CIwArray<GNode*> _children;
 
-	int _id;
+	const int _id;
 	char* _tag;
 	ObjType _type;
 	int _subType;
 	EnFlags _groups;
 	EnFlags _states;
 	CIwFMat2D  _transform;
-
-	static int ids;
+	
 
 
 public:
@@ -50,15 +53,49 @@ public:
 
 	void RemoveAttr(int key);
 
-	template<class T> Attrx<T>* FindAtt(int id) const{
+	bool HasAttr(int key) const;
+
+	template<class T> void AddAttrRef(int key, ElemType elemType, T& value){
+
+	}
+
+	template<class T> void AddAttrPtr(int key, ElemType elemtype, T* value){
+
+	}
+
+	template<class T> void CopyAttr(int id, T& output) const{
+
+	}
+	
+	template<class T> T* FindAttrPtr(int id) const{
 		return nullptr;
 	}
 
-	template<class T> T* FindAttValue(int id) const{
+	template<class T> T& FindAttrRef(int id) const{
+		return *(new T());
+	}
+
+	template<class T> T& FindOrCreateAttrRef(int id){
+		return *(new T());
+	}
+
+	template<class T> T* FindOrCreateAttrPtr(int id){
 		return nullptr;
 	}
+
+	template<class T> void ChangeAttrPtr(int id, T* value){
+
+	}
+
+	template<class T> void ChangeAttrRef(int id, T& value){
+
+	}
+
+	CIwArray<ABehavior*> GetBehaviorsCopy() const;
 
 	const CIwArray<ABehavior*> GetBehaviors() const;
+
+	CIwArray<GNode*> GetChildrenCopy() const;
 
 	const CIwArray<GNode*> GetChildren() const;
 
@@ -69,29 +106,25 @@ public:
 	GNode* GetParent() const;
 	void SetParent(GNode* val);
 
-	int GetId() const;
-	void SetId(int val);
+	GNode* FindPredecessor(ObjType type) const;
 
+	GNode* GetSceneRoot() const;
+
+	GNode* GetRoot() const;
+
+	int GetId() const;
+	
 	char* GetTag() const;
 	void SetTag(char* tag);
 
 	ObjType GetType() const;
-	void SetType(ObjType val);
-
+	
 	int GetSubType() const;
 	void SetSubType(int val);
-
-	GNode* FindParent(ObjType type) const;
-
-	GNode* GetSceneRoot() const;
-	
-	GNode* GetRoot() const;
 
 	CIwFMat2D GetTransform() const;
 	CIwFMat2D SetTransform(CIwFMat2D val);
 	void UpdateTransform(CIwFMat2D& parent);
-
-	template<class T> void AddAttribute(ElemType elemType, int key, T& value);
 
 	EnFlags GetGroups() const;
 	void SetGroups(EnFlags val);
