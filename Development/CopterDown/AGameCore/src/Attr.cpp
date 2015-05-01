@@ -1,10 +1,7 @@
 #include "Attr.h"
 
-Attr::Attr() : _elemType(ElemType::ALL), _owner(nullptr), _key(0){
 
-}
-
-Attr::Attr(int key, ElemType type, GNode* owner) : _elemType(type), _owner(owner), _key(key){
+Attr::Attr(int key, ElemType type, GNode* owner, bool isManaged) : _elemType(type), _owner(owner), _key(key), _isManaged(isManaged){
 
 }
 

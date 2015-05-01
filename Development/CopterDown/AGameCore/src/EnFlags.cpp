@@ -1,13 +1,43 @@
 #include "EnFlags.h"
 
 
-int EnFlags::GetStateIndex(int state) const{
-	return state / sizeof(int);
-}
-int EnFlags::GetStateOffset(int state) const{
-	return state%sizeof(int);
-}
 
+void EnFlags::DoStateOperation(bool set, int state){
+	int index = GetStateIndex(state);
+	int offset = GetStateOffset(state);
+	int binary = 1 << offset;
+
+	if (index <= 3)
+	{
+		switch (index){
+		case 0:  if (set)  (flags1 |= binary); else (flags1 ^= binary);
+			return;
+		case 1:  if (set) (flags2 |= binary); else (flags2 ^= binary);
+			return;
+		case 2:  if (set) (flags3 |= binary); else (flags3 ^= binary);
+			return;
+		case 3:  if (set) (flags4 |= binary); else (flags4 ^= binary);
+			return;
+		}
+	}
+
+	// index >3
+	if (otherFlags == nullptr) otherFlags = new map<int, int>();
+
+	if (set){
+		if (!otherFlags->count(index)){
+			(*otherFlags)[index] = binary;
+		}
+		else (*otherFlags)[index] |= binary;
+	}
+	else{
+		if (otherFlags->count(index)){
+			(*otherFlags)[index] ^= binary;
+			// must be, because there can't be any null value
+			if (((*otherFlags)[index]) == 0) otherFlags->erase(index);
+		}
+	}
+}
 
 EnFlags::EnFlags(){
 	otherFlags = nullptr;
@@ -105,51 +135,6 @@ bool EnFlags::HasState(int state) const{
 	else return false;
 }
 
-void EnFlags::SetState(int state){
-	return DoStateOperation(true, state);
-}
-
-void EnFlags::ResetState(int state){
-	return DoStateOperation(false, state);
-}
-
-void EnFlags::DoStateOperation(bool set, int state){
-	int index = GetStateIndex(state);
-	int offset = GetStateOffset(state);
-	int binary = 1 << offset;
-
-	if (index <= 3)
-	{
-		switch (index){
-		case 0:  if (set)  (flags1 |= binary); else (flags1 ^= binary);
-			return;
-		case 1:  if (set) (flags2 |= binary); else (flags2 ^= binary);
-			return;
-		case 2:  if (set) (flags3 |= binary); else (flags3 ^= binary);
-			return;
-		case 3:  if (set) (flags4 |= binary); else (flags4 ^= binary);
-			return;
-		}
-	}
-
-	// index >3
-	if (otherFlags == nullptr) otherFlags = new map<int, int>();
-
-	if (set){
-		if (!otherFlags->count(index)){
-			(*otherFlags)[index] = binary;
-		}
-		else (*otherFlags)[index] |= binary;
-	}
-	else{
-		if (otherFlags->count(index)){
-			(*otherFlags)[index] ^= binary;
-			// must be, because there can't be any null value
-			if (((*otherFlags)[index]) == 0) otherFlags->erase(index);
-		}
-	}
-}
-
 EnFlags& EnFlags::operator=(const int& st1){
 	delete otherFlags;
 	flags1 = flags2 = flags3 = flags4 = 0;
@@ -192,21 +177,33 @@ bool EnFlags::operator==(const EnFlags& st2){
 	return flags1 == st2.flags1 && flags2 == st2.flags2 && flags3 == st2.flags3 && flags4 == st2.flags4;
 }
 
-bool EnFlags::operator!=(int st2){
-	return !(*this == st2);
+bool EnFlags::operator!=(int st1){
+	return !(*this == st1);
 }
 
-bool EnFlags::operator!=(const EnFlags& st2){
-	return !(*this == st2);
+bool EnFlags::operator!=(const EnFlags& st1){
+	return !(*this == st1);
 }
 
-EnFlags& EnFlags::operator+(int st2){
-	SetState(st2);
+EnFlags EnFlags::operator+(int st1){
+	EnFlags copy(*this);
+	copy.SetState(st1);
+	return copy;
+}
+
+EnFlags EnFlags::operator-(int st1){
+	EnFlags copy(*this);
+	copy.ResetState(st1);
+	return copy;
+}
+
+EnFlags& EnFlags::operator+=(int st1){
+	SetState(st1);
 	return *this;
 }
 
-EnFlags& EnFlags::operator-(int st2){
-	ResetState(st2);
+EnFlags& EnFlags::operator-=(int st1){
+	ResetState(st1);
 	return *this;
 }
 

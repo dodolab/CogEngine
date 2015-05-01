@@ -19,23 +19,23 @@ void BeCollider::OnMessage(Msg& msg){
 }
 
 void BeCollider::Update(const uint64 delta, const uint64 absolute){
-	CIwArray<GNode*> childrens = _owner->GetChildren();
+	CIwList<GNode*> childrens = _owner->GetChildren();
 
-	for (int i = 0; i < childrens.size(); i++){
-		GNode* first = (childrens)[i];
+	for (CIwList<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
+		GNode* first = *it;
 
 		bool isInFirstGroup = first->GetGroups().ContainsAtLeastOne(_firstColGroups);
 		bool isInSecondGroup = first->GetGroups().ContainsAtLeastOne(_secondColGroups);
 
 		if (isInFirstGroup || isInSecondGroup){
-			for (int j = i+1; j < childrens.size(); j++){
-				GNode* second = (childrens)[0];
+			for (CIwList<GNode*>::iterator jt = it; jt != childrens.end(); ++jt){
+				GNode* second = *jt;
 				bool isSecondInFirstGroup = second->GetGroups().ContainsAtLeastOne(_firstColGroups);
 				bool isSecondInSecondGroup = second->GetGroups().ContainsAtLeastOne(_secondColGroups);
 
 				if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 					 
-					if (first->HasAttr(Attrs::BOUNDS) && first->FindAttrRef<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
+					if (first->HasAttr(Attrs::BOUNDS) && first->FindAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
 						EnCollision* col = new EnCollision(first->GetId(), second->GetId());
 
 						SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr);

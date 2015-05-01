@@ -18,28 +18,3 @@ void ABehavior::SendMessage(EnFlags traverse, int action, void* data, Msg& resp)
 void ABehavior::SendMessageNoResp(EnFlags traverse, int action, void* data) const{
 	SendMessage(traverse, action, data, _dummyMsg);
 }
-
-const ElemType ABehavior::GetElemType() const{
-		return _elemType;
-	}
-
-const int ABehavior::GetId() const{
-		return _id;
-	}
-
-const BehState ABehavior::GetBehState() const{
-		return _behState;
-	}
-
-const GNode* ABehavior::GetOwnerNode() const{
-	return _owner;
-}
-
-const EnFlags& ABehavior::GetMessageFlags() const{
-	return _msgFlags;
-}
-
-
-void ABehavior::SetBehState(BehState val){
-		_behState = val;
-	}
