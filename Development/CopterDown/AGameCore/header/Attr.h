@@ -27,15 +27,17 @@ public:
 	const ElemType GetElemType() const;
 
 	const int GetKey() const;
+
+	const bool IsManaged() const;
 };
 
 
 /**
-* Attrt - attribute generic wrapper
+* AttrR - reference attribute generic wrapper
 *
 */
 template <class  T>
-class Attrt : public Attr{
+class AttrR : public Attr{
 protected:
 	T _value;
 	
@@ -48,11 +50,11 @@ protected:
 public:
 
 
-	Attrt(int key, ElemType type, T& val, GNode* owner, bool isManaged) : Attr(type, owner, key, isManaged), _value(val){
+	AttrR(int key, ElemType type, T& val, GNode* owner) : Attr(key, type, owner, false), _value(val){
 		
 	}
 
-	~Attrt(){
+	~AttrR(){
 		if (_isManaged){
 			delete &_value;
 		}
@@ -64,6 +66,45 @@ public:
 	}
 
 	void SetValue(T& val){
+		this->_value = val;
+	}
+
+};
+
+/**
+* AttrP - pointer attribute generic wrapper
+*
+*/
+template <class  T>
+class AttrP : public Attr{
+protected:
+	T* _value;
+
+	void OnAttrChanged(T& old, T& newAt){
+		auto value = std::make_pair<T, T>(old, newAt);
+		Msg msg(this->_elemType, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
+		this->_owner->SendMessageNoResp(msg, resp)
+	}
+
+public:
+
+
+	AttrP(int key, ElemType type, T* val, GNode* owner, bool isManaged) : Attr(key, type, owner, isManaged), _value(val){
+
+	}
+
+	~AttrP(){
+		if (_isManaged){
+			delete &_value;
+		}
+	}
+
+	T* GetValue(){
+		// pointer musn't be null!
+		return (_value);
+	}
+
+	void SetValue(T* val){
 		this->_value = val;
 	}
 

@@ -17,7 +17,7 @@ void BeMove::OnMessage(Msg& msg){
 void BeMove::Update(const uint64 delta, const uint64 absolute){
 	CIwFMat2D transform = _owner->GetTransform();
 
-	CIwVec2 velocity = _owner->FindOrCreateAttr<CIwVec2>(Attrs::VELOCITY, ElemType::MODEL);
+	CIwVec2 velocity = _owner->FindAttrR<CIwVec2>(Attrs::VELOCITY);
 
 	transform.t.x += velocity.x * delta;
 	transform.t.y += velocity.y * delta;

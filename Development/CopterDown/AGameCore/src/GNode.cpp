@@ -1,5 +1,6 @@
 #include "GNode.h"
 #include "ABehavior.h"
+#include "GNodePool.h"
 
 int GNode::idCounter = 0;
 Msg GNode::_dummyMsg = Msg();
@@ -19,7 +20,7 @@ GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _i
 }
 
 GNode::~GNode(){
-	delete _tag;
+	//delete[] _tag;
 
 	// delete all behaviors
 	for (CIwList<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
@@ -27,13 +28,66 @@ GNode::~GNode(){
 		delete (*it);
 	}
 	_behaviors.clear();
+
+	for (map<int, Attr*>::iterator it = _attributes.begin(); it != _attributes.end(); ++it){
+		delete (it->second);
+	}
 }
 
-void GNode::SendMessage(Msg& msg, Msg& resp) const{
+void GNode::SendMessage(Msg& msg, Msg& resp){
+	GNodePool::Get()->OnMessage(msg);
 
+	if (GNodePool::Get()->IsRegisteredListener(msg.GetAction())){
+		if (msg.GetTraverse().HasState(Traverses::ROOT)){
+			msg.GetTraverse().ResetState(Traverses::ROOT);
+
+			if (GetRoot() != nullptr){
+				GetRoot()->SendMessage(msg, resp);
+				return;
+			}
+		}
+
+		if (msg.GetTraverse().HasState(Traverses::SCENEROOT)){
+			msg.GetTraverse().ResetState(Traverses::SCENEROOT);
+
+			if (GetSceneRoot() != nullptr){
+				GetSceneRoot()->SendMessage(msg, resp);
+				return;
+			}
+		}
+
+		// check only to prevent from settings traverses to both: child first and beh first
+		bool childfirst = false;
+
+		// traverse children at first
+		if (msg.GetTraverse().HasState(Traverses::CHILD_FIRST)){
+			childfirst = true;
+
+			for (auto it = _children.begin(); it != _children.end(); ++it){
+				  (*it)->SendMessage(msg, resp);
+			}
+		}
+
+		for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+			ABehavior* beh = (*it);
+			if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
+				(msg.GetSenderType() != SenderType::BEHAVIOR || beh->GetId() != msg.GetOwnerId()) &&
+				(msg.GetCategory() == ElemType::ALL || beh->GetElemType() == msg.GetCategory())){
+				if (beh->GetMessageFlags().HasState(msg.GetAction())){
+					beh->OnMessage(msg);
+				}
+			}
+		}
+
+		if (!childfirst &&msg.GetTraverse().HasState(Traverses::BEH_FIRST)){
+			for (auto it = _children.begin(); it != _children.end(); ++it){
+				(*it)->SendMessage(msg, resp);
+			}
+		}
+	}
 }
 
-void GNode::SendMessageNoResp(Msg& msg) const{
+void GNode::SendMessageNoResp(Msg& msg){
 	SendMessage(msg, _dummyMsg);
 }
 
@@ -56,7 +110,18 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 }
 
 void GNode::Draw(const uint64 delta, const uint64 absolute){
+	for (auto it = _children.begin(); it != _children.end(); ++it){
+		(*it)->Draw(delta, absolute);
+	}
 
+	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+		ABehavior* beh = (*it);
+
+		if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) &&
+			beh->GetElemType() == ElemType::VIEW){
+			beh->Update(delta, absolute);
+		}
+	}
 }
 
 bool GNode::AddBehavior(ABehavior* beh){
@@ -70,7 +135,15 @@ bool GNode::RemoveBehavior(ABehavior* beh){
 }
 
 bool GNode::RemoveAttr(int key){
-	return true;
+	
+	map<int, Attr*>::iterator it = _attributes.find(key);
+
+	if (it != _attributes.end()){
+		_attributes.erase(it);
+		delete it->second;
+		return true;
+	}
+	return false;
 }
 
 bool GNode::HasAttr(int key) const{

@@ -81,7 +81,7 @@ public:
 	/**
 	* Gets traversation state
 	*/
-	const EnFlags& GetTraverse() const;
+	EnFlags& GetTraverse();
 
 	/**
 	* Gets type of sender object

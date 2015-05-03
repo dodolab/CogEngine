@@ -17,3 +17,7 @@ const int Attr::GetKey() const{
 	return _key;
 }
 
+const bool Attr::IsManaged() const{
+	return _isManaged;
+}
+
