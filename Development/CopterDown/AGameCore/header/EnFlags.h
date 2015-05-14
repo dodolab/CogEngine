@@ -4,6 +4,7 @@
 
 #include <map>
 #include "IwArray.h"
+#include <vector>
 using namespace std;
 
 /**
@@ -57,7 +58,7 @@ public:
 	/**
 	* Creates a new flag object, initialized with list of state
 	*/
-	EnFlags(CIwArray<int> states);
+	EnFlags(vector<int> states);
 
 	/**
 	* Creates a new flag object, initialized with one state
@@ -91,7 +92,7 @@ public:
 	/**
 	* Gets list of all states (flags)
 	*/
-	CIwArray<int> GetAllStates() const;
+	vector<int> GetAllStates() const;
 
 	/**
 	* Returns true, if a state (flag) is set

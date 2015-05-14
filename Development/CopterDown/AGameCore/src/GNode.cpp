@@ -1,6 +1,8 @@
 #include "GNode.h"
 #include "ABehavior.h"
 #include "GNodePool.h"
+#include <vector>
+#include <list>
 
 int GNode::idCounter = 0;
 Msg GNode::_dummyMsg = Msg();
@@ -20,10 +22,10 @@ GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _i
 }
 
 GNode::~GNode(){
-	//delete[] _tag;
+	delete[] _tag;
 
 	// delete all behaviors
-	for (CIwList<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
+	for (list<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
 	{
 		delete (*it);
 	}
@@ -131,7 +133,12 @@ bool GNode::AddBehavior(ABehavior* beh){
 }
 
 bool GNode::RemoveBehavior(ABehavior* beh){
-	return true;
+		list<ABehavior*>::iterator found = find(_behaviors.begin(), _behaviors.end(),beh);
+	
+	bool result = _behaviors.end() != found;
+	if (result) _behaviors.remove(*found);
+
+	return result;
 }
 
 bool GNode::RemoveAttr(int key){
@@ -150,19 +157,25 @@ bool GNode::HasAttr(int key) const{
 	return false;
 }
 
-CIwList<ABehavior*> GNode::GetBehaviorsCopy() const{
+list<ABehavior*> GNode::GetBehaviorsCopy() const{
 	return _behaviors;
 }
 
-const CIwList<ABehavior*>& GNode::GetBehaviors() const{
+const list<ABehavior*>& GNode::GetBehaviors() const{
 	return _behaviors;
 }
 
-CIwList<GNode*> GNode::GetChildrenCopy() const{
+list<GNode*> GNode::GetChildrenCopy() const{
+	list<GNode*> output;
+
+//	for (list<GNode*>::iterator it = _children.begin(); it != _children.end(); ++it){
+
+	//}
+
 	return _children;
 }
 
-const CIwList<GNode*>& GNode::GetChildren() const{
+const list<GNode*>& GNode::GetChildren() const{
 	return _children;
 }
 

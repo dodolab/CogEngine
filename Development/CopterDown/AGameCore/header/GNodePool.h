@@ -12,8 +12,8 @@ private:
 	static GNodePool* _instance;
 	map<int, int> behListeners;
 	map<int, int> typeCounter;
-	CIwArray<GNode*> allGameObjects;
-	CIwArray<ABehavior*> allBehaviors;
+	vector<GNode*> allGameObjects;
+	vector<ABehavior*> allBehaviors;
 
 public:
 	GNodePool();
@@ -51,14 +51,14 @@ public:
 	GNode* FindGameObjectByTag(char* tag) const{
 		return nullptr;
 	}
-	CIwArray<GNode*> FindGameObjectsByTag(char* tag) const{
-		return CIwArray<GNode*>();
+	vector<GNode*> FindGameObjectsByTag(char* tag) const{
+		return vector<GNode*>();
 	}
 	GNode* FindGameObjectBySubType(int subtype) const{
 		return nullptr;
 	}
-	CIwArray<GNode*> FindGameObjectsBySubType(int subtype) const{
-		return CIwArray<GNode*>();
+	vector<GNode*> FindGameObjectsBySubType(int subtype) const{
+		return vector<GNode*>();
 	}
 
 	void OnMessage(Msg msg){

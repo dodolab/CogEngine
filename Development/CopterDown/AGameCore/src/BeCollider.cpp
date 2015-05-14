@@ -1,5 +1,6 @@
 
 #include "BeCollider.h"
+#include <list>
 
 BeCollider::BeCollider(EnFlags firstColGroups, EnFlags secondColGroups) : ABehavior(ElemType::MODEL, EnFlags()),
 _firstColGroups(firstColGroups), _secondColGroups(secondColGroups){
@@ -19,16 +20,16 @@ void BeCollider::OnMessage(Msg& msg){
 }
 
 void BeCollider::Update(const uint64 delta, const uint64 absolute){
-	CIwList<GNode*> childrens = _owner->GetChildren();
+	list<GNode*> childrens = _owner->GetChildren();
 
-	for (CIwList<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
+	for (list<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
 		GNode* first = *it;
 
 		bool isInFirstGroup = first->GetGroups().ContainsAtLeastOne(_firstColGroups);
 		bool isInSecondGroup = first->GetGroups().ContainsAtLeastOne(_secondColGroups);
 
 		if (isInFirstGroup || isInSecondGroup){
-			for (CIwList<GNode*>::iterator jt = it; jt != childrens.end(); ++jt){
+			for (list<GNode*>::iterator jt = it; jt != childrens.end(); ++jt){
 				GNode* second = *jt;
 				bool isSecondInFirstGroup = second->GetGroups().ContainsAtLeastOne(_firstColGroups);
 				bool isSecondInSecondGroup = second->GetGroups().ContainsAtLeastOne(_secondColGroups);

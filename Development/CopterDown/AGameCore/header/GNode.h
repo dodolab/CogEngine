@@ -11,6 +11,7 @@
 #include "EnBounds.h"
 #include "IwMap.h"
 #include "Enums.h"
+#include <list>
 
 using namespace std;
 
@@ -27,11 +28,11 @@ protected:
 	// attributes, mapped by their keys
 	map<int, Attr*> _attributes;
 	// list of behaviors
-	CIwList<ABehavior*> _behaviors;
+	list<ABehavior*> _behaviors;
 	// link to the parent
 	GNode* _parent;
 	// list of childrens
-	CIwList<GNode*> _children;
+	list<GNode*> _children;
 
 	// id of this node
 	const int _id;
@@ -118,22 +119,22 @@ public:
 	/**
 	* Gets copy of list of all behaviors
 	*/
-	CIwList<ABehavior*> GetBehaviorsCopy() const;
+	list<ABehavior*> GetBehaviorsCopy() const;
 
 	/**
 	* Gets direct reference to list of all behaviors
 	*/
-	const CIwList<ABehavior*>& GetBehaviors() const;
+	const list<ABehavior*>& GetBehaviors() const;
 
 	/**
 	* Gets copy of list of all children
 	*/
-	CIwList<GNode*> GetChildrenCopy() const;
+	list<GNode*> GetChildrenCopy() const;
 
 	/**
 	* Gets direct reference to list of all children
 	*/
-	const CIwList<GNode*>& GetChildren() const;
+	const list<GNode*>& GetChildren() const;
 
 	/**
 	* Adds a new child
