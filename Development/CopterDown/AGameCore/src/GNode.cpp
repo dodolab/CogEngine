@@ -4,7 +4,8 @@
 #include <vector>
 #include <list>
 
-int GNode::idCounter = 0;
+// first id is always 1
+int GNode::idCounter = 1;
 Msg GNode::_dummyMsg = Msg();
 
 GNode::GNode(ObjType type, int subType, char* tag):_type(type), _subType(subType), _tag(tag), _id(idCounter++){
@@ -146,15 +147,16 @@ bool GNode::RemoveAttr(int key){
 	map<int, Attr*>::iterator it = _attributes.find(key);
 
 	if (it != _attributes.end()){
+		Attr* attr = it->second;
 		_attributes.erase(it);
-		delete it->second;
+		delete attr;
 		return true;
 	}
 	return false;
 }
 
 bool GNode::HasAttr(int key) const{
-	return false;
+	return _attributes.find(key) != _attributes.end();
 }
 
 list<ABehavior*> GNode::GetBehaviorsCopy() const{

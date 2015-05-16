@@ -15,13 +15,13 @@ using namespace std;
 class EnFlags{
 private:
 	// first flag bit array
-	int flags1;
+	int flags1 = 0;
 	// second flag bit array
-	int flags2;
+	int flags2 = 0;
 	// third flag bit array
-	int flags3;
+	int flags3 = 0;
 	// fourth flag bit array
-	int flags4;
+	int flags4 = 0;
 	// map for other flags (if used)
 	map<int, int>* otherFlags;
 
