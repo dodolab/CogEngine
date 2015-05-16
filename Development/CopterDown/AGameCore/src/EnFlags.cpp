@@ -41,11 +41,9 @@ void EnFlags::DoStateOperation(bool set, int state){
 }
 
 EnFlags::EnFlags(){
-	otherFlags = nullptr;
 }
 
 EnFlags::EnFlags(vector<int> states){
-	otherFlags = nullptr;
 	for (int i = 0; i < states.size(); i++) SetState(states[i]);
 }
 
@@ -66,7 +64,6 @@ EnFlags::EnFlags(int state1, int state2, int state3, int state4) : EnFlags(state
 }
 
 EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
-	otherFlags = nullptr;
 	if (state1 != -1) SetState(state1);
 	if (state2 != -1) SetState(state2);
 	if (state3 != -1) SetState(state3);
@@ -80,10 +77,12 @@ EnFlags::EnFlags(const EnFlags& obj){
 	flags3 = obj.flags3;
 	flags4 = obj.flags4;
 
-	otherFlags = new map<int, int>();
+	if (obj.otherFlags != nullptr){
+		otherFlags = new map<int, int>();
 
-	for (map<int, int>::iterator it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
-		(*otherFlags)[it->first] = it->second;
+		for (map<int, int>::iterator it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
+			(*otherFlags)[it->first] = it->second;
+		}
 	}
 }
 

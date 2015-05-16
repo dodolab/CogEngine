@@ -19,7 +19,7 @@ void BeCollider::OnMessage(Msg& msg){
 
 }
 
-void BeCollider::Update(const uint64 delta, const uint64 absolute){
+void BeCollider::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
 	list<GNode*> childrens = _owner->GetChildren();
 
 	for (list<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){

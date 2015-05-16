@@ -16,13 +16,25 @@ private:
 
 public:
 
-	EnUserAct();
+	EnUserAct(){
 
-	vector<EnInputAct<Act>>& GetKeyActions() const;
-	void SetKeyActions(vector<EnInputAct<Act>>& val);
+	}
 
-	vector<EnInputAct<CIwFVec2>>& GetPointActions() const;
-	void SetPointActions(vector<EnInputAct<CIwFVec2>>& val);
+	vector<EnInputAct<Act>>& GetKeyActions(){
+		return _keyActions;
+	}
+
+	void SetKeyActions(vector<EnInputAct<Act>> val){
+		_keyActions = val;
+	}
+
+	vector<EnInputAct<CIwFVec2>>& GetPointActions(){
+		return _pointActions;
+	}
+
+	void SetPointActions(vector<EnInputAct<CIwFVec2>> val){
+		_pointActions = val;
+	}
 
 };
 

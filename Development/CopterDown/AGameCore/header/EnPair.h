@@ -3,37 +3,32 @@
 #define ENPAIR_H
 
 template<class T>
-class Pair1{
+class EnPair{
 private:
-	T* _item1;
-	T* _item2;
+	T _item1;
+	T _item2;
 
 public:
 
-	Pair1(T& item1, T& item2);
+	EnPair(T item1, T item2) : _item1(item1), _item2(item2){
 
-	T& GetItem1() const;
-	void SetItem1(T& val);
+	}
 
-	T& GetItem2() const;
-	void SetItem2(T& val);
-};
+	T GetItem1() const {
+		return _item1;
+	}
 
-template<class T, class M>
-class Pair2{
-private:
-	T* _item1;
-	M* _item2;
+	void SetItem1(T val){
+		_item1 = val;
+	}
 
-public:
+	T GetItem2() const{
+		return _item2;
+	}
 
-	Pair2(T& item1, M& item2);
-
-	T& GetItem1() const;
-	void SetItem1(T& val);
-
-	M& GetItem2() const;
-	void SetItem2(M& val);
+	void SetItem2(T val){
+		_item2 = val;
+	}
 };
 
 

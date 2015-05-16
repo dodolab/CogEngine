@@ -18,7 +18,7 @@ public:
 	BeRotateAnim(float from, float to, float speed, bool additive);
 
 	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
 };
 
 
