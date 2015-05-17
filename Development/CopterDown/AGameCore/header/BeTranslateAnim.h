@@ -5,6 +5,9 @@
 #include "ABehavior.h"
 #include "IwGeomFVec2.h"
 
+/**
+* Behavior for translation animation
+*/
 class BeTranslateAnim : public ABehavior{
 
 private:
@@ -23,7 +26,7 @@ private:
 public:
 	BeTranslateAnim(CIwFVec2 from, CIwFVec2 to, float speed, bool additive, bool repeat);
 	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
 };
 
 

@@ -5,6 +5,8 @@
 #include "Gnode.h"
 #include "unistd.h"
 #include <iostream>
+#include "EnUserAct.h"
+#include "SmartPointer.h"
 
 using namespace Iw2DSceneGraphCore;
 using namespace Iw2DSceneGraph;
@@ -13,7 +15,6 @@ using namespace Iw2DSceneGraph;
 #define MS_PER_MINUTE (MS_PER_SECOND * 60)
 #define MS_PER_HOUR (MS_PER_MINUTE * 60)
 #define MS_PER_DAY (MS_PER_HOUR * 24)
-
 #define UPDATE_FREQUENCY 35
 
 // ============================== VARIABLES
@@ -25,46 +26,88 @@ s3eThread* updateThread;
 
 int width;
 int height;
-
 // ============================== LOOPS
 // FRAME_TIME is the amount of time that a single frame should last in seconds
 #define FRAME_TIME  (30.0f / 1000.0f)
+GNode* root;
+uint64 absolute;
+spt<EnUserAct> userActions;
 
+void UpdateInputs(){
+	// todo: add new inputs to the root attribute
+}
+
+void CheckInputs(){
+	auto actions = userActions->GetKeyActions();
+	auto points = userActions->GetPointActions();
+
+	for (auto it = actions.begin(); it != actions.end(); /*nothing*/){
+		EnInputAct<Act>& act = (*it);
+		if (act.ended || act.handled){
+			actions.erase(it);
+		}
+		else{
+			act.cycleNumber++;
+			++it;
+		}
+	}
+
+	for (auto it = points.begin(); it != points.end(); /*nothing*/){
+		EnInputAct<CIwFVec2> act = (*it);
+		if (act.ended || act.handled){
+			points.erase(it);
+		}
+		else{
+			act.cycleNumber++;
+			++it;
+		}
+	}
+}
 
 void DrawingLoop(){
 
-	uint64 new_time = s3eTimerGetMs();
+	uint64 delta = s3eTimerGetMs();
 
 	while (!s3eDeviceCheckQuitRequest())
 	{
+		delta = s3eTimerGetMs() - delta;
+
 		//Update the input systems
 		s3eKeyboardUpdate();
-		s3ePointerUpdate();
-		
+		s3ePointerUpdate();		
+		UpdateInputs();
 
 		// Clear the drawing surface
 		Iw2DSurfaceClear(0xff000000);
+
+		// draw the root node
+		root->Draw(delta, absolute, CIwFMat2D::g_Identity);
 
 		// Show the drawing surface
 		Iw2DSurfaceShow();
 
 		// sleep 0ms (for input events update)
 		s3eDeviceYield(0);
-		new_time = s3eTimerGetMs();
 	}
 }
 
 // update loop runs on separate thread
 void* UpdateLoop(void* arg){
+
+	uint64 delta = s3eTimerGetMs();
+
 	while (!s3eDeviceCheckQuitRequest())
 	{
-		uint32 beforeUpdate = (uint32)s3eTimerGetMs();
-
+		delta = s3eTimerGetMs() - delta;
 		// do logic here
 
+		root->Update(delta, absolute, CIwFMat2D::g_Identity);
+
+		CheckInputs();
+
 		// sleep max 35 ms
-		uint32 afterUpdate = (uint32)s3eTimerGetMs();
-		long diff = (UPDATE_FREQUENCY - (afterUpdate - beforeUpdate)) * 1000;
+		uint64 updateTime = s3eTimerGetMs() - delta;
+		long diff = (UPDATE_FREQUENCY - (updateTime)) * 1000;
 		if (diff > 0) usleep(diff);
 	}
 	return NULL;
@@ -79,12 +122,64 @@ int32 ScreenSizeChangeCallback(void* systemData, void* userData)
 	return 0;
 }
 
+vector<s3eKey> pressedKeys;
+
+Act GetAction(s3eKey key){
+	if (key == s3eKeyLeft) return Act::LEFT;
+	if (key == s3eKeyRight) return Act::RIGHT;
+	if (key == s3eKeySpace) return Act::FIRE;
+	if (key == s3eKeyTab) return Act::SWITCH;
+	return Act::FIRE;
+}
+
 int32 KeyEventCallback(s3eKeyboardEvent* event, void* userData){
+	
+	if (event->m_Pressed){
+		// key down
+
+
+		// if pressed keys contains this key, do nothing
+		for (auto key : pressedKeys){
+			if (key == event->m_Key) return 0;
+		}
+
+		pressedKeys.push_back(event->m_Key);
+		Act inAct = GetAction(event->m_Key);
+
+		bool alreadyContains = false;
+		for (EnInputAct<Act> act : userActions->GetKeyActions()){
+			if (act.value == inAct){
+				alreadyContains = true;
+				break;
+			}
+		}
+
+		if (!alreadyContains) userActions->GetKeyActions().push_back(EnInputAct<Act>(inAct));
+	}
+	else{
+		// key up
+		for (auto it = pressedKeys.begin(); it != pressedKeys.end(); ++it){
+			if ((*it) == event->m_Key){
+				pressedKeys.erase(it);
+				break;
+			}
+		}
+
+		Act inAct = GetAction(event->m_Key);
+
+		for (EnInputAct<Act> act : userActions->GetKeyActions()){
+			if (act.value == inAct){
+				act.ended = true;
+				break;
+			}
+		}
+	}
+
 	return 0;
 }
 
 int32 PointerButtonEventCallback(s3ePointerEvent* event, void* userData){
-	return 0;
+	return 0; 
 }
 
 // handled even when mouse button is not pressed !!
@@ -112,6 +207,11 @@ void Init(){
 	
 	height = s3eSurfaceGetInt(S3E_SURFACE_HEIGHT);
 	width = height = s3eSurfaceGetInt(S3E_SURFACE_WIDTH);
+
+	// initialize root node
+	root = new GNode(ObjType::ROOT, 0, "root");
+	userActions = spt<EnUserAct>(new EnUserAct());
+	root->AddAttr(Attrs::USERACTION, userActions);
 }
 
 bool Check(){
@@ -141,8 +241,6 @@ void Terminate(){
 }
 
 // ============================== MAIN METHOD
-
-GNode* node;
 
 
 using namespace std;
@@ -189,7 +287,7 @@ void test(){
 	flags = 12;
 	flags = 13;
 	
-	node = new GNode(ObjType::OBJECT, 12, "fofka");
+/*	node = new GNode(ObjType::OBJECT, 12, "fofka");
 	node->AddAttr(12, 12);
 
 	int* pointer = new int(4);
@@ -197,7 +295,7 @@ void test(){
 
 	int mojo = 5;
 	node->AddAttr(6, mojo);
-
+	*/
 //	TestM testik(12);
 //	node->AddAttr(10, ElemType::ALL, testik);
 
@@ -213,9 +311,9 @@ void test(){
 
 	auto actual = s3eTimerGetMs();
 	for (int i = 0; i < 100000; i++){
-		node->AddAttr(11, testik3);
+//		node->AddAttr(11, testik3);
 		//TestM* testf = node->GetAttr<TestM*>(11);
-		node->RemoveAttr(11);
+	//	node->RemoveAttr(11);
 	}
 
 	auto diff = s3eTimerGetMs() - actual;
@@ -223,7 +321,7 @@ void test(){
 
 int main()
 {
-
+	absolute = s3eTimerGetMs();
 	test();
 
 	int gnodeSize = sizeof(GNode);

@@ -10,7 +10,7 @@ void BeRotateAnim::OnMessage(Msg& msg){
 
 }
 
-void BeRotateAnim::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
+void BeRotateAnim::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner){
 
 }
 

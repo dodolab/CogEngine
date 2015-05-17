@@ -110,7 +110,7 @@ void GNode::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& a
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		ABehavior* beh = *it;
 	    if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) && beh->GetElemType() == ElemType::MODEL){
-			beh->Update(delta, absolute, absoluteMatrix);
+			beh->Update(delta, absolute, absoluteMatrix, this);
 		}
 	}
 }
@@ -128,13 +128,12 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 
 		if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) &&
 			beh->GetElemType() == ElemType::VIEW){
-			beh->Update(delta, absolute, absoluteMatrix);
+			beh->Update(delta, absolute, absoluteMatrix, this);
 		}
 	}
 }
 
 bool GNode::AddBehavior(ABehavior* beh){
-	beh->_owner = this;
 	_behaviors.push_back(beh);
 	return true;
 }
