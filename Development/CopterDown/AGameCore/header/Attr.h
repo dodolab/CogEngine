@@ -3,6 +3,8 @@
 #define ATTR_H
 
 #include "Enums.h"
+#include "EnPair.h"
+#include "Msg.h"
 
 
 class GNode;
@@ -54,9 +56,9 @@ protected:
 	* @param newAt new value
 	*/
 	void OnAttrChanged(T& old, T& newAt){
-		EnPair<T, T> value = EnPair<T, T>(old, newAt);
+		/*EnPair<T, T> value = EnPair<T, T>(old, newAt);
 		Msg msg(ElemType::ALL, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
-		this->_owner->SendMessageNoResp(msg, resp)
+		this->_owner->SendMessageNoResp(msg);*/
 	}
 
 public:

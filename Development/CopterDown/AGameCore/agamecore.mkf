@@ -38,7 +38,6 @@ files
 	EnInputAct.cpp
 	EnPair.cpp
 	EnFlags.cpp
-	EnUserAct.cpp
 	GNode.cpp
 	GNodePool.cpp
 	Msg.cpp
@@ -49,5 +48,5 @@ files
 
 	[Data]
     (data)
-    resources.group
+
 }
