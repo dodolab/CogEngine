@@ -11,7 +11,36 @@
 #include "BeTranslateAnim.h"
 
 using namespace Iw2DSceneGraphCore;
-using namespace Iw2DSceneGraph;
+
+
+/*! Types of traversation */
+namespace Traverses{
+	int CHILD_FIRST = 0;	/*!< child is updated first */
+	int BEH_FIRST = 1;		/*!< behaviors are updated first */
+	int ROOT = 2;			/*!< root is updated first */
+	int SCENEROOT = 3;		/*!< scene root is updated first */
+}
+
+/*! Action events */
+namespace Actions{
+	int BEHAVIOR_ADDED = 0;
+	int BEHAVIOR_REMOVED = 1;
+	int OBJECT_CREATED = 2;
+	int OBJECT_REMOVED = 3;
+	int USER_INPUT = 4;
+	int COLLISION_OCURRED = 5;
+	int GAMEOBJECT_DESTROYED = 6;
+	int ATTRIBUTE_CHANGED = 7;
+}
+
+
+/*! Attribute keys */
+namespace Attrs{
+	int VELOCITY = 17;
+	int USERACTION = 16;
+	int IMGSOURCE = 24;
+	int BOUNDS = 26;
+}
 
 #define MS_PER_SECOND 1000
 #define MS_PER_MINUTE (MS_PER_SECOND * 60)
@@ -91,7 +120,7 @@ void DrawingLoop(){
 		// Show the drawing surface
 		Iw2DSurfaceShow();
 
-		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(200, 200)));
+		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(width/2, height)));
 
 		CheckInputs();
 
@@ -233,18 +262,18 @@ void Init(){
 	// Load images
 	spt<CIw2DImage> image = spt<CIw2DImage>(Iw2DCreateImageResource("blue"));
 
-	for (int i = 0; i < 1000; i++){
+	for (int i = 0; i < 2000; i++){
 		GNode* child = new GNode(ObjType::OBJECT, 0, "other");
 
-		CIwFVec2 randomTransform(IwRandMinMax(1, 400), IwRandMinMax(1, 400));
-		CIwFVec2 randomTransform2(IwRandMinMax(1, 400), IwRandMinMax(1, 400));
+		CIwFVec2 randomTransform(IwRandMinMax(1, width), IwRandMinMax(1, height*2));
+		CIwFVec2 randomTransform2(IwRandMinMax(1, width), IwRandMinMax(1, height*2));
 
 		child->GetTransform().SetTrans(randomTransform);
-		child->GetTransform().Scale(0.033f);
+		child->GetTransform().Scale(0.063f);
 
 		child->AddAttr<spt<CIw2DImage>>(Attrs::IMGSOURCE, image);
 		child->AddBehavior(new BeRender());
-		float speed = 0.1f*((float)IwRandMinMax(1, 10));
+		float speed = 0.1f*((float)IwRandMinMax(1, 15));
 
 		child->AddBehavior(new BeTranslateAnim(randomTransform, randomTransform2, speed, true, true));
 

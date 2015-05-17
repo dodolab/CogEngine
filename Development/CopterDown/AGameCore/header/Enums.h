@@ -1,4 +1,3 @@
-
 #ifndef ENUMS_H
 #define ENUMS_H
 
@@ -12,24 +11,33 @@ enum class Act{
 	SWITCH		/*!< switch/action */
 };
 
+/*! Types of traversation */
+namespace Traverses{
+	extern int CHILD_FIRST;	/*!< child is updated first */
+	extern int BEH_FIRST;		/*!< behaviors are updated first */
+	extern int ROOT;			/*!< root is updated first */
+	extern int SCENEROOT;		/*!< scene root is updated first */
+}
+
 /*! Action events */
 namespace Actions{
-	int BEHAVIOR_ADDED = 0;
-	int BEHAVIOR_REMOVED = 1;
-	int OBJECT_CREATED = 2;
-	int OBJECT_REMOVED = 3;
-	int USER_INPUT = 4;
-	int COLLISION_OCURRED = 5;
-	int GAMEOBJECT_DESTROYED = 6;
-	int ATTRIBUTE_CHANGED = 7;
+	extern int BEHAVIOR_ADDED;
+	extern int BEHAVIOR_REMOVED;
+	extern int OBJECT_CREATED;
+	extern int OBJECT_REMOVED;
+	extern int USER_INPUT;
+	extern int COLLISION_OCURRED;
+	extern int GAMEOBJECT_DESTROYED;
+	extern int ATTRIBUTE_CHANGED;
 }
+
 
 /*! Attribute keys */
 namespace Attrs{
-	int VELOCITY = 17;
-	int USERACTION = 16;
-	int IMGSOURCE = 24;
-	int BOUNDS = 26;
+	extern int VELOCITY;
+	extern int USERACTION;
+	extern int IMGSOURCE;
+	extern int BOUNDS;
 }
 
 /*! Behavior state enumerator */
@@ -62,13 +70,5 @@ enum class SenderType{
 	BEHAVIOR,			/*!< sender is behavior */
 	ATTR				/*!< sender is attribute */
 };
-
-/*! Types of traversation */
-namespace Traverses{
-	int CHILD_FIRST = 0;	/*!< child is updated first */
-	int BEH_FIRST = 1;		/*!< behaviors are updated first */
-	int ROOT = 2;			/*!< root is updated first */
-	int SCENEROOT = 3;		/*!< scene root is updated first */
-}
 
 #endif

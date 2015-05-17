@@ -44,7 +44,7 @@ const bool Msg::IsInitialized() const{
 
 bool Msg::Initialize(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data){
 	if (!IsInitialized()){
-		_id == idCounter++;
+		_id = idCounter++;
 
 		_category = cat;
 		_traverse = traverse;

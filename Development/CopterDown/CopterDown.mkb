@@ -1,16 +1,29 @@
+assets
+{
+    [default]
+	(data-ram)
+	.
+}
+
+
+
 #!/usr/bin/env mkb
 files
 {
     CopterDown.cpp
+
+    [Data]
+    (data)
+    resources.group
 }
 
 subprojects
 {
     iwnui
     iwutil
-    iw2dscenegraphcore
-    iw2dscenegraph
     iwgx
+	iw2dscenegraph
+	iw2dscenegraphcore
     iwresmanager
     iwtween
 	AGameCore
@@ -18,6 +31,7 @@ subprojects
 
 deployment
 {
+  assets=default
 }
 
-option cflags="-std=c++0x"
+option cflags="-std=c++11"
