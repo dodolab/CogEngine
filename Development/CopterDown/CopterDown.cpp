@@ -7,6 +7,8 @@
 #include <iostream>
 #include "EnUserAct.h"
 #include "SmartPointer.h"
+#include "BeRender.h"
+#include "BeTranslateAnim.h"
 
 using namespace Iw2DSceneGraphCore;
 using namespace Iw2DSceneGraph;
@@ -32,6 +34,7 @@ int height;
 GNode* root;
 uint64 absolute;
 spt<EnUserAct> userActions;
+CIwResGroup* resourceGroup;
 
 void UpdateInputs(){
 	// todo: add new inputs to the root attribute
@@ -66,11 +69,13 @@ void CheckInputs(){
 
 void DrawingLoop(){
 
-	uint64 delta = s3eTimerGetMs();
+	uint64 deltaTime = s3eTimerGetMs();
+	double angle = 0;
 
 	while (!s3eDeviceCheckQuitRequest())
 	{
-		delta = s3eTimerGetMs() - delta;
+		uint64 delta = s3eTimerGetMs() - deltaTime;
+		deltaTime = s3eTimerGetMs();
 
 		//Update the input systems
 		s3eKeyboardUpdate();
@@ -86,6 +91,10 @@ void DrawingLoop(){
 		// Show the drawing surface
 		Iw2DSurfaceShow();
 
+		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(200, 200)));
+
+		CheckInputs();
+
 		// sleep 0ms (for input events update)
 		s3eDeviceYield(0);
 	}
@@ -94,22 +103,24 @@ void DrawingLoop(){
 // update loop runs on separate thread
 void* UpdateLoop(void* arg){
 
-	uint64 delta = s3eTimerGetMs();
-
+	uint64 deltaTime = s3eTimerGetMs();
+	/*
 	while (!s3eDeviceCheckQuitRequest())
 	{
-		delta = s3eTimerGetMs() - delta;
+		uint64 delta = s3eTimerGetMs() - deltaTime;
+		deltaTime = s3eTimerGetMs();
+
 		// do logic here
 
-		root->Update(delta, absolute, CIwFMat2D::g_Identity);
+		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(200,200)));
 
 		CheckInputs();
 
 		// sleep max 35 ms
-		uint64 updateTime = s3eTimerGetMs() - delta;
+		uint64 updateTime = s3eTimerGetMs() - deltaTime;
 		long diff = (UPDATE_FREQUENCY - (updateTime)) * 1000;
 		if (diff > 0) usleep(diff);
-	}
+	}*/
 	return NULL;
 }
 
@@ -196,10 +207,13 @@ void RegisterEvents(){
 	s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)PointerMotionEventCallback, NULL);
 }
 
+
 void Init(){
 
 	// initialize 2D graphic system
 	Iw2DInit();
+	// initialize common graphic system
+	IwGxInit();
 	// initialize resources manager
 	IwResManagerInit();
 	// dont use mipmaps -> better memory usage
@@ -212,6 +226,30 @@ void Init(){
 	root = new GNode(ObjType::ROOT, 0, "root");
 	userActions = spt<EnUserAct>(new EnUserAct());
 	root->AddAttr(Attrs::USERACTION, userActions);
+	
+	// load application data
+	resourceGroup = IwGetResManager()->LoadGroup("resources.group");
+
+	// Load images
+	spt<CIw2DImage> image = spt<CIw2DImage>(Iw2DCreateImageResource("blue"));
+
+	for (int i = 0; i < 1000; i++){
+		GNode* child = new GNode(ObjType::OBJECT, 0, "other");
+
+		CIwFVec2 randomTransform(IwRandMinMax(1, 400), IwRandMinMax(1, 400));
+		CIwFVec2 randomTransform2(IwRandMinMax(1, 400), IwRandMinMax(1, 400));
+
+		child->GetTransform().SetTrans(randomTransform);
+		child->GetTransform().Scale(0.033f);
+
+		child->AddAttr<spt<CIw2DImage>>(Attrs::IMGSOURCE, image);
+		child->AddBehavior(new BeRender());
+		float speed = 0.1f*((float)IwRandMinMax(1, 10));
+
+		child->AddBehavior(new BeTranslateAnim(randomTransform, randomTransform2, speed, true, true));
+
+		root->AddChild(child);
+	}
 }
 
 bool Check(){
@@ -237,6 +275,7 @@ void Terminate(){
 	// terminate all used modules
 	IwResManagerTerminate();
 	Iw2DTerminate();
+	IwGxTerminate();
 
 }
 

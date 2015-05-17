@@ -1,0 +1,9 @@
+
+CIwResGroup
+{
+	name "resources"
+
+	// General images
+	"images/blue.png"
+}
+

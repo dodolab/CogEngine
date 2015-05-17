@@ -108,7 +108,7 @@ public:
 	* Receives a message
 	* @param msg received message
 	*/
-	virtual void OnMessage(Msg& msg) const = 0;
+	virtual void OnMessage(Msg& msg)  = 0;
 
 	/**
 	* Updates behavior inner state
@@ -116,7 +116,7 @@ public:
 	* @param absolute absolute time since the game begun
 	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	virtual void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner) const = 0;
+	virtual void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner) = 0;
 
 	bool operator==(int id){
 		return this->_id == id;

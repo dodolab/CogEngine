@@ -50,7 +50,7 @@ protected:
 	// states this object has set
 	EnFlags* _states = nullptr;
 	// transformation matrix (size = 24)
-	CIwFMat2D  _transform;
+	CIwFMat2D  _transform = CIwFMat2D::g_Identity;
 	
 public:
 
