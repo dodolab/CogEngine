@@ -21,6 +21,10 @@ files
 	EnUserAct.h
 	GNode.h
 	GNodePool.h
+	MGameCtrl.h
+	MGameEngine.h
+	MEnvironmentCtrl.h
+	MResourceCtrl.h
 	Msg.h
 	SmartPointer.h
 
@@ -34,6 +38,7 @@ files
 	BeRotateAnim.cpp
 	BeTranslateAnim.cpp
 	EnBounds.cpp
+	Enums.cpp
 	EnCollision.cpp
 	EnInputAct.cpp
 	EnPair.cpp
