@@ -45,6 +45,10 @@ files
 	EnFlags.cpp
 	GNode.cpp
 	GNodePool.cpp
+	MEnvironmentCtrl.cpp
+	MGameCtrl.cpp
+	MGameEngine.cpp
+	MResourceCtrl.cpp
 	Msg.cpp
 
     [Docs]
