@@ -15,6 +15,7 @@
 #include "SmartPointer.h"
 #include <stdexcept>
 #include <string>
+#include "EnTransform.h"
 
 using namespace std;
 
@@ -50,7 +51,7 @@ protected:
 	// states this object has set
 	EnFlags* _states = nullptr;
 	// transformation matrix (size = 24)
-	CIwFMat2D  _transform = CIwFMat2D::g_Identity;
+	EnTransform  _transform = EnTransform(0,0);
 	
 public:
 
@@ -214,12 +215,12 @@ public:
 	/**
 	* Gets transformation matrix
 	*/
-	CIwFMat2D& GetTransform();
+	EnTransform& GetTransform();
 
 	/**
 	* Sets transformation matrix
 	*/
-	void SetTransform(CIwFMat2D val);
+	void SetTransform(EnTransform val);
 
 	/**
 	* Returns indicator, if groups has been initialized

@@ -17,6 +17,7 @@ files
 	EnInputAct.h
 	EnPair.h
 	EnFlags.h
+	EnTransform.h
 	Enums.h
 	EnUserAct.h
 	GNode.h

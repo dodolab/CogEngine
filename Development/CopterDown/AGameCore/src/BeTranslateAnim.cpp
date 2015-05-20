@@ -43,17 +43,17 @@ void BeTranslateAnim::Update(const uint64 delta, const uint64 absolute, const CI
 	_actual.x += diffX;
 	_actual.y += diffY;
 
-	CIwFMat2D& transform = owner->GetTransform();
+	EnTransform& transform = owner->GetTransform();
 
 
 	if (_additive)
 	{
-		auto trans = transform.GetTrans();
-		transform.SetTrans(CIwFVec2(trans.x + diffX, trans.y + diffY));
+		transform.LocalPos.x += diffX;
+		transform.LocalPos.y += diffY;
 	}
 	else
 	{
-		transform.SetTrans(_actual);
+		transform.LocalPos = (_actual);
 	}
 }
 

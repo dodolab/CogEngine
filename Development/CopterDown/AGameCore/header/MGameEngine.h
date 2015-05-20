@@ -14,14 +14,27 @@ private:
 	uint64 absolute;
 	CIwResGroup* resourceGroup;
 
-	MEnvironmentCtrl environmentCtrl;
-	MGameCtrl gameCtrl;
-	MResourceCtrl resourceCtrl;
+	MEnvironmentCtrl* environmentCtrl;
+	MGameCtrl* gameCtrl;
+	MResourceCtrl* resourceCtrl;
 
 	void Update(uint64 delta, uint64 absolute);
 	void Draw(uint64 delta, uint64 absolute);
 
 public:
+
+	MGameEngine(){
+		environmentCtrl = MEnvironmentCtrl::Get();
+		gameCtrl = new MGameCtrl();
+		resourceCtrl = new MResourceCtrl();
+	}
+
+	~MGameEngine(){
+		delete environmentCtrl;
+		delete gameCtrl;
+		delete resourceCtrl;
+	}
+
 	void Init();
 	void StartLoop();
 	void Terminate();
