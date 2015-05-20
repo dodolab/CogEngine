@@ -1,6 +1,12 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
+
+ class MGameEngine;
+extern MGameEngine MEngine;
+
+
+
 #include "MEnvironmentCtrl.h"
 #include "MGameCtrl.h"
 #include "MResourceCtrl.h"
@@ -8,26 +14,22 @@
 #include "GNode.h"
 #include "IwResGroup.h"
 
+
+
 class MGameEngine{
 private:
-	GNode* root;
-	uint64 absolute;
-	CIwResGroup* resourceGroup;
 
-	MEnvironmentCtrl* environmentCtrl;
-	MGameCtrl* gameCtrl;
-	MResourceCtrl* resourceCtrl;
+	uint64 absolute = 0;
+
 
 	void Update(uint64 delta, uint64 absolute);
 	void Draw(uint64 delta, uint64 absolute);
 
 public:
+	MEnvironmentCtrl* environmentCtrl = nullptr;
+	MGameCtrl* gameCtrl = nullptr;
+	MResourceCtrl* resourceCtrl = nullptr;
 
-	MGameEngine(){
-		environmentCtrl = MEnvironmentCtrl::Get();
-		gameCtrl = new MGameCtrl();
-		resourceCtrl = new MResourceCtrl();
-	}
 
 	~MGameEngine(){
 		delete environmentCtrl;
@@ -39,8 +41,6 @@ public:
 	void StartLoop();
 	void Terminate();
 };
-
-
 
 
 #endif

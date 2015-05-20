@@ -119,10 +119,6 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 
 	CIwFMat2D absoluteMatrix = _transform.GetMatrix()*absMatrix;
 
-	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Draw(delta, absolute, absoluteMatrix);
-	}
-
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		ABehavior* beh = (*it);
 
@@ -130,6 +126,10 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 			beh->GetElemType() == ElemType::VIEW){
 			beh->Update(delta, absolute, absoluteMatrix, this);
 		}
+	}
+
+	for (auto it = _children.begin(); it != _children.end(); ++it){
+		(*it)->Draw(delta, absolute, absoluteMatrix);
 	}
 }
 

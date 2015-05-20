@@ -15,3 +15,11 @@
 #
 # Some conditional operations are also permitted, see the
 # S3E documentation for details.
+
+[S3E]
+MemSize=64000000
+MemSizeDebug=64000000
+[Util]
+MemMgrMaxAllocWarning=0
+[GX]
+DataCacheSize=64365

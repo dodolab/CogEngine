@@ -25,4 +25,7 @@ namespace Attrs{
 	int USERACTION = 16;
 	int IMGSOURCE = 24;
 	int BOUNDS = 26;
+	int SIZE = 25;
+	int POLYGON = 27;
+	int COLOR = 28;
 }

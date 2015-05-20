@@ -5,8 +5,12 @@
 #include "s3eTypes.h"
 #include "s3ePointer.h"
 #include "s3eKeyboard.h"
+#include "MGameEngine.h"
+#include "EnUserAct.h"
+#include "SmartPointer.h"
+#include <vector>
 
-MEnvironmentCtrl* MEnvironmentCtrl::_instance = nullptr;
+using namespace std;
 
 int32 MEnvironmentCtrl::PointerButtonEventCallback(s3ePointerEvent* event, void* userData){
 	return 0;
@@ -32,35 +36,35 @@ int32 MEnvironmentCtrl::KeyEventCallback(s3eKeyboardEvent* event, void* userData
 		// key down
 
 		// if pressed keys contains this key, do nothing
-		for (auto key : _instance->_pressedKeys){
+		for (auto key : MEngine.environmentCtrl->GetPressedKeys()){
 			if (key == event->m_Key) return 0;
 		}
 
-		_instance->_pressedKeys.push_back(event->m_Key);
+		MEngine.environmentCtrl->GetPressedKeys().push_back(event->m_Key);
 		Act inAct = GetAction(event->m_Key);
 
 		bool alreadyContains = false;
-		for (EnInputAct<Act> act : _instance->_userActions->GetKeyActions()){
+		for (EnInputAct<Act> act : MEngine.environmentCtrl->GetUserActions()->GetKeyActions()){
 			if (act.value == inAct){
 				alreadyContains = true;
 				break;
 			}
 		}
 
-		if (!alreadyContains) _instance->_userActions->GetKeyActions().push_back(EnInputAct<Act>(inAct));
+		if (!alreadyContains) MEngine.environmentCtrl->GetUserActions()->GetKeyActions().push_back(EnInputAct<Act>(inAct));
 	}
 	else{
 		// key up
-		for (auto it = _instance->_pressedKeys.begin(); it != _instance->_pressedKeys.end(); ++it){
+		for (auto it = MEngine.environmentCtrl->GetPressedKeys().begin(); it != MEngine.environmentCtrl->GetPressedKeys().end(); ++it){
 			if ((*it) == event->m_Key){
-				_instance->_pressedKeys.erase(it);
+				MEngine.environmentCtrl->GetPressedKeys().erase(it);
 				break;
 			}
 		}
 
 		Act inAct = GetAction(event->m_Key);
 
-		for (EnInputAct<Act> act : _instance->_userActions->GetKeyActions()){
+		for (EnInputAct<Act> act : MEngine.environmentCtrl->GetUserActions()->GetKeyActions()){
 			if (act.value == inAct){
 				act.ended = true;
 				break;
@@ -72,11 +76,11 @@ int32 MEnvironmentCtrl::KeyEventCallback(s3eKeyboardEvent* event, void* userData
 }
 
 int32 MEnvironmentCtrl::ScreenSizeChangeCallback(void* systemData, void* userData){
-	_instance->_screenSizeChanged = true;
+	MEngine.environmentCtrl->_screenSizeChanged = true;
 	return 0;
 }
 
-void MEnvironmentCtrl::Initialize(){
+void MEnvironmentCtrl::Init(){
 	_height = s3eSurfaceGetInt(S3E_SURFACE_HEIGHT);
 	_width = s3eSurfaceGetInt(S3E_SURFACE_WIDTH);
 	_userActions = spt<EnUserAct>(new EnUserAct());

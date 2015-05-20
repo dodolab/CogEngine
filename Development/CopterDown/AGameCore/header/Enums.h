@@ -38,6 +38,9 @@ namespace Attrs{
 	extern int USERACTION;
 	extern int IMGSOURCE;
 	extern int BOUNDS;
+	extern int SIZE;
+	extern int POLYGON;
+	extern int COLOR;
 }
 
 /*! Behavior state enumerator */
