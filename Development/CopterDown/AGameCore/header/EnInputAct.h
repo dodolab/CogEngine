@@ -9,6 +9,9 @@ template<class T>
 class EnInputAct{
 public:
 	T value;
+	// indicates, if input has just started (only for pointer events)
+	// if false, it means that pointer is in motion
+	bool started;
 	// indicates, if input has been handled
 	bool handled = false;
 	// indicates, if input has ended (e.g. key release)

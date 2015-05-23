@@ -20,11 +20,20 @@ private:
 	int _width;
 	int _height;
 
-	static int32 PointerButtonEventCallback(s3ePointerEvent* event, void* userData);
-	static int32 PointerMotionEventCallback(s3ePointerMotionEvent* event, void* userData);
 	static int32 KeyEventCallback(s3eKeyboardEvent* event, void* userData);
 	static int32 ScreenSizeChangeCallback(void* systemData, void* userData);
 
+	// user touches the screen with more fingers
+	static void MultiTouchButtonCallback(s3ePointerTouchEvent* event);
+	// user moves fingers
+	static void MultiTouchMotionCallback(s3ePointerTouchMotionEvent* event);
+	// user touches the screen
+	static void SingleTouchButtonCallback(s3ePointerEvent* event);
+	// user moves finger
+	static void SingleTouchMotionCallback(s3ePointerMotionEvent* event);
+
+	// gets touch by id or creates a new one
+	spt<EnInputAct<CIwFVec2>> GetTouchById(int id);
 
 public:
 	void Init();
