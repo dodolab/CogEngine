@@ -8,23 +8,23 @@
 class EnHitImage{
 private:
 	CIwImage m_Hitmap;
-	spt<CIw2DImage> _img;
+	spt<CIwImage> _img;
 
 public:
 
-	EnHitImage(spt<CIwImage> img) : _img(img){
+	EnHitImage(spt<CIwImage> img) : _img(img) {
+		// todo: this image could be stored only once per each object =)
+
 		m_Hitmap.SetFormat(CIwImage::A_8);
 		m_Hitmap.SetWidth(img->GetWidth());
 		m_Hitmap.SetHeight(img->GetHeight());
 		img->ConvertToImage(&m_Hitmap);
-
-
 	}
 
-	bool HitTest(const CIwFVec2& imgCenterPos, const CIwFVec2& testPos)
+	bool HitTest(const CIwFVec2& testPos)
 	{
 		//Move the test position into "local" coordinate space
-		CIwFVec2 localPos = testPos - (imgCenterPos - CIwFVec2(m_Hitmap.GetWidth() / 2, m_Hitmap.GetHeight() / 2));
+		CIwFVec2 localPos = testPos + CIwFVec2(m_Hitmap.GetWidth() / 2, m_Hitmap.GetHeight() / 2);
 		//Test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0

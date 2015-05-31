@@ -9,7 +9,6 @@
 #include "IwGeomFMat2D.h"
 #include "IwList.h"
 #include "EnBounds.h"
-#include "IwMap.h"
 #include "Enums.h"
 #include <list>
 #include "SmartPointer.h"
@@ -242,6 +241,27 @@ public:
 	void SetGroups(EnFlags val);
 
 	/**
+	* Gets indicator, if this object is in selected group
+	*/
+	bool IsInGroup(int groupId){
+		return _groups->HasState(groupId);
+	}
+
+	/**
+	* Sets selected group
+	*/
+	void SetGroup(int groupId){
+		_groups->SetState(groupId);
+	}
+
+	/**
+	* Resets selected group
+	*/
+	void UnsetGroup(int groupId){
+		_groups->ResetState(groupId);
+	}
+
+	/**
 	* Returns indicator, if states has been initialized
 	* Check this indicator first before asking for states, because
 	* they are lazy initialized
@@ -259,6 +279,36 @@ public:
 	* Sets states this object has set
 	*/
 	void SetStates(EnFlags val);
+
+	/**
+	* Gets indicator, if this object has selected state
+	*/
+	bool HasState(int state){
+		if (!HasStates()) return false;
+		return _states->HasState(state);
+	}
+
+	/**
+	* Sets selected state
+	*/
+	void SetState(int state){
+		GetStates().SetState(state);
+	}
+
+	/**
+	* Resets selected state
+	*/
+	void ResetState(int state){
+		GetStates().ResetState(state);
+	}
+
+
+	/**
+	* Switches values of two states
+	*/
+	void SwitchState(int state1, int state2){
+		GetStates().SwitchState(state1, state2);
+	}
 
 	/**
 	* Adds a new attribute of value type
@@ -307,7 +357,6 @@ public:
 			T newObj;
 			AttrR<T>* newAttr = new AttrR<T>(key, newObj, this);
 			_attributes[key] = newAttr;
-			return newAttr->GetValue();
 		}
 	}
 

@@ -9,6 +9,7 @@ files
 	Attr.h
 	BeCollider.h
 	BeHitEvent.h
+	BeInputKey.h
 	BeMove.h
 	BeRender.h
 	BeRotateAnim.h
@@ -22,7 +23,6 @@ files
 	EnPolygon.h
 	EnTransform.h
 	Enums.h
-	EnUserAct.h
 	GNode.h
 	GNodePool.h
 	MGameCtrl.h
@@ -38,6 +38,7 @@ files
 	Attr.cpp
 	BeCollider.cpp
 	BeHitEvent.cpp
+	BeInputKey.cpp
 	BeMove.cpp
 	BeRender.cpp
 	BeRotateAnim.cpp

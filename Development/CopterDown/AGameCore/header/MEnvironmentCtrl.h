@@ -6,7 +6,8 @@
 #include <vector>
 #include "s3ePointer.h"
 #include "SmartPointer.h"
-#include "EnUserAct.h"
+#include "EnInputAct.h"
+#include "IwGeomFVec2.h"
 
 using namespace std;
 
@@ -15,8 +16,8 @@ private:
 
 	// flag for screen size change
 	bool _screenSizeChanged = true;
-	vector<s3eKey> _pressedKeys;
-	spt<EnUserAct> _userActions;
+	vector<EnInputAct> _pressedKeys;
+	vector<EnInputAct> _pressedPoints;
 	int _width;
 	int _height;
 
@@ -33,23 +34,23 @@ private:
 	static void SingleTouchMotionCallback(s3ePointerMotionEvent* event);
 
 	// gets touch by id or creates a new one
-	spt<EnInputAct<CIwFVec2>> GetTouchById(int id);
+	spt<EnInputAct> GetTouchById(int id);
 
 public:
 	void Init();
 	void UpdateInputs();
-	void CheckInputs();
+	void RemoveEndedInputs();
 
 	bool ScreenSizeChanged(){
 		return _screenSizeChanged;
 	}
 
-	vector<s3eKey>& GetPressedKeys(){
+	vector<EnInputAct>& GetPressedKeys(){
 		return _pressedKeys;
 	}
 
-	spt<EnUserAct> GetUserActions(){
-		return _userActions;
+	vector<EnInputAct>& GetPressedPoints(){
+		return _pressedPoints;
 	}
 
 	int GetWidth(){

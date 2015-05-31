@@ -9,8 +9,8 @@
 int GNode::idCounter = 1;
 Msg GNode::_dummyMsg = Msg();
 
-GNode::GNode(ObjType type, int subType, string tag):_type(type), _subType(subType), _id(idCounter++){
-
+GNode::GNode(ObjType type, int subType, string tag):  _type(type), _subType(subType), _id(idCounter++){
+	if (!tag.empty()) SetTag(tag);
 }
 
 GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _id(idCounter++){
@@ -122,8 +122,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		ABehavior* beh = (*it);
 
-		if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) &&
-			beh->GetElemType() == ElemType::VIEW){
+		if (beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
 			beh->Update(delta, absolute, absoluteMatrix, this);
 		}
 	}

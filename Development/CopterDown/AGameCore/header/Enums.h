@@ -3,12 +3,13 @@
 
 /*! User input action enumerator */
 enum class Act{
-	LEFT,		/*!< move left */
-	RIGHT,		/*!< move right */
-	UP,			/*!< move up */
-	DOWN,		/*!< move down */
-	FIRE,		/*!< fire/action */
-	SWITCH		/*!< switch/action */
+	NONE=0,		/*!< none */
+	LEFT=1,		/*!< move left */
+	RIGHT=2,	/*!< move right */
+	UP=3,		/*!< move up */
+	DOWN=4,		/*!< move down */
+	FIRE=5,		/*!< fire/action */
+	SWITCH=6	/*!< switch/action */
 };
 
 /*! Types of traversation */
@@ -35,12 +36,19 @@ namespace Actions{
 /*! Attribute keys */
 namespace Attrs{
 	extern int VELOCITY;
-	extern int USERACTION;
+	extern int ACTIONS;
+	extern int ALLOWED_ACTIONS;
 	extern int IMGSOURCE;
 	extern int BOUNDS;
 	extern int SIZE;
 	extern int POLYGON;
 	extern int COLOR;
+	extern int HIT_IMAGE;
+}
+
+/*! States*/
+namespace States{
+	extern int HITTABLE;
 }
 
 /*! Behavior state enumerator */

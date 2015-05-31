@@ -65,7 +65,7 @@ void MGameEngine::StartLoop(){
 		Update(delta, absolute);
 		Draw(delta, absolute);
 
-		environmentCtrl->CheckInputs();
+		environmentCtrl->RemoveEndedInputs();
 
 		// sleep 0ms (for input events update)
 		s3eDeviceYield(0);
