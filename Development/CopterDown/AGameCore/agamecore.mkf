@@ -5,8 +5,6 @@ files
 {
 	[Header]
     (header)
-	ABehavior.h
-	Attr.h
 	BeCollider.h
 	BeHitEvent.h
 	BeInputKey.h
@@ -23,39 +21,35 @@ files
 	EnPolygon.h
 	EnTransform.h
 	Enums.h
+	GAttr.h
+	GBehavior.h
+	GMsg.h
 	GNode.h
-	GNodePool.h
-	MGameCtrl.h
 	MGameEngine.h
+	MGameFactory.h
+	MGameStorage.h
 	MEnvironmentCtrl.h
 	MResourceCtrl.h
-	Msg.h
 	SmartPointer.h
 
 	[Src]
     (src)
-	ABehavior.cpp
-	Attr.cpp
-	BeCollider.cpp
-	BeHitEvent.cpp
-	BeInputKey.cpp
-	BeMove.cpp
-	BeRender.cpp
-	BeRotateAnim.cpp
-	BeTranslateAnim.cpp
 	EnBounds.cpp
 	Enums.cpp
 	EnCollision.cpp
 	EnInputAct.cpp
 	EnPair.cpp
 	EnFlags.cpp
+    GAttr.cpp
+	GBehavior.cpp
+	GMsg.cpp
 	GNode.cpp
-	GNodePool.cpp
 	MEnvironmentCtrl.cpp
-	MGameCtrl.cpp
 	MGameEngine.cpp
+	MGameFactory.cpp
+	MGameStorage.cpp
 	MResourceCtrl.cpp
-	Msg.cpp
+	
 
     [Docs]
     (docs)

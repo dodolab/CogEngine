@@ -1,10 +1,9 @@
-
 #ifndef ATTR_H
 #define ATTR_H
 
 
 #include "EnPair.h"
-#include "Msg.h"
+#include "GMsg.h"
 
 
 class GNode;
@@ -13,7 +12,7 @@ class GNode;
 * Attr - common class for generic attributes
 *
 */
-class Attr{
+class GAttr{
 protected:
 	// owner node
 	GNode* _owner = nullptr;
@@ -22,12 +21,12 @@ protected:
 
 public:
 
-	virtual ~Attr()
+	virtual ~GAttr()
 	{
 
 	}
 
-	Attr(int key, GNode* owner);
+	GAttr(int key, GNode* owner);
 
 	/**
 	* Gets owner node
@@ -46,7 +45,7 @@ public:
 *
 */
 template <class  T>
-class AttrR : public Attr{
+class GAttrR : public GAttr{
 protected:
 	T _value;
 	
@@ -57,13 +56,13 @@ protected:
 	*/
 	void OnAttrChanged(T& old, T& newAt){
 		/*EnPair<T, T> value = EnPair<T, T>(old, newAt);
-		Msg msg(ElemType::ALL, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
+		GMsg msg(ElemType::ALL, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
 		this->_owner->SendMessageNoResp(msg);*/
 	}
 
 public:
 
-	~AttrR()
+	~GAttrR()
 	{
 
 	}
@@ -74,7 +73,7 @@ public:
 	* @param val attribute value
 	* @param owner owner node
 	*/
-	AttrR(int key, T val, GNode* owner) : Attr(key, owner), _value(val){
+	GAttrR(int key, T val, GNode* owner) : GAttr(key, owner), _value(val){
 		
 	}
 

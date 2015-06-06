@@ -46,13 +46,13 @@ void MEnvironmentCtrl::MultiTouchButtonCallback(s3ePointerTouchEvent* event){
 			if (key.inputType == InputType::TOUCH && key.touchId == event->m_TouchID) return;
 		}
 
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_TouchID, CIwFVec2(event->m_x, event->m_y)));
+		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_TouchID, Vectorf2(event->m_x, event->m_y)));
 	}
 	else{
 		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::TOUCH && (*it).touchId == event->m_TouchID){
 				// change position as well
-				(*it).position = CIwFVec2(event->m_x, event->m_y);
+				(*it).position = Vectorf2(event->m_x, event->m_y);
 				(*it).ended = true;
 				return;
 			}
@@ -66,7 +66,7 @@ void MEnvironmentCtrl::MultiTouchMotionCallback(s3ePointerTouchMotionEvent* even
 	for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).inputType == InputType::TOUCH && (*it).touchId == event->m_TouchID){
-			(*it).position = CIwFVec2(event->m_x, event->m_y);
+			(*it).position = Vectorf2(event->m_x, event->m_y);
 		}
 	}
 }
@@ -79,13 +79,13 @@ void MEnvironmentCtrl::SingleTouchButtonCallback(s3ePointerEvent* event){
 			if (key.inputType == InputType::MOUSE) return;
 		}
 
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_Button, CIwFVec2(event->m_x, event->m_y)));
+		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_Button, Vectorf2(event->m_x, event->m_y)));
 	}
 	else{
 		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::MOUSE){
 				// change position as well
-				(*it).position = CIwFVec2(event->m_x, event->m_y);
+				(*it).position = Vectorf2(event->m_x, event->m_y);
 				(*it).ended = true;
 				return;
 			}
@@ -98,7 +98,7 @@ void MEnvironmentCtrl::SingleTouchMotionCallback(s3ePointerMotionEvent* event){
 	for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).inputType == InputType::MOUSE){
-			(*it).position = CIwFVec2(event->m_x, event->m_y);
+			(*it).position = Vectorf2(event->m_x, event->m_y);
 		}
 	}
 }
@@ -133,6 +133,10 @@ void MEnvironmentCtrl::Init(){
 		s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchButtonCallback, NULL);
 		s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchMotionCallback, NULL);
 	}
+}
+
+void MEnvironmentCtrl::Terminate(){
+
 }
 
 void MEnvironmentCtrl::UpdateInputs(){

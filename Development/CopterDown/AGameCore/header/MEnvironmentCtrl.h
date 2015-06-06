@@ -38,6 +38,7 @@ private:
 
 public:
 	void Init();
+	void Terminate();
 	void UpdateInputs();
 	void RemoveEndedInputs();
 

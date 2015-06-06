@@ -1,11 +1,10 @@
-
 #ifndef GNODE_H
 #define GNODE_H
 
 #include <map>
-#include "Attr.h"
-#include "ABehavior.h"
-#include "Msg.h"
+#include "GAttr.h"
+#include "GBehavior.h"
+#include "GMsg.h"
 #include "IwGeomFMat2D.h"
 #include "IwList.h"
 #include "EnBounds.h"
@@ -27,11 +26,11 @@ protected:
 	// identifier incremental counter
 	static int idCounter;
 	// dummy message that is used for no-response sending
-	static Msg _dummyMsg;
+	static GMsg _dummyMsg;
 	// attributes, mapped by their keys
-	map<int, Attr*> _attributes;
+	map<int, GAttr*> _attributes;
 	// list of behaviors
-	list<ABehavior*> _behaviors;
+	list<GBehavior*> _behaviors;
 	// link to the parent
 	GNode* _parent = nullptr;
 	// list of childrens
@@ -68,16 +67,16 @@ public:
 
 	/**
 	* Sends a message to behaviors and other game objects
-	* @param msg message that will be sent
+	* @param GMsg message that will be sent
     * @param resp response that could be filled (at most once)
 	*/
-	void SendMessage(Msg& msg, Msg& resp);
+	void SendMessage(GMsg& msg, GMsg& resp);
 
 	/**
 	* Sends a message to behaviors and other game objects, expecting no response
-	* @param msg message that will be sent
+	* @param GMsg message that will be sent
 	*/
-	void SendMessageNoResp(Msg& msg);
+	void SendMessageNoResp(GMsg& msg);
 
 	/**
 	* Updates behavior inner state
@@ -100,14 +99,14 @@ public:
 	* @param beh behavior to add
 	* @return true, if behavior has been added
 	*/
-	bool AddBehavior(ABehavior* beh);
+	bool AddBehavior(GBehavior* beh);
 
 	/**
 	* Removes existing behavior (by its id)
 	* @param beh behavior to remove
 	* @return true, if behavior has been removed
 	*/
-	bool RemoveBehavior(ABehavior* beh);
+	bool RemoveBehavior(GBehavior* beh);
 
 	/**
 	* Removes existing attribute (by its key)
@@ -124,12 +123,12 @@ public:
 	/**
 	* Gets copy of list of all behaviors
 	*/
-	list<ABehavior*> GetBehaviorsCopy() const;
+	list<GBehavior*> GetBehaviorsCopy() const;
 
 	/**
 	* Gets direct reference to list of all behaviors
 	*/
-	const list<ABehavior*>& GetBehaviors() const;
+	const list<GBehavior*>& GetBehaviors() const;
 
 	/**
 	* Gets copy of list of all children
@@ -321,7 +320,7 @@ public:
 			RemoveAttr(key);
 		}
 
-		_attributes[key] = new AttrR<T>(key, value, this);
+		_attributes[key] = new GAttrR<T>(key, value, this);
 	}
 	
 	/**
@@ -331,12 +330,13 @@ public:
 	template<class T> T& GetAttr(int key){
 		auto it = _attributes.find(key);
 		if (it != _attributes.end()){
-			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
+			GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
 			return attr->GetValue();
 		}
 		else{
+			// todo: this won't work
 			T newObj;
-			AttrR<T>* newAttr = new AttrR<T>(key, newObj, this);
+			GAttrR<T>* newAttr = new GAttrR<T>(key, newObj, this);
 			_attributes[key] = newAttr;
 			return newAttr->GetValue();
 		}

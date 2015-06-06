@@ -1,9 +1,10 @@
+#ifndef ENINPUT_ACT_H
+#define ENINPUT_ACT_H
+
 #include "IwGeomFVec2.h"
 #include "s3eKeyboard.h"
 #include "s3ePointer.h"
-
-#ifndef ENINPUT_ACT_H
-#define ENINPUT_ACT_H
+#include "Enums.h"
 
 enum InputType{
 	KEYBOARD, MOUSE, TOUCH
@@ -22,7 +23,7 @@ public:
 	// pressed finger (touch input only)
 	int touchId;
 	// position (only for mouse and touch events)
-	CIwFVec2 position = CIwFVec2::g_Zero;
+	Vectorf2 position = Vectorf2::g_Zero;
 
 	// handlerId, -1 if there is none
 	int handlerId = -1;
@@ -37,11 +38,11 @@ public:
 
 	}
 
-	EnInputAct(s3ePointerButton mouseButt, CIwFVec2 pos) : inputType(InputType::MOUSE), mouseButton(mouseButt), position(pos){
+	EnInputAct(s3ePointerButton mouseButt, Vectorf2 pos) : inputType(InputType::MOUSE), mouseButton(mouseButt), position(pos){
 
 	}
 
-	EnInputAct(int touchID, CIwFVec2 pos) :inputType(InputType::TOUCH), touchId(touchID),  position(pos){
+	EnInputAct(int touchID, Vectorf2 pos) :inputType(InputType::TOUCH), touchId(touchID),  position(pos){
 
 	}
 

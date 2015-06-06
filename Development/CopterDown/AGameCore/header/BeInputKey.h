@@ -1,15 +1,14 @@
-
 #ifndef BEINPUTKEY_H
 #define BEINPUTKEY_H
 
-#include "ABehavior.h"
+#include "GBehavior.h"
 #include "s3eKeyboard.h"
 #include "MGameEngine.h"
 
 /**
 * Behavior for mapping key inputs to ACTIONS
 */
-class BeInputKey : public ABehavior{
+class BeInputKey : public GBehavior{
 private:
 	Act GetAction(s3eKey key){
 		if (key == s3eKeyLeft) return Act::LEFT;
@@ -21,7 +20,7 @@ private:
 
 
 public:
-	BeInputKey() : ABehavior(ElemType::MODEL, EnFlags()){
+	BeInputKey() : GBehavior(ElemType::MODEL, EnFlags()){
 
 	}
 

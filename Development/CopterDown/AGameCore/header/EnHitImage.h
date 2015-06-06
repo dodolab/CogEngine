@@ -1,9 +1,10 @@
+#ifndef EN_HITIMAGE_H
+#define EN_HITIMAGE_H
+
 #include "IwImage.h"
 #include "SmartPointer.h"
 #include "Iw2D.h"
-
-#ifndef EN_HITIMAGE_H
-#define EN_HITIMAGE_H
+#include "Enums.h"
 
 class EnHitImage{
 private:
@@ -21,10 +22,10 @@ public:
 		img->ConvertToImage(&m_Hitmap);
 	}
 
-	bool HitTest(const CIwFVec2& testPos)
+	bool HitTest(const Vectorf2& testPos)
 	{
 		//Move the test position into "local" coordinate space
-		CIwFVec2 localPos = testPos + CIwFVec2(m_Hitmap.GetWidth() / 2, m_Hitmap.GetHeight() / 2);
+		Vectorf2 localPos = testPos + Vectorf2(m_Hitmap.GetWidth() / 2, m_Hitmap.GetHeight() / 2);
 		//Test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0

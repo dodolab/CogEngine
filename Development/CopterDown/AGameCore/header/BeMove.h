@@ -1,21 +1,34 @@
-
 #ifndef BEMOVE_H
 #define BEMOVE_H
 
-#include "ABehavior.h"
-#include "Msg.h"
+#include "GBehavior.h"
+#include "GMsg.h"
 #include "IwGeomVec2.h"
 #include "IwGeomFMat2D.h"
+#include "GNode.h"
 
 /**
 * Behavior for translation
 */
-class BeMove : public ABehavior{
+class BeMove : public GBehavior{
 public:
-	BeMove();
+	BeMove() : GBehavior(ElemType::MODEL, EnFlags()){
 
-	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
+	}
+
+	void OnMessage(Msg& msg){
+
+	}
+
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner){
+		EnTransform& transform = owner->GetTransform();
+
+		CIwVec2 velocity = owner->GetAttr<CIwVec2>(Attrs::VELOCITY);
+
+		transform.LocalPos.x += velocity.x * delta;
+		transform.LocalPos.y += velocity.y * delta;
+	}
+
 };
 
 

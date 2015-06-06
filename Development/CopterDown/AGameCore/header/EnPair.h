@@ -1,4 +1,3 @@
-
 #ifndef ENPAIR_H
 #define ENPAIR_H
 
