@@ -5,9 +5,10 @@ files
 {
 	[Header]
     (header)
+	CopterFactory.h
 
 	[Src]
     (src)
-	
+	CopterFactory.cpp
 
 }
