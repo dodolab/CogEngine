@@ -275,9 +275,7 @@ void MGameFactory::SetSingleBackground(GNode* node, string imgPath){
 	spt<CIw2DImage> img = node->GetAttr<spt<CIw2DImage>>(Attrs::IMGSOURCE);
 	float scale = MEngine.environmentCtrl->GetWidth() / img->GetWidth();
 
-
 	SetTransform(node, img->GetWidth()/2*scale, img->GetHeight()/2*scale, scale);
-	
 }
 
 Vectorf2 MGameFactory::GetPercentageVec(float xPerc, float yPerc){

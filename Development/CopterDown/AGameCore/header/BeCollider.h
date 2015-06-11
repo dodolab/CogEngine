@@ -28,7 +28,7 @@ public:
 
 	}
 
-	void BeCollider::OnMessage(Msg& msg){
+	void BeCollider::OnMessage(GMsg& msg){
 
 	}
 
