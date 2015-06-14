@@ -13,12 +13,14 @@ class MResourceCtrl{
 private:
 //	CIwResGroup* resourceGroup;
 	map<string, spt<ofImage>> loadedImages;
+	map<string, spt<ofVboMesh>> loadedMeshes;
 
 public:
 
 	void Init();
 	void Terminate();
 	spt<ofImage> Get2DImage(string name);
+	spt<ofVboMesh> GetMesh(string name);
 };
 
 #endif

@@ -190,7 +190,7 @@ GNode* CreateThird(){
 
 	output->AddChild(child);
 
-	for (int i = 0; i < 500; i++){
+	for (int i = 0; i < 2000; i++){
 		GNode* particle = new GNode(ObjType::OBJECT, 0, "other");
 
 		Vectorf3 randomTransform(ofRandom(1, MEngine.environmentCtrl->GetWidth()), ofRandom(MEngine.environmentCtrl->GetHeight() / 2 - MEngine.environmentCtrl->GetWidth() / 2,

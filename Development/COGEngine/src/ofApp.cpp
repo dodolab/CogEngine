@@ -13,6 +13,7 @@ void ofApp::setup(){
 	MEngine.Init(new CopterFactory(), new MGameStorage());
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
+	
 }
 
 //--------------------------------------------------------------
