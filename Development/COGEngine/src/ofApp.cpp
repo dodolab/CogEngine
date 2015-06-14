@@ -1,8 +1,16 @@
 #include "ofApp.h"
 #include "MGameEngine.h"
+#include "CopterFactory.h"
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofSetVerticalSync(true);
+	ofSetFrameRate(50);   
+	ofEnableSmoothing();
+	ofEnableAntiAliasing();
+	// initialize game engine
+	MEngine.Init(new CopterFactory(), new MGameStorage());
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
 }

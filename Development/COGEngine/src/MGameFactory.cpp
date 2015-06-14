@@ -100,7 +100,7 @@ GNode* CreateFirst(){
 GNode* CreateSecond(){
 	GNode* output = new GNode(ObjType::SCENE, 2, "second");
 
-	int pixels = MEngine.environmentCtrl->GetWidth();
+	int pixels = MEngine.environmentCtrl->GetHeight();
 	int normPixels = 400;
 	float scale = 0.0243*(((float)pixels) / normPixels);
 
@@ -119,7 +119,7 @@ GNode* CreateSecond(){
 			child->AddBehavior(new BeHitEvent());
 		}
 		child->AddBehavior(new BeRender(RenderType::RECTANGLE));
-		child->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		child->AddBehavior(new BeRotateAnim(0, 0, 12, false));
 
 		child->AddAttr(Attrs::COLOR, color);
 		child->AddAttr(Attrs::SIZE, actualSize);
@@ -175,33 +175,38 @@ GNode* CreateThird(){
 	spt<ofImage> rytmus = MEngine.resourceCtrl->Get2DImage("images/rytmus.png");
 	spt<ofImage> image = MEngine.resourceCtrl->Get2DImage("images/blue.png");
 
-	int pixels = MEngine.environmentCtrl->GetWidth();
+	int pixels = MEngine.environmentCtrl->GetHeight();
 	int normPixels = 400;
 	float scale = 0.0243*(((float)pixels) / normPixels);
 
-	GNode* child = new GNode(ObjType::OBJECT, 0, "other");
+	GNode* child = new GNode(ObjType::OBJECT, 10, "other");
 	child->GetTransform().LocalPos = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
 	child->GetTransform().Scale = scale * 10;
 	child->AddAttr(Attrs::IMGSOURCE, rytmus);
 	child->SetState(States::HITTABLE);
 	child->AddBehavior(new BeHitEvent());
 	child->AddBehavior(new BeRender(RenderType::IMAGE));
-	child->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+	child->AddBehavior(new BeRotateAnim(0, 0, 20, false));
 
 	output->AddChild(child);
 
-	for (int i = 0; i < 1000; i++){
+	for (int i = 0; i < 500; i++){
 		GNode* particle = new GNode(ObjType::OBJECT, 0, "other");
 
 		Vectorf3 randomTransform(ofRandom(1, MEngine.environmentCtrl->GetWidth()), ofRandom(MEngine.environmentCtrl->GetHeight() / 2 - MEngine.environmentCtrl->GetWidth() / 2,
 			MEngine.environmentCtrl->GetHeight() / 2 + MEngine.environmentCtrl->GetWidth() / 2));
 
 		particle->GetTransform().LocalPos = randomTransform;
-		particle->GetTransform().Scale = scale;
+		particle->GetTransform().Scale = scale*2;
 		particle->GetTransform().RotationOrigin = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2) - particle->GetTransform().LocalPos;
 		particle->AddAttr<spt<ofImage>>(Attrs::IMGSOURCE, image);
+	
+		ofColor color;
+		color.set(0,0,222);
+		particle->AddAttr(Attrs::COLOR, color);
+		particle->AddAttr(Attrs::SIZE, Vectorf3(250,250));
 		particle->AddBehavior(new BeRender(RenderType::IMAGE));
-		float speed = particle->GetTransform().RotationOrigin.length() / 600;
+		float speed = particle->GetTransform().RotationOrigin.length() / 6;
 		BeRotateAnim* rot = new BeRotateAnim(0, 0, speed, false);
 		particle->AddBehavior(rot);
 
@@ -251,7 +256,7 @@ void MGameFactory::SetRenderImage(GNode* node, string imgPath, bool isHittable){
 void MGameFactory::SetSingleBackground(GNode* node, string imgPath, bool isHittable){
 	SetRenderImage(node, imgPath, isHittable);
 	spt<ofImage> img = node->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
-	float scale = ((float)MEngine.environmentCtrl->GetWidth()) / img->width;
+	float scale = ((float)MEngine.environmentCtrl->GetWidth()) / img->getWidth();
 	SetTransform(node, MEngine.environmentCtrl->GetWidth()/2, MEngine.environmentCtrl->GetHeight()/2, scale);
 }
 
@@ -269,26 +274,20 @@ GNode* MGameFactory::CreateRoot(){
 	GNode* _root = new GNode(ObjType::ROOT, 0, "root");
 
 
-	GNode* first = CreateFirst();
-	GNode* second = CreateSecond();
+	//GNode* first = CreateFirst();
+//	GNode* second = CreateSecond();
 	GNode* third = CreateThird();
 
-	GNode* maskLeft = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf3(-MEngine.environmentCtrl->GetWidth(), 0));
-	GNode* maskRight = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf3(0, 0));
-	GNode* maskCenter = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf3(MEngine.environmentCtrl->GetWidth(), 0));
 
-	second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth();
-	third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
+	//second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth();
+	//third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
 
-	_root->AddChild(second);
 	_root->AddChild(third);
+	//_root->AddChild(third);
 
-	//_root->AddChild(maskCenter);
-	_root->AddChild(first);
+
+//	_root->AddChild(first);
 	
-	
-	//_root->AddChild(maskLeft);
-	//_root->AddChild(maskRight);
 
 	return _root;
 

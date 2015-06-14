@@ -14,7 +14,7 @@ void OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x
 	scene->AddBehavior(new BeRender(RenderType::IMAGE));
 	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/background.png");
 	scene->AddAttr(Attrs::IMGSOURCE, img);
-	float scale = MEngine.environmentCtrl->GetWidth() / img->width;
+	float scale = MEngine.environmentCtrl->GetWidth() / img->getWidth();
 
 	int width = MEngine.environmentCtrl->GetWidth();
 	int height = MEngine.environmentCtrl->GetHeight();
@@ -28,13 +28,13 @@ void OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x
 
 
 GNode* CopterFactory::CreateRoot(){
-
-	GNode* root = new GNode(ObjType::ROOT, 12, "fofík");
+	return MGameFactory::CreateRoot();
+	/*GNode* root = new GNode(ObjType::ROOT, 12, "fofík");
 	GNode* splash = new GNode(ObjType::SCENE, 13, "scéna");
 
 	this->SetSingleBackground(splash, "images/intro.png", true);
 	splash->AddBehavior(new BeHitEvent(OnBackgroundhit));
 
 	root->AddChild(splash);
-	return root;
+	return root;*/
 }

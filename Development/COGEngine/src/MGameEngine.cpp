@@ -18,18 +18,19 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 
 void MGameEngine::Draw(uint64 delta, uint64 absolute){
 	// Clear the drawing surface
-	ofBackground(250,0,0);
+	ofBackground(50,50,50);
 	ofSetupScreenOrtho(environmentCtrl->GetWidth(),environmentCtrl->GetHeight(),-1000,1000);
 	// draw the root node
 	ofMatrix4x4 identity = ofMatrix4x4::newIdentityMatrix();
 	identity.translate(0,0,-690);
+	
 	this->_root->GetRoot()->Draw(delta, absolute, identity);
-
 }
 
 
 void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
 
+	
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MResourceCtrl();
 	this->factory = factory;
@@ -39,7 +40,6 @@ void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
 	resourceCtrl->Init();
 	factory->Init();
 	storage->Init();
-
 	_root = factory->CreateRoot();
 }
 
