@@ -55,6 +55,18 @@
     <ClCompile Include="src\GMsg.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ofxSpriteSheetRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PixelTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CollageTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LinearTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -144,6 +156,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\GBehavior.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxSpriteSheetRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PixelTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollageTexture.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

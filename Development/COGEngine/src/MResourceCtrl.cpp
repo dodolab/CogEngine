@@ -25,7 +25,7 @@ spt<ofImage> MResourceCtrl::Get2DImage(string name){
 	mesh->addVertex(Vectorf3(-img->width/2,img->height/2,1));
 	mesh->addVertex(Vectorf3(img->width/2,img->height/2,1));
 
-	// todo: for some devices (android) it has to be normalized!!!
+	// todo: for some devices (android) it has to be normalized
 	mesh->addTexCoord(ofVec2f(0,0));
 	mesh->addTexCoord(ofVec2f(img->width,0));
 	mesh->addTexCoord(ofVec2f(0,img->height));
