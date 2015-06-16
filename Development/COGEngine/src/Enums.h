@@ -54,6 +54,8 @@ namespace Attrs{
 /*! States*/
 namespace States{
 	extern int HITTABLE;
+	extern int TO_LEFT;
+	extern int TO_RIGHT;
 }
 
 /*! Behavior state enumerator */

@@ -356,12 +356,12 @@ public:
 	template<class T> void ChangeAttr(int key, T value){
 		auto it = _attributes.find(key);
 		if (it != _attributes.end()){
-			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
+			GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
 			attr->SetValue(value);
 		}
 		else{
 			T newObj;
-			AttrR<T>* newAttr = new AttrR<T>(key, newObj, this);
+			GAttrR<T>* newAttr = new GAttrR<T>(key, newObj, this);
 			_attributes[key] = newAttr;
 		}
 	}

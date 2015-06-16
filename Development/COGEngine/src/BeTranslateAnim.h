@@ -64,7 +64,11 @@ public:
 		_actual.y += diffY;
 
 		EnTransform& transform = owner->GetTransform();
-
+		
+		
+		// todo: refaktoring needed !!!!
+		if(diffX > 0) owner->SetState(States::TO_LEFT);
+		else owner->SetState(States::TO_RIGHT);
 
 		if (_additive)
 		{

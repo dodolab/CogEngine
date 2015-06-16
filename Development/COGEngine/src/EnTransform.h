@@ -11,7 +11,7 @@ public:
 	}
 
 	Vectorf3 LocalPos;
-	float Scale;
+	Vectorf3 Scale;
 	float Rotation;
 	Vectorf3 RotationOrigin;
 
@@ -22,7 +22,7 @@ public:
 		matrix.translate(RotationOrigin);
 		matrix.rotate(Rotation, 0,0,1);
 	
-		matrix.scale(Scale,Scale,1);	
+		matrix.scale(Scale);	
 		matrix.translate(LocalPos);	
 		
 		return matrix;

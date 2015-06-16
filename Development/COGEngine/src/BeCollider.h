@@ -30,7 +30,7 @@ public:
 
 	}
 
-	void BeCollider::OnMessage(GMsg& msg){
+	virtual void OnMessage(GMsg& msg){
 
 	}
 
