@@ -109,6 +109,7 @@
     <ClCompile Include="src\MGameFactory.cpp" />
     <ClCompile Include="src\MGameStorage.cpp" />
     <ClCompile Include="src\MResourceCtrl.cpp" />
+    <ClCompile Include="src\ofAndroidApp.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
     <ClCompile Include="src\PixelTexture.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\MGameFactory.h" />
     <ClInclude Include="src\MGameStorage.h" />
     <ClInclude Include="src\MResourceCtrl.h" />
+    <ClInclude Include="src\ofAndroidApp.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
     <ClInclude Include="src\PixelTexture.h" />

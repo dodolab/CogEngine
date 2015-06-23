@@ -1,122 +1,272 @@
-#include "ofApp.h"
+#ifdef TARGET_ANDROID
+
+#include "ofAndroidApp.h"
 #include "MGameEngine.h"
 #include "CopterFactory.h"
 
-bool sortVertically(basicSprite * a, basicSprite * b) {
-	return a->pos.y > b->pos.y;
-}
+//The circle parameters
+float Rad = 25; 			//Raduis of circle
+float circleStep = 3;		//Step size for circle motion
+int circleN = 40; 			//Number of points on the circle
 
+//Current circle state
+ofPoint pos;				//Circle center
+ofPoint axeX, axyY, axyZ;	//Circle's coordinate system
 //--------------------------------------------------------------
-void ofApp::setup(){
-	ofSetVerticalSync(true);
-	ofSetFrameRate(50);   
+void ofAndroidApp::setup(){
+
+	/*ofSetVerticalSync(true);
+	ofSetFrameRate(50);
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
 	MEngine.Init(new CopterFactory(), new MGameStorage());
 	absolute = ofGetSystemTime();
-	delta = ofGetSystemTime();
+	delta = ofGetSystemTime();*/
 
+	pos = ofPoint( 0, 0, 0 );	//Start from center of coordinate
+	axeX = ofPoint( 1, 0, 0 );	//Set initial coordinate system
+	axyY = ofPoint( 0, 1, 0 );
+	axyZ = ofPoint( 0, 0, 1 );
 
-/*	spriteRenderer = new ofxSpriteSheetRenderer(1, 10000, 0, 256); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
-	spriteRenderer->loadTexture("images/blue.png", 256, GL_LINEAR); // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
+	light.enable();				//Enable lighting
 
-	ofEnableAlphaBlending(); // turn on alpha blending. important!*/
-	
+	ofSetFrameRate( 60 );       //Set the rate of screen redrawing
+
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
-	delta = ofGetSystemTime() - absolute;
-	absolute = ofGetSystemTime();
-	MEngine.Update(delta, absolute);
-/*
-	spriteRenderer->clear(); // clear the sheet
-	spriteRenderer->update(ofGetElapsedTimeMillis()); //update the time in the renderer, this is necessary for animations to advance
 
-	sort(sprites.begin(), sprites.end(), sortVertically); // sorts the sprites vertically so the ones that are lower are drawn later and there for in front of the ones that are higher up
+void ofAndroidApp::setupViewports()
+{
 
-	if (sprites.size() > 0) // if we have sprites
-	{
-		for (int i = sprites.size() - 1; i >= 0; i--) //go through them
-		{
-			sprites[i]->pos.y += sprites[i]->speed; //add their speed to their y
-			sprites[i]->rotation+=0.01f;
-			if (sprites[i]->pos.y > ofGetHeight() + 16) //if they are past the bottom of the screen
-			{
-				delete sprites[i]; //delete them
-				sprites.erase(sprites.begin() + i); // remove them from the vector
-			}
-			else //otherwise 
-				//spriteRenderer->addCenterRotatedTile(&sprites[i]->animation, sprites[i]->pos.x, sprites[i]->pos.y, -1, F_NONE, 0.1f, sprites[i]->rotation); // add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
-		
-				spriteRenderer->setBrushIndex(0, 1);
+}
 
-			spriteRenderer->addRect(sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, 20, 20, 1, sprites[i]->rotation, 0, 0, 0, 255, 0);
-		}
+//--------------------------------------------------------------
+void ofAndroidApp::addRandomCircle( ofMesh &mesh ){
+	float time = ofGetElapsedTimef();	//Time
+
+	//Parameters – twisting and rotating angles and color
+	float twistAngle = 5.0 * ofSignedNoise( time * 0.3 + 332.4 );
+	float rotateAngle = 1.5;
+	ofFloatColor color( ofNoise( time * 0.05 ),
+		ofNoise( time * 0.1 ),
+		ofNoise( time * 0.15 ));
+	color.setSaturation( 1.0 );			//Make the color maximally colorful
+
+	//Rotate the coordinate system of the circle
+	axeX.rotate( twistAngle, axyZ );
+	axyY.rotate( twistAngle, axyZ );
+
+	axeX.rotate( rotateAngle, axyY );
+	axyZ.rotate( rotateAngle, axyY );
+
+	//Move the circle on a step
+	ofPoint move = axyZ * circleStep;
+	pos += move;
+
+	//Add vertices
+	for (int i=0; i<circleN; i++) {
+		float angle = float(i) / circleN * TWO_PI;
+		float x = Rad * cos( angle );
+		float y = Rad * sin( angle );
+		//We would like to distort this point
+		//to make the knot's surface embossed
+		float distort = ofNoise( x * 0.2, y * 0.2, time * 0.2 + 30 );
+		distort = ofMap( distort, 0.2, 0.8, 0.8, 1.2 );
+		x *= distort;
+		y *= distort;
+
+		ofPoint p = axeX * x + axyY * y + pos;
+		mesh.addVertex( p );
+		mesh.addColor( color );
 	}
 
-	for (int i = 0; i < 10; i++) //lets add ten sprites every frame and fill the screen with an army
-	{
-		basicSprite * newSprite = new basicSprite(); // create a new sprite
-		newSprite->pos.set(ofRandom(0, ofGetWidth()), ofRandom(0,5)); //set its position
-		newSprite->speed = ofRandom(1, 5); //set its speed
-		newSprite->rotation = ofRandom(0, PI);
-		newSprite->animation = walkAnimation; //set its animation to the walk animation we declared
-		newSprite->animation.frame_duration /= newSprite->speed; //adjust its frame duration based on how fast it is walking (faster = smaller)
-		newSprite->animation.index = (int)ofRandom(0, 4) * 8; //change the start index of our sprite. we have 4 rows of animations and our spritesheet is 8 tiles wide, so our possible start indicies are 0, 8, 16, and 24
-		sprites.push_back(newSprite); //add our sprite to the vector
-	}*/
+	//Add the triangles
+	int base = mesh.getNumVertices() - 2 * circleN;
+	if ( base >= 0 ) {	//Check if it is not the first step
+		//and we really need to add the triangles
+		for (int i=0; i<circleN; i++) {
+			int a = base + i;
+			int b = base + (i + 1) % circleN;
+			int c = circleN  + a;
+			int d = circleN  + b;
+			mesh.addTriangle( a, b, d );	//Clock-wise
+			mesh.addTriangle( a, d, c );
+		}
+		//Update the normals
+		setNormals( mesh );
+	}
+}
+
+
+//--------------------------------------------------------------
+//Universal function which sets normals for the triangle mesh
+void setNormals( ofMesh &mesh ){
+
+	//The number of the vertices
+	int nV = mesh.getNumVertices();
+
+	//The number of the triangles
+	int nT = mesh.getNumIndices() / 3;
+
+	vector<ofPoint> norm( nV ); //Array for the normals
+
+	//Scan all the triangles. For each triangle add its
+	//normal to norm's vectors of triangle's vertices
+	for (int t=0; t<nT; t++) {
+
+		//Get indices of the triangle t
+		int i1 = mesh.getIndex( 3 * t );
+		int i2 = mesh.getIndex( 3 * t + 1 );
+		int i3 = mesh.getIndex( 3 * t + 2 );
+
+		//Get vertices of the triangle
+		const ofPoint &v1 = mesh.getVertex( i1 );
+		const ofPoint &v2 = mesh.getVertex( i2 );
+		const ofPoint &v3 = mesh.getVertex( i3 );
+
+		//Compute the triangle's normal
+		ofPoint dir = ( (v2 - v1).crossed( v3 - v1 ) ).normalized();
+
+		//Accumulate it to norm array for i1, i2, i3
+		norm[ i1 ] += dir;
+		norm[ i2 ] += dir;
+		norm[ i3 ] += dir;
+	}
+
+	//Normalize the normal's length
+	for (int i=0; i<nV; i++) {
+		norm[i].normalize();
+	}
+
+	//Set the normals to mesh
+	mesh.clearNormals();
+	mesh.addNormals( norm );
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
-	MEngine.Draw(delta, absolute);
+void ofAndroidApp::update(){
+	/*delta = ofGetSystemTime() - absolute;
+	absolute = ofGetSystemTime();
+	MEngine.Update(delta, absolute);*/
+	addRandomCircle( mesh );
+}
 
-	//spriteRenderer->draw(); //draw the sprites!
+
+//--------------------------------------------------------------
+void ofAndroidApp::draw(){
+	//MEngine.Draw(delta, absolute);
+	ofEnableDepthTest();				//Enable z-buffering
+
+	//Set a gradient background from white to gray
+	ofBackgroundGradient( ofColor( 255 ), ofColor( 128 ) );
+
+	ofPushMatrix();						//Store the coordinate system
+	//Move the coordinate center to screen's center
+	ofTranslate( ofGetWidth()/2, ofGetHeight()/2, 0 );
+
+	//Calculate the rotation angle
+	float time = ofGetElapsedTimef();	//Get time in seconds
+	float angle = time * 20;			//Compute the angle.
+	//We rotate at speed 20 degrees per second
+	ofRotate( angle, 0, 1, 0 );			//Rotate the coordinate system
+	//along y-axe
+	//Shift the coordinate center so the mesh
+	//will be drawn in the screen center
+	ofTranslate( -mesh.getCentroid() );
+
+	//Draw the mesh
+	//Here ofSetColor() does not affects the result of drawing,
+	//because the mesh has its own vertices' colors
+	mesh.draw();
+
+	ofPopMatrix();						//Restore the coordinate system
+}
+
+
+
+
+//--------------------------------------------------------------
+void ofAndroidApp::keyPressed(int key){
+
+
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	MEngine.environmentCtrl->OnKeyAction(key,true);
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-	MEngine.environmentCtrl->OnKeyAction(key,false);
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x,y);
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofAndroidApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
+void ofAndroidApp::windowResized(int w, int h){
+	//MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
+}
+
+
+//--------------------------------------------------------------
+void ofAndroidApp::touchDown(int x, int y, int button){
+	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-	MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void ofAndroidApp::touchMoved(int x, int y, int id){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofAndroidApp::touchUp(int x, int y, int button){
+	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::touchDoubleTap(int x, int y, int id){
 
 }
+
+//--------------------------------------------------------------
+void ofAndroidApp::touchCancelled(int x, int y, int id){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::swipe(ofxAndroidSwipeDir swipeDir, int id){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::pause(){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::stop(){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::resume(){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::reloadTextures(){
+
+}
+
+//--------------------------------------------------------------
+bool ofAndroidApp::backPressed(){
+	return false;
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::okPressed(){
+
+}
+
+//--------------------------------------------------------------
+void ofAndroidApp::cancelPressed(){
+
+}
+
+#endif
