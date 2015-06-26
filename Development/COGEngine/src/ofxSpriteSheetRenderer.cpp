@@ -1,42 +1,15 @@
-/***********************************************************************
-
-Copyright (C) 2011 by Zach Gage and Ramsey Nasser
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-************************************************************************/
-
 #include "ofxSpriteSheetRenderer.h"
 
 ofxSpriteSheetRenderer::ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileSize)
 {
-	texture = NULL;
-	verts = NULL;
-	coords = NULL;
-	colors = NULL;
-	numSprites = NULL;
+	texture = nullptr;
+	verts = nullptr;
+	coords = nullptr;
+	colors = nullptr;
+	numSprites = nullptr;
 
 	textureIsExternal = false;
-
 	safeMode = true;
-
-	gameTime = ofGetElapsedTimeMillis();
 
 	reAllocateArrays(_numLayers, _tilesPerLayer, _defaultLayer, _tileSize);
 
@@ -46,16 +19,18 @@ ofxSpriteSheetRenderer::ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLaye
 
 ofxSpriteSheetRenderer::~ofxSpriteSheetRenderer()
 {
-	if (texture != NULL && textureIsExternal)
-		texture->clear();
+	if (texture != nullptr){
+		if(textureIsExternal) texture->clear();
+		else delete texture;
+	}
 
-	if (verts != NULL)
+	if (verts != nullptr)
 		delete[] verts;
-	if (coords != NULL)
+	if (coords != nullptr)
 		delete[] coords;
-	if (colors != NULL)
+	if (colors != nullptr)
 		delete[] colors;
-	if (numSprites != NULL)
+	if (numSprites != nullptr)
 		delete[] numSprites;
 }
 
@@ -66,13 +41,13 @@ void ofxSpriteSheetRenderer::reAllocateArrays(int _numLayers, int _tilesPerLayer
 	tilesPerLayer = _tilesPerLayer;
 	defaultLayer = _defaultLayer;
 
-	if (verts != NULL)
+	if (verts != nullptr)
 		delete[] verts;
-	if (coords != NULL)
+	if (coords != nullptr)
 		delete[] coords;
-	if (colors != NULL)
+	if (colors != nullptr)
 		delete[] colors;
-	if (numSprites != NULL)
+	if (numSprites != nullptr)
 		delete[] numSprites;
 
 	verts = new float[numLayers*tilesPerLayer * 18];
@@ -80,27 +55,27 @@ void ofxSpriteSheetRenderer::reAllocateArrays(int _numLayers, int _tilesPerLayer
 	colors = new unsigned char[numLayers*tilesPerLayer * 24];
 	numSprites = new int[numLayers];
 
-	clear();
+	clearCounters();
 	clearTexture();
 }
 
 void ofxSpriteSheetRenderer::clearTexture()
 {
-	if (texture != NULL)
+	if (texture != nullptr)
 	{
 		if (textureIsExternal)
-			texture = NULL; // just remove the refernece
+			texture = nullptr; // just remove the refernece
 		else
 		{
 			delete texture;
-			texture = NULL;
+			texture = nullptr;
 		}
 	}
 }
 
 void ofxSpriteSheetRenderer::allocate(int widthHeight, int internalGLScaleMode)
 {
-	if (texture == NULL)
+	if (texture == nullptr)
 	{
 		tileSize_f = tileSize;
 #ifdef TARGET_OPENGLES	// if we don't have arb, it's crazy important that things are power of 2 so that this float is set properly
@@ -134,7 +109,7 @@ void ofxSpriteSheetRenderer::finishTexture()
 void ofxSpriteSheetRenderer::loadTexture(string fileName, int widthHeight, int internalGLScaleMode)
 {
 	clearTexture();
-	clear();
+	clearCounters();
 	allocate(widthHeight, internalGLScaleMode);
 	addMisc(fileName, 0, 0);
 	finishTexture();
@@ -143,7 +118,7 @@ void ofxSpriteSheetRenderer::loadTexture(string fileName, int widthHeight, int i
 
 void ofxSpriteSheetRenderer::loadTexture(ofTexture * _texture, bool isExternal)
 {
-	clear();
+	clearCounters();
 	clearTexture();
 	textureIsExternal = isExternal;
 	texture = _texture;
@@ -161,7 +136,7 @@ void ofxSpriteSheetRenderer::loadTexture(LinearTexture * _texture){
 	loadTexture((ofTexture *)_texture);
 }
 
-void ofxSpriteSheetRenderer::clear(int layer)
+void ofxSpriteSheetRenderer::clearCounters(int layer)
 {
 	if (layer == -1)
 		for (int i = 0; i < numLayers; i++) numSprites[i] = 0;
@@ -169,46 +144,45 @@ void ofxSpriteSheetRenderer::clear(int layer)
 		numSprites[layer] = 0;
 }
 
-bool ofxSpriteSheetRenderer::addTile(animation_t* sprite, float x, float y, float z, int layer, flipDirection f, float scale, int rot, int r, int g, int b, int alpha){
-	int index, frame;
+void ofxSpriteSheetRenderer::makeQuad(int offset, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4){
+	verts[offset] = x1;
+	verts[offset + 1] = y1;
+	verts[offset + 2] = z1;
 
-	if (layer == -1)
-		layer = defaultLayer;
+	verts[offset + 3] = verts[offset + 9] = x2;
+	verts[offset + 4] = verts[offset + 10] = y2;
+	verts[offset + 5] = verts[offset + 11] = z2;
 
-	// animation
-	if (sprite->total_frames > 1)
-		// still animating
-		if (sprite->loops != 0)
-			// time to advance frame
-			if (gameTime > sprite->next_tick) {
-				sprite->frame += sprite->frame_skip;
-				// increment frame and keep it within range
-				if (sprite->frame < 0) sprite->frame = sprite->total_frames - 1;
-				if (sprite->frame >= sprite->total_frames) sprite->frame = 0;
-				sprite->next_tick = gameTime + sprite->frame_duration;
-				// decrement loop count if cycle complete
-				if (((sprite->frame_skip > 0 && sprite->frame == sprite->total_frames - 1) || (sprite->frame_skip < 0 && sprite->frame == 0)) && sprite->loops > 0) sprite->loops--;
-			}
+	verts[offset + 6] = verts[offset + 12] = x3;
+	verts[offset + 7] = verts[offset + 13] = y3;
+	verts[offset + 8] = verts[offset + 14] = z3;
 
-	if (sprite->loops == 0 && sprite->final_index >= 0) {
-		index = sprite->final_index;
-		frame = 0;
-	}
-	else {
-		index = sprite->index;
-		frame = sprite->frame;
-	}
-
-	return addTile(index, frame, x, y, z,layer, sprite->w, sprite->h, f, scale, rot, r, g, b, alpha);
+	verts[offset + 15] = x4;
+	verts[offset + 16] = y4;
+	verts[offset + 17] = z4;
 }
 
+void ofxSpriteSheetRenderer::makeColorQuad(int offset, int a, int r, int g, int b){
+	colors[offset] = colors[offset + 4] = colors[offset + 8] = colors[offset + 12] = colors[offset + 16] = colors[offset + 20] = r;
+	colors[offset + 1] = colors[offset + 5] = colors[offset + 9] = colors[offset + 13] = colors[offset + 17] = colors[offset + 21] = g;
+	colors[offset + 2] = colors[offset + 6] = colors[offset + 10] = colors[offset + 14] = colors[offset + 18] = colors[offset + 22] = b;
+	colors[offset + 3] = colors[offset + 7] = colors[offset + 11] = colors[offset + 15] = colors[offset + 19] = colors[offset + 23] = a;
+}
 
-bool ofxSpriteSheetRenderer::addTile(int tile_name, int frame, float x, float y, float z,int layer, float w, float h, flipDirection f, float scale, int rot, int r, int g, int b, int alpha)
+void ofxSpriteSheetRenderer::addTexCoords(int offset, float x1, float y1, float x2, float y2){
+	coords[offset] =     coords[offset + 4] = coords[offset + 8] = x1;
+	coords[offset + 1] = coords[offset + 3] = coords[offset + 7] = y1;
+	coords[offset + 2] = coords[offset + 6] = coords[offset + 10] = x2;
+	coords[offset + 5] = coords[offset + 9] = coords[offset + 11] = y2;
+}
+
+bool ofxSpriteSheetRenderer::addTile(int index, int frame, float x, float y, float z,int layer, float w, float h, 
+									 flipDirection f, float scale, float rot, int r, int g, int b, int alpha)
 {
 	if (layer == -1)
 		layer = defaultLayer;
 
-	if (texture == NULL)
+	if (texture == nullptr)
 	{
 		cerr << "RENDER ERROR: No texture loaded!" << endl;
 		return false;
@@ -228,61 +202,40 @@ bool ofxSpriteSheetRenderer::addTile(int tile_name, int frame, float x, float y,
 
 	float frameX;
 	float frameY;
-	int layerOffset = layer*tilesPerLayer;
-	int vertexOffset = (layerOffset + numSprites[layer]) * 18;
-	int colorOffset = (layerOffset + numSprites[layer]) * 24;
+	int layerOffset = getLayerOffset(layer);
+	int vertexOffset = getVertexOffset(layer);
+	int colorOffset = getColorOffset(layer);
 
-	getFrameXandY(tile_name, frameX, frameY);
+	getFrameXandY(index, frameX, frameY);
 
 	ofPoint framePos = getFramePosOnSheet(frameX, frameY, frame, w);
 
 	addTexCoords(f, framePos.x, framePos.y, layer, w, h);
 
-	w *= scale*tileSize;
-	w /= 2;
+	w = w*scale*tileSize/2;
 
-	h *= scale*tileSize;
-	h /= 2;
+	h*= h*scale*tileSize/2;
 
 	//verticies ------------------------------------
-	verts[vertexOffset] = x + getX(-w, -h, rot);//x+scale*rotA->ul[rot  ]; //ul ur ll
-	verts[vertexOffset + 1] = y + getY(-w, -h, rot);//y+scale*rotA->ul[rot+1];
-	verts[vertexOffset + 2] = z;
+	makeQuad(vertexOffset, 
+		x + getX(-w, -h, rot), y + getY(-w, -h, rot),z,
+		x + getX(w, -h, rot),  y + getY(w, -h, rot),z,
+		x + getX(-w, h, rot),  y + getY(-w, h, rot),z,
+		x + getX(w, h, rot),   y + getY(w, h, rot),z);
 
-	verts[vertexOffset + 3] = verts[vertexOffset + 9] = x + getX(w, -h, rot);//x+scale*rotA->ur[rot  ];
-	verts[vertexOffset + 4] = verts[vertexOffset + 10] = y + getY(w, -h, rot);//y+scale*rotA->ur[rot+1];
-	verts[vertexOffset + 5] = verts[vertexOffset + 11] = z;
 
-	verts[vertexOffset + 6] = verts[vertexOffset + 12] = x + getX(-w, h, rot);//x+scale*rotA->ll[rot  ];
-	verts[vertexOffset + 7] = verts[vertexOffset + 13] = y + getY(-w, h, rot);//y+scale*rotA->ll[rot+1];
-	verts[vertexOffset + 8] = verts[vertexOffset + 14] = z;
 
-	verts[vertexOffset + 15] = x + getX(w, h, rot);//x+scale*rotA->lr[rot  ];
-	verts[vertexOffset + 16] = y + getY(w, h, rot);//y+scale*rotA->lr[rot+1];
-	verts[vertexOffset + 17] = z;
-	
 	//colors ---------------------------------------
-
-	colors[colorOffset] = colors[colorOffset + 4] = colors[colorOffset + 8] = colors[colorOffset + 12] = colors[colorOffset + 16] = colors[colorOffset + 20] = r;
-	colors[colorOffset + 1] = colors[colorOffset + 5] = colors[colorOffset + 9] = colors[colorOffset + 13] = colors[colorOffset + 17] = colors[colorOffset + 21] = g;
-	colors[colorOffset + 2] = colors[colorOffset + 6] = colors[colorOffset + 10] = colors[colorOffset + 14] = colors[colorOffset + 18] = colors[colorOffset + 22] = b;
-	colors[colorOffset + 3] = colors[colorOffset + 7] = colors[colorOffset + 11] = colors[colorOffset + 15] = colors[colorOffset + 19] = colors[colorOffset + 23] = alpha;
-
+	makeColorQuad(colorOffset, alpha,r,g,b);
 	//----------------------------------------------
 	numSprites[layer]++;
 
 	return true;
 }
 
-void ofxSpriteSheetRenderer::update(unsigned long time)
-{
-	gameTime = time;
-}
 
-void ofxSpriteSheetRenderer::draw(int startLayer, int endLayer)
+void ofxSpriteSheetRenderer::draw()
 {
-	if (endLayer == -1)
-		endLayer = numLayers - 1;
 	if (safeMode)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -295,9 +248,9 @@ void ofxSpriteSheetRenderer::draw(int startLayer, int endLayer)
 	glTexCoordPointer(2, GL_FLOAT, 0, &coords[0]);
 
 	texture->bind();
-	for (int i = startLayer; i <= endLayer; i++)
-		if (numSprites[i] > 0)
-			glDrawArrays(GL_TRIANGLES, i*tilesPerLayer * 6, numSprites[i] * 6);
+	for (int i = 0; i <= numLayers - 1; i++){
+		if (numSprites[i] > 0) glDrawArrays(GL_TRIANGLES, i*tilesPerLayer * 6, numSprites[i] * 6);
+	}
 	texture->unbind();
 
 	if (safeMode)
@@ -310,40 +263,24 @@ void ofxSpriteSheetRenderer::draw(int startLayer, int endLayer)
 
 void ofxSpriteSheetRenderer::addTexCoords(flipDirection f, float &frameX, float &frameY, int layer, float w, float h)
 {
-	int layerOffset = layer*tilesPerLayer;
-	int coordOffset = (layerOffset + numSprites[layer]) * 12;
+	int layerOffset = getLayerOffset(layer);
+	int coordOffset = getCoordOffset(layer);
 
 	w *= tileSize_f;
 	h *= tileSize_f;
 
 	switch (f) {
 	case F_NONE:
-		coords[coordOffset] =     coords[coordOffset + 4] = coords[coordOffset + 8] = frameX;
-		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = frameY;
-		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = frameX + w;
-		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = frameY + h;
-
+		addTexCoords(coordOffset, frameX, frameY, frameX+w, frameY+h);
 		break;
 	case F_HORIZ:
-		coords[coordOffset] =     coords[coordOffset + 4] = coords[coordOffset + 8] = frameX+w;
-		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = frameY;
-		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = frameX;
-		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = frameY + h;
-
+		addTexCoords(coordOffset, frameX+w, frameY, frameX, frameY+h);
 		break;
 	case F_VERT:
-		coords[coordOffset] =     coords[coordOffset + 4] = coords[coordOffset + 8] = frameX;
-		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = frameY+h;
-		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = frameX+w;
-		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = frameY;
-
+		addTexCoords(coordOffset, frameX, frameY+h, frameX+w, frameY);
 		break;
 	case F_HORIZ_VERT:
-		coords[coordOffset] =     coords[coordOffset + 4] = coords[coordOffset + 8] = frameX+w;
-		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = frameY + h;
-		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = frameX;
-		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = frameY;
-
+		addTexCoords(coordOffset, frameX+w, frameY+h, frameX, frameY);
 		break;
 	default:
 		break;
@@ -356,7 +293,7 @@ bool ofxSpriteSheetRenderer::addRect(float x, float y, float z, float w, float h
 	if (layer == -1)
 		layer = defaultLayer;
 
-	if (texture == NULL)
+	if (texture == nullptr)
 	{
 		cerr << "RENDER ERROR: No texture loaded!" << endl;
 		return false;
@@ -380,44 +317,27 @@ bool ofxSpriteSheetRenderer::addRect(float x, float y, float z, float w, float h
 		return false;
 	}
 
-	int layerOffset = layer*tilesPerLayer;
-	int vertexOffset = (layerOffset + numSprites[layer]) * 18;
-	int colorOffset = (layerOffset + numSprites[layer]) * 24;
-	int coordOffset = (layerOffset + numSprites[layer]) * 12;
+	int layerOffset = getLayerOffset(layer);
+	int vertexOffset = getVertexOffset(layer);
+	int colorOffset = getColorOffset(layer);
+	int coordOffset = getCoordOffset(layer);
 
-	w *= scale;
-	w /= 2;
-
-	h *= scale;
-	h /= 2;
+	w = w*scale/2;
+	h = h*scale/2;
 
 	//verticies ------------------------------------
-	verts[vertexOffset] = x + getX(-w, -h, rot);//x+scale*rotA->ul[rot  ]; //ul ur ll
-	verts[vertexOffset + 1] = y + getY(-w, -h, rot);//y+scale*rotA->ul[rot+1];
-	verts[vertexOffset + 2] = 0;
+	makeQuad(vertexOffset, x + getX(-w, -h, rot), y + getY(-w, -h, rot),z,
+		x + getX(w, -h, rot), y + getY(w, -h, rot),z,
+		x + getX(-w, h, rot), y + getY(-w, h, rot),z,
+		x + getX(w, h, rot),y + getY(w, h, rot),z);
 
-	verts[vertexOffset + 3] = verts[vertexOffset + 9] = x + getX(w, -h, rot);//x+scale*rotA->ur[rot  ];
-	verts[vertexOffset + 4] = verts[vertexOffset + 10] = y + getY(w, -h, rot);//y+scale*rotA->ur[rot+1];
-	verts[vertexOffset + 5] = verts[vertexOffset + 11] = 0;
 
-	verts[vertexOffset + 6] = verts[vertexOffset + 12] = x + getX(-w, h, rot);//x+scale*rotA->ll[rot  ];
-	verts[vertexOffset + 7] = verts[vertexOffset + 13] = y + getY(-w, h, rot);//y+scale*rotA->ll[rot+1];
-	verts[vertexOffset + 8] = verts[vertexOffset + 14] = 0;
-
-	verts[vertexOffset + 15] = x + getX(w, h, rot);//x+scale*rotA->lr[rot  ];
-	verts[vertexOffset + 16] = y + getY(w, h, rot);//y+scale*rotA->lr[rot+1];
-	verts[vertexOffset + 17] = 0;
 
 	//colors ---------------------------------------
-	colors[colorOffset] = colors[colorOffset + 4] = colors[colorOffset + 8] = colors[colorOffset + 12] = colors[colorOffset + 16] = colors[colorOffset + 20] = r;
-	colors[colorOffset + 1] = colors[colorOffset + 5] = colors[colorOffset + 9] = colors[colorOffset + 13] = colors[colorOffset + 17] = colors[colorOffset + 21] = g;
-	colors[colorOffset + 2] = colors[colorOffset + 6] = colors[colorOffset + 10] = colors[colorOffset + 14] = colors[colorOffset + 18] = colors[colorOffset + 22] = b;
-	colors[colorOffset + 3] = colors[colorOffset + 7] = colors[colorOffset + 11] = colors[colorOffset + 15] = colors[colorOffset + 19] = colors[colorOffset + 23] = alpha;
+	makeColorQuad(colorOffset, alpha,r,g,b);
 
 	//texture --------------------------------------
-
-	coords[coordOffset] = coords[coordOffset + 2] = coords[coordOffset + 4] = coords[coordOffset + 6] = coords[coordOffset + 8] = coords[coordOffset + 10] = brushX + halfBrushSize;
-	coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 5] = coords[coordOffset + 7] = coords[coordOffset + 9] = coords[coordOffset + 11] = brushY + halfBrushSize;
+	addTexCoords(coordOffset, brushX+halfBrushSize, brushY+halfBrushSize,brushX+halfBrushSize, brushY+halfBrushSize);
 
 	numSprites[layer]++; // sprite == 2 triangles
 
@@ -426,7 +346,6 @@ bool ofxSpriteSheetRenderer::addRect(float x, float y, float z, float w, float h
 
 void ofxSpriteSheetRenderer::getFrameXandY(int tile_position, float &x, float &y)
 {
-
 	y = (tile_position / spriteSheetWidth);
 	x = (tile_position - y * spriteSheetWidth);
 
@@ -437,7 +356,7 @@ void ofxSpriteSheetRenderer::getFrameXandY(int tile_position, float &x, float &y
 ofPoint ofxSpriteSheetRenderer::getFramePosOnSheet(float _frameX, float _frameY, int _frame, float _w) {
 
 	ofPoint framePos;
-	framePos.set(_frameX, _frameY); // These get passed in externally and are probably zero, but maybe not, so we'll use them.
+	framePos.set(_frameX, _frameY);
 	int rowNum = floor(_frame / spriteSheetWidth);
 	framePos.x += (_frame - spriteSheetWidth * rowNum) * _w * tileSize_f;
 	framePos.y += tileSize_f * rowNum;
@@ -445,10 +364,12 @@ ofPoint ofxSpriteSheetRenderer::getFramePosOnSheet(float _frameX, float _frameY,
 }
 
 float ofxSpriteSheetRenderer::getX(int x, int y, float angle){
-	return (float)x*cos(angle) - (float)y*sin(angle);
+	if(angle == 0) return x;
+	return (float)x*cosf(angle) - (float)y*sinf(angle);
 }
 float ofxSpriteSheetRenderer::getY(int x, int y, float angle){
-	return (float)x*sin(angle) + (float)y*cos(angle);
+	if(angle == 0) return y;
+	return (float)x*sinf(angle) + (float)y*cosf(angle);
 }
 
 void ofxSpriteSheetRenderer::setBrushIndex(int index, int wh)

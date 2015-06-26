@@ -29,7 +29,9 @@ void OnBackgroundhit(const uint64 delta, const uint64 absolute, const CIwFMat2D&
 
 
 GNode* CopterFactory::CreateRoot(){
-	GNode* root = new GNode(ObjType::ROOT, 12, "fofík");
+
+	return MGameFactory::CreateRoot();
+	/*GNode* root = new GNode(ObjType::ROOT, 12, "fofík");
 	GNode* splash = new GNode(ObjType::SCENE, 13, "scéna");
 
 	this->SetSingleBackground(splash, "images/intro.png");
@@ -37,5 +39,5 @@ GNode* CopterFactory::CreateRoot(){
 	splash->AddBehavior(new BeHitEvent(OnBackgroundhit));
 
 	root->AddChild(splash);
-	return root;
+	return root;*/
 }

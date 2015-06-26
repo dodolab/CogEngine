@@ -1,4 +1,4 @@
-#ifdef TARGET_ANDROID
+#ifndef TARGET_WINDOWS
 
 #include "ofAndroidApp.h"
 #include "MGameEngine.h"

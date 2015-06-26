@@ -1,6 +1,4 @@
-#pragma once
-
-#ifdef TARGET_ANDROID
+#ifndef TARGET_WINDOWS
 
 #include "ofMain.h"
 #include "Enums.h"
