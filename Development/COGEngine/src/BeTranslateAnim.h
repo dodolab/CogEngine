@@ -15,18 +15,18 @@ private:
 	float _distX;
 	float _distY;
 	bool _additive;
-	Vectorf3 _to;
-	Vectorf3 _from;
+	ofVec3f _to;
+	ofVec3f _from;
 	bool _repeat;
 
-	Vectorf3 _actual;
+	ofVec3f _actual;
 
 	bool _stopped;
 
 public:
-	BeTranslateAnim(Vectorf3 from, Vectorf3 to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL, EnFlags()), _speed(speed),
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL, EnFlags()), _speed(speed),
 		_additive(additive), _to(to), _from(from), _repeat(repeat){
-		this->_actual = Vectorf3(from);
+		this->_actual = ofVec3f(from);
 		this->_distX = to.x - from.x;
 		this->_distY = to.y - from.y;
 
@@ -40,17 +40,17 @@ public:
 	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 		if (_stopped) return;
 
-		float diffX = (float)(_distX / 1000 * _speed*delta);
-		float diffY = (float)(_distY / 1000 * _speed*delta);
+		float diffX = (float)(_distX / MEngine.TranslateSpeed(_speed)*delta);
+		float diffY = (float)(_distY / MEngine.TranslateSpeed(_speed)*delta);
 
-		if (Vectorf3(_from - _to).lengthSquared() < Vectorf3(_from - _actual).lengthSquared())
+		if (ofVec3f(_from - _to).lengthSquared() < ofVec3f(_from - _actual).lengthSquared())
 		{
-			_actual = Vectorf3(_to);
+			_actual = ofVec3f(_to);
 			if (_repeat)
 			{
 				auto temp = _from;
-				_from = Vectorf3(_to);
-				_to = Vectorf3(temp);
+				_from = ofVec3f(_to);
+				_to = ofVec3f(temp);
 				_distX = _to.x - _from.x;
 				_distY = _to.y - _from.y;
 			}

@@ -33,8 +33,8 @@ public:
 	}
 
 
-	bool IsRegisteredListener(int listenerType) const{
-		return true;
+	bool IsRegisteredListener(int key) const{
+		return behListeners.find(key) != behListeners.end();;
 	}
 
 	GNode* FindGameObjectById(int id) const{

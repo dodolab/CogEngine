@@ -2,18 +2,20 @@
 #define ENTRANSFORM_H
 
 #include "Enums.h"
+#include "ofVec3f.h"
 
 class EnTransform{
 	
 public:
-	EnTransform(float posX, float posY) : LocalPos(Vectorf3(posX, posY)), Scale(1), RotationOrigin(Vectorf3(0.0f, 0.0f)), Rotation(0){
+	EnTransform(float posX, float posY) : LocalPos(ofVec3f(posX, posY)), Scale(1), RotationOrigin(ofVec3f(0.0f, 0.0f)), Rotation(0), Anchor(0,0){
 
 	}
 
-	Vectorf3 LocalPos;
-	Vectorf3 Scale;
+	ofVec3f LocalPos;
+	ofVec3f Scale;
 	float Rotation;
-	Vectorf3 RotationOrigin;
+	ofVec3f RotationOrigin;
+	ofVec2f Anchor;
 
 	ofMatrix4x4 GetMatrix(){
 		ofMatrix4x4 matrix;

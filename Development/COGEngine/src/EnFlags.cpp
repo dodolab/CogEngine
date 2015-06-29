@@ -85,6 +85,8 @@ EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
 }
 
 EnFlags::EnFlags(const EnFlags& obj){
+	Construct();
+
 	flags1 = obj.flags1;
 	flags2 = obj.flags2;
 	flags3 = obj.flags3;

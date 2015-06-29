@@ -55,7 +55,11 @@ public:
 	// -----------------------------------------
 	void clearCounters(int layer = -1);
 
-	bool addTile(int tile_name, int frame, float x, float y, float z, int layer = -1, float w = 1, float h = 1, flipDirection f = F_NONE, float scale = 1.0, float rot = 0, int r = 255, int g = 255, int b = 255, int alpha = 255);
+	bool addTile(int index, int frame, float x, float y, float z, int layer, float scale, float rot){
+		return addTile(index, frame, x, y, z, layer, 1, 1, F_NONE, scale, rot);
+	}
+
+	bool addTile(int index, int frame, float x, float y, float z, int layer = -1, float w = 1, float h = 1, flipDirection f = F_NONE, float scale = 1.0, float rot = 0, int r = 255, int g = 255, int b = 255, int alpha = 255);
 
 	void draw();
 

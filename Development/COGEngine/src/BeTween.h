@@ -51,7 +51,7 @@ public:
 
 			int width = MEngine.environmentCtrl->GetWidth();
 
-			actual += speed / 50.0f;
+			actual += 1.0f / width * MEngine.TranslateSpeed(speed)*delta;
 			if (actual > 1) actual = 1;
 
 			float widthActual = width*actual;

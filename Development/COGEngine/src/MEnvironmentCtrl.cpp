@@ -42,13 +42,13 @@ void MEnvironmentCtrl::OnMultiTouchButton(int x, int y){
 			if (key.inputType == InputType::TOUCH && key.touchId == event->m_TouchID) return;
 		}
 
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_TouchID, Vectorf3(event->m_x, event->m_y)));
+		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(event->m_TouchID, ofVec3f(event->m_x, event->m_y)));
 	}
 	else{
 		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::TOUCH && (*it).touchId == event->m_TouchID){
 				// change position as well
-				(*it).position = Vectorf3(event->m_x, event->m_y);
+				(*it).position = ofVec3f(event->m_x, event->m_y);
 				(*it).ended = true;
 				return;
 			}
@@ -62,7 +62,7 @@ void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y){
 	/*for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).inputType == InputType::TOUCH && (*it).touchId == event->m_TouchID){
-			(*it).position = Vectorf3(event->m_x, event->m_y);
+			(*it).position = ofVec3f(event->m_x, event->m_y);
 		}
 	}*/
 }
@@ -75,13 +75,13 @@ void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool presse
 			if (key.inputType == InputType::MOUSE) return;
 		}
 
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(button, Vectorf3(x,y)));
+		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(button, ofVec3f(x,y)));
 	}
 	else{
 		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::MOUSE){
 				// change position as well
-				(*it).position = Vectorf3(x,y);
+				(*it).position = ofVec3f(x,y);
 				(*it).ended = true;
 				return;
 			}
@@ -94,7 +94,7 @@ void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y){
 	for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).inputType == InputType::MOUSE){
-			(*it).position = Vectorf3(x,y);
+			(*it).position = ofVec3f(x,y);
 		}
 	}
 }

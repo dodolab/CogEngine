@@ -125,6 +125,7 @@
     <ClInclude Include="src\BeTween.h" />
     <ClInclude Include="src\CollageTexture.h" />
     <ClInclude Include="src\CopterFactory.h" />
+    <ClInclude Include="src\CopterSceneManager.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
     <ClInclude Include="src\EnFlags.h" />

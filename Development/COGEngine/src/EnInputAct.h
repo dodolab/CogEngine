@@ -20,7 +20,7 @@ public:
 	// pressed finger (touch input only)
 	int touchId;
 	// position (only for mouse and touch events)
-	Vectorf3 position;
+	ofVec3f position;
 
 	// handlerId, -1 if there is none
 	int handlerId;
@@ -35,11 +35,11 @@ public:
 		Construct();
 	}
 
-	EnInputAct(int mouseButt, Vectorf3 pos) : inputType(InputType::MOUSE), mouseButton(mouseButt), position(pos){
+	EnInputAct(int mouseButt, ofVec3f pos) : inputType(InputType::MOUSE), mouseButton(mouseButt), position(pos){
 		Construct();
 	}
 
-	/*EnInputAct(int touchID, Vectorf3 pos) :inputType(InputType::TOUCH), touchId(touchID),  position(pos){
+	/*EnInputAct(int touchID, ofVec3f pos) :inputType(InputType::TOUCH), touchId(touchID),  position(pos){
 		Construct();
 	}*/
 

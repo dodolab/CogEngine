@@ -39,7 +39,6 @@ void setup();
 		bool backPressed();
 		void okPressed();
 		void cancelPressed();
-
 };
 
 //Universal function which sets normals

@@ -32,9 +32,7 @@ private:
 	int _ownerId;
 
 	void Construct(){
-		_id = 0;
-		_action = 0;
-		_ownerId = 0;
+
 	}
 
 public:

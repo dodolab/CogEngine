@@ -68,7 +68,7 @@ public:
 	}
 
 	void RenderRectangle(GNode* owner){
-		Vectorf3 size = owner->GetAttr<Vectorf3>(Attrs::SIZE);
+		ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
 		ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
 		ofSetColor(color);
 		ofFill();  
@@ -77,12 +77,12 @@ public:
 	}
 
 	void RenderArc(GNode* owner){
-		Vectorf3 size = owner->GetAttr<Vectorf3>(Attrs::SIZE);
+		ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
 		ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
 		ofSetColor(color);
 
 		// todo: draw arc
-		//Iw2DFillArc(Vectorf3(0, 0), size, 0, PI * 2, 60);
+		//Iw2DFillArc(ofVec3f(0, 0), size, 0, PI * 2, 60);
 	}
 };
 
