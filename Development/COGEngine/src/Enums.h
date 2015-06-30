@@ -17,6 +17,14 @@ enum class Act{
 	SWITCH=6	/*!< switch/action */
 };
 
+/*! Scope object for messaging */
+enum class ScopeType{
+	ROOT,				 /*!< root object scope */
+	SCENE,				 /*!< scene object scope */
+	OBJECT,				 /*!< source object scope */
+	CHILDREN,			 /*!< children objects scope */
+};
+
 /*! Types of traversation */
 namespace Traverses{
 	extern int CHILD_FIRST;     /*!< child is updated first */
@@ -80,13 +88,6 @@ enum class ObjType{
 	OBJECT,				/*!< simple game object */
 	HUD,				/*!< human interface object */
 	INFO				/*!< info object */
-};
-
-/*! Message sender type enumerator */
-enum class SenderType{
-	GAMEOBJ,			/*!< sender is game object */
-	BEHAVIOR,			/*!< sender is behavior */
-	ATTR				/*!< sender is attribute */
 };
 
 #endif

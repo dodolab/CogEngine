@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <string>
 #include "EnTransform.h"
+#include "MGameStorage.h"
 
 using namespace std;
 
@@ -23,8 +24,6 @@ class GNode{
 protected:
 	// identifier incremental counter
 	static int idCounter;
-	// dummy message that is used for no-response sending
-	static GMsg _dummyMsg;
 	// attributes, mapped by their keys
 	map<int, GAttr*> _attributes;
 	// list of behaviors
@@ -70,19 +69,6 @@ public:
 	GNode(const GNode& copy);
 
 	~GNode();
-
-	/**
-	* Sends a message to behaviors and other game objects
-	* @param GMsg message that will be sent
-    * @param resp response that could be filled (at most once)
-	*/
-	void SendMessage(GMsg& msg, GMsg& resp);
-
-	/**
-	* Sends a message to behaviors and other game objects, expecting no response
-	* @param GMsg message that will be sent
-	*/
-	void SendMessageNoResp(GMsg& msg);
 
 	/**
 	* Updates behavior inner state
@@ -381,6 +367,9 @@ public:
 	bool operator!=(const GNode& other){
 		return _id != other._id;
 	}
+
+
+	friend class MGameStorage;
 };
 
 

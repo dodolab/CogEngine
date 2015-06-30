@@ -5,6 +5,7 @@
 #include "MGameEngine.h"
 #include "BeTranslateAnim.h"
 #include "Enums.h"
+#include "GMsg.h"
 
 /**
 * Behavior for hit testing
@@ -58,7 +59,7 @@ public:
 						if (ImageHitTest(hitImage, touchTrans)){ 
 							// is hit
 							//if (handlerId != -1){
-								SendMessageNoResp(Traverses::BEH_FIRST, Actions::OBJECT_HIT, nullptr, owner);
+							SendMessage(Traversation(ScopeType::ROOT, true, true), Actions::OBJECT_HIT, nullptr, owner);
 							//}
 						}
 					}

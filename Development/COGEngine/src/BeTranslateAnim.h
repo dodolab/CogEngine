@@ -11,7 +11,8 @@
 class BeTranslateAnim : public GBehavior{
 
 private:
-	float _speed;
+	float _speedX;
+	float _speedY;
 	float _distX;
 	float _distY;
 	bool _additive;
@@ -24,11 +25,15 @@ private:
 	bool _stopped;
 
 public:
-	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL, EnFlags()), _speed(speed),
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL, EnFlags()),
 		_additive(additive), _to(to), _from(from), _repeat(repeat){
 		this->_actual = ofVec3f(from);
 		this->_distX = to.x - from.x;
 		this->_distY = to.y - from.y;
+		
+		float distance = (float)sqrt(_distX*_distX+_distY*_distY);
+		_speedX = speed*_distX / distance;
+		_speedY = speed*_distY / distance;
 
 		_stopped = false;
 	}
@@ -40,8 +45,8 @@ public:
 	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 		if (_stopped) return;
 
-		float diffX = (float)(_distX / MEngine.TranslateSpeed(_speed)*delta);
-		float diffY = (float)(_distY / MEngine.TranslateSpeed(_speed)*delta);
+		float diffX = (float)(MEngine.TranslateSpeed(_speedX)*delta);
+		float diffY = (float)(MEngine.TranslateSpeed(_speedY)*delta);
 
 		if (ofVec3f(_from - _to).lengthSquared() < ofVec3f(_from - _actual).lengthSquared())
 		{

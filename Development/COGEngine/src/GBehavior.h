@@ -8,7 +8,6 @@
 
 class GNode;
 
-
 /**
 * GBehavior - common abstract class for all behaviors
 *
@@ -18,8 +17,6 @@ class GBehavior{
 protected:
 	// identifier incremental counter
 	static int idCounter;
-	// dummy response message
-	static GMsg _dummyMsg;
 	// element type {ALL, VIEW, MODEL}
 	const ElemType _elemType;
 	// identifier
@@ -42,23 +39,13 @@ protected:
 	GBehavior(ElemType elemType, EnFlags msgFlags);
 
 	/**
-	* Sends a message, expecting response
-	* @param traverse state machine that indicates who should process this message
-	* @param action id of action; see Actions namespace for common action ids
-	* @param data payload
-	* @param resp response that can be initialized only once
-	* @param target target game object
-	*/
-	void SendMessage(EnFlags traverse, int action, void* data, GMsg& resp, GNode* target) const;
-
-	/**
-	* Sends a message without response
+	* Sends a message
 	* @param traverse state machine that indicates who should process this message
 	* @param action id of action; see Actions namespace for common action ids
 	* @param data payload
 	* @param target target game object
 	*/
-	void SendMessageNoResp(EnFlags traverse, int action, void* data, GNode* target) const;
+	void SendMessage(Traversation traverse, int action, void* data, GNode* target) const;
 
 public:
 
