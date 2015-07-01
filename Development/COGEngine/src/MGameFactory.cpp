@@ -108,11 +108,12 @@ GNode* CreateSecond(){
 	ofColor color;
 	ofVec3f actualSize = ofVec3f(300, 300);
 
-	for (int i = 0; i < 5; i++){
+	for (int i = 0; i < 2; i++){
 		color.set(10 + i * 4, 100 + i * 20, 0);
 		GNode* child = new GNode(ObjType::OBJECT, 0, "fofka");
 		child->GetTransform().LocalPos = actualSize;
 		if (i == 0){
+			child->SetSubType(111);
 			child->GetTransform().LocalPos = ofVec3f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
 			child->GetTransform().Scale = ofVec3f(scale * 30, scale * 30, scale * 30);
 			child->SetState(States::HITTABLE);
@@ -135,7 +136,13 @@ GNode* CreateSecond(){
 		sChild->GetTransform().Scale = ofVec3f(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
-		sChild = new GNode(ObjType::OBJECT, 0, "other");
+		if (i == 1){
+			sChild = new GNode(ObjType::OBJECT, 123, "CHECK");
+			color.set(0,0,255);
+		}
+		else {
+			sChild = new GNode(ObjType::OBJECT, 0, "other");
+		}
 		sChild->GetTransform().LocalPos = ofVec3f(-actualSize.x / 2, actualSize.y / 2);
 		sChild->AddAttr(Attrs::COLOR, color);
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
@@ -144,6 +151,7 @@ GNode* CreateSecond(){
 		sChild->GetTransform().Scale =ofVec3f(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
+		color.set(100 + i * 20, 10 + i * 4, 0);
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
 		sChild->GetTransform().LocalPos = ofVec3f(actualSize.x / 2, -actualSize.y / 2);
 		sChild->AddAttr(Attrs::COLOR, color);
@@ -318,14 +326,14 @@ GNode* MGameFactory::CreateRoot(){
 
 
 	//GNode* first = CreateFirst();
-//	GNode* second = CreateSecond();
-	GNode* third = CreateThird();
+	GNode* second = CreateSecond();
+	//GNode* third = CreateThird();
 
 
 	//second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth();
 	//third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
 
-	_root->AddChild(third);
+	_root->AddChild(second);
 	//_root->AddChild(third);
 
 

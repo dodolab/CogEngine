@@ -29,7 +29,6 @@ public:
 
 	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 
-
 		if (_stopped) return;
 
 		float diff = (float)((_to == _from ? 1 : (_to - _from)) / 1000 * _speed*delta);

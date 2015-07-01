@@ -71,6 +71,11 @@ public:
 	~GNode();
 
 	/**
+	* Updates transformations to itself and all children
+	*/
+	void UpdateTransforms();
+
+	/**
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun

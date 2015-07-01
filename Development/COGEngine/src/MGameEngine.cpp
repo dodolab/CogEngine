@@ -11,6 +11,9 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 
 	ofMatrix4x4 identity = ofMatrix4x4::newIdentityMatrix();
 	identity.translate(0,0,-690);
+
+	this->_root->GetRoot()->UpdateTransforms();
+
 	this->_root->GetRoot()->Update(delta, absolute, identity);
 
 	environmentCtrl->RemoveEndedInputs();

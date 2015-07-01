@@ -1,6 +1,9 @@
 
 #include "MGameStorage.h"
 
+// first id is always 1
+int MGameStorage::callBackIdCounter = 1;
+
 void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it){
 		GBehavior* beh = (*it);
@@ -63,10 +66,10 @@ void MGameStorage::SendMessage(GMsg& msg){
 	auto callBack = callBackListeners.find(msg.GetAction());
 
 	if (callBack != callBackListeners.end()){
-		vector<MsgCallback>& callBacks = callBack->second;
+		vector<std::pair<int,MsgCallback>>& callBacks = callBack->second;
 
 		for (auto it = callBacks.begin(); it != callBacks.end(); ++it){
-			MsgCallback cb = (*it);
+			MsgCallback cb = (*it).second;
 			cb(msg);
 		}
 	}

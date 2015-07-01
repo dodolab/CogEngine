@@ -43,6 +43,28 @@ GNode::~GNode(){
 	}
 }
 
+void GNode::UpdateTransforms(){
+
+	
+
+	if (_parent != nullptr){
+		if (_subType == 123){
+			bool mojo = true;
+		}
+		else if (_subType == 111){
+			bool mojo = false;
+		}
+
+		this->_transform.CalcAbsTransform(_parent->_transform);
+	}
+	else this->_transform.SetAbsAsLocal();
+
+	for (auto it = _children.begin(); it != _children.end(); ++it){
+		(*it)->UpdateTransforms();
+	}
+
+}
+
 
 void GNode::Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix){
 
