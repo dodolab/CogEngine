@@ -98,10 +98,9 @@ public:
 	/**
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
-	* @param absolute absolute time since the game begun
-	* @param absMatrix current absolute matrix, traversed from parent
+	* @param absolute absolute time since the game begun 
 	*/
-	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner) = 0;
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner) = 0;
 
 	bool operator==(int id){
 		return this->_id == id;

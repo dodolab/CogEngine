@@ -15,15 +15,15 @@ ofPoint axeX, axyY, axyZ;	//Circle's coordinate system
 //--------------------------------------------------------------
 void ofAndroidApp::setup(){
 
-	/*ofSetVerticalSync(true);
+	ofSetVerticalSync(true);
 	ofSetFrameRate(50);
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
 	MEngine.Init(new CopterFactory(), new MGameStorage());
 	absolute = ofGetSystemTime();
-	delta = ofGetSystemTime();*/
-
+	delta = ofGetSystemTime();
+/*
 	pos = ofPoint( 0, 0, 0 );	//Start from center of coordinate
 	axeX = ofPoint( 1, 0, 0 );	//Set initial coordinate system
 	axyY = ofPoint( 0, 1, 0 );
@@ -31,7 +31,7 @@ void ofAndroidApp::setup(){
 
 	light.enable();				//Enable lighting
 
-	ofSetFrameRate( 60 );       //Set the rate of screen redrawing
+	ofSetFrameRate( 60 );       //Set the rate of screen redrawing*/
 
 }
 
@@ -147,17 +147,17 @@ void setNormals( ofMesh &mesh ){
 
 //--------------------------------------------------------------
 void ofAndroidApp::update(){
-	/*delta = ofGetSystemTime() - absolute;
+	delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
-	MEngine.Update(delta, absolute);*/
-	addRandomCircle( mesh );
+	MEngine.Update(delta, absolute);
+	//addRandomCircle( mesh );
 }
 
 
 //--------------------------------------------------------------
 void ofAndroidApp::draw(){
-	//MEngine.Draw(delta, absolute);
-	ofEnableDepthTest();				//Enable z-buffering
+	MEngine.Draw(delta, absolute);
+	/*ofEnableDepthTest();				//Enable z-buffering
 
 	//Set a gradient background from white to gray
 	ofBackgroundGradient( ofColor( 255 ), ofColor( 128 ) );
@@ -181,7 +181,7 @@ void ofAndroidApp::draw(){
 	//because the mesh has its own vertices' colors
 	mesh.draw();
 
-	ofPopMatrix();						//Restore the coordinate system
+	ofPopMatrix();						//Restore the coordinate system*/
 }
 
 
@@ -200,23 +200,23 @@ void ofAndroidApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofAndroidApp::windowResized(int w, int h){
-	//MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
+	MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
 }
 
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchDown(int x, int y, int button){
-	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
+	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchMoved(int x, int y, int id){
-
+	MEngine.environmentCtrl->OnSingleTouchMotion(x,y);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchUp(int x, int y, int button){
-	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
+	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
 }
 
 //--------------------------------------------------------------

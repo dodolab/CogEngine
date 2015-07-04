@@ -23,6 +23,7 @@ enum class ScopeType{
 	SCENE,				 /*!< scene object scope */
 	OBJECT,				 /*!< source object scope */
 	CHILDREN,			 /*!< children objects scope */
+	DIRECT_NO_TRAVERSE   /*!< no traversation made, objects are obtained from map */
 };
 
 /*! Types of traversation */
@@ -44,6 +45,8 @@ namespace Actions{
 	extern int GAMEOBJECT_DESTROYED;
 	extern int ATTRIBUTE_CHANGED;
 	extern int OBJECT_HIT;
+	extern int OBJECT_RELEASED;
+	extern int HEALTH_CHANGED;
 }
 
 
@@ -57,6 +60,9 @@ namespace Attrs{
 	extern int SIZE;
 	extern int POLYGON;
 	extern int COLOR;
+	extern int FRAME;
+	extern int COLLISIONS;
+	extern int HEALTH;
 }
 
 /*! States*/
@@ -64,6 +70,9 @@ namespace States{
 	extern int HITTABLE;
 	extern int TO_LEFT;
 	extern int TO_RIGHT;
+	extern int HIT;
+	extern int COLLID_SOURCE;
+	extern int COLLID_TARGET;
 }
 
 /*! Behavior state enumerator */

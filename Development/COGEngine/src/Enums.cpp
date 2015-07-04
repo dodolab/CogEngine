@@ -17,6 +17,8 @@ namespace Actions{
 	int GAMEOBJECT_DESTROYED = 6;
 	int ATTRIBUTE_CHANGED = 7;
 	int OBJECT_HIT = 8;
+	int OBJECT_RELEASED = 9;
+	int HEALTH_CHANGED = 10;
 }
 
 
@@ -30,6 +32,9 @@ namespace Attrs{
 	int SIZE = 6;
 	int POLYGON = 7;
 	int COLOR = 8;
+	int FRAME = 9;
+	int COLLISIONS = 10;
+	int HEALTH = 11;
 }
 
 /*! States*/
@@ -37,4 +42,7 @@ namespace States{
 	 int HITTABLE = 1;
 	 int TO_LEFT=2;
 	 int TO_RIGHT=3;
+	 int HIT = 4;
+	 int COLLID_SOURCE = 5;
+	 int COLLID_TARGET = 6;
 }

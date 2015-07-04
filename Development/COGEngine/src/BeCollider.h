@@ -34,8 +34,9 @@ public:
 
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 		list<GNode*> childrens = owner->GetChildren();
+		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
 
 		for (list<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
 			GNode* first = *it;
@@ -52,13 +53,21 @@ public:
 					if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 
 						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
-							EnCollision* col = new EnCollision(first->GetId(), second->GetId());
-
-							SendMessage(Traversation(ScopeType::ROOT,true,true), Actions::COLLISION_OCURRED, nullptr, owner);
+							spt<EnCollision> col = spt<EnCollision>(new EnCollision(first, second));
+							collisions.push_back(col);
 						}
 					}
 				}
 			}
+		}
+
+		if (collisions.size() != 0){
+			if (!owner->HasAttr(Attrs::COLLISIONS)){
+				owner->AddAttr(Attrs::COLLISIONS, collisions);
+			}
+			else owner->ChangeAttr(Attrs::COLLISIONS, collisions);
+
+			SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, nullptr, owner);
 		}
 	}
 };

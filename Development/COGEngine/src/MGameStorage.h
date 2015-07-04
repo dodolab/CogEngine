@@ -40,7 +40,7 @@ public:
 	}
 
 	template<class T>
-	int RegisterCallback(int action, void (T::*f)(GMsg const &)) {
+	int RegisterCallback(int action, void (T::*f)(GMsg &)) {
 		return RegisterCallback(action, std::tr1::bind(f, (T*)(this), std::placeholders::_1));
 	}
 
@@ -72,12 +72,38 @@ public:
 		return false;
 	}
 
+	void RegisterListener(int action, GBehavior* beh){
+		if (behListeners.find(action) == behListeners.end()){
+			behListeners[action] = vector <GBehavior*>();
+		}
+
+		vector<GBehavior*>& listeners = behListeners[action];
+		listeners.push_back(beh);
+	}
+
+	void UnregisterListener(int action, GBehavior* beh){
+		if (behListeners.find(action) != behListeners.end()){
+			vector<GBehavior*>& listeners = behListeners[action];
+
+			for (auto it = listeners.begin(); it != listeners.end(); ++it){
+				if ((*it)->GetId() == beh->GetId()){
+					listeners.erase(it);
+					return;
+				}
+			}
+		}
+	}
+
 	void SendTraversationMessage(GMsg& msg, GNode* actualNode);
 
 	void SendMessage(GMsg& msg);
 
 	bool IsRegisteredListener(int key) const{
-		return behListeners.find(key) != behListeners.end();;
+		return behListeners.find(key) != behListeners.end();
+	}
+
+	bool IsRegisteredCallBack(int key) const{
+		return callBackListeners.find(key) != callBackListeners.end();
 	}
 
 	GNode* FindGameObjectById(int id) const{

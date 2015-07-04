@@ -27,7 +27,7 @@ public:
 
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
 		if (_stopped) return;
 

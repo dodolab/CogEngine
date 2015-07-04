@@ -18,7 +18,7 @@ public:
 
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 		EnTransform& transform = owner->GetTransform();
 
 		ofVec3f velocity = owner->GetAttr<ofVec3f>(Attrs::VELOCITY);

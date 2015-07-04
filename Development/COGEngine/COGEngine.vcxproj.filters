@@ -31,9 +31,6 @@
     <ClCompile Include="src\EnBounds.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\EnCollision.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\EnFlags.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -177,6 +174,30 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\CopterSceneManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterCanon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterBullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterHelicopter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterCollisionMgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BeTempRender.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BeDelayRemove.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterHeliMgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterPara.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

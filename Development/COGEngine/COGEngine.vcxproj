@@ -43,6 +43,7 @@
     <TargetName>$(ProjectName)_debug</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
+    <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
@@ -93,7 +94,6 @@
     <ClCompile Include="src\CollageTexture.cpp" />
     <ClCompile Include="src\CopterFactory.cpp" />
     <ClCompile Include="src\EnBounds.cpp" />
-    <ClCompile Include="src\EnCollision.cpp" />
     <ClCompile Include="src\EnFlags.cpp" />
     <ClCompile Include="src\EnInputAct.cpp" />
     <ClCompile Include="src\EnPair.cpp" />
@@ -116,15 +116,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BeCollider.h" />
+    <ClInclude Include="src\BeDelayRemove.h" />
     <ClInclude Include="src\BeHitEvent.h" />
     <ClInclude Include="src\BeInputKey.h" />
     <ClInclude Include="src\BeMove.h" />
     <ClInclude Include="src\BeRender.h" />
     <ClInclude Include="src\BeRotateAnim.h" />
+    <ClInclude Include="src\BeTempRender.h" />
     <ClInclude Include="src\BeTranslateAnim.h" />
     <ClInclude Include="src\BeTween.h" />
     <ClInclude Include="src\CollageTexture.h" />
+    <ClInclude Include="src\CopterBullet.h" />
+    <ClInclude Include="src\CopterCanon.h" />
+    <ClInclude Include="src\CopterCollisionMgr.h" />
     <ClInclude Include="src\CopterFactory.h" />
+    <ClInclude Include="src\CopterHelicopter.h" />
+    <ClInclude Include="src\CopterHeliMgr.h" />
+    <ClInclude Include="src\CopterPara.h" />
     <ClInclude Include="src\CopterSceneManager.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
