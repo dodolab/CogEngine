@@ -59,15 +59,15 @@ void GNode::UpdateTransforms(){
 
 void GNode::Update(const uint64 delta, const uint64 absolute){	
 
-	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Update(delta, absolute);
-	}
-
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		GBehavior* beh = *it;
-	    if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) && beh->GetElemType() == ElemType::MODEL){
+		if (beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
 			beh->Update(delta, absolute, this);
 		}
+	}
+
+	for (auto it = _children.begin(); it != _children.end(); ++it){
+		(*it)->Update(delta, absolute);
 	}
 
 	for (auto it = _behaviorToRemove.begin(); it != _behaviorToRemove.end(); ++it){

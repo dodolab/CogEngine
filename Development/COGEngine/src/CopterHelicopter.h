@@ -82,7 +82,7 @@ public:
 		}
 
 		// spawn per 8 sec
-		if ((absolute - lastParaSpawn) > 8000){
+		if ((absolute - lastParaSpawn) > (8000+ofRandom(0,1000))){
 			float width = MEngine.environmentCtrl->GetWidth();
 
 			if (ofRandom(0, 2) == 1){

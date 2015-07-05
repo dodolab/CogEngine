@@ -16,7 +16,6 @@ extern MGameEngine MEngine;
 
 class MGameEngine{
 private:
-
 	GNode* _root;
 public:
 	MGameEngine(){

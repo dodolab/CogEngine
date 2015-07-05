@@ -8,8 +8,9 @@ bool sortByZIndex(basicSprite * a, basicSprite * b) {
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofSetVerticalSync(true);
-	ofSetFrameRate(50);   
+	// NEVER SET VERTICAL SYNC !!!! OTHERWISE IT WILL WORK STRANGE!!!
+	ofSetVerticalSync(false);
+	ofSetFrameRate(60);  
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine

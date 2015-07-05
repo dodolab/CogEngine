@@ -29,14 +29,14 @@ public:
 
 	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
-		if (owner->HasAttr(Attrs::ALLOWED_ACTIONS)){
+	//	if (owner->HasAttr(Attrs::ALLOWED_ACTIONS)){
 
 			if (!owner->HasAttr(Attrs::ACTIONS)){
 				owner->AddAttr(Attrs::ACTIONS, EnFlags());
 			}
 
 			EnFlags& actions = owner->GetAttr<EnFlags>(Attrs::ACTIONS);
-			EnFlags& allowedActions = owner->GetAttr<EnFlags>(Attrs::ALLOWED_ACTIONS);
+			//EnFlags& allowedActions = owner->GetAttr<EnFlags>(Attrs::ALLOWED_ACTIONS);
 
 			for (auto key : MEngine.environmentCtrl->GetPressedKeys()){
 
@@ -44,14 +44,15 @@ public:
 					key.handlerId = owner->GetId();
 
 					Act inAct = GetAction(key.key);
-					if (inAct != Act::NONE && allowedActions.HasState((int)inAct)){
+					if (inAct != Act::NONE)
+					{//&& allowedActions.HasState((int)inAct)){
 						if (!key.ended) actions.SetState((int)inAct);
 						else actions.ResetState((int)inAct);
 					}
 				}
 			}
 		}
-	}
+	//}
 };
 
 
