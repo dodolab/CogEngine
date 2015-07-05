@@ -31,7 +31,10 @@ public:
 			msg.GetSourceObject()->AddBehavior(new BeTempRender(MEngine.resourceCtrl->Get2DImage("images/explosion2.png"), 3));
 
 			// remove copter with delay
-			if (health <= 0) msg.GetSourceObject()->AddBehavior(new BeDelayRemove(100));
+			if (health <= 0){
+				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::PARA_KILLED, nullptr, msg.GetSourceObject());
+				msg.GetSourceObject()->AddBehavior(new BeDelayRemove(100));
+			}
 		}
 	}
 
@@ -44,6 +47,7 @@ public:
 				// change picture and do nothing....
 				grounded = true;
 				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/soldier.png"));
+				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::PARA_GROUNDED, nullptr, owner);
 			}
 			else{
 				owner->GetTransform().LocalPos.y += 0.4f;

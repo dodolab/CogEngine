@@ -4,7 +4,7 @@
 #include "Enums.h"
 
 enum InputType{
-	KEYBOARD, MOUSE, TOUCH
+	KEYBOARD, TOUCH
 };
 
 /**
@@ -15,10 +15,8 @@ public:
 	InputType inputType;
 	// pressed key (keyboard only)
 	int key;
-	// pressed mouse button (mouse input only)
-	int mouseButton;
 	// pressed finger (touch input only)
-	int touchId;
+	int buttonId;
 	// position (only for mouse and touch events)
 	ofVec3f position;
 
@@ -35,7 +33,7 @@ public:
 		Construct();
 	}
 
-	EnInputAct(int mouseButt, ofVec3f pos) : inputType(InputType::MOUSE), mouseButton(mouseButt), position(pos){
+	EnInputAct(int button, ofVec3f pos) : inputType(InputType::TOUCH), buttonId(button), position(pos){
 		Construct();
 	}
 

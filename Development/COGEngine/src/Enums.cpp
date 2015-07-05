@@ -19,6 +19,10 @@ namespace Actions{
 	int OBJECT_HIT = 8;
 	int OBJECT_RELEASED = 9;
 	int HEALTH_CHANGED = 10;
+	int PARA_GROUNDED = 11;
+	int PARA_KILLED = 12;
+	int COPTER_KILLED = 13;
+	int PLAYER_LOOSE = 14;
 }
 
 
@@ -35,6 +39,8 @@ namespace Attrs{
 	int FRAME = 9;
 	int COLLISIONS = 10;
 	int HEALTH = 11;
+	int FONT = 12;
+	int TEXT = 13;
 }
 
 /*! States*/

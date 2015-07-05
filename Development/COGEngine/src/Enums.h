@@ -47,6 +47,10 @@ namespace Actions{
 	extern int OBJECT_HIT;
 	extern int OBJECT_RELEASED;
 	extern int HEALTH_CHANGED;
+	extern int PARA_GROUNDED;
+	extern int PARA_KILLED;
+	extern int COPTER_KILLED;
+	extern int PLAYER_LOOSE;
 }
 
 
@@ -63,6 +67,8 @@ namespace Attrs{
 	extern int FRAME;
 	extern int COLLISIONS;
 	extern int HEALTH;
+	extern int FONT;
+	extern int TEXT;
 }
 
 /*! States*/

@@ -132,8 +132,10 @@
     <ClInclude Include="src\CopterFactory.h" />
     <ClInclude Include="src\CopterHelicopter.h" />
     <ClInclude Include="src\CopterHeliMgr.h" />
+    <ClInclude Include="src\CopterLives.h" />
     <ClInclude Include="src\CopterPara.h" />
     <ClInclude Include="src\CopterSceneManager.h" />
+    <ClInclude Include="src\CopterScore.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
     <ClInclude Include="src\EnFlags.h" />

@@ -50,13 +50,13 @@ public:
 	void OnScreenSizeChanged(int newWidth, int newHeight);
 
 	// user touches the screen with more fingers
-	void OnMultiTouchButton(int x, int y);
+	void OnMultiTouchButton(int x, int y, int button, bool pressed);
 	// user moves fingers
-	void OnMultiTouchMotion(int x, int y);
+	void OnMultiTouchMotion(int x, int y, int button);
 	// user touches the screen
 	void OnSingleTouchButton(int x, int y, int button, bool pressed);
 	// user moves finger
-	void OnSingleTouchMotion(int x, int y);
+	void OnSingleTouchMotion(int x, int y, int button);
 };
 
 

@@ -11,44 +11,41 @@
 */
 class BeCollider : public GBehavior{
 protected:
-	EnFlags _firstColGroups;
-	EnFlags _secondColGroups;
+	int _firstColGroup;
+	int _secondColGroup;
 
 public:
-	BeCollider(EnFlags firstColGroups, EnFlags secondColGroups) : GBehavior(ElemType::MODEL, EnFlags()),
-		_firstColGroups(firstColGroups), _secondColGroups(secondColGroups){
+	BeCollider(int firstColGroup, int secondColGroup) : GBehavior(ElemType::MODEL, EnFlags()),
+		_firstColGroup(firstColGroup), _secondColGroup(secondColGroup){
 
 	}
 
 	BeCollider(int colGroup) : GBehavior(ElemType::MODEL, EnFlags()),
-		_firstColGroups(colGroup), _secondColGroups(colGroup){
+		_firstColGroup(colGroup), _secondColGroup(colGroup){
 
 	}
 
-	BeCollider(int firstColGroup, int secondColGroup) : GBehavior(ElemType::MODEL, EnFlags()),
-		_firstColGroups(firstColGroup), _secondColGroups(secondColGroup){
-
-	}
 
 	virtual void OnMessage(GMsg& msg){
 
 	}
 
 	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
-		list<GNode*> childrens = owner->GetChildren();
+
+		const list<GNode*>& childrens = owner->GetChildren();
 		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
 
-		for (list<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
+		for (list<GNode*>::const_iterator it = childrens.begin(); it != childrens.end(); ++it){
 			GNode* first = *it;
 
-			bool isInFirstGroup = first->GetGroups().ContainsAtLeastOne(_firstColGroups);
-			bool isInSecondGroup = first->GetGroups().ContainsAtLeastOne(_secondColGroups);
+			bool isInFirstGroup = first->GetGroups().HasState(_firstColGroup);
+			bool isInSecondGroup = first->GetGroups().HasState(_secondColGroup);
 
 			if (isInFirstGroup || isInSecondGroup){
-				for (list<GNode*>::iterator jt = it; jt != childrens.end(); ++jt){
+				for (list<GNode*>::const_iterator jt = it; jt != childrens.end(); ++jt){
 					GNode* second = *jt;
-					bool isSecondInFirstGroup = second->GetGroups().ContainsAtLeastOne(_firstColGroups);
-					bool isSecondInSecondGroup = second->GetGroups().ContainsAtLeastOne(_secondColGroups);
+					bool isSecondInFirstGroup = second->GetGroups().HasState(_firstColGroup);
+					bool isSecondInSecondGroup = second->GetGroups().HasState(_secondColGroup);
 
 					if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 

@@ -14,6 +14,8 @@
 #include "CopterCollisionMgr.h"
 #include "CopterHeliMgr.h"
 #include "CopterPara.h"
+#include "CopterLives.h"
+#include "CopterScore.h"
 
 void CopterFactory::OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 MEngine.factory->SwitchToScene(0);
@@ -23,6 +25,7 @@ MEngine.factory->SwitchToScene(0);
 GNode* CopterFactory::CreateRoot(){
 	//return MGameFactory::CreateRoot();
 	 root = new GNode(ObjType::ROOT, 12, "fofík");
+
 	 splash = new GNode(ObjType::SCENE, 222, "splash");
 
     this->SetRenderImage(splash, "images/intro.png", 1, ofVec2f(0.5f, 0.5f), ofVec2f(0.5f, 0.5f));
@@ -39,7 +42,19 @@ GNode* CopterFactory::CreateRoot(){
 }
 
 void CopterFactory::SwitchToScene(int sc){
-	GNode* scene = new GNode(ObjType::SCENE, 14, "scene");
+	if (sc == 1){
+		// go back to background
+		scene->AddBehavior(new BeSlideTween(TweenDirection::RIGHT, splash, scene, 1));
+		return;
+	}
+
+	if (scene != nullptr){
+		root->RemoveChild(scene,true);
+		// todo: remove child immediately
+		delete scene;
+	}
+
+	scene = new GNode(ObjType::SCENE, 14, "scene");
 	scene->AddBehavior(new BeRender(RenderType::IMAGE));
 	scene->AddBehavior(new BeCollider(States::COLLID_SOURCE, States::COLLID_TARGET));
 	scene->AddBehavior(new CopterCollisionMgr(this));
@@ -60,6 +75,14 @@ void CopterFactory::SwitchToScene(int sc){
 
 	scene->AddBehavior(new BeSlideTween(TweenDirection::LEFT, scene, splash,1));
 
+	GNode* sun = new GNode(ObjType::OBJECT, 10, "sun");
+	sun->AddBehavior(new BeRender(RenderType::IMAGE));
+	img = MEngine.resourceCtrl->Get2DImage("images/sun.png");
+	sun->AddAttr(Attrs::IMGSOURCE, img);
+	sun->GetTransform().LocalPos = ofVec3f(RelPosX(70, scene), RelPosY(10, scene), 2);
+	sun->GetTransform().Scale = CalcScale(img, 10, scene);
+	sun->AddBehavior(new BeRotateAnim(0, 0, 10, false));
+	scene->AddChild(sun);
 
 	GNode* leftBut = new GNode(ObjType::OBJECT, 50, "but_left");
 	leftBut->AddBehavior(new BeRender(RenderType::IMAGE));
@@ -106,6 +129,23 @@ void CopterFactory::SwitchToScene(int sc){
 	MEngine.storage->RegisterCallback(Actions::OBJECT_HIT, &CopterFactory::OnButtonHit);
 	MEngine.storage->RegisterCallback(Actions::OBJECT_RELEASED, &CopterFactory::OnButtonReleased);
 
+	// player lives
+	GNode* lives = new GNode(ObjType::OBJECT, 24, "lives");
+	lives->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf",14));
+	lives->AddAttr(Attrs::TEXT, string("LIVES: 10"));
+	lives->AddBehavior(new BeRender(RenderType::TEXT));
+	lives->AddBehavior(new CopterLives(10));
+	lives->GetTransform().LocalPos = ofVec3f(RelPosX(80, scene), RelPosY(7, scene), 2);
+	scene->AddChild(lives);
+
+	// player score
+	GNode* score = new GNode(ObjType::OBJECT, 24, "score");
+	score->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf", 14));
+	score->AddAttr(Attrs::TEXT, string("SCORE: 0"));
+	score->AddBehavior(new BeRender(RenderType::TEXT));
+	score->AddBehavior(new CopterScore());
+	score->GetTransform().LocalPos = ofVec3f(RelPosX(5, scene), RelPosY(7, scene), 2);
+	scene->AddChild(score);
 	
 
    // int id = MEngine.storage->RegisterCallback(12, &CopterFactory::Test);
@@ -172,7 +212,7 @@ GNode* CopterFactory::CreatePara(GNode* copter){
 	para->AddAttr(Attrs::HEALTH, 5);
 
 	para->GetTransform().LocalPos = copter->GetTransform().LocalPos;
-	para->GetTransform().Scale = CalcScale(img, 1.5f, scene);
+	para->GetTransform().Scale = CalcScale(img, 2.5f, scene);
 	para->AddBehavior(new CopterPara(this));
 
 	return para;

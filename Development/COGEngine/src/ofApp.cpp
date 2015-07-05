@@ -94,7 +94,7 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x, y);
+	MEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
 }
 
 //--------------------------------------------------------------

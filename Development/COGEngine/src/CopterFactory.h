@@ -10,8 +10,13 @@ class CopterFactory : public MGameFactory{
 private:
 	GNode* root;
 	GNode* splash;
+	GNode* scene;
 public:
 	
+	CopterFactory(){
+		scene = nullptr;
+	}
+
 	GNode* CreateRoot();
 
 	virtual void SwitchToScene(int scene);
