@@ -16,6 +16,10 @@
 
 using namespace std;
 
+enum RunningMode{
+	RUNNING, PAUSED_ALL, PAUSED_CHILDREN
+};
+
 /**
 * GNode - game object with attributes, behaviors and transformation matrix
 *
@@ -33,8 +37,8 @@ protected:
 	// list of childrens
 	list<GNode*> _children;
 
-	list<GNode*> _childrenToRemove;
-	list<GBehavior*> _behaviorToRemove;
+	list<std::pair<GNode*,bool>> _childrenToRemove;
+	list<std::pair<GBehavior*,bool>> _behaviorToRemove;
 
 	// id of this node
 	const int _id;
@@ -51,12 +55,15 @@ protected:
 	// transformation matrix (size = 24)
 	EnTransform  _transform;
 
+	RunningMode _runMode;
+
 	void Construct(){
 		_parent = nullptr;
 		_tag = nullptr;
 		_groups = nullptr;
 		_states = nullptr;
 		_tag = nullptr;
+		_runMode = RunningMode::RUNNING;
 	}
 	
 public:
@@ -92,6 +99,10 @@ public:
 	*/
 	void Draw(const uint64 delta, const uint64 absolute);
 
+	void SetRunningMode(RunningMode runMode){
+		this->_runMode = runMode;
+	}
+
 	/**
 	* Adds a new behavior
 	* @param beh behavior to add
@@ -104,14 +115,14 @@ public:
 	* @param beh behavior to remove
 	* @return true, if behavior has been removed
 	*/
-	bool RemoveBehavior(GBehavior* beh);
+	bool RemoveBehavior(GBehavior* beh, bool immediately, bool erase);
 
 	/**
 	* Removes existing attribute (by its key)
 	* @param key key of attribute that will be removed
 	* @return true, if attribute has been removed
 	*/
-	bool RemoveAttr(int key);
+	bool RemoveAttr(int key, bool erase);
 
 	/**
 	* Returns true, if this game object has an attribute with given key
@@ -150,7 +161,7 @@ public:
 	* @param child child to remove
 	* @return true, if child has been removed
 	*/
-	bool RemoveChild(GNode* child, bool immediately = false);
+	bool RemoveChild(GNode* child, bool immediately, bool erase);
 
 	/**
 	* Gets pointer to the parent of this game node
@@ -317,7 +328,7 @@ public:
 	*/
 	template<class T> void AddAttr(int key, T value){
 		if (HasAttr(key)){
-			RemoveAttr(key);
+			RemoveAttr(key,true);
 		}
 
 		_attributes[key] = new GAttrR<T>(key, value, this);

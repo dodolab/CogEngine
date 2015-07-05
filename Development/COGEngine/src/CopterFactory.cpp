@@ -50,9 +50,7 @@ void CopterFactory::SwitchToScene(int sc){
 	}
 
 	if (scene != nullptr){
-		root->RemoveChild(scene,true);
-		// todo: remove child immediately
-		delete scene;
+		root->RemoveChild(scene,true,true);
 	}
 
 	scene = new GNode(ObjType::SCENE, 14, "scene");
@@ -230,4 +228,15 @@ GNode* CopterFactory::CreatePara(GNode* copter){
 	para->AddBehavior(new CopterPara(this));
 
 	return para;
+}
+
+GNode* CopterFactory::CreateSkull(GNode* scene){
+	GNode* skull = new GNode(ObjType::OBJECT, 24, "skull");
+	skull->AddBehavior(new BeRender(RenderType::IMAGE));
+	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/skull.png");
+	skull->AddAttr(Attrs::IMGSOURCE, img);
+	skull->GetTransform().LocalPos = ofVec3f(RelPosX(50, scene), RelPosY(30, scene), 2);
+	skull->GetTransform().Scale = CalcScale(img, 30.0f, scene);
+
+	return skull;
 }

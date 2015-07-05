@@ -57,6 +57,8 @@ public:
 
 	GNode* CreatePara(GNode* copter);
 
+	GNode* CreateSkull(GNode* scene);
+
 	void OnButtonHit(GMsg & msg){
 		GNode* source = msg.GetSourceObject();
 		GNode* scene = source->GetSceneRoot();

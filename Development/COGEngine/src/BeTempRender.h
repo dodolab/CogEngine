@@ -32,7 +32,7 @@ public:
 	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
 		if (actualFrame++ > framesNum){
-			owner->RemoveBehavior(this);
+			owner->RemoveBehavior(this,false,true);
 			return;
 		}
 

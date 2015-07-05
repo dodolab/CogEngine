@@ -51,6 +51,7 @@ namespace Actions{
 	extern int PARA_KILLED;
 	extern int COPTER_KILLED;
 	extern int PLAYER_LOOSE;
+	extern int GAME_FINISHED;
 }
 
 
@@ -69,6 +70,7 @@ namespace Attrs{
 	extern int HEALTH;
 	extern int FONT;
 	extern int TEXT;
+	extern int SCORE;	
 }
 
 /*! States*/

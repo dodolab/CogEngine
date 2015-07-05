@@ -82,7 +82,13 @@ public:
 		}
 
 		// spawn per 8 sec
-		if ((absolute - lastParaSpawn) > (8000+ofRandom(0,1000))){
+		GNode* scoreInfo = MEngine.storage->FindGameObjectByTag("score");
+		int score = scoreInfo->HasAttr(Attrs::SCORE) ? scoreInfo->GetAttr<int>(Attrs::SCORE) : 0;
+
+		int maximumPara = score == 0 ? 3 : 3*(1 + log10(score)*log10(score / 10));
+
+
+		if (MEngine.storage->GetGameObjectsCountByTag("para") <= maximumPara && (absolute - lastParaSpawn) > (8000) && ((int)ofRandom(0,20)) == 10){
 			float width = MEngine.environmentCtrl->GetWidth();
 
 			if (ofRandom(0, 2) == 1){

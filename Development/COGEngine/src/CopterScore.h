@@ -12,25 +12,33 @@
 */
 class CopterScore : public GBehavior{
 private:
-	int score;
-
+	int scoreDiff;
 
 public:
 	CopterScore() : GBehavior(ElemType::MODEL, EnFlags(Actions::PARA_KILLED, Actions::COPTER_KILLED)){
-		this->score = 0;
+		scoreDiff = 0;
 	}
 
 	virtual void OnMessage(GMsg& msg){
 		if (msg.GetAction() == Actions::PARA_KILLED){
-			score += 10;
+			scoreDiff = 10;
 		}
 		else if (msg.GetAction() == Actions::COPTER_KILLED){
-			score += 100;
+			scoreDiff = 100;
 		}
 	}
 
 
 	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+		if (!owner->HasAttr(Attrs::SCORE)) owner->AddAttr(Attrs::SCORE, 0);
+
+		int score = owner->GetAttr<int>(Attrs::SCORE);
+		if (scoreDiff != 0){
+			owner->ChangeAttr(Attrs::SCORE, score + scoreDiff);
+			score += scoreDiff;
+			scoreDiff = 0;
+		}
+
 		owner->ChangeAttr(Attrs::TEXT, string("SCORE: " + ofToString(score)));
 	}
 	

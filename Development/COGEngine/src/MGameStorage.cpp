@@ -25,6 +25,9 @@ void MGameStorage::SendTraversationMessageToChildren(GMsg& msg, GNode* actualNod
 
 void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 
+	// there is no such callback or behavior that listens to that type of message
+	if (!IsRegisteredCallBack(msg.GetAction()) && !IsRegisteredListener(msg.GetAction())) return;
+	
 	Traversation& trav = msg.GetTraverse();
 
 	if (trav.scope == ScopeType::DIRECT_NO_TRAVERSE){
@@ -110,4 +113,60 @@ void MGameStorage::SendMessage(GMsg& msg){
 			(*it)->OnMessage(msg);
 		}
 	}
+}
+
+GNode* MGameStorage::FindGameObjectById(int id) const{
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetId() == id) return (*it);
+	}
+	return nullptr;
+}
+
+int MGameStorage::GetGameObjectsCountByTag(string tag) const{
+	int counter = 0;
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetTag().compare(tag) == 0) counter++;
+	}
+	return counter;
+}
+
+GNode* MGameStorage::FindGameObjectByTag(string tag) const{
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetTag().compare(tag) == 0) return (*it);
+	}
+	return nullptr;
+}
+
+vector<GNode*> MGameStorage::FindGameObjectsByTag(char* tag) const{
+	vector<GNode*> output;
+
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetTag().compare(tag) == 0) output.push_back(*it);
+	}
+	return output;
+}
+
+int MGameStorage::GetGameObjectsCountBySubType(int subtype) const{
+	int counter = 0;
+
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetSubType() == subtype) counter++;
+	}
+	return counter;
+}
+
+GNode* MGameStorage::FindGameObjectBySubType(int subtype) const{
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetSubType() == subtype) return (*it);
+	}
+	return nullptr;
+}
+
+vector<GNode*> MGameStorage::FindGameObjectsBySubType(int subtype) const{
+	vector<GNode*> output;
+
+	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetSubType() == subtype) output.push_back(*it);
+	}
+	return output;
 }

@@ -36,7 +36,7 @@ public:
 				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::HEALTH_CHANGED, nullptr, target);
 
 				// remove projectil
-				source->GetParent()->RemoveChild(source);
+				source->GetParent()->RemoveChild(source,false,true);
 			}
 
 			// clear collisions

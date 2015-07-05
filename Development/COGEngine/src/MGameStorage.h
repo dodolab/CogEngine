@@ -106,42 +106,61 @@ public:
 		return callBackListeners.find(key) != callBackListeners.end();
 	}
 
-	GNode* FindGameObjectById(int id) const{
-		/*for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
-			if ((*it)->GetId() == id) return (*it);
-		}*/
-		return nullptr;
-	}
-	GNode* FindGameObjectByTag(string tag) const{
-		/*for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
-			if ((*it)->GetTag() == tag) return (*it);
-		}*/
-		return nullptr;
-	}
-	vector<GNode*> FindGameObjectsByTag(char* tag) const{
-		/*vector<GNode*> output;
+	GNode* FindGameObjectById(int id) const;
 
-		for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
-			if ((*it)->GetTag() == tag) output.push_back(*it);
+	int GetGameObjectsCountByTag(string tag) const;
+
+	GNode* FindGameObjectByTag(string tag) const;
+
+	vector<GNode*> FindGameObjectsByTag(char* tag) const;
+
+	int GetGameObjectsCountBySubType(int subtype) const;
+
+	GNode* FindGameObjectBySubType(int subtype) const;
+
+	vector<GNode*> FindGameObjectsBySubType(int subtype) const;
+
+	bool AddGameObject(GNode* gameObject){
+		auto found = find(allGameObjects.begin(), allGameObjects.end(), gameObject);
+		if (found == allGameObjects.end()){
+			allGameObjects.push_back(gameObject);
+			return true;
 		}
-		return output;*/
-		return vector < GNode* > ();
+		else return false;
 	}
-	GNode* FindGameObjectBySubType(int subtype) const{
-		/*for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
-			if ((*it)->GetSubType() == subtype) return (*it);
-		}*/
-		return nullptr;
-	}
-	vector<GNode*> FindGameObjectsBySubType(int subtype) const{
-		/*vector<GNode*> output;
 
-		for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
-			if ((*it)->GetSubType() == subtype) output.push_back(*it);
+	void RemoveGameObject(GNode* gameObject){
+		auto found = find(allGameObjects.begin(), allGameObjects.end(), gameObject);
+		if (found != allGameObjects.end()) allGameObjects.erase(found);
+	}
+
+	bool AddBehavior(GBehavior* beh){
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found == allBehaviors.end()){
+			allBehaviors.push_back(beh);
+
+			const EnFlags& flags = beh->GetMessageFlags();
+			vector<int> allStates = flags.GetAllStates();
+
+			for (auto it = allStates.begin(); it != allStates.end(); ++it){
+				RegisterListener((*it), beh);
+			}
+
+			return true;
 		}
-		return output;*/
+		else return false;
+	}
 
-		return vector<GNode*>();
+	void RemoveBehavior(GBehavior* beh){
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found != allBehaviors.end()) allBehaviors.erase(found);
+
+		const EnFlags& flags = beh->GetMessageFlags();
+		vector<int> allStates = flags.GetAllStates();
+
+		for (auto it = allStates.begin(); it != allStates.end(); ++it){
+			UnregisterListener((*it),beh);
+		}
 	}
 
 	void OnMessage(GMsg msg){

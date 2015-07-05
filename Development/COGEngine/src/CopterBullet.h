@@ -34,7 +34,7 @@ public:
 		if (owner->GetTransform().AbsPos.x < -20 || owner->GetTransform().AbsPos.x > MEngine.environmentCtrl->GetWidth() + 20 ||
 			owner->GetTransform().AbsPos.y < -20 || owner->GetTransform().AbsPos.y > MEngine.environmentCtrl->GetHeight() + 20){
 			// delete
-			owner->GetParent()->RemoveChild(owner);
+			owner->GetParent()->RemoveChild(owner,false,true);
 		}
 
 	}
