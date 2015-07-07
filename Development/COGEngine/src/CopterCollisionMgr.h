@@ -1,5 +1,4 @@
-#ifndef COPTER_COLLISION_MGR_H
-#define COPTER_COLLISION_MGR_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -45,7 +44,7 @@ public:
 	}
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 		
 
 
@@ -55,5 +54,3 @@ public:
 	
 };
 
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef COPTER_LIVES_H
-#define COPTER_LIVES_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -13,7 +12,7 @@
 class CopterLives : public GBehavior{
 private:
 	int lives;
-	GNode* lastOwner;
+
 
 public:
 	CopterLives(int lives) : GBehavior(ElemType::MODEL, EnFlags(Actions::PARA_GROUNDED)){
@@ -25,7 +24,7 @@ public:
 			lives--;
 
 			if (lives != 0){
-				lastOwner->ChangeAttr(Attrs::TEXT, string("LIVES: "+ofToString(lives)));
+				owner->ChangeAttr(Attrs::TEXT, string("LIVES: "+ofToString(lives)));
 			}
 			else{
 				// death!!!
@@ -35,11 +34,8 @@ public:
 	}
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
-		lastOwner = owner;
+	virtual void Update(const uint64 delta, const uint64 absolute){
+
 	}
 	
 };
-
-
-#endif

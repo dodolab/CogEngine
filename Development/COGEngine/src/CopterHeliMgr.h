@@ -1,5 +1,4 @@
-#ifndef COPTER_HELIMANAGER_H
-#define COPTER_HELIMANAGER_H
+#pragma once
 
 #include "GNode.h"
 #include "MGameFactory.h"
@@ -21,12 +20,9 @@ public:
 		this->factory = factory;
 	}
 
-	void OnMessage(GMsg& msg){
-
-	}
 
 
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 
 		GNode* scoreInfo = MEngine.storage->FindGameObjectByTag("score");
 		int score = scoreInfo->HasAttr(Attrs::SCORE) ? scoreInfo->GetAttr<int>(Attrs::SCORE) : 0;
@@ -44,5 +40,3 @@ public:
 
 };
 
-
-#endif

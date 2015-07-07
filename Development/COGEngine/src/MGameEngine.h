@@ -1,6 +1,4 @@
-#ifndef GAMEENGINE_H
-#define GAMEENGINE_H
-
+#pragma once
 
  class MGameEngine;
 extern MGameEngine MEngine;
@@ -57,5 +55,3 @@ public:
 	}
 };
 
-
-#endif

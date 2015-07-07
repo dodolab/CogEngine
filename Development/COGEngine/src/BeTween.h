@@ -1,5 +1,4 @@
-#ifndef BE_TWEEN_H
-#define BE_TWEEN_H
+#pragma once
 
 #include "GBehavior.h"
 
@@ -41,11 +40,8 @@ public:
 		tweenStarted = true;
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		if (!tweenEnded){
 			if (!tweenStarted) Init();
@@ -68,6 +64,3 @@ public:
 		}
 	}
 };
-
-
-#endif

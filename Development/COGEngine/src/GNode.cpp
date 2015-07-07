@@ -72,10 +72,12 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 
 	if (_runMode == RunningMode::PAUSED_ALL) return;
 
-	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
-		GBehavior* beh = *it;
-		if (beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
-			beh->Update(delta, absolute, this);
+	if (_runMode != RunningMode::PAUSED_ITSELF){
+		for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+			GBehavior* beh = *it;
+			if (beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
+				beh->Update(delta, absolute);
+			}
 		}
 	}
 
@@ -85,9 +87,14 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 		}
 	}
 
+	ClearElementsForRemoving();
+}
+
+void GNode::ClearElementsForRemoving(){
 	for (auto it = _behaviorToRemove.begin(); it != _behaviorToRemove.end(); ++it){
 		std::pair<GBehavior*, bool> item = (*it);
 		GBehavior* beh = item.first;
+		beh->owner = nullptr;
 		_behaviors.remove(beh);
 		MEngine.storage->RemoveBehavior(beh);
 		if (item.second) delete item.first;
@@ -112,7 +119,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 		GBehavior* beh = (*it);
 
 		if (beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
-			beh->Update(delta, absolute, this);
+			beh->Update(delta, absolute);
 		}
 	}
 
@@ -122,6 +129,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 }
 
 bool GNode::AddBehavior(GBehavior* beh){
+	beh->owner = this;
 	_behaviors.push_back(beh);
 	MEngine.storage->AddBehavior(beh);
 	return true;
@@ -133,6 +141,7 @@ bool GNode::RemoveBehavior(GBehavior* beh, bool immediately, bool erase){
 	bool result = _behaviors.end() != found;
 	if (result){
 		if (immediately){
+			beh->owner = nullptr;
 			_behaviors.remove(beh);
 			MEngine.storage->RemoveBehavior(beh);
 			if (erase) delete beh;
@@ -290,3 +299,32 @@ void GNode::SetStates(EnFlags val){
 	this->_states = new EnFlags(val);
 }
 
+string GNode::GetInfo(bool complete){
+	std::ostringstream ss;
+	GetInfo(complete, ss, 0);
+	std::cout << ss.str() << std::endl;
+	return ss.str();
+}
+
+void spaces(int howMany, std::ostringstream& ss){
+	for (int i = 0; i < howMany; i++) ss << " ";
+}
+
+void GNode::GetInfo(bool complete, std::ostringstream& ss, int level){
+	spaces(level * 4, ss);
+	ss << (*_tag) << " " << _subType << std::endl;
+	
+	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+		GBehavior* beh = (*it);
+		spaces(level * 4 + 2, ss);
+		ss << typeid(*beh).name() << std::endl;
+	}
+
+	ss << std::endl;
+
+	if (complete){
+		for (auto it = _children.begin(); it != _children.end(); ++it){
+			(*it)->GetInfo(complete, ss, level + 1);
+		}
+	}
+}

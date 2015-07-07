@@ -1,5 +1,4 @@
-#ifndef RESCTRL_H
-#define RESCTRL_H
+#pragma once
 
 #include "SmartPointer.h"
 #include <string>
@@ -25,4 +24,3 @@ public:
 	spt<ofTrueTypeFont> GetFont(string name, int size);
 };
 
-#endif

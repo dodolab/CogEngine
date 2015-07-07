@@ -1,5 +1,4 @@
-#ifndef ENTRANSFORM_H
-#define ENTRANSFORM_H
+#pragma once
 
 #include "Enums.h"
 #include "ofVec3f.h"
@@ -63,5 +62,3 @@ public:
 	}
 };
 
-
-#endif

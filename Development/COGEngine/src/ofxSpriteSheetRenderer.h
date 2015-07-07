@@ -1,5 +1,4 @@
-#ifndef OFX_SPRITE_SHEET_RENDERER_H
-#define OFX_SPRITE_SHEET_RENDERER_H
+#pragma once
 
 #include "ofMain.h"
 #include "CollageTexture.h"
@@ -136,4 +135,3 @@ protected:
 	}
 };
 
-#endif

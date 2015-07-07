@@ -1,5 +1,4 @@
-#ifndef ENSTATE_H
-#define ENSTATE_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -183,6 +182,3 @@ public:
 
 };
 
-
-
-#endif

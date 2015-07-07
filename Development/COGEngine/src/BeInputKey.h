@@ -1,5 +1,4 @@
-#ifndef BEINPUTKEY_H
-#define BEINPUTKEY_H
+#pragma once
 
 #include "GBehavior.h"
 #include "MGameEngine.h"
@@ -23,11 +22,8 @@ public:
 
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 	//	if (owner->HasAttr(Attrs::ALLOWED_ACTIONS)){
 
@@ -55,7 +51,3 @@ public:
 	//}
 };
 
-
-
-
-#endif

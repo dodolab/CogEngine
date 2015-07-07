@@ -78,13 +78,13 @@ void CopterFactory::SwitchToScene(int sc){
 
 
 	// performance info, must be at the top!!
-	GNode* perf = new GNode(ObjType::OBJECT, 24, "info");
+	/*GNode* perf = new GNode(ObjType::OBJECT, 24, "info");
 	perf->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf", 14));
 	perf->AddAttr(Attrs::TEXT, string(""));
 	perf->AddBehavior(new BeRender(RenderType::TEXT));
 	perf->AddBehavior(new Performance());
 	perf->GetTransform().LocalPos = ofVec3f(RelPosX(80, scene), RelPosY(14, scene), 2);
-	scene->AddChild(perf);
+	scene->AddChild(perf);*/
 
 	GNode* sun = new GNode(ObjType::OBJECT, 10, "sun");
 	sun->AddBehavior(new BeRender(RenderType::IMAGE));
@@ -158,6 +158,7 @@ void CopterFactory::SwitchToScene(int sc){
 	score->GetTransform().LocalPos = ofVec3f(RelPosX(5, scene), RelPosY(7, scene), 2);
 	scene->AddChild(score);
 
+	root->GetInfo(true);
 	
 
    // int id = MEngine.storage->RegisterCallback(12, &CopterFactory::Test);

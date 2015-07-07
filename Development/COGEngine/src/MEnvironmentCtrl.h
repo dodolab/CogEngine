@@ -1,5 +1,4 @@
-#ifndef INPUTCTRL_H
-#define INPUTCTRL_H
+#pragma once
 
 #include <vector>
 #include "SmartPointer.h"
@@ -58,6 +57,3 @@ public:
 	// user moves finger
 	void OnSingleTouchMotion(int x, int y, int button);
 };
-
-
-#endif

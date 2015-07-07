@@ -1,5 +1,4 @@
-#ifndef COPTER_CANON
-#define COPTER_CANON
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -20,13 +19,9 @@ public:
 		this->factory = factory;
 	}
 
-	virtual void OnMessage(GMsg& msg){
-
-	}
-
 	int lastShot;
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 		GNode* scene = owner->GetSceneRoot();
 		EnFlags& actions = scene->GetAttr<EnFlags>(Attrs::ACTIONS);
 		EnTransform& transform = owner->GetTransform();
@@ -61,5 +56,3 @@ public:
 	
 };
 
-
-#endif

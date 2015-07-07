@@ -1,7 +1,4 @@
-#ifndef GAMEFACTORY_H
-#define GAMEFACTORY_H
-
-
+#pragma once
 #include "GNode.h"
 
 
@@ -40,6 +37,3 @@ public:
 
 };
 
-
-
-#endif

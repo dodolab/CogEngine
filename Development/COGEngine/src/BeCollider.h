@@ -1,5 +1,4 @@
-#ifndef BECOLLIDER_H
-#define BECOLLIDER_H
+#pragma once
 
 #include "GBehavior.h"
 #include "EnFlags.h"
@@ -26,11 +25,7 @@ public:
 	}
 
 
-	virtual void OnMessage(GMsg& msg){
-
-	}
-
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 
 		const list<GNode*>& childrens = owner->GetChildren();
 		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
@@ -49,7 +44,7 @@ public:
 
 					if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 
-						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
+						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds*>(Attrs::BOUNDS)->Collides(*first, *second)){
 							spt<EnCollision> col = spt<EnCollision>(new EnCollision(first, second));
 							collisions.push_back(col);
 						}
@@ -70,9 +65,3 @@ public:
 };
 
 
-
-
-
-
-
-#endif

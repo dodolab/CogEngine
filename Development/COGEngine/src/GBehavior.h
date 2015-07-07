@@ -1,5 +1,4 @@
-#ifndef GBEHAVIOR_H
-#define GBEHAVIOR_H
+#pragma once
 
 #include "EnFlags.h"
 #include "Enums.h"
@@ -26,6 +25,9 @@ protected:
 	// message acceptation mask
 	EnFlags _msgFlags;
 
+	// will set GNode object itself
+	GNode* owner;
+
 	virtual ~GBehavior()
 	{
 
@@ -48,6 +50,10 @@ protected:
 	void SendMessage(Traversation traverse, int action, void* data, GNode* target) const;
 
 public:
+
+	const GNode* GetOwner() const{
+		return owner;
+	}
 
 	/**
 	* Gets element type
@@ -93,14 +99,16 @@ public:
 	* Receives a message
 	* @param GMsg received message
 	*/
-	virtual void OnMessage(GMsg& msg)  = 0;
+	virtual void OnMessage(GMsg& msg){
+
+	}
 
 	/**
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun 
 	*/
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner) = 0;
+	virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
 	bool operator==(int id){
 		return this->_id == id;
@@ -121,6 +129,3 @@ public:
 	// only game objects can access private members (especially the owner property)
 	friend class GNode;
 };
-
-
-#endif

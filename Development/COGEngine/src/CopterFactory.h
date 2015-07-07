@@ -1,5 +1,4 @@
-#ifndef COPTERFACTORY_H
-#define COPTERFACTORY_H
+#pragma once
 
 #include "GNode.h"
 #include "MGameFactory.h"
@@ -16,12 +15,8 @@ public:
 		this->lastdiff = 0;
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		owner->ChangeAttr(Attrs::TEXT, string("PERF: " + ofToString(ofGetSystemTime() - lastdiff)));
 		lastdiff = ofGetSystemTime();
@@ -110,7 +105,3 @@ public:
 		}
 	}
 };
-
-
-
-#endif

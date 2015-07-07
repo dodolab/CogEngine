@@ -1,5 +1,4 @@
-#ifndef BETRANSLATE_ANIM
-#define BETRANSLATE_ANIM
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -38,11 +37,8 @@ public:
 		_stopped = false;
 	}
 
-	void OnMessage(GMsg& msg){
 
-	}
-
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 		if (_stopped) return;
 
 		float diffX = (float)(MEngine.TranslateSpeed(_speedX)*delta);
@@ -89,6 +85,3 @@ public:
 
 };
 
-
-
-#endif

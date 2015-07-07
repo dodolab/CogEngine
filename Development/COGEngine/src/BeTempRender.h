@@ -1,5 +1,4 @@
-#ifndef BETEMPRENDER_H
-#define BETEMPRENDER_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -24,12 +23,8 @@ public:
 		this->actualFrame = 0;
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		if (actualFrame++ > framesNum){
 			owner->RemoveBehavior(this,false,true);
@@ -44,6 +39,3 @@ public:
 	}
 
 };
-
-
-#endif

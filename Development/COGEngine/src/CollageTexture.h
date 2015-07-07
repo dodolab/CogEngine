@@ -29,8 +29,7 @@
  used for any purpose. It handles alpha blending of pasted images as well.
  */
 
-#ifndef OFX_COLLAGE_TEXTURE_H
-#define OFX_COLLAGE_TEXTURE_H
+#pragma once
 
 #include "ofMain.h"
 
@@ -64,5 +63,3 @@ protected:
 
 	int getIndex(int x, int y);
 };
-
-#endif

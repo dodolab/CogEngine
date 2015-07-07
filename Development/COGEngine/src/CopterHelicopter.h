@@ -1,5 +1,4 @@
-#ifndef COPTER_HELICOPTER_H
-#define COPTER_HELICOPTER_H
+#pragma once
 
 #include "GNode.h"
 #include "MGameFactory.h"
@@ -15,8 +14,7 @@ class CopterHelicopter : public GBehavior{
 private:
 	int frameCounter;
 	int lastParaSpawn;
-	// todo: refactor this!!!
-	GNode* lastOwner;
+
 	CopterFactory* factory;
 
 public:
@@ -27,7 +25,7 @@ public:
 	}
 
 	void OnMessage(GMsg& msg){
-		if (msg.GetSourceObject()->GetId() == lastOwner->GetId() && msg.GetAction() == Actions::HEALTH_CHANGED){
+		if (msg.GetSourceObject()->GetId() == owner->GetId() && msg.GetAction() == Actions::HEALTH_CHANGED){
 			int health = msg.GetSourceObject()->GetAttr<int>(Attrs::HEALTH);
 
 			// add collision effect
@@ -41,8 +39,8 @@ public:
 		}
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
-		lastOwner = owner;
+	void Update(const uint64 delta, const uint64 absolute){
+
 		
 		ofVec2f velocity = owner->GetAttr<ofVec2f>(Attrs::VELOCITY);
 
@@ -112,5 +110,3 @@ public:
 
 };
 
-
-#endif

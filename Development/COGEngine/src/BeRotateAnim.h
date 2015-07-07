@@ -1,5 +1,4 @@
-#ifndef BEROTATE_ANIM_H
-#define BEROTATE_ANIM_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -23,11 +22,8 @@ public:
 
 	}
 
-	void OnMessage(GMsg& msg){
 
-	}
-
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 
 		if (_stopped) return;
 
@@ -46,6 +42,3 @@ public:
 		else transform.Rotation = (_actual);
 	}
 };
-
-
-#endif

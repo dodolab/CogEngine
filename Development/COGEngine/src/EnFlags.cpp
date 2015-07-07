@@ -46,7 +46,7 @@ EnFlags::EnFlags(){
 
 EnFlags::EnFlags(vector<int> states){
 	Construct();
-	for (int i = 0; i < states.size(); i++) SetState(states[i]);
+	for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 }
 
 EnFlags::EnFlags(int state){
@@ -234,7 +234,7 @@ EnFlags& EnFlags::operator-=(int st1){
 
 bool EnFlags::Contains(EnFlags& other) const{
 	vector<int> allStates = other.GetAllStates();
-	for (int i = 0; i < allStates.size(); i++){
+	for (size_t i = 0; i < allStates.size(); i++){
 		if (!HasState(allStates[i])) return false;
 	}
 	return true;
@@ -242,7 +242,7 @@ bool EnFlags::Contains(EnFlags& other) const{
 
 bool EnFlags::ContainsAtLeastOne(EnFlags& other) const{
 	vector<int> allStates = other.GetAllStates();
-	for (int i = 0; i < allStates.size(); i++){
+	for (size_t i = 0; i < allStates.size(); i++){
 		if (HasState(allStates[i])) return true;
 	}
 	return false;

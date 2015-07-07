@@ -1,5 +1,4 @@
-#ifndef COPTER_SCORE_H
-#define COPTER_SCORE_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -29,7 +28,7 @@ public:
 	}
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 		if (!owner->HasAttr(Attrs::SCORE)) owner->AddAttr(Attrs::SCORE, 0);
 
 		int score = owner->GetAttr<int>(Attrs::SCORE);
@@ -44,5 +43,3 @@ public:
 	
 };
 
-
-#endif
