@@ -4,7 +4,7 @@
 #include "Enums.h"
 #include "ofxSpriteSheetRenderer.h"
 #include "ofxAndroid.h"
-
+#include "Utils.h"
 
 class ofAndroidApp : public ofxAndroidApp{
 	uint64 absolute;

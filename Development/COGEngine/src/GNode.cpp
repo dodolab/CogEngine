@@ -306,9 +306,6 @@ string GNode::GetInfo(bool complete){
 	return ss.str();
 }
 
-void spaces(int howMany, std::ostringstream& ss){
-	for (int i = 0; i < howMany; i++) ss << " ";
-}
 
 void GNode::GetInfo(bool complete, std::ostringstream& ss, int level){
 	spaces(level * 4, ss);

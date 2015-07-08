@@ -4,6 +4,7 @@
 #include "Enums.h"
 #include "GMsg.h"
 #include <list>
+#include "Utils.h"
 
 class GNode;
 

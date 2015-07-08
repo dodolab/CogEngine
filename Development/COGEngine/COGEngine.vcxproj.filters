@@ -67,6 +67,12 @@
     <ClCompile Include="src\ofAndroidApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MFacade.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -207,6 +213,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\DebugLog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MLogger.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MFacade.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

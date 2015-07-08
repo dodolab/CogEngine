@@ -105,6 +105,7 @@
     <ClCompile Include="src\LinearTexture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MEnvironmentCtrl.cpp" />
+    <ClCompile Include="src\MFacade.cpp" />
     <ClCompile Include="src\MGameEngine.cpp" />
     <ClCompile Include="src\MGameFactory.cpp" />
     <ClCompile Include="src\MGameStorage.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
     <ClCompile Include="src\PixelTexture.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BeCollider.h" />
@@ -151,15 +153,18 @@
     <ClInclude Include="src\GNode.h" />
     <ClInclude Include="src\LinearTexture.h" />
     <ClInclude Include="src\MEnvironmentCtrl.h" />
+    <ClInclude Include="src\MFacade.h" />
     <ClInclude Include="src\MGameEngine.h" />
     <ClInclude Include="src\MGameFactory.h" />
     <ClInclude Include="src\MGameStorage.h" />
+    <ClInclude Include="src\MLogger.h" />
     <ClInclude Include="src\MResourceCtrl.h" />
     <ClInclude Include="src\ofAndroidApp.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
     <ClInclude Include="src\PixelTexture.h" />
     <ClInclude Include="src\SmartPointer.h" />
+    <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
