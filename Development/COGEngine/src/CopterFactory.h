@@ -2,7 +2,6 @@
 
 #include "GNode.h"
 #include "MGameFactory.h"
-#include "MGameEngine.h"
 #include "Enums.h"
 
 
@@ -40,8 +39,6 @@ public:
 
 	virtual void SwitchToScene(int scene);
 
-	void OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner);
-
 	void Test(GMsg const & mojo){
 
 	}
@@ -67,15 +64,15 @@ public:
 
 		if (source->GetTag().compare("but_left") == 0){
 			actions.SetState((int)Act::LEFT);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butLeft_press.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butLeft_press.png"));
 		}
 		else if (source->GetTag().compare("but_right") == 0){
 			actions.SetState((int)Act::RIGHT);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butRight_press.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butRight_press.png"));
 		}
 		else if (source->GetTag().compare("but_fire") == 0){
 			actions.SetState((int)Act::FIRE);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butFire_press.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butFire_press.png"));
 		}
 
 	}
@@ -93,15 +90,15 @@ public:
 
 		if (source->GetTag().compare("but_left") == 0){
 			actions.ResetState((int)Act::LEFT);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butLeft.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butLeft.png"));
 		}
 		else if (source->GetTag().compare("but_right") == 0){
 			actions.ResetState((int)Act::RIGHT);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butRight.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butRight.png"));
 		}
 		else if (source->GetTag().compare("but_fire") == 0){
 			actions.ResetState((int)Act::FIRE);
-			source->ChangeAttr(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/butFire.png"));
+			source->ChangeAttr(Attrs::IMGSOURCE, COGGet2DImage("images/butFire.png"));
 		}
 	}
 };

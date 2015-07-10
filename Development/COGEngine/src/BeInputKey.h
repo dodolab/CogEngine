@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GBehavior.h"
-#include "MGameEngine.h"
+
 
 /**
 * Behavior for mapping key inputs to ACTIONS
@@ -34,7 +34,7 @@ public:
 			EnFlags& actions = owner->GetAttr<EnFlags>(Attrs::ACTIONS);
 			//EnFlags& allowedActions = owner->GetAttr<EnFlags>(Attrs::ALLOWED_ACTIONS);
 
-			for (auto key : MEngine.environmentCtrl->GetPressedKeys()){
+			for (auto key : COGGetPressedKeys()){
 
 				if (!key.IsHandled() || key.handlerId == owner->GetId()){
 					key.handlerId = owner->GetId();

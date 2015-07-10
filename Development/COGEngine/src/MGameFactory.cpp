@@ -13,7 +13,7 @@ GNode* CreateFirst(){
 	spt<ofImage> image = MEngine.resourceCtrl->Get2DImage("images/blue.png");
 	spt<ofImage> rytmus = MEngine.resourceCtrl->Get2DImage("images/rytmus.png");
 
-	int pixels = MEngine.environmentCtrl->GetHeight();
+	int pixels = COGGetHeight();
 	int normPixels = 400;
 	float scale = 0.0243*(((float)pixels) / normPixels);
 
@@ -26,7 +26,7 @@ GNode* CreateFirst(){
 		GNode* child = new GNode(ObjType::OBJECT, 0, "fofka");
 		child->GetTransform().LocalPos = actualSize;
 		if (i == 0){
-			child->GetTransform().LocalPos = ofVec3f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
+			child->GetTransform().LocalPos = ofVec3f(COGGetWidth() / 2, COGGetHeight() / 2);
 			child->GetTransform().Scale =  ofVec3f(scale * 30,scale * 30,scale * 30);
 			child->AddAttr(Attrs::IMGSOURCE, rytmus);
 			child->SetState(States::HITTABLE);
@@ -100,7 +100,7 @@ GNode* CreateFirst(){
 GNode* CreateSecond(){
 	GNode* output = new GNode(ObjType::SCENE, 2, "second");
 
-	int pixels = MEngine.environmentCtrl->GetHeight();
+	int pixels = COGGetHeight();
 	int normPixels = 400;
 	float scale = 0.0243*(((float)pixels) / normPixels);
 
@@ -114,7 +114,7 @@ GNode* CreateSecond(){
 		child->GetTransform().LocalPos = actualSize;
 		if (i == 0){
 			child->SetSubType(111);
-			child->GetTransform().LocalPos = ofVec3f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
+			child->GetTransform().LocalPos = ofVec3f(COGGetWidth() / 2, COGGetHeight() / 2);
 			child->GetTransform().Scale = ofVec3f(scale * 30, scale * 30, scale * 30);
 			child->SetState(States::HITTABLE);
 			child->AddBehavior(new BeHitEvent());
@@ -183,12 +183,12 @@ GNode* CreateThird(){
 	spt<ofImage> rytmus = MEngine.resourceCtrl->Get2DImage("images/rytmus.png");
 	spt<ofImage> image = MEngine.resourceCtrl->Get2DImage("images/blue.png");
 
-	int pixels = MEngine.environmentCtrl->GetHeight();
+	int pixels = COGGetHeight();
 	int normPixels = 400;
 	float scale = 0.0243*(((float)pixels) / normPixels);
 
 	GNode* child = new GNode(ObjType::OBJECT, 10, "other");
-	child->GetTransform().LocalPos = ofVec3f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
+	child->GetTransform().LocalPos = ofVec3f(COGGetWidth() / 2, COGGetHeight() / 2);
 	child->GetTransform().Scale = ofVec3f(scale * 10, scale * 10, scale * 10);
 	child->AddAttr(Attrs::IMGSOURCE, rytmus);
 	child->SetState(States::HITTABLE);
@@ -201,12 +201,12 @@ GNode* CreateThird(){
 	for (int i = 0; i < 2000; i++){
 		GNode* particle = new GNode(ObjType::OBJECT, 0, "other");
 
-		ofVec3f randomTransform(ofRandom(1, MEngine.environmentCtrl->GetWidth()), ofRandom(MEngine.environmentCtrl->GetHeight() / 2 - MEngine.environmentCtrl->GetWidth() / 2,
-			MEngine.environmentCtrl->GetHeight() / 2 + MEngine.environmentCtrl->GetWidth() / 2));
+		ofVec3f randomTransform(ofRandom(1, COGGetWidth()), ofRandom(COGGetHeight() / 2 - COGGetWidth() / 2,
+			COGGetHeight() / 2 + COGGetWidth() / 2));
 
 		particle->GetTransform().LocalPos = randomTransform;
 		particle->GetTransform().Scale = ofVec3f(scale * 2, scale * 2, scale * 2);
-		particle->GetTransform().RotationOrigin = ofVec3f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2) - particle->GetTransform().LocalPos;
+		particle->GetTransform().RotationOrigin = ofVec3f(COGGetWidth() / 2, COGGetHeight() / 2) - particle->GetTransform().LocalPos;
 		particle->AddAttr<spt<ofImage>>(Attrs::IMGSOURCE, image);
 	
 		ofColor color;
@@ -243,7 +243,7 @@ GNode* CreateMask(int width, int height, ofVec3f position){
 
 
 ofVec3f MGameFactory::CalcScale(spt<ofImage> img, float width, GNode* scene){
-	int screenWidth = MEngine.environmentCtrl->GetWidth();
+	int screenWidth = COGGetWidth();
 
 	// width is always 100 units !
 	float rel = width/100.0f;
@@ -255,7 +255,7 @@ ofVec3f MGameFactory::CalcScale(spt<ofImage> img, float width, GNode* scene){
 }
 
 float MGameFactory::RelPosX(float posX, GNode* scene){
-	int screenWidth = MEngine.environmentCtrl->GetWidth();
+	int screenWidth = COGGetWidth();
 
 	// width is always 100 units !
 	float rel = posX/100.0f;
@@ -264,7 +264,7 @@ float MGameFactory::RelPosX(float posX, GNode* scene){
 }
 
 float MGameFactory::RelPosY(float posY, GNode* scene){
-	int screenHeight = MEngine.environmentCtrl->GetHeight();
+	int screenHeight = COGGetHeight();
 
 	// width is always 60 units !
 	float rel = posY/60.0f;
@@ -273,7 +273,7 @@ float MGameFactory::RelPosY(float posY, GNode* scene){
 }
 
 ofVec2f MGameFactory::GetCenter(){
-	return ofVec2f(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
+	return ofVec2f(COGGetWidth() / 2, COGGetHeight() / 2);
 }
 
 
@@ -312,8 +312,8 @@ void MGameFactory::SetRenderImage(GNode* node, string imgPath, float pScaleX, of
 
 
 ofVec3f MGameFactory::GetPercentageVec(float xPerc, float yPerc){
-	float width = MEngine.environmentCtrl->GetWidth();
-	float height = MEngine.environmentCtrl->GetHeight();
+	float width = COGGetWidth();
+	float height = COGGetHeight();
 
 	return ofVec3f(width*xPerc, height*yPerc);
 }
@@ -330,8 +330,8 @@ GNode* MGameFactory::CreateRoot(){
 	//GNode* third = CreateThird();
 
 
-	//second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth();
-	//third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
+	//second->GetTransform().LocalPos.x = COGGetWidth();
+	//third->GetTransform().LocalPos.x = COGGetWidth() * 2;
 
 	_root->AddChild(second);
 	//_root->AddChild(third);

@@ -46,9 +46,9 @@ public:
 		if (!tweenEnded){
 			if (!tweenStarted) Init();
 
-			int width = MEngine.environmentCtrl->GetWidth();
+			int width = COGGetWidth();
 
-			actual += 1.0f / width * MEngine.TranslateSpeed(speed)*delta;
+			actual += 1.0f / width * COGTranslateSpeed(speed)*delta;
 			if (actual > 1) actual = 1;
 
 			float widthActual = width*actual;

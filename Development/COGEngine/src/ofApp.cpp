@@ -14,7 +14,7 @@ void ofApp::setup(){
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
-	MEngine.Init(new CopterFactory(), new MGameStorage());
+	MEngine.Init(new CopterFactory());
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
 
