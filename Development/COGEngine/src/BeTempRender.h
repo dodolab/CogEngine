@@ -17,7 +17,7 @@ private:
 	int actualFrame;
 
 public:
-	BeTempRender(spt<ofImage> image, int framesNum) : GBehavior(ElemType::VIEW, EnFlags()){
+	BeTempRender(spt<ofImage> image, int framesNum) : GBehavior(ElemType::VIEW){
 		this->image = image;
 		this->framesNum = framesNum;
 		this->actualFrame = 0;

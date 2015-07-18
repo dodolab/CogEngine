@@ -80,7 +80,8 @@ public:
 			file << st.str();
 			file.close();
 
-			st.clear();
+			// clear
+			st.str(std::string());
 			anyLog = false;
 		}
 	}

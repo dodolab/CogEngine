@@ -49,6 +49,10 @@ namespace Actions{
 	extern int COPTER_KILLED;
 	extern int PLAYER_LOOSE;
 	extern int GAME_FINISHED;
+	extern int TWEEN_ENDED;
+	extern int SLIDE_ENDED;
+
+	extern const char* ToString(int act);
 }
 
 
@@ -68,6 +72,8 @@ namespace Attrs{
 	extern int FONT;
 	extern int TEXT;
 	extern int SCORE;	
+
+	extern const char* ToString(int act);
 }
 
 /*! States*/
@@ -78,6 +84,9 @@ namespace States{
 	extern int HIT;
 	extern int COLLID_SOURCE;
 	extern int COLLID_TARGET;
+	extern int FLIPPED;
+
+	extern const char* ToString(int act);
 }
 
 /*! Behavior state enumerator */

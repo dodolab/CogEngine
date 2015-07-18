@@ -14,7 +14,7 @@ private:
 	CopterFactory* factory;
 
 public:
-	CopterBullet(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags()){
+	CopterBullet(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		this->factory = factory;
 	}
 

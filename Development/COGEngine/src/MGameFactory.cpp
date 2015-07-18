@@ -277,7 +277,7 @@ ofVec2f MGameFactory::GetCenter(){
 }
 
 
-void MGameFactory::SetTransform(GNode* node, float posX, float posY, ofVec2f scale){
+void MGameFactory::SetTransformRelPixel(GNode* node, float posX, float posY, ofVec2f scale){
 	node->GetTransform().LocalPos = ofVec3f(posX, posY);
 	node->GetTransform().Scale = ofVec3f(scale.x, scale.y, 1);
 }
@@ -306,8 +306,45 @@ void MGameFactory::SetRenderImage(GNode* node, string imgPath, float pScaleX, of
 	pos.x += (0.5f - anchor.x) * img->getWidth()*scale.x;
 	pos.y += (0.5f - anchor.y) * img->getHeight()*scale.y;
 
-	SetTransform(node, pos.x, pos.y, scale);
+	SetTransformRelPixel(node, pos.x, pos.y, scale);
 
+	node->GetTransform().SetAbsAsLocal();
+
+}
+
+void MGameFactory::SetRenderImageAbsolute(GNode* node, string imgPath, ofVec2f pos, bool absolutePos, float scaleX, bool absoluteScale, ofVec2f anchor,GNode* parent){
+
+	node->AddBehavior(new BeRender(RenderType::IMAGE));
+	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage(imgPath);
+	node->AddAttr(Attrs::IMGSOURCE, img);
+
+	SetTransformAbs(node, pos, absolutePos, scaleX, absoluteScale, anchor, img->getWidth(), img->getHeight(), parent);
+
+}
+
+void MGameFactory::SetTransformAbs(GNode* node, ofVec2f pos, bool absolutePos, float scaleX, bool absoluteScale, ofVec2f anchor,int width, int height, GNode* parent){
+	ofVec2f scrSize = MEngine.GetSize();
+
+	EnTransform& parentTrans = parent->GetTransform();
+
+	float calcScale = absoluteScale ? scaleX : (scaleX* scrSize.x / width) / parentTrans.AbsScale.x;
+	ofVec2f scale(calcScale);
+	ofVec2f absPos;
+
+	if (absolutePos){
+		absPos = ofVec2f((pos.x - parentTrans.AbsPos.x) / parentTrans.AbsScale.x, (pos.y - parentTrans.AbsPos.y) / parentTrans.AbsScale.y);
+	}
+	else{
+		absPos = ofVec2f((pos.x*scrSize.x - parentTrans.AbsPos.x) / parentTrans.AbsScale.x, (pos.y*scrSize.y - parentTrans.AbsPos.y) / parentTrans.AbsScale.y);
+	}
+
+
+	absPos.x += (0.5f - anchor.x) * width*scale.x;
+	absPos.y += (0.5f - anchor.y) * height*scale.y;
+
+	SetTransformRelPixel(node, absPos.x, absPos.y, scale);
+
+	node->GetTransform().CalcAbsTransform(parent->GetTransform());
 }
 
 

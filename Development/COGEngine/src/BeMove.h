@@ -9,7 +9,7 @@
 */
 class BeMove : public GBehavior{
 public:
-	BeMove() : GBehavior(ElemType::MODEL, EnFlags()){
+	BeMove() : GBehavior(ElemType::MODEL){
 
 	}
 

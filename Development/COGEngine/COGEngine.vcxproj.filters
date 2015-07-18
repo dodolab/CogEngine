@@ -73,6 +73,21 @@
     <ClCompile Include="src\MFacade.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\NoahFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tinyxmlparser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxXmlSettings.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tinyxml.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tinyxmlerror.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -222,6 +237,24 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MFacade.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoahFactory.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoahBeMenu.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoahBeFlip.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NoahBeGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxXmlSettings.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tinyxml.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

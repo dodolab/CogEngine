@@ -14,7 +14,7 @@ private:
 	CopterFactory* factory;
 
 public:
-	CopterCanon(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags()){
+	CopterCanon(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		lastShot = 0;
 		this->factory = factory;
 	}

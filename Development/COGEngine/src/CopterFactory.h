@@ -10,7 +10,7 @@ private:
 	uint64 lastdiff;
 
 public:
-	Performance() : GBehavior(ElemType::MODEL, EnFlags()){
+	Performance() : GBehavior(ElemType::MODEL){
 		this->lastdiff = 0;
 	}
 

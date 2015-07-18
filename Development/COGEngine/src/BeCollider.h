@@ -5,46 +5,70 @@
 #include "EnBounds.h"
 #include "EnCollision.h"
 
-/**
-* Behavior for colliding two objects
+/**x
+* Behavior thats checks collisions between two groups of objects
 */
 class BeCollider : public GBehavior{
 protected:
-	int _firstColGroup;
-	int _secondColGroup;
+	// group of collidable objects, groupA is for collidable (bullet) and groupB for hittable (soldier)
+	int groupA;
+	int groupB;
 
 public:
-	BeCollider(int firstColGroup, int secondColGroup) : GBehavior(ElemType::MODEL, EnFlags()),
-		_firstColGroup(firstColGroup), _secondColGroup(secondColGroup){
+
+	/**
+	* Creates a new collision behavior
+	* @param groupA id of group of collidable objects
+	* @param groupB id of group of hittable objects
+	*/
+	BeCollider(int groupA, int groupB) : GBehavior(ElemType::MODEL),
+		groupA(groupA), groupB(groupB){
 
 	}
 
-	BeCollider(int colGroup) : GBehavior(ElemType::MODEL, EnFlags()),
-		_firstColGroup(colGroup), _secondColGroup(colGroup){
+	/**
+	* Creates a new collision behavior
+	* @param group id of group of collidable and hittable objects
+	*/
+	BeCollider(int group) : GBehavior(ElemType::MODEL),
+		groupA(group), groupB(group){
 
 	}
 
+	void Init(){
+		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
+		owner->AddAttr(Attrs::COLLISIONS, collisions);
+	}
 
 	void Update(const uint64 delta, const uint64 absolute){
 
 		const list<GNode*>& childrens = owner->GetChildren();
-		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
+		vector<spt<EnCollision>> collisions = owner->GetAttr<vector<spt<EnCollision>>>(Attrs::COLLISIONS);
+		collisions.clear();
 
 		for (list<GNode*>::const_iterator it = childrens.begin(); it != childrens.end(); ++it){
+			
 			GNode* first = *it;
 
-			bool isInFirstGroup = first->GetGroups().HasState(_firstColGroup);
-			bool isInSecondGroup = first->GetGroups().HasState(_secondColGroup);
+			bool firstInGroupA = first->GetGroups().HasState(groupA);
+			bool firstInGroupB = first->GetGroups().HasState(groupB);
 
-			if (isInFirstGroup || isInSecondGroup){
+			if (firstInGroupA || firstInGroupB){
+				// check collisions with first 
+
 				for (list<GNode*>::const_iterator jt = it; jt != childrens.end(); ++jt){
+					
 					GNode* second = *jt;
-					bool isSecondInFirstGroup = second->GetGroups().HasState(_firstColGroup);
-					bool isSecondInSecondGroup = second->GetGroups().HasState(_secondColGroup);
+					
+					bool secondInGroupA = second->GetGroups().HasState(groupA);
+					bool secondInGroupB = second->GetGroups().HasState(groupA);
 
-					if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
+					if ((firstInGroupA && secondInGroupB) || (firstInGroupB && secondInGroupA)){
+
+						// found collidable pair, check collision
 
 						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds*>(Attrs::BOUNDS)->Collides(*first, *second)){
+							// create collision
 							spt<EnCollision> col = spt<EnCollision>(new EnCollision(first, second));
 							collisions.push_back(col);
 						}
@@ -54,11 +78,8 @@ public:
 		}
 
 		if (collisions.size() != 0){
-			if (!owner->HasAttr(Attrs::COLLISIONS)){
-				owner->AddAttr(Attrs::COLLISIONS, collisions);
-			}
-			else owner->ChangeAttr(Attrs::COLLISIONS, collisions);
-
+			// send info about collision
+			owner->ChangeAttr(Attrs::COLLISIONS, collisions);
 			SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, nullptr, owner);
 		}
 	}

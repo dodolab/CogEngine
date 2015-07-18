@@ -17,9 +17,13 @@ private:
 	bool grounded;
 
 public:
-	CopterPara(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::HEALTH_CHANGED)){
+	CopterPara(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		this->factory = factory;
 		this->grounded = false;
+	}
+
+	void Init(){
+		RegisterListening(Actions::HEALTH_CHANGED);
 	}
 
 	void OnMessage(GMsg& msg){

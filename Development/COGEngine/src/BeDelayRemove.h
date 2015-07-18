@@ -14,12 +14,10 @@ private:
 	int actual;
 
 public:
-	BeDelayRemove(int millis) : GBehavior(ElemType::MODEL, EnFlags()){
+	BeDelayRemove(int millis) : GBehavior(ElemType::MODEL){
 		this->millis = millis;
 		this->actual = 0;
 	}
-
-
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
 		actual += delta;

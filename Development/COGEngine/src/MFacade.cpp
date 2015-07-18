@@ -75,6 +75,7 @@ void COGUnregisterListener(int action, GBehavior* beh){
 }
 
 void COGSendTraversationMessage(GMsg& msg, GNode* actualNode){
+	COGLogDebug("Message %s:%s:%d", Actions::ToString(msg.GetAction()), actualNode->GetTag().c_str(), actualNode->GetSubType());
 	MEngine.storage->SendTraversationMessage(msg, actualNode);
 }
 
@@ -112,10 +113,12 @@ vector<GNode*> COGFindGameObjectsBySubType(int subtype) {
 }
 
 bool COGAddGameObject(GNode* gameObject){
+	COGLogDebug("Adding gameobject %s", gameObject->GetTag().c_str());
 	return MEngine.storage->AddGameObject(gameObject);
 }
 
 void COGRemoveGameObject(GNode* gameObject){
+	COGLogDebug("Removing gameobject %s", gameObject->GetTag().c_str());
 	MEngine.storage->RemoveGameObject(gameObject);
 }
 

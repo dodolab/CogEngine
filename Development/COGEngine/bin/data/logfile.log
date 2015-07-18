@@ -1,0 +1,232 @@
+[DEBUG][19:51:17.982]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][19:51:19.574]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][19:51:20.300]Message 16 from 58 beh, target progress : 222
+[DEBUG][19:51:22.062]Message 16 from 59 beh, target board : 222
+[DEBUG][19:51:29.422]Message 8 from 24 beh, target card : 10007
+[DEBUG][19:51:30.161]Message 9 from 24 beh, target card : 10007
+[DEBUG][19:51:37.425]Message 17 from 60 beh, target card : 10007
+[DEBUG][19:51:42.043]Message 8 from 26 beh, target card : 10008
+[DEBUG][19:51:42.138]Message 9 from 26 beh, target card : 10008
+[DEBUG][19:51:42.815]Message 17 from 61 beh, target card : 10008
+[DEBUG][19:51:42.877]Message 8 from 38 beh, target card : 10014
+[DEBUG][19:51:42.954]Message 9 from 38 beh, target card : 10014
+[DEBUG][19:51:43.605]Message 17 from 63 beh, target card : 10008
+[DEBUG][19:51:43.646]Message 17 from 62 beh, target card : 10007
+[DEBUG][19:51:43.672]Message 17 from 64 beh, target card : 10014
+[DEBUG][19:51:43.733]Message 8 from 36 beh, target card : 10013
+[DEBUG][19:51:43.827]Message 9 from 36 beh, target card : 10013
+[DEBUG][19:51:44.520]Message 17 from 65 beh, target card : 10013
+[DEBUG][19:51:45.301]Message 17 from 67 beh, target card : 10013
+[DEBUG][19:51:45.301]Message 17 from 66 beh, target card : 10014
+[DEBUG][19:51:45.365]Message 8 from 22 beh, target card : 10006
+[DEBUG][19:51:45.458]Message 9 from 22 beh, target card : 10006
+[DEBUG][19:51:46.148]Message 17 from 68 beh, target card : 10006
+[DEBUG][19:51:46.148]Message 8 from 34 beh, target card : 10012
+[DEBUG][19:51:46.244]Message 9 from 34 beh, target card : 10012
+[DEBUG][19:51:46.930]Message 17 from 69 beh, target card : 10012
+[DEBUG][19:51:47.713]Message 17 from 71 beh, target card : 10012
+[DEBUG][19:51:47.749]Message 17 from 70 beh, target card : 10006
+[DEBUG][19:54:18.884]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][19:54:18.968]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][19:54:19.468]Message 16 from 58 beh, target progress : 222
+[DEBUG][19:54:21.300]Message 16 from 59 beh, target board : 222
+[DEBUG][20:08:38.371]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:08:38.440]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:10:50.823]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:10:50.889]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:11:23.654]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:11:23.737]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:11:24.238]Message 16 from 58 beh, target progress : 222
+[DEBUG][20:11:26.139]Message 16 from 59 beh, target board : 222
+[DEBUG][20:15:15.857]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:15:15.924]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:15:16.424]Message 16 from 58 beh, target progress : 222
+[DEBUG][20:15:18.341]Message 16 from 59 beh, target board : 222
+[DEBUG][20:16:36.434]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:16:36.501]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:16:37.017]Message 16 from 58 beh, target progress : 222
+[DEBUG][20:16:38.964]Message 16 from 59 beh, target board : 222
+[DEBUG][20:17:46.693]Message 8 from 2 beh, target btnPlay : 222
+[DEBUG][20:17:46.775]Message 9 from 2 beh, target btnPlay : 222
+[DEBUG][20:17:47.289]Message 16 from 58 beh, target progress : 222
+[DEBUG][20:17:49.365]Message 16 from 59 beh, target board : 222
+[DEBUG][20:19:11.346]Message OBJECT_HIT from 2 beh, target btnPlay:222
+[DEBUG][20:19:11.400]Message OBJECT_RELEASED from 2 beh, target btnPlay:222
+[DEBUG][20:19:11.907]Message SLIDE_ENDED from 58 beh, target progress:222
+[DEBUG][20:19:13.920]Message SLIDE_ENDED from 59 beh, target board:222
+[DEBUG][20:21:30.766]Message OBJECT_HIT : target btnPlay:222
+[DEBUG][20:21:30.865]Message OBJECT_RELEASED : target btnPlay:222
+[DEBUG][20:21:31.382]Message SLIDE_ENDED : target progress:222
+[DEBUG][20:21:33.241]Message SLIDE_ENDED : target board:222
+[DEBUG][20:21:34.563]Message OBJECT_HIT : target card:10008
+[DEBUG][20:21:34.707]Message OBJECT_RELEASED : target card:10008
+[DEBUG][20:22:27.886]Message OBJECT_HIT : target btnPlay:222
+[DEBUG][20:22:27.987]Message OBJECT_RELEASED : target btnPlay:222
+[DEBUG][20:22:28.494]Message TWEEN_ENDED : target progress:222
+[DEBUG][20:22:30.533]Message TWEEN_ENDED : target board:222
+[DEBUG][20:22:31.347]Message OBJECT_HIT : target card:10015
+[DEBUG][20:22:31.428]Message OBJECT_RELEASED : target card:10015
+[DEBUG][20:22:32.137]Message SLIDE_ENDED : target card:10015
+[DEBUG][20:22:32.399]Message OBJECT_HIT : target card:10007
+[DEBUG][20:22:32.480]Message OBJECT_RELEASED : target card:10007
+[DEBUG][20:22:33.193]Message SLIDE_ENDED : target card:10007
+[DEBUG][20:58:13.520]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:13.587]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:14.807]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:14.908]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:14.991]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:15.057]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:15.157]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:15.241]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:17.525]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:17.594]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:17.694]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:17.761]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:17.844]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:17.912]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:18.011]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:18.062]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:18.145]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:18.244]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:18.294]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:18.379]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][20:58:18.445]Message OBJECT_HIT:btnPlay:222
+[DEBUG][20:58:18.544]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:00:05.152]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:00:05.268]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:00:42.080]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:01:17.878]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:01:29.077]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:01:31.071]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:01:34.348]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:01:36.326]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:01:39.541]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:02:51.694]Message OBJECT_HIT:btnPlay:222
+[DEBUG][21:02:52.842]Message OBJECT_RELEASED:btnPlay:222
+[DEBUG][21:02:55.016]Message TWEEN_ENDED:progress:222
+[DEBUG][21:02:57.159]Message TWEEN_ENDED:board:222
+[DEBUG][21:02:58.157]Message OBJECT_HIT:card:10015
+[DEBUG][21:02:58.221]Message OBJECT_RELEASED:card:10015
+[DEBUG][21:02:58.940]Message SLIDE_ENDED:card:10015
+[DEBUG][21:02:59.002]Message OBJECT_HIT:card:10009
+[DEBUG][21:02:59.098]Message OBJECT_RELEASED:card:10009
+[DEBUG][21:02:59.787]Message SLIDE_ENDED:card:10009
+[DEBUG][21:03:00.563]Message SLIDE_ENDED:card:10009
+[DEBUG][21:03:00.564]Message SLIDE_ENDED:card:10015
+[DEBUG][21:03:00.808]Message OBJECT_HIT:card:10008
+[DEBUG][21:03:00.906]Message OBJECT_RELEASED:card:10008
+[DEBUG][21:03:01.602]Message SLIDE_ENDED:card:10008
+[DEBUG][21:03:01.696]Message OBJECT_HIT:card:10007
+[DEBUG][21:03:01.776]Message OBJECT_RELEASED:card:10007
+[DEBUG][21:03:02.495]Message SLIDE_ENDED:card:10007
+[DEBUG][21:03:03.273]Message SLIDE_ENDED:card:10007
+[DEBUG][21:03:03.273]Message SLIDE_ENDED:card:10008
+[DEBUG][21:03:03.486]Message OBJECT_HIT:card:10013
+[DEBUG][21:03:03.565]Message OBJECT_RELEASED:card:10013
+[DEBUG][21:03:04.278]Message SLIDE_ENDED:card:10013
+[DEBUG][21:03:04.306]Message OBJECT_HIT:card:10012
+[DEBUG][21:03:04.403]Message OBJECT_RELEASED:card:10012
+[DEBUG][21:03:05.089]Message SLIDE_ENDED:card:10012
+[DEBUG][21:03:05.878]Message SLIDE_ENDED:card:10012
+[DEBUG][21:03:05.879]Message SLIDE_ENDED:card:10013
+[DEBUG][21:03:05.909]Message OBJECT_HIT:card:10018
+[DEBUG][21:03:05.988]Message OBJECT_RELEASED:card:10018
+[DEBUG][21:03:06.680]Message SLIDE_ENDED:card:10018
+[DEBUG][21:03:06.710]Message OBJECT_HIT:card:10019
+[DEBUG][21:03:06.806]Message OBJECT_RELEASED:card:10019
+[DEBUG][21:03:07.486]Message SLIDE_ENDED:card:10019
+[DEBUG][21:03:08.275]Message SLIDE_ENDED:card:10019
+[DEBUG][21:03:08.319]Message SLIDE_ENDED:card:10018
+[DEBUG][21:09:23.461]Message OBJECT_HIT:btnPlay:0
+[DEBUG][21:09:23.527]Message OBJECT_RELEASED:btnPlay:0
+[DEBUG][21:09:24.028]Message TWEEN_ENDED:progress:0
+[DEBUG][21:09:25.832]Message TWEEN_ENDED:board:0
+[DEBUG][21:09:28.249]Message OBJECT_HIT:card:10007
+[DEBUG][21:09:28.330]Message OBJECT_RELEASED:card:10007
+[DEBUG][21:09:29.027]Message SLIDE_ENDED:card:10007
+[DEBUG][21:09:29.057]Message OBJECT_HIT:card:10013
+[DEBUG][21:09:29.172]Message OBJECT_RELEASED:card:10013
+[DEBUG][21:09:29.842]Message SLIDE_ENDED:card:10013
+[DEBUG][21:09:30.630]Message SLIDE_ENDED:card:10013
+[DEBUG][21:09:30.658]Message SLIDE_ENDED:card:10007
+[DEBUG][21:15:17.891]Adding gameobject ¼ð
+[DEBUG][21:15:17.908]Adding gameobject ¼ð
+[DEBUG][21:15:17.908]Adding gameobject ¼ð
+[DEBUG][21:15:18.120]Adding gameobject ¼ð
+[DEBUG][21:15:18.268]Adding gameobject ¼ð
+[DEBUG][21:15:18.303]Adding gameobject ¼ð
+[DEBUG][21:15:18.318]Adding gameobject ¼ð
+[DEBUG][21:15:18.336]Adding gameobject ¼ð
+[DEBUG][21:15:18.336]Adding gameobject ¼ð
+[DEBUG][21:15:18.337]Adding gameobject ¼ð
+[DEBUG][21:15:18.338]Adding gameobject ¼ð
+[DEBUG][21:15:18.339]Adding gameobject ¼ð
+[DEBUG][21:15:18.339]Adding gameobject ¼ð
+[DEBUG][21:15:18.340]Adding gameobject ¼ð
+[DEBUG][21:15:18.340]Adding gameobject ¼ð
+[DEBUG][21:15:18.341]Adding gameobject ¼ð
+[DEBUG][21:15:18.342]Adding gameobject ¼ð
+[DEBUG][21:15:18.342]Adding gameobject ¼ð
+[DEBUG][21:15:18.343]Adding gameobject ¼ð
+[DEBUG][21:15:18.343]Adding gameobject ¼ð
+[DEBUG][21:15:18.344]Adding gameobject ¼ð
+[DEBUG][21:15:18.344]Adding gameobject ¼ð
+[DEBUG][21:15:18.345]Adding gameobject ¼ð
+[DEBUG][21:15:18.346]Adding gameobject ¼ð
+[DEBUG][21:15:18.346]Adding gameobject ¼ð
+[DEBUG][21:15:18.347]Adding gameobject ¼ð
+[DEBUG][21:15:18.347]Adding gameobject ¼ð
+[DEBUG][21:15:18.348]Adding gameobject ¼ð
+[DEBUG][21:15:18.348]Adding gameobject ¼ð
+[DEBUG][21:15:18.348]Adding gameobject ¼ð
+[DEBUG][21:15:18.349]Adding gameobject ¼ð
+[DEBUG][21:15:31.476]Message OBJECT_HIT:btnPlay:0
+[DEBUG][21:15:31.559]Message OBJECT_RELEASED:btnPlay:0
+[DEBUG][21:15:32.062]Message TWEEN_ENDED:progress:0
+[DEBUG][21:15:33.904]Message TWEEN_ENDED:board:0
+[DEBUG][21:15:34.639]Message OBJECT_HIT:card:10015
+[DEBUG][21:15:34.704]Message OBJECT_RELEASED:card:10015
+[DEBUG][21:15:35.417]Message SLIDE_ENDED:card:10015
+[DEBUG][21:15:36.507]Message OBJECT_HIT:card:10008
+[DEBUG][21:15:36.587]Message OBJECT_RELEASED:card:10008
+[DEBUG][21:15:37.296]Message SLIDE_ENDED:card:10008
+[DEBUG][21:15:38.073]Message SLIDE_ENDED:card:10008
+[DEBUG][21:15:38.074]Message SLIDE_ENDED:card:10015
+[DEBUG][21:16:19.884]Adding gameobject btnPlay
+[DEBUG][21:16:19.905]Adding gameobject btnMulti
+[DEBUG][21:16:19.906]Adding gameobject menu
+[DEBUG][21:16:20.127]Adding gameobject progress
+[DEBUG][21:16:20.262]Adding gameobject board
+[DEBUG][21:16:20.292]Adding gameobject pause
+[DEBUG][21:16:20.305]Adding gameobject score
+[DEBUG][21:16:20.319]Adding gameobject card
+[DEBUG][21:16:20.319]Adding gameobject card
+[DEBUG][21:16:20.319]Adding gameobject card
+[DEBUG][21:16:20.320]Adding gameobject card
+[DEBUG][21:16:20.320]Adding gameobject card
+[DEBUG][21:16:20.320]Adding gameobject card
+[DEBUG][21:16:20.320]Adding gameobject card
+[DEBUG][21:16:20.320]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.321]Adding gameobject card
+[DEBUG][21:16:20.323]Adding gameobject card
+[DEBUG][21:16:20.324]Adding gameobject card
+[DEBUG][21:16:20.326]Adding gameobject card
+[DEBUG][21:16:20.326]Adding gameobject card
+[DEBUG][21:16:20.328]Adding gameobject card
+[DEBUG][21:16:20.329]Adding gameobject card
+[DEBUG][21:16:20.331]Adding gameobject card
+[DEBUG][21:16:20.332]Adding gameobject card
+[DEBUG][21:16:20.334]Adding gameobject card
+[DEBUG][21:16:21.396]Message OBJECT_HIT:btnPlay:0
+[DEBUG][21:16:21.478]Message OBJECT_RELEASED:btnPlay:0
+[DEBUG][21:16:21.983]Message TWEEN_ENDED:progress:0
+[DEBUG][21:16:23.918]Message TWEEN_ENDED:board:0
+[DEBUG][21:16:24.565]Message OBJECT_HIT:card:10013
+[DEBUG][21:16:24.644]Message OBJECT_RELEASED:card:10013
+[DEBUG][21:16:25.357]Message SLIDE_ENDED:card:10013

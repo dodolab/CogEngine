@@ -16,7 +16,7 @@ private:
 	CopterFactory* factory;
 
 public:
-	CopterHelicopter(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::HEALTH_CHANGED)){
+	CopterHelicopter(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		frameCounter = 0;
 		lastParaSpawn = 0;
 		this->factory = factory;
@@ -35,6 +35,10 @@ public:
 				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::COPTER_KILLED, nullptr, msg.GetSourceObject());
 			}
 		}
+	}
+
+	void Init(){
+		RegisterListening(Actions::HEALTH_CHANGED);
 	}
 
 	void Update(const uint64 delta, const uint64 absolute){

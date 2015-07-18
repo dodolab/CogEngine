@@ -156,7 +156,7 @@ void CopterFactory::SwitchToScene(int sc){
 	score->GetTransform().LocalPos = ofVec3f(RelPosX(5, scene), RelPosY(7, scene), 2);
 	scene->AddChild(score);
 
-	root->GetInfo(true);
+	root->GetInfo(true, true);
 	
 
    // int id = COGRegisterCallback(12, &CopterFactory::Test);

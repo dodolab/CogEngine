@@ -1,6 +1,7 @@
 #include "ofApp.h"
 #include "MGameEngine.h"
 #include "CopterFactory.h"
+#include "NoahFactory.h"
 
 bool sortByZIndex(basicSprite * a, basicSprite * b) {
 	return a->pos.z > b->pos.z;
@@ -14,7 +15,9 @@ void ofApp::setup(){
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
-	MEngine.Init(new CopterFactory());
+	//MEngine.Init(new CopterFactory());
+	MEngine.Init(new NoahFactory());
+	
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
 

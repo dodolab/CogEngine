@@ -16,8 +16,12 @@ class BeHitEvent : public GBehavior{
 
 
 public:
-	BeHitEvent() : GBehavior(ElemType::MODEL, EnFlags()){
+	BeHitEvent() : GBehavior(ElemType::MODEL){
 
+	}
+
+	void Init(){
+		owner->SetState(States::HITTABLE);
 	}
 
 

@@ -14,8 +14,12 @@ private:
 	int scoreDiff;
 
 public:
-	CopterScore() : GBehavior(ElemType::MODEL, EnFlags(Actions::PARA_KILLED, Actions::COPTER_KILLED)){
+	CopterScore() : GBehavior(ElemType::MODEL){
 		scoreDiff = 0;
+	}
+
+	void Init(){
+		RegisterListening(Actions::COPTER_KILLED, Actions::PARA_KILLED);
 	}
 
 	virtual void OnMessage(GMsg& msg){

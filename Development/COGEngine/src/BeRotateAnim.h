@@ -18,7 +18,7 @@ private:
 
 public:
 	BeRotateAnim(float from, float to, float speed, bool additive) : 
-		GBehavior(ElemType::MODEL, EnFlags()), _from(from), _to(to), _speed(speed), _additive(additive), _stopped(false), _actual(0){
+		GBehavior(ElemType::MODEL), _from(from), _to(to), _speed(speed), _additive(additive), _stopped(false), _actual(0){
 
 	}
 

@@ -13,7 +13,7 @@ private:
 	int lastSpawn;
 	CopterFactory* factory;
 public:
-	CopterHeliManager(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags()){
+	CopterHeliManager(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		lastSpawn = 0;
 		this->factory = factory;
 	}
