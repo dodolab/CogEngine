@@ -10,6 +10,8 @@ extern MGameEngine MEngine;
 #include "GNode.h"
 #include "MGameFactory.h"
 #include "MGameStorage.h"
+#include "BeTween.h"
+#include "BeSceneManager.h"
 
 class MGameEngine{
 private:
@@ -26,6 +28,7 @@ public:
 
 	void Update(uint64 delta, uint64 absolute);
 	void Draw(uint64 delta, uint64 absolute);
+
 
 	MEnvironmentCtrl* environmentCtrl;
 	MResourceCtrl* resourceCtrl;

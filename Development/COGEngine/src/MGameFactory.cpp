@@ -359,26 +359,11 @@ ofVec3f MGameFactory::GetPercentageVec(float xPerc, float yPerc){
 
 GNode* MGameFactory::CreateRoot(){
 
-	GNode* _root = new GNode(ObjType::ROOT, 0, "root");
+	GNode* root = new GNode(ObjType::ROOT, 0, "root");
+	sceneManager = new BeSceneManager();
+	root->AddBehavior(sceneManager);
 
-
-	//GNode* first = CreateFirst();
-	GNode* second = CreateSecond();
-	//GNode* third = CreateThird();
-
-
-	//second->GetTransform().LocalPos.x = COGGetWidth();
-	//third->GetTransform().LocalPos.x = COGGetWidth() * 2;
-
-	_root->AddChild(second);
-	//_root->AddChild(third);
-
-
-//	_root->AddChild(first);
-	
-
-	return _root;
-
+	return root;
 }
 
 void MGameFactory::SwitchToScene(int scene){

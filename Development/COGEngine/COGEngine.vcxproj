@@ -129,6 +129,7 @@
     <ClInclude Include="src\BeMove.h" />
     <ClInclude Include="src\BeRender.h" />
     <ClInclude Include="src\BeRotateAnim.h" />
+    <ClInclude Include="src\BeSceneManager.h" />
     <ClInclude Include="src\BeTempRender.h" />
     <ClInclude Include="src\BeTranslateAnim.h" />
     <ClInclude Include="src\BeTween.h" />
