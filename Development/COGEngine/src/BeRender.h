@@ -47,7 +47,6 @@ public:
 	}
 	
 	void RenderImage(GNode* owner){
-
 		ofSetColor(0x000000ff);
 		spt<ofImage> image = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
 		image->draw(-image->getWidth()/2,-image->getHeight()/2);

@@ -102,7 +102,6 @@
     <ClCompile Include="src\GBehavior.cpp" />
     <ClCompile Include="src\GMsg.cpp" />
     <ClCompile Include="src\GNode.cpp" />
-    <ClCompile Include="src\LinearTexture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MEnvironmentCtrl.cpp" />
     <ClCompile Include="src\MFacade.cpp" />
@@ -115,7 +114,7 @@
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
     <ClCompile Include="src\ofxXmlSettings.cpp" />
-    <ClCompile Include="src\PixelTexture.cpp" />
+    <ClCompile Include="src\SpriteTexture.cpp" />
     <ClCompile Include="src\tinyxml.cpp" />
     <ClCompile Include="src\tinyxmlerror.cpp" />
     <ClCompile Include="src\tinyxmlparser.cpp" />
@@ -157,7 +156,6 @@
     <ClInclude Include="src\GBehavior.h" />
     <ClInclude Include="src\GMsg.h" />
     <ClInclude Include="src\GNode.h" />
-    <ClInclude Include="src\LinearTexture.h" />
     <ClInclude Include="src\MEnvironmentCtrl.h" />
     <ClInclude Include="src\MFacade.h" />
     <ClInclude Include="src\MGameEngine.h" />
@@ -173,8 +171,8 @@
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
     <ClInclude Include="src\ofxXmlSettings.h" />
-    <ClInclude Include="src\PixelTexture.h" />
     <ClInclude Include="src\SmartPointer.h" />
+    <ClInclude Include="src\SpriteTexture.h" />
     <ClInclude Include="src\tinyxml.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>

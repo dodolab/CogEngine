@@ -55,13 +55,7 @@
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PixelTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\CollageTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LinearTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ofAndroidApp.cpp">
@@ -86,6 +80,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\tinyxmlerror.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SpriteTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,12 +179,6 @@
     <ClInclude Include="src\ofxSpriteSheetRenderer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\LinearTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PixelTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\CollageTexture.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -258,6 +249,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\BeSceneManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SpriteTexture.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

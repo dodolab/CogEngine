@@ -27,15 +27,11 @@ void MGameEngine::Draw(uint64 delta, uint64 absolute){
 	ofBackground(50,50,50);
 	ofSetupScreenOrtho(environmentCtrl->GetWidth(),environmentCtrl->GetHeight(),-1000,1000);
 	// draw the root node
-	ofMatrix4x4 identity = ofMatrix4x4::newIdentityMatrix();
-	identity.translate(0,0,-690);
-	
 	this->_root->GetRoot()->Draw(delta, absolute);
 }
 
 
 void MGameEngine::Init(MGameFactory* factory){
-
 	
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MResourceCtrl();

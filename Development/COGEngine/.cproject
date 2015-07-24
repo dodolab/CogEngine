@@ -46,6 +46,9 @@
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.1950827678" isAbstract="false" superClass="com.android.targetPlatform"/>
 							<builder cleanBuildTarget="CleanDebug PLATFORM_OS=Android" id="cdt.managedbuild.builder.gnu.cross.1812653902" incrementalBuildTarget="Debug PLATFORM_OS=Android" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="com.android.gcc.compiler.1704257024" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
+								<option id="com.android.gcc.option.includePath.393068476" superClass="com.android.gcc.option.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;C:\Python27\include&quot;"/>
+								</option>
 								<inputType id="com.android.gcc.inputType.431232555" superClass="com.android.gcc.inputType"/>
 							</tool>
 						</toolChain>
@@ -70,11 +73,14 @@
 			<resource resourceType="PROJECT" workspacePath="/COGEngine"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.898517443;com.android.toolchain.gcc.898517443.1887315853;com.android.gcc.compiler.1716371911;com.android.gcc.inputType.1288876143">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.android.AndroidPerProjectProfile"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.898517443.1692179379;com.android.toolchain.gcc.898517443.1692179379.;com.android.gcc.compiler.1704257024;com.android.gcc.inputType.431232555">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.android.AndroidPerProjectProfile"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
