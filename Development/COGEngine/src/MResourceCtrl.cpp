@@ -1,22 +1,17 @@
 #include "MResourceCtrl.h"
 #include <string>
 #include "ofImage.h"
-#include "Enums.h"
+#include "MEnums.h"
 
-void MResourceCtrl::Init(){
-	// initialize resources manager
-	// load application data
-	//resourceGroup = IwGetResManager()->LoadGroup("resources.group");
-}
 
-spt<ofImage> MResourceCtrl::Get2DImage(string name){
+spt<ofImage> MResourceCtrl::Get2DImage(string path){
 
-	auto found = loadedImages.find(name);
+	auto found = loadedImages.find(path);
 	if (found != loadedImages.end()){
 		return (found->second);
 	}
 
-	ofImage* img = new ofImage(name);
+	ofImage* img = new ofImage(path);
 	ofVboMesh* mesh = new ofVboMesh();
 	mesh->setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 	mesh->addVertex(ofVec3f(-img->width/2,-img->height/2,1));
@@ -33,31 +28,27 @@ spt<ofImage> MResourceCtrl::Get2DImage(string name){
 	auto image = spt<ofImage>(img);
 	auto meshPtr = spt<ofVboMesh>(mesh);
 
-	loadedImages[name] = image;
-	loadedMeshes[name] = meshPtr;
+	loadedImages[path] = image;
+	loadedMeshes[path] = meshPtr;
 	
 
 	return image;
 }
 
-spt<ofVboMesh> MResourceCtrl::GetMesh(string name){
-	auto found = loadedMeshes.find(name);
+spt<ofVboMesh> MResourceCtrl::GetMesh(string path){
+	auto found = loadedMeshes.find(path);
 	if (found != loadedMeshes.end()){
 		return (found->second);
 	}
 	return spt<ofVboMesh>();
 }
 
-void MResourceCtrl::Terminate(){
-	//IwResManagerTerminate();
-}
-
-spt<ofTrueTypeFont> MResourceCtrl::GetFont(string name, int size){
+spt<ofTrueTypeFont> MResourceCtrl::GetFont(string path, int size){
 	ofTrueTypeFont::setGlobalDpi(72);
 
 	ofTrueTypeFont* font = new ofTrueTypeFont();
 
-	font->loadFont(name, size, true, true);
+	font->loadFont(path, size, true, true);
 	font->setLineHeight(18.0f);
 	font->setLetterSpacing(1.037);
 

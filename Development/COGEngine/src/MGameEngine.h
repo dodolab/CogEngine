@@ -6,17 +6,30 @@ extern MGameEngine MEngine;
 #include "MEnvironmentCtrl.h"
 #include "MResourceCtrl.h"
 #include "MLogger.h"
-#include "Utils.h"
+#include "MUtils.h"
 #include "GNode.h"
 #include "MGameFactory.h"
 #include "MGameStorage.h"
 #include "BeTween.h"
 #include "BeSceneManager.h"
 
+/**
+* Game engine that holds references to all other components and
+* executes drawing and update loops
+*/
 class MGameEngine{
 private:
+	// root node, created by factory
 	GNode* _root;
+	// frame counter
+	int frameCounter;
 public:
+	MEnvironmentCtrl* environmentCtrl;
+	MResourceCtrl* resourceCtrl;
+	MGameFactory* factory;
+	MGameStorage* storage;
+	MLogger* logger;
+
 	MGameEngine(){
 		_root = nullptr;
 		environmentCtrl = nullptr;
@@ -24,17 +37,8 @@ public:
 		factory = nullptr;
 		storage = nullptr;
 		logger = nullptr;
+		frameCounter = 0;
 	}
-
-	void Update(uint64 delta, uint64 absolute);
-	void Draw(uint64 delta, uint64 absolute);
-
-
-	MEnvironmentCtrl* environmentCtrl;
-	MResourceCtrl* resourceCtrl;
-	MGameFactory* factory;
-	MGameStorage* storage;
-	MLogger* logger;
 
 	~MGameEngine(){
 		delete _root;
@@ -45,18 +49,31 @@ public:
 		delete logger;
 	}
 
+	/**
+	* Initializes engine
+	* @param factory default game factory
+	*/
 	void Init(MGameFactory* factory);
-	void StartLoop();
-	void Terminate();
+	
+	/**
+	* Executes one update cycle; this method is called by MApp
+	* @param delta time between frames
+	* @param absolute time elapsed after initialization
+	*/
+	void Update(uint64 delta, uint64 absolute);
 
-	// help functions
-	ofVec2f GetSize(){
-		return ofVec2f(environmentCtrl->GetWidth(), environmentCtrl->GetHeight());
-	}
+	/**
+	* Executes one drawing cycle; this method is called by MApp
+	* @param delta time between frames
+	* @param absolute time elapsed after initialization
+	*/
+	void Draw(uint64 delta, uint64 absolute);
 
-	float TranslateSpeed(float speed){
-		// speed = 1 translates over the whole width per 10 seconds
-		return speed * 0.001f*environmentCtrl->GetWidth();
+	/**
+	* Gets actual frame number
+	*/
+	int GetFrameCounter(){
+		return frameCounter;
 	}
 };
 

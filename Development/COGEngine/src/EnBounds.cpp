@@ -1,14 +1,16 @@
 #include "EnBounds.h"
 
 bool EnBounds::Collides(GNode& first, GNode& second) const{
+
+	// image collision
 	spt<ofImage> img1 = first.GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
 	spt<ofImage> img2 = second.GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
 
-	ofVec3f pos1 = first.GetTransform().AbsPos;
-	ofVec3f pos2 = second.GetTransform().AbsPos;
+	ofVec3f pos1 = first.GetTransform().absPos;
+	ofVec3f pos2 = second.GetTransform().absPos;
 
-	ofVec3f scale1 = first.GetTransform().AbsScale;
-	ofVec3f scale2 = second.GetTransform().AbsScale;
+	ofVec3f scale1 = first.GetTransform().absScale;
+	ofVec3f scale2 = second.GetTransform().absScale;
 
 	float width1 = abs(img1->width*scale1.x);
 	float width2 = abs(img2->width*scale2.x);

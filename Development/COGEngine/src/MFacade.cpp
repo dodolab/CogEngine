@@ -45,6 +45,10 @@ int COGGetHeight(){
 	return MEngine.environmentCtrl->GetHeight();
 }
 
+ofVec2f COGGetSize(){
+	return MEngine.environmentCtrl->GetSize();
+}
+
 spt<ofImage> COGGet2DImage(string name){
 	return MEngine.resourceCtrl->Get2DImage(name);
 }
@@ -74,13 +78,13 @@ void COGUnregisterListener(int action, GBehavior* beh){
 	MEngine.storage->UnregisterListener(action, beh);
 }
 
-void COGSendTraversationMessage(GMsg& msg, GNode* actualNode){
+void COGSendMessage(GMsg& msg, GNode* actualNode){
 	COGLogDebug("Message %s:%s:%d", Actions::ToString(msg.GetAction()), actualNode->GetTag().c_str(), actualNode->GetSubType());
-	MEngine.storage->SendTraversationMessage(msg, actualNode);
+	MEngine.storage->SendMessage(msg, actualNode);
 }
 
-void COGSendMessage(GMsg& msg){
-	MEngine.storage->SendMessage(msg);
+void COGSendDirectMessageToBehavior(GMsg& msg, int targetId){
+	MEngine.storage->SendDirectMessageToBehavior(msg, targetId);
 }
 
 
@@ -131,5 +135,5 @@ void COGRemoveBehavior(GBehavior* beh){
 }
 
 float COGTranslateSpeed(float speed){
-	return MEngine.TranslateSpeed(speed);
+	return MEngine.factory->TranslateSpeed(speed);
 }

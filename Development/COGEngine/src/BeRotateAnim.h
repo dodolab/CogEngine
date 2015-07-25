@@ -3,42 +3,51 @@
 #include "GBehavior.h"
 #include "GNode.h"
 
-/**
+/**x
 * Behavior for rotation animation
 */
 class BeRotateAnim : public GBehavior{
 
 private:
-	float _from;
-	float _to;
-	float _speed;
-	bool _additive;
-	float _actual;
-	bool _stopped;
+	// starting rotation
+	float from;
+	// ending rotation
+	float to;
+	// rotation speed in angles per second
+	float speed;
+	// if true, rotation will be additive (doesn't override actual rotation)
+	bool additive;
+	// actual rotation value
+	float actual;
 
 public:
+	/**
+	* Creates a new behavior for rotation animation
+	* @param from starting rotation
+	* @param to ending rotation (if from == to, it is infinite rotation)
+	* @param speed rotation speed in radians per second
+	* @param additive if true, rotation will be additive
+	*/
 	BeRotateAnim(float from, float to, float speed, bool additive) : 
-		GBehavior(ElemType::MODEL), _from(from), _to(to), _speed(speed), _additive(additive), _stopped(false), _actual(0){
-
+		GBehavior(ElemType::MODEL), from(from), to(to), speed(speed), additive(additive), actual(0){
 	}
 
 
 	void Update(const uint64 delta, const uint64 absolute){
 
-		if (_stopped) return;
-
-		float diff = (float)((_to == _from ? 1 : (_to - _from)) / 1000 * _speed*delta);
-		_actual += diff;
+		// calculate differencial
+		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta);
+		actual += diff;
 
 		// if to == from, it is infinite rotation
-		if (_to != _from && ((_to >= _from && _actual >= _to) || (_to < _from && _actual < _to))){
-			_actual = _to;
-			_stopped = true;
+		if (to != from && ((to >= from && actual >= to) || (to < from && actual < to))){
+			actual = to;
+			Finish();
 		}
 
 		EnTransform& transform = owner->GetTransform();
 
-		if (_additive) transform.Rotation += (diff);
-		else transform.Rotation = (_actual);
+		if (additive) transform.rotation += (diff);
+		else transform.rotation = (actual);
 	}
 };

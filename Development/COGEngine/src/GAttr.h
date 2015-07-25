@@ -7,57 +7,53 @@
 class GNode;
 
 /**
-* Attr - common class for generic attributes
+* Common class for generic attributes
 *
 */
 class GAttr{
 protected:
 	// owner node
-	GNode* _owner;
+	GNode* owner;
 	// key identifier
-	const int _key;
+	const int key;
 
 public:
+
+	GAttr(int key, GNode* owner) : owner(owner), key(key){
+
+	}
 
 	virtual ~GAttr()
 	{
 
 	}
 
-	GAttr(int key, GNode* owner);
-
 	/**
 	* Gets owner node
 	*/
-	const GNode* GetOwner() const;
+	const GNode* GetOwner() const{
+		return owner;
+	}
 
 	/**
 	* Gets key identifier
 	*/
-	const int GetKey() const;
+	const int GetKey() const{
+		return key;
+	}
 };
 
 
 /**
-* AttrR - attribute generic wrapper
+* Attribute generic wrapper
 *
 */
 template <class  T>
 class GAttrR : public GAttr{
 protected:
-	T _value;
+	// generic value
+	T value;
 	
-	/**
-	* Event that occurs when an attribute has been changed
-	* @param old old value
-	* @param newAt new value
-	*/
-	void OnAttrChanged(T& old, T& newAt){
-		/*EnPair<T, T> value = EnPair<T, T>(old, newAt);
-		GMsg msg(ElemType::ALL, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
-		this->_owner->SendMessageNoResp(msg);*/
-	}
-
 public:
 
 	~GAttrR()
@@ -71,7 +67,7 @@ public:
 	* @param val attribute value
 	* @param owner owner node
 	*/
-	GAttrR(int key, T val, GNode* owner) : GAttr(key, owner), _value(val){
+	GAttrR(int key, T val, GNode* owner) : GAttr(key, owner), value(val){
 		
 	}
 
@@ -79,16 +75,15 @@ public:
 	* Gets reference to the attribute value
 	*/
 	T& GetValue(){
-		return (_value);
+		return (value);
 	}
 
 	/**
 	* Sets attribute value
 	*/
 	void SetValue(T val){
-		T& temp = _value;
-		this->_value = val;
-		OnAttrChanged(temp, val);
+		T& temp = value;
+		this->value = val;
 	}
 
 };

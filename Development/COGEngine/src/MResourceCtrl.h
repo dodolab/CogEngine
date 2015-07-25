@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SmartPointer.h"
+#include "ofxSmartPointer.h"
 #include <string>
 #include <map>
 #include "ofImage.h"
@@ -9,18 +9,35 @@
 
 using namespace std;
 
+/**
+* Resource controller that holds images, 3D objects and sounds
+*/
 class MResourceCtrl{
 private:
-//	CIwResGroup* resourceGroup;
+	// cached images
 	map<string, spt<ofImage>> loadedImages;
+	// cached meshes
 	map<string, spt<ofVboMesh>> loadedMeshes;
 
 public:
 
-	void Init();
-	void Terminate();
-	spt<ofImage> Get2DImage(string name);
-	spt<ofVboMesh> GetMesh(string name);
-	spt<ofTrueTypeFont> GetFont(string name, int size);
+	/**
+	* Loads 2D image from file
+	* @param path path to file
+	*/
+	spt<ofImage> Get2DImage(string path);
+	
+	/**
+	* Loads mesh from file
+	* @param path path to file
+	*/
+	spt<ofVboMesh> GetMesh(string path);
+
+	/**
+	* Loads font from file
+	* @param path path to file
+	* @size font size
+	*/
+	spt<ofTrueTypeFont> GetFont(string path, int size);
 };
 

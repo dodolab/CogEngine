@@ -20,16 +20,8 @@ enum class ScopeType{
 	SCENE,				 /*!< scene object scope */
 	OBJECT,				 /*!< source object scope */
 	CHILDREN,			 /*!< children objects scope */
-	DIRECT_NO_TRAVERSE   /*!< no traversation made, objects are obtained from map */
+	DIRECT_NO_TRAVERSE   /*!< no BubblingType made, objects are obtained from map */
 };
-
-/*! Types of traversation */
-namespace Traverses{
-	extern int CHILD_FIRST;     /*!< child is updated first */
-	extern int BEH_FIRST;		/*!< behaviors are updated first */
-	extern int ROOT;			/*!< root is updated first */
-	extern int SCENEROOT;		/*!< scene root is updated first */
-}
 
 /*! Action events */
 namespace Actions{
@@ -51,6 +43,7 @@ namespace Actions{
 	extern int GAME_FINISHED;
 	extern int TWEEN_ENDED;
 	extern int SLIDE_ENDED;
+	extern int DELAY_ACTION;
 
 	extern const char* ToString(int act);
 }
@@ -99,9 +92,8 @@ enum class BehState {
 
 /*! Element type enumerator */
 enum class ElemType {
-	ALL,				/*!< common type */
-	VIEW,				/*!< view element - is not a part of game model */
-	MODEL				/*!< model element - is a part of game machine */
+	VIEW,				/*!< view element - used in DRAW loop */
+	MODEL				/*!< model element - used in UPDATE loop */
 };
 
 /*! Game object type enumerator */

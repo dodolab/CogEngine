@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CollageTexture.h"
-#include "SpriteTexture.h"
+#include "ofxCollageTexture.h"
+#include "ofxSpriteTexture.h"
 
 
 enum flipDirection { F_NONE = 0, F_HORIZ, F_VERT, F_HORIZ_VERT };

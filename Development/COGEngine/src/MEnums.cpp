@@ -2,13 +2,7 @@
 #include <stdarg.h>  // For va_start, etc.
 #include <cmath>
 #include <memory>
-/*! Types of traversation */
-namespace Traverses{
-	int CHILD_FIRST = 0;	/*!< child is updated first */
-	int BEH_FIRST = 1;		/*!< behaviors are updated first */
-	int ROOT = 2;			/*!< root is updated first */
-	int SCENEROOT = 3;		/*!< scene root is updated first */
-}
+
 
 /*! Action events */
 namespace Actions{
@@ -30,6 +24,7 @@ namespace Actions{
 	int GAME_FINISHED = 15;
 	int TWEEN_ENDED = 16;
 	int SLIDE_ENDED = 17;
+	int DELAY_ACTION = 18;
 
 	const char* ToString(int act){
 		const char * vals[] = { 
@@ -50,7 +45,8 @@ namespace Actions{
 			"PLAYER_LOOSE",
 			"GAME_FINISHED",
 			"TWEEN_ENDED",
-			"SLIDE_ENDED"
+			"SLIDE_ENDED",
+			"DELAY_ACTION"
 		};
 		return vals[act];
 	}

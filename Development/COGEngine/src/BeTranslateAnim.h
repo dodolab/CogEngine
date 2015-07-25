@@ -2,86 +2,83 @@
 
 #include "GBehavior.h"
 #include "GNode.h"
-#include "Enums.h"
+#include "MEnums.h"
 
-/**
+/**x
 * Behavior for translation animation
 */
 class BeTranslateAnim : public GBehavior{
 
 private:
-	float _speedX;
-	float _speedY;
-	float _distX;
-	float _distY;
-	bool _additive;
-	ofVec3f _to;
-	ofVec3f _from;
-	bool _repeat;
+	// speed in X axis
+	float speedX;
+	// speed in Y axis
+	float speedY;
+	// distance in X axis
+	float distX;
+	// distance in Y axis
+	float distY;
+	// if true, animation will be additive
+	bool additive;
+	// starting position
+	ofVec3f to;
+	// ending position
+	ofVec3f from;
 
-	ofVec3f _actual;
+	// actual position
+	ofVec3f actual;
 
-	bool _stopped;
 
 public:
-	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL),
-		_additive(additive), _to(to), _from(from), _repeat(repeat){
-		this->_actual = ofVec3f(from);
-		this->_distX = to.x - from.x;
-		this->_distY = to.y - from.y;
-		
-		float distance = (float)sqrt(_distX*_distX+_distY*_distY);
-		_speedX = speed*_distX / distance;
-		_speedY = speed*_distY / distance;
 
-		_stopped = false;
+	/**
+	* Creates a new behavior for translation animation
+	* @param from starting position
+	* @param to ending position
+	* @param speed in display width per second
+	* @param additive if true, position will be additive (not overriden)
+	*/
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive) : GBehavior(ElemType::MODEL),
+		additive(additive), to(to), from(from){
+		this->actual = ofVec3f(from);
+		this->distX = to.x - from.x;
+		this->distY = to.y - from.y;
+		
+		float distance = (float)sqrt(distX*distX+distY*distY);
+		speedX = speed*distX / distance;
+		speedY = speed*distY / distance;
+
 	}
 
 
 	void Update(const uint64 delta, const uint64 absolute){
-		if (_stopped) return;
+		
+		// calculate differencial
+		float diffX = (float)(COGTranslateSpeed(speedX)*delta);
+		float diffY = (float)(COGTranslateSpeed(speedY)*delta);
 
-		float diffX = (float)(COGTranslateSpeed(_speedX)*delta);
-		float diffY = (float)(COGTranslateSpeed(_speedY)*delta);
-
-		if (ofVec3f(_from - _to).lengthSquared() < ofVec3f(_from - _actual).lengthSquared())
+		if (ofVec3f(from - to).lengthSquared() < ofVec3f(from - actual).lengthSquared())
 		{
-			_actual = ofVec3f(_to);
-			if (_repeat)
-			{
-				auto temp = _from;
-				_from = ofVec3f(_to);
-				_to = ofVec3f(temp);
-				_distX = _to.x - _from.x;
-				_distY = _to.y - _from.y;
-			}
-			else
-			{
-				_stopped = true;
-			}
+			actual = ofVec3f(to);
+			Finish();
 		}
 
-		_actual.x += diffX;
-		_actual.y += diffY;
+		actual.x += diffX;
+		actual.y += diffY;
 
 		EnTransform& transform = owner->GetTransform();
 		
-		
-		// todo: refaktoring needed !!!!
-		if(diffX > 0) owner->SetState(States::TO_LEFT);
-		else owner->SetState(States::TO_RIGHT);
-
-		if (_additive)
+		// change position
+		if (additive)
 		{
-			transform.LocalPos.x += diffX;
-			transform.LocalPos.y += diffY;
+			transform.localPos.x += diffX;
+			transform.localPos.y += diffY;
 		}
 		else
 		{
-			transform.LocalPos = (_actual);
+			transform.localPos = (actual);
 		}
 	}
-
 
 };
 

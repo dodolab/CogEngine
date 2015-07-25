@@ -3,9 +3,9 @@
 #include "ofMain.h"
 #include <string.h>
 #if (_MSC_VER)
-#include "tinyxml.h"
+#include "ofxtinyxml.h"
 #else
-#include "tinyxml.h"
+#include "ofxtinyxml.h"
 #endif
 
 using namespace std;

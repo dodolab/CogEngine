@@ -19,22 +19,7 @@
     <ClCompile Include="src\MResourceCtrl.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\EnBounds.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\EnFlags.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EnInputAct.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EnPair.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Enums.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GAttr.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\GBehavior.cpp">
@@ -46,31 +31,37 @@
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\CollageTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utils.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\MFacade.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tinyxmlparser.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\ofxXmlSettings.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\tinyxml.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tinyxmlerror.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SpriteTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\MApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EnBounds.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MUtils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxCollageTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxSpriteTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxtinyxml.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxtinyxmlerror.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxtinyxmlparser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MEnums.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,9 +92,6 @@
     <ClInclude Include="src\MResourceCtrl.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\SmartPointer.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\BeCollider.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -128,9 +116,6 @@
     <ClInclude Include="src\BeTween.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\EnBounds.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\EnCollision.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -143,13 +128,7 @@
     <ClInclude Include="src\EnPair.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\EnPolygon.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\EnTransform.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Enums.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\GAttr.h">
@@ -161,19 +140,7 @@
     <ClInclude Include="src\ofxSpriteSheetRenderer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\CollageTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeTempRender.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\BeDelayRemove.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DebugLog.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MLogger.h">
@@ -185,20 +152,36 @@
     <ClInclude Include="src\ofxXmlSettings.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\tinyxml.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\BeSceneManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SpriteTexture.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ofAndroidApp.h" />
-    <ClInclude Include="src\ofDesktopApp.h" />
+    <ClInclude Include="src\BeDelayAction.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EnBounds.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MUtils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxCollageTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxSmartPointer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxSpriteTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxtinyxml.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MEnums.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

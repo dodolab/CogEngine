@@ -1,7 +1,7 @@
 #pragma once
 
 /**
-* EnPair - generic class for pairs
+* Generic class for pairs
 */
 template<class T>
 class EnPair{
@@ -13,6 +13,11 @@ private:
 
 public:
 
+	/**
+	* Creates a new pair
+	* @param item1 first item
+	* @param item2 second item
+	*/
 	EnPair(T item1, T item2) : _item1(item1), _item2(item2){
 
 	}

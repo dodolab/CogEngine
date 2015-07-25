@@ -3,24 +3,27 @@
 #include "MApp.h"
 #include "MGameEngine.h"
 
+#define GAME_SPEED 60
 
 void MApp::setup(){
-	// NEVER SET VERTICAL SYNC !!!! OTHERWISE IT WILL WORK STRANGE!!!
+	// never set vertical sync
 	ofSetVerticalSync(false);
-	ofSetFrameRate(60);
+	ofSetFrameRate(GAME_SPEED);
 	ofEnableAntiAliasing();
 	// initialize game engine
 	MEngine.Init(factory);
-
+	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
 }
 
 void MApp::draw(){
+	// drawing loop
 	MEngine.Draw(delta, absolute);
 }
 
 void MApp::update(){
+	// update loop
 	delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
 	MEngine.Update(delta, absolute);

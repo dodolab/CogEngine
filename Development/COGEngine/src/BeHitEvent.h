@@ -1,9 +1,7 @@
 #pragma once
 
 #include "GBehavior.h"
-#include "BeTranslateAnim.h"
-#include "Enums.h"
-#include "GMsg.h"
+#include "MEnums.h"
 
 #ifdef TARGET_ANDROID
 #include "ofxAndroidVibrator.h"
@@ -13,10 +11,17 @@
 * Behavior for hit testing
 */
 class BeHitEvent : public GBehavior{
-
+protected:
+	// if true, device will vibrate when object is hit
+	bool vibrate;
 
 public:
-	BeHitEvent() : GBehavior(ElemType::MODEL){
+
+	/**
+	* Creates a new behavior for hit testing
+	* @param vibrate if true, device will vibrate when object is hit
+	*/
+	BeHitEvent(bool vibrate) : GBehavior(ElemType::MODEL), vibrate(vibrate){
 
 	}
 
@@ -24,11 +29,15 @@ public:
 		owner->SetState(States::HITTABLE);
 	}
 
-
+	/**
+	* Tests if the image has been hit
+	* @param image image to test
+	* @param testPos test position
+	*/
 	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos){
-		//Move the test position into "local" coordinate space
+		// move the test position into "local" coordinate space
 		ofVec3f localPos = testPos + ofVec3f(image->width / 2, image->height / 2);
-		//Test for location outside the image rectangle
+		// test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0
 			|| localPos.x >(float)image->width
@@ -36,7 +45,7 @@ public:
 			return false;
 
 		ofColor col = image->getColor(localPos.x, localPos.y);
-		//Return a hit if the specified local alpha value is greater than half
+		// return a hit if the specified local alpha value is greater than half
 		return col.a > 0x80;
 	}
 
@@ -44,8 +53,8 @@ public:
 
 		if (owner->HasState(States::HITTABLE)){
 
+			// get inverse matrix
 			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
-
 
 			if (owner->HasAttr(Attrs::IMGSOURCE)){
 				spt<ofImage> hitImage = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
@@ -54,57 +63,49 @@ public:
 
 				for (auto touch : COGGetPressedPoints()){
 
+					// calculate vector in image space
 					ofVec3f touchVector = touch.position;
 					ofVec3f touchTrans = touchVector*inverse;
 
 					if (ImageHitTest(hitImage, touchTrans)){
+						// image has been hit
 						if (touch.started){
 #ifdef TARGET_ANDROID
-							    ofxAndroidVibrator::vibrate(50);
+							    if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 								atLeastOneTouch = true;
 								owner->SetState(States::HIT);
-								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
+								SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
 						}
 						else if (touch.ended){
-							// todo: multitouch problem!!
-								//owner->ResetState(States::HIT);
-								//SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+							// nothing to do here
 						}
 						else{
 							atLeastOneTouch = true;
 							if (!owner->HasState(States::HIT)){
 #ifdef TARGET_ANDROID
-							    ofxAndroidVibrator::vibrate(50);
+								if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
-								
+								// touch hasn't started but this object hasn't been hit
 								owner->SetState(States::HIT);
-								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
+								SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
 							}
 						}
 					}
-					else{
-						if (owner->HasState(States::HIT)){
-							//owner->ResetState(States::HIT);
-							//SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
-						}
-					}
-
-					
-
 				}
 
 				if (!atLeastOneTouch){
+					// object could lost its hit
 					if (owner->HasState(States::HIT)){
 						owner->ResetState(States::HIT);
-						SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+						SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
 					}
 				}
 
 			}
 			else{
-
-				for (auto touch : COGGetPressedPoints()){
+				// TODO
+				/*for (auto touch : COGGetPressedPoints()){
 					if (touch.started){
 						ofVec3f touchVector = touch.position;
 						ofVec3f touchTrans = inverse*(touchVector);
@@ -117,7 +118,7 @@ public:
 
 						}
 					}
-				}
+				}*/
 			}
 		}
 	}

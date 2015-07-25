@@ -4,13 +4,10 @@
 #include <stdarg.h>  // For va_start, etc.
 #include <memory>    // For std::unique_ptr
 #include <string>
-
-void COGLogError(const char* format, ...);
-void COGLogInfo(const char* format, ...);
-void COGLogDebug(const char* format, ...);
-void COGLoggerFlush();
+#include "MFacade.h"
 
 
+// assertion with formatted message
 #ifndef DEBUG
 #   define MASSERT(condition, message, ...) \
     do { \
@@ -25,11 +22,15 @@ void COGLoggerFlush();
 #   define MASSERT(condition, message) do { } while (false)
 #endif
 
-
-
+/**
+* Creates formatted string
+*/
 std::string string_format(const std::string fmt_str, ...);
 
-void spaces(int howMany, std::ostringstream& ss);
+/**
+* Adds spaces into string stream
+*/
+void spaces(int howMany, std::ostream& ss);
 
 typedef unsigned int uint64;
 

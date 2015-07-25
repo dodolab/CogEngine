@@ -7,7 +7,7 @@
  *
  */
 
-#include "SpriteTexture.h"
+#include "ofxSpriteTexture.h"
 
 void SpriteTexture::loadImage(string textureName)
 {
