@@ -61,7 +61,7 @@ public:
 					GNode* second = *jt;
 					
 					bool secondInGroupA = second->GetGroups().HasState(groupA);
-					bool secondInGroupB = second->GetGroups().HasState(groupA);
+					bool secondInGroupB = second->GetGroups().HasState(groupB);
 
 					if ((firstInGroupA && secondInGroupB) || (firstInGroupB && secondInGroupA)){
 

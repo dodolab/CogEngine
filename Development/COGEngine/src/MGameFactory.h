@@ -7,12 +7,6 @@ class MGameFactory{
 
 protected:
 
-	ofVec3f CalcScale(spt<ofImage> img, float width, GNode* scene);
-
-	float RelPosX(float posX, GNode* scene);
-
-	float RelPosY(float posY, GNode* scene);
-
 	ofVec2f GetCenter();
 
 	
@@ -21,6 +15,10 @@ protected:
 	void SetRenderImage(GNode* node, string imgPath, float pScaleX, ofVec2f pPos, ofVec2f anchor);
 
 	void SetRenderImageAbsolute(GNode* node, string imgPath, ofVec2f pos, bool absolutePos, float scaleX, bool absoluteScale, ofVec2f anchor, GNode* parent);
+
+	ofVec2f CalcPositionAbsolute(GNode* node, ofVec2f pos, bool absolutePos, ofVec2f anchor, GNode* parent);
+
+	ofVec3f CalsScaleAbsolute(GNode* node, float scaleX, float width, bool absoluteScale, GNode* parent);
 
 	ofVec3f GetPercentageVec(float xPerc, float yPerc);
 
