@@ -9,9 +9,9 @@ using namespace std;
 
 /*! Logging level */
 enum class LogLevel{
-	LERROR,		/*!< log only errors */
-	LINFO,		/*!< log errors and info */
-	LDEBUG		/*!< log errors, info and debug messages */
+	LERROR = 0,		/*!< log only errors */
+	LINFO = 1,		/*!< log errors and info */
+	LDEBUG = 2		/*!< log errors, info and debug messages */
 };
 
 
@@ -128,15 +128,16 @@ class MLogger{
 
 protected:
 	LoggerChannel* channel;
-
+	LogLevel logLevel;
 
 public:
 
 	/**
 	* Creates a new logger
 	* @param channel default logging channel
+	* @param logLevel lowest level that should bel logged
 	*/
-	MLogger(LoggerChannel* channel) : channel(channel){
+	MLogger(LoggerChannel* channel, LogLevel logLevel) : channel(channel), logLevel(logLevel){
 	
 	}
 
@@ -149,7 +150,9 @@ public:
 	* @param depth log depth (padding from left)
 	*/
 	void LogError(int depth, const char* format, va_list args){
-		channel->Log(LogLevel::LERROR, depth, ofVAArgsToString(format,args));
+		if (((int)logLevel) >= ((int)LogLevel::LERROR)){
+			channel->Log(LogLevel::LERROR, depth, ofVAArgsToString(format, args));
+		}
 	}
 
 	/**
@@ -157,7 +160,9 @@ public:
 	* @param depth log depth (padding from left)
 	*/
 	void LogInfo(int depth, const char* format, va_list args){
-		channel->Log(LogLevel::LINFO, depth, ofVAArgsToString(format, args));
+		if (((int)logLevel) >= ((int)LogLevel::LINFO)){
+			channel->Log(LogLevel::LINFO, depth, ofVAArgsToString(format, args));
+		}
 	}
 
 	/**
@@ -165,7 +170,9 @@ public:
 	* @param depth log depth (padding from left)
 	*/
 	void LogDebug(int depth, const char* format, va_list args){
-		channel->Log(LogLevel::LDEBUG, depth, ofVAArgsToString(format, args));
+		if (((int)logLevel) >= ((int)LogLevel::LDEBUG)){
+			channel->Log(LogLevel::LDEBUG, depth, ofVAArgsToString(format, args));
+		}
 	}
 
 	/**

@@ -54,8 +54,8 @@ public:
 		// translate new scene
 		actualScene = scene;
 		scene->SetRunningMode(RUNNING);
-		scene->GetTransform().localPos.x = COGGetWidth() / 2;
-		scene->GetTransform().localPos.y = COGGetHeight() / 2;
+		scene->GetTransform().localPos.x = COGGetScreenWidth() / 2;
+		scene->GetTransform().localPos.y = COGGetScreenHeight() / 2;
 	}
 
 	/**
@@ -71,7 +71,7 @@ public:
 		// add new scene to the front
 		scene->GetTransform().localPos.z = 0;
 		// move the scene away; tween behavior will set its position itself
-		scene->GetTransform().localPos.x = COGGetWidth()*10;
+		scene->GetTransform().localPos.x = COGGetScreenWidth()*10;
 
 		actualScene->GetTransform().localPos.z = 1;
 		

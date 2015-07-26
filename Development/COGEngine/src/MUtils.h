@@ -19,8 +19,20 @@
 				        } \
 		    } while (false)
 #else
-#   define MASSERT(condition, message) do { } while (false)
+#   define MASSERT(condition, message, ...) do { } while (false)
 #endif
+
+// macro for debug-only logging
+#ifndef DEBUG
+#   define MLOGDEBUG(message, ...) \
+    do { \
+             COGLogDebug(message, ##__VA_ARGS__); \
+				    } while (false)
+#else
+#   define MLOGDEBUG(message, ...) do { } while (false)
+#endif
+
+
 
 /**
 * Creates formatted string

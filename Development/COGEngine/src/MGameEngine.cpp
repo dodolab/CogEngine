@@ -14,7 +14,7 @@ void MGameEngine::Init(MGameFactory* factory){
 	// create components
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MResourceCtrl();
-	logger = new MLogger(new FileLoggerChannel("logfile.log", true));
+	logger = new MLogger(new ConsoleLoggerChannel(), LogLevel::LERROR);
 	storage = new MGameStorage();
 
 	this->factory = factory;
