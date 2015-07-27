@@ -7,6 +7,7 @@
 #include "ofBaseTypes.h"
 #include "ofxSmartPointer.h"
 #include <functional>
+#include "EnSound.h"
 
 class GBehavior;
 using namespace std;
@@ -17,9 +18,10 @@ using namespace std;
 /*************************************************************************/
 
 // =================== MENVIRONMENT ====================
-
+void COGAddSound(EnSound* sound);
 vector<EnInputAct>& COGGetPressedKeys();
 vector<EnInputAct>& COGGetPressedPoints();
+vector<EnSound*>& COGGetPlayedSounds();
 int COGGetScreenWidth();
 int COGGetScreenHeight();
 ofVec2f COGGetScreenSize();

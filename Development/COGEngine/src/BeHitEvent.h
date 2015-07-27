@@ -7,6 +7,7 @@
 #include "ofxAndroidVibrator.h"
 #endif
 
+
 /**
 * Behavior for hit testing
 */
@@ -14,14 +15,22 @@ class BeHitEvent : public GBehavior{
 protected:
 	// if true, device will vibrate when object is hit
 	bool vibrate;
+	// indicator, if hit has started over this object
+	bool hitStarted;
+	// id of button who started the hit
+	int hitStartedTouchId;
+	// id of handler behavior (-1 for all behaviors)
+	int handlerBehId;
 
 public:
 
 	/**
 	* Creates a new behavior for hit testing
+	* @param handlerBehId id of handler behavior (set -1 for all handlers that listens HIT events)
 	* @param vibrate if true, device will vibrate when object is hit
 	*/
-	BeHitEvent(bool vibrate) : GBehavior(ElemType::MODEL), vibrate(vibrate){
+	BeHitEvent(int handlerBehId, bool vibrate) : GBehavior(ElemType::MODEL), 
+		handlerBehId(handlerBehId), vibrate(vibrate), hitStarted(false), hitStartedTouchId(-1){
 
 	}
 
@@ -71,14 +80,32 @@ public:
 						// image has been hit
 						if (touch.started){
 #ifdef TARGET_ANDROID
-							    if(vibrate) ofxAndroidVibrator::vibrate(50);
+							if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
-								atLeastOneTouch = true;
-								owner->SetState(States::HIT);
-								SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
+							atLeastOneTouch = true;
+							hitStarted = true;
+							hitStartedTouchId = touch.touchId;
+
+							owner->SetState(States::HIT);
+							if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, nullptr, owner);
+							else SendDirectMessage(Actions::OBJECT_HIT_STARTED, nullptr, owner, handlerBehId);
 						}
 						else if (touch.ended){
-							// nothing to do here
+							
+
+							owner->ResetState(States::HIT);
+							if (hitStarted){
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_ENDED, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_ENDED, nullptr, owner, handlerBehId);
+							}
+							else{
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_LOST, nullptr, owner, handlerBehId);
+							}
+
+							if (hitStartedTouchId == touch.touchId && hitStarted){
+								hitStarted = false;
+							}
 						}
 						else{
 							atLeastOneTouch = true;
@@ -88,8 +115,24 @@ public:
 #endif
 								// touch hasn't started but this object hasn't been hit
 								owner->SetState(States::HIT);
-								SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
 							}
+							// hit started and continues
+							if (hitStarted){
+								// hit started, lost and started again
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_STARTED, nullptr, owner, handlerBehId);
+							}
+							else{
+								// hit started but not on first touch
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_OVER, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_OVER, nullptr, owner, handlerBehId);
+							}
+						}
+					}
+					else{
+						if (touch.ended && touch.touchId == hitStartedTouchId){
+							// object isn't hit and this hit has already ended
+							hitStarted = false;
 						}
 					}
 				}
@@ -98,7 +141,8 @@ public:
 					// object could lost its hit
 					if (owner->HasState(States::HIT)){
 						owner->ResetState(States::HIT);
-						SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+						if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, nullptr, owner);
+						else SendDirectMessage(Actions::OBJECT_HIT_LOST, nullptr, owner, handlerBehId);
 					}
 				}
 

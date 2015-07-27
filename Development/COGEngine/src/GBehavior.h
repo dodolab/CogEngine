@@ -80,14 +80,21 @@ protected:
 	void SendMessage(BubblingType bubblingType, int action, void* data, GNode* source) const;
 
 	/**
+	* Sends a message to any set of behaviors without tree-bubbling
+	* @param action id of action; see Actions namespace for common action ids
+	* @param data payload
+	* @param source source game object that is a part of message
+	*/
+	void SendMessageNoBubbling(int action, void* data, GNode* source) const;
+
+	/**
 	* Sends a message to one behavior with specific id
-	* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
 	* @param action id of action; see Actions namespace for common action ids
 	* @param data payload
 	* @param source source game object that is a part of message
 	* @param behaviorId id of behavior that should get this message
 	*/
-	void SendDirectMessage(BubblingType bubblingType, int action, void* data, GNode* source, int behaviorId) const;
+	void SendDirectMessage(int action, void* data, GNode* source, int behaviorId) const;
 
 public:
 

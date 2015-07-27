@@ -22,7 +22,8 @@ enum RunningMode{
 	PAUSED_ALL,			/*!< active for draw */
 	PAUSED_CHILDREN,	/*!< active itself but children are inactive */
 	PAUSED_ITSELF,		/*!< inactive but children are active */
-	INVISIBLE			/*!< active for update but inactive for draw */
+	INVISIBLE,			/*!< active for update but inactive for draw */
+	DISABLED			/*!< inactive for both, update and draw */
 };
 
 /**
@@ -110,9 +111,10 @@ public:
 	~GNode();
 
 	/**
-	* Updates absolute transformations to itself and all children
+	* Updates absolute transformations according to the parent
+	* @param depp if true, children will be updated as well
 	*/
-	void UpdateTransforms();
+	void UpdateTransform(bool deep);
 
 	/**
 	* Updates all behaviors in the subtree

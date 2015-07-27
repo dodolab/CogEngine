@@ -182,6 +182,9 @@
     <ClInclude Include="src\MEnums.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\EnSound.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

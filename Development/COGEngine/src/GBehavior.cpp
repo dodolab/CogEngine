@@ -33,8 +33,13 @@ void GBehavior::SendMessage(BubblingType bubblingType, int action, void* data, G
 	COGSendMessage(msg, source);
 }
 
-void GBehavior::SendDirectMessage(BubblingType bubblingType, int action, void* data, GNode* source, int targetId) const{
-	GMsg msg(elemType, bubblingType, action, id, source, data);
+void GBehavior::SendMessageNoBubbling(int action, void* data, GNode* source) const{
+	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), action, id, source, data);
+	COGSendMessage(msg, source);
+}
+
+void GBehavior::SendDirectMessage(int action, void* data, GNode* source, int targetId) const{
+	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE,true,true), action, id, source, data);
 	COGSendDirectMessageToBehavior(msg, targetId);
 }
 

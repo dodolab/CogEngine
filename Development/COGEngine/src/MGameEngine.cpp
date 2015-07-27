@@ -5,6 +5,7 @@
 #include "BeRotateAnim.h"
 #include "MGameFactory.h"
 #include "MGameStorage.h"
+#include "ofSoundPlayer.h"
 
 MGameEngine MEngine;
 
@@ -22,7 +23,7 @@ void MGameEngine::Init(MGameFactory* factory){
 	// initialize components 
 	environmentCtrl->Init();
 	factory->Init();
-
+	resourceCtrl->Init();
 	// create game root
 	_root = factory->CreateRoot();
 }
@@ -32,7 +33,7 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	frameCounter++;
 
 	// update transforms
-	this->_root->GetRoot()->UpdateTransforms();
+	this->_root->GetRoot()->UpdateTransform(true);
 	// update scene
 	this->_root->GetRoot()->Update(delta, absolute);
 	// remove ended inputs
@@ -42,6 +43,8 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	if (frameCounter % 100 == 0){
 		logger->Flush();
 	}
+
+	ofSoundUpdate();
 }
 
 void MGameEngine::Draw(uint64 delta, uint64 absolute){

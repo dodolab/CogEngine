@@ -14,17 +14,22 @@ namespace Actions{
 	int COLLISION_OCURRED = 5;
 	int GAMEOBJECT_DESTROYED = 6;
 	int ATTRIBUTE_CHANGED = 7;
-	int OBJECT_HIT = 8;
-	int OBJECT_RELEASED = 9;
-	int HEALTH_CHANGED = 10;
-	int PARA_GROUNDED = 11;
-	int PARA_KILLED = 12;
-	int COPTER_KILLED = 13;
-	int PLAYER_LOOSE = 14;
-	int GAME_FINISHED = 15;
-	int TWEEN_ENDED = 16;
-	int SLIDE_ENDED = 17;
-	int DELAY_ACTION = 18;
+	int OBJECT_HIT_STARTED = 8;
+	int OBJECT_HIT_OVER = 9;
+	int OBJECT_HIT_LOST = 10;
+	int OBJECT_HIT_ENDED = 11;
+	int HEALTH_CHANGED = 13;
+	int PARA_GROUNDED = 14;
+	int PARA_KILLED = 15;
+	int COPTER_KILLED = 16;
+	int PLAYER_LOOSE = 17;
+	int GAME_FINISHED = 18;
+	int TWEEN_ENDED = 19;
+	int SLIDE_ENDED = 20;
+	int DELAY_ACTION = 21;
+	int SCENE_SWITCHED = 22;
+	int MATCH_FOUND = 23;
+	int MATCH_FAILED = 24;
 
 	const char* ToString(int act){
 		const char * vals[] = { 
@@ -36,8 +41,10 @@ namespace Actions{
 			"COLLISION_OCURRED",
 			"GAMEOBJECT_DESTROYED",
 			"ATTRIBUTE_CHANGED",
-			"OBJECT_HIT",
-			"OBJECT_RELEASED",
+			"OBJECT_HIT_STARTED",
+			"OBJECT_HIT_OVER",
+			"OBJECT_HIT_LOST",
+			"OBJECT_HIT_ENDED",
 			"HEALTH_CHANGED",
 			"PARA_GROUNDED",
 			"PARA_KILLED",
@@ -46,7 +53,10 @@ namespace Actions{
 			"GAME_FINISHED",
 			"TWEEN_ENDED",
 			"SLIDE_ENDED",
-			"DELAY_ACTION"
+			"DELAY_ACTION",
+			"SCENE_SWITCHED",
+			"MATCH_FOUND",
+			"MATCH_FAILED"
 		};
 		return vals[act];
 	}

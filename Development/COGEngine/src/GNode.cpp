@@ -106,22 +106,24 @@ void GNode::DeleteElementsForRemoving(){
 	childrenToRemove.clear();
 }
 
-void GNode::UpdateTransforms(){
+void GNode::UpdateTransform(bool deep){
 
 	if (parent != nullptr){
 		this->transform.CalcAbsTransform(parent->transform);
 	}
 	else this->transform.SetAbsAsLocal();
 
-	for (auto it = children.begin(); it != children.end(); ++it){
-		(*it)->UpdateTransforms();
+	if (deep){
+		for (auto it = children.begin(); it != children.end(); ++it){
+			(*it)->UpdateTransform(true);
+		}
 	}
 }
 
 
 void GNode::Update(const uint64 delta, const uint64 absolute){	
 
-	if (runMode == RunningMode::PAUSED_ALL) return;
+	if (runMode == RunningMode::PAUSED_ALL || runMode == RunningMode::DISABLED) return;
 
 	if (runMode != RunningMode::PAUSED_ITSELF){
 		// update behaviors
@@ -136,8 +138,14 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 
 	if (runMode != RunningMode::PAUSED_CHILDREN){
 		// update children
+		int childrenCount = children.size();
+		int childrenCounter = 0;
+
 		for (auto it = children.begin(); it != children.end(); ++it){
-			(*it)->Update(delta, absolute);
+			// prevent for while-update adding children
+			if (childrenCounter++ < childrenCount){
+				(*it)->Update(delta, absolute);
+			}
 		}
 	}
 
@@ -148,7 +156,7 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 
 void GNode::Draw(const uint64 delta, const uint64 absolute){
 
-	if (runMode == RunningMode::INVISIBLE) return;
+	if (runMode == RunningMode::INVISIBLE || runMode == RunningMode::DISABLED) return;
 
 	for (auto it = behaviors.begin(); it != behaviors.end(); ++it){
 		// draw behaviors

@@ -3,6 +3,7 @@
 #include <vector>
 #include "ofxSmartPointer.h"
 #include "EnInputAct.h"
+#include "EnSound.h"
 
 using namespace std;
 
@@ -18,6 +19,9 @@ private:
 	vector<EnInputAct> pressedKeys;
 	// collection of actually pressed buttons
 	vector<EnInputAct> pressedPoints;
+	// collection of played sounds
+	vector<EnSound*> playedSounds;
+
 	// screen width
 	int width;
 	// screen height
@@ -29,6 +33,13 @@ public:
 	*/
 	void Init();
 	
+	/**
+	* Adds a new sound
+	*/
+	void AddSound(EnSound* sound){
+		playedSounds.push_back(sound);
+	}
+
 	/**
 	* Returns true, if screen size has changed
 	*/
@@ -51,10 +62,20 @@ public:
 	}
 
 	/**
+	* Gets collection of currently played sounds
+	*/
+	vector<EnSound*>& GetPlayedSounds(){
+		return playedSounds;
+	}
+
+	/**
 	* Gets screen width
 	*/
 	int GetWidth(){
-		return width;
+		//return width;
+		// always returns 16:9 (TODO)
+		if (width > height) return height / 9.0f*16.0f;
+		else return height / 16.0f*9.0f;
 	}
 
 	/**
@@ -68,7 +89,7 @@ public:
 	* Gets width and height in 2D vector
 	*/
 	ofVec2f GetSize(){
-		return ofVec2f(width, height);
+		return ofVec2f(GetWidth(), GetHeight());
 	}
 
 	/**

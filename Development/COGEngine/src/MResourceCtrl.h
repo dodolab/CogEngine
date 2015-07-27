@@ -22,6 +22,11 @@ private:
 public:
 
 	/**
+	* Initializes controller
+	*/
+	void Init();
+
+	/**
 	* Loads 2D image from file
 	* @param path path to file
 	*/

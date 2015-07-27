@@ -35,7 +35,7 @@ public:
 		actual += delta;
 
 		if (actual > millis){
-			SendDirectMessage(BubblingType(ScopeType::OBJECT, false, true), Actions::DELAY_ACTION, data, owner, targetId);
+			SendDirectMessage(Actions::DELAY_ACTION, data, owner, targetId);
 			Finish();
 		}
 	}
