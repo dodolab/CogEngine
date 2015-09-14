@@ -2,24 +2,24 @@
 
 
 #include <string>
+#include "ofSoundPlayer.h"
 
 /**
 * Entity for sound attachment
 */
 class EnSound{
-
+private:
+	ofSoundPlayer soundPlayer;
 public:
 	string filename;
-	ofSoundPlayer soundPlayer;
 	bool started;
+	float volume;
 
-	EnSound(string filename, bool multiplay, bool loop) : filename(filename){
+	EnSound(string filename) : filename(filename){
 		started = false;
 		// music must be streamed; otherwise it won't work on android
 		soundPlayer.loadSound(filename,true);
-		soundPlayer.setMultiPlay(multiplay);
-		soundPlayer.setLoop(loop);
-		soundPlayer.setVolume(1.0f);
+		SetVolume(1.0f);
 	}
 
 	bool Ended(){
@@ -31,6 +31,22 @@ public:
 		started = true;
 	}
 
+	void Stop(){
+		soundPlayer.stop();
+	}
+
+	void SetLoop(bool loop){
+		soundPlayer.setLoop(loop);
+	}
+
+	void SetVolume(float volume){
+		this->volume = volume;
+		soundPlayer.setVolume(volume);
+	}
+
+	float GetVolume(){
+		return volume;
+	}
 };
 
 

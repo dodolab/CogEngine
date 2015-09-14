@@ -28,18 +28,18 @@ void GBehavior::RegisterListening(int action1, int action2, int action3, int act
 }
 
 
-void GBehavior::SendMessage(BubblingType bubblingType, int action, void* data, GNode* source) const{
-	GMsg msg(elemType, bubblingType, action, id, source, data);
+void GBehavior::SendMessage(BubblingType bubblingType, int action, int subaction, void* data, GNode* source) const{
+	GMsg msg(elemType, bubblingType, action, subaction, id, source, data);
 	COGSendMessage(msg, source);
 }
 
-void GBehavior::SendMessageNoBubbling(int action, void* data, GNode* source) const{
-	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), action, id, source, data);
+void GBehavior::SendMessageNoBubbling(int action, int subaction, void* data, GNode* source) const{
+	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), action, subaction, id, source, data);
 	COGSendMessage(msg, source);
 }
 
-void GBehavior::SendDirectMessage(int action, void* data, GNode* source, int targetId) const{
-	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE,true,true), action, id, source, data);
+void GBehavior::SendDirectMessage(int action, int subaction, void* data, GNode* source, int targetId) const{
+	GMsg msg(elemType, BubblingType(ScopeType::DIRECT_NO_TRAVERSE,true,true), action, subaction, id, source, data);
 	COGSendDirectMessageToBehavior(msg, targetId);
 }
 

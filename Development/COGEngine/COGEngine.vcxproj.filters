@@ -13,12 +13,6 @@
     <ClCompile Include="src\MGameFactory.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MGameStorage.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MResourceCtrl.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\EnFlags.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -64,6 +58,12 @@
     <ClCompile Include="src\MEnums.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MRepository.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MStorage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -84,12 +84,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MGameFactory.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGameStorage.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MResourceCtrl.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\BeCollider.h">
@@ -183,6 +177,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\EnSound.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MRepository.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MStorage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BeButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BeMultiAnim.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EnAnim.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

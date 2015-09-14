@@ -4,7 +4,7 @@
 #include "BeRender.h"
 #include "BeRotateAnim.h"
 #include "MGameFactory.h"
-#include "MGameStorage.h"
+#include "MRepository.h"
 #include "ofSoundPlayer.h"
 
 MGameEngine MEngine;
@@ -14,9 +14,9 @@ void MGameEngine::Init(MGameFactory* factory){
 
 	// create components
 	environmentCtrl = new MEnvironmentCtrl();
-	resourceCtrl = new MResourceCtrl();
+	resourceCtrl = new MStorage();
 	logger = new MLogger(new ConsoleLoggerChannel(), LogLevel::LERROR);
-	storage = new MGameStorage();
+	storage = new MRepository();
 
 	this->factory = factory;
 	
@@ -35,9 +35,9 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	// update transforms
 	this->_root->GetRoot()->UpdateTransform(true);
 	// update scene
-	this->_root->GetRoot()->Update(delta, absolute);
+	this->_root->GetRoot()->Update(16, absolute);
 	// remove ended inputs
-	environmentCtrl->RemoveEndedInputs();
+	environmentCtrl->RemoveEndedProcesses();
  	
 	// flush each 100th frame
 	if (frameCounter % 100 == 0){

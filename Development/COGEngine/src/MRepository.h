@@ -8,7 +8,7 @@
 /**
 * Game object repository
 */
-class MGameStorage{
+class MRepository{
 private:
 	// behavior listeners
 	map<int, vector<GBehavior*>> behListeners;
@@ -26,7 +26,7 @@ private:
 	*/
 	void SendMessageToBehaviors(GMsg& msg, GNode* actualNode);
 
-	/**
+	/**MM
 	* Sends message to children of actual node
 	* @param msg message to send
 	* @param actualNode actual node in bubbling algorithm

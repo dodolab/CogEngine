@@ -20,13 +20,14 @@ private:
 	// collection of actually pressed buttons
 	vector<EnInputAct> pressedPoints;
 	// collection of played sounds
-	vector<EnSound*> playedSounds;
+	vector<spt<EnSound>> playedSounds;
 
 	// screen width
 	int width;
 	// screen height
 	int height;
-
+	// collection of running threads
+	vector<ofThread*> runningThreads;
 public:
 	/**
 	* Initializes environment controller
@@ -36,7 +37,15 @@ public:
 	/**
 	* Adds a new sound
 	*/
-	void AddSound(EnSound* sound){
+	void AddSound(spt<EnSound> sound){
+		playedSounds.push_back(sound);
+	}
+
+	/**
+	* Plays sound and adds it to the collection
+	*/
+	void PlaySound(spt<EnSound> sound){
+		sound->Play();
 		playedSounds.push_back(sound);
 	}
 
@@ -64,7 +73,7 @@ public:
 	/**
 	* Gets collection of currently played sounds
 	*/
-	vector<EnSound*>& GetPlayedSounds(){
+	vector<spt<EnSound>>& GetPlayedSounds(){
 		return playedSounds;
 	}
 
@@ -141,7 +150,13 @@ public:
 	void OnSingleTouchMotion(int x, int y, int button);
 
 	/**
-	* Removes inputs that already ended from collection
+	* Removes processes that already ended from collection
 	*/
-	void RemoveEndedInputs();
+	void RemoveEndedProcesses();
+
+	/**
+	* Runs a new thread
+	* @param thread thread to run
+	*/
+	void RunThread(ofThread* thread);
 };

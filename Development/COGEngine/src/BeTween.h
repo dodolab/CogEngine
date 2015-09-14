@@ -68,8 +68,11 @@ public:
 				actual = 1;
 			}
 
-			float widthActual = width*actual;
-			float heightActual = height*actual;
+			// add sinus tweening
+			float actSinus = (float)sin(actual*PI/2);
+
+			float widthActual = width*actSinus;
+			float heightActual = height*actSinus;
 
 			// change position according to the tweening direction
 			if (direction == TweenDirection::RIGHT){
@@ -93,7 +96,7 @@ public:
 
 			if (actual >= 1.0f){
 				Finish();
-				SendMessageNoBubbling(Actions::TWEEN_ENDED, nullptr, tweenIn);
+				SendMessageNoBubbling(Actions::TWEEN_ENDED, 0, nullptr, tweenIn);
 			}
 	}
 };

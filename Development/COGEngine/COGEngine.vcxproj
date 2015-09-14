@@ -44,6 +44,8 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
+    <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
@@ -102,8 +104,8 @@
     <ClCompile Include="src\MFacade.cpp" />
     <ClCompile Include="src\MGameEngine.cpp" />
     <ClCompile Include="src\MGameFactory.cpp" />
-    <ClCompile Include="src\MGameStorage.cpp" />
-    <ClCompile Include="src\MResourceCtrl.cpp" />
+    <ClCompile Include="src\MRepository.cpp" />
+    <ClCompile Include="src\MStorage.cpp" />
     <ClCompile Include="src\MUtils.cpp" />
     <ClCompile Include="src\ofxCollageTexture.cpp" />
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
@@ -114,17 +116,20 @@
     <ClCompile Include="src\ofxXmlSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BeButton.h" />
     <ClInclude Include="src\BeCollider.h" />
     <ClInclude Include="src\BeDelayAction.h" />
     <ClInclude Include="src\BeDelayRemove.h" />
     <ClInclude Include="src\BeHitEvent.h" />
     <ClInclude Include="src\BeInputKey.h" />
     <ClInclude Include="src\BeMove.h" />
+    <ClInclude Include="src\BeMultiAnim.h" />
     <ClInclude Include="src\BeRender.h" />
     <ClInclude Include="src\BeRotateAnim.h" />
     <ClInclude Include="src\BeSceneManager.h" />
     <ClInclude Include="src\BeTranslateAnim.h" />
     <ClInclude Include="src\BeTween.h" />
+    <ClInclude Include="src\EnAnim.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
     <ClInclude Include="src\EnFlags.h" />
@@ -142,9 +147,9 @@
     <ClInclude Include="src\MFacade.h" />
     <ClInclude Include="src\MGameEngine.h" />
     <ClInclude Include="src\MGameFactory.h" />
-    <ClInclude Include="src\MGameStorage.h" />
+    <ClInclude Include="src\MRepository.h" />
     <ClInclude Include="src\MLogger.h" />
-    <ClInclude Include="src\MResourceCtrl.h" />
+    <ClInclude Include="src\MStorage.h" />
     <ClInclude Include="src\MUtils.h" />
     <ClInclude Include="src\ofxCollageTexture.h" />
     <ClInclude Include="src\ofxSmartPointer.h" />

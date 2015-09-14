@@ -1,6 +1,6 @@
 #include "GNode.h"
 #include "GBehavior.h"
-#include "MGameStorage.h"
+#include "MRepository.h"
 #include <vector>
 #include <list>
 #include <string>
@@ -32,8 +32,8 @@ GNode::GNode(const GNode& copy) : type(copy.type), subType(copy.subType), id(idC
 }
 
 GNode::~GNode(){
-	
 
+	MLOGDEBUG("Destructing gameobject %s", tag->c_str());
 	// move elements from collection to insert so they can be removed from classic collections
 	InsertElementsForAdding();
 
@@ -45,10 +45,11 @@ GNode::~GNode(){
 	}
 	behaviors.clear();
 
+	/* don't delete attributes 
 	// delete attributes
 	for (map<int, GAttr*>::iterator it = attributes.begin(); it != attributes.end(); ++it){
 		delete (it->second);
-	}
+	}*/
 
 	// delete all children
 	for (auto it = children.begin(); it != children.end(); ++it)
@@ -153,7 +154,6 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 	InsertElementsForAdding();
 }
 
-
 void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 	if (runMode == RunningMode::INVISIBLE || runMode == RunningMode::DISABLED) return;
@@ -166,6 +166,15 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 			beh->Update(delta, absolute);
 		}
 	}
+
+	// TODO !!! solve another way
+	// sort by z-index
+	auto comp = [](GNode* lhs, GNode* rhs) -> bool
+	{
+		return lhs->GetTransform().localPos.z < rhs->GetTransform().localPos.z;
+	};
+
+	 children.sort(comp);
 
 	for (auto it = children.begin(); it != children.end(); ++it){
 		// draw children
@@ -230,6 +239,13 @@ bool GNode::HasAttr(int key) const{
 
 
 bool GNode::AddChild(GNode* child, bool immediately){
+
+	auto existing = std::find(children.begin(), children.end(), child);
+	if (existing != children.end()){
+		COGLogError("Attempt to add already existing child: %s into %s", child->tag->c_str(), tag->c_str());
+		return false;
+	}
+
 	if (immediately){
 		children.push_back(child);
 		child->parent = this;

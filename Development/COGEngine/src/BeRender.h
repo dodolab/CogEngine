@@ -108,6 +108,6 @@ public:
 		}else ofSetColor(0,0,0);
 		spt<ofTrueTypeFont> font = owner->GetAttr<spt<ofTrueTypeFont>>(Attrs::FONT);
 		string text = owner->GetAttr<string>(Attrs::TEXT);
-		font->drawString(text, 0, 0);
+		font->drawString(text, -font->stringWidth(text)/2, -font->stringHeight(text)/2);
 	}
 };

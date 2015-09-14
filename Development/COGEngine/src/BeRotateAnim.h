@@ -36,7 +36,7 @@ public:
 	void Update(const uint64 delta, const uint64 absolute){
 
 		// calculate differencial
-		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta);
+		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta*360);
 		actual += diff;
 
 		// if to == from, it is infinite rotation

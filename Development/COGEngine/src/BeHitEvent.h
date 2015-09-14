@@ -17,6 +17,8 @@ protected:
 	bool vibrate;
 	// indicator, if hit has started over this object
 	bool hitStarted;
+	// indicator, if hit has been lost
+	bool hitLost;
 	// id of button who started the hit
 	int hitStartedTouchId;
 	// id of handler behavior (-1 for all behaviors)
@@ -30,7 +32,7 @@ public:
 	* @param vibrate if true, device will vibrate when object is hit
 	*/
 	BeHitEvent(int handlerBehId, bool vibrate) : GBehavior(ElemType::MODEL), 
-		handlerBehId(handlerBehId), vibrate(vibrate), hitStarted(false), hitStartedTouchId(-1){
+		handlerBehId(handlerBehId), vibrate(vibrate), hitStarted(false), hitLost(false), hitStartedTouchId(-1){
 
 	}
 
@@ -87,20 +89,22 @@ public:
 							hitStartedTouchId = touch.touchId;
 
 							owner->SetState(States::HIT);
-							if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, nullptr, owner);
-							else SendDirectMessage(Actions::OBJECT_HIT_STARTED, nullptr, owner, handlerBehId);
+							if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner);
+							else SendDirectMessage(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
 						}
 						else if (touch.ended){
 							
 
 							owner->ResetState(States::HIT);
 							if (hitStarted){
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_ENDED, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_ENDED, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_ENDED, 0, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_ENDED, 0, nullptr, owner, handlerBehId);
 							}
 							else{
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_LOST, nullptr, owner, handlerBehId);
+								// hit has been lost
+								hitLost = true;
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, 0, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 							}
 
 							if (hitStartedTouchId == touch.touchId && hitStarted){
@@ -117,15 +121,16 @@ public:
 								owner->SetState(States::HIT);
 							}
 							// hit started and continues
-							if (hitStarted){
+							if (hitLost){
+								hitLost = false;
 								// hit started, lost and started again
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_STARTED, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
 							}
 							else{
 								// hit started but not on first touch
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_OVER, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_OVER, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_OVER, 0, nullptr, owner);
+								else SendDirectMessage(Actions::OBJECT_HIT_OVER, 0, nullptr, owner, handlerBehId);
 							}
 						}
 					}
@@ -141,8 +146,9 @@ public:
 					// object could lost its hit
 					if (owner->HasState(States::HIT)){
 						owner->ResetState(States::HIT);
-						if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, nullptr, owner);
-						else SendDirectMessage(Actions::OBJECT_HIT_LOST, nullptr, owner, handlerBehId);
+						hitLost = true;
+						if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, 0, nullptr, owner);
+						else SendDirectMessage(Actions::OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 					}
 				}
 

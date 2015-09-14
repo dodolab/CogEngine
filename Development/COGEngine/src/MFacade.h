@@ -8,6 +8,8 @@
 #include "ofxSmartPointer.h"
 #include <functional>
 #include "EnSound.h"
+#include "ofxXmlSettings.h"
+#include "EnAnim.h"
 
 class GBehavior;
 using namespace std;
@@ -18,19 +20,21 @@ using namespace std;
 /*************************************************************************/
 
 // =================== MENVIRONMENT ====================
-void COGAddSound(EnSound* sound);
+void COGAddSound(spt<EnSound> sound);
+void COGPlaySound(spt<EnSound> sound);
 vector<EnInputAct>& COGGetPressedKeys();
 vector<EnInputAct>& COGGetPressedPoints();
-vector<EnSound*>& COGGetPlayedSounds();
+vector<spt<EnSound>>& COGGetPlayedSounds();
 int COGGetScreenWidth();
 int COGGetScreenHeight();
 ofVec2f COGGetScreenSize();
+void COGRunThread(ofThread* thread);
 
 // =================== MFACTORY ========================
 
 float COGTranslateSpeed(float speed);
 
-// =================== MSTORAGE ========================
+// =================== MREPOSITORY ========================
 
 void COGRegisterListener(int action, GBehavior* beh);
 void COGUnregisterListener(int action, GBehavior* beh);
@@ -55,8 +59,14 @@ void COGLogInfo(const char* format, ...);
 void COGLogDebug(const char* format, ...);
 void COGLoggerFlush();
 
-// =================== MRESOURCE =======================
+// =================== MSTORAGE =======================
 
-spt<ofImage> COGGet2DImage(string name);
-spt<ofVboMesh> COGGetMesh(string name);
-spt<ofTrueTypeFont> COGGetFont(string name, int size);
+spt<ofImage> COGGet2DImage(string path);
+spt<ofImage> COGPreload2DImage(string path);
+spt<ofVboMesh> COGGetMesh(string path);
+spt<ofTrueTypeFont> COGGetFont(string path, int size);
+spt<EnSound> COGGetSound(string path);
+spt<ofxXmlSettings> COGPreloadXMLFile(string path);
+spt<ofxXmlSettings> COGLoadXMLFile(string path);
+spt<EnAnim> COGGetAnimation(string name);
+void COGStoreAnimation(spt<EnAnim> anim);

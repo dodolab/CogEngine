@@ -35,7 +35,7 @@ public:
 		actual += delta;
 
 		if (actual > millis){
-			SendDirectMessage(Actions::DELAY_ACTION, data, owner, targetId);
+			SendDirectMessage(Actions::DELAY_ACTION,0, data, owner, targetId);
 			Finish();
 		}
 	}
