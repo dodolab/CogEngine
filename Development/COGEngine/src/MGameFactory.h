@@ -158,5 +158,21 @@ public:
 	* @param xml entity with animations
 	*/
 	void LoadAnimations(spt<ofxXmlSettings> xml);
+
+	/**
+	* Loads animation and its children from xml; sets only attributes for non-referenced animations
+	* Referenced animations are stored in referencedAnims parameter
+	* @param xml xml to load from
+	* @param referencedAnims array that will by filled with referenced animations
+	*/
+	EnAnim* CreateNonRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims);
+
+	/**
+	* Processes referenced animation from XML
+	* @param xml xml to load from
+	* @param referencedAnims array that contains referenced animations
+	* @param rootAnim root anim of actual scope
+	*/
+	void ProcessRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims, spt<EnAnim> rootAnim);
 };
 

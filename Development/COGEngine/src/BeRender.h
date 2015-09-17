@@ -60,7 +60,14 @@ public:
 	void RenderImage(GNode* owner){
 		ofSetColor(0x000000ff);
 		spt<ofImage> image = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
-		image->draw(-image->getWidth()/2,-image->getHeight()/2);
+
+		if (owner->HasAttr(Attrs::IMGBOUNDS)){
+			ofRectangle bound = owner->GetAttr<ofRectangle>(Attrs::IMGBOUNDS);
+			image->drawSubsection(-bound.width / 2, -bound.height / 2, bound.width, bound.height, bound.x, bound.y);
+		}
+		else{
+			image->draw(-image->getWidth() / 2, -image->getHeight() / 2);
+		}
 	}
 
 	/**

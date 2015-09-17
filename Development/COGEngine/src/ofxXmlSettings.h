@@ -137,6 +137,7 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 
 		bool    getAttributeNames(const string& tag, vector<string>& outNames, int which = 0);
 
+		bool	getBoolAttribute(const string& tag, const string& attribute, bool defaultValue, int which = 0);
 		int		getAttribute(const string& tag, const string& attribute, int defaultValue, int which = 0);
 		double	getAttribute(const string& tag, const string& attribute, double defaultValue, int which = 0);
 		string	getAttribute(const string& tag, const string& attribute, const string& defaultValue, int which = 0);

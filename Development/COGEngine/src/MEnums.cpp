@@ -87,6 +87,7 @@ namespace Attrs{
 	int FONT = 11;
 	int TEXT = 12;
 	int SCORE = 13;
+	int IMGBOUNDS = 14;
 
 	const char* ToString(int act){
 		const char * vals[] = {

@@ -116,6 +116,7 @@
     <ClCompile Include="src\ofxXmlSettings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BeAnim.h" />
     <ClInclude Include="src\BeButton.h" />
     <ClInclude Include="src\BeCollider.h" />
     <ClInclude Include="src\BeDelayAction.h" />

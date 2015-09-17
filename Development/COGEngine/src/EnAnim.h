@@ -1,17 +1,14 @@
 #pragma once
 
-
 /**
 * Entity for animations
 */
 class EnAnim{
 protected:
-	// link to root animation
-	spt<EnAnim> rootAnim;
 	// name of animation
 	string name;
-	// path to image
-	string imgPath;
+	// path to sheet(s)
+	string sheetPath;
 	// reference to another animation
 	string ref;
 	// number of frames per one line in spritesheet
@@ -24,6 +21,8 @@ protected:
 	int end;
 	// sequence increment
 	int increment;
+	// speed multiplier
+	double speed;
 	// number of repetition
 	int repeat;
 	// if true, animation will be reverted
@@ -31,60 +30,60 @@ protected:
 	// list of children
 	vector<spt<EnAnim>> children;
 
-	void FillFromXml(spt<ofxXmlSettings> xml){
-		int innerAnimations = xml->getNumTags("anim");
-
-		this->name = xml->getAttribute(":", "name", "");
-		cout << "LOADING ANIMATION " << this->name << endl;
-		cout << "  INNER ANIMATIONS: " << innerAnimations << endl;
-
-		this->imgPath = xml->getAttribute(":", "img", "");
-		cout << "  --img: " << this->imgPath << endl;
-		this->ref = xml->getAttribute(":", "ref", "");
-		cout << "  --ref: " << this->ref << endl;
-		this->frames = xml->getAttribute(":", "frames", 1);
-		cout << "  --frames: " << ofToString(this->frames) << endl;
-		this->lines = xml->getAttribute(":", "lines", 1);
-		cout << "  --lines: " << ofToString(this->lines) << endl;
-		this->start = xml->getAttribute(":", "start", 0);
-		cout << "  --start: " << ofToString(this->start) << endl;
-		this->end = xml->getAttribute(":", "end", 0);
-		cout << "  --end: " << ofToString(this->end) << endl;
-		this->increment = xml->getAttribute(":", "increment", 1);
-		cout << "  --increment: " << ofToString(this->increment) << endl;
-		this->repeat = xml->getAttribute(":", "repeat", 1);
-		cout << "  --repeat: " << ofToString(this->repeat) << endl;
-		this->isRevert = xml->getBoolValue(":", false);
-		cout << "  --isRevert: " << ofToString(this->isRevert) << endl;
-
-		for (int i = 0; i < innerAnimations; i++){
-			xml->pushTag("anim", i);
-			spt<EnAnim> anim = spt<EnAnim>(new EnAnim(xml));
-			anim->SetRoot(spt<EnAnim>(this));
-			children.push_back(anim);
-			xml->popTag();
-		}
-	}
 
 public:
 		
-	EnAnim(spt<ofxXmlSettings> construct) : name(""), imgPath(""), ref(""), frames(0), lines(0), start(0), end(0), increment(0), repeat(0), isRevert(false){
-		FillFromXml(construct);
+
+	EnAnim(string name, string sheetPath, string ref, int frames, int lines, int start,
+		int end, int increment, double speed, int repeat, bool isRevert) : name(name), sheetPath(sheetPath), ref(ref),
+		frames(frames), lines(lines), start(start), end(end), increment(increment), speed(speed), repeat(repeat), isRevert(isRevert){
+	//	this->rootAnim = spt<EnAnim>();
 	}
 
-	EnAnim(string name, string imgPath, string ref, int frames, int lines, int start, 
-		int end, int increment, int repeat, bool isRevert) : name(name), imgPath(imgPath), ref(ref),
-		frames(frames), lines(lines), start(start), end(end), increment(increment), repeat(repeat), isRevert(isRevert){
-		this->rootAnim = spt<EnAnim>(nullptr);
-	}
-
-	EnAnim() : name(""), imgPath(""), ref(""), frames(0), lines(0), start(0), end(0), increment(0), repeat(0), isRevert(false){
-		this->rootAnim = spt<EnAnim>(nullptr);
+	EnAnim() : name(""), sheetPath(""), ref(""), frames(1), lines(1), start(0), end(0), increment(1), speed(1), repeat(1), isRevert(false){
+		//this->rootAnim = spt<EnAnim>();
 	}
 
 	~EnAnim(){
-		for (auto it = children.begin(); it != children.end(); ++it){
+		cout << "Destructing node " << name.c_str() << endl;
+		// todo: some trash here...
+		/*for (auto it = children.begin(); it != children.end(); ++it){
 			delete (*it);
+		}*/
+	}
+
+	/**
+	* Copies all parameters from other animation
+	*/
+	void GetParametersFromReference(EnAnim* reference){
+		this->SetSheetPath(reference->GetSheetPath());
+		this->SetFrames(reference->GetFrames());
+		this->SetLines(reference->GetLines());
+		this->SetStart(reference->GetStart());
+		this->SetEnd(reference->GetEnd());
+		this->SetIncrement(reference->GetIncrement());
+		this->SetSpeed(reference->GetSpeed());
+		this->SetRepeat(reference->GetRepeat());
+		this->SetIsRevert(reference->GetIsRevert());
+
+		// insert children
+		vector<spt<EnAnim>>& refChildren = reference->children;
+
+		for (auto it = refChildren.begin(); it != refChildren.end(); ++it){
+			spt<EnAnim> child = (*it);
+			AddChild(child);
+		}
+	}
+
+	/**
+	* Adds itself and all children to the output array
+	*/
+	void GetAllNodes(vector<EnAnim*> &output){
+		output.push_back(this);
+
+		for (auto it = children.begin(); it != children.end(); ++it){
+			spt<EnAnim> an = (*it);
+			an->GetAllNodes(output);
 		}
 	}
 
@@ -104,6 +103,38 @@ public:
 		}
 
 		return spt<EnAnim>();
+	}
+
+	/**
+	* Gets list of paths to all sheets this animation holds
+	*/
+	vector<string> GetSheetPaths(){
+		
+		vector<string> output;
+		if (!HasSheets()) return output;
+
+		int firstBracket = sheetPath.find("{");
+		int secondBracket = sheetPath.find("}");
+
+
+		if (firstBracket != string::npos && secondBracket != string::npos){
+			string sequencePrefix = sheetPath.substr(0, firstBracket);
+			string sequenceSuffix = sheetPath.substr(secondBracket + 1, sheetPath.length() - (secondBracket + 1));
+			
+			// string is in form {XXX}, it means that this is a file sequence
+			int numberOfDigits = secondBracket - firstBracket - 1;
+
+			for (int i = start; i <= end; i += increment){
+				// todo: danger increment value !!
+				string file = sequencePrefix + ofToString(i, 1, numberOfDigits, '0') + sequenceSuffix;
+				output.push_back(file);
+			}
+		}
+		else{
+			output.push_back(sheetPath);
+		}
+
+		return output;
 	}
 
 	/**
@@ -137,18 +168,12 @@ public:
 	}
 
 	/**
-	* Gets root animation
+	* Returns true, if this animation has sheet(s)
 	*/
-	spt<EnAnim> GetRoot(){
-		return rootAnim;
+	bool HasSheets(){
+		return sheetPath.length() != 0;
 	}
 
-	/**
-	* Sets root animation
-	*/
-	void SetRoot(spt<EnAnim> root){
-		this->rootAnim = root;
-	}
 
 	/**
 	* Gets name of this animation
@@ -165,17 +190,17 @@ public:
 	}
 
 	/**
-	* Gets path to the animation image
+	* Gets path to the animation sheet
 	*/
-	const string GetImgPath() const{
-		return imgPath;
+	const string GetSheetPath() const{
+		return sheetPath;
 	}
 
 	/**
-	* Sets path to the animation image
+	* Sets path to the animation sheet
 	*/
-	void SetImgPath(string imgPath){
-		this->imgPath = imgPath;
+	void SetSheetPath(string sheetPath){
+		this->sheetPath = sheetPath;
 	}
 
 	/**
@@ -197,6 +222,13 @@ public:
 	*/
 	const int GetFrames() const{
 		return frames;
+	}
+
+	/**
+	* Gets total number of frames
+	*/
+	const int GetTotalFrames() const {
+		return (end - start+1+(increment-1))/increment;
 	}
 
 	/**
@@ -260,6 +292,20 @@ public:
 	*/
 	void SetIncrement(int increment){
 		this->increment = increment;
+	}
+
+	/**
+	* Gets speed
+	*/
+	const double GetSpeed() const{
+		return speed;
+	}
+
+	/**
+	* Sets speed
+	*/
+	void SetSpeed(double speed){
+		this->speed = speed;
 	}
 
 	/**
