@@ -145,6 +145,7 @@
     <ClInclude Include="src\MApp.h" />
     <ClInclude Include="src\MEnums.h" />
     <ClInclude Include="src\MEnvironmentCtrl.h" />
+    <ClInclude Include="src\MError.h" />
     <ClInclude Include="src\MFacade.h" />
     <ClInclude Include="src\MGameEngine.h" />
     <ClInclude Include="src\MGameFactory.h" />

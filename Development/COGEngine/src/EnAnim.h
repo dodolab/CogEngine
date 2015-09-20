@@ -53,7 +53,6 @@ public:
 	}
 
 	~EnAnim(){
-		cout << "Destructing node " << name.c_str() << endl;
 		// todo: some trash here...
 		/*for (auto it = children.begin(); it != children.end(); ++it){
 			delete (*it);

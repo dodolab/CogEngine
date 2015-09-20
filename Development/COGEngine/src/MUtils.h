@@ -8,7 +8,7 @@
 
 
 // assertion with formatted message
-#ifndef DEBUG
+#ifdef DEBUG
 #   define MASSERT(condition, message, ...) \
     do { \
         if (! (condition)) { \
@@ -23,7 +23,7 @@
 #endif
 
 // macro for debug-only logging
-#ifndef DEBUG
+#ifdef DEBUG
 #   define MLOGDEBUG(message, ...) \
     do { \
              COGLogDebug(message, ##__VA_ARGS__); \
