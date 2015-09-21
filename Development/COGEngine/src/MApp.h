@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "MGameFactory.h"
+#include "MFactory.h"
 
 #ifndef TARGET_WINDOWS
 #include "ofxAndroid.h"
@@ -23,7 +23,7 @@ protected:
 	// time elapsed between frames
 	uint64 delta;
 	// link to default factory
-	MGameFactory* factory;
+	MFactory* factory;
 
 public:
 
@@ -31,8 +31,7 @@ public:
 	* Creates a new application wrapper
 	* @param factory default factory
 	*/
-	MApp(MGameFactory* factory) : factory(factory){
-
+	MApp(MFactory* factory) : factory(factory){
 	}
 
 	// setup function, called before first draw and update

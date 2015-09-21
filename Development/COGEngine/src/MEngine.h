@@ -1,23 +1,23 @@
 #pragma once
 
- class MGameEngine;
-extern MGameEngine MEngine;
+ class MEngine;
+extern MEngine COGEngine;
 
 #include "MEnvironmentCtrl.h"
 #include "MStorage.h"
 #include "MLogger.h"
 #include "MUtils.h"
 #include "GNode.h"
-#include "MGameFactory.h"
+#include "MFactory.h"
 #include "MRepository.h"
 #include "BeTween.h"
 #include "BeSceneManager.h"
 
 /**
-* Game engine that holds references to all other components and
+* COG engine that holds references to all other components and
 * executes drawing and update loops
 */
-class MGameEngine{
+class MEngine{
 private:
 	// root node, created by factory
 	GNode* _root;
@@ -26,11 +26,11 @@ private:
 public:
 	MEnvironmentCtrl* environmentCtrl;
 	MStorage* resourceCtrl;
-	MGameFactory* factory;
+	MFactory* factory;
 	MRepository* storage;
 	MLogger* logger;
 
-	MGameEngine(){
+	MEngine(){
 		_root = nullptr;
 		environmentCtrl = nullptr;
 		resourceCtrl = nullptr;
@@ -40,7 +40,7 @@ public:
 		frameCounter = 0;
 	}
 
-	~MGameEngine(){
+	~MEngine(){
 		//delete _root;
 		delete environmentCtrl;
 		delete resourceCtrl;
@@ -51,9 +51,9 @@ public:
 
 	/**
 	* Initializes engine
-	* @param factory default game factory
+	* @param factory default COG factory
 	*/
-	void Init(MGameFactory* factory);
+	void Init(MFactory* factory);
 	
 	/**
 	* Executes one update cycle; this method is called by MApp

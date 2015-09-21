@@ -1,17 +1,17 @@
 #pragma once
 
 #include "MApp.h"
-#include "MGameEngine.h"
+#include "MEngine.h"
 
-#define GAME_SPEED 60
+#define APP_SPEED 60
 
 void MApp::setup(){
 	// never set vertical sync
 	ofSetVerticalSync(false);
-	ofSetFrameRate(GAME_SPEED);
+	ofSetFrameRate(APP_SPEED);
 	ofEnableAntiAliasing();
-	// initialize game engine
-	MEngine.Init(factory);
+	// initialize COG engine
+	COGEngine.Init(factory);
 	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
@@ -19,26 +19,27 @@ void MApp::setup(){
 
 void MApp::draw(){
 	// drawing loop
-	MEngine.Draw(delta, absolute);
+	COGEngine.Draw(delta, absolute);
 }
 
 void MApp::update(){
 	// update loop
 	delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
-	MEngine.Update(delta, absolute);
+
+	COGEngine.Update(1000/APP_SPEED, absolute);
 }
 
 void MApp::keyPressed(int key){
-	MEngine.environmentCtrl->OnKeyAction(key, true);
+	COGEngine.environmentCtrl->OnKeyAction(key, true);
 }
 
 void MApp::keyReleased(int key){
-	MEngine.environmentCtrl->OnKeyAction(key, false);
+	COGEngine.environmentCtrl->OnKeyAction(key, false);
 }
 
 void MApp::windowResized(int w, int h){
-	MEngine.environmentCtrl->OnScreenSizeChanged(w, h);
+	COGEngine.environmentCtrl->OnScreenSizeChanged(w, h);
 }
 
 
@@ -50,16 +51,16 @@ void MApp::mouseMoved(int x, int y){
 }
 
 void MApp::mouseDragged(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
+	COGEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
 
 }
 
 void MApp::mousePressed(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x, y, button, true);
+	COGEngine.environmentCtrl->OnSingleTouchButton(x, y, button, true);
 }
 
 void MApp::mouseReleased(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x, y, button, false);
+	COGEngine.environmentCtrl->OnSingleTouchButton(x, y, button, false);
 }
 
 void MApp::dragEvent(ofDragInfo dragInfo){

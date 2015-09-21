@@ -22,39 +22,15 @@ private:
 	map<int, int>* otherFlags;
 
 	/**
-	* Gets index of a state
-	* @param state number of state
-	*/
-	int GetStateIndex(int state) const{
-		return state / sizeof(int);
-	}
-	
-	/**
-	* Gets offset of a state
-	* @param state number of state
-	*/
-	int GetStateOffset(int state) const{
-		return state%sizeof(int);
-	}
-
-	/**
-	* Does state operation (sets or resets the state)
-	* @param set - if true, state will be set; reset otherwise
-	* @param state - state to set/reset
-	*/
-	void DoStateOperation(bool set, int state);
-
-	/**
 	* Initializes state machine
 	*/
 	void Init(){
-		 flags1 = 0;
-		 flags2 = 0;
-		 flags3 = 0;
-		 flags4 = 0;
-		 otherFlags = nullptr;
+		flags1 = 0;
+		flags2 = 0;
+		flags3 = 0;
+		flags4 = 0;
+		otherFlags = nullptr;
 	}
-
 
 public:
 	/**
@@ -193,5 +169,28 @@ public:
 	*/
 	bool ContainsAtLeastOne(EnFlags& other) const;
 
+	private:
+		/**
+		* Gets index of a state
+		* @param state number of state
+		*/
+		int GetStateIndex(int state) const{
+			return state / sizeof(int);
+		}
+
+		/**
+		* Gets offset of a state
+		* @param state number of state
+		*/
+		int GetStateOffset(int state) const{
+			return state%sizeof(int);
+		}
+
+		/**
+		* Does state operation (sets or resets the state)
+		* @param set - if true, state will be set; reset otherwise
+		* @param state - state to set/reset
+		*/
+		void DoStateOperation(bool set, int state);
 };
 

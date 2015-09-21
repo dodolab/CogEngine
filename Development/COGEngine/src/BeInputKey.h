@@ -10,15 +10,6 @@ class BeInputKey : public GBehavior{
 private:
 	map<int, Act> keyMapping;
 
-	// Gets action by key
-	Act GetAction(int key){
-		auto find = keyMapping.find(key);
-		if (find != keyMapping.end()) return (*find).second;
-
-		return Act::NONE;
-	}
-
-
 public:
 	/**
 	* Creates a new behavior that maps keys to actions
@@ -52,6 +43,16 @@ public:
 				}
 			}
 		}
+	}
+
+private:
+
+	// Gets action by key
+	Act GetAction(int key){
+		auto find = keyMapping.find(key);
+		if (find != keyMapping.end()) return (*find).second;
+
+		return Act::NONE;
 	}
 };
 

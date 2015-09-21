@@ -85,6 +85,7 @@ public:
 			SendMessage(BubblingType(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, 0, nullptr, owner);
 		}
 	}
+
 };
 
 

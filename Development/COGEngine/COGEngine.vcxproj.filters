@@ -7,12 +7,6 @@
     <ClCompile Include="src\MEnvironmentCtrl.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MGameEngine.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MGameFactory.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\EnFlags.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -64,6 +58,12 @@
     <ClCompile Include="src\MStorage.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MEngine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MFactory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -78,12 +78,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MEnvironmentCtrl.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGameEngine.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MGameFactory.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\BeCollider.h">
@@ -198,6 +192,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MError.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MEngine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MFactory.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MTests.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

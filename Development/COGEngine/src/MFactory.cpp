@@ -1,18 +1,18 @@
-#include "MGameFactory.h"
+#include "MFactory.h"
 #include "ofxSmartPointer.h"
 #include "GNode.h"
-#include "MGameEngine.h"
+#include "MEngine.h"
 #include "BeRender.h"
 #include "BeRotateAnim.h"
 #include "BeHitEvent.h"
 #include "BeAnim.h"
 #include "MError.h"
 
-ofVec2f MGameFactory::GetCenter(){
+ofVec2f MFactory::GetCenter(){
 	return ofVec2f(COGGetScreenWidth() / 2, COGGetScreenHeight() / 2);
 }
 
-void MGameFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent){
+void MFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent){
 	ofVec2f scrSize = COGGetScreenSize();
 
 	EnTransform& parentTrans = parent->GetTransform();
@@ -31,31 +31,31 @@ void MGameFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, floa
 	nodeTransform.CalcAbsTransform(parent->GetTransform());
 }
 
-spt<ofImage> MGameFactory::SetRenderImage(GNode* node, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
+spt<ofImage> MFactory::SetRenderImage(GNode* node, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 
 	node->AddBehavior(new BeRender(RenderType::IMAGE), true);
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage(imgPath);
+	spt<ofImage> img = COGEngine.resourceCtrl->Get2DImage(imgPath);
 	node->AddAttr(Attrs::IMGSOURCE, img);
 
 	SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, img->getWidth(), img->getHeight(), parent);
 	return img;
 }
 
-GNode* MGameFactory::CreateImageNode(string tag, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
+GNode* MFactory::CreateImageNode(string tag, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	GNode* node = new GNode(tag);
 	SetRenderImage(node, imgPath, pos, posCalc, scaleX, scaleCalc, anchor, parent);
 	parent->AddChild(node, true);
 	return node;
 }
 
-void MGameFactory::SetFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text){
+void MFactory::SetFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text){
 	node->AddAttr(Attrs::FONT, font);
 	node->AddBehavior(new BeRender(RenderType::TEXT), true);
 	node->AddAttr(Attrs::COLOR, color);
 	node->AddAttr(Attrs::TEXT, text);
 }
 
-void MGameFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
+void MFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	node->AddAttr(Attrs::FONT, font);
 	node->AddBehavior(new BeRender(RenderType::TEXT), true);
 	node->AddAttr(Attrs::COLOR, color);
@@ -65,14 +65,14 @@ void MGameFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor 
 }
 
 
-GNode* MGameFactory::CreateFontNode(string tag, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
+GNode* MFactory::CreateFontNode(string tag, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	GNode* node = new GNode(tag);
 	SetRenderFont(node, font, color, text, pos, posCalc, scaleX, scaleCalc, anchor, parent);
 	parent->AddChild(node, true);
 	return node;
 }
 
-ofVec2f MGameFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, GNode* parent){
+ofVec2f MFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, GNode* parent){
 	ofVec2f scrSize = COGGetScreenSize();
 	EnTransform& parentTrans = parent->GetTransform();
 	ofVec2f absPos;
@@ -92,7 +92,7 @@ ofVec2f MGameFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, G
 	return absPos;
 }
 
-ofVec2f MGameFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, ofVec2f anchor, int width, int height, GNode* parent){
+ofVec2f MFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, ofVec2f anchor, int width, int height, GNode* parent){
 	ofVec2f scrSize = COGGetScreenSize();
 
 	EnTransform& parentTrans = parent->GetTransform();
@@ -107,7 +107,7 @@ ofVec2f MGameFactory::CalcPosition(GNode* node, ofVec2f pos, CalcType posCalc, o
 	return ofVec3f(absPos.x, absPos.y, node->GetTransform().localPos.z);
 }
 
-ofVec3f MGameFactory::CalcScale(GNode* node, float scaleX, float width, CalcType scaleCalc, GNode* parent){
+ofVec3f MFactory::CalcScale(GNode* node, float scaleX, float width, CalcType scaleCalc, GNode* parent){
 	ofVec2f scrSize = COGGetScreenSize();
 	EnTransform& parentTrans = parent->GetTransform();
 
@@ -129,12 +129,12 @@ ofVec3f MGameFactory::CalcScale(GNode* node, float scaleX, float width, CalcType
 }
 
 
-float MGameFactory::TranslateSpeed(float speed){
+float MFactory::TranslateSpeed(float speed){
 	// speed = 1 translates over the whole width per 10 seconds
-	return speed * 0.001f*MEngine.environmentCtrl->GetWidth();
+	return speed * 0.001f*COGEngine.environmentCtrl->GetWidth();
 }
 
-GNode* MGameFactory::CreateRoot(){
+GNode* MFactory::CreateRoot(){
 
 	GNode* root = new GNode(ObjType::ROOT, 1, "root");
 	sceneManager = new BeSceneManager();
@@ -145,14 +145,14 @@ GNode* MGameFactory::CreateRoot(){
 
 
 
-bool MGameFactory::LoadAnimations(spt<ofxXmlSettings> xml){
+bool MFactory::LoadAnimations(spt<ofxXmlSettings> xml){
 
 	AnimationLoader loader;
 	vector<spt<EnAnim>> rootAnims;
 
 	try{
 		// load root animations
-		rootAnims = loader.LoadAnimations(xml);
+		loader.LoadAnimations(xml, rootAnims);
 	}
 	catch (IllegalArgumentException& err){
 		COGLogError(err.what());
