@@ -25,6 +25,8 @@ protected:
 	// link to default factory
 	MFactory* factory;
 
+	spt<ofxXmlSettings> config;
+
 public:
 
 	/**
@@ -32,6 +34,14 @@ public:
 	* @param factory default factory
 	*/
 	MApp(MFactory* factory) : factory(factory){
+	}
+
+	/**
+	* Creates a new application wrapper
+	* @param factory default factory
+	* @param config configuration XML
+	*/
+	MApp(MFactory* factory, spt<ofxXmlSettings> config) : factory(factory), config(config){
 	}
 
 	// setup function, called before first draw and update

@@ -52,8 +52,9 @@ public:
 	/**
 	* Initializes engine
 	* @param factory default COG factory
+	* @param config configuration xml
 	*/
-	void Init(MFactory* factory);
+	void Init(MFactory* factory, spt<ofxXmlSettings> config);
 	
 	/**
 	* Executes one update cycle; this method is called by MApp

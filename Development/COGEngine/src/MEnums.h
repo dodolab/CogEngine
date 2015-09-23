@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 
+typedef float(*FadeFunction)(float);
 
 /*! User input action enumerator */
 enum class Act{

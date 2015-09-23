@@ -10,12 +10,12 @@
 MEngine COGEngine;
 
 
-void MEngine::Init(MFactory* factory){
+void MEngine::Init(MFactory* factory, spt<ofxXmlSettings> config){
 
 	// create components
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MStorage();
-	logger = new MLogger(new ConsoleLoggerChannel(), LogLevel::LERROR);
+	logger = new MLogger(config);
 	storage = new MRepository();
 
 	this->factory = factory;
@@ -23,6 +23,7 @@ void MEngine::Init(MFactory* factory){
 	// initialize components 
 	environmentCtrl->Init();
 	factory->Init();
+	logger->Init();
 	resourceCtrl->Init();
 	// create root node
 	_root = factory->CreateRoot();

@@ -59,7 +59,7 @@ void COGUnregisterListener(int action, GBehavior* beh){
 }
 
 void COGSendMessage(GMsg& msg, GNode* actualNode){
-	COGLogDebug("Message %s:%s:%d", Actions::ToString(msg.GetAction()), actualNode->GetTag().c_str(), actualNode->GetSubType());
+	COGLogDebug("CORE", "Message %s:%s:%d", Actions::ToString(msg.GetAction()), actualNode->GetTag().c_str(), actualNode->GetSubType());
 	COGEngine.storage->SendMessage(msg, actualNode);
 }
 
@@ -97,47 +97,47 @@ vector<GNode*> COGFindNodesBySubType(int subtype) {
 }
 
 bool COGAddNode(GNode* node){
-	MLOGDEBUG("Adding node %s", node->GetTag().c_str());
+	MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
 	return COGEngine.storage->AddNode(node);
 }
 
 void COGRemoveNode(GNode* node){
-	MLOGDEBUG("Removing node %s", node->GetTag().c_str());
+	MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
 	COGEngine.storage->RemoveNode(node);
 }
 
 bool COGAddBehavior(GBehavior* beh){
-	MASSERT(beh->GetOwner() != nullptr, "Behavior %s hasn't node assigned", typeid(*beh).name());
-	MLOGDEBUG("Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
+	MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
+	MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	return COGEngine.storage->AddBehavior(beh);
 }
 
 void COGRemoveBehavior(GBehavior* beh){
-	MASSERT(beh->GetOwner() != nullptr, "Behavior %s hasn't node assigned", typeid(*beh).name());
-	MLOGDEBUG("Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
+	MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
+	MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	COGEngine.storage->RemoveBehavior(beh);
 }
 
 // =================== MLOGGER =========================
 
-void COGLogError(const char* format, ...){
+void COGLogError(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
-	COGEngine.logger->LogError(0, format, args);
+	COGEngine.logger->LogError(module, 0, format, args);
 	va_end(args);
 }
 
-void COGLogInfo(const char* format, ...){
+void COGLogInfo(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
-	COGEngine.logger->LogInfo(0, format, args);
+	COGEngine.logger->LogInfo(module, 0, format, args);
 	va_end(args);
 }
 
-void COGLogDebug(const char* format, ...){
+void COGLogDebug(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
-	COGEngine.logger->LogDebug(0, format, args);
+	COGEngine.logger->LogDebug(module, 0, format, args);
 	va_end(args);
 }
 

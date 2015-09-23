@@ -29,6 +29,8 @@ private:
 	// collection of running threads
 	vector<ofThread*> runningThreads;
 public:
+
+
 	/**
 	* Initializes environment controller
 	*/

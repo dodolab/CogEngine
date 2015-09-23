@@ -203,6 +203,9 @@
     <ClInclude Include="src\MTests.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BeTransformAnim.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
