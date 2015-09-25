@@ -4,6 +4,7 @@
 #include "EnFlags.h"
 #include "EnBounds.h"
 #include "EnCollision.h"
+#include "EnShape.h"
 
 /**x
 * Behavior that switches button on-click images
@@ -20,7 +21,7 @@ public:
 	* @param defaultImg default image
 	* @param pressedImg pressed image
 	*/
-	BeButton(spt<ofImage> defaultImg, spt<ofImage> pressedImg) : GBehavior(ElemType::MODEL),
+	BeButton(spt<ofImage> defaultImg, spt<ofImage> pressedImg) : 
 		defaultImg(defaultImg), pressedImg(pressedImg){
 
 	}
@@ -32,13 +33,13 @@ public:
 	void OnMessage(GMsg& msg){
 		if (msg.GetAction() == Actions::OBJECT_HIT_STARTED){
 			if (msg.GetSourceObject()->GetId() == owner->GetId()){
-				msg.GetSourceObject()->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, pressedImg);
+				msg.GetSourceObject()->GetShape<spt<EnImageShape>>()->SetImage(pressedImg);
 			}
 		}
 
 		if (msg.GetAction() == Actions::OBJECT_HIT_ENDED || msg.GetAction() == Actions::OBJECT_HIT_LOST){
 			if (msg.GetSourceObject()->GetId() == owner->GetId()){
-				msg.GetSourceObject()->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, defaultImg);
+				msg.GetSourceObject()->GetShape<spt<EnImageShape>>()->SetImage(defaultImg);
 			}
 		}
 	}

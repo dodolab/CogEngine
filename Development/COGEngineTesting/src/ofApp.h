@@ -1,9 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Enums.h"
 #include "ofxSpriteSheetRenderer.h"
-#include "Utils.h"
 #include "MApp.h"
 
 //a quick and dirty sprite implementation

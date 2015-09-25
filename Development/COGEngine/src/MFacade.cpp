@@ -145,6 +145,16 @@ void COGLoggerFlush(){
 	COGEngine.logger->Flush();
 }
 
+
+// =================== MRENDERER =========================
+void COGPushNodeForRendering(GNode* node){
+	COGEngine.renderer->PushNode(node);
+}
+
+void COGRender(){
+	COGEngine.renderer->Render();
+}
+
 // =================== MRESOURCE =======================
 
 spt<ofImage> COGGet2DImage(string path){

@@ -3,8 +3,8 @@
 bool EnBounds::Collides(GNode& first, GNode& second) const{
 
 	// image collision
-	spt<ofImage> img1 = first.GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
-	spt<ofImage> img2 = second.GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
+	spt<ofImage> img1 = first.GetShape<spt<EnImageShape>>()->GetImage();
+	spt<ofImage> img2 = second.GetShape<spt<EnImageShape>>()->GetImage();
 
 	ofVec3f pos1 = first.GetTransform().absPos;
 	ofVec3f pos2 = second.GetTransform().absPos;

@@ -46,8 +46,6 @@ private:
 	int action;
 	// id of subaction that has been invoked
 	int subAction;
-	// message element type (view, model)
-	ElemType elemType;
 	// bubbling settings
 	BubblingType bubblingType;
 	// data payload
@@ -61,7 +59,6 @@ public:
 
 	/**
 	* Creates a new message
-	* @param elemType type of message (view, model)
 	* @param bubblingType bubbling settings
 	* @param action id of action that has been invoked
 	* @param subAction id of subaction that has been invoked
@@ -69,7 +66,7 @@ public:
 	* @param sourceObj source object
 	* @param data payload
 	*/
-	GMsg(ElemType elemType, BubblingType bubblingType, int action, int subAction, int behaviorId, GNode* sourceObj, void* data);
+	GMsg(BubblingType bubblingType, int action, int subAction, int behaviorId, GNode* sourceObj, void* data);
 
 	~GMsg(){
 
@@ -87,13 +84,6 @@ public:
 	*/
 	const int GetSubaction() const{
 		return subAction;
-	}
-
-	/**
-	* Gets type of this message (view, model)
-	*/
-	const ElemType GetElemType() const{
-		return elemType;
 	}
 
 	/**

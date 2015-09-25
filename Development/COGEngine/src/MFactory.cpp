@@ -2,7 +2,6 @@
 #include "ofxSmartPointer.h"
 #include "GNode.h"
 #include "MEngine.h"
-#include "BeRender.h"
 #include "BeRotateAnim.h"
 #include "BeHitEvent.h"
 #include "BeAnim.h"
@@ -39,9 +38,8 @@ void MFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float sc
 
 spt<ofImage> MFactory::SetRenderImage(GNode* node, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 
-	node->AddBehavior(new BeRender(RenderType::IMAGE));
 	spt<ofImage> img = COGEngine.resourceCtrl->Get2DImage(imgPath);
-	node->AddAttr(Attrs::IMGSOURCE, img);
+	node->SetShape(spt<EnImageShape>(new EnImageShape(img)));
 
 	SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, img->getWidth(), img->getHeight(), parent);
 	return img;
@@ -55,15 +53,13 @@ GNode* MFactory::CreateImageNode(string tag, string imgPath, ofVec2f pos, CalcTy
 }
 
 void MFactory::SetFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text){
-	node->AddAttr(Attrs::FONT, font);
-	node->AddBehavior(new BeRender(RenderType::TEXT));
+	node->SetShape(spt<EnFontShape>(new EnFontShape(font)));
 	node->AddAttr(Attrs::COLOR, color);
 	node->AddAttr(Attrs::TEXT, text);
 }
 
 void MFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
-	node->AddAttr(Attrs::FONT, font);
-	node->AddBehavior(new BeRender(RenderType::TEXT));
+	node->SetShape(spt<EnFontShape>(new EnFontShape(font)));
 	node->AddAttr(Attrs::COLOR, color);
 	node->AddAttr(Attrs::TEXT, text);
 	SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, font->stringWidth(text), font->stringHeight(text), parent);

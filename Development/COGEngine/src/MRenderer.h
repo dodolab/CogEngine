@@ -4,62 +4,84 @@
 #include "GNode.h"
 #include "ofxSmartPointer.h"
 
-/*! User input action enumerator */
-enum class RenderType{
-	IMAGE, RECTANGLE, POLYGON, ARC, TEXT
-};
+
 
 /**
-* Behavior for rendering
+* Engine for rendering
 */
-class BeRender : public GBehavior{
+class MRenderer {
+
 protected:
-	// type of rendering
-	RenderType _type;
+	map<int, vector<GNode*>> zIndexes;
+
 public:
 
-	/**
-	* Creates a new behavior for rendering
-	* @param type rendering type
-	*/
-	BeRender(RenderType type) : GBehavior(ElemType::VIEW){
-		this->_type = type;
+	void Init(){
+		zIndexes = map<int, vector<GNode*>>();
 	}
 
+	void PushNode(GNode* node){
+		EnTransform& tr = node->GetTransform();
+		int zIndex = (int)(tr.localPos.z*tr.absScale.z + tr.absPos.z);
 
-	virtual void Update(const uint64 delta, const uint64 absolute){
-
-		// load absolute matrix
-		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
-		ofLoadMatrix(absM);
-
-		// render
-		switch (_type){
-		case RenderType::ARC:
-			RenderArc(owner);
-			break;
-		case RenderType::IMAGE:
-			RenderImage(owner);
-			break;
-		case RenderType::POLYGON:
-			RenderPolygon(owner);
-			break;
-		case RenderType::RECTANGLE:
-			RenderRectangle(owner);
-			break;
-		case RenderType::TEXT:
-			RenderText(owner);
+	
+		auto it = zIndexes.find(zIndex);
+		if (it != zIndexes.end()){
+			(*it).second.push_back(node);
 		}
+		else{
+			vector<GNode*> arr = vector<GNode*>();
+			arr.push_back(node);
+			zIndexes[zIndex] = arr;
+		}
+	}
 
+	void Render(){
+
+		for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it){
+			vector<GNode*>& arr = (*it).second;
+			int index = (*it).first;
+			cout << index << endl;
+
+			for (auto it2 = arr.begin(); it2 != arr.end(); ++it2){
+				GNode* node = (*it2);
+
+				// load absolute matrix
+				ofMatrix4x4 absM = node->GetTransform().GetAbsMatrix();
+				ofLoadMatrix(absM);
+
+
+				// render
+				switch (node->GetShape()->GetRenderType()){
+				case RenderType::ARC:
+					RenderArc(node);
+					break;
+				case RenderType::IMAGE:
+					RenderImage(node);
+					break;
+				case RenderType::POLYGON:
+					RenderPolygon(node);
+					break;
+				case RenderType::RECTANGLE:
+					RenderRectangle(node);
+					break;
+				case RenderType::TEXT:
+					RenderText(node);
+				}
+			}
+		}
 	}
 	
+protected:
+
 	/**
 	* Renders an image
 	* @param owner owner node
 	*/
 	void RenderImage(GNode* owner){
 		ofSetColor(0x000000ff);
-		spt<ofImage> image = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
+		spt<EnImageShape> imgShp = static_cast<spt<EnImageShape>>(owner->GetShape());
+		spt<ofImage> image = imgShp->GetImage();
 
 		if (owner->HasAttr(Attrs::IMGBOUNDS)){
 			ofRectangle bound = owner->GetAttr<ofRectangle>(Attrs::IMGBOUNDS);
@@ -113,7 +135,8 @@ public:
 			ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
 			ofSetColor(color);
 		}else ofSetColor(0,0,0);
-		spt<ofTrueTypeFont> font = owner->GetAttr<spt<ofTrueTypeFont>>(Attrs::FONT);
+		spt<EnFontShape> mojo = owner->GetShape<spt<EnFontShape>>();
+		spt<ofTrueTypeFont> font = mojo->GetFont();
 		string text = owner->GetAttr<string>(Attrs::TEXT);
 		font->drawString(text, -font->stringWidth(text)/2, -font->stringHeight(text)/2);
 	}

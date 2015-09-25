@@ -27,7 +27,7 @@ public:
 	* @param targetId id of target whom the message will be sent to
 	* @param data message payload
 	*/
-	BeDelayAction(int millis, int targetId, void* data) : GBehavior(ElemType::MODEL), millis(millis), actual(0), targetId(targetId), data(data){
+	BeDelayAction(int millis, int targetId, void* data) :  millis(millis), actual(0), targetId(targetId), data(data){
 
 	}
 

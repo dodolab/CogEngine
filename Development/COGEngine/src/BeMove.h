@@ -16,7 +16,7 @@ public:
 	* Creates a new behavior for simple movement
 	* @param speed movement speed
 	*/
-	BeMove(float speed) : GBehavior(ElemType::MODEL), speed(speed){
+	BeMove(float speed) : speed(speed){
 
 	}
 

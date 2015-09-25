@@ -12,6 +12,7 @@ extern MEngine COGEngine;
 #include "MRepository.h"
 #include "BeTween.h"
 #include "BeSceneManager.h"
+#include "MRenderer.h"
 
 /**
 * COG engine that holds references to all other components and
@@ -29,6 +30,7 @@ public:
 	MFactory* factory;
 	MRepository* storage;
 	MLogger* logger;
+	MRenderer* renderer;
 
 	MEngine(){
 		_root = nullptr;
@@ -37,6 +39,7 @@ public:
 		factory = nullptr;
 		storage = nullptr;
 		logger = nullptr;
+		renderer = nullptr;
 		frameCounter = 0;
 	}
 
@@ -47,6 +50,7 @@ public:
 		delete factory;
 		delete storage;
 		delete logger;
+		delete renderer;
 	}
 
 	/**

@@ -26,13 +26,13 @@ private:
 
 public:
 
-	BeTransformAnim(EnTransform from, EnTransform to, float duration, float delayAfter) : GBehavior(ElemType::MODEL), to(to), from(from), duration(duration), 
+	BeTransformAnim(EnTransform from, EnTransform to, float duration, float delayAfter) : to(to), from(from), duration(duration), 
 		delayAfter(delayAfter){
 		this->actual = 0;
 		fadeFunction = nullptr;
 	}
 
-	BeTransformAnim(EnTransform from, EnTransform to, float duration, float delayAfter, FadeFunction fadeFunction) : GBehavior(ElemType::MODEL), 
+	BeTransformAnim(EnTransform from, EnTransform to, float duration, float delayAfter, FadeFunction fadeFunction) : 
 		to(to), from(from), duration(duration), delayAfter(delayAfter){
 		this->actual = 0;
 		this->fadeFunction = fadeFunction;

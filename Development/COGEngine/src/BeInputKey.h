@@ -15,7 +15,7 @@ public:
 	* Creates a new behavior that maps keys to actions
 	* @param keyMapping key-to-action map
 	*/
-	BeInputKey(map<int, Act> keyMapping) : GBehavior(ElemType::MODEL), keyMapping(keyMapping){
+	BeInputKey(map<int, Act> keyMapping) : keyMapping(keyMapping){
 
 	}
 

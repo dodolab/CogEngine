@@ -31,7 +31,7 @@ public:
 	* @param handlerBehId id of handler behavior (set -1 for all handlers that listens HIT events)
 	* @param vibrate if true, device will vibrate when object is hit
 	*/
-	BeHitEvent(int handlerBehId, bool vibrate) : GBehavior(ElemType::MODEL), 
+	BeHitEvent(int handlerBehId, bool vibrate) : 
 		handlerBehId(handlerBehId), vibrate(vibrate), hitStarted(false), hitLost(false), hitStartedTouchId(-1){
 
 	}
@@ -67,8 +67,8 @@ public:
 			// get inverse matrix
 			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
 
-			if (owner->HasAttr(Attrs::IMGSOURCE)){
-				spt<ofImage> hitImage = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
+			if (owner->HasRenderType(RenderType::IMAGE)){
+				spt<ofImage> hitImage = owner->GetShape<spt<EnImageShape>>()->GetImage();
 
 				bool atLeastOneTouch = false;
 

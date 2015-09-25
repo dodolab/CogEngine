@@ -125,7 +125,6 @@
     <ClInclude Include="src\BeInputKey.h" />
     <ClInclude Include="src\BeMove.h" />
     <ClInclude Include="src\BeMultiAnim.h" />
-    <ClInclude Include="src\BeRender.h" />
     <ClInclude Include="src\BeRotateAnim.h" />
     <ClInclude Include="src\BeSceneManager.h" />
     <ClInclude Include="src\BeTransformAnim.h" />
@@ -137,6 +136,7 @@
     <ClInclude Include="src\EnFlags.h" />
     <ClInclude Include="src\EnInputAct.h" />
     <ClInclude Include="src\EnPair.h" />
+    <ClInclude Include="src\EnShape.h" />
     <ClInclude Include="src\EnSound.h" />
     <ClInclude Include="src\EnTransform.h" />
     <ClInclude Include="src\GAttr.h" />
@@ -150,6 +150,7 @@
     <ClInclude Include="src\MError.h" />
     <ClInclude Include="src\MFacade.h" />
     <ClInclude Include="src\MFactory.h" />
+    <ClInclude Include="src\MRenderer.h" />
     <ClInclude Include="src\MRepository.h" />
     <ClInclude Include="src\MLogger.h" />
     <ClInclude Include="src\MStorage.h" />

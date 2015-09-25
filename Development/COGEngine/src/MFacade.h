@@ -59,6 +59,10 @@ void COGLogInfo(const char* module, const char* format, ...);
 void COGLogDebug(const char* module, const char* format, ...);
 void COGLoggerFlush();
 
+// =================== MRENDERER =========================
+void COGPushNodeForRendering(GNode* node);
+void COGRender();
+
 // =================== MSTORAGE =======================
 
 spt<ofImage> COGGet2DImage(string path);

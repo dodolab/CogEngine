@@ -18,8 +18,6 @@ class GBehavior{
 protected:
 	// identifier incremental counter
 	static int idCounter;
-	// element type {VIEW, MODEL}
-	const ElemType elemType;
 	// identifier
 	const int id;
 	// behavior running state
@@ -31,9 +29,8 @@ protected:
 
 	/**
 	* Creates a new behavior
-	* @param elemType element type {VIEW, MODEL}
 	*/
-	GBehavior(ElemType elemType);
+	GBehavior();
 
 
 public:
@@ -57,14 +54,6 @@ public:
 	*/
 	const GNode* GetOwner() const{
 		return owner;
-	}
-
-	/**
-	* Gets element type
-	* @return {VIEW, MODEL}
-	*/
-	const ElemType GetElemType() const{
-		return elemType;
 	}
 
 	/**
