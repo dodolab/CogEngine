@@ -138,6 +138,9 @@
     <ClInclude Include="src\EnPair.h" />
     <ClInclude Include="src\EnShape.h" />
     <ClInclude Include="src\EnSound.h" />
+    <ClInclude Include="src\EnSprite.h" />
+    <ClInclude Include="src\EnSpriteSet.h" />
+    <ClInclude Include="src\EnSpriteSheet.h" />
     <ClInclude Include="src\EnTransform.h" />
     <ClInclude Include="src\GAttr.h" />
     <ClInclude Include="src\GBehavior.h" />

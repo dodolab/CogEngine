@@ -25,7 +25,7 @@ public:
 	* Creates a new behavior for rotation animation
 	* @param from starting rotation
 	* @param to ending rotation (if from == to, it is infinite rotation)
-	* @param speed rotation speed in radians per second
+	* @param speed rotation speed in angles per second
 	* @param additive if true, rotation will be additive
 	*/
 	BeRotateAnim(float from, float to, float speed, bool additive) : 

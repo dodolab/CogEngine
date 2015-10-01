@@ -49,8 +49,7 @@ void MEngine::Update(uint64 delta, uint64 absolute){
 }
 
 void MEngine::Draw(uint64 delta, uint64 absolute){
-	
-	renderer->Init();
+	renderer->ClearCounters();
 	// clear the drawing surface
 	ofBackground(50,50,50);
 	// setup ortographic camera

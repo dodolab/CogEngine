@@ -3,6 +3,7 @@
 #include "ofxSQLiteUpdate.h"
 #include "ofxSQLiteDelete.h"
 #include "ofxSQLiteSelect.h"
+#include "ofUtils.h"
 //#include "ofxSQLiteSimpler.h"
 
 ofxSQLite::ofxSQLite()
@@ -10,16 +11,10 @@ ofxSQLite::ofxSQLite()
 {
 }
 
-// @deprecated, use setup()
-ofxSQLite::ofxSQLite(std::string sDB):db_name(sDB) {
-	// 007 breaks using ofToDataPath()
-	//db_file = ofToDataPath(db_name,true);
-	setup(sDB);
-}
 
 void ofxSQLite::setup(std::string sDB) {
 	db_name = sDB;
-	db_file  = sDB; 
+	db_file  = ofToDataPath(sDB); 
 	if (SQLITE_OK != sqlite3_open(db_file.c_str(), &db)) {
 		cout << sqlite3_errmsg(db);
 		exit(1);

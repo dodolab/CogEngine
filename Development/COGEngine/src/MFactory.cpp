@@ -23,7 +23,7 @@ EnTransform MFactory::CalcTransform(GNode* node, ofVec2f pos, CalcType posCalc, 
 	absPos.x += (0.5f - anchor.x) * width*scale.x;
 	absPos.y += (0.5f - anchor.y) * height*scale.y;
 
-	nodeTransform.localPos = ofVec3f(absPos.x, absPos.y);
+	nodeTransform.localPos = ofVec3f(absPos.x, absPos.y, node->GetTransform().localPos.z);
 	nodeTransform.scale = ofVec3f(scale.x, scale.y, 1);
 
 	// refresh transform

@@ -124,3 +124,18 @@ void MStorage::StoreAnimation(spt<EnAnim> anim){
 		loadedAnimations[anim->GetName()] = anim;
 	}
 }
+
+spt<EnSpriteSheet> MStorage::GetSpriteSheet(string name){
+	auto found = loadedSpriteSheets.find(name);
+	if (found != loadedSpriteSheets.end()) return found->second;
+	else return spt<EnSpriteSheet>();
+}
+
+void MStorage::StoreSpriteSheet(spt<EnSpriteSheet> spriteSheet){
+	MASSERT(spriteSheet->GetName().compare("") != 0, "MStorage", "Attempt to store spritesheet without a name!");
+
+	auto found = loadedSpriteSheets.find(spriteSheet->GetName());
+	if (found == loadedSpriteSheets.end()){
+		loadedSpriteSheets[spriteSheet->GetName()] = spriteSheet;
+	}
+}

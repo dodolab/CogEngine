@@ -209,6 +209,15 @@
     <ClInclude Include="src\EnShape.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\EnSpriteSheet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EnSpriteSet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EnSprite.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
