@@ -62,4 +62,29 @@ public:
 	EnSprite(spt<EnSpriteSet> spriteSet, int frame) : spriteSet(spriteSet), frame(frame){
 		Recalc();
 	}
+
+	spt<EnSpriteSet> GetSpriteSet(){
+		return spriteSet;
+	}
+
+	int GetFrame(){
+		return frame;
+	}
+
+	int GetPosX(){
+		return posX;
+	}
+
+	int GetPosY(){
+		return posY;
+	}
+
+	int GetWidth(){
+		return width;
+	}
+
+	int GetHeight(){
+		return height;
+	};
+
 };

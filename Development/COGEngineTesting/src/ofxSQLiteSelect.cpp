@@ -164,6 +164,27 @@ float ofxSQLiteSelect::getFloat(int nIndex) {
 	return sqlite3_column_double(statement, use_index);
 }
 
+bool ofxSQLiteSelect::getBool(int nIndex){
+	return getInt(nIndex) == 1;
+}
+
+std::string ofxSQLiteSelect::getString(string column){
+	return getString(getColumnIndex(column));
+}
+
+int ofxSQLiteSelect::getInt(string column){
+	return getInt(getColumnIndex(column));
+}
+
+float ofxSQLiteSelect::getFloat(string column){
+	return getFloat(getColumnIndex(column));
+}
+
+bool ofxSQLiteSelect::getBool(string column){
+	return getBool(getColumnIndex(column));
+}
+
+
 int ofxSQLiteSelect::getNumColumns() {
 	return sqlite3_column_count(statement);
 }
@@ -211,4 +232,11 @@ std::string ofxSQLiteSelect::getResultAsAsciiTable() {
 		ss << endl;
 	}
 	return ss.str();
+}
+
+int ofxSQLiteSelect::getColumnIndex(string name){
+	for (int i = 0; i < getNumColumns(); i++){
+		if (getColumnName(i).compare(name.c_str()) == 0) return i;
+	}
+	return -1;
 }

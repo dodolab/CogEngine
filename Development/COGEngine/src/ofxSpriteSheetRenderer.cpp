@@ -98,13 +98,12 @@ void ofxSpriteSheetRenderer::loadTexture(string fileName, string sheetName, int 
 		buffers[sheetName] = new SpriteBuffer();
 	}
 
-	clearTexture(sheetName);
-	clearCounters(sheetName);
+	reAllocateArrays(sheetName, bufferSize);
 	allocate(sheetName, width, height, internalGLScaleMode);
-	addMisc(sheetName, fileName, 0, 0);
+	addMisc(fileName, sheetName, 0, 0);
 	finishTexture(sheetName);
 	actualBuffer->textureIsExternal = false;
-	reAllocateArrays(sheetName, bufferSize);
+	
 }
 
 void ofxSpriteSheetRenderer::loadTexture(ofTexture * texture, string sheetName, int bufferSize, bool isExternal)

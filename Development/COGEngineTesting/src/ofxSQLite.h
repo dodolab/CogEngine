@@ -27,6 +27,7 @@
 #include "ofxSQLiteSelect.h"
 #include "ofxSQLiteType.h"
 #include "ofxSQLiteTypeNow.h"
+#include "ofxSQLiteTable.h"
 //#include "ofxSQLiteSimpler.h"
 class ofxSQLiteSimpler;
 //
@@ -41,6 +42,7 @@ class ofxSQLite {
 		ofxSQLite();
 		ofxSQLite(std::string sDB);
 		void setup(std::string sDB);
+		ofxSQLiteTable createTableIfNotExists(std::string sTable);
 		ofxSQLiteInsert insert(std::string sTable);
 		ofxSQLiteUpdate update(std::string sTable);
 		ofxSQLiteDelete remove(std::string sTable);

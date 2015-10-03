@@ -70,6 +70,10 @@ public:
 	EnSpriteShape(spt<EnSprite> sprite) : EnShape(RenderType::SPRITE){
 		this->sprite = sprite;
 	}
+
+	spt<EnSprite>& GetSprite(){
+		return sprite;
+	}
 };
 
 

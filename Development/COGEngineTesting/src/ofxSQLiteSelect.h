@@ -86,9 +86,17 @@ class ofxSQLiteSelect {
 		std::string getString(int nIndex = -1);
 		int getInt(int nIndex = -1);
 		float getFloat(int nIndex = -1);
+		bool getBool(int nIndex = -1);
 		
+		std::string getString(string column);
+		int getInt(string column);
+		float getFloat(string column);
+		bool getBool(string column);
+
 		std::string getResultAsAsciiTable();
 	private:
+		int getColumnIndex(string name);
+
 		std::vector<Join> joins;
 		ofxSQLiteWhere wheres;
 		std::vector<Order> orders;

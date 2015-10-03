@@ -111,7 +111,6 @@
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
     <ClCompile Include="src\ofxSpriteTexture.cpp" />
     <ClCompile Include="src\ofxtinyxml.cpp" />
-    <ClCompile Include="src\ofxtinyxmlerror.cpp" />
     <ClCompile Include="src\ofxtinyxmlparser.cpp" />
     <ClCompile Include="src\ofxXmlSettings.cpp" />
   </ItemGroup>

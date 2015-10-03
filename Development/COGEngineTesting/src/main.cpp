@@ -78,8 +78,9 @@ public:
 			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
 			
 
-			if (i % 2 == 0){
-				child->SetShape(spt<EnImageShape>(new EnImageShape(img)));
+			if (i % 2 == 0 || true){
+				child->SetShape(spt<EnSpriteShape>(new EnSpriteShape(spt<EnSprite>(new EnSprite(spt<EnSpriteSet>(new EnSpriteSet(
+					new EnSpriteSheet("mojo",img),0,0,1,256,256,256,256,256,256)),0)))));
 			}
 			else{
 				child->SetShape(spt<EnImageShape>(new EnImageShape(img2)));
@@ -128,8 +129,8 @@ int main(){
 
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
-	//ofRunApp(new MTestApp());
-	ofRunApp(new MApp(new TestingFactory()));
+	ofRunApp(new MTestApp());
+	//ofRunApp(new MApp(new TestingFactory()));
 	
 	return 0;
 }

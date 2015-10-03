@@ -51,7 +51,7 @@ struct FieldValuePair {
 						 	,index
 						 	,value_string.c_str()
 						 	,value_string.size()
-						 	,SQLITE_STATIC
+							, SQLITE_TRANSIENT
 				); 
 				break;
 			}
