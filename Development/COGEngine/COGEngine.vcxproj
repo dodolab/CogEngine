@@ -61,7 +61,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\src;.\src\Attributes;.\src\Behaviors;.\src\Components;.\src\Engine;.\src\Libraries;.\src\Misc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -78,7 +78,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions);TARGET_WINDOWS</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\src;.\src\Attributes;.\src\Behaviors;.\src\Components;.\src\Engine;.\src\Libraries;.\src\Misc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -93,79 +93,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\EnBounds.cpp" />
-    <ClCompile Include="src\EnFlags.cpp" />
-    <ClCompile Include="src\GBehavior.cpp" />
-    <ClCompile Include="src\GMsg.cpp" />
-    <ClCompile Include="src\GNode.cpp" />
-    <ClCompile Include="src\MApp.cpp" />
-    <ClCompile Include="src\MEngine.cpp" />
-    <ClCompile Include="src\MEnums.cpp" />
-    <ClCompile Include="src\MEnvironmentCtrl.cpp" />
-    <ClCompile Include="src\MFacade.cpp" />
-    <ClCompile Include="src\MFactory.cpp" />
-    <ClCompile Include="src\MRepository.cpp" />
-    <ClCompile Include="src\MStorage.cpp" />
-    <ClCompile Include="src\MUtils.cpp" />
-    <ClCompile Include="src\ofxCollageTexture.cpp" />
-    <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
-    <ClCompile Include="src\ofxSpriteTexture.cpp" />
-    <ClCompile Include="src\ofxtinyxml.cpp" />
-    <ClCompile Include="src\ofxtinyxmlparser.cpp" />
-    <ClCompile Include="src\ofxXmlSettings.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\BeAnim.h" />
-    <ClInclude Include="src\BeButton.h" />
-    <ClInclude Include="src\BeCollider.h" />
-    <ClInclude Include="src\BeDelayAction.h" />
-    <ClInclude Include="src\BeDelayRemove.h" />
-    <ClInclude Include="src\BeHitEvent.h" />
-    <ClInclude Include="src\BeInputKey.h" />
-    <ClInclude Include="src\BeMove.h" />
-    <ClInclude Include="src\BeMultiAnim.h" />
-    <ClInclude Include="src\BeRotateAnim.h" />
-    <ClInclude Include="src\BeSceneManager.h" />
-    <ClInclude Include="src\BeTransformAnim.h" />
-    <ClInclude Include="src\BeTranslateAnim.h" />
-    <ClInclude Include="src\BeTween.h" />
-    <ClInclude Include="src\EnAnim.h" />
-    <ClInclude Include="src\EnBounds.h" />
-    <ClInclude Include="src\EnCollision.h" />
-    <ClInclude Include="src\EnFlags.h" />
-    <ClInclude Include="src\EnInputAct.h" />
-    <ClInclude Include="src\EnPair.h" />
-    <ClInclude Include="src\EnShape.h" />
-    <ClInclude Include="src\EnSound.h" />
-    <ClInclude Include="src\EnSprite.h" />
-    <ClInclude Include="src\EnSpriteSet.h" />
-    <ClInclude Include="src\EnSpriteSheet.h" />
-    <ClInclude Include="src\EnTransform.h" />
-    <ClInclude Include="src\GAttr.h" />
-    <ClInclude Include="src\GBehavior.h" />
-    <ClInclude Include="src\GMsg.h" />
-    <ClInclude Include="src\GNode.h" />
-    <ClInclude Include="src\MApp.h" />
-    <ClInclude Include="src\MEngine.h" />
-    <ClInclude Include="src\MEnums.h" />
-    <ClInclude Include="src\MEnvironmentCtrl.h" />
-    <ClInclude Include="src\MError.h" />
-    <ClInclude Include="src\MFacade.h" />
-    <ClInclude Include="src\MFactory.h" />
-    <ClInclude Include="src\MRenderer.h" />
-    <ClInclude Include="src\MRepository.h" />
-    <ClInclude Include="src\MLogger.h" />
-    <ClInclude Include="src\MStorage.h" />
-    <ClInclude Include="src\MTests.h" />
-    <ClInclude Include="src\MUtils.h" />
-    <ClInclude Include="src\ofxCollageTexture.h" />
-    <ClInclude Include="src\ofxSmartPointer.h" />
-    <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
-    <ClInclude Include="src\ofxSpriteTexture.h" />
-    <ClInclude Include="src\ofxtinyxml.h" />
-    <ClInclude Include="src\ofxXmlSettings.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
@@ -174,6 +101,88 @@
     <ResourceCompile Include="icon.rc">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Attributes\ofxAraAnim.h" />
+    <ClInclude Include="src\Attributes\ofxAraBounds.h" />
+    <ClInclude Include="src\Attributes\ofxAraCollision.h" />
+    <ClInclude Include="src\Attributes\ofxAraFlags.h" />
+    <ClInclude Include="src\Attributes\ofxAraInputAct.h" />
+    <ClInclude Include="src\Attributes\ofxAraPair.h" />
+    <ClInclude Include="src\Attributes\ofxAraShape.h" />
+    <ClInclude Include="src\Attributes\ofxAraSound.h" />
+    <ClInclude Include="src\Attributes\ofxAraSprite.h" />
+    <ClInclude Include="src\Attributes\ofxAraSpriteSet.h" />
+    <ClInclude Include="src\Attributes\ofxAraSpriteSheet.h" />
+    <ClInclude Include="src\Attributes\ofxAraTransform.h" />
+    <ClInclude Include="src\Behaviors\ofxArbAnim.h" />
+    <ClInclude Include="src\Behaviors\ofxArbButton.h" />
+    <ClInclude Include="src\Behaviors\ofxArbCollider.h" />
+    <ClInclude Include="src\Behaviors\ofxArbDelayAction.h" />
+    <ClInclude Include="src\Behaviors\ofxArbDelayRemove.h" />
+    <ClInclude Include="src\Behaviors\ofxArbHitEvent.h" />
+    <ClInclude Include="src\Behaviors\ofxArbInputKey.h" />
+    <ClInclude Include="src\Behaviors\ofxArbMove.h" />
+    <ClInclude Include="src\Behaviors\ofxArbMultiAnim.h" />
+    <ClInclude Include="src\Behaviors\ofxArbRotateAnim.h" />
+    <ClInclude Include="src\Behaviors\ofxArbSceneManager.h" />
+    <ClInclude Include="src\Behaviors\ofxArbTransformAnim.h" />
+    <ClInclude Include="src\Behaviors\ofxArbTranslateAnim.h" />
+    <ClInclude Include="src\Behaviors\ofxArbTween.h" />
+    <ClInclude Include="src\Components\ofxArcEnvironmentCtrl.h" />
+    <ClInclude Include="src\Components\ofxArcFactory.h" />
+    <ClInclude Include="src\Components\ofxArcRenderer.h" />
+    <ClInclude Include="src\Components\ofxArcRepository.h" />
+    <ClInclude Include="src\Components\ofxArcStorage.h" />
+    <ClInclude Include="src\Engine\ofxAreApp.h" />
+    <ClInclude Include="src\Engine\ofxAreAttr.h" />
+    <ClInclude Include="src\Engine\ofxAreBehavior.h" />
+    <ClInclude Include="src\Engine\ofxAreEngine.h" />
+    <ClInclude Include="src\Engine\ofxAreEnums.h" />
+    <ClInclude Include="src\Engine\ofxAreError.h" />
+    <ClInclude Include="src\Engine\ofxAreFacade.h" />
+    <ClInclude Include="src\Engine\ofxAreLogger.h" />
+    <ClInclude Include="src\Engine\ofxAreMsg.h" />
+    <ClInclude Include="src\Engine\ofxAreNode.h" />
+    <ClInclude Include="src\Engine\ofxAreTests.h" />
+    <ClInclude Include="src\Engine\ofxAreUtils.h" />
+    <ClInclude Include="src\Libraries\ofxSmartPointer.h" />
+    <ClInclude Include="src\Libraries\ofxSQLite.h" />
+    <ClInclude Include="src\Libraries\ofxXmlSettings.h" />
+    <ClInclude Include="src\Libraries\sqlite3.h" />
+    <ClInclude Include="src\Libraries\tinyxml.h" />
+    <ClInclude Include="src\Misc\ofxCollageTexture.h" />
+    <ClInclude Include="src\Misc\ofxSpriteSheetRenderer.h" />
+    <ClInclude Include="src\Misc\ofxSpriteTexture.h" />
+    <ClInclude Include="src\Misc\ofxSQLiteEntity.h" />
+    <ClInclude Include="src\ofxAreMain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Attributes\ofxAraBounds.cpp" />
+    <ClCompile Include="src\Attributes\ofxAraFlags.cpp" />
+    <ClCompile Include="src\Components\ofxArcEnvironmentCtrl.cpp" />
+    <ClCompile Include="src\Components\ofxArcFactory.cpp" />
+    <ClCompile Include="src\Components\ofxArcRepository.cpp" />
+    <ClCompile Include="src\Components\ofxArcStorage.cpp" />
+    <ClCompile Include="src\Engine\ofxAreApp.cpp" />
+    <ClCompile Include="src\Engine\ofxAreBehavior.cpp" />
+    <ClCompile Include="src\Engine\ofxAreEngine.cpp" />
+    <ClCompile Include="src\Engine\ofxAreEnums.cpp" />
+    <ClCompile Include="src\Engine\ofxAreFacade.cpp" />
+    <ClCompile Include="src\Engine\ofxAreMsg.cpp" />
+    <ClCompile Include="src\Engine\ofxAreNode.cpp" />
+    <ClCompile Include="src\Engine\ofxAreUtils.cpp" />
+    <ClCompile Include="src\Libraries\ofxSQLite.cpp" />
+    <ClCompile Include="src\Libraries\ofxXmlSettings.cpp" />
+    <ClCompile Include="src\Libraries\sqlite3.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\tinyxml.cpp" />
+    <ClCompile Include="src\Libraries\tinyxmlparser.cpp" />
+    <ClCompile Include="src\Misc\ofxCollageTexture.cpp" />
+    <ClCompile Include="src\Misc\ofxSpriteSheetRenderer.cpp" />
+    <ClCompile Include="src\Misc\ofxSpriteTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

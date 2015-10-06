@@ -1,222 +1,258 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\GNode.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MEnvironmentCtrl.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EnFlags.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GBehavior.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GMsg.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxSpriteSheetRenderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MFacade.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxXmlSettings.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EnBounds.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MUtils.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxCollageTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxSpriteTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxtinyxml.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofxtinyxmlparser.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MEnums.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MRepository.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MStorage.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MEngine.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MFactory.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="src">
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\GMsg.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GNode.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MEnvironmentCtrl.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeCollider.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeHitEvent.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeInputKey.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeMove.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeRotateAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeTranslateAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeTween.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnCollision.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnFlags.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnInputAct.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnPair.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnTransform.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GAttr.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GBehavior.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxSpriteSheetRenderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeDelayRemove.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MLogger.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MFacade.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxXmlSettings.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeSceneManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeDelayAction.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnBounds.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MUtils.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxCollageTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxSmartPointer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxSpriteTexture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofxtinyxml.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MEnums.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnSound.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MRepository.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MStorage.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeButton.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeMultiAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MError.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MEngine.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MFactory.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MTests.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BeTransformAnim.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MRenderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnShape.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnSpriteSheet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnSpriteSet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EnSprite.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <Filter Include="src\Attributes">
+      <UniqueIdentifier>{bc5db335-e66a-40c6-83b9-360435967537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Behaviors">
+      <UniqueIdentifier>{21a9233e-8ea8-47ee-8b44-9d01c69d1744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Components">
+      <UniqueIdentifier>{bcd9fc5a-833c-47da-8d68-f2bf90f1e152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine">
+      <UniqueIdentifier>{9e095e5b-4cbb-4b1d-811f-ad0786bf1017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Libraries">
+      <UniqueIdentifier>{68e157c3-20a6-4dfe-a6e7-d7db159cf325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Misc">
+      <UniqueIdentifier>{e7310a9c-2ce4-4a1e-821b-bcab0d74862e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Attributes\ofxAraPair.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraShape.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraSound.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraSprite.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraSpriteSet.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraSpriteSheet.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraTransform.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraAnim.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraBounds.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraCollision.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraFlags.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\ofxAraInputAct.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbMultiAnim.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbRotateAnim.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbSceneManager.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbTransformAnim.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbTranslateAnim.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbTween.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbAnim.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbButton.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbCollider.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbDelayAction.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbDelayRemove.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbHitEvent.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbInputKey.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Behaviors\ofxArbMove.h">
+      <Filter>src\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ofxArcRenderer.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ofxArcRepository.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ofxArcEnvironmentCtrl.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ofxArcFactory.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ofxArcStorage.h">
+      <Filter>src\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreMsg.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreNode.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreTests.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreUtils.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreApp.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreAttr.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreBehavior.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreEngine.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreEnums.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreError.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreFacade.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ofxAreLogger.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\ofxXmlSettings.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\sqlite3.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\tinyxml.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\ofxSmartPointer.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\ofxSQLite.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Misc\ofxSpriteTexture.h">
+      <Filter>src\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Misc\ofxSQLiteEntity.h">
+      <Filter>src\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Misc\ofxCollageTexture.h">
+      <Filter>src\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Misc\ofxSpriteSheetRenderer.h">
+      <Filter>src\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxAreMain.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Attributes\ofxAraBounds.cpp">
+      <Filter>src\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Attributes\ofxAraFlags.cpp">
+      <Filter>src\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ofxArcStorage.cpp">
+      <Filter>src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ofxArcEnvironmentCtrl.cpp">
+      <Filter>src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ofxArcRepository.cpp">
+      <Filter>src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ofxArcFactory.cpp">
+      <Filter>src\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreNode.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreUtils.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreApp.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreBehavior.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreEngine.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreFacade.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreMsg.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\ofxXmlSettings.cpp">
+      <Filter>src\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\sqlite3.c">
+      <Filter>src\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\tinyxml.cpp">
+      <Filter>src\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\tinyxmlparser.cpp">
+      <Filter>src\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\ofxSQLite.cpp">
+      <Filter>src\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Misc\ofxCollageTexture.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Misc\ofxSpriteSheetRenderer.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Misc\ofxSpriteTexture.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ofxAreEnums.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
