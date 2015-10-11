@@ -89,9 +89,9 @@ public:
 				tweenOut->GetTransform().localPos.y = height / 2 - heightActual;
 			}
 			else if (direction == TweenDirection::DOWN){
-				tweenIn->GetTransform().localPos.x = width / 2;
-				tweenOut->GetTransform().localPos.y = height / 2 + (heightActual);
-				tweenIn->GetTransform().localPos.y = -height / 2 + heightActual;
+				tweenIn->GetTransform().localPos.x = (float) (width / 2);
+				tweenOut->GetTransform().localPos.y = (float)(height / 2 + (heightActual));
+				tweenIn->GetTransform().localPos.y = (float) (-height / 2 + heightActual);
 			}
 
 			if (actual >= 1.0f){

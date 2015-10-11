@@ -1,17 +1,11 @@
 #pragma once
 
-#include "ofxSmartPointer.h"
-#include <string>
-#include <map>
-#include "ofImage.h"
-#include "ofTrueTypeFont.h"
+#include "ofxAreMain.h"
 #include "ofxAraSound.h"
-#include "ofxXmlSettings.h"
 #include "ofxAraAnim.h"
 #include "ofxAraSpriteSheet.h"
 
 
-using namespace std;
 
 /**
 * Resource controller that holds images, 3D objects and sounds

@@ -3,12 +3,10 @@
 #include "ofxAreMain.h"
 #include "ofxAreMsg.h"
 #include "ofxAraInputAct.h"
-#include "ofBaseTypes.h"
 #include "ofxAraSound.h"
 #include "ofxAraAnim.h"
 
 class ofxAreBehavior;
-using namespace std;
 
 
 /*************************************************************************/
@@ -21,8 +19,13 @@ void COGPlaySound(spt<ofxAraSound> sound);
 vector<ofxAraInputAct>& COGGetPressedKeys();
 vector<ofxAraInputAct>& COGGetPressedPoints();
 vector<spt<ofxAraSound>>& COGGetPlayedSounds();
+int COGGetScreenRealWidth();
+int COGGetScreenRealHeight();
 int COGGetScreenWidth();
 int COGGetScreenHeight();
+float COGGetScreenRealAspectRatio();
+float COGGetScreenAspectRatio();
+void COGSetScreenAspectRatio(float ratio);
 ofVec2f COGGetScreenSize();
 void COGRunThread(ofThread* thread);
 

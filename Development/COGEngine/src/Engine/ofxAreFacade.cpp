@@ -26,6 +26,14 @@ vector<spt<ofxAraSound>>& COGGetPlayedSounds(){
 	return COGEngine.environmentCtrl->GetPlayedSounds();
 }
 
+int COGGetScreenRealWidth(){
+	return COGEngine.environmentCtrl->GetRealWidth();
+}
+
+int COGGetScreenRealHeight(){
+	return COGEngine.environmentCtrl->GetRealHeight();
+}
+
 int COGGetScreenWidth(){
 	return COGEngine.environmentCtrl->GetWidth();
 }
@@ -33,6 +41,20 @@ int COGGetScreenWidth(){
 int COGGetScreenHeight(){
 	return COGEngine.environmentCtrl->GetHeight();
 }
+
+float COGGetScreenRealAspectRatio(){
+	return COGEngine.environmentCtrl->GetRealAspectRatio();
+}
+
+float COGGetScreenAspectRatio(){
+	return COGEngine.environmentCtrl->GetAspectRatio();
+}
+
+void COGSetScreenAspectRatio(float ratio){
+	COGEngine.environmentCtrl->SetAspectRatio(ratio);
+}
+
+
 
 ofVec2f COGGetScreenSize(){
 	return COGEngine.environmentCtrl->GetSize();

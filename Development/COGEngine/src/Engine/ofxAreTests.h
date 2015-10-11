@@ -1,9 +1,6 @@
 #pragma once
 
-#include "ofMain.h"
-#ifndef TARGET_WINDOWS
-#include "ofxAndroid.h"
-#endif
+#include "ofxAreMain.h
 #include "ofxAreEngine.h"
 #include "ofxArbRotateAnim.h"
 #include "ofxAraTransform.h"
@@ -22,8 +19,7 @@ public:
 		root = new ofxAreNode(ObjType::ROOT, 12,"root");
 		root->AddAttr(Attrs::COLOR, ofColor(222,222,111));
 		root->AddAttr(Attrs::SIZE, ofVec3f(100));
-		root->AddBehavior(new ofxArbRender(RenderType::RECTANGLE),true);
-		root->AddBehavior(new ofxArbRotateAnim(0, 0, 2, false),true);
+		root->AddBehavior(new ofxArbRotateAnim(0, 0, 2, false));
 		root->GetTransform().scale = ofVec3f(0.4f);
 		return root;
 	}
@@ -62,7 +58,7 @@ public:
 	void setup(){
 		ofSetVerticalSync(false);
 		ofSetFrameRate(60);
-		COGEngine.Init(factory);
+		COGEngine.Init(factory,spt<ofxXmlSettings>());
 	}
 
 	void draw(){

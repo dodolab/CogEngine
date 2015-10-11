@@ -4,7 +4,6 @@
 #include "ofxArbRotateAnim.h"
 #include "ofxArbHitEvent.h"
 #include "ofxArbAnim.h"
-#include "ofxAreError.h"
 
 ofVec2f ofxArcFactory::GetCenter(){
 	return ofVec2f(COGGetScreenWidth() / 2, COGGetScreenHeight() / 2);

@@ -6,6 +6,7 @@
 #include "ofxAreUtils.h"
 #include "ofxAreFacade.h"
 
+
 class ofxAreNode;
 
 /**

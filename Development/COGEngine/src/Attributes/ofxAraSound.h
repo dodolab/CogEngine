@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofxAreMain.h"
-#include "ofSoundPlayer.h"
 
 /**
 * Entity for sound attachment

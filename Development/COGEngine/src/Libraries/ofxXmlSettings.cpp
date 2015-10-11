@@ -184,6 +184,15 @@ double ofxXmlSettings::getValue(const string& tag, double defaultValue, int whic
 }
 
 //---------------------------------------------------------
+float ofxXmlSettings::getValue(const string& tag, float defaultValue, int which){
+	TiXmlHandle valHandle(NULL);
+	if (readTag(tag, valHandle, which)){
+		return ofToFloat(valHandle.ToText()->Value());
+	}
+	return defaultValue;
+}
+
+//---------------------------------------------------------
 string ofxXmlSettings::getValue(const string& tag, const string& defaultValue, int which){
     TiXmlHandle valHandle(NULL);
 	if (readTag(tag, valHandle, which)){
@@ -401,6 +410,12 @@ int ofxXmlSettings::setValue(const string& tag, int value, int which){
 //---------------------------------------------------------
 int ofxXmlSettings::setValue(const string& tag, double value, int which){
 	int tagID = writeTag(tag, ofToString(value, floatPrecision).c_str(), which) -1;
+	return tagID;
+}
+
+//---------------------------------------------------------
+int ofxXmlSettings::setValue(const string& tag, float value, int which){
+	int tagID = writeTag(tag, ofToString(value, floatPrecision).c_str(), which) - 1;
 	return tagID;
 }
 
