@@ -146,6 +146,8 @@
     <ClInclude Include="src\Engine\ofxAreNode.h" />
     <ClInclude Include="src\Engine\ofxAreTests.h" />
     <ClInclude Include="src\Engine\ofxAreUtils.h" />
+    <ClInclude Include="src\Libraries\duktape.h" />
+    <ClInclude Include="src\Libraries\duk_config.h" />
     <ClInclude Include="src\Libraries\ofxSmartPointer.h" />
     <ClInclude Include="src\Libraries\ofxSQLite.h" />
     <ClInclude Include="src\Libraries\ofxXmlSettings.h" />
@@ -172,6 +174,9 @@
     <ClCompile Include="src\Engine\ofxAreMsg.cpp" />
     <ClCompile Include="src\Engine\ofxAreNode.cpp" />
     <ClCompile Include="src\Engine\ofxAreUtils.cpp" />
+    <ClCompile Include="src\Libraries\duktape.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+    </ClCompile>
     <ClCompile Include="src\Libraries\ofxSQLite.cpp" />
     <ClCompile Include="src\Libraries\ofxXmlSettings.cpp" />
     <ClCompile Include="src\Libraries\sqlite3.c">

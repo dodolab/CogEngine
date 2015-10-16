@@ -186,6 +186,12 @@
     <ClInclude Include="src\ofxAreMain.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Libraries\duk_config.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Libraries\duktape.h">
+      <Filter>src\Libraries</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Attributes\ofxAraBounds.cpp">
@@ -253,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\ofxAreEnums.cpp">
       <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Libraries\duktape.c">
+      <Filter>src\Libraries</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

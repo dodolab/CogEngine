@@ -53,7 +53,8 @@ void ofxAreEngine::Draw(uint64 delta, uint64 absolute){
 	// clear the drawing surface
 	ofBackground(50,50,50);
 	// setup ortographic camera
-	ofSetupScreenOrtho(environmentCtrl->GetWidth(),environmentCtrl->GetHeight(),-1000,1000);
+	ofSetupScreenOrtho(environmentCtrl->GetRealWidth(),environmentCtrl->GetRealHeight(),-1000,1000);
+
 	// draw the root node
 	this->_root->GetRoot()->Draw(delta, absolute);
 
