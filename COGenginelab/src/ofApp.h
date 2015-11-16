@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxSpriteSheetRenderer.h"
-#include "ofxAreApp.h"
+#include "SpriteSheetRenderer.h"
+#include "CogApp.h"
 
 //a quick and dirty sprite implementation
 struct basicSprite {
@@ -14,25 +14,25 @@ struct basicSprite {
 	int frame;              // DEFAULT SHOULD BE SET TO 0.	which frame of the animation to draw. current tile is calculated as index+frame..
 
 	float w;                // how many tiles right of the index are included
-	float h; 
+	float h;
 };
 
 #pragma once
 
 
-#ifndef TARGET_WINDOWS
+#ifndef WIN32
 #include "ofxAndroid.h"
 #endif
 
-class MTestApp : public ofxAreApp
+class MTestApp : public CogApp
 {
 protected:
-	ofxSpriteSheetRenderer * spriteRenderer;	// our spriteRenderer
+	SpriteSheetRenderer * spriteRenderer;	// our spriteRenderer
 	vector<basicSprite *> sprites;				// our vector of sprites
 
 public:
 
-	MTestApp() : ofxAreApp(nullptr){
+	MTestApp() : CogApp(nullptr) {
 
 	}
 
@@ -45,7 +45,7 @@ public:
 	void windowResized(int w, int h);
 
 
-#ifdef TARGET_WINDOWS
+#ifdef WIN32
 	void mouseMoved(int x, int y);
 	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);

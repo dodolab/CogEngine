@@ -2,7 +2,7 @@
 
 #include "ofApp.h"
 #include "ofxSQLite.h"
-#include "ofxSQLiteEntity.h"
+#include "SQLiteEntity.h"
 
 
 bool sortByZIndex(basicSprite * a, basicSprite * b) {
@@ -10,12 +10,12 @@ bool sortByZIndex(basicSprite * a, basicSprite * b) {
 }
 
 
-void MTestApp::setup(){
+void MTestApp::setup() {
 
-	
+
 	ofxSQLite* sqlite = new ofxSQLite();
 	sqlite->setup("test.db");
-	
+
 
 	sqlite->simpleQuery(""\
 		"CREATE TABLE IF NOT EXISTS Krabicka (" \
@@ -51,43 +51,43 @@ void MTestApp::setup(){
 		.execute();
 
 
-		sqlite->simpleQuery(""\
-			"CREATE TABLE IF NOT EXISTS game_runs( " \
-			" id INTEGER PRIMARY KEY AUTOINCREMENT" \
-			",start_time TEXT" \
-			", end_time TEXT" \
-			");"
-			);
+	sqlite->simpleQuery(""\
+		"CREATE TABLE IF NOT EXISTS game_runs( " \
+		" id INTEGER PRIMARY KEY AUTOINCREMENT" \
+		",start_time TEXT" \
+		", end_time TEXT" \
+		");"
+		);
 
-		if (SQLITE_OK != sqlite->simpleQuery(""\
-			"CREATE TABLE IF NOT EXISTS game_run_data( " \
-			" gid INTEGER PRIMARY KEY AUTOINCREMENT" \
-			",runid INTEGER" \
-			",gdata TEXT" \
-			");"
-			)) {
-			cout << "ERROR CREATE TABLE\n";
-		}
+	if (SQLITE_OK != sqlite->simpleQuery(""\
+		"CREATE TABLE IF NOT EXISTS game_run_data( " \
+		" gid INTEGER PRIMARY KEY AUTOINCREMENT" \
+		",runid INTEGER" \
+		",gdata TEXT" \
+		");"
+		)) {
+		cout << "ERROR CREATE TABLE\n";
+	}
 
-		// insert
-		sqlite->insert("game_runs")
-			.use("start_time", "today")
-			.use("end_time", "tomorrow")
-			.execute();
+	// insert
+	sqlite->insert("game_runs")
+		.use("start_time", "today")
+		.use("end_time", "tomorrow")
+		.execute();
 
-		// lastInsertID
-		int last_run_id = sqlite->lastInsertID();
-		sqlite->insert("game_run_data")
-			.use("runid", last_run_id)
-			.use("gdata", "MyData")
-			.execute();
-		cout << "insert into game_run_data error:" << sqlite->getError() << endl;;
+	// lastInsertID
+	int last_run_id = sqlite->lastInsertID();
+	sqlite->insert("game_run_data")
+		.use("runid", last_run_id)
+		.use("gdata", "MyData")
+		.execute();
+	cout << "insert into game_run_data error:" << sqlite->getError() << endl;;
 
 
-		// insert
-		sqlite->insert("scores")
-			.use("score", 5999)
-			.use(
+	// insert
+	sqlite->insert("scores")
+		.use("score", 5999)
+		.use(
 			"time"
 			, ofToString(ofGetDay())
 			+ "-" + ofToString(ofGetMonth())
@@ -97,128 +97,128 @@ void MTestApp::setup(){
 			+ ":" + ofToString(ofGetSeconds())
 			).execute();
 
-		// get last inserted row id
-		cout << "inserted row id: " << sqlite->lastInsertID() << endl;
+	// get last inserted row id
+	cout << "inserted row id: " << sqlite->lastInsertID() << endl;
 
 
-		ofxSQLiteSelect sel = sqlite->select("id, time").from("scores");
-		sel.execute().begin();
+	ofxSQLiteSelect sel = sqlite->select("id, time").from("scores");
+	sel.execute().begin();
 
-		while (sel.hasNext()) {
-			int id = sel.getInt();
-			std::string name = sel.getString();
-			cout << id << ", " << name << endl;
-			sel.next();
-		}
+	while (sel.hasNext()) {
+		int id = sel.getInt();
+		std::string name = sel.getString();
+		cout << id << ", " << name << endl;
+		sel.next();
+	}
 
-		// select
-		sel = sqlite->select("id, start_time")
-			.from("game_runs")
-			.join("game_run_data", "runid = id", "runid, gdata")
-			.where("runid", 3)
-			.orWhere("runid", 13)
-			.orWhere("runid", last_run_id)
-			//.limit(5)
-			.order("runid", " DESC ")
-			.execute().begin();
+	// select
+	sel = sqlite->select("id, start_time")
+		.from("game_runs")
+		.join("game_run_data", "runid = id", "runid, gdata")
+		.where("runid", 3)
+		.orWhere("runid", 13)
+		.orWhere("runid", last_run_id)
+		//.limit(5)
+		.order("runid", " DESC ")
+		.execute().begin();
 
-		while (sel.hasNext()) {
-			int runid = sel.getInt();
-			string gdata = sel.getString();
-			cout << "runid: " << runid << ", gdata: " << gdata << endl;
-			sel.next();
-		}
+	while (sel.hasNext()) {
+		int runid = sel.getInt();
+		string gdata = sel.getString();
+		cout << "runid: " << runid << ", gdata: " << gdata << endl;
+		sel.next();
+	}
 
-		// update
-		sqlite->update("game_runs")
-			.use("end_time", "past")
-			.where("id", last_run_id)
+	// update
+	sqlite->update("game_runs")
+		.use("end_time", "past")
+		.where("id", last_run_id)
+		.execute();
+
+
+	// delete
+	sqlite->remove("game_runs")
+		.where("id", last_run_id)
+		.execute();
+
+	// auto increment field and auto-timestamp field. on each insert
+	// the value for date_created is added automatically.
+	// -------------------------------------------------------------------------
+
+	sqlite->createTableIfNotExists("photos")
+		.add("id", SQLColumnType::SQLITE_COLUMN_INTEGER, true, true)
+		.add("old_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+		.add("new_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+		.add("dir_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+		.add("file_path", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+		.add("synchronized", SQLColumnType::SQLITE_COLUMN_BOOLEAN)
+		.add("date_synchronized", SQLColumnType::SQLITE_COLUMN_DATETIME)
+		.add("date_created", SQLColumnType::SQLITE_COLUMN_DATETIME, "CURRENT_TIMESTAMP")
+		.execute();
+
+	/*
+	*    sqlite->createTableIfNotExists("Krabicka")
+	*    .add("id", MOJO.INTEGER, MOJO.PRIMARY_KEY, MOJO.AUTOINCREMENT)
+	*    .add("old_name", MOJO:VARCHAR, 255)
+	*    .add("date_created", MOJO_DATETIME, MOJO.CURRENT_TIMESTAMP)
+	*    .execute();
+	*/
+
+
+	// just pasted this example here from a project I did.. (did no test it,
+	// but shows you some things you can do with sqlite tables
+	// ------------------------------------------------------------------------
+	int r = sqlite->simpleQuery("CREATE TABLE IF NOT EXISTS tweets (" \
+		" id INTEGER PRIMARY KEY AUTOINCREMENT " \
+		",avatar VARCHAR(255) " \
+		",user_id VARCHAR(100) " \
+		",screen_name VARCHAR(50)" \
+		",tweet_id VARCHAR(50) " \
+		",date_created DATETIME DEFAULT CURRENT_TIMESTAMP "\
+		",date_exported DATETIME "\
+		",contains_face BOOLEAN " \
+		",is_used BOOLEAN " \
+		",is_fetched BOOLEAN " \
+		",is_exported BOOLEAN " \
+		");"
+		);
+
+	// inserting mass amount of entries: use transations
+	// -------------------------------------------------------------------------
+	if (SQLITE_OK != sqlite->simpleQuery("BEGIN TRANSACTION;")) {
+		cout << "ERROR: cannot begin transaction" << std::endl;
+	}
+	int ok = 0;
+
+	for (int i = 0; i < 20; ++i) {
+		int result = sqlite->insert("photos")
+			.use("old_name", "old_name")
+			.use("new_name", "new_name")
+			.use("dir_name", "IMAGE2008.08.06/")
+			.use("file_path", "dirname/image0001.jpg")
+			.use("synchronized", 0)
 			.execute();
-
-
-		// delete
-		sqlite->remove("game_runs")
-			.where("id", last_run_id)
-			.execute();
-
-		// auto increment field and auto-timestamp field. on each insert
-		// the value for date_created is added automatically.
-		// -------------------------------------------------------------------------
-
-		sqlite->createTableIfNotExists("photos")
-			.add("id", SQLColumnType::SQLITE_COLUMN_INTEGER, true, true)
-			.add("old_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
-			.add("new_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
-			.add("dir_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
-			.add("file_path", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
-			.add("synchronized", SQLColumnType::SQLITE_COLUMN_BOOLEAN)
-			.add("date_synchronized", SQLColumnType::SQLITE_COLUMN_DATETIME)
-			.add("date_created", SQLColumnType::SQLITE_COLUMN_DATETIME, "CURRENT_TIMESTAMP")
-			.execute();
-
-		/*
-		*    sqlite->createTableIfNotExists("Krabicka")
-		*    .add("id", MOJO.INTEGER, MOJO.PRIMARY_KEY, MOJO.AUTOINCREMENT)
-		*    .add("old_name", MOJO:VARCHAR, 255)
-		*    .add("date_created", MOJO_DATETIME, MOJO.CURRENT_TIMESTAMP)
-		*    .execute();
-		*/
-
-
-		// just pasted this example here from a project I did.. (did no test it,
-		// but shows you some things you can do with sqlite tables
-		// ------------------------------------------------------------------------
-		int r = sqlite->simpleQuery("CREATE TABLE IF NOT EXISTS tweets (" \
-			" id INTEGER PRIMARY KEY AUTOINCREMENT " \
-			",avatar VARCHAR(255) " \
-			",user_id VARCHAR(100) " \
-			",screen_name VARCHAR(50)" \
-			",tweet_id VARCHAR(50) " \
-			",date_created DATETIME DEFAULT CURRENT_TIMESTAMP "\
-			",date_exported DATETIME "\
-			",contains_face BOOLEAN " \
-			",is_used BOOLEAN " \
-			",is_fetched BOOLEAN " \
-			",is_exported BOOLEAN " \
-			");"
-			);
-
-		// inserting mass amount of entries: use transations
-		// -------------------------------------------------------------------------
-		if (SQLITE_OK != sqlite->simpleQuery("BEGIN TRANSACTION;")) {
-			cout << "ERROR: cannot begin transaction" << std::endl;
+		if (result != SQLITE_OK) {
+			cout << "error: " << result << endl;
+			cout << "message:" << sqlite->getError() << endl;
+			break;
 		}
-		int ok = 0;
-
-		for (int i = 0; i < 20; ++i) {
-			int result = sqlite->insert("photos")
-				.use("old_name", "old_name")
-				.use("new_name", "new_name")
-				.use("dir_name", "IMAGE2008.08.06/")
-				.use("file_path", "dirname/image0001.jpg")
-				.use("synchronized", 0)
-				.execute();
-			if (result != SQLITE_OK) {
-				cout << "error: " << result << endl;
-				cout << "message:" << sqlite->getError() << endl;
-				break;
-			}
-			else {
-				ok++;
-			}
-
-		}
-		cout << "Inserted: " << ok << std::endl;
-		if (SQLITE_OK != sqlite->simpleQuery("COMMIT;")) {
-			cout << "ERROR: cannot commit" << std::endl;
+		else {
+			ok++;
 		}
 
-		// Get amount of rows.
-		//-------------------------------------------------------------------------
-		sel = sqlite->select("count(id) as total").from("photos");
-		sel.execute().begin();
-		int count = sel.getInt();
-		cout << "total entries:" << count << std::endl;
+	}
+	cout << "Inserted: " << ok << std::endl;
+	if (SQLITE_OK != sqlite->simpleQuery("COMMIT;")) {
+		cout << "ERROR: cannot commit" << std::endl;
+	}
+
+	// Get amount of rows.
+	//-------------------------------------------------------------------------
+	sel = sqlite->select("count(id) as total").from("photos");
+	sel.execute().begin();
+	int count = sel.getInt();
+	cout << "total entries:" << count << std::endl;
 
 
 
@@ -234,8 +234,8 @@ void MTestApp::setup(){
 
 
 	ofSetFrameRate(50);
-	spriteRenderer = new ofxSpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
-	//spriteRenderer->allocate(512, GL_LINEAR);
+	spriteRenderer = new SpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
+												   //spriteRenderer->allocate(512, GL_LINEAR);
 	CollageTexture* text = new CollageTexture();
 	text->allocate(512, 256, GL_RGBA, GL_LINEAR);
 	text->pasteImage(0, 0, "images/blue.png", GL_RGBA);
@@ -255,11 +255,11 @@ void MTestApp::setup(){
 	ofEnableAlphaBlending(); // turn on alpha blending. important!
 }
 
-void MTestApp::draw(){
+void MTestApp::draw() {
 	spriteRenderer->draw(); //draw the sprites!
 }
 
-void MTestApp::update(){
+void MTestApp::update() {
 	spriteRenderer->clearCounters("combined"); // clear the sheet
 
 
@@ -277,8 +277,8 @@ void MTestApp::update(){
 				delete sprites[i]; //delete them
 				sprites.erase(sprites.begin() + i); // remove them from the vector
 			}
-			else{ 
-				
+			else {
+
 				Tile til = Tile();
 				til.offsetX = 256;
 				til.posX = sprites[i]->pos.x;
@@ -288,7 +288,7 @@ void MTestApp::update(){
 				til.height = 512;
 				til.scaleX = til.scaleY = sprites[i]->scale;
 				til.rotation = sprites[i]->rotation;
-				
+
 				//otherwise 
 				// add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
 				spriteRenderer->addTile(til);
@@ -316,39 +316,39 @@ void MTestApp::update(){
 	}
 }
 
-void MTestApp::keyPressed(int key){
+void MTestApp::keyPressed(int key) {
 
 }
 
-void MTestApp::keyReleased(int key){
+void MTestApp::keyReleased(int key) {
 
 }
 
-void MTestApp::windowResized(int w, int h){
+void MTestApp::windowResized(int w, int h) {
 
 }
 
 
 
-#ifdef TARGET_WINDOWS
+#ifdef WIN32
 
-void MTestApp::mouseMoved(int x, int y){
-
-}
-
-void MTestApp::mouseDragged(int x, int y, int button){
+void MTestApp::mouseMoved(int x, int y) {
 
 }
 
-void MTestApp::mousePressed(int x, int y, int button){
+void MTestApp::mouseDragged(int x, int y, int button) {
 
 }
 
-void MTestApp::mouseReleased(int x, int y, int button){
+void MTestApp::mousePressed(int x, int y, int button) {
 
 }
 
-void MTestApp::dragEvent(ofDragInfo dragInfo){
+void MTestApp::mouseReleased(int x, int y, int button) {
+
+}
+
+void MTestApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
@@ -356,55 +356,55 @@ void MTestApp::dragEvent(ofDragInfo dragInfo){
 #else
 
 
-void MTestApp::swipe(ofxAndroidSwipeDir swipeDir, int id){
+void MTestApp::swipe(ofxAndroidSwipeDir swipeDir, int id) {
 
 }
 
-void MTestApp::pause(){
+void MTestApp::pause() {
 
 }
 
-void MTestApp::stop(){
+void MTestApp::stop() {
 
 }
 
-void MTestApp::resume(){
+void MTestApp::resume() {
 
 }
 
-void MTestApp::reloadTextures(){
+void MTestApp::reloadTextures() {
 
 }
 
-bool MTestApp::backPressed(){
+bool MTestApp::backPressed() {
 	return false;
 }
 
-void MTestApp::okPressed(){
+void MTestApp::okPressed() {
 
 }
 
-void MTestApp::cancelPressed(){
+void MTestApp::cancelPressed() {
 
 }
 
-void MTestApp::touchDown(int x, int y, int id){
+void MTestApp::touchDown(int x, int y, int id) {
 
 }
 
-void MTestApp::touchMoved(int x, int y, int id){
+void MTestApp::touchMoved(int x, int y, int id) {
 
 }
 
-void MTestApp::touchUp(int x, int y, int id){
+void MTestApp::touchUp(int x, int y, int id) {
 
 }
 
-void MTestApp::touchDoubleTap(int x, int y, int id){
+void MTestApp::touchDoubleTap(int x, int y, int id) {
 
 }
 
-void MTestApp::touchCancelled(int x, int y, int id){
+void MTestApp::touchCancelled(int x, int y, int id) {
 
 }
 
