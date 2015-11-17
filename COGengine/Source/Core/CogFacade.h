@@ -1,12 +1,12 @@
 #pragma once
 
 #include "ofxCogMain.h"
-#include "Msg.h"
-#include "InputAct.h"
-#include "SoundFile.h"
-#include "Anim.h"
+#include "CogMsg.h"
+#include "CogInputAct.h"
+#include "CogSoundFile.h"
+#include "CogAnim.h"
 
-class Behavior;
+class CogBehavior;
 
 
 /*************************************************************************/
@@ -14,62 +14,62 @@ class Behavior;
 /*************************************************************************/
 
 // =================== MENVIRONMENT ====================
-void COGAddSound(spt<SoundFile> sound);
-void COGPlaySound(spt<SoundFile> sound);
-vector<InputAct>& COGGetPressedKeys();
-vector<InputAct>& COGGetPressedPoints();
-vector<spt<SoundFile>>& COGGetPlayedSounds();
-int COGGetScreenRealWidth();
-int COGGetScreenRealHeight();
-int COGGetScreenWidth();
-int COGGetScreenHeight();
-float COGGetScreenRealAspectRatio();
-float COGGetScreenAspectRatio();
-void COGSetScreenAspectRatio(float ratio);
-ofVec2f COGGetScreenSize();
-void COGRunThread(ofThread* thread);
+void CogAddSound(spt<CogSound> sound);
+void CogPlaySound(spt<CogSound> sound);
+vector<CogInputAct>& CogGetPressedKeys();
+vector<CogInputAct>& CogGetPressedPoints();
+vector<spt<CogSound>>& CogGetPlayedSounds();
+int CogGetScreenRealWidth();
+int CogGetScreenRealHeight();
+int CogGetScreenWidth();
+int CogGetScreenHeight();
+float CogGetScreenRealAspectRatio();
+float CogGetScreenAspectRatio();
+void CogSetScreenAspectRatio(float ratio);
+ofVec2f CogGetScreenSize();
+void CogRunThread(ofThread* thread);
 
 // =================== MFACTORY ========================
 
-float COGTranslateSpeed(float speed);
+float CogTranslateSpeed(float speed);
 
 // =================== MREPOSITORY ========================
 
-void COGRegisterListener(int action, Behavior* beh);
-void COGUnregisterListener(int action, Behavior* beh);
-void COGSendMessage(Msg& msg, Node* actualNode);
-void COGSendDirectMessageToBehavior(Msg& msg, int targetId);
-Node* COGFindNodeById(int id);
-int COGGetNodesCountByTag(string tag);
-Node* COGFindNodeByTag(string tag);
-vector<Node*> COGFindNodesByTag(char* tag);
-int COGGetNodesCountBySubType(int subtype);
-Node* COGFindNodeBySubType(int subtype);
-vector<Node*> COGFindNodesBySubType(int subtype);
-bool COGAddNode(Node* node);
-void COGRemoveNode(Node* node);
-bool COGAddBehavior(Behavior* beh);
-void COGRemoveBehavior(Behavior* beh);
+void CogRegisterListener(int action, CogBehavior* beh);
+void CogUnregisterListener(int action, CogBehavior* beh);
+void CogSendMessage(CogMsg& msg, CogNode* actualNode);
+void CogSendDirectMessageToBehavior(CogMsg& msg, int targetId);
+CogNode* CogFindNodeById(int id);
+int CogGetNodesCountByTag(string tag);
+CogNode* CogFindNodeByTag(string tag);
+vector<CogNode*> CogFindNodesByTag(char* tag);
+int CogGetNodesCountBySubType(int subtype);
+CogNode* CogFindNodeBySubType(int subtype);
+vector<CogNode*> CogFindNodesBySubType(int subtype);
+bool CogAddNode(CogNode* node);
+void CogRemoveNode(CogNode* node);
+bool CogAddBehavior(CogBehavior* beh);
+void CogRemoveBehavior(CogBehavior* beh);
 
 // =================== MLOGGER =========================
 
-void COGLogError(const char* module, const char* format, ...);
-void COGLogInfo(const char* module, const char* format, ...);
-void COGLogDebug(const char* module, const char* format, ...);
-void COGLoggerFlush();
+void CogLogError(const char* module, const char* format, ...);
+void CogLogInfo(const char* module, const char* format, ...);
+void CogLogDebug(const char* module, const char* format, ...);
+void CogLoggerFlush();
 
 // =================== MRENDERER =========================
-void COGPushNodeForRendering(Node* node);
-void COGRender();
+void CogPushNodeForRendering(CogNode* node);
+void CogRender();
 
 // =================== MSTORAGE =======================
 
-spt<ofImage> COGGet2DImage(string path);
-spt<ofImage> COGPreload2DImage(string path);
-spt<ofVboMesh> COGGetMesh(string path);
-spt<ofTrueTypeFont> COGGetFont(string path, int size);
-spt<SoundFile> COGGetSound(string path);
-spt<ofxXmlSettings> COGPreloadXMLFile(string path);
-spt<ofxXmlSettings> COGLoadXMLFile(string path);
-spt<Anim> COGGetAnimation(string name);
-void COGStoreAnimation(spt<Anim> anim);
+spt<ofImage> CogGet2DImage(string path);
+spt<ofImage> CogPreload2DImage(string path);
+spt<ofVboMesh> CogGetMesh(string path);
+spt<ofTrueTypeFont> CogGetFont(string path, int size);
+spt<CogSound> CogGetSound(string path);
+spt<ofxXmlSettings> CogPreloadXMLFile(string path);
+spt<ofxXmlSettings> CogLoadXMLFile(string path);
+spt<CogAnim> CogGetAnimation(string name);
+void CogStoreAnimation(spt<CogAnim> anim);

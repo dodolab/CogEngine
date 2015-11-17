@@ -1,140 +1,140 @@
 
 #include "CogFacade.h"
 #include "CogEngine.h"
-#include "Logger.h"
-#include "Cache.h"
+#include "CogLogger.h"
+#include "CogCache.h"
 
 // =================== MENVIRONMENT ====================
 
-void COGAddSound(spt<SoundFile> sound){
+void CogAddSound(spt<CogSound> sound){
 	COGEngine.environmentCtrl->AddSound(sound);
 }
 
-void COGPlaySound(spt<SoundFile> sound){
+void CogPlaySound(spt<CogSound> sound){
 	COGEngine.environmentCtrl->PlaySound(sound);
 }
 
-vector<InputAct>& COGGetPressedKeys(){
+vector<CogInputAct>& CogGetPressedKeys(){
 	return COGEngine.environmentCtrl->GetPressedKeys();
 }
 
-vector<InputAct>& COGGetPressedPoints(){
+vector<CogInputAct>& CogGetPressedPoints(){
 	return COGEngine.environmentCtrl->GetPressedPoints();
 }
 
-vector<spt<SoundFile>>& COGGetPlayedSounds(){
+vector<spt<CogSound>>& CogGetPlayedSounds(){
 	return COGEngine.environmentCtrl->GetPlayedSounds();
 }
 
-int COGGetScreenRealWidth(){
+int CogGetScreenRealWidth(){
 	return COGEngine.environmentCtrl->GetRealWidth();
 }
 
-int COGGetScreenRealHeight(){
+int CogGetScreenRealHeight(){
 	return COGEngine.environmentCtrl->GetRealHeight();
 }
 
-int COGGetScreenWidth(){
+int CogGetScreenWidth(){
 	return COGEngine.environmentCtrl->GetWidth();
 }
 
-int COGGetScreenHeight(){
+int CogGetScreenHeight(){
 	return COGEngine.environmentCtrl->GetHeight();
 }
 
-float COGGetScreenRealAspectRatio(){
+float CogGetScreenRealAspectRatio(){
 	return COGEngine.environmentCtrl->GetRealAspectRatio();
 }
 
-float COGGetScreenAspectRatio(){
+float CogGetScreenAspectRatio(){
 	return COGEngine.environmentCtrl->GetAspectRatio();
 }
 
-void COGSetScreenAspectRatio(float ratio){
+void CogSetScreenAspectRatio(float ratio){
 	COGEngine.environmentCtrl->SetAspectRatio(ratio);
 }
 
 
 
-ofVec2f COGGetScreenSize(){
+ofVec2f CogGetScreenSize(){
 	return COGEngine.environmentCtrl->GetSize();
 }
 
-void COGRunThread(ofThread* thread){
+void CogRunThread(ofThread* thread){
 	COGEngine.environmentCtrl->RunThread(thread);
 }
 
 // =================== MFACTORY ========================
 
-float COGTranslateSpeed(float speed){
+float CogTranslateSpeed(float speed){
 	return COGEngine.factory->TranslateSpeed(speed);
 }
 
 // =================== MSTORAGE ========================
 
-void COGRegisterListener(int action, Behavior* beh){
+void CogRegisterListener(int action, CogBehavior* beh){
 	COGEngine.storage->RegisterListener(action, beh);
 }
 
-void COGUnregisterListener(int action, Behavior* beh){
+void CogUnregisterListener(int action, CogBehavior* beh){
 	COGEngine.storage->UnregisterListener(action, beh);
 }
 
-void COGSendMessage(Msg& msg, Node* actualNode){
+void CogSendMessage(CogMsg& msg, CogNode* actualNode){
 	MLOGDEBUG("CORE", "Message %s:%s:%d", ofToString(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
 	COGEngine.storage->SendMessage(msg, actualNode);
 }
 
-void COGSendDirectMessageToBehavior(Msg& msg, int targetId){
+void CogSendDirectMessageToBehavior(CogMsg& msg, int targetId){
 	COGEngine.storage->SendDirectMessageToBehavior(msg, targetId);
 }
 
 
-Node* COGFindNodeById(int id) {
+CogNode* CogFindNodeById(int id) {
 	return COGEngine.storage->FindNodeById(id);
 }
 
-int COGGetNodesCountByTag(string tag) {
+int CogGetNodesCountByTag(string tag) {
 	return COGEngine.storage->GetNodesCountByTag(tag);
 }
 
-Node* COGFindNodeByTag(string tag) {
+CogNode* CogFindNodeByTag(string tag) {
 	return COGEngine.storage->FindNodeByTag(tag);
 }
 
-vector<Node*> COGFindNodesByTag(char* tag) {
+vector<CogNode*> CogFindNodesByTag(char* tag) {
 	return COGEngine.storage->FindNodesByTag(tag);
 }
 
-int COGGetNodesCountBySubType(int subtype) {
+int CogGetNodesCountBySubType(int subtype) {
 	return COGEngine.storage->GetNodesCountBySubType(subtype);
 }
 
-Node* COGFindNodeBySubType(int subtype) {
+CogNode* CogFindNodeBySubType(int subtype) {
 	return COGEngine.storage->FindNodeBySubType(subtype);
 }
 
-vector<Node*> COGFindNodesBySubType(int subtype) {
+vector<CogNode*> CogFindNodesBySubType(int subtype) {
 	return COGEngine.storage->FindNodesBySubType(subtype);
 }
 
-bool COGAddNode(Node* node){
+bool CogAddNode(CogNode* node){
 	MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
 	return COGEngine.storage->AddNode(node);
 }
 
-void COGRemoveNode(Node* node){
+void CogRemoveNode(CogNode* node){
 	MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
 	COGEngine.storage->RemoveNode(node);
 }
 
-bool COGAddBehavior(Behavior* beh){
+bool CogAddBehavior(CogBehavior* beh){
 	MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 	MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	return COGEngine.storage->AddBehavior(beh);
 }
 
-void COGRemoveBehavior(Behavior* beh){
+void CogRemoveBehavior(CogBehavior* beh){
 	MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 	MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	COGEngine.storage->RemoveBehavior(beh);
@@ -142,75 +142,75 @@ void COGRemoveBehavior(Behavior* beh){
 
 // =================== MLOGGER =========================
 
-void COGLogError(const char* module, const char* format, ...){
+void CogLogError(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
 	COGEngine.logger->LogError(module, 0, format, args);
 	va_end(args);
 }
 
-void COGLogInfo(const char* module, const char* format, ...){
+void CogLogInfo(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
 	COGEngine.logger->LogInfo(module, 0, format, args);
 	va_end(args);
 }
 
-void COGLogDebug(const char* module, const char* format, ...){
+void CogLogDebug(const char* module, const char* format, ...){
 	va_list args;
 	va_start(args, format);
 	COGEngine.logger->LogDebug(module, 0, format, args);
 	va_end(args);
 }
 
-void COGLoggerFlush(){
+void CogLoggerFlush(){
 	COGEngine.logger->Flush();
 }
 
 
 // =================== MRENDERER =========================
-void COGPushNodeForRendering(Node* node){
+void CogPushNodeForRendering(CogNode* node){
 	COGEngine.renderer->PushNode(node);
 }
 
-void COGRender(){
+void CogRender(){
 	COGEngine.renderer->Render();
 }
 
 // =================== MRESOURCE =======================
 
-spt<ofImage> COGGet2DImage(string path){
+spt<ofImage> CogGet2DImage(string path){
 	return COGEngine.resourceCtrl->Get2DImage(path);
 }
 
-spt<ofImage> COGPreload2DImage(string path){
+spt<ofImage> CogPreload2DImage(string path){
 	return COGEngine.resourceCtrl->Preload2DImage(path);
 }
 
-spt<ofVboMesh> COGGetMesh(string path){
+spt<ofVboMesh> CogGetMesh(string path){
 	return COGEngine.resourceCtrl->GetMesh(path);
 }
 
-spt<ofTrueTypeFont> COGGetFont(string path, int size){
+spt<ofTrueTypeFont> CogGetFont(string path, int size){
 	return COGEngine.resourceCtrl->GetFont(path, size);
 }
 
-spt<SoundFile> COGGetSound(string path){
+spt<CogSound> CogGetSound(string path){
 	return COGEngine.resourceCtrl->GetSound(path);
 }
 
-spt<ofxXmlSettings> COGPreloadXMLFile(string path){
+spt<ofxXmlSettings> CogPreloadXMLFile(string path){
 	return COGEngine.resourceCtrl->PreloadXMLFile(path);
 }
 
-spt<ofxXmlSettings> COGLoadXMLFile(string path){
+spt<ofxXmlSettings> CogLoadXMLFile(string path){
 	return COGEngine.resourceCtrl->LoadXMLFile(path);
 }
 
-spt<Anim> COGGetAnimation(string name){
+spt<CogAnim> CogGetAnimation(string name){
 	return COGEngine.resourceCtrl->GetAnimation(name);
 }
 
-void COGStoreAnimation(spt<Anim> anim){
+void CogStoreAnimation(spt<CogAnim> anim){
 	COGEngine.resourceCtrl->StoreAnimation(anim);
 }

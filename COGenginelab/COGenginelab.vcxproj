@@ -110,6 +110,14 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>robocopy "$(OF_ROOT)/export/vs/Win32/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>robocopy "$(ProjectDir)data" "$(ProjectDir)bin/data" /E /njs /njh /np /fp  /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -152,6 +160,10 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
+    <PreBuildEvent>
+      <Command>robocopy "$(ProjectDir)data" "$(ProjectDir)bin/data" /E /njs /njh /np /fp  /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

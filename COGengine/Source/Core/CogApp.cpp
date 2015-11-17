@@ -73,55 +73,55 @@ void CogApp::dragEvent(ofDragInfo dragInfo){
 #else
 
 
-void App::swipe(ofxAndroidSwipeDir swipeDir, int id){
+void CogApp::swipe(ofxAndroidSwipeDir swipeDir, int id){
 
 }
 
-void App::pause(){
+void CogApp::pause(){
 
 }
 
-void App::stop(){
+void CogApp::stop(){
 
 }
 
-void App::resume(){
+void CogApp::resume(){
 
 }
 
-void App::reloadTextures(){
+void CogApp::reloadTextures(){
 
 }
 
-bool App::backPressed(){
+bool CogApp::backPressed(){
 	return false;
 }
 
-void App::okPressed(){
+void CogApp::okPressed(){
 
 }
 
-void App::cancelPressed(){
+void CogApp::cancelPressed(){
 
 }
 
-void App::touchDown(int x, int y, int id){
+void CogApp::touchDown(int x, int y, int id){
 	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, true);
 }
 
-void App::touchMoved(int x, int y, int id){
+void CogApp::touchMoved(int x, int y, int id){
 	COGEngine.environmentCtrl->OnMultiTouchMotion(x, y, id);
 }
 
-void App::touchUp(int x, int y, int id){
+void CogApp::touchUp(int x, int y, int id){
 	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, false);
 }
 
-void App::touchDoubleTap(int x, int y, int id){
+void CogApp::touchDoubleTap(int x, int y, int id){
 
 }
 
-void App::touchCancelled(int x, int y, int id){
+void CogApp::touchCancelled(int x, int y, int id){
 
 }
 

@@ -1,11 +1,11 @@
 #include "ofMain.h"
 #include "ofApp.h"
-#include "Factory.h"
-#include "Node.h"
-#include "RotateAnim.h"
-#include "TranslateAnim.h"
-#include "HitEvent.h"
-#include "Collider.h"
+#include "CogFactory.h"
+#include "CogNode.h"
+#include "CogRotateAnim.h"
+#include "CogTranslateAnim.h"
+#include "CogHitEvent.h"
+#include "CogCollider.h"
 
 #include "duk_config.h"
 #include "duktape.h"
@@ -21,9 +21,9 @@ void WriteTime(const char* msg) {
 	temp = ofGetElapsedTimeMillis();
 }
 
-class JavaScriptBehavior : public Behavior {
+class JavaScriptBehavior : public CogBehavior {
 	duk_context* ctx;
-
+	
 	string GetBehaviorJsName() {
 		return "Behavior_" + ofToString(this->GetId());
 	}
@@ -76,7 +76,7 @@ public:
 
 
 
-	void OnMessage(Msg& msg) {
+	void OnMessage(CogMsg& msg) {
 
 		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
 		duk_get_prop_string(ctx, -1, "OnMessage");
@@ -127,7 +127,7 @@ public:
 	}
 };
 
-class TestingBehavior : public Behavior {
+class TestingBehavior : public CogBehavior {
 
 public:
 
@@ -144,7 +144,7 @@ public:
 	int fpsCounter;
 	bool othersEnded;
 
-	void OnMessage(Msg& msg) {
+	void OnMessage(CogMsg& msg) {
 		if (!othersEnded) {
 			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
 				long mojo = temp;
@@ -179,57 +179,61 @@ int OnTestAnimFinished(duk_context *ctx) {
 	return 1;
 }
 
-class TestingFactory : public Factory {
+class TestingFactory : public CogFactory {
 
 public:
-	Node* CreateRoot() {
+	CogNode* CreateRoot() {
 
+		ofLogNotice("test") << "vytvarim hlavni uzel";
 		mstart = temp = ofGetElapsedTimeMillis();
 
-		Node* root = new Node(ObjType::ROOT, 12, "root");
+		CogNode* root = new CogNode(CogObjType::ROOT, 12, "root");
 
+		ofLogNotice("test") << "nacitam barvicky";
 		for (int i = 0; i < 2000; i++) {
-			spt<ofImage> img = COGGet2DImage("images/blue.png");
-			spt<ofImage> img2 = COGGet2DImage("images/red.png");
+			spt<ofImage> img = CogGet2DImage("images/blue.png");
+			spt<ofImage> img2 = CogGet2DImage("images/red.png");
 
-			Node* child = new Node("item");
+			CogNode* child = new CogNode("item");
 
 			float rand1 = ofRandomf() / 2 + 0.5f;
 			float rand2 = ofRandomf() / 2 + 0.5f;
 
-			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
+			SetTransform(child, ofVec2f(rand1, rand2), CogCalcType::PER, 0.01f, CogCalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
 
 
 			if (i % 2 == 0 || true) {
-				child->SetShape(spt<SpriteShape>(new SpriteShape(spt<Sprite>(new Sprite(spt<SpriteSet>(new SpriteSet(
-					new SpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
+				child->SetShape(spt<CogSpriteShape>(new CogSpriteShape(spt<CogSprite>(new CogSprite(spt<CogSpriteSet>(new CogSpriteSet(
+					new CogSpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
 			}
 			else {
-				child->SetShape(spt<EnImageShape>(new EnImageShape(img2)));
+				child->SetShape(spt<CogImage>(new CogImage(img2)));
 			}
 
 
 			float scale = child->GetTransform().scale.x;
-			child->GetTransform().rotationOrigin = ofVec2f((COGGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale,
-				(COGGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
+			child->GetTransform().rotationOrigin = ofVec2f((CogGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale,
+				(CogGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
 
-			RotateAnim* anim = new RotateAnim(0, 360, 0.8f, false);
+			CogRotateAnim* anim = new CogRotateAnim(0, 360, 0.8f, false);
 			rotateAnimId = anim->GetId();
 			child->AddBehavior(anim);
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
-			if (i % 2 == 0) child->AddBehavior(new HitEvent(0, false));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
+			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
+			if (i % 2 == 0) child->AddBehavior(new CogHitEvent(0, false));
 			if (i % 50 == 0) child->SetGroup(12345);
 			root->AddChild(child);
 		}
 
 		WriteTime("INIT");
 
-		root->AddBehavior(new Collider(12345));
+		ofLogNotice("test") << "zapisuju ze je vsechno OK";
+
+		root->AddBehavior(new CogCollider(12345));
 		//root->AddBehavior(new TestingBehavior());
 		duk_context *ctx = duk_create_heap_default();
 		duk_push_global_object(ctx);
@@ -246,6 +250,7 @@ public:
 
 		WriteTime("SUBMIT CHANGES");
 
+		ofLogNotice("test") << "spoustim barvicky";
 		return root;
 	}
 };
@@ -266,6 +271,130 @@ int dojo(duk_context *ctx) {
 
 
 #ifdef WIN32
+#ifdef TESTING
+
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
+
+struct TestPointer
+{
+	TestPointer(const int data) : Data(data) {}
+	TestPointer(const TestPointer & other)
+	{
+		Data = other.Data;
+		++CopyConstructorCount;
+	}
+
+	~TestPointer()
+	{
+		++DestructorCount;
+	}
+
+	int Data;
+
+	static size_t CopyConstructorCount;
+	static size_t DestructorCount;
+};
+
+size_t TestPointer::CopyConstructorCount = 0;
+size_t TestPointer::DestructorCount = 0;
+
+dukbind_bind_as_raw_pointer(TestPointer)
+
+static bool DoStuffIsCalled = false;
+
+static duk_ret_t DoStuff(duk_context *)
+{
+	DoStuffIsCalled = true;
+	return 0;
+}
+
+static duk_ret_t CheckThis(duk_context * ctx)
+{
+	duk_push_this(ctx);
+
+	const TestPointer & result = dukbind::Get(ctx, -1, (TestPointer*)0);
+
+	REQUIRE(result.Data == 5678);
+
+	return 0;
+}
+
+TEST_CASE("Class can be passed as pointer", "[binding][class]")
+{
+	duk_context * ctx = duk_create_heap_default();
+
+	dukbind::BindingInfo info;
+
+	info.AddClass("TestPointer", dukbind::rtti::GetTypeIndex<TestPointer>());
+	info.AddMethod(dukbind::rtti::GetTypeIndex<TestPointer>(), "DoStuff", DoStuff);
+	info.AddMethod(dukbind::rtti::GetTypeIndex<TestPointer>(), "CheckThis", CheckThis);
+
+	dukbind::Setup(ctx, info, "Module");
+
+	SECTION("Instance is not copied when pushed")
+	{
+		TestPointer data(1234);
+		TestPointer::CopyConstructorCount = 0;
+		dukbind::Push(ctx, data, (TestPointer*)0);
+		REQUIRE(TestPointer::CopyConstructorCount == 0);
+	}
+
+	SECTION("Instance is not copied when pushed")
+	{
+		TestPointer data(5678);
+
+		dukbind::Push(ctx, data, (TestPointer*)0);
+
+		const TestPointer & result = dukbind::Get(ctx, -1, (TestPointer*)0);
+
+		REQUIRE(&result == &data);
+	}
+
+	SECTION("Instance is not destructed when garbage collected")
+	{
+		TestPointer data(1234);
+		dukbind::Push(ctx, data, (TestPointer*)0);
+		TestPointer::DestructorCount = 0;
+
+		duk_pop(ctx);
+		duk_gc(ctx, 0);
+		duk_gc(ctx, 0);
+		REQUIRE(TestPointer::DestructorCount == 0);
+	}
+
+	SECTION("Binding is called")
+	{
+		TestPointer data(1234);
+		duk_push_global_object(ctx);
+		dukbind::Push(ctx, data, (TestPointer*)0);
+		duk_put_prop_string(ctx, -2, "data");
+
+		duk_eval_string_noresult(ctx, "data.DoStuff()");
+
+		REQUIRE(DoStuffIsCalled);
+	}
+
+	SECTION("This is valid")
+	{
+		TestPointer data(5678);
+		duk_push_global_object(ctx);
+		dukbind::Push(ctx, data, (TestPointer*)0);
+		duk_put_prop_string(ctx, -2, "data");
+
+		duk_eval_string_noresult(ctx, "data.CheckThis()");
+	}
+
+	duk_destroy_heap(ctx);
+}
+
+
+
+
+
+#else
 int main() {
 
 	duk_context *ctx = duk_create_heap_default();
@@ -308,12 +437,14 @@ int main() {
 
 	return 0;
 }
+#endif
 
 #else
 #include <jni.h>
 
 int main() {
 
+	ofLogNotice("test") << "spustil jsem aplikaci";
 	duk_context *ctx = duk_create_heap_default();
 
 	duk_push_global_object(ctx);
@@ -329,13 +460,15 @@ int main() {
 
 	//duk_pop(ctx);  /* pop global */
 
+	ofLogNotice("test") << "nacitam ruzne atributy";
 
 	duk_destroy_heap(ctx);
 
 	ofSetupOpenGL(720, 1280, OF_WINDOW);			// <-------- setup the GL context
 	cout << "Android app loaded" << endl;
 	//ofRunApp(new MTestApp());
-	ofRunApp(new ofxAreApp(new TestingFactory()));
+	ofLogNotice("test") << "spoustim appku s testingFactory";
+	ofRunApp(new CogApp(new TestingFactory()));
 	return 0;
 }
 

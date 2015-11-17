@@ -39,7 +39,7 @@
 ################################################################################
 # PROJECT_EXTERNAL_SOURCE_PATHS = 
 
-PROJECT_EXTERNAL_SOURCE_PATHS = ../COGengine/src
+PROJECT_EXTERNAL_SOURCE_PATHS = ../COGengine/Source ../COGengine/3rdParty
 
 ################################################################################
 # PROJECT EXCLUSIONS
@@ -107,6 +107,8 @@ PROJECT_EXTERNAL_SOURCE_PATHS = ../COGengine/src
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 # PROJECT_CFLAGS = 
+
+PROJECT_CFLAGS =-w
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS

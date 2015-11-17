@@ -1,8 +1,7 @@
-SET ANDROID_HOME=c:/ofxp/android-sdk
-SET JAVA_HOME=C:\OFXP\JDK
-SET OF_ROOT=C:/ofxp/openframeworks/android
-SET NDK_ROOT=C:/ofxp/android-ndk
-SET SDK_ROOT=C:/ofxp/android-sdk
-SET PATH=C:\OFXP\ANT\bin;C:\OFXP\android-sdk\platform-tools;C:\OFXP\MINGW\mingw64\bin;c:\ofxp\mingw\msys\1.0\bin;c:\ofxp\jdk\bin;C:\ofxp\openframeworks\android\libs\openframeworkscompiled\project\android\windows;c:\windows\system32
-make -j8 clean PLATFORM_OS=Android
-make -j8 Release PLATFORM_OS=Android
+SET ANDROID_HOME=F:/of/android-sdk
+SET JAVA_HOME=F:\OF\JDK
+SET OF_ROOT=F:/of/openframeworks/android
+SET NDK_ROOT=F:/of/android-ndk
+SET SDK_ROOT=F:/of/android-sdk
+SET PATH=F:\OF\ANT\bin;F:\OF\android-sdk\platform-tools;F:\OF\MINGW\mingw64\bin;F:\of\mingw\msys\1.0\bin;F:\of\jdk\bin;F:\of\openframeworks\android\libs\openframeworkscompiled\project\android\windows;F:\windows\system32
+make -j1 Release PLATFORM_OS=Android

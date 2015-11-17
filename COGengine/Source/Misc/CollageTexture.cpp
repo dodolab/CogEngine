@@ -100,7 +100,7 @@ void CollageTexture::allocate(int w, int h, int internalGlDataType, int internal
 	// init to black
 	glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, (GLint) texData.tex_w, (GLint) texData.tex_h, 0, internal.glType, internal.pixelType, 0);
 #else
-	glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, texData.tex_w, texData.tex_h, 0, texData.glTypeInternal, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(texData.textureTarget, 0, texData.glInternalFormat, texData.tex_w, texData.tex_h, 0, texData.glInternalFormat, GL_UNSIGNED_BYTE, 0);
 #endif
 	
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
