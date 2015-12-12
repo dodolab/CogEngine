@@ -36,7 +36,7 @@ namespace Cog {
 			actual += delta;
 
 			if (actual > millis) {
-				SendDirectMessage(Actions::DELAY_ACTION, 0, data, owner, targetId);
+				SendDirectMessage(ACT_DELAY_ACTION, 0, data, owner, targetId);
 				Finish();
 			}
 		}
@@ -44,4 +44,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

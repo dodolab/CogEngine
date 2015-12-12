@@ -330,7 +330,7 @@ namespace Cog {
 					int cellHeight = spriteSheet->getHeight() / actualNode->GetLines();
 
 					ofRectangle imageBound(frameColumn*cellWidth, frameRow*cellHeight, cellWidth, cellHeight);
-					owner->ChangeAttr(Attrs::IMGBOUNDS, imageBound);
+					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
 					owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
 
 					if (owner->HasRenderType(RenderType::IMAGE)) {
@@ -343,7 +343,7 @@ namespace Cog {
 				}
 				else {
 					// image is only a common image
-					if (owner->HasAttr(Attrs::IMGBOUNDS)) owner->RemoveAttr(Attrs::IMGBOUNDS, true);
+					if (owner->HasAttr(ATTR_IMGBOUNDS)) owner->RemoveAttr(ATTR_IMGBOUNDS, true);
 
 					string imagePath = actualNode->GetSheet(actualIndex);
 					spt<ofImage> image = CogGet2DImage(imagePath);
@@ -486,4 +486,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

@@ -98,9 +98,9 @@ namespace Cog {
 
 			if (actual >= 1.0f) {
 				Finish();
-				SendMessageNoBubbling(Actions::TWEEN_ENDED, 0, nullptr, tweenIn);
+				SendMessageNoBubbling(ACT_TWEEN_ENDED, 0, nullptr, tweenIn);
 			}
 		}
 	};
 
-}
+}// namespace

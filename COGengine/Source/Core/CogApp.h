@@ -104,4 +104,4 @@ namespace Cog {
 	#endif
 	};
 
-}
+}// namespace

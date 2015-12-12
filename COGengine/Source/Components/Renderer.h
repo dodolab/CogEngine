@@ -112,8 +112,8 @@ namespace Cog {
 			spt<Image> imgShp = static_cast<spt<Image>>(owner->GetShape());
 			spt<ofImage> image = imgShp->GetImage();
 
-			if (owner->HasAttr(Attrs::IMGBOUNDS)) {
-				ofRectangle bound = owner->GetAttr<ofRectangle>(Attrs::IMGBOUNDS);
+			if (owner->HasAttr(ATTR_IMGBOUNDS)) {
+				ofRectangle bound = owner->GetAttr<ofRectangle>(ATTR_IMGBOUNDS);
 				image->drawSubsection(-bound.width / 2, -bound.height / 2, bound.width, bound.height, bound.x, bound.y);
 			}
 			else {
@@ -139,8 +139,8 @@ namespace Cog {
 			ofLoadMatrix(absM);
 
 
-			ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
-			ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
+			ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
+			ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
 			ofSetColor(color);
 			ofFill();
 			ofRect(-size.x / 2, -size.y / 2, size.x, size.y);
@@ -152,8 +152,8 @@ namespace Cog {
 		* @param owner owner node
 		*/
 		void RenderArc(Node* owner) {
-			ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
-			ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
+			ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
+			ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
 			ofSetColor(color);
 
 			// todo: draw arc
@@ -170,14 +170,14 @@ namespace Cog {
 			ofLoadMatrix(absM);
 
 
-			if (owner->HasAttr(Attrs::COLOR)) {
-				ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
+			if (owner->HasAttr(ATTR_COLOR)) {
+				ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
 				ofSetColor(color);
 			}
 			else ofSetColor(0, 0, 0);
 			spt<Font> mojo = owner->GetShape<spt<Font>>();
 			spt<ofTrueTypeFont> font = mojo->GetFont();
-			string text = owner->GetAttr<string>(Attrs::TEXT);
+			string text = owner->GetAttr<string>(ATTR_TEXT);
 			font->drawString(text, -font->stringWidth(text) / 2, -font->stringHeight(text) / 2);
 		}
 
@@ -209,4 +209,4 @@ namespace Cog {
 	};
 
 
-}
+}// namespace

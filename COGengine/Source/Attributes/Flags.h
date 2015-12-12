@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofxCogMain.h"
+#include "StringHash.h"
 
 namespace Cog {
 
@@ -11,15 +12,15 @@ namespace Cog {
 	class Flags {
 	private:
 		// first flag bit array
-		int flags1;
+		unsigned flags1;
 		// second flag bit array
-		int flags2;
+		unsigned flags2;
 		// third flag bit array
-		int flags3;
+		unsigned flags3;
 		// fourth flag bit array
-		int flags4;
+		unsigned flags4;
 		// map for other flags (if used)
-		map<int, int>* otherFlags;
+		map<unsigned, unsigned>* otherFlags;
 
 		/**
 		* Initializes state machine
@@ -41,32 +42,18 @@ namespace Cog {
 		/**
 		* Creates a new state machine, initialized with list of state
 		*/
-		Flags(vector<int> states);
+		Flags(vector<unsigned> states);
+
+		/**
+		* Creates a new state machine, initialized with any number of states
+		*/
+		Flags(unsigned states, ...);
 
 		/**
 		* Creates a new state machine, initialized with one state
 		*/
-		Flags(int state);
+		Flags(StringHash state);
 
-		/**
-		* Creates a new state machine, initialized with two states
-		*/
-		Flags(int state1, int state2);
-
-		/**
-		* Creates a new state machine, initialized with three states
-		*/
-		Flags(int state1, int state2, int state3);
-
-		/**
-		* Creates a new state machine, initialized with four states
-		*/
-		Flags(int state1, int state2, int state3, int state4);
-
-		/**
-		* Creates a new state machine, initialized with five states
-		*/
-		Flags(int state1, int state2, int state3, int state4, int state5);
 
 		Flags(const Flags& obj);
 
@@ -75,31 +62,31 @@ namespace Cog {
 		/**
 		* Gets list of all states (flags)
 		*/
-		vector<int> GetAllStates() const;
+		vector<unsigned> GetAllStates() const;
 
 		/**
 		* Returns true, if a state (flag) is set
 		*/
-		bool HasState(int state) const;
+		bool HasState(unsigned state) const;
 
 		/**
 		* Sets the state
 		* @param state state to set
 		*/
-		void SetState(int state) {
+		void SetState(unsigned state) {
 			return DoStateOperation(true, state);
 		}
 
 		/**
 		* Switches values of two states
 		*/
-		void SwitchState(int state1, int state2);
+		void SwitchState(unsigned state1, unsigned state2);
 
 		/**
 		* Resets the state
 		* @param state state to reset
 		*/
-		void ResetState(int state) {
+		void ResetState(unsigned state) {
 			return DoStateOperation(false, state);
 		}
 
@@ -107,7 +94,7 @@ namespace Cog {
 		* Resets all states and sets one given state
 		* @param st1 state to set
 		*/
-		Flags& operator=(const int& st1);
+		Flags& operator=(const unsigned& st1);
 
 		/**
 		* Resets all states and sets all states from given EnFlag object
@@ -118,7 +105,7 @@ namespace Cog {
 		/**
 		* Compares state machine with one state
 		*/
-		bool operator==(int st1);
+		bool operator==(unsigned st1);
 
 		/**
 		* Compares state machine with another
@@ -128,7 +115,7 @@ namespace Cog {
 		/**
 		* Compares state machine with one state
 		*/
-		bool operator!=(int st1);
+		bool operator!=(unsigned st1);
 
 		/**
 		* Compares state machine with another
@@ -139,25 +126,25 @@ namespace Cog {
 		* Adds a state to the state machine and returns a new object
 		* @param st1 state to set
 		*/
-		Flags operator+(int st1);
+		Flags operator+(unsigned st1);
 
 		/**
 		* Removes a state from the state machine and returns a new object
 		* @param st1 state to reset
 		*/
-		Flags operator-(int st2);
+		Flags operator-(unsigned st2);
 
 		/**
 		* Adds a state to the state machine
 		* @param st1 state to set
 		*/
-		Flags& operator+=(int st1);
+		Flags& operator+=(unsigned st1);
 
 		/**
 		* Renoves a state from the state machine
 		* @param st1 state to reset
 		*/
-		Flags& operator-=(int st1);
+		Flags& operator-=(unsigned st1);
 
 		/**
 		* Returns true, if all states from the given state machine are set in this state machine
@@ -174,16 +161,16 @@ namespace Cog {
 		* Gets index of a state
 		* @param state number of state
 		*/
-		int GetStateIndex(int state) const {
-			return state / sizeof(int);
+		int GetStateIndex(unsigned state) const {
+			return state / sizeof(unsigned);
 		}
 
 		/**
 		* Gets offset of a state
 		* @param state number of state
 		*/
-		int GetStateOffset(int state) const {
-			return state%sizeof(int);
+		int GetStateOffset(unsigned state) const {
+			return state%sizeof(unsigned);
 		}
 
 		/**
@@ -191,7 +178,7 @@ namespace Cog {
 		* @param set - if true, state will be set; reset otherwise
 		* @param state - state to set/reset
 		*/
-		void DoStateOperation(bool set, int state);
+		void DoStateOperation(bool set, unsigned state);
 	};
 
-}
+}// namespace

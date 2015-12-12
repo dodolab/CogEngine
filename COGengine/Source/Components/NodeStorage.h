@@ -8,12 +8,12 @@ namespace Cog {
 	/**
 	* Node repository
 	*/
-	class Repository {
+	class NodeStorage {
 	private:
 		// behavior listeners
-		map<int, vector<Behavior*>> behListeners;
+		map<StringHash, vector<Behavior*>> behListeners;
 		// behavior ids and their registered actions
-		map<int, vector<int>> behListenerActions;
+		map<int, vector<StringHash>> behListenerActions;
 		// list of all nodes
 		vector<Node*> allNodes;
 		// list of all behaviors
@@ -27,7 +27,7 @@ namespace Cog {
 		* @param action action to register
 		* @param beh beh that will be called when selected action is invoked
 		*/
-		void RegisterListener(int action, Behavior* beh) {
+		void RegisterListener(StringHash action, Behavior* beh) {
 			if (behListeners.find(action) == behListeners.end()) {
 				behListeners[action] = vector <Behavior*>();
 			}
@@ -36,7 +36,7 @@ namespace Cog {
 			listeners.push_back(beh);
 
 			if (behListenerActions.find(beh->GetId()) == behListenerActions.end()) {
-				behListenerActions[beh->GetId()] = vector<int>();
+				behListenerActions[beh->GetId()] = vector<StringHash>();
 			}
 
 			behListenerActions[beh->GetId()].push_back(action);
@@ -46,7 +46,7 @@ namespace Cog {
 		* Unregisters behavior listener for selected action
 		* @return true if behavior has been found and erased
 		*/
-		bool UnregisterListener(int action, Behavior* beh) {
+		bool UnregisterListener(StringHash action, Behavior* beh) {
 			if (behListeners.find(action) != behListeners.end()) {
 				vector<Behavior*>& listeners = behListeners[action];
 
@@ -69,7 +69,7 @@ namespace Cog {
 
 			if (found != behListenerActions.end()) {
 
-				vector<int> actions = found->second;
+				vector<StringHash> actions = found->second;
 
 				// unregister all actions
 				for (auto action : actions) {
@@ -105,7 +105,7 @@ namespace Cog {
 		/**
 		* Returns true, if there is at least one behavior listener for selected action
 		*/
-		bool IsRegisteredListener(int action) const {
+		bool IsRegisteredListener(StringHash action) const {
 			return behListeners.find(action) != behListeners.end();
 		}
 
@@ -115,7 +115,7 @@ namespace Cog {
 		bool IsRegisteredListener(int action, Behavior* beh) {
 			if (behListenerActions.find(beh->GetId()) == behListenerActions.end()) return false;
 
-			vector<int>& actions = behListenerActions[beh->GetId()];
+			vector<StringHash>& actions = behListenerActions[beh->GetId()];
 
 			return (std::find(actions.begin(), actions.end(), action) != actions.end());
 		}
@@ -237,4 +237,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

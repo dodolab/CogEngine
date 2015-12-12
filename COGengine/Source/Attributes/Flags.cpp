@@ -6,45 +6,26 @@ namespace Cog {
 		Init();
 	}
 
-	Flags::Flags(vector<int> states) {
+	Flags::Flags(vector<unsigned> states) {
 		Init();
 		for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 	}
 
-	Flags::Flags(int state) {
+	Flags::Flags(unsigned states, ...) {
 		Init();
-		if (state != -1) SetState(state);
+		va_list args;
+		
+		va_start(args, states);          
+		for (unsigned x = 0; x < states; x++)       
+			SetState(va_arg(args, unsigned)); 
+		va_end(args);
 	}
 
-	Flags::Flags(int state1, int state2) {
+	Flags::Flags(StringHash state) {
 		Init();
-		if (state1 != -1) SetState(state1);
-		if (state2 != -1) SetState(state2);
+		SetState(state.Value());
 	}
 
-	Flags::Flags(int state1, int state2, int state3) {
-		Init();
-		if (state1 != -1) SetState(state1);
-		if (state2 != -1) SetState(state2);
-		if (state3 != -1) SetState(state3);
-	}
-
-	Flags::Flags(int state1, int state2, int state3, int state4) {
-		Init();
-		if (state1 != -1) SetState(state1);
-		if (state2 != -1) SetState(state2);
-		if (state3 != -1) SetState(state3);
-		if (state4 != -1) SetState(state4);
-	}
-
-	Flags::Flags(int state1, int state2, int state3, int state4, int state5) {
-		Init();
-		if (state1 != -1) SetState(state1);
-		if (state2 != -1) SetState(state2);
-		if (state3 != -1) SetState(state3);
-		if (state4 != -1) SetState(state4);
-		if (state5 != -1) SetState(state5);
-	}
 
 	Flags::Flags(const Flags& obj) {
 		Init();
@@ -55,9 +36,9 @@ namespace Cog {
 		flags4 = obj.flags4;
 
 		if (obj.otherFlags != nullptr) {
-			otherFlags = new map<int, int>();
+			otherFlags = new map<unsigned, unsigned>();
 
-			for (map<int, int>::iterator it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
+			for (map<unsigned, unsigned>::iterator it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
 				(*otherFlags)[it->first] = it->second;
 			}
 		}
@@ -67,23 +48,23 @@ namespace Cog {
 		delete otherFlags;
 	}
 
-	vector<int> Flags::GetAllStates() const {
-		vector<int> output;
+	vector<unsigned> Flags::GetAllStates() const {
+		vector<unsigned> output;
 
 		// iterate over integer flags
-		for (int i = 0; i < sizeof(int) * 4; i++) {
+		for (unsigned i = 0; i < sizeof(unsigned) * 4; i++) {
 			if (HasState(i)) output.push_back(i);
 		}
 
 		// oterate over map
 		if (otherFlags != nullptr) {
-			for (map<int, int>::iterator it = otherFlags->begin(); it != otherFlags->end(); ++it) {
+			for (map<unsigned, unsigned>::iterator it = otherFlags->begin(); it != otherFlags->end(); ++it) {
 				// get value
-				int flag = it->second;
+				unsigned flag = it->second;
 				if (flag != 0) {
-					for (int i = 0; i < sizeof(int); i++) {
+					for (unsigned i = 0; i < sizeof(unsigned); i++) {
 						// state = key*intsize + i
-						if (HasState(it->first*sizeof(int) + i)) output.push_back(i);
+						if (HasState(it->first*sizeof(unsigned) + i)) output.push_back(i);
 					}
 				}
 			}
@@ -92,10 +73,10 @@ namespace Cog {
 		return output;
 	}
 
-	bool Flags::HasState(int state) const {
-		int index = GetStateIndex(state);
-		int offset = GetStateOffset(state);
-		int binary = 1 << offset;
+	bool Flags::HasState(unsigned state) const {
+		unsigned index = GetStateIndex(state);
+		unsigned offset = GetStateOffset(state);
+		unsigned binary = 1 << offset;
 
 		// check integer flags
 		if (index <= 3)
@@ -115,7 +96,7 @@ namespace Cog {
 		else return false;
 	}
 
-	void Flags::SwitchState(int state1, int state2) {
+	void Flags::SwitchState(unsigned state1, unsigned state2) {
 		bool hasState2 = HasState(state2);
 
 		if (HasState(state1)) SetState(state2);
@@ -125,7 +106,7 @@ namespace Cog {
 		else ResetState(state1);
 	}
 
-	Flags& Flags::operator=(const int& st1) {
+	Flags& Flags::operator=(const unsigned& st1) {
 		delete otherFlags;
 		flags1 = flags2 = flags3 = flags4 = 0;
 		otherFlags = nullptr;
@@ -148,7 +129,7 @@ namespace Cog {
 		return *this;
 	}
 
-	bool Flags::operator==(int st2) {
+	bool Flags::operator==(unsigned st2) {
 		return HasState(st2);
 	}
 
@@ -157,10 +138,10 @@ namespace Cog {
 			// compare map
 			if (st2.otherFlags == nullptr || otherFlags->size() != st2.otherFlags->size()) return false;
 
-			for (map<int, int>::iterator iter = otherFlags->begin(); iter != otherFlags->end(); ++iter)
+			for (map<unsigned, unsigned>::iterator iter = otherFlags->begin(); iter != otherFlags->end(); ++iter)
 			{
-				int key = iter->first;
-				int value = iter->second;
+				unsigned key = iter->first;
+				unsigned value = iter->second;
 				if ((*st2.otherFlags)[key] != value) return false;
 			}
 		}
@@ -169,7 +150,7 @@ namespace Cog {
 		return flags1 == st2.flags1 && flags2 == st2.flags2 && flags3 == st2.flags3 && flags4 == st2.flags4;
 	}
 
-	bool Flags::operator!=(int st1) {
+	bool Flags::operator!=(unsigned st1) {
 		return !(*this == st1);
 	}
 
@@ -177,31 +158,31 @@ namespace Cog {
 		return !(*this == st1);
 	}
 
-	Flags Flags::operator+(int st1) {
+	Flags Flags::operator+(unsigned st1) {
 		Flags copy(*this);
 		copy.SetState(st1);
 		return copy;
 	}
 
-	Flags Flags::operator-(int st1) {
+	Flags Flags::operator-(unsigned st1) {
 		Flags copy(*this);
 		copy.ResetState(st1);
 		return copy;
 	}
 
-	Flags& Flags::operator+=(int st1) {
+	Flags& Flags::operator+=(unsigned st1) {
 		SetState(st1);
 		return *this;
 	}
 
-	Flags& Flags::operator-=(int st1) {
+	Flags& Flags::operator-=(unsigned st1) {
 		ResetState(st1);
 		return *this;
 	}
 
 	bool Flags::Contains(Flags& other) const {
 		// return first false
-		vector<int> allStates = other.GetAllStates();
+		vector<unsigned> allStates = other.GetAllStates();
 		for (size_t i = 0; i < allStates.size(); i++) {
 			if (!HasState(allStates[i])) return false;
 		}
@@ -210,17 +191,17 @@ namespace Cog {
 
 	bool Flags::ContainsAtLeastOne(Flags& other) const {
 		// return first true
-		vector<int> allStates = other.GetAllStates();
+		vector<unsigned> allStates = other.GetAllStates();
 		for (size_t i = 0; i < allStates.size(); i++) {
 			if (HasState(allStates[i])) return true;
 		}
 		return false;
 	}
 
-	void Flags::DoStateOperation(bool set, int state) {
-		int index = GetStateIndex(state);
-		int offset = GetStateOffset(state);
-		int binary = 1 << offset;
+	void Flags::DoStateOperation(bool set, unsigned state) {
+		unsigned index = GetStateIndex(state);
+		unsigned offset = GetStateOffset(state);
+		unsigned binary = 1 << offset;
 
 		// set integer flags
 		if (index <= 3)
@@ -238,7 +219,7 @@ namespace Cog {
 		}
 
 		// index >3 - set map
-		if (otherFlags == nullptr) otherFlags = new map<int, int>();
+		if (otherFlags == nullptr) otherFlags = new map<unsigned, unsigned>();
 
 		if (set) {
 			if (!otherFlags->count(index)) {
@@ -256,4 +237,4 @@ namespace Cog {
 	}
 
 
-}
+}// namespace

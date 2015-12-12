@@ -28,19 +28,19 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(Actions::TWEEN_ENDED);
+			RegisterListening(ACT_TWEEN_ENDED);
 		}
 
 
 		void OnMessage(Msg& msg) {
-			if (msg.GetAction() == Actions::TWEEN_ENDED && waitingForTween) {
+			if (msg.GetAction() == ACT_TWEEN_ENDED && waitingForTween) {
 
 				// change zindex back to original value
 				actualScene->GetTransform().localPos.z = 1;
 				switchedScene->SetRunningMode(DISABLED);
 				waitingForTween = false;
 
-				SendMessageNoBubbling(Actions::SCENE_SWITCHED, 0, nullptr, actualScene);
+				SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, actualScene);
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Cog {
 			scene->GetTransform().localPos.x = CogGetScreenWidth() / 2;
 			scene->GetTransform().localPos.y = CogGetScreenHeight() / 2;
 
-			SendMessageNoBubbling(Actions::SCENE_SWITCHED, 0, nullptr, actualScene);
+			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, actualScene);
 		}
 
 		/**
@@ -100,4 +100,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

@@ -81,4 +81,4 @@ namespace Cog {
 		int getIndex(int x, int y);
 	};
 
-}
+}// namespace

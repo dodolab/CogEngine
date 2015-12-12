@@ -29,17 +29,17 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(Actions::OBJECT_HIT_STARTED, Actions::OBJECT_HIT_LOST, Actions::OBJECT_HIT_ENDED);
+			RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED);
 		}
 
 		void OnMessage(Msg& msg) {
-			if (msg.GetAction() == Actions::OBJECT_HIT_STARTED) {
+			if (msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
 				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
 					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(pressedImg);
 				}
 			}
 
-			if (msg.GetAction() == Actions::OBJECT_HIT_ENDED || msg.GetAction() == Actions::OBJECT_HIT_LOST) {
+			if (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST) {
 				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
 					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
 				}
@@ -54,4 +54,4 @@ namespace Cog {
 	};
 
 
-}
+}// namespace

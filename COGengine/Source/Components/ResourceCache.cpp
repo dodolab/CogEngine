@@ -1,4 +1,4 @@
-#include "Cache.h"
+#include "ResourceCache.h"
 #include <string>
 #include "ofImage.h"
 #include "Facade.h"
@@ -7,12 +7,12 @@
 
 namespace Cog {
 
-	void Cache::Init() {
+	void ResourceCache::Init() {
 		// set global dpi so font will have the same pixel size on each display
 		ofTrueTypeFont::setGlobalDpi(CogGetScreenWidth() * 72 * 0.001f);
 	}
 
-	spt<ofImage> Cache::Get2DImage(string path) {
+	spt<ofImage> ResourceCache::Get2DImage(string path) {
 
 		auto found = loadedImages.find(path);
 		if (found != loadedImages.end()) {
@@ -50,7 +50,7 @@ namespace Cog {
 		return image;
 	}
 
-	spt<ofImage> Cache::Preload2DImage(string path) {
+	spt<ofImage> ResourceCache::Preload2DImage(string path) {
 		auto found = loadedImages.find(path);
 		if (found != loadedImages.end()) {
 			return (found->second);
@@ -69,7 +69,7 @@ namespace Cog {
 		return image;
 	}
 
-	spt<ofVboMesh> Cache::GetMesh(string path) {
+	spt<ofVboMesh> ResourceCache::GetMesh(string path) {
 		auto found = loadedMeshes.find(path);
 		if (found != loadedMeshes.end()) {
 			return (found->second);
@@ -77,13 +77,13 @@ namespace Cog {
 		return spt<ofVboMesh>();
 	}
 
-	spt<ofTrueTypeFont> Cache::GetFont(string path, int size) {
+	spt<ofTrueTypeFont> ResourceCache::GetFont(string path, int size) {
 		ofTrueTypeFont* font = new ofTrueTypeFont();
 		font->loadFont(path, size, true, true);
 		return spt<ofTrueTypeFont>(font);
 	}
 
-	spt<Sound> Cache::GetSound(string path) {
+	spt<Sound> ResourceCache::GetSound(string path) {
 		auto found = loadedSounds.find(path);
 		if (found != loadedSounds.end()) {
 			return (found->second);
@@ -93,7 +93,7 @@ namespace Cog {
 		return spt<Sound>(snd);
 	}
 
-	spt<ofxXmlSettings> Cache::PreloadXMLFile(string path) {
+	spt<ofxXmlSettings> ResourceCache::PreloadXMLFile(string path) {
 		auto found = loadedXMLs.find(path);
 		if (found != loadedXMLs.end()) {
 			return (found->second);
@@ -106,20 +106,20 @@ namespace Cog {
 		return xmlPtr;
 	}
 
-	spt<ofxXmlSettings> Cache::LoadXMLFile(string path) {
+	spt<ofxXmlSettings> ResourceCache::LoadXMLFile(string path) {
 		ofxXmlSettings* xml = new ofxXmlSettings();
 		xml->loadFile(path);
 		auto xmlPtr = spt<ofxXmlSettings>(xml);
 		return xmlPtr;
 	}
 
-	spt<Anim> Cache::GetAnimation(string name) {
+	spt<Anim> ResourceCache::GetAnimation(string name) {
 		auto found = loadedAnimations.find(name);
 		if (found != loadedAnimations.end()) return found->second;
 		else return spt<Anim>();
 	}
 
-	void Cache::StoreAnimation(spt<Anim> anim) {
+	void ResourceCache::StoreAnimation(spt<Anim> anim) {
 		MASSERT(anim->GetName().compare("") != 0, "Cache", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());
@@ -128,13 +128,13 @@ namespace Cog {
 		}
 	}
 
-	spt<SpriteSheet> Cache::GetSpriteSheet(string name) {
+	spt<SpriteSheet> ResourceCache::GetSpriteSheet(string name) {
 		auto found = loadedSpriteSheets.find(name);
 		if (found != loadedSpriteSheets.end()) return found->second;
 		else return spt<SpriteSheet>();
 	}
 
-	void Cache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
+	void ResourceCache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
 		MASSERT(spriteSheet->GetName().compare("") != 0, "Cache", "Attempt to store spritesheet without a name!");
 
 		auto found = loadedSpriteSheets.find(spriteSheet->GetName());
@@ -143,4 +143,4 @@ namespace Cog {
 		}
 	}
 
-}
+}// namespace

@@ -4,7 +4,7 @@
 
 namespace Cog {
 
-// assertion with formatted message
+	// assertion with formatted message
 #ifdef DEBUG
 #   define MASSERT(condition, module, message, ...) \
     do { \
@@ -44,4 +44,4 @@ namespace Cog {
 	typedef unsigned int uint64;
 
 
-	}
+} // namespace

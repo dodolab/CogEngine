@@ -224,11 +224,13 @@
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
-    <ClInclude Include="Source\Components\Cache.h" />
+    <ClInclude Include="Source\Components\Component.h" />
+    <ClInclude Include="Source\Components\ComponentStorage.h" />
+    <ClInclude Include="Source\Components\ResourceCache.h" />
     <ClInclude Include="Source\Components\Environment.h" />
     <ClInclude Include="Source\Components\Factory.h" />
     <ClInclude Include="Source\Components\Renderer.h" />
-    <ClInclude Include="Source\Components\Storage.h" />
+    <ClInclude Include="Source\Components\NodeStorage.h" />
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
     <ClInclude Include="Source\Core\CogApp.h" />
@@ -239,6 +241,7 @@
     <ClInclude Include="Source\Core\Logger.h" />
     <ClInclude Include="Source\Core\Msg.h" />
     <ClInclude Include="Source\Core\Node.h" />
+    <ClInclude Include="Source\Core\StringHash.h" />
     <ClInclude Include="Source\Core\Tests.h" />
     <ClInclude Include="Source\Core\Utils.h" />
     <ClInclude Include="Source\Misc\CollageTexture.h" />
@@ -266,10 +269,11 @@
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Attributes\Flags.cpp" />
-    <ClCompile Include="Source\Components\Cache.cpp" />
+    <ClCompile Include="Source\Components\ComponentStorage.cpp" />
+    <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\Factory.cpp" />
-    <ClCompile Include="Source\Components\Storage.cpp" />
+    <ClCompile Include="Source\Components\NodeStorage.cpp" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
     <ClCompile Include="Source\Core\CogApp.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -277,6 +281,7 @@
     <ClCompile Include="Source\Core\Enums.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\Node.cpp" />
+    <ClCompile Include="Source\Core\StringHash.cpp" />
     <ClCompile Include="Source\Core\Utils.cpp" />
     <ClCompile Include="Source\Misc\CollageTexture.cpp" />
     <ClCompile Include="Source\Misc\SpriteSheetRenderer.cpp" />

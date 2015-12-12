@@ -129,4 +129,4 @@ void CogApp::touchCancelled(int x, int y, int id){
 
 #endif
 
-}
+}// namespace

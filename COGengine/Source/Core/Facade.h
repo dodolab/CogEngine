@@ -37,8 +37,8 @@ namespace Cog {
 
 	// =================== MREPOSITORY ========================
 
-	void CogRegisterListener(int action, Behavior* beh);
-	void CogUnregisterListener(int action, Behavior* beh);
+	void CogRegisterListener(StringHash action, Behavior* beh);
+	void CogUnregisterListener(StringHash action, Behavior* beh);
 	void CogSendMessage(Msg& msg, Node* actualNode);
 	void CogSendDirectMessageToBehavior(Msg& msg, int targetId);
 	Node* CogFindNodeById(int id);
@@ -76,4 +76,4 @@ namespace Cog {
 	spt<Anim> CogGetAnimation(string name);
 	void CogStoreAnimation(spt<Anim> anim);
 
-}
+}// namespace

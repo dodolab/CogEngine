@@ -94,7 +94,7 @@ namespace Cog {
 		*/
 		void Finish() {
 			ended = true;
-			SendMessageNoBubbling(Actions::BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
+			SendMessageNoBubbling(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
 		}
 
 		/**
@@ -140,18 +140,19 @@ namespace Cog {
 		friend class Node;
 
 	protected:
+		
 		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		*/
-		void RegisterListening(int action1);
+		void RegisterListening(StringHash action1);
 
 		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		*/
-		void RegisterListening(int action1, int action2);
+		void RegisterListening(StringHash action1, StringHash action2);
 
 		/**
 		* Registers itself as a action listener
@@ -159,7 +160,7 @@ namespace Cog {
 		* @param action2 action to listen to
 		* @param action3 action to listen to
 		*/
-		void RegisterListening(int action1, int action2, int action3);
+		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
 
 		/**
 		* Registers itself as a action listener
@@ -168,7 +169,8 @@ namespace Cog {
 		* @param action3 action to listen to
 		* @param action4 action to listen to
 		*/
-		void RegisterListening(int action1, int action2, int action3, int action4);
+		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+
 
 		/**
 		* Sends a message to any set of behaviors
@@ -178,7 +180,7 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessage(BubblingType bubblingType, int action, int subaction, void* data, Node* source) const;
+		void SendMessage(BubblingType bubblingType, StringHash action, int subaction, void* data, Node* source) const;
 
 		/**
 		* Sends a message to any set of behaviors without tree-bubbling
@@ -187,7 +189,7 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessageNoBubbling(int action, int subaction, void* data, Node* source) const;
+		void SendMessageNoBubbling(StringHash action, int subaction, void* data, Node* source) const;
 
 		/**
 		* Sends a message to one behavior with specific id
@@ -197,7 +199,7 @@ namespace Cog {
 		* @param source source node that is a part of message
 		* @param behaviorId id of behavior that should get this message
 		*/
-		void SendDirectMessage(int action, int subaction, void* data, Node* source, int behaviorId) const;
+		void SendDirectMessage(StringHash action, int subaction, void* data, Node* source, int behaviorId) const;
 
 		/**
 		* Sets owner to behavior
@@ -209,4 +211,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace

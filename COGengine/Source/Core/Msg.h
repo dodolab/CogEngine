@@ -43,7 +43,7 @@ namespace Cog {
 		// id of this message
 		int id;
 		// id of action that has been invoked
-		int action;
+		StringHash action;
 		// id of subaction that has been invoked
 		int subAction;
 		// bubbling settings
@@ -66,7 +66,7 @@ namespace Cog {
 		* @param sourceObj source object
 		* @param data payload
 		*/
-		Msg(BubblingType bubblingType, int action, int subAction, int behaviorId, Node* sourceObj, void* data);
+		Msg(BubblingType bubblingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, void* data);
 
 		~Msg() {
 
@@ -75,7 +75,7 @@ namespace Cog {
 		/**
 		* Gets id of action; see Actions for common action ids
 		*/
-		const int GetAction() const {
+		const StringHash GetAction() const {
 			return action;
 		}
 
@@ -123,4 +123,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

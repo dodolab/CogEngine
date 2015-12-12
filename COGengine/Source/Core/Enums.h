@@ -32,68 +32,47 @@ namespace Cog {
 	};
 
 	/*! Action events */
-	namespace Actions {
-		extern int BEHAVIOR_ADDED;
-		extern int BEHAVIOR_REMOVED;
-		extern int OBJECT_CREATED;
-		extern int OBJECT_REMOVED;
-		extern int USER_INPUT;
-		extern int COLLISION_OCURRED;
-		extern int NODE_DESTROYED;
-		extern int ATTRIBUTE_CHANGED;
-		extern int OBJECT_HIT_STARTED;
-		extern int OBJECT_HIT_OVER;
-		extern int OBJECT_HIT_LOST;
-		extern int OBJECT_HIT_ENDED;
-		extern int HEALTH_CHANGED;
-		extern int PARA_GROUNDED;
-		extern int PARA_KILLED;
-		extern int COPTER_KILLED;
-		extern int PLAYER_LOOSE;
-		extern int APP_FINISHED;
-		extern int TWEEN_ENDED;
-		extern int FLIP_ENDED;
-		extern int DELAY_ACTION;
-		extern int SCENE_SWITCHED;
-		extern int MATCH_FOUND;
-		extern int MATCH_FAILED;
-		extern int PROCESS_ENDED;
-		extern int NOAH_STATE_CHANGED;
-		extern int BEHAVIOR_FINISHED;
-		extern int TAKEOUTANIM_ENDED;
-
-	}
+	#define ACT_BEHAVIOR_ADDED "BEHAVIOR_ADDED"
+	#define ACT_BEHAVIOR_REMOVED "BEHAVIOR_REMOVED"
+	#define ACT_OBJECT_CREATED "OBJECT_CREATED"
+	#define ACT_OBJECT_REMOVED "OBJECT_REMOVED"
+	#define ACT_USER_INPUT "USER_INPUT"
+	#define ACT_COLLISION_OCURRED "COLLISION_OCURRED"
+	#define ACT_NODE_DESTROYED "NODE_DESTROYED"
+	#define ACT_ATTRIBUTE_CHANGED "ATTRIBUTE_CHANGED"
+	#define ACT_OBJECT_HIT_STARTED "OBJECT_HIT_STARTED"
+	#define ACT_OBJECT_HIT_OVER "OBJECT_HIT_OVER"
+	#define ACT_OBJECT_HIT_LOST "OBJECT_HIT_LOST"
+	#define ACT_OBJECT_HIT_ENDED "OBJECT_HIT_ENDED"
+	#define ACT_APP_FINISHED "APP_FINISHED"
+	#define ACT_TWEEN_ENDED "TWEEN_ENDED"
+	#define ACT_FLIP_ENDED "FLIP_ENDED"
+	#define ACT_DELAY_ACTION "DELAY_ACTION"
+	#define ACT_SCENE_SWITCHED "SCENE_SWITCHED"
+	#define ACT_PROCESS_ENDED "PROCESS_ENDED"
+	#define ACT_BEHAVIOR_FINISHED "BEHAVIOR_FINISHED"
 
 
 	/*! Attribute keys */
-	namespace Attrs {
-		extern int VELOCITY;
-		extern int ACTIONS;
-		extern int ALLOWED_ACTIONS;
-		extern int BOUNDS;
-		extern int SIZE;
-		extern int POLYGON;
-		extern int COLOR;
-		extern int FRAME;
-		extern int COLLISIONS;
-		extern int HEALTH;
-		extern int SCORE;
-		extern int IMGBOUNDS;
-		extern int TEXT;
-	}
+	#define ATTR_VELOCITY "VELOCITY"
+	#define ATTR_ACTIONS "ACTIONS"
+	#define ATTR_ALLOWED_ACTIONS "ALLOWED_ACTIONS"
+	#define ATTR_BOUNDS "BOUNDS"
+	#define ATTR_SIZE "SIZE"
+	#define ATTR_POLYGON "POLYGON"
+	#define ATTR_COLOR "COLOR"
+	#define ATTR_FRAME "FRAME"
+	#define ATTR_COLLISIONS "COLLISIONS"
+	#define ATTR_IMGBOUNDS "IMGBOUNDS"
+	#define ATTR_TEXT "TEXT"
 
 	/*! States*/
-	namespace States {
-		extern int HITTABLE;
-		extern int TO_LEFT;
-		extern int TO_RIGHT;
-		extern int HIT;
-		extern int COLLID_SOURCE;
-		extern int COLLID_TARGET;
-		extern int FLIPPED;
-	}
-
-
+	#define STATES_HITTABLE "HITTABLE"
+	#define STATES_TOLEFT "TO_LEFT"
+	#define STATES_TORIGHT "TO_RIGHT"
+	#define STATES_HIT "HIT"
+	#define STATES_COLLID_SOURCE "COLLID_SOURCE"
+	#define STATES_COLLID_TARGET "COLLID_TARGET"
 
 	/*! Behavior state enumerator */
 	enum class BehState {
@@ -113,4 +92,4 @@ namespace Cog {
 		INFO				/*!< info object */
 	};
 
-}
+}// namespace

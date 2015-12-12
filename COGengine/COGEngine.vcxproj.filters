@@ -180,9 +180,6 @@
     <ClInclude Include="Source\Behaviors\Tween.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Cache.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Components\Environment.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
@@ -190,9 +187,6 @@
       <Filter>Source\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Renderer.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\Storage.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Attr.h">
@@ -230,6 +224,21 @@
     </ClInclude>
     <ClInclude Include="Source\Core\CogApp.h">
       <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\ResourceCache.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\NodeStorage.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\ComponentStorage.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\StringHash.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Component.h">
+      <Filter>Source\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -287,16 +296,10 @@
     <ClCompile Include="Source\Attributes\Flags.cpp">
       <Filter>Source\Attributes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Cache.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\Environment.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\Factory.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\Storage.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Behavior.cpp">
@@ -321,6 +324,18 @@
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\CogApp.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\ResourceCache.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NodeStorage.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\ComponentStorage.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\StringHash.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include "Node.h"
 #include "RotateAnim.h"
 #include "Factory.h"
-#include "Cache.h"
+#include "ResourceCache.h"
 #include "ofSoundPlayer.h"
 
 namespace Cog {
@@ -15,10 +15,11 @@ namespace Cog {
 
 		// create components
 		environmentCtrl = new Environment();
-		resourceCtrl = new Cache();
+		resourceCtrl = new ResourceCache();
 		logger = new Logger(config);
-		storage = new Repository();
+		storage = new NodeStorage();
 		renderer = new Renderer();
+		componentStorage = new ComponentStorage();
 		this->factory = factory;
 
 		// initialize components 
@@ -63,4 +64,4 @@ namespace Cog {
 		renderer->Render();
 	}
 
-}
+}// namespace

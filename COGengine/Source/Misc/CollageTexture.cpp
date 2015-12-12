@@ -223,4 +223,4 @@ namespace Cog {
 			collage[i] = 0;
 	}
 
-}
+}// namespace

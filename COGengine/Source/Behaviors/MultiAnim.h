@@ -29,7 +29,7 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(Actions::BEHAVIOR_FINISHED);
+			RegisterListening(ACT_BEHAVIOR_FINISHED);
 			if (actual != nullptr)actual->Init();
 			SetOwner(actual, owner);
 		}
@@ -38,7 +38,7 @@ namespace Cog {
 
 			if (actual != nullptr) actual->OnMessage(msg);
 
-			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == actual->GetId()) {
+			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == actual->GetId()) {
 				// get next behavior
 				auto it = std::find(animations.begin(), animations.end(), actual);
 
@@ -65,4 +65,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace

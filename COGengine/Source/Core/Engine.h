@@ -6,18 +6,18 @@ namespace Cog {
 }
 
 
-#include "Cache.h"
-#include "Storage.h"
+#include "ResourceCache.h"
+#include "NodeStorage.h"
 #include "Logger.h"
 #include "Utils.h"
 #include "Node.h"
 #include "Factory.h"
-#include "Storage.h"
+#include "NodeStorage.h"
 #include "Tween.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "Environment.h"
-
+#include "ComponentStorage.h"
 
 namespace Cog {
 
@@ -36,11 +36,12 @@ namespace Cog {
 		int frameCounter;
 	public:
 		Environment* environmentCtrl;
-		Cache* resourceCtrl;
+		ResourceCache* resourceCtrl;
 		Factory* factory;
-		Repository* storage;
+		NodeStorage* storage;
 		Logger* logger;
 		Renderer* renderer;
+		ComponentStorage* componentStorage;
 
 		Engine() {
 			_root = nullptr;
@@ -50,6 +51,7 @@ namespace Cog {
 			storage = nullptr;
 			logger = nullptr;
 			renderer = nullptr;
+			componentStorage = nullptr;
 			frameCounter = 0;
 		}
 
@@ -92,4 +94,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace
