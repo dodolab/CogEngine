@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CogApp.h"
-#include "CogEngine.h"
+#include "Engine.h"
 
 #define APP_SPEED 60
 
