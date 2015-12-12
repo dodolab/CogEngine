@@ -8,7 +8,10 @@ namespace Cog {
 	/**
 	* Node repository
 	*/
-	class NodeStorage {
+	class NodeStorage : public Component{
+	
+		COMPONENT(NodeStorage)
+	
 	private:
 		// behavior listeners
 		map<StringHash, vector<Behavior*>> behListeners;
@@ -18,9 +21,24 @@ namespace Cog {
 		vector<Node*> allNodes;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
+		// root object, should be created only once
+		Node* rootObject;
 
 	public:
 
+		/**
+		* Gets the root object
+		*/
+		Node* GetRootObject() {
+			return rootObject;
+		}
+
+		/**
+		* Sets the root object
+		*/
+		void SetRootObject(Node* root) {
+			this->rootObject = root;
+		}
 
 		/**
 		* Registers behavior listener for selected action

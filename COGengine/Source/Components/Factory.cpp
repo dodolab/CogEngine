@@ -38,7 +38,7 @@ namespace Cog {
 
 	spt<ofImage> Factory::SetRenderImage(Node* node, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, Node* parent) {
 
-		spt<ofImage> img = COGEngine.resourceCtrl->Get2DImage(imgPath);
+		spt<ofImage> img = COGEngine.resourceCache->Get2DImage(imgPath);
 		node->SetShape(spt<Image>(new Image(img)));
 
 		SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, img->getWidth(), img->getHeight(), parent);
@@ -133,7 +133,7 @@ namespace Cog {
 
 	float Factory::TranslateSpeed(float speed) {
 		// speed = 1 translates over the whole width per 10 seconds
-		return speed * 0.001f*COGEngine.environmentCtrl->GetWidth();
+		return speed * 0.001f*COGEngine.environment->GetWidth();
 	}
 
 	Node* Factory::CreateRoot() {

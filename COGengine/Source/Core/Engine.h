@@ -30,47 +30,45 @@ namespace Cog {
 	*/
 	class Engine {
 	private:
-		// root node, created by factory
-		Node* _root;
 		// frame counter
-		int frameCounter;
-	public:
-		Environment* environmentCtrl;
-		ResourceCache* resourceCtrl;
-		Factory* factory;
-		NodeStorage* storage;
-		Logger* logger;
-		Renderer* renderer;
-		ComponentStorage* componentStorage;
+		int frameCounter = 0;
 
+		void RegisterComponents();
+
+	public:
+		// component storage
+		ComponentStorage* componentStorage = nullptr;
+
+		// main components that are simply accessible from this object
+		Environment* environment = nullptr;
+		ResourceCache* resourceCache = nullptr;
+		Logger* logger = nullptr;
+		Renderer* renderer = nullptr;
+		NodeStorage* nodeStorage = nullptr;
+		
 		Engine() {
-			_root = nullptr;
-			environmentCtrl = nullptr;
-			resourceCtrl = nullptr;
-			factory = nullptr;
-			storage = nullptr;
-			logger = nullptr;
-			renderer = nullptr;
-			componentStorage = nullptr;
-			frameCounter = 0;
+			componentStorage = new ComponentStorage();
 		}
 
 		~Engine() {
-			//delete _root;
-			delete environmentCtrl;
-			delete resourceCtrl;
-			delete factory;
-			delete storage;
+			delete environment;
+			delete resourceCache;
+			delete nodeStorage;
 			delete logger;
 			delete renderer;
 		}
 
 		/**
 		* Initializes engine
-		* @param factory default COG factory
+		*/
+		void Init();
+
+
+		/**
+		* Initializes engine
 		* @param config configuration xml
 		*/
-		void Init(Factory* factory, spt<ofxXmlSettings> config);
+		void Init(spt<ofxXmlSettings> config);
 
 		/**
 		* Executes one update cycle; this method is called by App
@@ -93,5 +91,7 @@ namespace Cog {
 			return frameCounter;
 		}
 	};
+
+#define GETCOMPONENT(className) COGEngine.componentStorage->GetComponent<className>(#className)
 
 }// namespace

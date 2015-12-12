@@ -9,7 +9,10 @@ namespace Cog {
 	/**
 	* Environment controller for device events (especially inputs)
 	*/
-	class Environment {
+	class Environment : public  Component {
+
+		COMPONENT(Environment)
+
 	private:
 
 		// flag for screen size change

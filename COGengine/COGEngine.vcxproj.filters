@@ -207,9 +207,6 @@
     <ClInclude Include="Source\Core\Facade.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Logger.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Msg.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -231,13 +228,16 @@
     <ClInclude Include="Source\Components\NodeStorage.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\ComponentStorage.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\StringHash.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Component.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\ComponentStorage.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Logger.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -332,10 +332,10 @@
     <ClCompile Include="Source\Components\NodeStorage.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\ComponentStorage.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\StringHash.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\ComponentStorage.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>

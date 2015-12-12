@@ -72,7 +72,7 @@ public:
 	}
 
 	void Init() {
-		RegisterListening(Actions::BEHAVIOR_FINISHED);
+		RegisterListening(ACT_BEHAVIOR_FINISHED);
 	}
 
 
@@ -139,7 +139,7 @@ public:
 	void Init() {
 		othersEnded = false;
 		fpsCounter = 0;
-		RegisterListening(Actions::BEHAVIOR_FINISHED);
+		RegisterListening(ACT_BEHAVIOR_FINISHED);
 	}
 
 	int fpsCounter;
@@ -147,7 +147,7 @@ public:
 
 	void OnMessage(Msg& msg) {
 		if (!othersEnded) {
-			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
+			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
 				long mojo = temp;
 				mend = ofGetElapsedTimeMillis();
 
@@ -396,6 +396,22 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 
 
 #else
+
+#include "Engine.h"
+
+class TestingApp : public CogApp {
+	void InitEngine() {
+		TestingFactory* fact = new TestingFactory();
+		COGEngine.componentStorage->RegisterComponent(fact);
+
+
+
+		COGEngine.Init();
+		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+	}
+};
+
+
 int main() {
 
 	duk_context *ctx = duk_create_heap_default();
@@ -434,7 +450,7 @@ int main() {
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
 	//ofRunApp(new MTestApp());
-	ofRunApp(new CogApp(new TestingFactory()));
+	ofRunApp(new TestingApp());
 
 	return 0;
 }

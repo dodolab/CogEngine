@@ -10,7 +10,10 @@ namespace Cog {
 	/**
 	* Resource controller that holds images, 3D objects and sounds
 	*/
-	class ResourceCache {
+	class ResourceCache : public Component {
+
+		COMPONENT(ResourceCache)
+
 	private:
 		// cached images
 		map<string, spt<ofImage>> loadedImages;
@@ -26,6 +29,7 @@ namespace Cog {
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
 
 	public:
+		REGISTER_XMLHANDLING("resources")
 
 		/**
 		* Initializes controller

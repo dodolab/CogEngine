@@ -137,7 +137,9 @@ namespace Cog {
 	/**
 	* Log controller
 	*/
-	class Logger {
+	class Logger : public Component {
+
+		COMPONENT(Logger)
 
 	protected:
 		LoggerChannel* channel;
@@ -145,56 +147,56 @@ namespace Cog {
 		spt<ofxXmlSettings> config;
 
 	public:
+		REGISTER_XMLHANDLING("logger")
 
-		/**
-		* Creates a new logger
-		* @param config configuration xml
-		*/
-		Logger(spt<ofxXmlSettings> config) : config(config) {
+			/**
+			* Creates a new logger
+			* @param config configuration xml
+			*/
+			Logger() {
 		}
 
 		~Logger() {
 			delete channel;
 		}
 
+		void Init() {
+			channel = new ConsoleLoggerChannel();
+			logLevel = LogLevel::LERROR;
+		}
+
 		/**
 		* Initializes component, using xml settings or default one
 		*/
-		void Init() {
-			if (config != spt<ofxXmlSettings>()) {
-				if (config->tagExists("logger")) {
-					config->pushTag("logger");
+		void Init(spt<ofxXmlSettings> config) {
+			if (config->tagExists("logger")) {
+				config->pushTag("logger");
 
-					string level = ofToLower(config->getValue("level", "info"));
+				string level = ofToLower(config->getValue("level", "info"));
 
-					if (level.compare("error") == 0) logLevel = LogLevel::LERROR;
-					else if (level.compare("info") == 0) logLevel = LogLevel::LINFO;
-					else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
+				if (level.compare("error") == 0) logLevel = LogLevel::LERROR;
+				else if (level.compare("info") == 0) logLevel = LogLevel::LINFO;
+				else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
 
-					if (config->tagExists("channel")) {
-						string type = config->getAttribute("channel", "type", "console");
+				if (config->tagExists("channel")) {
+					string type = config->getAttribute("channel", "type", "console");
 
-						if (type.compare("console") == 0) channel = new ConsoleLoggerChannel();
-						else if (type.compare("file") == 0) {
-							bool append = config->getBoolAttribute("channel", "append", true);
-							string path = config->getAttribute("channel", "path", "");
-							string fullPath = ofToDataPath(path);
-							channel = new FileLoggerChannel(fullPath, append);
-						}
-
+					if (type.compare("console") == 0) channel = new ConsoleLoggerChannel();
+					else if (type.compare("file") == 0) {
+						bool append = config->getBoolAttribute("channel", "append", true);
+						string path = config->getAttribute("channel", "path", "");
+						string fullPath = ofToDataPath(path);
+						channel = new FileLoggerChannel(fullPath, append);
 					}
-					else channel = new ConsoleLoggerChannel();
 
-
-					config->popTag();
 				}
-			}
-			else {
-				// no config available, use default settings
-				channel = new ConsoleLoggerChannel();
-				logLevel = LogLevel::LERROR;
+				else channel = new ConsoleLoggerChannel();
+
+
+				config->popTag();
 			}
 		}
+	
 
 		/**
 		* Logs error message

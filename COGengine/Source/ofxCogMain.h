@@ -26,8 +26,8 @@
 #include <list>
 #include <stdexcept>
 #include <assert.h>
-#include <stdarg.h>  // For va_start, etc.
-#include <memory>    // For std::unique_ptr
+#include <stdarg.h>  
+#include <memory>    
 #include <cmath>
 #include <functional>
 #include "ofImage.h"
@@ -37,6 +37,7 @@
 #include "SpriteTexture.h"
 #include "SQLiteEntity.h"
 #include "SpriteSheetRenderer.h"
+#include "Component.h"
 
 #pragma warning(pop)
 
