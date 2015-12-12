@@ -2,65 +2,69 @@
 
 #include "ofxCogMain.h"
 
-class CogSpriteSheet;
+namespace Cog {
 
-class CogSpriteSet{
-private:
-	int offsetX;
-	int offsetY;
-	int totalFrames;
-	int spriteWidth;
-	int spriteHeight;
-	int spriteSetWidth;
-	int spriteSetHeight;
+	class CogSpriteSheet;
 
-	CogSpriteSheet* spriteSheet;
+	class CogSpriteSet {
+	private:
+		int offsetX;
+		int offsetY;
+		int totalFrames;
+		int spriteWidth;
+		int spriteHeight;
+		int spriteSetWidth;
+		int spriteSetHeight;
 
-	int spriteSheetWidth;
-	int spriteSheetHeight;
+		CogSpriteSheet* spriteSheet;
+
+		int spriteSheetWidth;
+		int spriteSheetHeight;
 
 
-public:
-	CogSpriteSet(CogSpriteSheet* spriteSheet, int offsetX, int offsetY, int totalFrames, 
-		int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight, int spriteSheetWidth, int spriteSheetHeight)
-		: spriteSheet(spriteSheet), offsetX(offsetX), offsetY(offsetY), totalFrames(totalFrames), spriteWidth(spriteWidth), 
-		spriteHeight(spriteHeight), spriteSetWidth(spriteSetWidth), spriteSetHeight(spriteSetHeight),
-		spriteSheetWidth(spriteSheetWidth), spriteSheetHeight(spriteSheetHeight){
-	}
+	public:
+		CogSpriteSet(CogSpriteSheet* spriteSheet, int offsetX, int offsetY, int totalFrames,
+			int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight, int spriteSheetWidth, int spriteSheetHeight)
+			: spriteSheet(spriteSheet), offsetX(offsetX), offsetY(offsetY), totalFrames(totalFrames), spriteWidth(spriteWidth),
+			spriteHeight(spriteHeight), spriteSetWidth(spriteSetWidth), spriteSetHeight(spriteSetHeight),
+			spriteSheetWidth(spriteSheetWidth), spriteSheetHeight(spriteSheetHeight) {
+		}
 
-	int GetOffsetX(){
-		return offsetX;
-	}
+		int GetOffsetX() {
+			return offsetX;
+		}
 
-	int GetOffsetY(){
-		return offsetY;
-	}
+		int GetOffsetY() {
+			return offsetY;
+		}
 
-	int GetTotalFrames(){
-		return totalFrames;
-	}
+		int GetTotalFrames() {
+			return totalFrames;
+		}
 
-	int GetSpriteWidth(){
-		return spriteWidth;
-	}
+		int GetSpriteWidth() {
+			return spriteWidth;
+		}
 
-	int GetSpriteHeight(){
-		return spriteHeight;
-	}
+		int GetSpriteHeight() {
+			return spriteHeight;
+		}
 
-	int GetSpriteSetWidth(){
-		return spriteSetWidth;
-	}
+		int GetSpriteSetWidth() {
+			return spriteSetWidth;
+		}
 
-	int GetSpriteSetHeight(){
-		return spriteSetHeight;
-	}
+		int GetSpriteSetHeight() {
+			return spriteSetHeight;
+		}
 
-	int GetSpriteSheetWidth(){
-		return spriteSheetWidth;
-	}
+		int GetSpriteSheetWidth() {
+			return spriteSheetWidth;
+		}
 
-	int GetSpriteSheetHeight(){
-		return spriteSheetHeight;
-	}
-};
+		int GetSpriteSheetHeight() {
+			return spriteSheetHeight;
+		}
+	};
+
+}

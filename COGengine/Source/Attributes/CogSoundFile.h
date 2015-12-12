@@ -2,50 +2,54 @@
 
 #include "ofxCogMain.h"
 
-/**
-* Entity for sound attachment
-*/
-class CogSound{
-private:
-	ofSoundPlayer soundPlayer;
-public:
-	string filename;
-	bool started;
-	float volume;
+namespace Cog {
 
-	CogSound(string filename) : filename(filename){
-		started = false;
-		// music must be streamed; otherwise it won't work on android
-		soundPlayer.loadSound(filename,true);
-		SetVolume(1.0f);
-	}
+	/**
+	* Entity for sound attachment
+	*/
+	class CogSound {
+	private:
+		ofSoundPlayer soundPlayer;
+	public:
+		string filename;
+		bool started;
+		float volume;
 
-	bool Ended(){
-		return started && !soundPlayer.getIsPlaying();
-	}
+		CogSound(string filename) : filename(filename) {
+			started = false;
+			// music must be streamed; otherwise it won't work on android
+			soundPlayer.loadSound(filename, true);
+			SetVolume(1.0f);
+		}
 
-	void Play(){
-		soundPlayer.play();
-		started = true;
-	}
+		bool Ended() {
+			return started && !soundPlayer.getIsPlaying();
+		}
 
-	void Stop(){
-		soundPlayer.stop();
-	}
+		void Play() {
+			soundPlayer.play();
+			started = true;
+		}
 
-	void SetLoop(bool loop){
-		soundPlayer.setLoop(loop);
-	}
+		void Stop() {
+			soundPlayer.stop();
+		}
 
-	void SetVolume(float volume){
-		this->volume = volume;
-		soundPlayer.setVolume(volume);
-	}
+		void SetLoop(bool loop) {
+			soundPlayer.setLoop(loop);
+		}
 
-	float GetVolume(){
-		return volume;
-	}
-};
+		void SetVolume(float volume) {
+			this->volume = volume;
+			soundPlayer.setVolume(volume);
+		}
+
+		float GetVolume() {
+			return volume;
+		}
+	};
+
+}
 
 
 

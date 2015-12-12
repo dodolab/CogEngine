@@ -2,6 +2,7 @@
 
 #include "ofxCogMain.h"
 
+namespace Cog {
 
 // assertion with formatted message
 #ifdef DEBUG
@@ -33,12 +34,14 @@
 /**
 * Creates formatted string
 */
-std::string string_format(const char* fmt_str, ...);
+	std::string string_format(const char* fmt_str, ...);
 
-/**
-* Adds spaces into string stream
-*/
-void spaces(int howMany, std::ostream& ss);
+	/**
+	* Adds spaces into string stream
+	*/
+	void spaces(int howMany, std::ostream& ss);
 
-typedef unsigned int uint64;
+	typedef unsigned int uint64;
 
+
+	}

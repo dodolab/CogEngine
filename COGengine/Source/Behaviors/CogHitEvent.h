@@ -6,6 +6,7 @@
 #include "ofxAndroidVibrator.h"
 #endif
 
+namespace Cog {
 
 /**
 * Behavior for hit testing
@@ -173,3 +174,4 @@ public:
 	}
 
 };
+}

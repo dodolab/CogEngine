@@ -14,6 +14,7 @@ long mstart;
 long mend;
 long temp;
 using namespace std;
+using namespace Cog;
 int rotateAnimId;
 
 void WriteTime(const char* msg) {
