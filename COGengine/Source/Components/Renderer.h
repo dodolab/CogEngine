@@ -106,6 +106,7 @@ namespace Cog {
 		* @param owner owner node
 		*/
 		void RenderImage(Node* owner) {
+			auto trans = owner->GetTransform();
 			// load absolute matrix
 			ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
 			ofLoadMatrix(absM);

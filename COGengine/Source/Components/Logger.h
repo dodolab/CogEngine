@@ -147,7 +147,6 @@ namespace Cog {
 		spt<ofxXmlSettings> config;
 
 	public:
-		REGISTER_XMLHANDLING("logger")
 
 			/**
 			* Creates a new logger
@@ -194,6 +193,9 @@ namespace Cog {
 
 
 				config->popTag();
+			}
+			else {
+				Init();
 			}
 		}
 	

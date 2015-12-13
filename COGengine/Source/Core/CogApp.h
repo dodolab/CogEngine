@@ -33,9 +33,13 @@ namespace Cog {
 		CogApp() {
 		}
 
+		/**
+		* Virtual method that can be overriden to initialize custom components
+		*/
+		virtual void InitComponents();
 
 		/**
-		* Virtual method that can be used to initialize engine and custom components
+		* Virtual method that can be overriden to initialize engine with custom configuration
 		*/
 		virtual void InitEngine();
 

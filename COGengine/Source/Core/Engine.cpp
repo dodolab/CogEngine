@@ -23,8 +23,11 @@ namespace Cog {
 
 	void Engine::Init(spt<ofxXmlSettings> config) {
 		RegisterComponents();
+		vector<Component*> components = componentStorage->GetAllComponents();
 
-		// todo :-)
+		for (auto it = components.begin(); it != components.end(); ++it) {
+			(*it)->Init(config);
+		}
 	}
 
 

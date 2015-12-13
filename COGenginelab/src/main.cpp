@@ -400,14 +400,44 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 #include "Engine.h"
 
 class TestingApp : public CogApp {
-	void InitEngine() {
-		TestingFactory* fact = new TestingFactory();
+
+	TestingFactory* fact;
+
+	void InitComponents() {
+		fact = new TestingFactory();
 		COGEngine.componentStorage->RegisterComponent(fact);
+	}
 
-
+	void InitEngine() {
+		spt<ofxXmlSettings> config;
 
 		COGEngine.Init();
 		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+	}
+};
+
+class XmlTestingApp : public CogApp {
+
+	
+	void InitComponents() {
+
+	}
+
+	void InitEngine() {
+		ofxXmlSettings* xml = new ofxXmlSettings();
+		xml->loadFile("configexample.xml");
+		auto xmlPtr = spt<ofxXmlSettings>(xml);
+
+		COGEngine.Init(xmlPtr);
+
+		xmlPtr->popAll();
+		xmlPtr->pushTag("app_config");
+		xmlPtr->pushTag("scenes");
+		xmlPtr->pushTag("scene", 0);
+
+		auto mgr = GETCOMPONENT(NodeStorage);
+
+		mgr->LoadSceneFromXml(xmlPtr);
 	}
 };
 
@@ -443,14 +473,18 @@ int main() {
 
 	//ofAppGLFWWindow window;
 	//ofSetupOpenGL(&window, 225,400,OF_WINDOW);
-	ofSetupOpenGL(450, 800, OF_WINDOW);
+	ofSetupOpenGL(800, 450, OF_WINDOW);
 	//window.setDoubleBuffering(true);
 	//window.setNumSamples(4);
 
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
 	//ofRunApp(new MTestApp());
-	ofRunApp(new TestingApp());
+	
+	//ofRunApp(new TestingApp());
+	ofRunApp(new XmlTestingApp());
+
+
 
 	return 0;
 }

@@ -7,6 +7,56 @@
 
 namespace Cog {
 
+	class SettingItem {
+	public:
+		string key = "";
+		string value = "";
+
+
+		string GetValStr() {
+			return value;
+		}
+
+		double GetValDouble() {
+			return ofToDouble(value);
+		}
+
+		int GetValInt() {
+			return ofToInt(value);
+		}
+
+		float GetValFloat() {
+			return ofToFloat(value);
+		}
+
+		bool GetValBool() {
+			return ofToBool(value);
+		}
+	};
+
+	class Setting {
+	public:
+		map<string, SettingItem> items;
+		string name;
+
+		Setting() {
+			items = map<string, SettingItem>();
+		}
+
+		SettingItem GetItem(string key) {
+			auto itm = items.find(key);
+			if (itm != items.end()) {
+				return itm->second;
+			}
+			return SettingItem();
+		}
+
+		string GetItemVal(string key) {
+			return GetItem(key).value;
+		}
+	};
+
+
 	/**
 	* Resource controller that holds images, 3D objects and sounds
 	*/
@@ -28,13 +78,18 @@ namespace Cog {
 		// cached spritesheets
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
 
+		map<string, Setting> loadedDefaultSettings;
+		map<string, Setting> loadedGlobalSettings;
+		map<string, Setting> loadedProjectSettings;
+
 	public:
-		REGISTER_XMLHANDLING("resources")
 
 		/**
 		* Initializes controller
 		*/
 		void Init();
+
+		void Init(spt<ofxXml> xml);
 
 		/**
 		* Loads 2D image from file
@@ -103,6 +158,8 @@ namespace Cog {
 		* @param spriteSheet spritesheet to store
 		*/
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
+
+		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
 	};
 
 }// namespace

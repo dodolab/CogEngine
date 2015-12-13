@@ -1,6 +1,13 @@
 #include "NodeStorage.h"
+#include "Scene.h"
 
 namespace Cog {
+
+	void NodeStorage::LoadSceneFromXml(spt<ofxXml> xml) {
+		Scene* sc = new Scene();
+		sc->LoadFromXml(xml);
+		this->SetRootObject(sc->GetSceneNode()); // todo
+	}
 
 	void NodeStorage::SendMessage(Msg& msg, Node* actualNode) {
 		// there is no such callback or behavior that listens to that type of message
