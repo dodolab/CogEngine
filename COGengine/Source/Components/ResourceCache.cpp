@@ -111,9 +111,29 @@ namespace Cog {
 	}
 
 	spt<ofTrueTypeFont> ResourceCache::GetFont(string path, int size) {
-		ofTrueTypeFont* font = new ofTrueTypeFont();
-		font->loadFont(path, size, true, true);
-		return spt<ofTrueTypeFont>(font);
+
+		auto fontSetIt = loadedFonts.find(path);
+		map<int, spt<ofTrueTypeFont>> fontSet;
+
+		if (fontSetIt == loadedFonts.end()) {
+			fontSet = map<int, spt<ofTrueTypeFont>>();
+			loadedFonts[path] = fontSet;
+		}
+		else {
+			fontSet = fontSetIt->second;
+		}
+		auto font = (fontSet).find(size);
+		if (font != fontSet.end()) {
+			// return cached font
+			return font->second;
+		}
+		else {
+			ofTrueTypeFont* font = new ofTrueTypeFont();
+			font->loadFont(path, size, true, true);
+			auto fontPtr = spt<ofTrueTypeFont>(font);
+			fontSet[size] = fontPtr;
+			return fontPtr;
+		}
 	}
 
 	spt<Sound> ResourceCache::GetSound(string path) {

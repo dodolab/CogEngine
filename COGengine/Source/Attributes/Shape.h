@@ -11,6 +11,7 @@ namespace Cog {
 	class Shape {
 	protected:
 		RenderType renderType;
+		ofColor color;
 	public:
 
 		Shape() {
@@ -25,12 +26,20 @@ namespace Cog {
 			return renderType;
 		}
 
+		ofColor GetColor() {
+			return color;
+		}
+
+		void SetColor(ofColor color) {
+			this->color = color;
+		}
+
 		virtual float GetWidth() {
-			return 0;
+			return 1; // must be 1
 		}
 
 		virtual float GetHeight() {
-			return 0;
+			return 1; // must be 1
 		}
 	};
 
@@ -60,14 +69,18 @@ namespace Cog {
 		}
 	};
 
-	class Font : public Shape {
+	class Text : public Shape {
 	private:
 		spt<ofTrueTypeFont> font;
+		float size;
+		string text;
 
 	public:
 
-		Font(spt<ofTrueTypeFont> font) : Shape(RenderType::TEXT) {
+		Text(spt<ofTrueTypeFont> font, string text, float size) : Shape(RenderType::TEXT) {
 			this->font = font;
+			this->size = size;
+			this->text = text;
 		}
 
 		spt<ofTrueTypeFont> GetFont() {
@@ -76,6 +89,42 @@ namespace Cog {
 
 		void SetFont(spt<ofTrueTypeFont> font) {
 			this->font = font;
+		}
+
+		float GetSize() {
+			return size;
+		}
+
+		void SetSize(float size) {
+			this->size = size;
+		}
+
+		float GetWidth() {
+			return size;
+		}
+
+		float GetHeight() {
+			return size;
+		
+		}
+
+		float GetTextWidth() {
+			font->setGlobalDpi(size);
+			return font->stringWidth(text);
+
+		}
+
+		float GetTextHeight() {
+			font->setGlobalDpi(size);
+			return font->stringHeight(text);
+		}
+
+		string GetText() {
+			return text;
+		}
+
+		void SetText(string text) {
+			this->text = text;
 		}
 	};
 

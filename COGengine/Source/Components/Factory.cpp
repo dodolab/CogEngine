@@ -53,16 +53,16 @@ namespace Cog {
 	}
 
 	void Factory::SetFont(Node* node, spt<ofTrueTypeFont> font, ofColor color, string text) {
-		node->SetShape(spt<Font>(new Font(font)));
+	/*	node->SetShape(spt<Font>(new Font(font,2)));
 		node->AddAttr(ATTR_COLOR, color);
-		node->AddAttr(ATTR_TEXT, text);
+		node->AddAttr(ATTR_TEXT, text);*/
 	}
 
 	void Factory::SetRenderFont(Node* node, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, Node* parent) {
-		node->SetShape(spt<Font>(new Font(font)));
+	/*	node->SetShape(spt<Font>(new Font(font,2)));
 		node->AddAttr(ATTR_COLOR, color);
 		node->AddAttr(ATTR_TEXT, text);
-		SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, font->stringWidth(text), font->stringHeight(text), parent);
+		SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, font->stringWidth(text), font->stringHeight(text), parent);*/
 
 	}
 

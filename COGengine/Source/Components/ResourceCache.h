@@ -7,9 +7,25 @@
 
 namespace Cog {
 
+	/**
+	* Entity that holds key-value record, loaded usually from XML
+	*/
 	class SettingItem {
 	public:
+
+		SettingItem() {
+
+		}
+
+		SettingItem(const SettingItem& copy) {
+			key = copy.key;
+			value = copy.value;
+		}
+
+		/** key */
 		string key = "";
+
+		/** string value */
 		string value = "";
 
 
@@ -34,6 +50,9 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* Collection of key-pair values
+	*/
 	class Setting {
 	public:
 		map<string, SettingItem> items;
@@ -43,6 +62,17 @@ namespace Cog {
 			items = map<string, SettingItem>();
 		}
 
+		Setting(const Setting& copy) {
+			items = map<string, SettingItem>();
+
+			for (auto i = copy.items.begin(); i != copy.items.end(); ++i) {
+				items[i->first] = i->second;
+			}
+		}
+
+		/**
+		* Gets item by key or an item with empty values, if there is no such item
+		*/
 		SettingItem GetItem(string key) {
 			auto itm = items.find(key);
 			if (itm != items.end()) {
@@ -54,8 +84,80 @@ namespace Cog {
 		string GetItemVal(string key) {
 			return GetItem(key).value;
 		}
+
+		/**
+		* Merges collection of items, adds not presented and replaces already stored
+		*/
+		void MergeItems(map<string, SettingItem>& newSet) {
+			for (auto i = newSet.begin(); i != newSet.end(); ++i) {
+				
+				SettingItem copy = i->second;
+				items[i->first] = copy;
+			}
+		}
 	};
 
+	/**
+	* Collection of settings for various components, loaded usually from XML
+	*/
+	class Settings {
+	private:
+		map<string, Setting> settings;
+
+	public:
+		Settings() {
+
+		}
+
+		Settings(const Settings& copy) {
+			settings = map<string, Setting>();
+
+			for (auto i = copy.settings.begin(); i != copy.settings.end(); ++i) {
+				settings[i->first] = i->second;
+			}
+		}
+
+		string GetSettingVal(string setKey, string itemKey) {
+			return GetSetting(setKey).GetItemVal(itemKey);
+		}
+
+		int GetSettingValInt(string setKey, string itemKey) {
+			return GetSetting(setKey).GetItem(itemKey).GetValInt();
+		}
+
+		float GetSettingValFloat(string setKey, string itemKey) {
+			return GetSetting(setKey).GetItem(itemKey).GetValFloat();
+		}
+
+		Setting& GetSetting(string key) {
+			return settings[key];
+		}
+
+		void SetSetting(string key, Setting val) {
+			settings[key] = val;
+		}
+
+		/**
+		* Merges collection of settings, adds not presented and replaces already stored
+		*/
+		void MergeSettings(map<string, Setting>& newSet) {
+			for (auto i = newSet.begin(); i != newSet.end(); ++i) {
+				auto existing = settings.find(i->first);
+
+				if (existing != settings.end()) {
+					Setting& existingSet = existing->second;
+					Setting& newSet = i->second;
+
+					// merge values
+					existingSet.MergeItems(newSet.items);
+				}
+				else {
+					Setting copy = i->second;
+					settings[i->first] = copy;
+				}
+			}
+		}
+	};
 
 	/**
 	* Resource controller that holds images, 3D objects and sounds
@@ -77,6 +179,8 @@ namespace Cog {
 		map<string, spt<Anim>> loadedAnimations;
 		// cached spritesheets
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
+		// loaded fonts (each DPI must have one font loaded)
+		map<string, map<int,spt<ofTrueTypeFont>>> loadedFonts;
 
 		map<string, Setting> loadedDefaultSettings;
 		map<string, Setting> loadedGlobalSettings;
@@ -159,6 +263,9 @@ namespace Cog {
 		*/
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
 
+		/**
+		* Loads settings from XML
+		*/
 		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
 	};
 

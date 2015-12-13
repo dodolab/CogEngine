@@ -436,7 +436,6 @@ class XmlTestingApp : public CogApp {
 		xmlPtr->pushTag("scene", 0);
 
 		auto mgr = GETCOMPONENT(NodeStorage);
-
 		mgr->LoadSceneFromXml(xmlPtr);
 	}
 };
@@ -473,6 +472,7 @@ int main() {
 
 	//ofAppGLFWWindow window;
 	//ofSetupOpenGL(&window, 225,400,OF_WINDOW);
+
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	//window.setDoubleBuffering(true);
 	//window.setNumSamples(4);

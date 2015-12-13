@@ -47,7 +47,8 @@ namespace Cog {
 
 		void PushNode(Node* node) {
 			Trans& tr = node->GetTransform();
-			int zIndex = (int)(tr.absPos.z);
+			// zIndex will be taken always from local position
+			int zIndex = (int)(tr.localPos.z);
 
 
 			auto it = zIndexes.find(zIndex);
@@ -141,12 +142,12 @@ namespace Cog {
 			ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
 			ofLoadMatrix(absM);
 
-
+/*
 			ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
 			ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
 			ofSetColor(color);
 			ofFill();
-			ofRect(-size.x / 2, -size.y / 2, size.x, size.y);
+			ofRect(-size.x / 2, -size.y / 2, size.x, size.y);*/
 			ofEndShape();
 		}
 
@@ -155,9 +156,9 @@ namespace Cog {
 		* @param owner owner node
 		*/
 		void RenderArc(Node* owner) {
-			ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
+			/*ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
 			ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
-			ofSetColor(color);
+			ofSetColor(color);*/
 
 			// todo: draw arc
 			//Iw2DFillArc(ofVec3f(0, 0), size, 0, PI * 2, 60);
@@ -171,27 +172,25 @@ namespace Cog {
 			// load absolute matrix
 			ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
 			ofLoadMatrix(absM);
-
-
-			if (owner->HasAttr(ATTR_COLOR)) {
-				ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
-				ofSetColor(color);
-			}
-			else ofSetColor(0, 0, 0);
-			spt<Font> mojo = owner->GetShape<spt<Font>>();
-			spt<ofTrueTypeFont> font = mojo->GetFont();
-			string text = owner->GetAttr<string>(ATTR_TEXT);
-			font->drawString(text, -font->stringWidth(text) / 2, -font->stringHeight(text) / 2);
+			spt<Text> shape = owner->GetShape<spt<Text>>();
+			ofSetColor(shape->GetColor());
+			
+			// there is maybe a bug in OF : left upper border of the text is not the left upper border of the first letter
+			// but a few pixels nearby -> that's why the coordinate is multiplied by absolute scale
+			spt<ofTrueTypeFont> font = shape->GetFont();
+			font->drawString(shape->GetText(), -shape->GetTextWidth() / 2, owner->GetTransform().absScale.y*shape->GetTextHeight() / 2);
 		}
 
 		void RenderSprite(Node* owner) {
 			// todo - dont use this method very often
 			//renderer->setActualBuffer("blue");
 
+
 			// BEGIN UPGRADE
 			Trans& trans = owner->GetTransform();
 			ofMatrix4x4 abs = owner->GetTransform().GetAbsMatrix();
 			spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
+
 
 			spt<Sprite>& sprite = shape->GetSprite();
 

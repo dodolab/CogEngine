@@ -60,11 +60,9 @@ namespace Cog {
 	#define ATTR_BOUNDS "BOUNDS"
 	#define ATTR_SIZE "SIZE"
 	#define ATTR_POLYGON "POLYGON"
-	#define ATTR_COLOR "COLOR"
 	#define ATTR_FRAME "FRAME"
 	#define ATTR_COLLISIONS "COLLISIONS"
 	#define ATTR_IMGBOUNDS "IMGBOUNDS"
-	#define ATTR_TEXT "TEXT"
 
 	/*! States*/
 	#define STATES_HITTABLE "HITTABLE"
