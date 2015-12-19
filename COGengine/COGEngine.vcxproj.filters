@@ -22,6 +22,9 @@
     <Filter Include="Source\Misc">
       <UniqueIdentifier>{c8638d57-2ba7-4acc-b2f1-85d75cb97470}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Tests">
+      <UniqueIdentifier>{344811c4-1bf8-47bc-b46e-f3c25b3b73ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -248,6 +251,9 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EntityStorage.h">
       <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\BaseTests.h">
+      <Filter>Source\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

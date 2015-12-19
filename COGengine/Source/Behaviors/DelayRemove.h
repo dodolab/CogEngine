@@ -13,11 +13,11 @@ namespace Cog {
 		OBJECT_PROTOTYPE(DelayRemove)
 	protected:
 		// number of milliseconds for delay
-		int millis;
+		int millis = 0;
 		// actual time
-		int actual;
+		int actual = 0;
 		// if true, object will be erased
-		bool erase;
+		bool erase = false;
 
 	public:
 

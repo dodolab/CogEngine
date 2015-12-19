@@ -13,13 +13,13 @@ namespace Cog {
 		OBJECT_PROTOTYPE(DelayAction)
 	private:
 		// number of milliseconds for delay
-		int millis;
+		int millis = 0;
 		// actual time
-		int actual;
+		int actual = 0;
 		// id of target behavior
-		int targetId;
+		int targetId = -1;
 		// message payload
-		void* data;
+		void* data = nullptr;
 
 	public:
 

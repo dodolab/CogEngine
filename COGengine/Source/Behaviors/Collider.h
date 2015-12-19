@@ -14,8 +14,8 @@ namespace Cog {
 		OBJECT_PROTOTYPE(Collider)
 	protected:
 		// group of collidable objects, groupA is for collidable (bullet) and groupB for hittable (soldier)
-		int groupA;
-		int groupB;
+		int groupA = 0;
+		int groupB = 0;
 
 	public:
 

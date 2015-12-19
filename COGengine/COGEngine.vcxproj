@@ -252,6 +252,7 @@
     <ClInclude Include="Source\Misc\SpriteTexture.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
+    <ClInclude Include="Source\Tests\BaseTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\dukbind\dukbind.cpp" />

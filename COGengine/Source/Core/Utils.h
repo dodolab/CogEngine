@@ -7,7 +7,7 @@ namespace Cog {
 
 #define GETCOMPONENT(className) COGEngine.entityStorage->GetComponent<className>(#className)
 #define GETBEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)
-#define CREATEBEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)()
+#define CREATE_BEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
 #define REGISTER_COMPONENT(object) COGEngine.entityStorage->RegisterComponent(object)
 #define REGISTER_BEHAVIOR(className) COGEngine.entityStorage->RegisterBehaviorPrototype(#className, new className())
 
@@ -16,6 +16,12 @@ public: \
 virtual string GetClassName() { \
 	return string(); \
 } 
+
+#define PROTOTYPE_VIRTUAL(compName) \
+public: \
+virtual compName* CreatePrototype(){ \
+ return nullptr; \
+}
 
 #define OBJECT(compName) \
   public: \
@@ -34,7 +40,10 @@ public: \
 
 #define OBJECT_PROTOTYPE(compName) \
   OBJECT(compName) \
-  DEFAULT_CONST(compName)
+  DEFAULT_CONST(compName) \
+  compName* CreatePrototype(){ \
+	return new compName(); \
+  }
 
 	// assertion with formatted message
 #ifdef DEBUG
