@@ -9,7 +9,7 @@ namespace Cog {
 	* Behavior for rotation animation
 	*/
 	class RotateAnim : public Behavior {
-
+		OBJECT_PROTOTYPE(RotateAnim)
 	private:
 		// starting rotation
 		float from;

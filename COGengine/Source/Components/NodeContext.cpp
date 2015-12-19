@@ -1,15 +1,15 @@
-#include "NodeStorage.h"
+#include "NodeContext.h"
 #include "Scene.h"
 
 namespace Cog {
 
-	void NodeStorage::LoadSceneFromXml(spt<ofxXml> xml) {
+	void NodeContext::LoadSceneFromXml(spt<ofxXml> xml) {
 		Scene* sc = new Scene();
 		sc->LoadFromXml(xml);
 		this->SetRootObject(sc->GetSceneNode()); // todo
 	}
 
-	void NodeStorage::SendMessage(Msg& msg, Node* actualNode) {
+	void NodeContext::SendMessage(Msg& msg, Node* actualNode) {
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
 
@@ -24,7 +24,7 @@ namespace Cog {
 	}
 
 
-	void NodeStorage::SendDirectMessageToBehavior(Msg& msg, int targetId) {
+	void NodeContext::SendDirectMessageToBehavior(Msg& msg, int targetId) {
 		Behavior* beh = FindBehaviorById(targetId);
 
 		if (beh != nullptr) {
@@ -32,7 +32,7 @@ namespace Cog {
 		}
 	}
 
-	void NodeStorage::SendDirectMessageToNode(Msg& msg, int targetId) {
+	void NodeContext::SendDirectMessageToNode(Msg& msg, int targetId) {
 		Node* node = FindNodeById(targetId);
 
 		if (node != nullptr) {
@@ -41,21 +41,21 @@ namespace Cog {
 	}
 
 
-	Node* NodeStorage::FindNodeById(int id) const {
+	Node* NodeContext::FindNodeById(int id) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	Behavior* NodeStorage::FindBehaviorById(int id) const {
+	Behavior* NodeContext::FindBehaviorById(int id) const {
 		for (auto it = allBehaviors.begin(); it != allBehaviors.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	int NodeStorage::GetNodesCountByTag(string tag) const {
+	int NodeContext::GetNodesCountByTag(string tag) const {
 		int counter = 0;
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) counter++;
@@ -63,14 +63,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* NodeStorage::FindNodeByTag(string tag) const {
+	Node* NodeContext::FindNodeByTag(string tag) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> NodeStorage::FindNodesByTag(char* tag) const {
+	vector<Node*> NodeContext::FindNodesByTag(char* tag) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -79,7 +79,7 @@ namespace Cog {
 		return output;
 	}
 
-	int NodeStorage::GetNodesCountBySubType(int subtype) const {
+	int NodeContext::GetNodesCountBySubType(int subtype) const {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -88,14 +88,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* NodeStorage::FindNodeBySubType(int subtype) const {
+	Node* NodeContext::FindNodeBySubType(int subtype) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetSubType() == subtype) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> NodeStorage::FindNodesBySubType(int subtype) const {
+	vector<Node*> NodeContext::FindNodesBySubType(int subtype) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -105,7 +105,7 @@ namespace Cog {
 	}
 
 
-	void NodeStorage::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
+	void NodeContext::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
 			if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
@@ -117,14 +117,14 @@ namespace Cog {
 		}
 	}
 
-	void NodeStorage::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
+	void NodeContext::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
 			CogSendMessage(msg, (*it));
 		}
 	}
 
 
-	void NodeStorage::SendBubblingMessage(Msg& msg, Node* actualNode) {
+	void NodeContext::SendBubblingMessage(Msg& msg, Node* actualNode) {
 
 		BubblingType& trav = msg.GetBubblingType();
 
@@ -166,7 +166,7 @@ namespace Cog {
 		}
 	}
 
-	void NodeStorage::SendDirectMessage(Msg& msg) {
+	void NodeContext::SendDirectMessage(Msg& msg) {
 		auto behaviors = behListeners.find(msg.GetAction());
 
 		if (behaviors != behListeners.end()) {

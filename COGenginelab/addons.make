@@ -1,2 +1,4 @@
-ofxAndroid
-ofxAccelerometer
+ifdef OF_ANDROID
+   ofxAndroid
+   ofxAccelerometer
+endif

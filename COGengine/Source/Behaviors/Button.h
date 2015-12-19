@@ -12,6 +12,7 @@ namespace Cog {
 	* Behavior that switches button on-click images
 	*/
 	class Button : public Behavior {
+		OBJECT_PROTOTYPE(Button)
 	protected:
 		spt<ofImage> defaultImg;
 		spt<ofImage> pressedImg;

@@ -48,8 +48,6 @@
         </setting>
       </scene_settings>
 	
-      <!-- scene goes left in one second -->
-      <sceneanim type="leave" tween="quadratic_1" direction="left" speed="1" sptype="abs" />
 
       <node type="background" img="blue_background.png" />
       <!-- blue background-->

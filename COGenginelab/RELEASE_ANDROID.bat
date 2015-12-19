@@ -1,5 +1,6 @@
 SET ANDROID_HOME=F:/of/android-sdk
 SET JAVA_HOME=F:\OF\JDK
+SET OF_ANDROID=.
 SET OF_ROOT=F:/of/openframeworks/android
 SET NDK_ROOT=F:/of/android-ndk
 SET SDK_ROOT=F:/of/android-sdk

@@ -8,6 +8,7 @@ namespace Cog {
 	* Behavior for mapping key inputs to ACTIONS
 	*/
 	class InputKey : public Behavior {
+		OBJECT_PROTOTYPE(InputKey)
 	private:
 		map<int, Act> keyMapping;
 
@@ -30,7 +31,7 @@ namespace Cog {
 
 			Flags& actions = owner->GetAttr<Flags>(ATTR_ACTIONS);
 
-			for (auto key : GetPressedKeys()) {
+			for (auto key : CogGetPressedKeys()) {
 
 				if (!key.IsHandled() || key.handlerId == owner->GetId()) {
 					// handle key press

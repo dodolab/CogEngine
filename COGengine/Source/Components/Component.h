@@ -4,15 +4,7 @@
 
 namespace Cog {
 
-#define COMPONENT(compName) \
-  public: \
-  string GetClassName() { \
-      return GetClassNameStatic(); \
-  } \
-  \
-  static string GetClassNameStatic() { \
-	  return string(#compName); \
-  }
+
 
 	/**
 	* Common class for all components
@@ -22,9 +14,7 @@ namespace Cog {
 		
 	public:
 
-		virtual string GetClassName() {
-			return string();
-		}
+		OBJECT_VIRTUAL()
 
 		/**
 		* Initializes factory

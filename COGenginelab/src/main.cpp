@@ -17,14 +17,47 @@ using namespace std;
 using namespace Cog;
 int rotateAnimId;
 
+#include "CogEngine.h"
+
+
 void WriteTime(const char* msg) {
 	cout << msg << " " << (ofGetElapsedTimeMillis() - temp) << " ms" << endl;
 	temp = ofGetElapsedTimeMillis();
 }
 
+
+int OnTestAnimFinished(duk_context *ctx) {
+	int fpsCounter = duk_to_number(ctx, 0);
+
+	long mojo = temp;
+	mend = ofGetElapsedTimeMillis();
+
+	WriteTime("ANIM");
+	cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
+	cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
+
+
+	return 1;
+}
+
+
+int mojo(duk_context *ctx) {
+	int argument = duk_to_number(ctx, 0);
+	ofLog(OF_LOG_NOTICE, "mojo " + ofToString(argument));
+	cout << "MOJO :: " << argument << endl;
+	return 1;
+}
+
+int dojo(duk_context *ctx) {
+	int argument = duk_to_number(ctx, 0);
+	cout << "DOJO :: " << argument << endl;
+	ofLog(OF_LOG_NOTICE, "DOJO " + ofToString(argument));
+	return 0;
+}
+
 class JavaScriptBehavior : public Behavior {
 	duk_context* ctx;
-	
+
 	string GetBehaviorJsName() {
 		return "Behavior_" + ofToString(this->GetId());
 	}
@@ -128,57 +161,6 @@ public:
 	}
 };
 
-class TestingBehavior : public Behavior {
-
-public:
-
-	TestingBehavior() {
-
-	}
-
-	void Init() {
-		othersEnded = false;
-		fpsCounter = 0;
-		RegisterListening(ACT_BEHAVIOR_FINISHED);
-	}
-
-	int fpsCounter;
-	bool othersEnded;
-
-	void OnMessage(Msg& msg) {
-		if (!othersEnded) {
-			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
-				long mojo = temp;
-				mend = ofGetElapsedTimeMillis();
-
-				WriteTime("ANIM");
-				cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
-				cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
-
-				othersEnded = true;
-			}
-		}
-	}
-
-
-	void Update(const uint64 delta, const uint64 absolute) {
-		fpsCounter++;
-	}
-};
-
-int OnTestAnimFinished(duk_context *ctx) {
-	int fpsCounter = duk_to_number(ctx, 0);
-
-	long mojo = temp;
-	mend = ofGetElapsedTimeMillis();
-
-	WriteTime("ANIM");
-	cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
-	cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
-
-
-	return 1;
-}
 
 class TestingFactory : public Factory {
 
@@ -256,19 +238,89 @@ public:
 	}
 };
 
-int mojo(duk_context *ctx) {
-	int argument = duk_to_number(ctx, 0);
-	ofLog(OF_LOG_NOTICE, "mojo " + ofToString(argument));
-	cout << "MOJO :: " << argument << endl;
-	return 1;
-}
+class TestingApp : public CogApp {
 
-int dojo(duk_context *ctx) {
-	int argument = duk_to_number(ctx, 0);
-	cout << "DOJO :: " << argument << endl;
-	ofLog(OF_LOG_NOTICE, "DOJO " + ofToString(argument));
-	return 0;
-}
+	TestingFactory* fact;
+
+	void InitComponents() {
+		fact = new TestingFactory();
+		COGEngine.entityStorage->RegisterComponent(fact);
+	}
+
+	void InitEngine() {
+		spt<ofxXmlSettings> config;
+
+		COGEngine.Init();
+		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+	}
+};
+
+class XmlTestingApp : public CogApp {
+
+
+	void InitComponents() {
+
+	}
+
+	void InitEngine() {
+		ofxXmlSettings* xml = new ofxXmlSettings();
+		xml->loadFile("configexample.xml");
+		auto xmlPtr = spt<ofxXmlSettings>(xml);
+
+		COGEngine.Init(xmlPtr);
+
+		xmlPtr->popAll();
+		xmlPtr->pushTag("app_config");
+		xmlPtr->pushTag("scenes");
+		xmlPtr->pushTag("scene", 0);
+
+		auto mgr = GETCOMPONENT(NodeContext);
+		mgr->LoadSceneFromXml(xmlPtr);
+	}
+};
+
+
+
+
+class TestingBehavior : public Behavior {
+
+public:
+
+	TestingBehavior() {
+
+	}
+
+	void Init() {
+		othersEnded = false;
+		fpsCounter = 0;
+		RegisterListening(ACT_BEHAVIOR_FINISHED);
+	}
+
+	int fpsCounter;
+	bool othersEnded;
+
+	void OnMessage(Msg& msg) {
+		if (!othersEnded) {
+			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
+				long mojo = temp;
+				mend = ofGetElapsedTimeMillis();
+
+				WriteTime("ANIM");
+				cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
+				cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
+
+				othersEnded = true;
+			}
+		}
+	}
+
+
+	void Update(const uint64 delta, const uint64 absolute) {
+		fpsCounter++;
+	}
+};
+
+
 
 
 #ifdef WIN32
@@ -397,48 +449,6 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 
 #else
 
-#include "Engine.h"
-
-class TestingApp : public CogApp {
-
-	TestingFactory* fact;
-
-	void InitComponents() {
-		fact = new TestingFactory();
-		COGEngine.componentStorage->RegisterComponent(fact);
-	}
-
-	void InitEngine() {
-		spt<ofxXmlSettings> config;
-
-		COGEngine.Init();
-		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
-	}
-};
-
-class XmlTestingApp : public CogApp {
-
-	
-	void InitComponents() {
-
-	}
-
-	void InitEngine() {
-		ofxXmlSettings* xml = new ofxXmlSettings();
-		xml->loadFile("configexample.xml");
-		auto xmlPtr = spt<ofxXmlSettings>(xml);
-
-		COGEngine.Init(xmlPtr);
-
-		xmlPtr->popAll();
-		xmlPtr->pushTag("app_config");
-		xmlPtr->pushTag("scenes");
-		xmlPtr->pushTag("scene", 0);
-
-		auto mgr = GETCOMPONENT(NodeStorage);
-		mgr->LoadSceneFromXml(xmlPtr);
-	}
-};
 
 
 int main() {
@@ -515,11 +525,12 @@ int main() {
 
 	duk_destroy_heap(ctx);
 
-	ofSetupOpenGL(720, 1280, OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(1280, 720, OF_WINDOW);			// <-------- setup the GL context
 	cout << "Android app loaded" << endl;
 	//ofRunApp(new MTestApp());
 	ofLogNotice("test") << "spoustim appku s testingFactory";
-	ofRunApp(new App(new TestingFactory()));
+	//ofRunApp(new App(new TestingFactory()));
+	ofRunApp(new XmlTestingApp());
 	return 0;
 }
 

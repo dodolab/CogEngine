@@ -2,7 +2,6 @@
 
 #include "ofxCogMain.h"
 #include "ofUtils.h"
-#include "Utils.h"
 
 
 namespace Cog {
@@ -139,7 +138,7 @@ namespace Cog {
 	*/
 	class Logger : public Component {
 
-		COMPONENT(Logger)
+		OBJECT(Logger)
 
 	protected:
 		LoggerChannel* channel;

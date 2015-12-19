@@ -10,6 +10,7 @@ namespace Cog {
 	* Behavior that removes object with delay
 	*/
 	class DelayRemove : public Behavior {
+		OBJECT_PROTOTYPE(DelayRemove)
 	protected:
 		// number of milliseconds for delay
 		int millis;

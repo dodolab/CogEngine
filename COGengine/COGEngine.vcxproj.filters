@@ -195,9 +195,6 @@
     <ClInclude Include="Source\Core\Behavior.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Engine.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Enums.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -225,17 +222,11 @@
     <ClInclude Include="Source\Components\ResourceCache.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\NodeStorage.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\StringHash.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Component.h">
       <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\ComponentStorage.h">
-      <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Logger.h">
       <Filter>Source\Components</Filter>
@@ -247,6 +238,15 @@
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\NodeBuilder.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CogEngine.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\NodeContext.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EntityStorage.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -314,9 +314,6 @@
     <ClCompile Include="Source\Core\Behavior.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Engine.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Enums.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
@@ -338,13 +335,16 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\NodeStorage.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\StringHash.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\ComponentStorage.cpp">
+    <ClCompile Include="Source\Core\CogEngine.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NodeContext.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\EntityStorage.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>

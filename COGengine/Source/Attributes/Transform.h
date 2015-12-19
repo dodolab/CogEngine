@@ -12,6 +12,9 @@ namespace Cog {
 	class Trans {
 
 	public:
+		Trans() {
+
+		}
 
 		/**
 		* Creates a new transformation entity

@@ -1,6 +1,6 @@
 
 #include "Facade.h"
-#include "Engine.h"
+#include "CogEngine.h"
 #include "Logger.h"
 #include "ResourceCache.h"
 
@@ -222,15 +222,15 @@ namespace Cog {
 	// ================== MCOMPONENTSTORAGE ====================
 
 	void CogRegisterComponent(Component* value) {
-		COGEngine.componentStorage->RegisterComponent(value);
+		COGEngine.entityStorage->RegisterComponent(value);
 	}
 
 	bool CogRemoveComponent(StringHash key) {
-		return COGEngine.componentStorage->RemoveComponent(key);
+		return COGEngine.entityStorage->RemoveComponent(key);
 	}
 
 	bool CogExistsComponent(StringHash key) {
-		return COGEngine.componentStorage->ExistsComponent(key);
+		return COGEngine.entityStorage->ExistsComponent(key);
 	}
 
 }// namespace

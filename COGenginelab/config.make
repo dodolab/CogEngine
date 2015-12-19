@@ -65,6 +65,7 @@ PROJECT_EXTERNAL_SOURCE_PATHS = ../COGengine/Source ../COGengine/3rdParty
 ################################################################################
 # PROJECT_EXCLUSIONS =
 
+
 ################################################################################
 # PROJECT LINKER FLAGS
 #	These flags will be sent to the linker when compiling the executable.
@@ -143,5 +144,3 @@ PROJECT_CFLAGS =-w
 ################################################################################
 # PROJECT_CXX = 
 # PROJECT_CC = 
-
-SUPER_CFLAGS=-DANDROID_MINIFY

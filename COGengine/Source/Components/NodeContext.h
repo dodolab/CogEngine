@@ -6,11 +6,11 @@
 namespace Cog {
 
 	/**
-	* Node repository
+	* Node context
 	*/
-	class NodeStorage : public Component{
+	class NodeContext : public Component{
 	
-		COMPONENT(NodeStorage)
+		OBJECT(NodeContext)
 	
 	private:
 		// behavior listeners

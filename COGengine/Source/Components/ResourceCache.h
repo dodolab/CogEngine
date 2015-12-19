@@ -164,7 +164,7 @@ namespace Cog {
 	*/
 	class ResourceCache : public Component {
 
-		COMPONENT(ResourceCache)
+		OBJECT(ResourceCache)
 
 	private:
 		// cached images

@@ -11,21 +11,15 @@ namespace Cog {
 	* Behavior scene manager
 	*/
 	class SceneManager : public Behavior {
+		OBJECT_PROTOTYPE(SceneManager)
 	public:
 		// scene to switch to
 		Node* switchedScene;
 		// actually displayed scene
-		Node* actualScene;
+		Node* actualScene = nullptr;
 		// indicator, if this behavior is waiting until tween ends
-		bool waitingForTween;
+		bool waitingForTween = false;
 
-		/**
-		* Creates a new behavior for scene managing
-		*/
-		SceneManager() {
-			actualScene = nullptr;
-			waitingForTween = false;
-		}
 
 		void Init() {
 			RegisterListening(ACT_TWEEN_ENDED);
