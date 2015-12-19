@@ -121,8 +121,11 @@ namespace Cog {
 		else {
 			fontSet = fontSetIt->second;
 		}
-		auto font = (fontSet).find(size);
-		if (font != fontSet.end()) {
+
+		map<int, spt<ofTrueTypeFont>>& fs = loadedFonts.find(path)->second;
+
+		auto font = (fs).find(size);
+		if (font != fs.end()) {
 			// return cached font
 			return font->second;
 		}
@@ -130,7 +133,7 @@ namespace Cog {
 			ofTrueTypeFont* font = new ofTrueTypeFont();
 			font->loadFont(path, size, true, true);
 			auto fontPtr = spt<ofTrueTypeFont>(font);
-			fontSet[size] = fontPtr;
+			fs[size] = fontPtr;
 			return fontPtr;
 		}
 	}

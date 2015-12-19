@@ -17,6 +17,7 @@
 #include "TranslateAnim.h"
 #include "Tween.h"
 #include "Component.h"
+#include "FloatingScene.h"
 
 namespace Cog {
 
@@ -103,6 +104,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(TransformAnim);
 		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);
+		REGISTER_BEHAVIOR(FloatingScene);
 
 	}
 

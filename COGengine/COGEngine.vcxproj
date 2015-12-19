@@ -215,6 +215,7 @@
     <ClInclude Include="Source\Behaviors\Collider.h" />
     <ClInclude Include="Source\Behaviors\DelayAction.h" />
     <ClInclude Include="Source\Behaviors\DelayRemove.h" />
+    <ClInclude Include="Source\Behaviors\FloatingScene.h" />
     <ClInclude Include="Source\Behaviors\HitEvent.h" />
     <ClInclude Include="Source\Behaviors\InputKey.h" />
     <ClInclude Include="Source\Behaviors\Move.h" />

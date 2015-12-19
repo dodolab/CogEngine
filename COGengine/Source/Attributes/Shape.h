@@ -100,22 +100,20 @@ namespace Cog {
 		}
 
 		float GetWidth() {
-			return size;
+			return GetTextWidth();
 		}
 
 		float GetHeight() {
-			return size;
+			return GetTextHeight();
 		
 		}
 
 		float GetTextWidth() {
-			font->setGlobalDpi(size);
 			return font->stringWidth(text);
 
 		}
 
 		float GetTextHeight() {
-			font->setGlobalDpi(size);
 			return font->stringHeight(text);
 		}
 

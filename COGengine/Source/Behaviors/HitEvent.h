@@ -39,7 +39,9 @@ public:
 
 	void Init(){
 		owner->SetState(StringHash(STATES_HITTABLE));
+
 	}
+
 
 	/**
 	* Tests if the image has been hit
@@ -48,7 +50,7 @@ public:
 	*/
 	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos){
 		// move the test position into "local" coordinate space
-		ofVec3f localPos = testPos + ofVec3f(image->getWidth() / 2, image->getHeight()/ 2);
+		ofVec3f localPos = testPos;
 		// test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0
@@ -73,13 +75,16 @@ public:
 
 				bool atLeastOneTouch = false;
 
-				for (auto touch : CogGetPressedPoints()){
+				for (InputAct& touch : CogGetPressedPoints()){
 
 					// calculate vector in image space
 					ofVec3f touchVector = touch.position;
 					ofVec3f touchTrans = touchVector*inverse;
 
-					if (ImageHitTest(hitImage, touchTrans)){
+					if ((touch.handlerId == -1 || touch.handlerId == id) &&  ImageHitTest(hitImage, touchTrans)){
+
+						touch.handlerId = id;
+
 						// image has been hit
 						if (touch.started){
 #ifdef ANDROID
@@ -90,22 +95,22 @@ public:
 							hitStartedTouchId = touch.touchId;
 
 							owner->SetState(StringHash(STATES_HIT));
-							if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
+							if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
+							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);
 						}
 						else if (touch.ended){
 							
 
 							owner->ResetState(StringHash(STATES_HIT));
 							if (hitStarted){
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_ENDED, 0, nullptr, owner);
-								else SendDirectMessage(ACT_OBJECT_HIT_ENDED, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 							else{
 								// hit has been lost
 								hitLost = true;
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
-								else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 
 							if (hitStartedTouchId == touch.touchId && hitStarted){
@@ -125,13 +130,13 @@ public:
 							if (hitLost){
 								hitLost = false;
 								// hit started, lost and started again
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner);
-								else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 							else{
 								// hit started but not on first touch
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_OVER, 0, nullptr, owner);
-								else SendDirectMessage(ACT_OBJECT_HIT_OVER, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 						}
 					}
