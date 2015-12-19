@@ -51,7 +51,8 @@ namespace Cog {
 	#define ACT_SCENE_SWITCHED "SCENE_SWITCHED"
 	#define ACT_PROCESS_ENDED "PROCESS_ENDED"
 	#define ACT_BEHAVIOR_FINISHED "BEHAVIOR_FINISHED"
-
+	#define ACT_STATE_CHANGED "STATE_CHANGED"
+	#define ACT_TRANSFORM_ENDED  "TRANSFORM_ENDED"
 
 	/*! Attribute keys */
 	#define ATTR_VELOCITY "VELOCITY"
@@ -71,9 +72,10 @@ namespace Cog {
 	#define STATES_HIT "HIT"
 	#define STATES_COLLID_SOURCE "COLLID_SOURCE"
 	#define STATES_COLLID_TARGET "COLLID_TARGET"
+    #define STATES_DISABLED "DISABLED"
 
-	/*! Behavior state enumerator */
-	enum class BehState {
+	/*! Listener state enumerator */
+	enum class ListenerState {
 		ACTIVE_ALL,			/*!< active for all events */
 		ACTIVE_MESSAGES,	/*!< active for message sending */
 		ACTIVE_UPDATES,		/*!< active for update */

@@ -55,7 +55,10 @@ namespace Cog {
 			actualTrans.CalcAbsTransform(owner->GetParent()->GetTransform());
 			owner->SetTransform(actualTrans);
 
-			if (actual >= (duration + delayAfter)) Finish();
+			if (actual >= (duration + delayAfter)) {
+				Finish();
+				SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+			}
 		}
 
 	};

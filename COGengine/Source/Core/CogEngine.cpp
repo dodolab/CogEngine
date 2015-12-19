@@ -1,6 +1,5 @@
 #include "CogEngine.h"
 #include "Node.h"
-#include "Factory.h"
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
 #include "Animator.h"
@@ -17,7 +16,7 @@
 #include "TransformAnim.h"
 #include "TranslateAnim.h"
 #include "Tween.h"
-
+#include "Component.h"
 
 namespace Cog {
 
@@ -48,9 +47,9 @@ namespace Cog {
 		frameCounter++;
 
 		// update transforms
-		nodeStorage->GetRootObject()->UpdateTransform(true);
+		sceneContext->GetRootObject()->UpdateTransform(true);
 		// update scene
-		nodeStorage->GetRootObject()->Update(delta, absolute);
+		sceneContext->GetRootObject()->Update(delta, absolute);
 		// remove ended inputs
 		environment->RemoveEndedProcesses();
 
@@ -70,7 +69,7 @@ namespace Cog {
 		ofSetupScreenOrtho(environment->GetRealWidth(), environment->GetRealHeight(), -1000, 1000);
 		
 		// draw the root node
-		nodeStorage->GetRootObject()->Draw(delta, absolute);
+		sceneContext->GetRootObject()->Draw(delta, absolute);
 
 		renderer->Render();
 	}
@@ -79,14 +78,17 @@ namespace Cog {
 		environment = new Environment();
 		resourceCache = new ResourceCache();
 		logger = new Logger();
-		nodeStorage = new NodeContext();
+		sceneContext = new SceneContext();
 		renderer = new Renderer();
 		
 		REGISTER_COMPONENT(environment);
 		REGISTER_COMPONENT(resourceCache);
 		REGISTER_COMPONENT(logger);
-		REGISTER_COMPONENT(nodeStorage);
+		REGISTER_COMPONENT(sceneContext);
 		REGISTER_COMPONENT(renderer);
+
+		auto sceneMgr = new SceneManager();
+		REGISTER_COMPONENT(sceneMgr);
 
 		REGISTER_BEHAVIOR(Animator);
 		REGISTER_BEHAVIOR(Button);
@@ -98,7 +100,6 @@ namespace Cog {
 		REGISTER_BEHAVIOR(Move);
 		REGISTER_BEHAVIOR(MultiAnim);
 		REGISTER_BEHAVIOR(RotateAnim);
-		REGISTER_BEHAVIOR(SceneManager);
 		REGISTER_BEHAVIOR(TransformAnim);
 		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);

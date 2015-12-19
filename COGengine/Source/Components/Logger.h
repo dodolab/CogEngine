@@ -2,7 +2,7 @@
 
 #include "ofxCogMain.h"
 #include "ofUtils.h"
-
+#include "Component.h"
 
 namespace Cog {
 

@@ -5,6 +5,17 @@
 namespace Cog {
 
 	/**
+	* Calculation type
+	*/
+	enum class CalcType {
+		ABS,	/*!< absolute */
+		LOC,	/*!< local */
+		PER,	/*!< percentage <0..1> */
+		GRID,	/*!< grid positioning */
+		ABS_PER /*!< absolute percentage */
+	};
+
+	/**
 	* Transformation helper
 	*/
 	class TransformMath  {
@@ -139,6 +150,7 @@ namespace Cog {
 			else if (height == 0)return ofVec3f(scaleX, scaleX, 1);
 
 		}
+		
 
 		/**
 		* Loads transformation from XML

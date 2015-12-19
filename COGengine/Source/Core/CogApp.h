@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofxCogMain.h"
-#include "Factory.h"
 
 #ifdef ANDROID
 #include "ofxAndroid.h"

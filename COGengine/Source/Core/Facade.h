@@ -10,6 +10,7 @@ namespace Cog {
 
 	class Behavior;
 	class Component;
+	class MsgListener;
 
 	/*************************************************************************/
 	/* Facade methods that are used for centralized access to all components */
@@ -37,10 +38,13 @@ namespace Cog {
 
 	// =================== MNODESTORAGE ========================
 
-	void CogRegisterListener(StringHash action, Behavior* beh);
-	void CogUnregisterListener(StringHash action, Behavior* beh);
+	void CogRegisterListener(StringHash action, MsgListener* listener);
+	void CogUnregisterListener(StringHash action, MsgListener* listener);
 	void CogSendMessage(Msg& msg, Node* actualNode);
-	void CogSendDirectMessageToBehavior(Msg& msg, int targetId);
+	void CogSendDirectMessageToListener(Msg& msg, int targetId);
+	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
+	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
+
 	Node* CogFindNodeById(int id);
 	int CogGetNodesCountByTag(string tag);
 	Node* CogFindNodeByTag(string tag);
@@ -78,7 +82,7 @@ namespace Cog {
 
 	// ================== MCOMPONENTSTORAGE ====================
 
-	void CogRegisterComponent(StringHash key, Component* value);
+	void CogRegisterComponent(Component* value);
 
 	bool CogRemoveComponent(StringHash key);
 

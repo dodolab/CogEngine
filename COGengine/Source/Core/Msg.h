@@ -2,11 +2,12 @@
 
 #include "ofxCogMain.h"
 #include "Flags.h"
+#include "Events.h"
 
 namespace Cog {
 
-	class Msg;
 	class Node;
+	class StringHash;
 
 	/**
 	* Configuration class that holds information how the message should bubble through the scene tre
@@ -49,12 +50,13 @@ namespace Cog {
 		// bubbling settings
 		BubblingType bubblingType;
 		// data payload
-		void* data;
+		MsgEvent* data = nullptr;
 		// id of behavior that sent this message
 		int behaviorId;
 		// source node that is connected with this message
 		Node* sourceObj;
-
+		// indicator, if data has been kept by some object (if true, data won't be deleted)
+		bool dataKept = false;
 	public:
 
 		/**
@@ -66,7 +68,7 @@ namespace Cog {
 		* @param sourceObj source object
 		* @param data payload
 		*/
-		Msg(BubblingType bubblingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, void* data);
+		Msg(BubblingType bubblingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
 
 		~Msg() {
 
@@ -96,14 +98,14 @@ namespace Cog {
 		/**
 		* Gets data payload
 		*/
-		const void* GetData() const {
+		const MsgEvent* GetData() const {
 			return data;
 		}
 
 		/**
 		* Gets data payload
 		*/
-		void* GetData() {
+		MsgEvent* GetData() {
 			return data;
 		}
 
@@ -121,6 +123,26 @@ namespace Cog {
 			return sourceObj;
 		}
 
+		/**
+		* Sets indicator that data has been kept so they won't be deleted
+		*/
+		void SetDataKept(bool val) {
+			this->dataKept = val;
+		}
+
+		/**
+		* Gets indicator, if data has been kept by some object
+		*/
+		bool DataKept() {
+			return this->dataKept;
+		}
+
+		/**
+		* Deletes data
+		*/
+		void DeleteData() {
+			delete data;
+		}
 	};
 
 }// namespace
