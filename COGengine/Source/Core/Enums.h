@@ -73,6 +73,8 @@ namespace Cog {
 	#define STATES_COLLID_SOURCE "COLLID_SOURCE"
 	#define STATES_COLLID_TARGET "COLLID_TARGET"
     #define STATES_DISABLED "DISABLED"
+	#define STATES_ENABLED "ENABLED"
+	#define STATES_LOCKED "LOCKED"
 
 	/*! Listener state enumerator */
 	enum class ListenerState {

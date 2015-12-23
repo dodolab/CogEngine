@@ -10,10 +10,17 @@ namespace Cog {
 		SetName(xml->getAttribute(":", "name", ""));
 
 		sceneNode = new Node(ObjType::SCENE, 0, name);
+		
+		sceneNode->SetShape(spt<Shape>(new Rectangle(CogGetScreenWidth(), CogGetScreenHeight())));
 
-		if (xml->tagExists("scene_settings")) {
-			xml->pushTag("scene_settings");
+		if (xml->pushTagIfExists("transform")) {
+			auto math = TransformMath();
+			math.LoadTransformFromXml(xml, sceneNode, sceneNode, settings);
+			xml->popTag();
+		}
 
+		if (xml->pushTagIfExists("scene_settings")) {
+			
 			auto map = cache->LoadSettingsFromXml(xml);
 			settings.MergeSettings(map);
 

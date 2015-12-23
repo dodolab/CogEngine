@@ -43,6 +43,32 @@ namespace Cog {
 		}
 	};
 
+	class Rectangle : public Shape {
+	private:
+		float width = 0;
+		float height = 0;
+
+	public:
+		Rectangle(float width, float height) : width(width), height(height) {
+		}
+
+		float GetWidth() {
+			return width;
+		}
+
+		void SetWidth(float width) {
+			this->width = width;
+		}
+
+		float GetHeight() {
+			return height;
+		}
+
+		float SetHeight(float height) {
+			this->height = height;
+		}
+	};
+
 	class Image : public Shape {
 	private:
 		spt<ofImage> image;

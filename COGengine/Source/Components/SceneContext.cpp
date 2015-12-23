@@ -176,6 +176,7 @@ namespace Cog {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
 			CogSendMessage(msg, (*it));
 		}
+
 	}
 
 

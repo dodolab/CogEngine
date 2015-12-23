@@ -30,7 +30,7 @@ namespace Cog {
 		// local scale
 		ofVec3f scale;
 		// local rotation
-		float rotation;
+		float rotation = 0;
 		// local rotation origin
 		ofVec3f rotationOrigin;
 
@@ -39,9 +39,9 @@ namespace Cog {
 		// absolute scale    - recalculated due to parent's transform
 		ofVec3f absScale;
 		// absolute rotation - recalculated due to parent's transform
-		float absRotation;
+		float absRotation = 0;
 		// absolute rotation origin - recalculated due to parent's transform
-		ofVec3f absRotationOrigin;
+		ofVec3f absRotationOrigin = ofVec3f(0);
 
 		/**
 		* Sets absolute coordinates to be the same as local
@@ -59,14 +59,22 @@ namespace Cog {
 		* @param parent parent whose transform will be calculated according to
 		*/
 		void CalcAbsTransform(Trans& parent) {
-			// calc absolute angle
-			float angle = ofDegToRad(parent.absRotation) + (atan2(localPos.y, localPos.x));
-			// calc local vector length
-			float length = sqrt(localPos.x*localPos.x + localPos.y*localPos.y);
-			// calc unscaled absolute position
-			ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), localPos.z);
-			// calc absolute position
-			absPos = rotPos*parent.absScale + parent.absPos;
+			if (parent.absRotation == 0) {
+				// calculate easily
+				absPos = localPos*parent.absScale + parent.absPos;
+			}
+			else {
+
+				// calc absolute angle
+				float angle = ofDegToRad(parent.absRotation) + (atan2(localPos.y, localPos.x));
+				// calc local vector length
+				float length = sqrt(localPos.x*localPos.x + localPos.y*localPos.y);
+				// calc unscaled absolute position
+				ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), localPos.z);
+				// calc absolute position
+				absPos = rotPos*parent.absScale + parent.absPos;
+			}
+
 			absScale = parent.absScale*scale;
 			absRotation = rotation + parent.absRotation;
 			absRotationOrigin = rotationOrigin + parent.absRotationOrigin;

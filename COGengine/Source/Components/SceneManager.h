@@ -68,8 +68,11 @@ namespace Cog {
 			this->from = from;
 			this->to = to;
 
+			// take the other node away before the animation starts
+			to->GetTransform().localPos.x = to->GetTransform().absPos.x = 100000000;
 			to->SetRunningMode(RUNNING);
-			from->SetRunningMode(RUNNING);
+			from->SetRunningMode(PAUSED_ALL);
+
 			auto slide = new SlideTween(tweenDir, from, to, 1);
 
 			auto fadeFunc = [](float x) {

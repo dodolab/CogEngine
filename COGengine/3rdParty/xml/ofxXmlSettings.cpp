@@ -201,6 +201,26 @@ string ofxXmlSettings::getValue(const string& tag, const string& defaultValue, i
 	return defaultValue;
 }
 
+bool	ofxXmlSettings::getBoolValuex(bool			defaultValue, int which) {
+	return getBoolValue(":", defaultValue, which);
+}
+
+int 	ofxXmlSettings::getValuex(int            defaultValue, int which) {
+	return getValue(":", defaultValue, which);
+}
+
+double 	ofxXmlSettings::getValuex(double         defaultValue, int which) {
+	return getValue(":", defaultValue, which);
+}
+
+float 	ofxXmlSettings::getValuex(float         defaultValue, int which) {
+	return getValue(":", defaultValue, which);
+}
+
+string 	ofxXmlSettings::getValuex(const string& 	defaultValue, int which) {
+	return getValue(":", defaultValue, which);
+}
+
 //---------------------------------------------------------
 bool ofxXmlSettings::readTag(const string&  tag, TiXmlHandle& valHandle, int which){
 
@@ -216,7 +236,6 @@ bool ofxXmlSettings::readTag(const string&  tag, TiXmlHandle& valHandle, int whi
 	valHandle = tagHandle.Child( 0 );
     return (valHandle.ToText() != NULL);
 }
-
 
 //---------------------------------------------------------
 bool ofxXmlSettings::pushTag(const string&  tag, int which){
@@ -238,6 +257,13 @@ bool ofxXmlSettings::pushTag(const string&  tag, int which){
 	}
 
 	return false;
+}
+
+bool ofxXmlSettings::pushTagIfExists(const string& tag, int which) {
+	if (this->tagExists(tag, which)) {
+		return pushTag(tag, which);
+	}
+	else return false;
 }
 
 //---------------------------------------------------------
@@ -615,6 +641,10 @@ bool ofxXmlSettings::attributeExists(const string& tag, const string& attribute,
 	return false;
 }
 
+bool ofxXmlSettings::attributeExists(const string& attribute, int which) {
+	return attributeExists(":", attribute, which);
+}
+
 //---------------------------------------------------------
 bool ofxXmlSettings::getAttributeNames(const string& tag, vector<string>& outNames, int which){
 	vector<string> tokens = tokenize(tag,":");
@@ -667,6 +697,22 @@ string ofxXmlSettings::getAttribute(const string& tag, const string& attribute, 
     string value = defaultValue;
 	readStringAttribute(tag, attribute, value, which);
 	return value;
+}
+
+bool ofxXmlSettings::getBoolAttributex(const string& attribute, bool defaultValue, int which) {
+	return getBoolAttribute(":", attribute, defaultValue, which);
+}
+
+int ofxXmlSettings::getAttributex(const string& attribute, int defaultValue, int which) {
+	return getAttribute(":", attribute, defaultValue, which);
+}
+
+double ofxXmlSettings::getAttributex(const string& attribute, double defaultValue, int which) {
+	return getAttribute(":", attribute, defaultValue, which);
+}
+
+string	ofxXmlSettings::getAttributex(const string& attribute, const string& defaultValue, int which) {
+	return getAttribute(":", attribute, defaultValue, which);
 }
 
 //---------------------------------------------------------

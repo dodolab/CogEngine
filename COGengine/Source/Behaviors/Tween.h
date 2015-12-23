@@ -65,6 +65,7 @@ namespace Cog {
 
 		}
 
+
 		void SetFadeFunction(FadeFunction func) {
 			this->fadeFunction = func;
 		}
