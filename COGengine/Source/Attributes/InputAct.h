@@ -14,36 +14,29 @@ namespace Cog {
 	* Entity for input activity
 	*/
 	class InputAct {
-	private:
-		void Init() {
-			handlerId = -1;
-			started = true;
-			ended = false;
-		}
 
 	public:
 		// input type 
 		InputType inputType;
 		// pressed key (keyboard only)
-		int key;
+		int key = -1;
 		// pressed finger (touch input only)
-		int touchId;
+		int touchId = -1;
 		// position (touch input only)
 		ofVec3f position;
 
 		// handlerId, -1 if there is none
-		int handlerId;
+		int handlerId = -1;
 		// indicates, if input has just started
-		bool started;
+		bool started = true;
 		// indicates, if input has ended (e.g. key release)
-		bool ended;
+		bool ended = false;
 
 		/**
 		* Creates a new input action
 		* @param keyboardKey pressed key
 		*/
 		InputAct(int keyboardKey) : inputType(InputType::KEYBOARD), key(keyboardKey) {
-			Init();
 		}
 
 		/**
@@ -52,11 +45,9 @@ namespace Cog {
 		* @param pos button position
 		*/
 		InputAct(int touchId, ofVec3f pos) : inputType(InputType::TOUCH), touchId(touchId), position(pos) {
-			Init();
 		}
 
-		InputAct() : touchId(-1), key(-1) {
-			Init();
+		InputAct() {
 		}
 
 		/**

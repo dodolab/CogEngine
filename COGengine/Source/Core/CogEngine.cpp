@@ -90,6 +90,8 @@ namespace Cog {
 
 		auto sceneMgr = new SceneManager();
 		REGISTER_COMPONENT(sceneMgr);
+		auto animLoader = new AnimationLoader();
+		REGISTER_COMPONENT(animLoader);
 
 		REGISTER_BEHAVIOR(Animator);
 		REGISTER_BEHAVIOR(Button);

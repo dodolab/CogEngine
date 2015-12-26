@@ -224,6 +224,7 @@
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
+    <ClInclude Include="Source\Components\AnimationLoader.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\Logger.h" />
     <ClInclude Include="Source\Components\ResourceCache.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Source\Core\Node.h" />
     <ClInclude Include="Source\Core\NodeBuilder.h" />
     <ClInclude Include="Source\Core\Scene.h" />
+    <ClInclude Include="Source\Core\Settings.h" />
     <ClInclude Include="Source\Core\StringHash.h" />
     <ClInclude Include="Source\Core\TransformMath.h" />
     <ClInclude Include="Source\Core\Utils.h" />
@@ -253,7 +255,8 @@
     <ClInclude Include="Source\Misc\SpriteTexture.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
-    <ClInclude Include="Source\Tests\BaseTests.h" />
+    <ClInclude Include="Source\Tests\FlagsTest.h" />
+    <ClInclude Include="Source\Tests\TransformTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\dukbind\dukbind.cpp" />

@@ -21,23 +21,23 @@ namespace Cog {
 		* @param posX position in X axis
 		* @param posY position in Y axis
 		*/
-		Trans(float posX, float posY) : localPos(ofVec3f(posX, posY)), scale(1), rotationOrigin(ofVec3f(0.0f, 0.0f)), rotation(0) {
+		Trans(float posX, float posY) : localPos(ofVec3f(posX, posY)) {
 			SetAbsAsLocal();
 		}
 
 		// local position
-		ofVec3f localPos;
+		ofVec3f localPos = ofVec3f(0);
 		// local scale
-		ofVec3f scale;
+		ofVec3f scale = ofVec3f(1);
 		// local rotation
 		float rotation = 0;
 		// local rotation origin
-		ofVec3f rotationOrigin;
+		ofVec3f rotationOrigin = ofVec3f(0);
 
 		// absolute position - recalculated due to parent's transform
-		ofVec3f absPos;
+		ofVec3f absPos = ofVec3f(0);
 		// absolute scale    - recalculated due to parent's transform
-		ofVec3f absScale;
+		ofVec3f absScale = ofVec3f(0);
 		// absolute rotation - recalculated due to parent's transform
 		float absRotation = 0;
 		// absolute rotation origin - recalculated due to parent's transform

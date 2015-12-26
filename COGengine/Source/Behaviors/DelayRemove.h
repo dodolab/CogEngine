@@ -26,7 +26,7 @@ namespace Cog {
 		* @param millis number of milliseconds for delay
 		* @param erase if true, object will be erased
 		*/
-		DelayRemove(int millis, bool erase) : millis(millis), actual(0), erase(erase) {
+		DelayRemove(int millis, bool erase) : millis(millis), erase(erase) {
 
 		}
 

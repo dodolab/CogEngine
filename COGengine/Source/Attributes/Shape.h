@@ -10,12 +10,11 @@ namespace Cog {
 	*/
 	class Shape {
 	protected:
-		RenderType renderType;
+		RenderType renderType = RenderType::NONE;
 		ofColor color;
 	public:
 
 		Shape() {
-			renderType = RenderType::NONE;
 		}
 
 		Shape(RenderType renderType) : renderType(renderType) {

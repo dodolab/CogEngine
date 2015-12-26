@@ -240,9 +240,6 @@
     <ClInclude Include="Source\Core\EntityStorage.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\BaseTests.h">
-      <Filter>Source\Tests</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Events.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -257,6 +254,18 @@
     </ClInclude>
     <ClInclude Include="Source\Behaviors\FloatingScene.h">
       <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\AnimationLoader.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Settings.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\TransformTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\FlagsTest.h">
+      <Filter>Source\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

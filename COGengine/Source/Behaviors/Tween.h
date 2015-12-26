@@ -38,7 +38,7 @@ namespace Cog {
 		* @param to scene that will be tweened to
 		* @param speed tweening speed
 		*/
-		Tween(Node* from, Node* to, float speed) : from(from), to(to), speed(speed), actual(0) {
+		Tween(Node* from, Node* to, float speed) : from(from), to(to), speed(speed){
 
 		}
 	};
