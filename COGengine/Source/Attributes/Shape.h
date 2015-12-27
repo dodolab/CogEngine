@@ -78,6 +78,11 @@ namespace Cog {
 		}
 
 		spt<ofImage> GetImage() {
+			if (!image->isUsingTexture()) {
+				// for preloaded images, they need to be copied to the texture
+				image->setUseTexture(true);
+				image->update();
+			}
 			return image;
 		}
 

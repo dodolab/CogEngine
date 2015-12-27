@@ -273,6 +273,9 @@
     <ClInclude Include="Source\Behaviors\Selection.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\AsyncProcess.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">

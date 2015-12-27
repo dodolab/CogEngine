@@ -31,6 +31,12 @@ namespace Cog
 		vector<Node*> allNodes;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
+		// indicator, if lazy loading should be used
+		bool lazyLoad = false;
+		// scene index; used only when loading from xml
+		int index;
+		// indicator, if this scene has been loaded
+		bool loaded = false;
 
 	public:
 
@@ -44,6 +50,26 @@ namespace Cog
 
 		void SetName(string name) {
 			this->name = name;
+		}
+
+		bool IsLazyLoad() {
+			return lazyLoad;
+		}
+
+		void SetLazyLoad(bool lazyLoad) {
+			this->lazyLoad = lazyLoad;
+		}
+
+		bool Loaded() {
+			return loaded;
+		}
+
+		int GetIndex() {
+			return index;
+		}
+
+		void SetIndex(int index) {
+			this->index = index;
 		}
 
 		/**
@@ -163,13 +189,15 @@ namespace Cog
 		*/
 		void RemoveBehavior(Behavior* beh);
 
-
+		/**
+		* Loads initial data from xml
+		*/
+		void LoadInitDataFromXml(spt<ofxXml> xml, int sceneIndex);
 		
 		/**
 		* Loads scene from xml
 		*/
 		void LoadFromXml(spt<ofxXml> xml);
-
 
 		private:
 

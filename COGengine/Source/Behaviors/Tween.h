@@ -73,6 +73,11 @@ namespace Cog {
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
+			// there is a bug for the first render -> the next node flickers
+			if (to->GetRunningMode() == INVISIBLE) {
+				to->SetRunningMode(RUNNING);
+			}
+
 			int width = CogGetScreenWidth();
 			int height = CogGetScreenHeight();
 

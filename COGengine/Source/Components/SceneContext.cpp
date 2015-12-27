@@ -1,6 +1,7 @@
 #include "SceneContext.h"
 #include "Scene.h"
 #include "CogEngine.h"
+#include "AsyncProcess.h"
 
 namespace Cog {
 
@@ -22,8 +23,33 @@ namespace Cog {
 		auto manager = GETCOMPONENT(SceneManager);
 
 		Node* from = actualScene->GetSceneNode();
+
+		if (scene->IsLazyLoad() && !scene->Loaded()) {
+			auto async = new AsyncProcess(new SceneLoader(COGEngine.config, scene, tweenDir));
+
+
+			// lazy load the scene
+			if (this->loadingScene != nullptr) {
+				Node* to = loadingScene->GetSceneNode();
+				sceneStack.push(actualScene);
+				actualScene = loadingScene;
+				if (tweenDir == TweenDirection::NONE) {
+					manager->SwitchToScene(from, to);
+				}
+				else {
+					manager->SwitchToScene(from, to, tweenDir);
+				}
+			}
+
+			CogRunThread(async);
+			return;
+		}
+
 		Node* to = scene->GetSceneNode();
-		sceneStack.push(actualScene);
+		if (loadingScene == nullptr || scene->GetName().compare(loadingScene->GetName()) == 0) {
+			sceneStack.push(actualScene);
+		}
+
 		actualScene = scene;
 		if (tweenDir == TweenDirection::NONE) {
 			manager->SwitchToScene(from, to);
@@ -60,20 +86,32 @@ namespace Cog {
 
 	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {
 
-		string initialScene = xml->getAttribute(":", "initial", "");
+		string initialScene = xml->getAttributex("initial", "");
+		string loading = xml->getAttributex("loading", "");
 
 		int scenesNum = xml->getNumTags("scene");
 
 		for (int i = 0; i < scenesNum; i++) {
 			xml->pushTag("scene", i);
-
+			
 			Scene* sc = new Scene();
-			sc->LoadFromXml(xml);
+
+			sc->LoadInitDataFromXml(xml, i);
+
+			if (!sc->IsLazyLoad()) {
+				// load complete scene only if it isn't lazy loaded
+				sc->LoadFromXml(xml);
+			}
+
 			this->scenes.push_back(sc);
 
 			if (sc->GetName().compare(initialScene) == 0) {
 				// set as initial
 				AddScene(sc, true);
+			}
+			else if (!loading.empty() && sc->GetName().compare(loading) == 0) {
+				AddScene(sc, false);
+				this->loadingScene = sc;
 			}
 			else {
 				AddScene(sc, false);

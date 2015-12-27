@@ -42,7 +42,10 @@ namespace Cog {
 		}
 	}
 
-	void Engine::Init(spt<ofxXmlSettings> config) {
+	void Engine::Init(spt<ofxXml> config) {
+		
+		this->config = config;
+
 		RegisterComponents();
 
 		vector<Component*> components = entityStorage->GetAllComponents();
