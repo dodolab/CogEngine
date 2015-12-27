@@ -1,7 +1,54 @@
 #include "Scene.h"
 #include "CogEngine.h"
+#include "NodeBuilder.h"
 
 namespace Cog {
+
+	void Scene::RegisterListener(StringHash action, MsgListener* listener) {
+		if (msgListeners.find(action) == msgListeners.end()) {
+			msgListeners[action] = vector <MsgListener*>();
+		}
+
+		vector<MsgListener*>& listeners = msgListeners[action];
+		listeners.push_back(listener);
+
+		if (msgListenerActions.find(listener->GetId()) == msgListenerActions.end()) {
+			msgListenerActions[listener->GetId()] = vector<StringHash>();
+		}
+
+		msgListenerActions[listener->GetId()].push_back(action);
+	}
+
+	bool Scene::UnregisterListener(StringHash action, MsgListener* listener) {
+		if (msgListeners.find(action) != msgListeners.end()) {
+			vector<MsgListener*>& listeners = msgListeners[action];
+
+			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
+				if ((*it)->GetId() == listener->GetId()) {
+					listeners.erase(it);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	void Scene::UnregisterListener(MsgListener* beh) {
+		auto found = msgListenerActions.find(beh->GetId());
+
+		if (found != msgListenerActions.end()) {
+
+			vector<StringHash> actions = found->second;
+
+			// unregister all actions
+			for (auto action : actions) {
+				UnregisterListener(action, beh);
+			}
+
+			// remove from the second collection
+			msgListenerActions.erase(beh->GetId());
+		}
+	}
 
 	void Scene::SendMessage(Msg& msg, Node* actualNode) {
 		// there is no such callback or behavior that listens to that type of message
@@ -46,6 +93,17 @@ namespace Cog {
 		}
 	}
 
+	bool Scene::IsRegisteredListener(StringHash action) const {
+		return msgListeners.find(action) != msgListeners.end();
+	}
+
+	bool Scene::IsRegisteredListener(int action, MsgListener* beh) {
+		if (msgListenerActions.find(beh->GetId()) == msgListenerActions.end()) return false;
+
+		vector<StringHash>& actions = msgListenerActions[beh->GetId()];
+
+		return (std::find(actions.begin(), actions.end(), action) != actions.end());
+	}
 
 	Node* Scene::FindNodeById(int id) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -108,6 +166,59 @@ namespace Cog {
 			if ((*it)->GetSubType() == subtype) output.push_back(*it);
 		}
 		return output;
+	}
+
+	vector<Node*> Scene::FindNodesByGroup(StringHash group) const {
+		vector<Node*> output;
+
+		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
+			Node* nd = (*it);
+
+			if (nd->IsInGroup(group)) {
+				output.push_back(nd);
+			}
+		}
+
+		return output;
+	}
+
+	bool Scene::AddNode(Node* node) {
+		MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found == allNodes.end()) {
+			allNodes.push_back(node);
+			node->SetScene(this);
+			return true;
+		}
+		else return false;
+	}
+
+	void Scene::RemoveNode(Node* node) {
+		MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found != allNodes.end()) allNodes.erase(found);
+	}
+
+	bool Scene::AddBehavior(Behavior* beh) {
+		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
+		MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found == allBehaviors.end()) {
+			allBehaviors.push_back(beh);
+
+			return true;
+		}
+		else return false;
+	}
+
+	void Scene::RemoveBehavior(Behavior* beh) {
+		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
+		MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
+
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found != allBehaviors.end()) allBehaviors.erase(found);
+
+		UnregisterListener(beh);
 	}
 
 	void Scene::LoadFromXml(spt<ofxXml> xml) {

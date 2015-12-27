@@ -36,7 +36,7 @@ namespace Cog {
 		// delete all behaviors
 		for (list<Behavior*>::iterator it = behaviors.begin(); it != behaviors.end(); ++it)
 		{
-			CogRemoveBehavior((*it));
+			this->scene->RemoveBehavior(*it);
 			delete (*it);
 		}
 		behaviors.clear();
@@ -50,7 +50,7 @@ namespace Cog {
 		// delete all children
 		for (auto it = children.begin(); it != children.end(); ++it)
 		{
-			CogRemoveNode(this->scene, (*it));
+			scene->RemoveNode(*it);
 			delete (*it);
 		}
 		children.clear();
@@ -274,7 +274,12 @@ namespace Cog {
 			Behavior* beh = (*it);
 			beh->owner = this;
 			behaviors.push_back(beh);
-			CogAddBehavior(beh);
+			
+			// todo: root node can't have its behaviors stored in the scene
+			if (this->type != ObjType::ROOT) {
+				scene->AddBehavior(beh);
+			}
+
 			// initialize
 			beh->Init();
 		}
@@ -289,10 +294,10 @@ namespace Cog {
 			// root has no scene
 			if (this->type != ObjType::ROOT) {
 				child->scene = this->scene;
-				CogAddNode(this->scene, child);
+				scene->AddNode(child);
 			}
 			else {
-				CogAddNode(child->GetScene(), child);
+				child->GetScene()->AddNode(child);
 			}
 
 		}
@@ -306,7 +311,7 @@ namespace Cog {
 			std::pair<Behavior*, bool> item = (*it);
 			Behavior* beh = item.first;
 			behaviors.remove(beh);
-			CogRemoveBehavior(beh);
+			scene->RemoveBehavior(beh);
 			beh->owner = nullptr;
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
@@ -319,7 +324,7 @@ namespace Cog {
 			std::pair<Node*, bool> item = (*it);
 			Node* child = item.first;
 			children.remove(child);
-			CogRemoveNode(this->scene, child);
+			scene->RemoveNode(child);
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
 		}

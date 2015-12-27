@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "ResourceCache.h"
 #include "TransformMath.h"
+#include "Selection.h"
 
 namespace Cog {
 
@@ -30,6 +31,12 @@ namespace Cog {
 			node->AddBehavior(new HitEvent(-1, false,false));
 			node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
 			node->GetStates().SetState(StringHash(STATES_HITTABLE));
+		}
+
+		void AssignSelect(Node* node, string defaultImg, string selectImg, string selectionGroup) {
+			node->AddBehavior(new HitEvent(-1, false, false));
+			node->AddBehavior(new Selection(CogGet2DImage(defaultImg), CogGet2DImage(selectImg), StringHash(selectionGroup)));
+			node->GetGroups().SetState(StringHash(selectionGroup));
 		}
 
 		void AssignText(Node* node, string font, double size, ofColor color, string text) {
@@ -64,6 +71,12 @@ namespace Cog {
 				AssignButton(node, img, imgClick, imgDisabled);
 			}
 
+			if (xml->attributeExists("img_select")) {
+				// set image on selection
+				string imgSelect = xml->getAttributex("img_select", "");
+				string selectGroup = xml->getAttributex("select_group", "");
+				AssignSelect(node, img, imgSelect, selectGroup);
+			}
 
 			if (!type.empty()) {
 				if (type.compare("background") == 0) {

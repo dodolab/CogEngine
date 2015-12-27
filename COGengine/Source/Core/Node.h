@@ -368,7 +368,7 @@ namespace Cog {
 		* Returns true, if this object is in selected group
 		*/
 		bool IsInGroup(int groupId) {
-			return groups->HasState(groupId);
+			return HasGroups() && groups->HasState(groupId);
 		}
 
 		/**

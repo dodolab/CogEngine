@@ -270,6 +270,9 @@
     <ClInclude Include="Source\Components\InputHandler.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\Selection.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">

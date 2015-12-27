@@ -19,6 +19,7 @@
 #include "Component.h"
 #include "FloatingScene.h"
 #include "InputHandler.h"
+#include "Selection.h"
 
 namespace Cog {
 
@@ -127,6 +128,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);
 		REGISTER_BEHAVIOR(FloatingScene);
+		REGISTER_BEHAVIOR(Selection);
 
 	}
 

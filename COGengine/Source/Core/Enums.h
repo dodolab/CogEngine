@@ -75,6 +75,7 @@ namespace Cog {
     #define STATES_DISABLED "DISABLED"
 	#define STATES_ENABLED "ENABLED"
 	#define STATES_LOCKED "LOCKED"
+    #define STATES_SELECTED "SELECTED"
 
 	/*! Listener state enumerator */
 	enum class ListenerState {

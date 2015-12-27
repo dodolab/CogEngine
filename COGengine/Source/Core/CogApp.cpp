@@ -106,7 +106,8 @@ void CogApp::reloadTextures(){
 }
 
 bool CogApp::backPressed(){
-	return false;
+	COGEngine.sceneContext->SwitchBackToScene(TweenDirection::NONE);
+	return true;
 }
 
 void CogApp::okPressed(){
