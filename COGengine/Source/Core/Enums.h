@@ -8,7 +8,7 @@ namespace Cog {
 
 	/*! User input action enumerator */
 	enum class RenderType {
-		NONE, IMAGE, RECTANGLE, POLYGON, ARC, TEXT, SPRITE
+		NONE, IMAGE, RECTANGLE, POLYGON, TEXT, SPRITE, MULTISPRITE
 	};
 
 	/*! User input action enumerator */

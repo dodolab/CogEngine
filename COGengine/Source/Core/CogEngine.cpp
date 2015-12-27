@@ -102,20 +102,19 @@ namespace Cog {
 		logger = new Logger();
 		sceneContext = new SceneContext();
 		renderer = new Renderer();
-		
+		inputHandler = new InputHandler();
+
 		REGISTER_COMPONENT(environment);
 		REGISTER_COMPONENT(resourceCache);
 		REGISTER_COMPONENT(logger);
 		REGISTER_COMPONENT(sceneContext);
 		REGISTER_COMPONENT(renderer);
+		REGISTER_COMPONENT(inputHandler);
 
 		auto sceneMgr = new SceneManager();
 		REGISTER_COMPONENT(sceneMgr);
 		auto animLoader = new AnimationLoader();
 		REGISTER_COMPONENT(animLoader);
-
-		inputHandler = new InputHandler();
-		REGISTER_COMPONENT(inputHandler);
 
 		REGISTER_BEHAVIOR(Animator);
 		REGISTER_BEHAVIOR(Button);

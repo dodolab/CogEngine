@@ -47,18 +47,6 @@ namespace Cog {
 	void CogSendDirectMessageToListener(Msg& msg, int targetId);
 	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
 	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
-	/*
-	Node* CogFindNodeById(int id);
-	int CogGetNodesCountByTag(string tag);
-	Node* CogFindNodeByTag(string tag);
-	vector<Node*> CogFindNodesByTag(char* tag);
-	int CogGetNodesCountBySubType(int subtype);
-	Node* CogFindNodeBySubType(int subtype);
-	vector<Node*> CogFindNodesBySubType(int subtype);
-	bool CogAddNode(Scene* scene, Node* node);
-	void CogRemoveNode(Scene* scene, Node* node);
-	bool CogAddBehavior(Behavior* beh);
-	void CogRemoveBehavior(Behavior* beh);*/
 
 	// =================== MLOGGER =========================
 

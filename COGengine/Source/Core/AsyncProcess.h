@@ -7,11 +7,17 @@
 
 namespace Cog {
 
+	/**
+	* Abstract class for all jobs
+	*/
 	class Job {
 	public:
 		virtual void DoJob() = 0;
 	};
 
+	/**
+	* Job that runs scene loading from XML
+	*/
 	class SceneLoader : public Job {
 	private:
 		spt<ofxXml> config;
