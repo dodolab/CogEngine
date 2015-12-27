@@ -24,7 +24,7 @@ namespace Cog {
 
 
 		void Init() {
-			RegisterListening(ACT_TWEEN_ENDED);
+			RegisterGlobalListening(ACT_TWEEN_ENDED);
 		}
 
 
@@ -53,8 +53,8 @@ namespace Cog {
 			this->to = to;
 
 			to->SetRunningMode(RUNNING);
-			to->GetTransform().localPos.x = CogGetScreenWidth() / 2;
-			to->GetTransform().localPos.y = CogGetScreenHeight() / 2;
+			to->GetTransform().localPos.x = 0;
+			to->GetTransform().localPos.y = 0;
 
 			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
 		}

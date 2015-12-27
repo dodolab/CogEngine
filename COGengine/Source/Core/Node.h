@@ -11,6 +11,7 @@
 
 namespace Cog {
 
+	class Scene;
 
 	/*! Node running mode */
 	enum RunningMode {
@@ -38,6 +39,8 @@ namespace Cog {
 		list<Behavior*> behaviors;
 		// link to the parent
 		Node* parent = nullptr;
+		// link to the scene
+		Scene* scene = nullptr;
 		// list of children that will be removed at the end of update method
 		list<std::pair<Node*, bool>> childrenToRemove;
 		// list of behaviors that will be removed at the end of update method
@@ -226,6 +229,20 @@ namespace Cog {
 		Node* GetRoot() {
 			if (type == ObjType::ROOT) return this;
 			else return FindPredecessor(ObjType::ROOT);
+		}
+
+		/**
+		* Gets scene of this object
+		*/
+		Scene* GetScene() {
+			return scene;
+		}
+
+		/**
+		* Sets object scene
+		*/
+		void SetScene(Scene* scene) {
+			this->scene = scene;
 		}
 
 		/**

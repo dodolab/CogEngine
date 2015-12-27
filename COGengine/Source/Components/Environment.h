@@ -19,9 +19,9 @@ namespace Cog {
 		// flag for screen size change
 		bool screenSizeChanged;
 		// collection of actually pressed keys
-		vector<InputAct> pressedKeys;
+		vector<InputAct*> pressedKeys;
 		// collection of actually pressed buttons
-		vector<InputAct> pressedPoints;
+		vector<InputAct*> pressedPoints;
 		// collection of played sounds
 		vector<spt<Sound>> playedSounds;
 
@@ -70,14 +70,14 @@ namespace Cog {
 		/**
 		* Gets collection of currently pressed keys
 		*/
-		vector<InputAct>& GetPressedKeys() {
+		vector<InputAct*>& GetPressedKeys() {
 			return pressedKeys;
 		}
 
 		/**
 		* Gets collection of currently pressed points
 		*/
-		vector<InputAct>& GetPressedPoints() {
+		vector<InputAct*>& GetPressedPoints() {
 			return pressedPoints;
 		}
 

@@ -11,7 +11,7 @@ namespace Cog
 		value_(Calculate(str))
 	{
 #ifdef DEBUG
-		strValues[value_] = string(str);
+		StringHash::strValues[value_] = string(str);
 #endif
 	}
 
@@ -19,7 +19,7 @@ namespace Cog
 		value_(Calculate(str.c_str()))
 	{
 #ifdef DEBUG
-		strValues[value_] = str;
+		StringHash::strValues[value_] = str;
 #endif
 	}
 

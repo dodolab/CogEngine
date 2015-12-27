@@ -23,7 +23,7 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(ACT_BEHAVIOR_FINISHED);
+			RegisterListening(owner->GetScene(), ACT_BEHAVIOR_FINISHED);
 			if (actual != nullptr)actual->Init();
 			SetOwner(actual, owner);
 		}

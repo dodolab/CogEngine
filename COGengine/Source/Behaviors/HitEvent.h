@@ -6,6 +6,9 @@
 #include "ofxAndroidVibrator.h"
 #endif
 
+#include "EntityStorage.h"
+#include "InputHandler.h"
+
 namespace Cog {
 
 /**
@@ -24,7 +27,8 @@ protected:
 	int hitStartedTouchId = -1;
 	// id of handler behavior (-1 for all behaviors)
 	int handlerBehId = -1;
-
+	// if true, hit will be tested precisely (suitable for alpha-images)
+	bool preciseTest = false;
 public:
 
 	/**
@@ -32,8 +36,8 @@ public:
 	* @param handlerBehId id of handler behavior (set -1 for all handlers that listens HIT events)
 	* @param vibrate if true, device will vibrate when object is hit
 	*/
-	HitEvent(int handlerBehId, bool vibrate) : 
-		handlerBehId(handlerBehId), vibrate(vibrate){
+	HitEvent(int handlerBehId, bool preciseTest, bool vibrate) : 
+		handlerBehId(handlerBehId), preciseTest(preciseTest), vibrate(vibrate){
 
 	}
 
@@ -47,8 +51,9 @@ public:
 	* Tests if the image has been hit
 	* @param image image to test
 	* @param testPos test position
+	* @param preciseTest if true, hit will be tested precisely (suitable for alpha-images)
 	*/
-	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos){
+	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos, bool preciseTest){
 		// move the test position into "local" coordinate space
 		ofVec3f localPos = testPos;
 		// test for location outside the image rectangle
@@ -58,9 +63,12 @@ public:
 			|| localPos.y >(float)image->getHeight())
 			return false;
 
-		ofColor col = image->getColor(localPos.x, localPos.y);
-		// return a hit if the specified local alpha value is greater than half
-		return col.a > 0x80;
+		if (preciseTest) {
+			ofColor col = image->getColor(localPos.x, localPos.y);
+			// return a hit if the specified local alpha value is greater than half
+			return col.a > 0x80;
+		}
+		else return true;
 	}
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
@@ -75,30 +83,32 @@ public:
 
 				bool atLeastOneTouch = false;
 
-				for (InputAct& touch : CogGetPressedPoints()){
+				for (InputAct* touch : CogGetPressedPoints()){
 
 					// calculate vector in image space
-					ofVec3f touchVector = touch.position;
+					ofVec3f touchVector = touch->position;
 					ofVec3f touchTrans = touchVector*inverse;
 
-					if ((touch.handlerId == -1 || touch.handlerId == id) &&  ImageHitTest(hitImage, touchTrans)){
-
-						touch.handlerId = id;
-
+					if ((touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId()) &&  ImageHitTest(hitImage, touchTrans, preciseTest)){
 						// image has been hit
-						if (touch.started){
+						if (touch->started){
 #ifdef ANDROID
 							if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 							atLeastOneTouch = true;
 							hitStarted = true;
-							hitStartedTouchId = touch.touchId;
+							hitStartedTouchId = touch->touchId;
 
+							auto inputHandler = GETCOMPONENT(InputHandler);
+							inputHandler->RegisterRequest(owner, touch, -1);
+
+							/*
+							touch->handlerNodeId = owner->GetId();
 							owner->SetState(StringHash(STATES_HIT));
 							if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);
+							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);*/
 						}
-						else if (touch.ended){
+						else if (touch->ended){
 							
 
 							owner->ResetState(StringHash(STATES_HIT));
@@ -113,7 +123,7 @@ public:
 								else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 
-							if (hitStartedTouchId == touch.touchId && hitStarted){
+							if (hitStartedTouchId == touch->touchId && hitStarted){
 								hitStarted = false;
 							}
 						}
@@ -141,7 +151,7 @@ public:
 						}
 					}
 					else{
-						if (touch.ended && touch.touchId == hitStartedTouchId){
+						if (touch->ended && touch->touchId == hitStartedTouchId){
 							// object isn't hit and this hit has already ended
 							hitStarted = false;
 						}

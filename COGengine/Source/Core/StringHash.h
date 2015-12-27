@@ -1,10 +1,12 @@
 #pragma once
 
 #include <string>
-using namespace std;
+#include <map>
 
 namespace Cog
 {
+	using namespace std;
+
 #define CONVERSION_BUFFER_LENGTH 128
 
 	class StringHash
@@ -94,6 +96,7 @@ namespace Cog
 			}
 			return string("");
 		}
+
 #endif
 
 	private:

@@ -33,7 +33,7 @@ namespace Cog {
 
 		void Init() {
 			if (touchEnabled) {
-				RegisterListening(ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST);
+				RegisterListening(owner->GetScene(), ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST);
 			}
 		}
 
@@ -47,9 +47,9 @@ namespace Cog {
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
 
 					// handle only the first touch
-					if(evt->input.touchId == 0){
+					if(evt->input->touchId == 0){
 						if (lastMousePos != ofVec3f(0)) {
-							ofVec3f diff = evt->input.position - lastMousePos;
+							ofVec3f diff = evt->input->position - lastMousePos;
 
 							Trans& transform = owner->GetTransform();
 							ofVec2f oldPos = transform.absPos;
@@ -69,7 +69,7 @@ namespace Cog {
 
 						}
 
-						lastMousePos = evt->input.position;
+						lastMousePos = evt->input->position;
 					}
 				}
 			}

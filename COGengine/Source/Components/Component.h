@@ -6,14 +6,21 @@
 
 namespace Cog {
 
-
+	/**
+	* Initialization priority
+	*/
+	enum class InitPriority {
+		LOW = 0,
+		MEDIUM = 1,
+		HIGH = 2
+	};
 
 	/**
 	* Common class for all components
 	*/
 	class Component : public MsgListener {
-	private:
-		
+	protected:
+		InitPriority initPriority = InitPriority::LOW;
 	public:
 
 		OBJECT_VIRTUAL()
@@ -23,6 +30,10 @@ namespace Cog {
 		*/
 		virtual void Init() {
 
+		}
+
+		InitPriority GetPriority() const {
+			return initPriority;
 		}
 
 		/**

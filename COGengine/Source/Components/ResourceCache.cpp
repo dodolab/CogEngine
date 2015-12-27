@@ -228,4 +228,25 @@ namespace Cog {
 		return setMap;
 	}
 
+	Setting ResourceCache::GetDefaultSettings(string name) {
+		auto fnd = loadedDefaultSettings.find(name);
+
+		if (fnd != loadedDefaultSettings.end()) return fnd->second;
+		else return Setting();
+	}
+
+	Setting ResourceCache::GetGlobalSettings(string name) {
+		auto fnd = loadedGlobalSettings.find(name);
+
+		if (fnd != loadedGlobalSettings.end()) return fnd->second;
+		else return Setting();
+	}
+
+	Setting ResourceCache::GetProjectSettings(string name) {
+		auto fnd = loadedProjectSettings.find(name);
+
+		if (fnd != loadedProjectSettings.end()) return fnd->second;
+		else return Setting();
+	}
+
 }// namespace

@@ -27,9 +27,9 @@ namespace Cog {
 
 			spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogGet2DImage(disabledImg);
 
-			node->AddBehavior(new HitEvent(-1, false));
+			node->AddBehavior(new HitEvent(-1, false,false));
 			node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
-			node->SetState(StringHash(STATES_HITTABLE));
+			node->GetStates().SetState(StringHash(STATES_HITTABLE));
 		}
 
 		void AssignText(Node* node, string font, double size, ofColor color, string text) {
@@ -99,7 +99,7 @@ namespace Cog {
 				
 				for (int i = 0; i < states; i++) {
 					string stateName = xml->getValue("state", "", i);
-					node->SetState(StringHash(stateName));
+					node->GetStates().SetState(StringHash(stateName));
 				}
 			}
 

@@ -6,6 +6,10 @@
 
 namespace Cog {
 
+	EntityStorage* CogGetEntityStorage() {
+		return COGEngine.entityStorage;
+	}
+
 	// =================== MENVIRONMENT ====================
 
 	void CogAddSound(spt<Sound> sound) {
@@ -16,11 +20,11 @@ namespace Cog {
 		COGEngine.environment->PlaySound(sound);
 	}
 
-	vector<InputAct>& CogGetPressedKeys() {
+	vector<InputAct*>& CogGetPressedKeys() {
 		return COGEngine.environment->GetPressedKeys();
 	}
 
-	vector<InputAct>& CogGetPressedPoints() {
+	vector<InputAct*>& CogGetPressedPoints() {
 		return COGEngine.environment->GetPressedPoints();
 	}
 
@@ -75,21 +79,21 @@ namespace Cog {
 
 	// =================== MSTORAGE ========================
 
-	void CogRegisterListener(StringHash action, MsgListener* listener) {
+	void CogRegisterGlobalListener(StringHash action, MsgListener* listener) {
 		COGEngine.sceneContext->RegisterListener(action, listener);
 	}
 
-	void CogUnregisterListener(StringHash action, MsgListener* listener) {
+	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener) {
 		COGEngine.sceneContext->UnregisterListener(action, listener);
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
-		MLOGDEBUG("CORE", "Message %s:%s:%d", ofToString(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
-		COGEngine.sceneContext->SendMessage(msg, actualNode);
+		MLOGDEBUG("CORE", "Message %s:%s:%d", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
+		COGEngine.sceneContext->GetActualScene()->SendMessage(msg, actualNode);
 	}
 
 	void CogSendDirectMessageToListener(Msg& msg, int targetId) {
-		COGEngine.sceneContext->SendDirectMessageToListener(msg, targetId);
+		COGEngine.sceneContext->GetActualScene()->SendDirectMessageToListener(msg, targetId);
 	}
 
 	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
@@ -103,53 +107,53 @@ namespace Cog {
 	}
 
 	Node* CogFindNodeById(int id) {
-		return COGEngine.sceneContext->FindNodeById(id);
+		return COGEngine.sceneContext->GetActualScene()->FindNodeById(id);
 	}
 
 	int CogGetNodesCountByTag(string tag) {
-		return COGEngine.sceneContext->GetNodesCountByTag(tag);
+		return COGEngine.sceneContext->GetActualScene()->GetNodesCountByTag(tag);
 	}
 
 	Node* CogFindNodeByTag(string tag) {
-		return COGEngine.sceneContext->FindNodeByTag(tag);
+		return COGEngine.sceneContext->GetActualScene()->FindNodeByTag(tag);
 	}
 
 	vector<Node*> CogFindNodesByTag(char* tag) {
-		return COGEngine.sceneContext->FindNodesByTag(tag);
+		return COGEngine.sceneContext->GetActualScene()->FindNodesByTag(tag);
 	}
 
 	int CogGetNodesCountBySubType(int subtype) {
-		return COGEngine.sceneContext->GetNodesCountBySubType(subtype);
+		return COGEngine.sceneContext->GetActualScene()->GetNodesCountBySubType(subtype);
 	}
 
 	Node* CogFindNodeBySubType(int subtype) {
-		return COGEngine.sceneContext->FindNodeBySubType(subtype);
+		return COGEngine.sceneContext->GetActualScene()->FindNodeBySubType(subtype);
 	}
 
 	vector<Node*> CogFindNodesBySubType(int subtype) {
-		return COGEngine.sceneContext->FindNodesBySubType(subtype);
+		return COGEngine.sceneContext->GetActualScene()->FindNodesBySubType(subtype);
 	}
 
-	bool CogAddNode(Node* node) {
+	bool CogAddNode(Scene* scene, Node* node) {
 		MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
-		return COGEngine.sceneContext->AddNode(node);
+		return scene->AddNode(node);
 	}
 
-	void CogRemoveNode(Node* node) {
+	void CogRemoveNode(Scene* scene, Node* node) {
 		MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
-		COGEngine.sceneContext->RemoveNode(node);
+		scene->RemoveNode(node);
 	}
 
 	bool CogAddBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		return COGEngine.sceneContext->AddBehavior(beh);
+		return COGEngine.sceneContext->GetActualScene()->AddBehavior(beh);
 	}
 
 	void CogRemoveBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		COGEngine.sceneContext->RemoveBehavior(beh);
+		COGEngine.sceneContext->GetActualScene()->RemoveBehavior(beh);
 	}
 
 	// =================== MLOGGER =========================

@@ -1,6 +1,7 @@
 
 #include "MsgListener.h"
 #include "Facade.h"
+#include "Scene.h"
 
 namespace Cog {
 
@@ -10,26 +11,30 @@ namespace Cog {
 
 	}
 
-	void MsgListener::RegisterListening(StringHash action1) {
-		CogRegisterListener(action1, this);
+	void MsgListener::RegisterGlobalListening(StringHash action1) {
+		CogRegisterGlobalListener(action1, this);
 	}
 
-	void MsgListener::RegisterListening(StringHash action1, StringHash action2) {
-		CogRegisterListener(action1, this);
-		CogRegisterListener(action2, this);
+	void MsgListener::RegisterListening(Scene* scene, StringHash action1) {
+		scene->RegisterListener(action1, this);
 	}
 
-	void MsgListener::RegisterListening(StringHash action1, StringHash action2, StringHash action3) {
-		CogRegisterListener(action1, this);
-		CogRegisterListener(action2, this);
-		CogRegisterListener(action3, this);
+	void MsgListener::RegisterListening(Scene* scene, StringHash action1, StringHash action2) {
+		RegisterListening(scene, action1);
+		RegisterListening(scene, action2);
 	}
 
-	void MsgListener::RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4) {
-		CogRegisterListener(action1, this);
-		CogRegisterListener(action2, this);
-		CogRegisterListener(action3, this);
-		CogRegisterListener(action4, this);
+	void MsgListener::RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3) {
+		RegisterListening(scene, action1);
+		RegisterListening(scene, action2);
+		RegisterListening(scene, action3);
+	}
+
+	void MsgListener::RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3, StringHash action4) {
+		RegisterListening(scene, action1);
+		RegisterListening(scene, action2);
+		RegisterListening(scene, action3);
+		RegisterListening(scene, action4);
 	}
 
 	void MsgListener::SendMessage(BubblingType bubblingType, StringHash action, int subaction, MsgEvent* data, Node* source) const {

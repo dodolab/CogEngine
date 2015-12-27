@@ -42,7 +42,7 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED);
+			RegisterListening(owner->GetScene(), ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED);
 
 			if (disabledImg && owner->HasState(stateDisabled)) {
 				owner->GetShape<spt<Image>>()->SetImage(disabledImg);
@@ -53,17 +53,16 @@ namespace Cog {
 		}
 
 		void OnMessage(Msg& msg) {
-			if (!owner->HasState(stateDisabled) && msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
-				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(pressedImg);
+			if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+				if (!owner->HasState(stateDisabled) && msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
+						msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(pressedImg);
 				}
-			}else if (!owner->HasState(stateDisabled) && (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST)) {
-				if (msg.GetSourceObject()->GetId() == owner->GetId()) { 
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
+				else if (!owner->HasState(stateDisabled) && (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST)) {
+						msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
 				}
-			}
-			else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
-				msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(disabledImg);
+				else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
+					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(disabledImg);
+				}
 			}
 		}
 

@@ -50,7 +50,7 @@ namespace Cog {
 		// delete all children
 		for (auto it = children.begin(); it != children.end(); ++it)
 		{
-			CogRemoveNode((*it));
+			CogRemoveNode(this->scene, (*it));
 			delete (*it);
 		}
 		children.clear();
@@ -285,7 +285,16 @@ namespace Cog {
 			Node* child = (*it);
 			children.push_back(child);
 			child->parent = this;
-			CogAddNode(child);
+			
+			// root has no scene
+			if (this->type != ObjType::ROOT) {
+				child->scene = this->scene;
+				CogAddNode(this->scene, child);
+			}
+			else {
+				CogAddNode(child->GetScene(), child);
+			}
+
 		}
 		childrenToAdd.clear();
 	}
@@ -310,7 +319,7 @@ namespace Cog {
 			std::pair<Node*, bool> item = (*it);
 			Node* child = item.first;
 			children.remove(child);
-			CogRemoveNode(child);
+			CogRemoveNode(this->scene, child);
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
 		}

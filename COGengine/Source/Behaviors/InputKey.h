@@ -33,14 +33,14 @@ namespace Cog {
 
 			for (auto key : CogGetPressedKeys()) {
 
-				if (!key.IsHandled() || key.handlerId == owner->GetId()) {
+				if (!key->IsHandled() || key->handlerNodeId == owner->GetId()) {
 					// handle key press
-					key.handlerId = owner->GetId();
+					key->handlerNodeId = owner->GetId();
 
-					Act inAct = GetAction(key.key);
+					Act inAct = GetAction(key->key);
 					if (inAct != Act::NONE)
 					{
-						if (!key.ended) actions.SetState((int)inAct);
+						if (!key->ended) actions.SetState((int)inAct);
 						else actions.ResetState((int)inAct);
 					}
 				}

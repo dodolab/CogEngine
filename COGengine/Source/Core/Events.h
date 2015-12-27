@@ -32,9 +32,9 @@ namespace Cog {
 
 	class InputEvent : public MsgEvent {
 	public:
-		InputAct input;
+		InputAct* input;
 
-		InputEvent(InputAct input) : input(input) {
+		InputEvent(InputAct* input) : input(input) {
 
 		}
 	};

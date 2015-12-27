@@ -38,6 +38,12 @@ namespace Cog {
 
 	public:
 
+		ResourceCache() {
+			// resource cache should be initialized with higher priority because it
+			// loads XML settings
+			this->initPriority = InitPriority::HIGH;
+		}
+
 		/**
 		* Initializes controller
 		*/
@@ -117,6 +123,12 @@ namespace Cog {
 		* Loads settings from XML
 		*/
 		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
+
+		Setting GetDefaultSettings(string name);
+
+		Setting GetGlobalSettings(string name);
+
+		Setting GetProjectSettings(string name);
 	};
 
 }// namespace

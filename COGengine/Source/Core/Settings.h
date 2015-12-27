@@ -61,6 +61,7 @@ namespace Cog {
 
 		Setting(const Setting& copy) {
 			items = map<string, SettingItem>();
+			name = copy.name;
 
 			for (auto i = copy.items.begin(); i != copy.items.end(); ++i) {
 				items[i->first] = i->second;

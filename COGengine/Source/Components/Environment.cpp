@@ -29,16 +29,16 @@ namespace Cog {
 			// if pressed keys contains this key, remove it
 			for (auto pKey : pressedKeys) {
 				// key is already in the collection of pressed keys
-				if (pKey.key == key) return;
+				if (pKey->key == key) return;
 			}
 
-			pressedKeys.push_back(InputAct(key));
+			pressedKeys.push_back(new InputAct(key));
 		}
 		else {
 			// key up
 			for (auto it = pressedKeys.begin(); it != pressedKeys.end(); ++it) {
-				if ((*it).key == key) {
-					(*it).ended = true;
+				if ((*it)->key == key) {
+					(*it)->ended = true;
 					break;
 				}
 			}
@@ -52,14 +52,14 @@ namespace Cog {
 		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
 
 		if (pressed) {
-			pressedPoints.push_back(InputAct(button, ofVec3f(x, y)));
+			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
 		}
 		else {
 			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
-				if ((*it).inputType == InputType::TOUCH && (*it).touchId == button) {
+				if ((*it)->inputType == InputType::TOUCH && (*it)->touchId == button) {
 					// change position
-					(*it).position = ofVec3f(x, y);
-					(*it).ended = true;
+					(*it)->position = ofVec3f(x, y);
+					(*it)->ended = true;
 					return;
 				}
 			}
@@ -72,8 +72,8 @@ namespace Cog {
 		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
-			if ((*it).touchId == button && (*it).inputType == InputType::TOUCH) {
-				(*it).position = ofVec3f(x, y);
+			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
+				(*it)->position = ofVec3f(x, y);
 			}
 		}
 	}
@@ -85,14 +85,14 @@ namespace Cog {
 		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
 
 		if (pressed) {
-			pressedPoints.push_back(InputAct(button, ofVec3f(x, y)));
+			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
 		}
 		else {
 			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
-				if ((*it).inputType == InputType::TOUCH) {
+				if ((*it)->inputType == InputType::TOUCH) {
 					// change position
-					(*it).position = ofVec3f(x, y);
-					(*it).ended = true;
+					(*it)->position = ofVec3f(x, y);
+					(*it)->ended = true;
 					return;
 				}
 			}
@@ -105,8 +105,8 @@ namespace Cog {
 
 		// user moves finger
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
-			if ((*it).touchId == button && (*it).inputType == InputType::TOUCH) {
-				(*it).position = ofVec3f(x, y);
+			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
+				(*it)->position = ofVec3f(x, y);
 			}
 		}
 	}
@@ -116,12 +116,14 @@ namespace Cog {
 
 		// remove released keys
 		for (auto it = pressedKeys.begin(); it != pressedKeys.end();) {
-			if ((*it).ended) {
+			if ((*it)->ended) {
+				InputAct* act = (*it);
 				it = pressedKeys.erase(it);
+				delete act;
 				continue;
 			}
-			else if ((*it).started) {
-				(*it).started = false;
+			else if ((*it)->started) {
+				(*it)->started = false;
 			}
 			// increment only if item hasn't been erased
 			++it;
@@ -129,12 +131,14 @@ namespace Cog {
 
 		// remove released touches
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end();) {
-			if ((*it).ended) {
+			if ((*it)->ended) {
+				InputAct* act = (*it);
 				it = pressedPoints.erase(it);
+				delete act;
 				continue;
 			}
-			else if ((*it).started) {
-				(*it).started = false;
+			else if ((*it)->started) {
+				(*it)->started = false;
 			}
 			// increment only if item hasn't been erased
 			++it;
