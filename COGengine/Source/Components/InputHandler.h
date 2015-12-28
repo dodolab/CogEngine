@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "InputAct.h"
 #include "SoundFile.h"
 #include "Component.h"
@@ -66,10 +66,8 @@ namespace Cog {
 				else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(reqToHandle.touch), reqToHandle.owner, reqToHandle.handlerBehId);
 
 				requests.clear();
-
 			}
 		}
-	
 	};
 
 }// namespace

@@ -33,9 +33,8 @@ namespace Cog {
 			Trans& transform = owner->GetTransform();
 
 			ofVec3f velocity = owner->GetAttr<ofVec3f>(ATTR_VELOCITY);
-
-			transform.localPos.x += CogTranslateSpeed(speed)*velocity.x * delta;
-			transform.localPos.y += CogTranslateSpeed(speed)*velocity.y * delta;
+			transform.localPos.x += speed*0.001*CogGetScreenWidth()*velocity.x * delta;
+			transform.localPos.y += speed*0.001*CogGetScreenWidth()*velocity.y * delta;
 		}
 
 	};

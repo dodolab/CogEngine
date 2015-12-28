@@ -82,7 +82,7 @@ namespace Cog {
 			int height = CogGetScreenHeight();
 
 			// calculate actual position
-			actual += 1.0f / width * CogTranslateSpeed(speed)*delta;
+			actual += 1.0f / width * speed*0.001*CogGetScreenWidth()*delta;
 
 			if (actual > 1) {
 				actual = 1;

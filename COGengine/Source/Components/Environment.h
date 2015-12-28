@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "InputAct.h"
 #include "SoundFile.h"
 #include "Component.h"

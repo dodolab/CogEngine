@@ -35,6 +35,8 @@ namespace Cog {
 
 		void Init();
 
+		void OnMessage(Msg& msg);
+
 		/**
 		* Gets the root object
 		*/

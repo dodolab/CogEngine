@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "ofUtils.h"
 #include "Component.h"
 
@@ -144,6 +144,8 @@ namespace Cog {
 		LoggerChannel* channel;
 		LogLevel logLevel;
 		spt<ofxXmlSettings> config;
+		vector<string> includes;
+		vector<string> excludes;
 
 	public:
 
@@ -184,8 +186,13 @@ namespace Cog {
 		* @param depth log depth (padding from left)
 		*/
 		void LogInfo(const char* module, int depth, const char* format, va_list args) {
-			if (((int)logLevel) >= ((int)LogLevel::LINFO)) {
-				channel->Log(LogLevel::LINFO, module, ofVAArgsToString(format, args), depth);
+
+			if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
+				(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
+
+				if (((int)logLevel) >= ((int)LogLevel::LINFO)) {
+					channel->Log(LogLevel::LINFO, module, ofVAArgsToString(format, args), depth);
+				}
 			}
 		}
 
@@ -194,8 +201,13 @@ namespace Cog {
 		* @param depth log depth (padding from left)
 		*/
 		void LogDebug(const char* module, int depth, const char* format, va_list args) {
-			if (((int)logLevel) >= ((int)LogLevel::LDEBUG)) {
-				channel->Log(LogLevel::LDEBUG, module, ofVAArgsToString(format, args), depth);
+
+			if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
+				(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
+
+				if (((int)logLevel) >= ((int)LogLevel::LDEBUG)) {
+					channel->Log(LogLevel::LDEBUG, module, ofVAArgsToString(format, args), depth);
+				}
 			}
 		}
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
-#include "Flags.h"
+#include "ofxCogCommon.h"
 #include "Msg.h"
 #include "Facade.h"
 #include "MsgListener.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "Button.h"
 #include "HitEvent.h"
 #include "Node.h"

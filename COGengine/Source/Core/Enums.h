@@ -1,10 +1,7 @@
 #pragma once
 
-#define PIF 3.141592653f
 
 namespace Cog {
-
-	typedef float(*FadeFunction)(float);
 
 	/*! User input action enumerator */
 	enum class RenderType {

@@ -238,6 +238,7 @@
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
     <ClInclude Include="Source\Core\CogApp.h" />
+    <ClInclude Include="Source\Core\Definitions.h" />
     <ClInclude Include="Source\Core\EntityStorage.h" />
     <ClInclude Include="Source\Core\CogEngine.h" />
     <ClInclude Include="Source\Core\Events.h" />
@@ -257,6 +258,7 @@
     <ClInclude Include="Source\Misc\SpriteSheetRenderer.h" />
     <ClInclude Include="Source\Misc\SpriteTexture.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
+    <ClInclude Include="Source\ofxCogCommon.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
@@ -289,7 +291,6 @@
     <ClCompile Include="Source\Core\EntityStorage.cpp" />
     <ClCompile Include="Source\Core\CogEngine.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
-    <ClCompile Include="Source\Core\Enums.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\MsgListener.cpp" />
     <ClCompile Include="Source\Core\Node.cpp" />

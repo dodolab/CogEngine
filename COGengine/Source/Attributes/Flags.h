@@ -1,11 +1,10 @@
 #pragma once
 
-#include "StringHash.h"
-#include <map>
-#include <vector>
-#include <stdarg.h>  
+#include "ofxCogCommon.h"
 
 namespace Cog {
+
+	class StringHash;
 
 	/**
 	* State machine class that holds collection of states

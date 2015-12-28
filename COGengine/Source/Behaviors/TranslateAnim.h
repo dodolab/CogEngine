@@ -79,8 +79,8 @@ namespace Cog {
 		void Update(const uint64 delta, const uint64 absolute) {
 
 			// calculate differencial
-			float diffX = (float)(CogTranslateSpeed(speedX)*delta);
-			float diffY = (float)(CogTranslateSpeed(speedY)*delta);
+			float diffX = (float)(speedX*0.001*CogGetScreenWidth()*delta);
+			float diffY = (float)(speedY*0.001*CogGetScreenWidth()*delta);
 			bool finished = false;
 
 			actual.x += diffX;

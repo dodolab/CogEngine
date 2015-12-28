@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 
 namespace Cog {
 
@@ -16,34 +16,44 @@ namespace Cog {
 
 		SettingItem(const SettingItem& copy) {
 			key = copy.key;
-			value = copy.value;
+
+			for (string val : copy.values) {
+				values.push_back(val);
+			}
 		}
 
 		/** key */
 		string key = "";
 
-		/** string value */
-		string value = "";
+		/** list of values */
+		vector<string> values;
 
+		bool HasMoreValues() {
+			return values.size() > 1;
+		}
+
+		vector<string>& GetValues() {
+			return values;
+		}
 
 		string GetValStr() {
-			return value;
+			return values[0];
 		}
 
 		double GetValDouble() {
-			return ofToDouble(value);
+			return ofToDouble(values[0]);
 		}
 
 		int GetValInt() {
-			return ofToInt(value);
+			return ofToInt(values[0]);
 		}
 
 		float GetValFloat() {
-			return ofToFloat(value);
+			return ofToFloat(values[0]);
 		}
 
 		bool GetValBool() {
-			return ofToBool(value);
+			return ofToBool(values[0]);
 		}
 	};
 
@@ -80,7 +90,11 @@ namespace Cog {
 		}
 
 		string GetItemVal(string key) {
-			return GetItem(key).value;
+			return GetItem(key).GetValStr();
+		}
+
+		vector<string> GetItemVals(string key) {
+			return GetItem(key).values;
 		}
 
 		/**

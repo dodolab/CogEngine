@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "Scene.h"
 #include "Behavior.h"
 #include "Node.h"
@@ -11,6 +11,7 @@ namespace Cog {
 	* Abstract class for all jobs
 	*/
 	class Job {
+		OBJECT(Job)
 	public:
 		virtual void DoJob() = 0;
 	};
@@ -19,6 +20,7 @@ namespace Cog {
 	* Job that runs scene loading from XML
 	*/
 	class SceneLoader : public Job {
+		OBJECT(SceneLoader)
 	private:
 		spt<ofxXml> config;
 		Scene* scene;
@@ -59,10 +61,11 @@ namespace Cog {
 
 		void threadedFunction()
 		{
-			MLOGDEBUG("AsyncProcess", "Running threaded job");
+			MLOGDEBUG("AsyncProcess", "Running threaded job %s", this->job->GetClassName().c_str());
 			job->DoJob();
+			MLOGDEBUG("AsyncProcess", "Finishing threaded job %s", this->job->GetClassName().c_str());
 			delete job;
-			MLOGDEBUG("SceneManager", "Finishing threaded job");
+			
 		}
 
 	};
