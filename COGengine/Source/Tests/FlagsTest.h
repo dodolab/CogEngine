@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "CogEngine.h"
-
+#include "cpplinq.hpp"
 
 #ifdef TESTING
 #else

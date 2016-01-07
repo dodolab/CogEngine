@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</ProjectGuid>
+    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>COGengine</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdParty\catch\catch.hpp" />
+    <ClInclude Include="3rdParty\cpplinq\cpplinq.hpp" />
     <ClInclude Include="3rdParty\dukbind\dukbind.h" />
     <ClInclude Include="3rdParty\dukbind\dukbindconf.h" />
     <ClInclude Include="3rdParty\dukbind\dukbind_assert.h" />
