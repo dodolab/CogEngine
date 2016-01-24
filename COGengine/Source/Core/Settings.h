@@ -41,18 +41,22 @@ namespace Cog {
 		}
 
 		double GetValDouble() {
+			if (values.size() == 0) return 0;
 			return ofToDouble(values[0]);
 		}
 
 		int GetValInt() {
+			if (values.size() == 0) return 0;
 			return ofToInt(values[0]);
 		}
 
 		float GetValFloat() {
+			if (values.size() == 0) return 0;
 			return ofToFloat(values[0]);
 		}
 
 		bool GetValBool() {
+			if (values.size() == 0) return false;
 			return ofToBool(values[0]);
 		}
 	};
@@ -63,7 +67,7 @@ namespace Cog {
 	class Setting {
 	public:
 		map<string, SettingItem> items;
-		string name;
+		string name = "";
 
 		Setting() {
 			items = map<string, SettingItem>();

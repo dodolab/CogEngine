@@ -149,11 +149,12 @@ namespace Cog {
 
 	public:
 
-			/**
-			* Creates a new logger
-			* @param config configuration xml
-			*/
-			Logger() {
+		/**
+		* Creates a new logger
+		* @param config configuration xml
+		*/
+		Logger() {
+			initPriority = InitPriority::MEDIUM; // logger will be initialized before environment
 		}
 
 		~Logger() {

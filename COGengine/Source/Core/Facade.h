@@ -26,14 +26,14 @@ namespace Cog {
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
 	vector<spt<Sound>>& CogGetPlayedSounds();
-	int CogGetScreenRealWidth();
-	int CogGetScreenRealHeight();
-	int CogGetScreenWidth();
-	int CogGetScreenHeight();
-	float CogGetScreenRealAspectRatio();
+	float CogGetScreenWidth();
+	float CogGetVirtualWidth();
+	float CogGetScreenHeight();
+	float CogGetVirtualHeight();
+	float CogGetVirtualAspectRatio();
 	float CogGetScreenAspectRatio();
-	void CogSetScreenAspectRatio(float ratio);
 	ofVec2f CogGetScreenSize();
+	ofVec2f CogGetVirtualScreenSize();
 	void CogRunThread(ofThread* thread);
 
 	
@@ -54,7 +54,6 @@ namespace Cog {
 
 	// =================== MRENDERER =========================
 	void CogPushNodeForRendering(Node* node);
-	void CogRender();
 
 	// =================== MCACHE =======================
 

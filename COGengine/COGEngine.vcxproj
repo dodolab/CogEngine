@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <ProjectGuid>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>COGengine</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -284,6 +284,7 @@
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Attributes\Flags.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
+    <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\SceneContext.cpp" />

@@ -122,6 +122,8 @@ namespace Cog {
 
 		bool SwitchBackToScene(TweenDirection tweenDir);
 
+		void SetActualScene(Scene* scene);
+
 		/**
 		* Loads scene from xml
 		*/

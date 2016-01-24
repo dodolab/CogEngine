@@ -78,11 +78,11 @@ namespace Cog {
 				to->SetRunningMode(RUNNING);
 			}
 
-			int width = CogGetScreenWidth();
-			int height = CogGetScreenHeight();
+			int width = CogGetVirtualWidth();
+			int height = CogGetVirtualHeight();
 
 			// calculate actual position
-			actual += 1.0f / width * speed*0.001*CogGetScreenWidth()*delta;
+			actual += 1.0f / width * speed*0.001*width*delta;
 
 			if (actual > 1) {
 				actual = 1;
@@ -100,22 +100,22 @@ namespace Cog {
 
 			// change position according to the tweening direction
 			if (direction == TweenDirection::RIGHT) {
-				from->GetTransform().localPos.x = (widthActual);
-				to->GetTransform().localPos.x = -width  + widthActual;
+				from->GetScene()->GetViewPortOffset().x = (widthActual);
+				to->GetScene()->GetViewPortOffset().x = -width  + widthActual;
 			}
 			else if (direction == TweenDirection::LEFT) {
-				from->GetTransform().localPos.x = (- widthActual);
-				to->GetTransform().localPos.x = width  - widthActual;
+				from->GetScene()->GetViewPortOffset().x = (- widthActual);
+				to->GetScene()->GetViewPortOffset().x = width  - widthActual;
 			}
 			else if (direction == TweenDirection::UP) {
-				to->GetTransform().localPos.x = 0;
-				from->GetTransform().localPos.y = (float)((-heightActual));
-				to->GetTransform().localPos.y = (float)(height - heightActual);
+				to->GetScene()->GetViewPortOffset().x = 0;
+				from->GetScene()->GetViewPortOffset().y = (float)((-heightActual));
+				to->GetScene()->GetViewPortOffset().y = (float)(height - heightActual);
 			}
 			else if (direction == TweenDirection::DOWN) {
-				to->GetTransform().localPos.x = (float)(0);
-				from->GetTransform().localPos.y = (float)((heightActual));
-				to->GetTransform().localPos.y = (float)(-height  + heightActual);
+				to->GetScene()->GetViewPortOffset().x = (float)(0);
+				from->GetScene()->GetViewPortOffset().y = (float)((heightActual));
+				to->GetScene()->GetViewPortOffset().y = (float)(-height  + heightActual);
 			}
 
 			if (actual >= 1.0f) {

@@ -389,5 +389,8 @@
     <ClCompile Include="Source\Components\Logger.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Components\Renderer.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
