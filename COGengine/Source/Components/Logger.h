@@ -78,10 +78,14 @@ namespace Cog {
 
 			spaces(depth * 2, cout);
 
+#ifdef WIN32
 			cout << GetLogLevel(level);
 			cout << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
 			cout << "[" << module << "]";
 			cout << message << endl;
+#else
+			ofLogNotice("OpenFrameworks") << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]" << "[" << module << "]" << message << endl;
+#endif
 		}
 	};
 

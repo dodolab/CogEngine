@@ -142,10 +142,7 @@ namespace Cog {
 		}
 
 		void RenderSprite(Node* owner) {
-			// todo - dont use this method very often
-			//renderer->setActualBuffer("blue");
-
-
+			
 			// BEGIN UPGRADE
 			Trans& trans = owner->GetTransform();
 			ofMatrix4x4 abs = owner->GetTransform().GetAbsMatrix();
@@ -169,10 +166,10 @@ namespace Cog {
 		}
 
 		void RenderMultiSprite(Node* owner) {
-			renderer->setActualBuffer("water");
-
+			
 
 			spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
+			renderer->setActualBuffer(shape->GetName());
 			vector<spt<MSpriteCrate>> sprites = shape->GetSprites();
 
 			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
@@ -184,6 +181,7 @@ namespace Cog {
 				drawingTile.height = sprite->GetHeight();
 				drawingTile.offsetX = sprite->GetPosX();
 				drawingTile.offsetY = sprite->GetPosY();
+
 				drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width/2;  // [0,0] is topleft corner
 				drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height/2;
 				drawingTile.posZ = trans.absPos.z;

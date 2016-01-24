@@ -27,7 +27,7 @@ namespace Cog {
 			ofDrawRectangle(0, 0, screenSize.x, screenSize.y);
 
 			// back to actual viewport
-			ofViewport((screenSize.x - virtualSize.x) / 2,0, virtualSize.x, virtualSize.y);
+			ofViewport((screenSize.x - virtualSize.x) / 2, 0, virtualSize.x, virtualSize.y);
 		}
 		else if (virtualSize.y != screenSize.y) {
 			// draw top and bottom
@@ -35,16 +35,15 @@ namespace Cog {
 			ofDrawRectangle(0, 0, screenSize.x, screenSize.y);
 			ofViewport(0, screenSize.y-(screenSize.y-virtualSize.y)/2, virtualSize.x, (screenSize.y - virtualSize.y) / 2);
 			ofDrawRectangle(0, 0, screenSize.x, screenSize.y);
-
 			// back to actual viewport
-			ofViewport(0, (screenSize.y - virtualSize.y) / 2, virtualSize.x, virtualSize.y);
+			ofViewport((screenSize.x - virtualSize.x) / 2, 0, virtualSize.x, virtualSize.y);
 		}
+		
 	}
 
 	void Renderer::InitViewPort(Scene* sceneNode) {
 		ofVec2f screenSize = CogGetScreenSize();
 		ofVec2f virtualSize = CogGetVirtualScreenSize();
-
 
 		// handle custom aspect ratio
 		if (virtualSize.x != screenSize.x) {
@@ -52,6 +51,10 @@ namespace Cog {
 		}
 		else if (virtualSize.y != screenSize.y) {
 			ofViewport(sceneNode->GetViewPortOffset().x, sceneNode->GetViewPortOffset().y + (screenSize.y - virtualSize.y) / 2, virtualSize.x, virtualSize.y);
+		}
+		else {
+			// back to actual viewport
+			ofViewport(sceneNode->GetViewPortOffset().x, sceneNode->GetViewPortOffset().y, virtualSize.x, virtualSize.y);
 		}
 	}
 

@@ -37,6 +37,7 @@ namespace Cog {
 		}
 
 		string GetValStr() {
+			if (values.size() == 0) return "";
 			return values[0];
 		}
 
@@ -122,6 +123,10 @@ namespace Cog {
 
 	public:
 		Settings() {
+
+		}
+
+		Settings(map<string, Setting> settings) : settings(settings) {
 
 		}
 
