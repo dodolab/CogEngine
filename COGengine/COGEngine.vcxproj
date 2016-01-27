@@ -290,6 +290,8 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\SceneContext.cpp" />
+    <ClCompile Include="Source\Core\AStarSearch.cpp" />
+    <ClCompile Include="Source\Core\AStarSearch.h" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
     <ClCompile Include="Source\Core\CogApp.cpp" />
     <ClCompile Include="Source\Core\EntityStorage.cpp" />

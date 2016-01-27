@@ -257,6 +257,12 @@ namespace Cog {
 			xml->popTag();
 		}
 
+
+		// always merge from default settings
+		auto defaultSettings = cache->GetDefaultSettings();
+		settings.MergeSettings(defaultSettings);
+
+
 		if (xml->pushTagIfExists("scene_settings")) {
 			
 			auto map = cache->LoadSettingsFromXml(xml);
@@ -264,11 +270,12 @@ namespace Cog {
 
 			xml->popTag();
 		}
-
+		
 		if (xml->tagExists("sceneanim")) {
 			// parse animation
 
 		}
+
 
 		int nodes = xml->getNumTags("node");
 		NodeBuilder bld = NodeBuilder();
@@ -278,7 +285,6 @@ namespace Cog {
 			// load nodes
 			Node* node = bld.LoadNodeFromXml(xml, sceneNode, settings);
 			sceneNode->AddChild(node);
-
 			xml->popTag();
 		}
 

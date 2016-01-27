@@ -260,24 +260,15 @@ namespace Cog {
 	}
 
 	Setting ResourceCache::GetDefaultSettings(string name) {
-		auto fnd = loadedDefaultSettings.find(name);
-
-		if (fnd != loadedDefaultSettings.end()) return fnd->second;
-		else return Setting();
+		return loadedDefaultSettings.GetSetting(name);
 	}
 
 	Setting ResourceCache::GetGlobalSettings(string name) {
-		auto fnd = loadedGlobalSettings.find(name);
-
-		if (fnd != loadedGlobalSettings.end()) return fnd->second;
-		else return Setting();
+		return loadedGlobalSettings.GetSetting(name);
 	}
 
 	Setting ResourceCache::GetProjectSettings(string name) {
-		auto fnd = loadedProjectSettings.find(name);
-
-		if (fnd != loadedProjectSettings.end()) return fnd->second;
-		else return Setting();
+		return loadedProjectSettings.GetSetting(name);
 	}
 
 }// namespace

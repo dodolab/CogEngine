@@ -157,17 +157,17 @@ namespace Cog {
 
 
 
-		inline float getX(int x, int y, float angle) {
+		inline float getX(float x, float y, float angle) {
 			return (angle == 0) ? x : ((float)x*cosf(angle) - (float)y*sinf(angle));
 		}
 
-		inline float getY(int x, int y, float angle) {
+		inline float getY(float x, float y, float angle) {
 			return (angle == 0) ? y : ((float)x*sinf(angle) + (float)y*cosf(angle));
 		}
 
 		void setTexCoeffs(int textureWidth, int textureHeight);
 
-		void addTexCoords(flipDirection f, int frameX, int frameY, float x = 1, float y = 1);
+		void addTexCoords(flipDirection f, float posX, float posY, float x = 1, float y = 1);
 
 		void addTexCoords(Tile& tile);
 

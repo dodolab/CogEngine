@@ -47,6 +47,7 @@ namespace Cog {
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
 
 					// handle only the first touch
+					
 					if(evt->input->touchId == 0){
 						if (lastMousePos != ofVec3f(0)) {
 							ofVec3f diff = evt->input->position - lastMousePos;

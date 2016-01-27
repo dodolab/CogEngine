@@ -182,8 +182,8 @@ namespace Cog {
 				drawingTile.offsetX = sprite->GetPosX();
 				drawingTile.offsetY = sprite->GetPosY();
 
-				drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width/2;  // [0,0] is topleft corner
-				drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height/2;
+				drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width/2.0f;  // [0,0] is topleft corner
+				drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height/2.0f;
 				drawingTile.posZ = trans.absPos.z;
 				drawingTile.rotation = trans.rotation / 360;
 				drawingTile.scaleX = trans.absScale.x;

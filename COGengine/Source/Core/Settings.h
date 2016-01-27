@@ -178,6 +178,10 @@ namespace Cog {
 				}
 			}
 		}
+
+		void MergeSettings(Settings& newSet) {
+			MergeSettings(newSet.settings);
+		}
 	};
 
 
