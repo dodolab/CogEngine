@@ -26,14 +26,14 @@ namespace Cog {
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
 	vector<spt<Sound>>& CogGetPlayedSounds();
-	float CogGetScreenWidth();
-	float CogGetVirtualWidth();
-	float CogGetScreenHeight();
-	float CogGetVirtualHeight();
+	int CogGetScreenWidth();
+	int CogGetVirtualWidth();
+	int CogGetScreenHeight();
+	int CogGetVirtualHeight();
 	float CogGetVirtualAspectRatio();
 	float CogGetScreenAspectRatio();
-	ofVec2f CogGetScreenSize();
-	ofVec2f CogGetVirtualScreenSize();
+	Vec2i CogGetScreenSize();
+	Vec2i CogGetVirtualScreenSize();
 	void CogRunThread(ofThread* thread);
 
 	

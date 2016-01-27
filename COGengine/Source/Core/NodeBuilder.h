@@ -39,8 +39,8 @@ namespace Cog {
 			node->GetGroups().SetState(StringHash(selectionGroup));
 		}
 
-		void AssignText(Node* node, string font, double size, ofColor color, string text) {
-			spt<ofTrueTypeFont> fontVal = CogGetFont(font, size);
+		void AssignText(Node* node, string font, float size, ofColor color, string text) {
+			spt<ofTrueTypeFont> fontVal = CogGetFont(font, (int)size);
 
 			auto textShape = new Text(fontVal, text, size);
 			textShape->SetColor(color);
@@ -64,7 +64,7 @@ namespace Cog {
 
 			Node* node = new Node(ObjType::OBJECT, 0, name);
 			// set default shape
-			node->SetShape(spt<Rectangle>(new Rectangle(refWidth, refHeight)));
+			node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
 
 			if (!img.empty()) {
 				AssignImage(node, img);
@@ -142,7 +142,7 @@ namespace Cog {
 
 		void LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
 			string font = xml->getAttributex("font", "");
-			double size = xml->getAttributex("size", 1.0);
+			float size = xml->getAttributex("size", 1.0);
 			string value = xml->getValuex("");
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = ofColor::fromHex(ofHexToInt(colorStr));

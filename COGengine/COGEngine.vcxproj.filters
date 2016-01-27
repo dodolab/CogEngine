@@ -300,6 +300,9 @@
     <ClInclude Include="Source\Entities\Settings.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\Vec2i.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -350,9 +353,6 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\EntityStorage.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\SceneContext.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
@@ -369,9 +369,6 @@
       <Filter>Source\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\StringHash.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\AStarSearch.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\CollageTexture.cpp">

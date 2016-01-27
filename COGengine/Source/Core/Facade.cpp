@@ -32,19 +32,19 @@ namespace Cog {
 		return COGEngine.environment->GetPlayedSounds();
 	}
 
-	float CogGetScreenWidth() {
+	int CogGetScreenWidth() {
 		return COGEngine.environment->GetScreenWidth();
 	}
 
-	float CogGetVirtualWidth() {
+	int CogGetVirtualWidth() {
 		return COGEngine.environment->GetVirtualWidth();
 	}
 
-	float CogGetScreenHeight() {
+	int CogGetScreenHeight() {
 		return COGEngine.environment->GetScreenHeight();
 	}
 
-	float CogGetVirtualHeight() {
+	int CogGetVirtualHeight() {
 		return COGEngine.environment->GetVirtualHeight();
 	}
 
@@ -56,11 +56,11 @@ namespace Cog {
 		return COGEngine.environment->GetScreenAspectRatio();
 	}
 
-	ofVec2f CogGetScreenSize() {
+	Vec2i CogGetScreenSize() {
 		return COGEngine.environment->GetScreenSize();
 	}
 
-	ofVec2f CogGetVirtualScreenSize() {
+	Vec2i CogGetVirtualScreenSize() {
 		return COGEngine.environment->GetVirtualScreenSize();
 	}
 

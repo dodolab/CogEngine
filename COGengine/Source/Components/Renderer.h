@@ -37,7 +37,7 @@ namespace Cog {
 		}
 
 		void AddTileLayer(spt<ofImage> img, string name, int bufferSize) {
-			renderer->loadTexture(&img->getTextureReference(), name, bufferSize);
+			renderer->loadTexture(&img->getTexture(), name, bufferSize);
 			rendererLayers.push_back(name);
 		}
 

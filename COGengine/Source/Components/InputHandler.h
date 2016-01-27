@@ -23,7 +23,7 @@ namespace Cog {
 
 		InputHandlerRequest(Node* owner, InputAct* touch, int handlerBehId):
 			owner(owner), touch(touch), handlerBehId(handlerBehId) {
-			ownerZIndex = owner->GetTransform().localPos.z;
+			ownerZIndex = (int)owner->GetTransform().localPos.z;
 		}
 	};
 

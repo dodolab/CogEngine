@@ -238,7 +238,7 @@ namespace Cog {
 
 		sceneNode = new Node(ObjType::SCENE, 0, name);
 		sceneNode->SetScene(this);
-		sceneNode->SetShape(spt<Shape>(new Rectangle(CogGetScreenWidth(), CogGetScreenHeight())));
+		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
 
 		if (xml->attributeExists("lazy") && xml->getBoolAttributex("lazy", false)) {
 			this->lazyLoad = true;

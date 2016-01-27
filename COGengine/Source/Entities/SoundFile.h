@@ -18,12 +18,12 @@ namespace Cog {
 		Sound(string filename) : filename(filename) {
 			started = false;
 			// music must be streamed; otherwise it won't work on android
-			soundPlayer.loadSound(filename, true);
+			soundPlayer.load(filename, true);
 			SetVolume(1.0f);
 		}
 
 		bool Ended() {
-			return started && !soundPlayer.getIsPlaying();
+			return started && !soundPlayer.isPlaying();
 		}
 
 		void Play() {

@@ -69,4 +69,4 @@ public: \
 
 typedef float(*FadeFunction)(float);
 
-typedef unsigned int uint64;
+typedef unsigned long long uint64;

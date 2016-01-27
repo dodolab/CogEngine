@@ -64,7 +64,7 @@ public:
 			return false;
 
 		if (preciseTest) {
-			ofColor col = image->getColor(localPos.x, localPos.y);
+			ofColor col = image->getColor((int)localPos.x, (int)localPos.y);
 			// return a hit if the specified local alpha value is greater than half
 			return col.a > 0x80;
 		}
@@ -96,8 +96,8 @@ public:
 				for (InputAct* touch : CogGetPressedPoints()){
 
 					// calculate vector in image space
-					ofVec3f touchVector = touch->position;
-					ofVec3f touchTrans = touchVector*inverse;
+					ofVec2f touchVector = touch->position;
+					ofVec3f touchTrans = ofVec3f(touchVector)*inverse;
 
 					// do hit test
 					bool hasHitTest = false;

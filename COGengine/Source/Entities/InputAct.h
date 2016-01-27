@@ -2,6 +2,7 @@
 
 #include "ofxCogCommon.h"
 
+
 namespace Cog {
 
 	/*! Type of device that invoked the input */
@@ -23,7 +24,7 @@ namespace Cog {
 		// pressed finger (touch input only)
 		int touchId = -1;
 		// position (touch input only)
-		ofVec3f position;
+		Vec2i position;
 
 		// handlerId, -1 if there is none
 		int handlerNodeId = -1;
@@ -44,7 +45,7 @@ namespace Cog {
 		* @param touchId pressed button
 		* @param pos button position
 		*/
-		InputAct(int touchId, ofVec3f pos) : inputType(InputType::TOUCH), touchId(touchId), position(pos) {
+		InputAct(int touchId, Vec2i pos) : inputType(InputType::TOUCH), touchId(touchId), position(pos) {
 		}
 
 		InputAct() {

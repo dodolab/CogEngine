@@ -44,7 +44,7 @@ namespace Cog
 	string StringHash::ToString() const
 	{
 		char tempBuffer[CONVERSION_BUFFER_LENGTH];
-		sprintf(tempBuffer, "%08X", value_);
+		sprintf_s(tempBuffer, "%08X", value_);
 		return string(tempBuffer);
 	}
 
