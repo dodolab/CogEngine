@@ -9,8 +9,7 @@ namespace Cog {
 	/**
 	* XML animation loader
 	*/
-	class AnimationLoader : public Component {
-		OBJECT(AnimationLoader)
+	class AnimationLoader  {
 
 	public:
 
