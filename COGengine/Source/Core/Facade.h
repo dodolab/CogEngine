@@ -13,6 +13,9 @@ namespace Cog {
 	class MsgListener;
 	class EntityStorage;
 	class Scene;
+	class Node;
+	class Msg;
+	class MsgEvent;
 
 	EntityStorage* CogGetEntityStorage();
 

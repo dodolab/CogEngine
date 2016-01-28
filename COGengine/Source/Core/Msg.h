@@ -6,8 +6,7 @@
 namespace Cog {
 
 	class Node;
-	class StringHash;
-
+	
 	/**
 	* Configuration class that holds information how the message should bubble through the scene tre
 	*/

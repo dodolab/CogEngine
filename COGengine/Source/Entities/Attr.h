@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Pair.h"
-#include "Msg.h"
 
 namespace Cog {
 

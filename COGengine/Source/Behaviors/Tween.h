@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
+#include "Scene.h"
 
 namespace Cog {
 

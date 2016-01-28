@@ -1,7 +1,11 @@
 #include "SceneContext.h"
+#include "Node.h"
+#include "Behavior.h"
 #include "Scene.h"
 #include "CogEngine.h"
 #include "AsyncProcess.h"
+#include "Tween.h"
+
 
 namespace Cog {
 
@@ -16,6 +20,55 @@ namespace Cog {
 			Node* scene =  (Node*)msg.GetSourceObject();
 			actualScene = scene->GetScene();
 		}
+	}
+
+	void SceneContext::AddScene(Scene* scene, bool setAsActual) {
+
+		rootObject->AddChild(scene->GetSceneNode());
+
+		if (setAsActual) {
+			this->actualScene = scene;
+			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
+		}
+		else {
+			scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
+		}
+
+		// copy global listeners
+		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
+			StringHash action = (*it).first;
+			vector <MsgListener*>& listeners = (*it).second;
+
+			for (auto jt = listeners.begin(); jt != listeners.end(); ++jt) {
+				scene->RegisterListener(action, (*jt));
+			}
+		}
+
+		MLOGDEBUG("SceneContext", "Initializing scene %s", scene->GetName().c_str());
+		scene->GetSceneNode()->SubmitChanges(true);
+	}
+
+	void SceneContext::RegisterListener(StringHash action, MsgListener* listener) {
+		if (msgListeners.find(action) == msgListeners.end()) {
+			msgListeners[action] = vector <MsgListener*>();
+		}
+
+		vector<MsgListener*>& listeners = msgListeners[action];
+		listeners.push_back(listener);
+	}
+
+	bool SceneContext::UnregisterListener(StringHash action, MsgListener* listener) {
+		if (msgListeners.find(action) != msgListeners.end()) {
+			vector<MsgListener*>& listeners = msgListeners[action];
+
+			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
+				if ((*it)->GetId() == listener->GetId()) {
+					listeners.erase(it);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	Scene* SceneContext::FindSceneByName(string name) const {

@@ -289,9 +289,11 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\SceneContext.cpp" />
+    <ClCompile Include="Source\Components\SceneManager.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />
+    <ClCompile Include="Source\Core\TransformMath.cpp" />
     <ClCompile Include="Source\Engine\Behavior.cpp" />
     <ClCompile Include="Source\Engine\CogApp.cpp" />
     <ClCompile Include="Source\Engine\CogEngine.cpp" />
@@ -304,6 +306,7 @@
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />
     <ClCompile Include="Source\Math\Flags.cpp" />
     <ClCompile Include="Source\Math\StringHash.cpp" />
+    <ClCompile Include="Source\Math\Transform.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

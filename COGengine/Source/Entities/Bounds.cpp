@@ -1,4 +1,5 @@
 #include "Bounds.h"
+#include "Node.h"
 
 namespace Cog {
 

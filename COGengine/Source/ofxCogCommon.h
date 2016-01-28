@@ -27,20 +27,19 @@
 #include "ofxSmartPointer.h"
 #include "ofSoundPlayer.h"
 #include "ofMain.h"
-#include "ofxSQLite.h"
 #include "ofxXmlSettings.h"
 #include "Error.h"
 #include "ofImage.h"
 #include "ofTrueTypeFont.h"
 #include "CollageTexture.h"
 #include "SpriteTexture.h"
-#include "SQLiteEntity.h"
-#include "SpriteSheetRenderer.h"
 #include "Definitions.h"
 #include "Utils.h"
 #include "StringHash.h"
 #include "Flags.h"
 #include "Vec2i.h"
+#include "Transform.h"
+#include "Facade.h"
 
 #pragma warning(pop)
 

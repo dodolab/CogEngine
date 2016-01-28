@@ -201,4 +201,36 @@ namespace Cog {
 		thread->startThread();
 	}
 
+	void Environment::RecalcVirtualSize() {
+
+		if (abs(virtualAspectRatio - aspectRatio) > 0.01f) {
+
+			// recalculate virtual width and height
+			switch (screenOrient) {
+			case ScreenOrient::LANDSCAPE:
+				if (aspectRatio < virtualAspectRatio) {
+					virtualWidth = screenWidth;
+					virtualHeight = (int)(screenWidth / virtualAspectRatio);
+				}
+				else {
+					virtualWidth = (int)(screenHeight*virtualAspectRatio);
+					virtualHeight = screenHeight;
+				}
+				break;
+			case ScreenOrient::PORTRAIT:
+
+				if (aspectRatio < virtualAspectRatio) {
+					virtualWidth = (int)(screenHeight / virtualAspectRatio);
+					virtualHeight = screenHeight;
+				}
+				else {
+					virtualWidth = screenWidth;
+					virtualHeight = (int)(screenHeight*virtualAspectRatio);
+				}
+
+				break;
+			}
+		}
+	}
+
 }// namespace

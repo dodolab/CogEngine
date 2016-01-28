@@ -8,6 +8,10 @@
 #include "TranslateAnim.h"
 #include "HitEvent.h"
 #include "Collider.h"
+#include "MapLoader.h"
+#include "Settings.h"
+#include "AStarSearch.h"
+
 
 using namespace std;
 using namespace Cog;

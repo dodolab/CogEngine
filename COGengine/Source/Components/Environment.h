@@ -2,7 +2,6 @@
 
 #include "ofxCogCommon.h"
 #include "InputAct.h"
-#include "SoundFile.h"
 #include "Component.h"
 
 namespace Cog {
@@ -211,37 +210,7 @@ namespace Cog {
 		* Reinitializes virtual width and height
 		* according to the actual aspect ratio
 		*/
-		void RecalcVirtualSize() {
-
-			if (abs(virtualAspectRatio - aspectRatio) > 0.01f) {
-				
-				// recalculate virtual width and height
-				switch (screenOrient) {
-				case ScreenOrient::LANDSCAPE:
-					if (aspectRatio < virtualAspectRatio) {
-						virtualWidth = screenWidth;
-						virtualHeight = (int)(screenWidth / virtualAspectRatio);
-					}
-					else {
-						virtualWidth = (int)(screenHeight*virtualAspectRatio);
-						virtualHeight = screenHeight;
-					}
-					break;
-				case ScreenOrient::PORTRAIT:
-
-					if (aspectRatio < virtualAspectRatio) {
-						virtualWidth = (int)(screenHeight / virtualAspectRatio);
-						virtualHeight = screenHeight;
-					}
-					else {
-						virtualWidth = screenWidth;
-						virtualHeight = (int)(screenHeight*virtualAspectRatio);
-					}
-
-					break;
-				}
-			}
-		}
+		void RecalcVirtualSize();
 	};
 
 }// namespace

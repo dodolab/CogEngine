@@ -2,9 +2,9 @@
 
 namespace Cog {
 
-/**
-* Creates formatted string
-*/
+	/**
+	* Creates formatted string
+	*/
 	std::string string_format(const char* fmt_str, ...);
 
 	/**

@@ -1,4 +1,6 @@
 #include "Flags.h"
+#include <stdarg.h>  
+#include "StringHash.h"
 
 namespace Cog {
 

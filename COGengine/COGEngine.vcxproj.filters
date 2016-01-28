@@ -407,5 +407,14 @@
     <ClCompile Include="Source\Engine\Node.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\TransformMath.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\SceneManager.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Transform.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
