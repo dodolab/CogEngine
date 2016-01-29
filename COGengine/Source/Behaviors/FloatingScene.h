@@ -51,10 +51,12 @@ namespace Cog {
 					if(evt->input->touchId == 0){
 						if (lastMousePos != Vec2i(0)) {
 							Vec2i diff = evt->input->position - lastMousePos;
+							ofVec2f diffVec = ofVec2f((float)diff.x, (float)diff.y);
+
 
 							Trans& transform = owner->GetTransform();
-							ofVec2f oldPos = transform.absPos;
-							ofVec2f newPos = oldPos+diff;
+							ofVec3f oldPos = transform.absPos;
+							ofVec3f newPos = oldPos+ diffVec;
 
 							float shapeWidth = owner->GetShape()->GetWidth();
 							float shapeHeight = owner->GetShape()->GetHeight();

@@ -39,9 +39,9 @@ namespace Cog {
 
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
 		screenSizeChanged = true;
-		screenWidth = virtualWidth = (int)ofGetWindowSize().x;
-		screenHeight = virtualHeight = (int)ofGetWindowSize().y;
-		screenOrient = screenWidth > screenHeight ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
+		screenWidth = virtualWidth = newWidth;
+		screenHeight = virtualHeight = newHeight;
+		screenOrient = screenWidth >= screenHeight ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
 
 		aspectRatio = ((float)screenWidth) / screenHeight;
 		RecalcVirtualSize();

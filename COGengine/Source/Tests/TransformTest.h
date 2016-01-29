@@ -5,7 +5,7 @@
 
 
 #ifdef TESTING
-#else
+
 
 class DummyShape : public Shape {
 public:
@@ -33,7 +33,7 @@ using namespace Cog;
 	TEST_CASE("Transformation test", "[class]")
 	{
 		COGEngine.Init();
-		COGEngine.environment->SetScreenSizeHard(ofVec2f(400, 400));
+		COGEngine.environment->OnScreenSizeChanged(400, 400);
 		auto math = TransformMath();
 		
 
