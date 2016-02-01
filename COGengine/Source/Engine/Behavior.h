@@ -4,6 +4,7 @@
 #include "Msg.h"
 #include "Facade.h"
 #include "MsgListener.h"
+#include "Settings.h"
 
 
 namespace Cog {
@@ -47,9 +48,9 @@ namespace Cog {
 		}
 
 		/**
-		* Loads object properties from xml
+		* Loads object properties from settings
 		*/
-		virtual void LoadFromXml(spt<ofxXml> xml) {
+		virtual void Init(Setting settings) {
 
 		}
 

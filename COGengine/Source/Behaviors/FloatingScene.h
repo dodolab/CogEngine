@@ -17,6 +17,7 @@ namespace Cog {
 		// if true, user will be able to scroll the scene
 		bool touchEnabled = false;
 		Vec2i lastMousePos = Vec2i(0,0);
+		Vec2i originalMousePos = Vec2i(0, 0);
 		TransformMath math = TransformMath();
 
 	public:
@@ -42,14 +43,20 @@ namespace Cog {
 
 				if (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST) {
 					lastMousePos = Vec2i(0); // restart mouse position
+					originalMousePos = Vec2i(0);
 				} else if (msg.GetAction() == ACT_OBJECT_HIT_OVER) {
 					
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
 
 					// handle only the first touch
-					
 					if(evt->input->touchId == 0){
-						if (lastMousePos != Vec2i(0)) {
+
+						// set original mouse position
+						if (originalMousePos == 0) {
+							originalMousePos = lastMousePos;
+						}
+
+						if (lastMousePos != Vec2i(0) && Vec2i::Distance(lastMousePos,originalMousePos) > 40) { // 40px tolerance
 							Vec2i diff = evt->input->position - lastMousePos;
 							ofVec2f diffVec = ofVec2f((float)diff.x, (float)diff.y);
 
