@@ -4,6 +4,7 @@
 #include "SpriteSheet.h"
 #include "Facade.h"
 #include "AnimationLoader.h"
+#include "TransformEnt.h"
 
 namespace Cog {
 
@@ -74,6 +75,23 @@ namespace Cog {
 
 				xml->popTag();
 			}
+
+			if (xml->pushTagIfExists("transforms")) {
+				int transNum = xml->getNumTags("transform");
+
+				for (int i = 0; i < transNum; i++) {
+					xml->pushTag("transform", i);
+					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
+					trans->LoadFromXml(xml);
+
+
+					MASSERT(!trans->name.empty(),"RESOURCE","Transform entity on index %d in configuration file must have a name!", i);
+
+					StoreEntity(trans->name, trans);
+					xml->popTag();
+				}
+				xml->popTag();
+			}
 		}
 	}
 
@@ -90,6 +108,8 @@ namespace Cog {
 
 			return existing;
 		}
+
+
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -216,6 +236,20 @@ namespace Cog {
 		}
 	}
 
+	spt<DEntity> ResourceCache::GetEntity(string name) {
+		auto found = loadedEntities.find(name);
+		if (found != loadedEntities.end()) {
+			return found->second;
+		}
+		else {
+			return spt<DEntity>();
+		}
+	}
+
+	void ResourceCache::StoreEntity(string name, spt<DEntity> entity) {
+		loadedEntities[name] = entity;
+	}
+
 	spt<SpriteSheet> ResourceCache::GetSpriteSheet(string name) {
 		auto found = loadedSpriteSheets.find(name);
 		if (found != loadedSpriteSheets.end()) return found->second;
@@ -238,7 +272,15 @@ namespace Cog {
 
 		for (int i = 0; i < numOfSettings; i++) {
 			xml->pushTag("setting", i);
+			auto set = LoadSettingFromXml(xml);
+			setMap[set.name] = set;
+			xml->popTag();
+		}
 
+		return setMap;
+	}
+
+	Setting ResourceCache::LoadSettingFromXml(spt<ofxXml> xml) {
 			Setting set = Setting();
 			set.name = xml->getAttribute(":", "name", "");;
 
@@ -268,11 +310,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
-			setMap[set.name] = set;
-			xml->popTag();
-		}
-
-		return setMap;
+			return set;
 	}
 
 	Setting ResourceCache::GetDefaultSettings(string name) {

@@ -12,7 +12,7 @@ namespace Cog {
 	* World has to be specified in some measureable units
 	*/
 	class FloatingScene : public Behavior {
-		OBJECT_PROTOTYPE(FloatingScene)
+		OBJECT_PROTOTYPE_INIT(FloatingScene)
 	protected:
 		// if true, user will be able to scroll the scene
 		bool touchEnabled = false;
@@ -26,10 +26,8 @@ namespace Cog {
 
 		}
 
-		virtual void LoadFromXml(spt<ofxXml> xml) {
-			if (xml->tagExists("touch_enabled")) {
-				touchEnabled = xml->getBoolValue("touch_enabled", false);
-			}
+		FloatingScene(Setting setting) {
+			touchEnabled = setting.GetItem("touch_enabled").GetValBool();
 		}
 
 		void Init() {

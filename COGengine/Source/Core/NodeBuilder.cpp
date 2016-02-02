@@ -80,8 +80,17 @@ namespace Cog {
 
 		if (xml->pushTagIfExists("transform")) {
 
-			// load transform
-			math.LoadTransformFromXml(xml, node, parent, settings);
+			TransformEnt transformEnt = TransformEnt();
+			transformEnt.LoadFromXml(xml);
+
+			// =================== get grid size (if specified)
+			int gridWidth = settings.GetSettingValInt("transform", "grid_width");
+			int gridHeight = settings.GetSettingValInt("transform", "grid_height");
+			
+			TransformMath math = TransformMath();
+
+			// set transform according to the parsed values
+			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
 			xml->popTag();
 		}
 
@@ -132,14 +141,25 @@ namespace Cog {
 	}
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
+		
 		string name = xml->getAttributex("name", "");
-		auto newBeh = COGEngine.entityStorage->GetBehaviorPrototype(name)->CreatePrototype();
+		
+		Behavior* behavior = nullptr;
+		Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(name);
 
-		auto resourceCache = GETCOMPONENT(ResourceCache);
-		auto setting = resourceCache->LoadSettingsFromXml(xml);
+		if (xml->pushTagIfExists("setting")) {
+			auto resourceCache = GETCOMPONENT(ResourceCache);
+			auto setting = resourceCache->LoadSettingFromXml(xml);
+			behavior = prototype->CreatePrototype(setting);
+			xml->popTag();
+		}
+		else {
+			behavior = prototype->CreatePrototype();
+		}
 
-		newBeh->Init(setting.begin()->second);
-		node->AddBehavior(newBeh);
+		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found",name));
+
+		node->AddBehavior(behavior);
 	}
 
 } // namespace

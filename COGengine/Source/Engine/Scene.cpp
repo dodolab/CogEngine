@@ -251,13 +251,6 @@ namespace Cog {
 
 		auto cache = GETCOMPONENT(ResourceCache);
 
-		if (xml->pushTagIfExists("transform")) {
-			auto math = TransformMath();
-			math.LoadTransformFromXml(xml, sceneNode, sceneNode, settings);
-			xml->popTag();
-		}
-
-
 		// always merge from default settings
 		auto defaultSettings = cache->GetDefaultSettings();
 		settings.MergeSettings(defaultSettings);
