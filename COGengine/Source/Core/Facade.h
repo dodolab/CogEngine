@@ -29,6 +29,8 @@ namespace Cog {
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
 	vector<spt<Sound>>& CogGetPlayedSounds();
+	bool CogIsKeyPressed(int key);
+	Vec2i CogGetMousePosition();
 	int CogGetScreenWidth();
 	int CogGetVirtualWidth();
 	int CogGetScreenHeight();

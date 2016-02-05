@@ -157,7 +157,7 @@ namespace Cog {
 			behavior = prototype->CreatePrototype();
 		}
 
-		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found",name));
+		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found",name.c_str()));
 
 		node->AddBehavior(behavior);
 	}

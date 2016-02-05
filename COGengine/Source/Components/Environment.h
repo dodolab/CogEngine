@@ -101,6 +101,14 @@ namespace Cog {
 			return playedSounds;
 		}
 
+		bool IsKeyPressed(int key) {
+			for (InputAct* act : pressedKeys) {
+				if (act->key == key) return true;
+			}
+
+			return false;
+		}
+
 		int GetScreenWidth() {
 			return screenWidth;
 		}
@@ -158,6 +166,11 @@ namespace Cog {
 		* @param newHeight new screen height
 		*/
 		void OnScreenSizeChanged(int newWidth, int newHeight);
+
+		/**
+		* Gets actual position of the mouse
+		*/
+		Vec2i GetMousePosition();
 
 		/**
 		* Handler for multitouch press

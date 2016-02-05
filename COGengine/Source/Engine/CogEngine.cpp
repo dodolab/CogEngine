@@ -85,6 +85,9 @@ namespace Cog {
 
 	void Engine::Draw(uint64 delta, uint64 absolute) {
 		
+		// has to be here!
+		sceneContext->GetRootObject()->UpdateTransform(true);
+		
 		Node* root = sceneContext->GetRootObject();
 		auto children = root->GetChildren();
 		
