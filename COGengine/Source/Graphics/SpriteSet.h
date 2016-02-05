@@ -20,14 +20,20 @@ namespace Cog {
 
 		int spriteSheetWidth;
 		int spriteSheetHeight;
-
+		string name;
 
 	public:
-		SpriteSet(SpriteSheet* spriteSheet, int offsetX, int offsetY, int totalFrames,
-			int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight, int spriteSheetWidth, int spriteSheetHeight)
-			: spriteSheet(spriteSheet), offsetX(offsetX), offsetY(offsetY), totalFrames(totalFrames), spriteWidth(spriteWidth),
-			spriteHeight(spriteHeight), spriteSetWidth(spriteSetWidth), spriteSetHeight(spriteSetHeight),
-			spriteSheetWidth(spriteSheetWidth), spriteSheetHeight(spriteSheetHeight) {
+		SpriteSet(SpriteSheet* spriteSheet, string name, int totalFrames,
+			int spriteWidth, int spriteHeight);
+
+		SpriteSet(SpriteSheet* spriteSheet, string name, int totalFrames,
+			int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight);
+
+		SpriteSet(SpriteSheet* spriteSheet, string name, int offsetX, int offsetY, int totalFrames,
+			int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight);
+
+		string GetName() {
+			return name;
 		}
 
 		int GetOffsetX() {

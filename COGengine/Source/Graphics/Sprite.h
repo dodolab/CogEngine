@@ -62,6 +62,13 @@ namespace Cog {
 
 	public:
 
+		Sprite(spt<SpriteSet> spriteSet, int row, int column) : spriteSet(spriteSet) {
+
+			int columns = spriteSet->GetSpriteSetWidth() / spriteSet->GetSpriteWidth();
+			this->frame = row*columns + column;
+			Recalc();
+		}
+
 		Sprite(spt<SpriteSet> spriteSet, int frame) : spriteSet(spriteSet), frame(frame) {
 			Recalc();
 		}

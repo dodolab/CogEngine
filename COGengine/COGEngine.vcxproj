@@ -203,7 +203,7 @@
     <ClInclude Include="Source\Attributes\Collision.h" />
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
-    <ClInclude Include="Source\Behaviors\Animator.h" />
+    <ClInclude Include="Source\Behaviors\SheetAnim.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\Collider.h" />
     <ClInclude Include="Source\Behaviors\DelayAction.h" />
@@ -306,6 +306,7 @@
     <ClCompile Include="Source\Engine\Node.cpp" />
     <ClCompile Include="Source\Engine\Scene.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
+    <ClCompile Include="Source\Graphics\SpriteSet.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />
     <ClCompile Include="Source\Math\Flags.cpp" />

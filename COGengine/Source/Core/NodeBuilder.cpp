@@ -17,6 +17,7 @@ namespace Cog {
 		node->GetStates().SetState(StringHash(STATES_HITTABLE));
 	}
 
+
 	void NodeBuilder::SetSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 		node->AddBehavior(new HitEvent(-1, false, false));
 		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StringHash(selectionGroup)));
@@ -94,6 +95,12 @@ namespace Cog {
 			xml->popTag();
 		}
 
+		if (xml->pushTagIfExists("shape")) {
+			// load shape
+			LoadShapeFromXml(xml, node);
+			xml->popTag();
+		}
+
 		if (xml->tagExists("behavior")) {
 			int behaviors = xml->getNumTags("behavior");
 
@@ -160,6 +167,59 @@ namespace Cog {
 		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found",name.c_str()));
 
 		node->AddBehavior(behavior);
+	}
+
+	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node) {
+		string type = xml->getAttributex("type", "");
+
+
+		if (type.compare("image") == 0) {
+			string img = xml->getAttributex("img", "");
+			this->SetImageNode(node, img);
+		}
+		else if (type.compare("rectangle") == 0) {
+			// todo
+		}
+		else if (type.compare("polygon") == 0) {
+			// todo
+		}
+		else if (type.compare("text") == 0) {
+			// todo
+		}
+		else if (type.compare("sprite") == 0) {
+			string spriteSheet = xml->getAttributex("spritesheet", "");
+			string spriteSet = xml->getAttributex("spriteset", "");
+
+			auto cache = GETCOMPONENT(ResourceCache);
+			auto sheet = cache->GetSpriteSheet(spriteSheet);
+
+			if (sheet == nullptr) throw new IllegalArgumentException("Error while loading sprite sheet. No name specified!");
+
+			spt<SpriteSet> spriteSetEntity;
+
+			if (spriteSet.empty()) {
+				// load default
+				spriteSetEntity = sheet->GetDefaultSpriteSet();
+			}
+			else {
+				// load by name
+				spriteSetEntity = sheet->GetSpriteSetByName(spriteSet);
+			}
+
+			int row = xml->getAttributex("row", 0);
+			int column = xml->getAttributex("column", 0);
+
+			spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
+
+			auto shape = spt<SpriteShape>(new SpriteShape(sprite));
+			shape->GetTransform().localPos.x = spriteSetEntity->GetSpriteWidth()*column;
+			shape->GetTransform().localPos.y = spriteSetEntity->GetSpriteHeight()*row;
+			node->SetShape(shape);
+			
+		}
+		else if (type.compare("multisprite") == 0) {
+			// todo
+		}
 	}
 
 } // namespace

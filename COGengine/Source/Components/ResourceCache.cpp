@@ -92,6 +92,20 @@ namespace Cog {
 				}
 				xml->popTag();
 			}
+
+			if (xml->pushTagIfExists("spritesheets")) {
+				int sheetsNum = xml->getNumTags("spritesheet");
+
+				for (int i = 0; i < sheetsNum; i++) {
+					xml->pushTag("spritesheet", i);
+					spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
+					spriteSheet->LoadFromXml(xml);
+					this->StoreSpriteSheet(spriteSheet);
+					xml->popTag();
+				}
+
+				xml->popTag();
+			}
 		}
 	}
 
