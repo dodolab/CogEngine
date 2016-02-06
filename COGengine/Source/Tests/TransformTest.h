@@ -33,6 +33,7 @@ using namespace Cog;
 	TEST_CASE("Transformation test", "[class]")
 	{
 		COGEngine.Init();
+		COGEngine.environment->SetVirtualAspectRatio(1);
 		COGEngine.environment->OnScreenSizeChanged(400, 400);
 		auto math = TransformMath();
 		
@@ -44,15 +45,17 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0, 
 				CalcType::ABS,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::ABS,	// scale type
+				CalcType::ABS),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
-			REQUIRE(((int)tr.absPos.x) == 0, ((int)tr.absPos.y) == 0);
+			REQUIRE(((int)tr.absPos.x) == 0);
+			REQUIRE(((int)tr.absPos.y) == 0);
 			delete root;
 			delete first;
 		}
@@ -64,15 +67,17 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::ABS_PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
-			REQUIRE(((int)tr.absPos.x) == 200, ((int)tr.absPos.y) == 200);
+			REQUIRE(((int)tr.absPos.x) == 200);
+			REQUIRE(((int)tr.absPos.y) == 200);
 			delete root;
 			delete first;
 		}
@@ -84,15 +89,17 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
-			REQUIRE(((int)tr.absPos.x) == 100, ((int)tr.absPos.y) == 100);
+			REQUIRE(((int)tr.absPos.x) == 100);
+			REQUIRE(((int)tr.absPos.y) == 100);
 			delete root;
 			delete first;
 		}
@@ -104,15 +111,17 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
-			REQUIRE(((int)tr.absPos.x) == 0, ((int)tr.absPos.y) == 0);
+			REQUIRE(((int)tr.absPos.x) == 0);
+			REQUIRE(((int)tr.absPos.y) == 0);
 			delete root;
 			delete first;
 		}
@@ -124,15 +133,17 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(100, 50),  // position
 				0,
 				CalcType::GRID,	// pos type
 				ofVec2f(1.0f, 1.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				100, 50);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
-			REQUIRE(((int)tr.absPos.x) == 0, ((int)tr.absPos.y) == 0);
+			REQUIRE(((int)tr.absPos.x) == 0);
+			REQUIRE(((int)tr.absPos.y) == 0);
 			delete root;
 			delete first;
 		}
@@ -146,26 +157,31 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr.absPos.x) == 0, ((int)tr.absPos.y) == 0, ((int)tr2.absPos.x) == 0, ((int)tr2.absPos.y) == 0);
+			REQUIRE(((int)tr.absPos.x) == 0);
+			REQUIRE(((int)tr.absPos.y) == 0);
+			REQUIRE(((int)tr2.absPos.x) == 0);
+			REQUIRE(((int)tr2.absPos.y) == 0);
 			delete root;
 			delete first;
 			delete second;
@@ -180,26 +196,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
 				CalcType::ABS,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 200, ((int)tr2.absPos.y) == 200);
+			REQUIRE(((int)tr2.absPos.x) == 200);
+			REQUIRE(((int)tr2.absPos.y) == 200);
 			delete root;
 			delete first;
 			delete second;
@@ -214,26 +233,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1,1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 200, ((int)tr2.absPos.y) == 200);
+			REQUIRE(((int)tr2.absPos.x) == 200);
+			REQUIRE(((int)tr2.absPos.y) == 200);
 			delete root;
 			delete first;
 			delete second;
@@ -248,26 +270,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 200, ((int)tr2.absPos.y) == 200);
+			REQUIRE(((int)tr2.absPos.x) == 200);
+			REQUIRE(((int)tr2.absPos.y) == 200);
 			delete root;
 			delete first;
 			delete second;
@@ -282,26 +307,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::ABS_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 200, ((int)tr2.absPos.y) == 200);
+			REQUIRE(((int)tr2.absPos.x) == 200);
+			REQUIRE(((int)tr2.absPos.y) == 200);
 			delete root;
 			delete first;
 			delete second;
@@ -316,26 +344,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 400, ((int)tr2.absPos.y) == 400);
+			REQUIRE(((int)tr2.absPos.x) == 400);
+			REQUIRE(((int)tr2.absPos.y) == 400);
 			delete root;
 			delete first;
 			delete second;
@@ -350,26 +381,29 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
-			REQUIRE(((int)tr2.absPos.x) == 400, ((int)tr2.absPos.y) == 400);
+			REQUIRE(((int)tr2.absPos.x) == 400);
+			REQUIRE(((int)tr2.absPos.y) == 400);
 			delete root;
 			delete first;
 			delete second;
@@ -386,37 +420,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 0, ((int)tr3.absPos.y) == 0);
+			REQUIRE(((int)tr3.absPos.x) == 0);
+			REQUIRE(((int)tr3.absPos.y) == 0);
 			delete root;
 			delete first;
 			delete second;
@@ -434,37 +472,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2,2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(0, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2,2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 200, ((int)tr3.absPos.y) == 200);
+			REQUIRE(((int)tr3.absPos.x) == 200);
+			REQUIRE(((int)tr3.absPos.y) == 200);
 			delete root;
 			delete first;
 			delete second;
@@ -482,37 +524,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
 				CalcType::ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 100, ((int)tr3.absPos.y) == 100);
+			REQUIRE(((int)tr3.absPos.x) == 100);
+			REQUIRE(((int)tr3.absPos.y) == 100);
 			delete root;
 			delete first;
 			delete second;
@@ -530,37 +576,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC,	// scale type
+				CalcType::LOC),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::PER,	// scale type
+				CalcType::PER),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(1,1),	// size 
-				CalcType::PER,	// scale type
+				CalcType::PER),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 400, ((int)tr3.absPos.y) == 400);
+			REQUIRE(((int)tr3.absPos.x) == 400);
+			REQUIRE(((int)tr3.absPos.y) == 400);
 			delete root;
 			delete first;
 			delete second;
@@ -578,37 +628,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(0.5f,0.5f),	// size 
-				CalcType::ABS_PER,	// scale type
+				CalcType::ABS_PER),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(0.5f, 0.5f),	// size 
-				CalcType::ABS_PER,	// scale type
+				CalcType::ABS_PER),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0.5f,0.5f),	// size 
-				CalcType::ABS_PER,	// scale type
+				CalcType::ABS_PER),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 400, ((int)tr3.absPos.y) == 400);
+			REQUIRE(((int)tr3.absPos.x) == 400);
+			REQUIRE(((int)tr3.absPos.y) == 400);
 			delete root;
 			delete first;
 			delete second;
@@ -626,37 +680,41 @@ using namespace Cog;
 			Node* root = new Node("root");
 			Trans tr = Trans(0, 0);
 			math.CalcTransform(tr, first, root,
+				TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1,1),	// size 
-				CalcType::ABS,	// scale type
+				CalcType::ABS),	// scale type
 				0, 0);			// grid size
 			tr.CalcAbsTransform(root->GetTransform());
 			first->SetTransform(tr);
 			Trans tr2 = Trans(0, 0);
 			math.CalcTransform(tr2, second, first,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2,2),	// size 
-				CalcType::ABS,	// scale type
+				CalcType::ABS),	// scale type
 				0, 0);			// grid size
 			tr2.CalcAbsTransform(tr);
 			second->SetTransform(tr2);
 			Trans tr3 = Trans(0, 0);
 			math.CalcTransform(tr3, third, second,
+				TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
 				CalcType::PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(4,4),	// size 
-				CalcType::ABS,	// scale type
+				CalcType::ABS),	// scale type
 				0, 0);			// grid size
 			tr3.CalcAbsTransform(tr2);
-			REQUIRE(((int)tr3.absPos.x) == 400, ((int)tr3.absPos.y) == 400);
+			REQUIRE(((int)tr3.absPos.x) == 400);
+			REQUIRE(((int)tr3.absPos.y) == 400);
 			delete root;
 			delete first;
 			delete second;

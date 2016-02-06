@@ -159,15 +159,18 @@ namespace Cog {
 		}
 
 		string GetSettingVal(string setKey, string itemKey) {
-			return GetSetting(setKey).GetItemVal(itemKey);
+			if (settings.find(setKey) == settings.end()) return "";
+			else return GetSetting(setKey).GetItemVal(itemKey);
 		}
 
 		int GetSettingValInt(string setKey, string itemKey) {
-			return GetSetting(setKey).GetItem(itemKey).GetValInt();
+			if (settings.find(setKey) == settings.end()) return 0;
+			else return GetSetting(setKey).GetItem(itemKey).GetValInt();
 		}
 
 		float GetSettingValFloat(string setKey, string itemKey) {
-			return GetSetting(setKey).GetItem(itemKey).GetValFloat();
+			if (settings.find(setKey) == settings.end()) return 0;
+			else return GetSetting(setKey).GetItem(itemKey).GetValFloat();
 		}
 
 		Setting& GetSetting(string key) {

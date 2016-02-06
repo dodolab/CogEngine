@@ -5,6 +5,8 @@
 
 #ifdef TESTING
 
+#include "catch.hpp"
+using namespace Cog;
 #include "StringHash.h"
 
 	TEST_CASE("StringHash test", "[class]")

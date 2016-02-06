@@ -173,8 +173,8 @@ namespace Cog {
 
 			if (transform.absScale.x > 1 || transform.absScale.y > 1) {
 				// max scale exceeded
-				transform.scale = 1.0f / (transform.absScale / transform.scale);
-				transform.CalcAbsTransform(owner->GetParent()->GetTransform());
+			//	transform.scale = 1.0f / (transform.absScale / transform.scale);
+			//	transform.CalcAbsTransform(owner->GetParent()->GetTransform());
 			}
 
 			ofVec3f absPos = transform.absPos;

@@ -8,16 +8,25 @@
 	<spritesheet name="squares" img="sheet_squares.png">
 	  <spriteset frames="4" sprite_width="128" sprite_height="128"  />
 	</spritesheet>
+		<spritesheet name="background" img="bgr.jpg">
+	  <spriteset frames="1" sprite_width="800" sprite_height="450"  />
+	</spritesheet>
   </spritesheets>
  
   <scenes initial="main">
     <scene name="main">
 	  <scene_layers>
-	    <layer name="balls" spritesheet="balls" buffer_size="100" z_index="1" />
-		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="2" />
-		<layer name="balls2" spritesheet="balls" buffer_size="100" z_index="3" />
+	    <layer name="background" spritesheet="background" buffer_size="1" z_index="1" />
+	    <layer name="balls" spritesheet="balls" buffer_size="100" z_index="2" />
+		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="3" />
+		<layer name="balls2" spritesheet="balls" buffer_size="100" z_index="4" />
 	  </scene_layers>
 
+	  <node name="bgr">
+        <shape type="sprite" spritesheet="background" row="0" column="0" />
+		<transform pos="0" ptype="rel" size="1" stype="rel" z_index="100" />
+	  </node>
+	  
 	  <node name="ball_1">
         <shape type="sprite" spritesheet="squares" row="1" column="0" />
 		<transform pos_x="0.25" pos_y="0.2" ptype="rel" stype="loc" z_index="100" />
