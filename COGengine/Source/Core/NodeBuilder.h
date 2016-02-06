@@ -30,7 +30,7 @@ namespace Cog {
 		/**
 		* Loads node from XML
 		*/
-		Node* LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Settings& settings);
+		Node* LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene, Settings& settings);
 
 		/**
 		* Loads text node from XML
@@ -45,7 +45,7 @@ namespace Cog {
 		/**
 		* Loads shape from xml
 		*/
-		void LoadShapeFromXml(spt<ofxXml> xml, Node* node);
+		void LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene);
 	};
 
 }// namespace

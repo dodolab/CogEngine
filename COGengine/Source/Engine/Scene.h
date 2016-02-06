@@ -2,6 +2,7 @@
 
 #include "ofxCogCommon.h"
 #include "Settings.h"
+#include "LayerEnt.h"
 
 namespace Cog
 {
@@ -22,6 +23,8 @@ namespace Cog
 		Settings settings;
 		// node on top
 		Node* sceneNode;
+		// settings for all layers presented in this scene
+		vector<LayerEnt> layerSettings;
 
 		// message listeners
 		map<StringHash, vector<MsgListener*>> msgListeners;
@@ -31,12 +34,16 @@ namespace Cog
 		vector<Node*> allNodes;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
+
+
 		// indicator, if lazy loading should be used
 		bool lazyLoad = false;
 		// scene index; used only when loading from xml
 		int index;
 		// indicator, if this scene has been loaded
 		bool loaded = false;
+		// indicator, if this scene has been initialized (and can be displayed)
+		bool initialized = false;
 
 		// viewport offset of the scene
 		ofVec2f viewPortOffset = ofVec2f(0,0);
@@ -67,6 +74,10 @@ namespace Cog
 			return loaded;
 		}
 
+		bool Initialized() {
+			return initialized;
+		}
+
 		int GetIndex() {
 			return index;
 		}
@@ -82,6 +93,12 @@ namespace Cog
 		Settings& GetSettings() {
 			return settings;
 		}
+
+		vector<LayerEnt>& GetLayerSettings() {
+			return layerSettings;
+		}
+
+		LayerEnt FindLayerSettings(string name);
 
 		/**
 		* Registers behavior listener for selected action
@@ -199,6 +216,16 @@ namespace Cog
 		* Removes behavior from collection
 		*/
 		void RemoveBehavior(Behavior* beh);
+
+		/**
+		* Initializes the scene
+		*/
+		void Init();
+
+		/**
+		* Disposes the scene
+		*/
+		void Dispose();
 
 		/**
 		* Loads initial data from xml

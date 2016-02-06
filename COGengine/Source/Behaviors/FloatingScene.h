@@ -22,7 +22,7 @@ namespace Cog {
 		TransformMath math = TransformMath();
 		// how far should the pointer go before scrolling will start (proper for mobile phones)
 		int scrollPrevention = 0; 
-
+		bool scrollStarted = false;
 	public:
 
 		FloatingScene(bool scrollEnabled, int scrollPrevention) : scrollEnabled(scrollEnabled), scrollPrevention(scrollPrevention){
@@ -57,6 +57,7 @@ namespace Cog {
 				if (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST) {
 					lastMousePos = Vec2i(0); // restart mouse position
 					originalMousePos = Vec2i(0);
+					scrollStarted = false;
 				} else if (msg.GetAction() == ACT_OBJECT_HIT_OVER) {
 					
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
@@ -95,8 +96,8 @@ namespace Cog {
 								originalMousePos = lastMousePos;
 							}
 
-							if (lastMousePos != Vec2i(0) && Vec2i::Distance(lastMousePos, originalMousePos) >= scrollPrevention) { // scroll prevention
-								
+							if (lastMousePos != Vec2i(0) && (scrollStarted || Vec2i::Distance(lastMousePos, originalMousePos) >= scrollPrevention)) { // scroll prevention
+								scrollStarted = true;
 								Vec2i diff = evt->input->position - lastMousePos;
 								ofVec2f diffVec = ofVec2f((float)diff.x, (float)diff.y);
 

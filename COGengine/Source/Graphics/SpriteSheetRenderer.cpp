@@ -94,10 +94,10 @@ namespace Cog {
 		cTexture->finish();
 	}
 
-	void SpriteSheetRenderer::loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode)
+	void SpriteSheetRenderer::loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode, int zIndex)
 	{
 		if (buffers.find(sheetName) == buffers.end()) {
-			buffers[sheetName] = new SpriteBuffer();
+			buffers[sheetName] = new SpriteBuffer(zIndex);
 		}
 
 		reAllocateArrays(sheetName, bufferSize);
@@ -108,10 +108,10 @@ namespace Cog {
 
 	}
 
-	void SpriteSheetRenderer::loadTexture(ofTexture * texture, string sheetName, int bufferSize, bool isExternal)
+	void SpriteSheetRenderer::loadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal)
 	{
 		if (buffers.find(sheetName) == buffers.end()) {
-			buffers[sheetName] = new SpriteBuffer();
+			buffers[sheetName] = new SpriteBuffer(zIndex);
 		}
 
 		clearCounters(sheetName);
@@ -124,12 +124,12 @@ namespace Cog {
 
 	}
 
-	void SpriteSheetRenderer::loadTexture(CollageTexture * _texture, string sheetName, int bufferSize) {
-		loadTexture((ofTexture *)_texture, sheetName, bufferSize);
+	void SpriteSheetRenderer::loadTexture(CollageTexture * _texture, string sheetName, int bufferSize, int zIndex) {
+		loadTexture((ofTexture *)_texture, sheetName, bufferSize, zIndex);
 	}
 
-	void SpriteSheetRenderer::loadTexture(SpriteTexture * _texture, string sheetName, int bufferSize) {
-		loadTexture((ofTexture *)_texture, sheetName, bufferSize);
+	void SpriteSheetRenderer::loadTexture(SpriteTexture * _texture, string sheetName, int bufferSize, int zIndex) {
+		loadTexture((ofTexture *)_texture, sheetName, bufferSize, zIndex);
 	}
 
 
@@ -225,12 +225,11 @@ namespace Cog {
 
 		makeQuad(vertexOffset, tile);
 
-
-
-			//colors ---------------------------------------
+		//colors ---------------------------------------
 		makeColorQuad(colorOffset, tile.col.a, tile.col.r * 255, tile.col.g * 255, tile.col.b * 255);
 		//----------------------------------------------
 		actualBuffer->numSprites++;
+
 
 		return true;
 	}
@@ -245,8 +244,22 @@ namespace Cog {
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 
-		for (auto it = buffers.begin(); it != buffers.end(); ++it) {
-			SpriteBuffer* buff = (*it).second;
+		// copy buffers into vector and sort it by z-index
+
+		vector<SpriteBuffer*> buffs = vector<SpriteBuffer*>();
+
+		for (auto& it : buffers) {
+			buffs.push_back(it.second);
+		}
+
+		sort(buffs.begin(), buffs.end(),
+			[](const SpriteBuffer*  a, const SpriteBuffer* b) -> bool
+		{
+			return a->zIndex < b->zIndex;
+		});
+
+		for (auto it = buffs.begin(); it != buffs.end(); ++it) {
+			SpriteBuffer* buff = (*it);
 
 			if (buff->numSprites > 0) {
 				glVertexPointer(3, GL_FLOAT, 0, &buff->verts[0]);

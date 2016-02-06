@@ -11,7 +11,7 @@ namespace Cog {
 #include "Node.h"
 #include "SceneContext.h"
 #include "Tween.h"
-#include "SceneManager.h"
+#include "SceneSwitchManager.h"
 #include "Renderer.h"
 #include "Environment.h"
 #include "EntityStorage.h"

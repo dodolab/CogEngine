@@ -28,6 +28,7 @@ namespace Cog {
 
 		if (setAsActual) {
 			this->actualScene = scene;
+			scene->Init();
 			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
 		}
 		else {
@@ -81,7 +82,7 @@ namespace Cog {
 	}
 
 	void SceneContext::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
-		auto manager = GETCOMPONENT(SceneManager);
+		auto manager = GETCOMPONENT(SceneSwitchManager);
 
 		Node* from = actualScene->GetSceneNode();
 
@@ -117,7 +118,7 @@ namespace Cog {
 
 	bool SceneContext::SwitchBackToScene(TweenDirection tweenDir) {
 		if (!sceneStack.empty()) {
-			auto manager = GETCOMPONENT(SceneManager);
+			auto manager = GETCOMPONENT(SceneSwitchManager);
 			Scene* scene = sceneStack.top();
 
 			Node* from = actualScene->GetSceneNode();

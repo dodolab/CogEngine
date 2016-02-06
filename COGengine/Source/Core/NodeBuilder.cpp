@@ -32,7 +32,7 @@ namespace Cog {
 		node->SetShape(spt<Text>(textShape));
 	}
 
-	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Settings& settings) {
+	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene, Settings& settings) {
 		TransformMath math = TransformMath();
 
 
@@ -97,7 +97,7 @@ namespace Cog {
 
 		if (xml->pushTagIfExists("shape")) {
 			// load shape
-			LoadShapeFromXml(xml, node);
+			LoadShapeFromXml(xml, node, scene);
 			xml->popTag();
 		}
 
@@ -128,7 +128,7 @@ namespace Cog {
 			for (int i = 0; i < children; i++) {
 				xml->pushTag("node", i);
 
-				Node* child = LoadNodeFromXml(xml, node, settings);
+				Node* child = LoadNodeFromXml(xml, node, scene, settings);
 				node->AddChild(child);
 
 				xml->popTag();
@@ -169,7 +169,7 @@ namespace Cog {
 		node->AddBehavior(behavior);
 	}
 
-	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node) {
+	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
 
 
@@ -188,12 +188,27 @@ namespace Cog {
 		}
 		else if (type.compare("sprite") == 0) {
 			string spriteSheet = xml->getAttributex("spritesheet", "");
+			string layer = xml->getAttributex("layer", "");
+
+			if(spriteSheet.empty() && layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Neither spriteSheet nor layer specified");
+
 			string spriteSet = xml->getAttributex("spriteset", "");
 
 			auto cache = GETCOMPONENT(ResourceCache);
+
+			// user can specify spritesheet directly or by layer name that points to the spritesheet
+			if (!layer.empty()) {
+				LayerEnt layerEntity = scene->FindLayerSettings(layer);
+				spriteSheet = layerEntity.spriteSheetName;
+			}
+			else {
+				layer = spriteSheet;
+			}
+
 			auto sheet = cache->GetSpriteSheet(spriteSheet);
 
-			if (sheet == nullptr) throw new IllegalArgumentException("Error while loading sprite sheet. No name specified!");
+			if (sheet == nullptr) throw IllegalArgumentException("Error while loading sprite sheet. No such spritesheed found!");
+
 
 			spt<SpriteSet> spriteSetEntity;
 
@@ -211,9 +226,7 @@ namespace Cog {
 
 			spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
 
-			auto shape = spt<SpriteShape>(new SpriteShape(sprite));
-			shape->GetTransform().localPos.x = spriteSetEntity->GetSpriteWidth()*column;
-			shape->GetTransform().localPos.y = spriteSetEntity->GetSpriteHeight()*row;
+			auto shape = spt<SpriteShape>(new SpriteShape(sprite, layer));
 			node->SetShape(shape);
 			
 		}

@@ -21,4 +21,12 @@ namespace Cog {
 		IllegalArgumentException(string msg) : runtime_error(msg.c_str()) {}
 	};
 
+	/**
+	* Exception that occurs when the engine is doing illegal operation
+	*/
+	class IllegalOperationException : public runtime_error {
+	public:
+		IllegalOperationException(string msg) : runtime_error(msg.c_str()) {}
+	};
+
 }// namespace
