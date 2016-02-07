@@ -118,6 +118,8 @@ namespace Cog {
 
 		template<class T> spt<T> GetEntityC(string name) {
 			spt<DEntity> entity = GetEntity(name);
+			if (!entity) return spt<T>();
+
 			DEntity* entityPtr = entity.get();
 			MASSERT(typeid(*entity) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name);
 

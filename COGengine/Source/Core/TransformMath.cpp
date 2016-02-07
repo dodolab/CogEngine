@@ -45,6 +45,7 @@ namespace Cog {
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
 		outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
+		outputTrans.rotation = entity.rotation;
 	}
 
 

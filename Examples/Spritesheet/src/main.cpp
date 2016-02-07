@@ -14,16 +14,6 @@ class XmlTestingApp : public CogApp {
 		auto xmlPtr = spt<ofxXml>(xml);
 		
 		COGEngine.Init(xmlPtr);
-
-
-		xmlPtr->popAll();
-		xmlPtr->pushTag("app_config");
-		xmlPtr->pushTag("scenes");
-
-
-		auto context = GETCOMPONENT(SceneContext);
-		context->LoadScenesFromXml(xmlPtr);
-		xmlPtr->popTag();
 	}
 };
 

@@ -40,28 +40,28 @@ namespace Cog {
 			return values;
 		}
 
-		string GetValStr() {
-			if (values.size() == 0) return "";
+		string GetValStr(string defaultVal = "") {
+			if (values.size() == 0) return defaultVal;
 			return values[0];
 		}
 
-		double GetValDouble() {
-			if (values.size() == 0) return 0;
+		double GetValDouble(double defaultVal = 0) {
+			if (values.size() == 0) return defaultVal;
 			return ofToDouble(values[0]);
 		}
 
-		int GetValInt() {
-			if (values.size() == 0) return 0;
+		int GetValInt(int defaultVal = 0) {
+			if (values.size() == 0) return defaultVal;
 			return ofToInt(values[0]);
 		}
 
-		float GetValFloat() {
-			if (values.size() == 0) return 0;
+		float GetValFloat(float defaultVal = 0) {
+			if (values.size() == 0) return defaultVal;
 			return ofToFloat(values[0]);
 		}
 
-		bool GetValBool() {
-			if (values.size() == 0) return false;
+		bool GetValBool(bool defaultVal = false) {
+			if (values.size() == 0) return defaultVal;
 			return ofToBool(values[0]);
 		}
 	};
@@ -98,24 +98,24 @@ namespace Cog {
 			return SettingItem();
 		}
 
-		string GetItemVal(string key) {
-			return GetItem(key).GetValStr();
+		string GetItemVal(string key, string defaultVal = "") {
+			return GetItem(key).GetValStr(defaultVal);
 		}
 
-		double GetItemValDouble(string key) {
-			return GetItem(key).GetValDouble();
+		double GetItemValDouble(string key, double defaultVal = 0) {
+			return GetItem(key).GetValDouble(defaultVal);
 		}
 
-		int GetItemValInt(string key) {
-			return GetItem(key).GetValInt();
+		int GetItemValInt(string key, int defaultVal = 0) {
+			return GetItem(key).GetValInt(defaultVal);
 		}
 
-		float GetItemValFloat(string key) {
-			return GetItem(key).GetValFloat();
+		float GetItemValFloat(string key, float defaultVal = 0) {
+			return GetItem(key).GetValFloat(defaultVal);
 		}
 
-		bool GetItemValBool(string key) {
-			return GetItem(key).GetValBool();
+		bool GetItemValBool(string key, bool defaultVal = false) {
+			return GetItem(key).GetValBool(defaultVal);
 		}
 
 		vector<string> GetItemVals(string key) {
@@ -131,6 +131,10 @@ namespace Cog {
 				SettingItem copy = i->second;
 				items[i->first] = copy;
 			}
+		}
+
+		bool Empty() {
+			return items.empty();
 		}
 	};
 

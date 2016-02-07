@@ -120,10 +120,9 @@ namespace Cog {
 				for (int j = 0; j < pix.getWidth(); j++) {
 					ofFloatColor color = pix.getColor(j, i);
 					int hexa = color.getHex();
-
 					std::stringstream stream;
 					stream << "0x" << std::setfill('0') << std::setw(6) << std::hex << hexa;
-
+				
 					std::string identifier(stream.str());
 
 					string name = idNameMap.GetItemVal(identifier);

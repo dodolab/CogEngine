@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
 
- 
+
 <animations>
     <anim name="mario_anim_sheet" sheet="mario_all.png" frames="5" lines="1"  start="0" end="4"  repeat="0" increment="1" speed="0.2"></anim>
 	<anim name="mario_anim_frames" sheet="mario_{0}.png"  start="0" end="4"  repeat="0" increment="1" speed="0.2"></anim>
@@ -16,20 +16,21 @@
     <scene name="main">
       <node img="bgr.jpg" />
       <node name="mario" img="mario_0.png">
-	    <transform pos_x="100" pos_y="200" z_index="2" ptype="abs" anchor="0" width="1" stype="abs" />
+	    <transform pos_x="0" pos_y="0.46" z_index="2" ptype="rel" anchor_x="1" width="1" stype="abs"/>
 		
-		<behavior name="SheetAnim">
+		<behavior type="SheetAnim">
 		  <setting>
 		    <item key="animation" value="mario_anim_sheet" />
 		  </setting>
 		</behavior> 
 		
-	    <behavior name="TransformAnim">
+	    <behavior type="TransformAnim">
 		  <setting>
 		    <item key="from" value="mario_from" />
 			<item key="to" value="mario_to" />
 			<item key="duration" value="4000" />
 			<item key="repeat" value="true" />
+			<item key="blend" value="overlay" />
 		  </setting>
 		</behavior> 
 

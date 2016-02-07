@@ -9,6 +9,10 @@
 
 namespace Cog {
 
+	enum class AnimBlend {
+		ADDITIVE, OVERLAY
+	};
+
 	/**x
 	* Behavior for common transformation animation
 	*/
@@ -29,15 +33,18 @@ namespace Cog {
 		FadeFunction fadeFunction = nullptr;
 		float delayAfter = 0;
 		bool repeat = false;
+		AnimBlend blend;
+
+		float lastPercent = 0;
 
 	public:
 
-		TransformAnim(spt<TransformEnt> from, spt<TransformEnt> to, float duration, float delayAfter, bool repeat) : to(to), from(from), duration(duration),
-			delayAfter(delayAfter), repeat(repeat) {
+		TransformAnim(spt<TransformEnt> from, spt<TransformEnt> to, float duration, float delayAfter, bool repeat, AnimBlend blend) : to(to), from(from), duration(duration),
+			delayAfter(delayAfter), repeat(repeat), blend(blend) {
 		}
 
-		TransformAnim(spt<TransformEnt> from, spt<TransformEnt> to, float duration, float delayAfter, bool repeat, FadeFunction fadeFunction) :
-			to(to), from(from), duration(duration), delayAfter(delayAfter), repeat(repeat), fadeFunction(fadeFunction) {
+		TransformAnim(spt<TransformEnt> from, spt<TransformEnt> to, float duration, float delayAfter, bool repeat, AnimBlend blend, FadeFunction fadeFunction) :
+			to(to), from(from), duration(duration), delayAfter(delayAfter), repeat(repeat), blend(blend), fadeFunction(fadeFunction) {
 		}
 
 		TransformAnim(Setting setting) {
@@ -50,6 +57,8 @@ namespace Cog {
 			auto resCache = GETCOMPONENT(ResourceCache);
 			this->from = resCache->GetEntityC<TransformEnt>(from);
 			this->to = resCache->GetEntityC<TransformEnt>(to);
+
+			this->blend = StrToAnimBlend(setting.GetItemVal("blend"));
 		}
 
 		void Init() {
@@ -80,17 +89,40 @@ namespace Cog {
 			float actualPercent = actualCropped / duration;
 			if (fadeFunction != nullptr) actualPercent = fadeFunction(actualPercent);
 
-
 			Trans actualTrans(0, 0);
-			actualTrans.localPos = fromTrans.localPos + (toTrans.localPos - fromTrans.localPos)*actualPercent;
-			actualTrans.rotation = fromTrans.rotation + (toTrans.rotation - fromTrans.rotation)*actualPercent;
-			actualTrans.scale = fromTrans.scale + (toTrans.scale - fromTrans.scale)*actualPercent;
-			actualTrans.CalcAbsTransform(owner->GetParent()->GetTransform());
-			owner->SetTransform(actualTrans);
+			Trans& ownerTrans = owner->GetTransform();
+
+			if (blend == AnimBlend::ADDITIVE) {
+				actualTrans.localPos = (toTrans.localPos - fromTrans.localPos)*(actualPercent - lastPercent);
+				actualTrans.rotation = (toTrans.rotation - fromTrans.rotation)*(actualPercent - lastPercent);
+				actualTrans.scale = (toTrans.scale - fromTrans.scale)*(actualPercent - lastPercent);
+
+				ownerTrans.localPos += (actualTrans.localPos);
+				ownerTrans.rotation += (actualTrans.rotation);
+
+				if (actualTrans.scale != ofVec3f(1)) {
+					ownerTrans.scale *= (1 + (actualTrans.scale));
+				}
+			}
+			else if (blend == AnimBlend::OVERLAY) {
+				ownerTrans.localPos = fromTrans.localPos + (toTrans.localPos - fromTrans.localPos)*(actualPercent);
+				actualTrans.rotation = fromTrans.rotation + (toTrans.rotation - fromTrans.rotation)*(actualPercent);
+				actualTrans.scale = fromTrans.scale + (toTrans.scale - fromTrans.scale)*(actualPercent);
+			}
+			
+			lastPercent = actualPercent;
 
 			if (actual >= (duration + delayAfter)) {
 				if (repeat) {
 					actual = 0;
+					lastPercent = 0;
+
+					if (blend == AnimBlend::ADDITIVE) {
+						// return transformation back
+						ownerTrans.localPos -= (toTrans.localPos - fromTrans.localPos);
+						ownerTrans.rotation -= (toTrans.rotation - fromTrans.rotation);
+						ownerTrans.scale /= (1 + (toTrans.scale - fromTrans.scale));
+					}
 				}
 				else {
 					Finish();
@@ -99,6 +131,13 @@ namespace Cog {
 			}
 		}
 
+		private:
+			AnimBlend StrToAnimBlend(string val) {
+				if (val.compare("additive") == 0) return AnimBlend::ADDITIVE;
+				else if (val.compare("overlay") == 0) return AnimBlend::OVERLAY;
+
+				return AnimBlend::ADDITIVE;
+			}
 	};
 
 }// namespace
