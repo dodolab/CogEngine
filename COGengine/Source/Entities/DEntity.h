@@ -14,6 +14,11 @@ namespace Cog {
 
 		}
 
+		virtual ~DEntity() {
+
+		}
+
+
 		string name;
 
 		virtual void LoadFromXml(spt<ofxXml> xml) {

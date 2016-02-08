@@ -22,12 +22,17 @@ namespace Cog {
 	public:
 
 		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(0), sType(CalcType::PER), rotation(0) {
-
+			this->name = "";
 		}
 
-		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc):pos(position),zIndex(zIndex),pType(positionCalc),anchor(anchor),
-			size(size),sType(sizeCalc), rotation(0){
+		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
+			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation):pos(position),zIndex(zIndex),pType(positionCalc),anchor(anchor),
+			size(size),sType(sizeCalc), rotation(rotation){
+			this->name = name;
+		}
+
+		~TransformEnt() {
+
 		}
 
 		ofVec2f pos;

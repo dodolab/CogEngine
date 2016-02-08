@@ -24,7 +24,7 @@ namespace Cog
 		// node on top
 		Node* sceneNode;
 		// settings for all layers presented in this scene
-		vector<LayerEnt> layerSettings;
+		vector<LayerEnt> layers;
 
 		// message listeners
 		map<StringHash, vector<MsgListener*>> msgListeners;
@@ -94,8 +94,12 @@ namespace Cog
 			return settings;
 		}
 
-		vector<LayerEnt>& GetLayerSettings() {
-			return layerSettings;
+		void AddLayer(LayerEnt layer) {
+			layers.push_back(layer);
+		}
+
+		vector<LayerEnt>& GetLayers() {
+			return layers;
 		}
 
 		LayerEnt FindLayerSettings(string name);
@@ -228,9 +232,9 @@ namespace Cog
 		void Dispose();
 
 		/**
-		* Loads initial data from xml
+		* Loads initial data
 		*/
-		void LoadInitDataFromXml(spt<ofxXml> xml, int sceneIndex);
+		void LoadInitData(string name, bool isLazyLoad, int sceneIndex);
 		
 		/**
 		* Loads scene from xml

@@ -68,7 +68,6 @@ namespace Cog {
 			int gridWidth = sceneSettings.GetSettingValInt("transform", "grid_width");
 			int gridHeight = sceneSettings.GetSettingValInt("transform", "grid_height");
 
-
 			if(from) math.CalcTransform(fromTrans, owner, owner->GetParent(), *from, gridWidth,gridHeight);
 			else fromTrans = owner->GetTransform();
 

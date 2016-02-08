@@ -122,6 +122,13 @@ namespace Cog {
 			return GetItem(key).values;
 		}
 
+		void AddItem(string key, string value) {
+			SettingItem newItem = SettingItem();
+			newItem.key = key;
+			newItem.values.push_back(value);
+			items[key] = newItem;
+		}
+
 		/**
 		* Merges collection of items, adds not presented and replaces already stored
 		*/
