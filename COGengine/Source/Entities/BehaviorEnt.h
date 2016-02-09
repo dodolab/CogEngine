@@ -21,6 +21,10 @@ namespace Cog {
 			this->name = name;
 		}
 
+		BehaviorEnt(string name, string type, Setting setting) : setting(setting), type(type) {
+			this->name = name;
+		}
+
 		~BehaviorEnt() {
 
 		}
@@ -36,9 +40,8 @@ namespace Cog {
 			this->setting = Setting();
 
 			if (xml->pushTagIfExists("setting")) {
-				auto resCache = GETCOMPONENT(ResourceCache);
-				
-				this->setting = resCache->LoadSettingFromXml(xml);
+				this->setting = Setting();
+				this->setting.LoadFromXml(xml);
 				xml->popTag();
 			}
 
@@ -49,10 +52,8 @@ namespace Cog {
 				if (attr.compare("name") != 0 && attr.compare("type") != 0) {
 					// settings could be specified even as attributes of the behavior tag!
 					string val = xml->getAttributex(attr, "");
-					SettingItem it = SettingItem();
-					it.key = attr;
-					it.values.push_back(val);
-					this->setting.items[attr] =  it;
+
+					this->setting.AddItem(attr,val);
 				}
 			}
 		}

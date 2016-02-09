@@ -51,6 +51,7 @@ namespace Cog {
 	#define ACT_STATE_CHANGED "STATE_CHANGED"
 	#define ACT_TRANSFORM_ENDED  "TRANSFORM_ENDED"
     #define ACT_KEY_PRESSED "KEY_PRESSED"
+    #define ACT_SCREEN_CHANGED "SCREEN_CHANGED"
 
 	/*! Attribute keys */
 	#define ATTR_VELOCITY "VELOCITY"

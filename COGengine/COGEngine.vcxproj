@@ -223,7 +223,7 @@
     <ClInclude Include="Source\Components\ResourceCache.h" />
     <ClInclude Include="Source\Components\Environment.h" />
     <ClInclude Include="Source\Components\Renderer.h" />
-    <ClInclude Include="Source\Components\SceneContext.h" />
+    <ClInclude Include="Source\Components\Stage.h" />
     <ClInclude Include="Source\Components\SceneSwitchManager.h" />
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Component.h" />
@@ -296,7 +296,7 @@
     <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
-    <ClCompile Include="Source\Components\SceneContext.cpp" />
+    <ClCompile Include="Source\Components\Stage.cpp" />
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />

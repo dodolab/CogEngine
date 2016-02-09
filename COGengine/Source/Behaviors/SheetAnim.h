@@ -11,7 +11,7 @@ namespace Cog {
 	* Context entity used in animation behavior as
 	* it goes through the animation tree
 	*/
-	class AnimSceneContext {
+	class AnimStage {
 	public:
 		// index of actual loop
 		int actualLoop;
@@ -27,11 +27,11 @@ namespace Cog {
 		// indicator, if the node entity is a root node
 		bool isRootNode;
 
-		AnimSceneContext() {
+		AnimStage() {
 
 		}
 
-		AnimSceneContext(spt<Anim> node, bool isScopeReverted, bool isRootNode) {
+		AnimStage(spt<Anim> node, bool isScopeReverted, bool isRootNode) {
 
 			this->isRootNode = isRootNode;
 			this->actualLoop = 0;
@@ -90,9 +90,9 @@ namespace Cog {
 		// animation root
 		spt<Anim> root = spt<Anim>();
 		// actual tree context
-		AnimSceneContext context;
+		AnimStage context;
 		// stack of processing tree
-		stack<AnimSceneContext> nodeStack;
+		stack<AnimStage> nodeStack;
 	public:
 
 		SheetAnim(spt<Anim> anim) : root(anim) {
@@ -116,7 +116,7 @@ namespace Cog {
 			//int gridHeight = settings.GetSettingValInt("transform", "grid_height");
 
 			// the root is not in inverted scope (but it can be inverted itself)
-			context = AnimSceneContext(root, false, true);
+			context = AnimStage(root, false, true);
 			// start with -SPEED so the first update will get the proper frame
 			context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames() - root->GetSpeed()) : -root->GetSpeed();
 		}
@@ -224,7 +224,7 @@ namespace Cog {
 				nodeStack.push(context);
 				// XOR function -> two inverted parents give non-inverted animation for children
 				bool invertedScope = context.IsChildReverted();
-				context = AnimSceneContext(actualNode, invertedScope, false);
+				context = AnimStage(actualNode, invertedScope, false);
 				return true;
 			}
 			else return false;

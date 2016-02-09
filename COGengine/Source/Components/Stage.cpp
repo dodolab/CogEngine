@@ -1,4 +1,4 @@
-#include "SceneContext.h"
+#include "Stage.h"
 #include "Node.h"
 #include "Behavior.h"
 #include "Scene.h"
@@ -9,20 +9,20 @@
 
 namespace Cog {
 
-	void SceneContext::Init() {
+	void Stage::Init() {
 		// create root object with default behaviors, states and attributes
 		this->rootObject = new Node(ObjType::ROOT, 0, "root");
-		RegisterGlobalListening(ACT_SCENE_SWITCHED);
+		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
 	}
 
-	void SceneContext::OnMessage(Msg& msg) {
+	void Stage::OnMessage(Msg& msg) {
 		if (msg.GetAction() == ACT_SCENE_SWITCHED) {
 			Node* scene =  (Node*)msg.GetSourceObject();
 			actualScene = scene->GetScene();
 		}
 	}
 
-	void SceneContext::AddScene(Scene* scene, bool setAsActual) {
+	void Stage::AddScene(Scene* scene, bool setAsActual) {
 
 		rootObject->AddChild(scene->GetSceneNode());
 
@@ -46,11 +46,11 @@ namespace Cog {
 		}
 
 		this->scenes.push_back(scene);
-		MLOGDEBUG("SceneContext", "Initializing scene %s", scene->GetName().c_str());
+		MLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
 		scene->GetSceneNode()->SubmitChanges(true);
 	}
 
-	void SceneContext::RegisterListener(StringHash action, MsgListener* listener) {
+	void Stage::RegisterGlobalListener(StringHash action, MsgListener* listener) {
 		if (msgListeners.find(action) == msgListeners.end()) {
 			msgListeners[action] = vector <MsgListener*>();
 		}
@@ -59,7 +59,7 @@ namespace Cog {
 		listeners.push_back(listener);
 	}
 
-	bool SceneContext::UnregisterListener(StringHash action, MsgListener* listener) {
+	bool Stage::UnregisterGlobalListener(StringHash action, MsgListener* listener) {
 		if (msgListeners.find(action) != msgListeners.end()) {
 			vector<MsgListener*>& listeners = msgListeners[action];
 
@@ -73,7 +73,7 @@ namespace Cog {
 		return false;
 	}
 
-	Scene* SceneContext::FindSceneByName(string name) const {
+	Scene* Stage::FindSceneByName(string name) const {
 		for (auto it = scenes.begin(); it != scenes.end(); ++it) {
 			if ((*it)->GetName().compare(name) == 0) {
 				return (*it);
@@ -82,42 +82,57 @@ namespace Cog {
 		return nullptr;
 	}
 
-	void SceneContext::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
-		auto manager = GETCOMPONENT(SceneSwitchManager);
+	void Stage::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
 
-		Node* from = actualScene->GetSceneNode();
-
-		if (scene->IsLazyLoad() && !scene->Loaded()) {
-			auto async = new AsyncProcess(new SceneLoader(COGEngine.config, scene, tweenDir));
-
-			MLOGDEBUG("SceneContext", "Scene is lazy loaded!");
-
-			// lazy load the scene
-			if (this->loadingScene != nullptr) {
-				MLOGDEBUG("SceneContext", "Loading progress scene instead");
-
-				Node* to = loadingScene->GetSceneNode();
-				sceneStack.push(actualScene);
-				actualScene = loadingScene;
-				
-				// switch to loading window
-				manager->SwitchToScene(from, to, tweenDir);
-				
-				// set tween to the map window, but don't switch automatically
-				manager->PushSceneSwitch(to, scene->GetSceneNode(), tweenDir, false);
-			}
-
-			CogRunThread(async);
-			return;
+		if (actualScene == nullptr) {
+			// there is no scene running yet -> switch immediately
+			this->actualScene = scene;
+			scene->Init();
+			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
 		}
+		else {
+			// switch, using switch manager
+			auto manager = GETCOMPONENT(SceneSwitchManager);
+			Node* from = actualScene->GetSceneNode();
 
-		SetActualScene(scene);
+			if (scene->IsLazyLoad() && !scene->Loaded()) {
+				// scene is lazy loaded -> run asynchronous loading process
 
-		Node* to = scene->GetSceneNode();
-		manager->SwitchToScene(from, to, tweenDir);
+				auto async = new AsyncProcess(new SceneLoader(COGEngine.config, scene, tweenDir));
+
+				MLOGDEBUG("Stage", "Scene is lazy loaded!");
+
+				// lazy load the scene
+				if (this->loadingScene != nullptr) {
+					MLOGDEBUG("Stage", "Loading progress scene instead");
+
+					Node* to = loadingScene->GetSceneNode();
+					sceneStack.push(actualScene);
+					actualScene = loadingScene;
+
+					// switch to loading window
+					manager->SwitchToScene(from, to, tweenDir);
+				}
+
+				CogRunThread(async);
+			}
+			else {
+				// switch scene using the switch manager
+				if (actualScene != nullptr &&
+					(loadingScene == nullptr ||
+						(actualScene->GetName().compare(loadingScene->GetName()) != 0))) {
+					sceneStack.push(actualScene);
+				}
+
+				actualScene = scene;
+
+				Node* to = scene->GetSceneNode();
+				manager->SwitchToScene(from, to, tweenDir);
+			}
+		}
 	}
 
-	bool SceneContext::SwitchBackToScene(TweenDirection tweenDir) {
+	bool Stage::SwitchBackToScene(TweenDirection tweenDir) {
 		if (!sceneStack.empty()) {
 			auto manager = GETCOMPONENT(SceneSwitchManager);
 			Scene* scene = sceneStack.top();
@@ -126,7 +141,7 @@ namespace Cog {
 			Node* to = scene->GetSceneNode();
 			actualScene = scene;
 
-			MLOGDEBUG("SceneContext", "Switching to previous scene");
+			MLOGDEBUG("Stage", "Switching to previous scene");
 
 			manager->SwitchToScene(from, to, tweenDir);
 
@@ -137,17 +152,10 @@ namespace Cog {
 		return false;
 	}
 
-	void SceneContext::SetActualScene(Scene* scene) {
-		if (loadingScene == nullptr || (actualScene->GetName().compare(loadingScene->GetName()) != 0)) {
-				sceneStack.push(actualScene);
-		}
 
-		actualScene = scene;
-	}
+	void Stage::LoadScenesFromXml(spt<ofxXml> xml) {
 
-	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {
-
-		MLOGDEBUG("SceneContext", "Loading scenes from XML");
+		MLOGDEBUG("Stage", "Loading scenes from XML");
 
 		string initialScene = xml->getAttributex("initial", "");
 		string loading = xml->getAttributex("loading", "");
@@ -157,39 +165,36 @@ namespace Cog {
 		for (int i = 0; i < scenesNum; i++) {
 			xml->pushTag("scene", i);
 			
-			Scene* sc = new Scene();
-
-			sc->LoadInitDataFromXml(xml, i);
+			string name = xml->getAttributex("name", "");
+			bool isLazy = xml->getBoolAttributex("lazy", false);
+			
+			Scene* sc = new Scene(name, isLazy);
 
 			if (!sc->IsLazyLoad()) {
 				// load complete scene only if it isn't lazy loaded
 				sc->LoadFromXml(xml);
 			}
 
-			
 			if (sc->GetName().compare(initialScene) == 0) {
 				// set as initial
 				AddScene(sc, true);
 			}
-			else if (!loading.empty() && sc->GetName().compare(loading) == 0) {
-				// set as loading scene
-				AddScene(sc, false);
-				this->loadingScene = sc;
-			}
 			else {
 				AddScene(sc, false);
+			}
+				
+			if (!loading.empty() && sc->GetName().compare(loading) == 0) {
+				// set as loading scene
+				this->loadingScene = sc;
 			}
 
 			xml->popTag();
 		}
 
-		if (actualScene == nullptr) {
+		if (actualScene == nullptr && this->scenes.size() != 0) {
 			// if no actual scene specified, use the first one
 			auto firstScene = this->scenes[0];
-
-			this->actualScene = firstScene;
-			firstScene->Init();
-			firstScene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
+			SwitchToScene(firstScene, TweenDirection::NONE);
 		}
 	}
 

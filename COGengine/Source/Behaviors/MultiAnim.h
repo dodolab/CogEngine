@@ -24,6 +24,9 @@ namespace Cog {
 
 			for (string anim : animations) {
 				spt<BehaviorEnt> ent = resourceCache->GetEntityC<BehaviorEnt>(anim);
+
+				if (!ent) throw IllegalArgumentException(string_format("Animation %s not found", anim));
+
 				Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(ent->type);
 				Behavior* behavior;
 				if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);

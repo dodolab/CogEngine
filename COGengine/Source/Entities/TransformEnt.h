@@ -21,8 +21,19 @@ namespace Cog {
 	class TransformEnt : public DEntity{
 	public:
 
-		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(0), sType(CalcType::PER), rotation(0) {
+		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(1), sType(CalcType::LOC), rotation(0) {
 			this->name = "";
+		}
+
+		TransformEnt(string name) : TransformEnt() {
+			this->name = name;
+		}
+
+		TransformEnt(string name, ofVec2f position, CalcType positionCalc, float rotation) : TransformEnt(){
+			this->name = name;
+			this->pos = position;
+			this->pType = positionCalc;
+			this->rotation = rotation;
 		}
 
 		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
@@ -72,7 +83,7 @@ namespace Cog {
 			float height = 0;
 
 			if (xml->attributeExists("size")) {
-				width = height = xml->getAttributex("size", 0.0);
+				width = height = xml->getAttributex("size", 1);
 			}
 			else {
 				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1));

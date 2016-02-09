@@ -80,19 +80,19 @@ namespace Cog {
 	// =================== MSTORAGE ========================
 
 	void CogRegisterGlobalListener(StringHash action, MsgListener* listener) {
-		COGEngine.sceneContext->RegisterListener(action, listener);
+		COGEngine.stage->RegisterGlobalListener(action, listener);
 	}
 
 	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener) {
-		COGEngine.sceneContext->UnregisterListener(action, listener);
+		COGEngine.stage->UnregisterGlobalListener(action, listener);
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
-		COGEngine.sceneContext->GetActualScene()->SendMessage(msg, actualNode);
+		COGEngine.stage->GetActualScene()->SendMessage(msg, actualNode);
 	}
 
 	void CogSendDirectMessageToListener(Msg& msg, int targetId) {
-		COGEngine.sceneContext->GetActualScene()->SendDirectMessageToListener(msg, targetId);
+		COGEngine.stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
 	}
 
 	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {

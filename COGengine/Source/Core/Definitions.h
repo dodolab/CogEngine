@@ -56,7 +56,7 @@ public: \
 
 // assertion with formatted message
 #ifdef DEBUG
-#   define MASSERT(condition, module, message, ...) \
+#   define COGASSERT(condition, module, message, ...) \
     do { \
         if (! (condition)) { \
             std::cerr << "Assertion " #condition " failed in " << __FILE__ \
@@ -66,7 +66,7 @@ public: \
 				        } \
 		    } while (false)
 #else
-#   define MASSERT(condition, message, ...) do { } while (false)
+#   define COGASSERT(condition, message, ...) do { } while (false)
 #endif
 
 // macro for debug-only logging

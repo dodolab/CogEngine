@@ -9,7 +9,7 @@ namespace Cog {
 #include "ResourceCache.h"
 #include "Logger.h"
 #include "Node.h"
-#include "SceneContext.h"
+#include "Stage.h"
 #include "Tween.h"
 #include "SceneSwitchManager.h"
 #include "Renderer.h"
@@ -45,7 +45,7 @@ namespace Cog {
 		ResourceCache* resourceCache = nullptr;
 		Logger* logger = nullptr;
 		Renderer* renderer = nullptr;
-		SceneContext* sceneContext = nullptr;
+		Stage* stage = nullptr;
 		InputHandler* inputHandler = nullptr;
 		
 		Engine() {
@@ -55,7 +55,7 @@ namespace Cog {
 		~Engine() {
 			delete environment;
 			delete resourceCache;
-			delete sceneContext;
+			delete stage;
 			delete logger;
 			delete renderer;
 			delete inputHandler;
@@ -69,7 +69,7 @@ namespace Cog {
 
 
 		/**
-		* Initializes engine
+		* Initializes engine from XML file
 		* @param config configuration xml
 		*/
 		void Init(spt<ofxXmlSettings> config);

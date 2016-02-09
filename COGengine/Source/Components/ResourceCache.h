@@ -49,7 +49,7 @@ namespace Cog {
 		}
 
 		~ResourceCache() {
-			
+
 		}
 
 		/**
@@ -125,10 +125,11 @@ namespace Cog {
 			if (!entity) return spt<T>();
 
 			DEntity* entityPtr = entity.get();
-			MASSERT(typeid(*entity) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name);
+			COGASSERT(typeid(*entity) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name);
 
-			T* entityC = static_cast<T*>(entityPtr);
-			return spt<T>(entityC);
+			// never create another pointer, because it will be destroyed within the original!
+			// always use static_cast of the actual pointer
+			return static_cast<spt<T>>(entity);
 		}
 
 		/**
@@ -155,16 +156,6 @@ namespace Cog {
 		* @param spriteSheet spritesheet to store
 		*/
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
-
-		/**
-		* Loads settings from XML
-		*/
-		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
-
-		/**
-		* Loads one setting entity from XML
-		*/
-		Setting LoadSettingFromXml(spt<ofxXml> xml);
 
 		Settings& GetDefaultSettings() {
 			return loadedDefaultSettings;

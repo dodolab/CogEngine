@@ -24,6 +24,10 @@ namespace Cog {
 			sprites = vector<spt<SpriteSet>>();
 		}
 
+		SpriteSheet(string name, spt<ofImage> spriteImage, int totalFrames, int spriteWidth, int spriteHeight) : SpriteSheet(name, spriteImage) {
+			AddSpriteSet(name, totalFrames, spriteWidth, spriteHeight);
+		}
+
 		/**
 		* Inserts a new sprite into sheet
 		* @param totalFrames total number of frames

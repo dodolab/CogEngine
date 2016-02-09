@@ -12,5 +12,7 @@ namespace Cog {
 	*/
 	void spaces(int howMany, std::ostream& ss);
 
+	std::vector<std::string> split_string(string str, string delimiter);
+
 
 } // namespace

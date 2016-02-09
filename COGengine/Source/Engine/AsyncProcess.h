@@ -35,17 +35,26 @@ namespace Cog {
 			config->popAll();
 			config->pushTag("app_config");
 			config->pushTag("scenes");
-			config->pushTag("scene", scene->GetIndex());
 
-			scene->LoadFromXml(config);
+			for (int i = 0; i < config->getNumTags("scene"); i++) {
+				config->pushTag("scene", i);
+
+				string name = config->getAttributex("name", "");
+				if (name.compare(scene->GetName()) == 0) {
+					scene->LoadFromXml(config);
+					config->popTag();
+					break;
+				}
+
+				config->popTag();
+			}
+
 			config->popAll();
 
 			// switch to scene
-			auto context = GETCOMPONENT(SceneContext);
-			auto manager = GETCOMPONENT(SceneSwitchManager);
+			auto stage = GETCOMPONENT(Stage);
 			scene->GetSceneNode()->SubmitChanges(true);
-			context->SetActualScene(scene);
-			manager->PopSceneSwitch();
+			stage->SwitchToScene(scene, tweenDir);
 		}
 	};
 

@@ -1,0 +1,31 @@
+Init from XML:
+
+CogEngine
+- register components
+- init all components
+  ResourceCache
+  - load settings
+  - load fonts
+  - load animations
+  - load transforms
+  - load behaviors
+  - load spritesheets
+  Logger
+  Environment
+  InputHandler (noinit)
+  Renderer (noinit)
+  Stage (noinit
+  SceneSwitchManager (noinit)
+  
+Stage
+- load all scenes
+  Scene
+  - load settings
+  - load layers
+  - load nodes
+    Node
+    - load transform
+	- load shape
+	- load behaviors
+	- load states
+	- load children
