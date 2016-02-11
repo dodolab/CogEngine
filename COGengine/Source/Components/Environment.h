@@ -43,6 +43,10 @@ namespace Cog {
 		// real aspect ratio
 		float aspectRatio;
 
+		// first width and height
+		int originalWidth = 0;
+		int originalHeight = 0;
+
 		// collection of running threads
 		vector<ofThread*> runningThreads;
 	public:
@@ -125,12 +129,24 @@ namespace Cog {
 			return virtualHeight;
 		}
 
+		int GetOriginalWidth() {
+			return originalWidth;
+		}
+
+		int GetOriginalHeight() {
+			return originalHeight;
+		}
+
 		float GetVirtualAspectRatio() {
 			return virtualAspectRatio;
 		}
 
 		float GetScreenAspectRatio() {
 			return aspectRatio;
+		}
+
+		ScreenOrient GetScreenOrientation() {
+			return screenOrient;
 		}
 
 		/**
@@ -224,6 +240,8 @@ namespace Cog {
 		* according to the actual aspect ratio
 		*/
 		void RecalcVirtualSize();
+
+		void FixTouchPosition(int& x, int& y);
 	};
 
 }// namespace

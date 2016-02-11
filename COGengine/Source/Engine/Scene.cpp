@@ -17,7 +17,7 @@ namespace Cog {
 		auto cache = GETCOMPONENT(ResourceCache);
 		// always merge from default settings
 		auto defaultSettings = cache->GetDefaultSettings();
-		settings.MergeSettings(defaultSettings);
+		this->settings.MergeSettings(defaultSettings);
 	
 		this->settings.MergeSettings(settings);
 	}
@@ -80,7 +80,7 @@ namespace Cog {
 
 	void Scene::SendMessage(Msg& msg, Node* actualNode) {
 
-		MLOGDEBUG("Messaging", "Message %s:%s", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode->GetTag().c_str());
+		MLOGDEBUG("Messaging", "Message %s:%s", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
 
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
@@ -92,7 +92,7 @@ namespace Cog {
 			SendDirectMessage(msg);
 
 		}
-		else SendBubblingMessage(msg, actualNode);
+		else if(actualNode != nullptr) SendBubblingMessage(msg, actualNode);
 
 		if (!msg.DataKept()) {
 			msg.DeleteData();
@@ -304,7 +304,6 @@ namespace Cog {
 		}
 	}
 
-
 	void Scene::SendBubblingMessage(Msg& msg, Node* actualNode) {
 
 		BubblingType& trav = msg.GetBubblingType();
@@ -398,6 +397,33 @@ namespace Cog {
 		if (found != allBehaviors.end()) allBehaviors.erase(found);
 
 		UnregisterListener(beh);
+	}
+
+	void Scene::WriteInfo(int logLevel) {
+		
+		CogLogTree("INFO_SCENE", logLevel, "Scene %s info:", this->name.c_str());
+
+#if DEBUG
+
+		if(msgListeners.size() > 0) CogLogTree("INFO_SCENE", logLevel+1, "Message listeners: %d",msgListeners.size());
+
+		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
+			StringHash key = (*it).first;
+			int listeners = (*it).second.size();
+
+			if (listeners > 0) {
+				string str = StringHash::GetStringValue(key)+":"+ofToString(listeners);
+				CogLogTree("INFO_SCENE", logLevel+2, str.c_str());
+			}
+		}
+#endif
+
+		CogLogTree("INFO_SCENE", logLevel+1, "Nodes: %d",allNodes.size());
+		CogLogTree("INFO_SCENE", logLevel+1, "Behaviors: %d", allBehaviors.size());
+
+		CogLogTree("INFO_SCENE_NODES", logLevel+1, "Nodes::");
+
+		this->sceneNode->WriteInfo(logLevel + 2);
 	}
 
 

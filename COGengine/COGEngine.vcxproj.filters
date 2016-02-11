@@ -327,6 +327,30 @@
     <ClInclude Include="Source\Components\Stage.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxTCPManager.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxTCPServer.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxUDPManager.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxNetwork.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxNetworkUtils.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\network\ofxTCPClient.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Network.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\CogDatabase.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -441,6 +465,21 @@
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\Stage.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\network\ofxTCPManager.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\network\ofxTCPServer.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\network\ofxUDPManager.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\network\ofxTCPClient.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Network.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>

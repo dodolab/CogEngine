@@ -20,6 +20,7 @@
 #include "FloatingScene.h"
 #include "InputHandler.h"
 #include "Selection.h"
+#include "Network.h"
 
 namespace Cog {
 
@@ -136,9 +137,12 @@ namespace Cog {
 		REGISTER_COMPONENT(stage);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);
-
+		
 		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
+
+		auto network = new Network();
+		REGISTER_COMPONENT(network);
 
 		REGISTER_BEHAVIOR(SheetAnim);
 		REGISTER_BEHAVIOR(Button);

@@ -32,10 +32,17 @@ namespace Cog {
 			Flags& actions = owner->GetAttr<Flags>(ATTR_ACTIONS);
 
 			for (auto key : CogGetPressedKeys()) {
+				
+				if (!key->IsHandled()) {
+					
 
-				if (!key->IsHandled() || key->handlerNodeId == owner->GetId()) {
-					// handle key press
-					key->handlerNodeId = owner->GetId();
+					// todo...
+					if (key->key == (int)('l')) {
+						// handle key press
+						key->handlerNodeId = owner->GetId();
+						// write log
+						CogWriteLogActualScene();
+					}
 
 					Act inAct = GetAction(key->key);
 					if (inAct != Act::NONE)

@@ -56,6 +56,7 @@ public:
 	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos, bool preciseTest){
 		// move the test position into "local" coordinate space
 		ofVec3f localPos = testPos;
+		//cout << "X: " << localPos.x << " Y:" << localPos.y << endl;
 		// test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0
@@ -64,9 +65,10 @@ public:
 			return false;
 
 		if (preciseTest) {
+			
 			ofColor col = image->getColor((int)localPos.x, (int)localPos.y);
 			// return a hit if the specified local alpha value is greater than half
-			return col.a > 0x80;
+			return ((int)col.a) > 0x80;
 		}
 		else return true;
 	}

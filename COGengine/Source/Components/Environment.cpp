@@ -2,6 +2,7 @@
 #include "InputAct.h"
 #include "CogEngine.h"
 #include "Utils.h"
+#include "Events.h"
 
 namespace Cog {
 
@@ -37,17 +38,30 @@ namespace Cog {
 	}
 
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
+		Vec2i originalSize = this->GetScreenSize();
+
+		// set original values only once
+		if (originalWidth == 0 && originalHeight == 0) {
+			originalWidth = newWidth;
+			originalHeight = newHeight;
+		}
+
 		screenSizeChanged = true;
 		screenWidth = virtualWidth = newWidth;
 		screenHeight = virtualHeight = newHeight;
-		screenOrient = screenWidth >= screenHeight ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
+		screenOrient = virtualAspectRatio > 1 ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
 
 		aspectRatio = ((float)screenWidth) / screenHeight;
 		RecalcVirtualSize();
 
-		MLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d",screenWidth,screenHeight,virtualWidth,virtualHeight);
+		float realVirtual = ((virtualWidth)/((float)virtualHeight));
 
-		//SendMessageNoBubbling(ACT_SCREEN_CHANGED, 0, nullptr, nullptr);
+		MLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
+			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
+
+		if (COGEngine.stage->GetActualScene() != nullptr) {
+			SendMessageNoBubbling(ACT_SCREEN_CHANGED, 0, new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize()),nullptr);
+		}
 	}
 
 	Vec2i Environment::GetMousePosition() {
@@ -71,7 +85,7 @@ namespace Cog {
 			}
 
 			pressedKeys.push_back(new InputAct(key));
-			CogSendDirectMessage(StringHash(ACT_KEY_PRESSED), 0, nullptr, new Node("dummy"), this->GetId());
+			CogSendDirectMessage(StringHash(ACT_KEY_PRESSED), 0, nullptr, nullptr, this->GetId());
 		}
 		else {
 			// key up
@@ -86,8 +100,7 @@ namespace Cog {
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen with more fingers
-		x -= (int)ofGetCurrentViewport().x;
-		y -= (int)ofGetCurrentViewport().y;
+		FixTouchPosition(x, y);
 
 		if (pressed) {
 			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
@@ -107,8 +120,7 @@ namespace Cog {
 	void Environment::OnMultiTouchMotion(int x, int y, int button) {
 		// user moves fingers
 
-		x -= (int)ofGetCurrentViewport().x;
-		y -= (int)ofGetCurrentViewport().y;
+		FixTouchPosition(x, y);
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
@@ -120,8 +132,7 @@ namespace Cog {
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen
 
-		x -= (int)ofGetCurrentViewport().x;
-		y -= (int)ofGetCurrentViewport().y;
+		FixTouchPosition(x, y);
 
 		if (pressed) {
 			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
@@ -140,8 +151,7 @@ namespace Cog {
 
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
 
-		x -= (int)ofGetCurrentViewport().x;
-		y -= (int)ofGetCurrentViewport().y;
+		FixTouchPosition(x, y);
 
 		// user moves finger
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
@@ -243,6 +253,11 @@ namespace Cog {
 				break;
 			}
 		}
+	}
+
+	void Environment::FixTouchPosition(int& x, int& y) {
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (screenHeight - (int)ofGetCurrentViewport().getHeight()) / 2;
 	}
 
 }// namespace

@@ -39,4 +39,16 @@ namespace Cog {
 		}
 	};
 
+	
+	template <class  T>
+	class ValueChangeEvent : public MsgEvent {
+	public:
+		T before;
+		T after;
+
+		ValueChangeEvent(T before, T after):before(before), after(after) {
+
+		}
+	};
+
 }// namespace

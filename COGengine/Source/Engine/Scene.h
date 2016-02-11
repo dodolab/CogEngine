@@ -204,11 +204,6 @@ namespace Cog
 		void Dispose();
 
 		/**
-		* Loads initial data
-		*/
-		void LoadInitData(string name, bool isLazyLoad, int sceneIndex);
-		
-		/**
 		* Loads scene from xml
 		*/
 		void LoadFromXml(spt<ofxXml> xml);
@@ -266,6 +261,9 @@ namespace Cog
 			void RemoveBehavior(Behavior* beh);
 
 			friend class Node;
+
+		public:
+			void WriteInfo(int logLevel = 0);
 	};
 
 } // namespace

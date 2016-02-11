@@ -54,8 +54,12 @@ namespace Cog {
 
 	void CogLogError(const char* module, const char* format, ...);
 	void CogLogInfo(const char* module, const char* format, ...);
+	void CogLogTree(const char* module, int logLevel, const char* format, ...);
 	void CogLogDebug(const char* module, const char* format, ...);
 	void CogLoggerFlush();
+
+	void CogWriteLogStage();
+	void CogWriteLogActualScene();
 
 	// =================== MRENDERER =========================
 	void CogPushNodeForRendering(Node* node);

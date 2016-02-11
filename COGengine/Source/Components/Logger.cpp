@@ -22,12 +22,12 @@ namespace Cog {
 
 			string channelStr = ofToLower(set.GetItemVal("channel"));
 			if (!channelStr.empty()) {
-				if (channelStr.compare("console") == 0) channel = new ConsoleLoggerChannel();
+				if (channelStr.compare("console") == 0) SetOutputToConsole();
 				else if (channelStr.compare("file") == 0) {
 					bool append = ofToBool(set.GetItemVal("append"));
 					string path = set.GetItemVal("path");
 					string fullPath = ofToDataPath(path);
-					channel = new FileLoggerChannel(fullPath, append);
+					SetOutputToFile(fullPath, append);
 				}
 			}
 
