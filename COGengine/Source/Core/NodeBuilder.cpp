@@ -64,7 +64,7 @@ namespace Cog {
 			spriteSetEntity = spriteSheet->GetSpriteSetByName(spriteSet);
 		}
 
-		if (!spriteSetEntity) throw IllegalArgumentException(string_format("Spriteset %s not found!", spriteSet));
+		if (!spriteSetEntity) throw IllegalArgumentException(string_format("Spriteset %s not found!", spriteSet.c_str()));
 
 		spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
 		auto shape = spt<SpriteShape>(new SpriteShape(sprite, layer));
@@ -236,7 +236,8 @@ namespace Cog {
 		
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
-		ent->LoadFromXml(xml, Setting());
+		auto dummySet = Setting();
+		ent->LoadFromXml(xml, dummySet);
 
 		Behavior* behavior = CreateBehavior(ent);
 

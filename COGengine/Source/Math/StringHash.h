@@ -2,6 +2,7 @@
 
 #include <string>
 #include <map>
+#include "ofUtils.h"
 
 using std::map;
 using std::string;
@@ -94,17 +95,19 @@ namespace Cog
 		// Zero hash.
 		static const StringHash ZERO;
 
-#ifdef DEBUG
+
 		static string GetStringValue(unsigned val) {
+#ifdef DEBUG
 			auto fnd = strValues.find(val);
 
 			if (fnd != strValues.end()) {
 				return fnd->second;
 			}
 			return string("");
-		}
-
+#else
+			return ofToString(val);
 #endif
+		}
 
 	private:
 		// Hash value.

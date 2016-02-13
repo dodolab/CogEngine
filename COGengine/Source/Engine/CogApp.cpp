@@ -74,7 +74,7 @@ void CogApp::mousePressed(int x, int y, int button){
 }
 
 void CogApp::mouseReleased(int x, int y, int button){
-	CogEngine::GetInstance().environment->OnSingleTouchButton(x, y, button, false);
+	CogEngine::GetInstance().environment->OnSingleTouchButton(x, y, button, false); 
 }
 
 void CogApp::dragEvent(ofDragInfo dragInfo){
@@ -106,7 +106,7 @@ void CogApp::reloadTextures(){
 }
 
 bool CogApp::backPressed(){
-	COGEngine.sceneContext->SwitchBackToScene(TweenDirection::NONE);
+	CogEngine::GetInstance().stage->SwitchBackToScene(TweenDirection::NONE);
 	return true;
 }
 
@@ -119,15 +119,15 @@ void CogApp::cancelPressed(){
 }
 
 void CogApp::touchDown(int x, int y, int id){
-	COGEngine.environment->OnMultiTouchButton(x, y, id, true);
+	CogEngine::GetInstance().environment->OnMultiTouchButton(x, y, id, true);
 }
 
 void CogApp::touchMoved(int x, int y, int id){
-	COGEngine.environment->OnMultiTouchMotion(x, y, id);
+	CogEngine::GetInstance().environment->OnMultiTouchMotion(x, y, id);
 }
 
 void CogApp::touchUp(int x, int y, int id){
-	COGEngine.environment->OnMultiTouchButton(x, y, id, false);
+	CogEngine::GetInstance().environment->OnMultiTouchButton(x, y, id, false);
 }
 
 void CogApp::touchDoubleTap(int x, int y, int id){

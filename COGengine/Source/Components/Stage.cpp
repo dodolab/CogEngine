@@ -227,7 +227,7 @@ namespace Cog {
 
 	void Stage::WriteInfo(int logLevel) {
 		
-		if(actualScene != nullptr) CogLogTree("INFO_STAGE", logLevel, "Actual scene: ", actualScene->GetName());
+		if(actualScene != nullptr) CogLogTree("INFO_STAGE", logLevel, "Actual scene: ", actualScene->GetName().c_str());
 
 		if (this->scenes.size() > 0) {
 			CogLogTree("INFO_STAGE_SCENES", logLevel, "Scenes: %d", scenes.size());

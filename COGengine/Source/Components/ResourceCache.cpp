@@ -99,7 +99,8 @@ namespace Cog {
 					xml->pushTag("behavior", i);
 					spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 
-					ent->LoadFromXml(xml, Setting());
+					auto dummySet = Setting();
+					ent->LoadFromXml(xml, dummySet);
 
 					COGASSERT(!ent->name.empty(), "ResourceCache", "Behavior entity on index %d in configuration file must have a name!", i);
 

@@ -36,7 +36,7 @@ namespace Cog {
 		this->endTime = ofGetElapsedTimeMicros();
 	}
 
-	MeasureBlock& TimeMeasure::GetMeasureBlock(string blockName) {
+	MeasureBlock TimeMeasure::GetMeasureBlock(string blockName) {
 		auto found = blocks.find(blockName);
 
 		if (found != blocks.end()) return (*found).second;

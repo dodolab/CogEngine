@@ -1,445 +1,218 @@
-#include "ofMain.h"
-#include "ofApp.h"
-#include "Node.h"
-#include "RotateAnim.h"
-#include "TranslateAnim.h"
-#include "HitEvent.h"
-#include "Collider.h"
-
-#include "duk_config.h"
-#include "duktape.h"
-
-long mstart;
-long mend;
-long temp;
-using namespace std;
-using namespace Cog;
-int rotateAnimId;
-
-#include "CogEngine.h"
+#include "ofxCogMain.h"
+#include "AnimationLoader.h"
+#include "BehaviorEnt.h"
+#include "NodeBuilder.h"
+#include "MultiAnim.h"
+#include "ofxNetwork.h"
 
 
-void WriteTime(const char* msg) {
-	cout << msg << " " << (ofGetElapsedTimeMillis() - temp) << " ms" << endl;
-	temp = ofGetElapsedTimeMillis();
-}
-
-
-int OnTestAnimFinished(duk_context *ctx) {
-	int fpsCounter = duk_to_number(ctx, 0);
-
-	long mojo = temp;
-	mend = ofGetElapsedTimeMillis();
-
-	WriteTime("ANIM");
-	cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
-	cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
-
-
-	return 1;
-}
-
-
-int mojo(duk_context *ctx) {
-	int argument = duk_to_number(ctx, 0);
-	ofLog(OF_LOG_NOTICE, "mojo " + ofToString(argument));
-	cout << "MOJO :: " << argument << endl;
-	return 1;
-}
-
-int dojo(duk_context *ctx) {
-	int argument = duk_to_number(ctx, 0);
-	cout << "DOJO :: " << argument << endl;
-	ofLog(OF_LOG_NOTICE, "DOJO " + ofToString(argument));
-	return 0;
-}
-
-class JavaScriptBehavior : public Behavior {
-	duk_context* ctx;
-
-	string GetBehaviorJsName() {
-		return "Behavior_" + ofToString(this->GetId());
-	}
-
+class SwitchBehavior : public Behavior {
+private:
+	int actualConfig = 0;
+	vector<string> configFiles;
 public:
 
-	JavaScriptBehavior(duk_context* context) {
-		this->ctx = context;
-		/*
-		string path = ofToDataPath("scriptTest.js");
-
-		string str, strTotal;
-		ifstream in;
-		in.open(path);
-		getline(in, str);
-		while (in) {
-		strTotal += str+"\n";
-		getline(in, str);
-		}
-
-		//	duk_peval_string(ctx, strTotal.c_str());
-		if (duk_peval_string(ctx, strTotal.c_str()) != 0) {
-		printf("compile failed: %s\n", duk_safe_to_string(ctx, -1));
-		*/
-
-		if (duk_peval_file(ctx, ofToDataPath("scriptTest.js").c_str()) != 0) {
-			printf("Error: %s\n", duk_safe_to_string(ctx, -1));
-		}
-		duk_pop(ctx);  /* ignore result */
-
-
-		duk_push_global_object(ctx);
-		duk_get_global_string(ctx, "TestingBehavior");
-		duk_push_int(ctx, rotateAnimId);
-
-		if (duk_pnew(ctx, 1) != 0) {
-			printf("%s\n", duk_safe_to_string(ctx, -1));
-		}
-
-		duk_put_prop_string(ctx, -2, GetBehaviorJsName().c_str());
-
-
-		//string newObj = "var "+GetBehaviorJsName() + " = new " + "TestingBehavior" + "(" + ofToString(rotateAnimId)+");";
-		//int isOK = duk_peval_string(ctx, newObj.c_str());
+	SwitchBehavior(vector<string> configFiles) {
+		this->configFiles = configFiles;
 	}
 
 	void Init() {
-		//RegisterListening(ACT_BEHAVIOR_FINISHED);
+		
 	}
 
+	virtual void Update(const uint64 delta, const uint64 absolute) {
 
+		string newConfig = "";
 
-	void OnMessage(Msg& msg) {
-
-		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
-		duk_get_prop_string(ctx, -1, "OnMessage");
-		duk_dup(ctx, -2);
-		duk_push_number(ctx, msg.GetAction());
-		duk_push_number(ctx, msg.GetBehaviorId());
-		int isOK = duk_pcall_method(ctx, 2);
-
-		if (isOK != 0) {
-			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
+		// for touch
+		for (InputAct* touch : CogGetPressedPoints()) {
+			if (!touch->IsHandled()) {
+				touch->handlerNodeId = 1;
+				actualConfig = (actualConfig + 1) % configFiles.size();
+				newConfig = configFiles[actualConfig];
+			}
 		}
 
-		// pop function
-		duk_pop(ctx);
-		// pop instance
-		duk_pop(ctx);
+		for (auto key : CogGetPressedKeys()) {
 
+			if (!key->IsHandled()) {
 
-
-		//string onmsg = GetBehaviorJsName() + ".OnMessage(" + ofToString(msg.GetAction()) + "," + ofToString(msg.GetBehaviorId()) + ");";
-		//int isOK = duk_peval_string(ctx, onmsg.c_str());
-	}
-
-
-	void Update(const uint64 delta, const uint64 absolute) {
-
-		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
-		duk_get_prop_string(ctx, -1, "Update");
-		duk_dup(ctx, -2);
-		duk_push_number(ctx, delta);
-		duk_push_number(ctx, absolute);
-		int isOK = duk_pcall_method(ctx, 2);
-
-
-		if (isOK != 0) {
-			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
+				if (key->key == (int)(OF_KEY_END)) {
+					// restarts actual config file
+					newConfig = configFiles[actualConfig];
+				}
+				else if (key->key == OF_KEY_PAGE_UP) {
+					// goes to previous config file
+					actualConfig = (actualConfig == 0 ? (configFiles.size() - 1) : (actualConfig - 1)) % configFiles.size();
+					newConfig = configFiles[actualConfig];
+				}
+				else if (key->key == OF_KEY_PAGE_DOWN) {
+					// goes to next config file
+					actualConfig = (actualConfig + 1) % configFiles.size();
+					newConfig = configFiles[actualConfig];
+				}
+			}
 		}
 
-		// pop function
-		duk_pop(ctx);
-		// pop instance
-		duk_pop(ctx);
+		if (!newConfig.empty()) {
 
+			// insert action that resets the engine
+			auto action = [newConfig, this]() {
+				CogLogInfo("Main", "Loading config %s", newConfig.c_str());
+				ofxXml* xml = new ofxXml();
+				xml->loadFile(newConfig.c_str());
+				auto xmlPtr = spt<ofxXml>(xml);
+				CogEngine::GetInstance().Init(xmlPtr);
+				CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(this);
+			};
 
-		//string updateObj = GetBehaviorJsName() + ".Update(" + ofToString(delta) + "," + ofToString(absolute) + ");";
-		//int isOK = duk_peval_string(ctx, updateObj.c_str());
-
+			CogEngine::GetInstance().AddPostUpdateAction(action);
+		}
 	}
 };
 
 
-
-class XmlTestingApp : public CogApp {
+class ExampleApp : public CogApp {
 
 
 	void InitComponents() {
 
 	}
 
-
 	void InitEngine() {
-		ofxXmlSettings* xml = new ofxXmlSettings();
-		xml->loadFile("configexample.xml");
-		auto xmlPtr = spt<ofxXmlSettings>(xml);
 
-		COGEngine.Init(xmlPtr);
+		// find all config files
+		ofDirectory dir = ofDirectory(".");
+		auto files = dir.getFiles();
+		auto configFiles = vector<string>();
 
-		xmlPtr->popAll();
-		xmlPtr->pushTag("app_config");
-		xmlPtr->pushTag("scenes");
-
-		auto mgr = GETCOMPONENT(SceneContext);
-		mgr->LoadScenesFromXml(xmlPtr);
-	}
-};
-
-
-
-
-class TestingBehavior : public Behavior {
-
-public:
-
-	TestingBehavior() {
-
-
-	}
-
-	void Init() {
-		othersEnded = false;
-		fpsCounter = 0;
-//		RegisterListening(ACT_BEHAVIOR_FINISHED);
-	}
-
-	int fpsCounter;
-	bool othersEnded;
-
-	void OnMessage(Msg& msg) {
-		if (!othersEnded) {
-			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
-				long mojo = temp;
-				mend = ofGetElapsedTimeMillis();
-
-				WriteTime("ANIM");
-				cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
-				cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
-
-				othersEnded = true;
+		for (auto& file : files) {
+			if (file.getExtension().compare("xml") == 0) {
+				configFiles.push_back(file.getFileName());
 			}
 		}
-	}
+
+		// load first config file
+		ofxXml* xml = new ofxXml();
+		xml->loadFile(configFiles[0]);
+		auto xmlPtr = spt<ofxXml>(xml);
+		CogEngine::GetInstance().Init(xmlPtr);
+		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles));
+		return;
 
 
-	void Update(const uint64 delta, const uint64 absolute) {
-		fpsCounter++;
+
+		// this example is an alternative for config1.xml
+		CogEngine::GetInstance().Init();
+
+		auto resCache = GETCOMPONENT(ResourceCache);
+
+		// <animations>
+		auto anims = vector<spt<Anim>>();
+		spt<Anim> anim = spt<Anim>(new Anim("square_anim", "sheet_squares.png", "", 4, 2, 0, 3, 1, 0.2, 0, false));
+		resCache->StoreAnimation(anim);
+
+		// <spritesheets>
+		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("squares", CogGet2DImage("sheet_squares.png"), 4, 128, 128));
+		resCache->StoreSpriteSheet(spriteSheet);
+		spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr.jpg"), 1, 800, 450));
+		resCache->StoreSpriteSheet(spriteSheet);
+
+		// <transforms>
+		spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt("rot_begin", ofVec2f(0), CalcType::PER, 0));
+		spt<TransformEnt> trans2 = spt<TransformEnt>(new TransformEnt("rot_end", ofVec2f(0), CalcType::PER, 360));
+		spt<TransformEnt> trans3 = spt<TransformEnt>(new TransformEnt("scale_begin", ofVec2f(0), 10, CalcType::PER, ofVec2f(0), ofVec2f(1), CalcType::LOC, 0));
+		spt<TransformEnt> trans4 = spt<TransformEnt>(new TransformEnt("scale_end", ofVec2f(0), 10, CalcType::PER, ofVec2f(0), ofVec2f(-1), CalcType::LOC, 0));
+		resCache->StoreEntity(trans);
+		resCache->StoreEntity(trans2);
+		resCache->StoreEntity(trans3);
+		resCache->StoreEntity(trans4);
+
+		// <behaviors>
+		Setting setting = Setting();
+		setting.AddItem("from", "rot_begin");
+		setting.AddItem("to", "rot_end");
+		setting.AddItem("duration", "4000");
+		setting.AddItem("repeat", "false");
+		setting.AddItem("blend", "additive");
+		spt<BehaviorEnt> beh1 = spt<BehaviorEnt>(new BehaviorEnt("transform1", "TransformAnim", setting));
+		Setting setting2 = Setting();
+		setting2.AddItem("from", "scale_begin");
+		setting2.AddItem("to", "scale_end");
+		setting2.AddItem("duration", "4000");
+		setting2.AddItem("repeat", "false");
+		setting2.AddItem("blend", "additive");
+		spt<BehaviorEnt> beh2 = spt<BehaviorEnt>(new BehaviorEnt("transform2", "TransformAnim", setting2));
+		Setting setting3 = Setting();
+		setting3.AddItem("animation", "square_anim");
+		spt<BehaviorEnt> beh3 = spt<BehaviorEnt>(new BehaviorEnt("squareanim", "SheetAnim", setting3));
+		resCache->StoreEntity(beh1);
+		resCache->StoreEntity(beh2);
+		resCache->StoreEntity(beh3);
+
+		// <scenes>
+		Scene* main = new Scene("main", false);
+
+		//  <scene_layers>
+		LayerEnt layer1 = LayerEnt("bgr", "bgr", 100, 30);
+		LayerEnt layer2 = LayerEnt("squares", "squares", 100, 30);
+		main->AddLayer(layer1);
+		main->AddLayer(layer2);
+
+		// <node>
+		NodeBuilder bld = NodeBuilder();
+		Node* node1 = new Node("bgr");
+		bld.SetSpriteNode(main, node1, "bgr", 0, 0);
+		main->GetSceneNode()->AddChild(node1);
+
+		// <node>
+		auto spriteSheet2 = resCache->GetSpriteSheet("squares");
+		Node* node2 = new Node("square_2");
+		bld.SetSpriteNode(main, node2, "squares", 0, 1);
+
+		TransformEnt node2trans = TransformEnt();
+		node2trans.pos = ofVec2f(0.15f);
+		node2trans.pType = CalcType::PER;
+		node2trans.sType = CalcType::LOC;
+		node2trans.zIndex = 10;
+
+		TransformMath math = TransformMath();
+		math.SetTransform(node2, main->GetSceneNode(), node2trans);
+
+		Setting settingAnim = Setting();
+		settingAnim.AddItem("animations", "transform1|transform2");
+		MultiAnim* multiAnim = new MultiAnim(settingAnim);
+
+		node2->AddBehavior(multiAnim);
+		node2->AddBehavior(bld.CreateBehavior(beh3));
+		main->GetSceneNode()->AddChild(node2);
+
+		// add scene into stage
+		auto stage = GETCOMPONENT(Stage);
+		stage->AddScene(main, true);
+
+		// init logging
+		auto logger = GETCOMPONENT(Logger);
+		logger->SetLogLevel(LogLevel::LDEBUG);
+
 	}
 };
-
-
-
 
 #ifdef WIN32
-#ifdef TESTING
-
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
-#include "duktape.h"
-#include "dukbind.h"
-
-struct TestPointer
-{
-	TestPointer(const int data) : Data(data) {}
-	TestPointer(const TestPointer & other)
-	{
-		Data = other.Data;
-		++CopyConstructorCount;
-	}
-
-	~TestPointer()
-	{
-		++DestructorCount;
-	}
-
-	int Data;
-
-	static size_t CopyConstructorCount;
-	static size_t DestructorCount;
-};
-
-size_t TestPointer::CopyConstructorCount = 0;
-size_t TestPointer::DestructorCount = 0;
-
-dukbind_bind_as_raw_pointer(TestPointer)
-
-static bool DoStuffIsCalled = false;
-
-static duk_ret_t DoStuff(duk_context *)
-{
-	DoStuffIsCalled = true;
-	return 0;
-}
-
-static duk_ret_t CheckThis(duk_context * ctx)
-{
-	duk_push_this(ctx);
-
-	const TestPointer & result = dukbind::Get(ctx, -1, (TestPointer*)0);
-
-	REQUIRE(result.Data == 5678);
-
-	return 0;
-}
-
-TEST_CASE("Class can be passed as pointer", "[binding][class]")
-{
-	duk_context * ctx = duk_create_heap_default();
-
-	dukbind::BindingInfo info;
-
-	info.AddClass("TestPointer", dukbind::rtti::GetTypeIndex<TestPointer>());
-	info.AddMethod(dukbind::rtti::GetTypeIndex<TestPointer>(), "DoStuff", DoStuff);
-	info.AddMethod(dukbind::rtti::GetTypeIndex<TestPointer>(), "CheckThis", CheckThis);
-
-	dukbind::Setup(ctx, info, "Module");
-
-	SECTION("Instance is not copied when pushed")
-	{
-		TestPointer data(1234);
-		TestPointer::CopyConstructorCount = 0;
-		dukbind::Push(ctx, data, (TestPointer*)0);
-		REQUIRE(TestPointer::CopyConstructorCount == 0);
-	}
-
-	SECTION("Instance is not copied when pushed")
-	{
-		TestPointer data(5678);
-
-		dukbind::Push(ctx, data, (TestPointer*)0);
-
-		const TestPointer & result = dukbind::Get(ctx, -1, (TestPointer*)0);
-
-		REQUIRE(&result == &data);
-	}
-
-	SECTION("Instance is not destructed when garbage collected")
-	{
-		TestPointer data(1234);
-		dukbind::Push(ctx, data, (TestPointer*)0);
-		TestPointer::DestructorCount = 0;
-
-		duk_pop(ctx);
-		duk_gc(ctx, 0);
-		duk_gc(ctx, 0);
-		REQUIRE(TestPointer::DestructorCount == 0);
-	}
-
-	SECTION("Binding is called")
-	{
-		TestPointer data(1234);
-		duk_push_global_object(ctx);
-		dukbind::Push(ctx, data, (TestPointer*)0);
-		duk_put_prop_string(ctx, -2, "data");
-
-		duk_eval_string_noresult(ctx, "data.DoStuff()");
-
-		REQUIRE(DoStuffIsCalled);
-	}
-
-	SECTION("This is valid")
-	{
-		TestPointer data(5678);
-		duk_push_global_object(ctx);
-		dukbind::Push(ctx, data, (TestPointer*)0);
-		duk_put_prop_string(ctx, -2, "data");
-
-		duk_eval_string_noresult(ctx, "data.CheckThis()");
-	}
-
-	duk_destroy_heap(ctx);
-}
-
-
-#else
-
-
-#define CATCH_CONFIG_RUNNER
-#include "catch.hpp"
-#include "TransformTest.h"
-#include "FlagsTest.h"
 
 int main() {
-
-	duk_context *ctx = duk_create_heap_default();
-
-	duk_push_global_object(ctx);
-	duk_push_c_function(ctx, mojo, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2 /*idx:global*/, "mojo");
-
-	duk_push_c_function(ctx, dojo, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2 /*idx:global*/, "dojo");
-	duk_pop(ctx);
-
-	int output = 0;
-
-	output = duk_peval_string(ctx, "var bobo = 25; var blbost = 'ahoj nazdar';  bobo = Math.min(0,5);");
-
-	if (output != 0) {
-		string err = duk_safe_to_string(ctx, -1);
-	}
-
-	output = duk_peval_string(ctx, "mojo(bobo);");
-
-	//duk_eval_string(ctx, "(dojo(12));");
-
-	//duk_pop(ctx);  /* pop global */
-
-
-	//duk_destroy_heap(ctx);
-
-	//ofAppGLFWWindow window;
-	//ofSetupOpenGL(&window, 225,400,OF_WINDOW);
-
 	ofSetupOpenGL(800, 450, OF_WINDOW);
-	//window.setDoubleBuffering(true);
-	//window.setNumSamples(4);
-
-	//window.setGlutDisplayString("rgba double samples=4 depth");
-	//window.setWindowTitle("COGEngine");
-	//ofRunApp(new MTestApp());
-	int result = Catch::Session().run();
-	//ofRunApp(new TestingApp());
-	ofRunApp(new XmlTestingApp());
-
-
-
+	ofRunApp(new ExampleApp());
 	return 0;
 }
-#endif
 
 #else
 #include <jni.h>
 
 int main() {
 
-	ofLogNotice("test") << "spustil jsem aplikaci";
-	duk_context *ctx = duk_create_heap_default();
-
-	duk_push_global_object(ctx);
-	duk_push_c_function(ctx, mojo, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2 /*idx:global*/, "mojo");
-
-	duk_push_c_function(ctx, dojo, DUK_VARARGS);
-	duk_put_prop_string(ctx, -2 /*idx:global*/, "dojo");
-	duk_pop(ctx);
-
-	duk_eval_string(ctx, "dojo(mojo(12));");
-	//duk_eval_string(ctx, "(dojo(12));");
-
-	//duk_pop(ctx);  /* pop global */
-
-	ofLogNotice("test") << "nacitam ruzne atributy";
-
-	duk_destroy_heap(ctx);
-
-	ofSetupOpenGL(1280, 720, OF_WINDOW);			// <-------- setup the GL context
-	cout << "Android app loaded" << endl;
-	//ofRunApp(new MTestApp());
-	ofLogNotice("test") << "spoustim appku s testingFactory";
-	//ofRunApp(new App(new TestingFactory()));
-	ofRunApp(new XmlTestingApp());
+	ofSetupOpenGL(800, 450, OF_WINDOW);
+	ofRunApp(new ExampleApp());
 	return 0;
 }
 
@@ -451,4 +224,6 @@ extern "C" {
 	}
 }
 #endif
+
+
 

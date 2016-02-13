@@ -32,7 +32,7 @@ namespace Cog {
 		string type;
 		Setting setting;
 
-		void LoadFromXml(spt<ofxXml> xml, Setting& setting) {
+		void LoadFromXml(spt<ofxXml> xml, Setting& set) {
 
 			this->name = xml->getAttributex("name", "");
 			this->type = xml->getAttributex("type", "");
