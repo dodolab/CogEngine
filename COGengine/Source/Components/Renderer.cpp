@@ -110,6 +110,10 @@ namespace Cog {
 
 	void Renderer::Render() {
 
+		COGMEASURE_BEGIN("RENDER");
+
+		COGMEASURE_BEGIN("RENDER_LAYERS");
+
 		if (rendererLayers.size() != 0) {
 
 			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
@@ -143,6 +147,9 @@ namespace Cog {
 			renderer->draw();
 		}
 		
+		COGMEASURE_END("RENDER_LAYERS");
+		COGMEASURE_BEGIN("RENDER_IMAGES");
+
 		for (auto it = zIndexImageBuffer.begin(); it != zIndexImageBuffer.end(); ++it) {
 
 			vector<Node*>& arr = (*it).second;
@@ -169,6 +176,9 @@ namespace Cog {
 				}
 			}
 		}
+
+		COGMEASURE_END("RENDER_IMAGES");
+		COGMEASURE_END("RENDER");
 	}
 
 	void Renderer::RenderImage(Node* owner) {
@@ -241,6 +251,7 @@ namespace Cog {
 
 	void Renderer::RenderMultiSprite(Node* owner) {
 
+		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
 		spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
 		renderer->setActualBuffer(shape->GetSheetName());
@@ -267,6 +278,8 @@ namespace Cog {
 
 			renderer->addTile(drawingTile);
 		}
+
+		COGMEASURE_END("RENDER_PREPARE_MULTISPRITE");
 	}
 
 }// namespace

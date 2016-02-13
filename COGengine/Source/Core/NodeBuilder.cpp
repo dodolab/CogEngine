@@ -82,7 +82,7 @@ namespace Cog {
 
 		if (!entity->type.empty()) {
 			// load directly
-			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(entity->type);
+			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(entity->type);
 
 			if (!entity->setting.Empty()) {
 				behavior = prototype->CreatePrototype(entity->setting);
@@ -94,7 +94,7 @@ namespace Cog {
 		else {
 			// load from reference
 			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->name);
-			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(refent->type);
+			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(refent->type);
 
 			if (!refent->setting.Empty()) behavior = prototype->CreatePrototype(refent->setting);
 			else behavior = prototype->CreatePrototype();
@@ -178,6 +178,7 @@ namespace Cog {
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
 			xml->popTag();
 		}
+
 
 		if (xml->pushTagIfExists("shape")) {
 			// load shape

@@ -33,15 +33,17 @@ namespace Cog {
 
 		absScale = parent.absScale*scale;
 		absRotation = rotation + parent.absRotation;
-		absRotationOrigin = rotationOrigin + parent.absRotationOrigin;
+		absRotationOrigin = parent.absRotationOrigin + rotationOrigin;
 	}
 
 
 	ofMatrix4x4 Trans::GetAbsMatrix() {
 		ofMatrix4x4 matrix;
 
-		matrix.translate(absRotationOrigin);
+		matrix.translate(-absRotationOrigin);
 		matrix.rotate(absRotation, 0, 0, 1);
+		matrix.translate(absRotationOrigin);
+
 
 		matrix.scale(absScale);
 		matrix.translate(absPos);
@@ -51,8 +53,9 @@ namespace Cog {
 
 	ofMatrix4x4 Trans::GetMatrix() {
 		ofMatrix4x4 matrix;
-		matrix.translate(rotationOrigin);
+		matrix.translate(-rotationOrigin);
 		matrix.rotate(rotation, 0, 0, 1);
+		matrix.translate(rotationOrigin);
 
 		matrix.scale(scale);
 		matrix.translate(localPos);

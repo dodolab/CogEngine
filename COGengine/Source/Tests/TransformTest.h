@@ -32,9 +32,9 @@ using namespace Cog;
 
 	TEST_CASE("Transformation test", "[class]")
 	{
-		COGEngine.Init();
-		COGEngine.environment->SetVirtualAspectRatio(1);
-		COGEngine.environment->OnScreenSizeChanged(400, 400);
+		CogEngine::GetInstance().Init();
+		CogEngine::GetInstance().environment->SetVirtualAspectRatio(1);
+		CogEngine::GetInstance().environment->OnScreenSizeChanged(400, 400);
 		auto math = TransformMath();
 		
 

@@ -8,6 +8,9 @@ namespace Cog {
 	* Initializes component, using xml settings or default one
 	*/
 	void Logger::Init(spt<ofxXmlSettings> config) {
+		delete channel;
+		channel = nullptr;
+
 		// use global settings that is already loaded
 		auto resCache = GETCOMPONENT(ResourceCache);
 		Setting set = resCache->GetGlobalSettings("logger");
@@ -19,6 +22,7 @@ namespace Cog {
 				else if (level.compare("info") == 0) logLevel = LogLevel::LINFO;
 				else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
 			}
+
 
 			string channelStr = ofToLower(set.GetItemVal("channel"));
 			if (!channelStr.empty()) {

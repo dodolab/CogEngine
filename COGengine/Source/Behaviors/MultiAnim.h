@@ -14,12 +14,13 @@ namespace Cog {
 	private:
 		Behavior* actual = nullptr;
 		vector<Behavior*> animations;
+		bool repeat = false;
 
 	public:
 
 		MultiAnim(Setting setting) {
 			auto animations = setting.GetItemVals("animations");
-			
+			this->repeat = setting.GetItemValBool("repeat");
 			auto resourceCache = GETCOMPONENT(ResourceCache);
 
 			for (string anim : animations) {
@@ -27,7 +28,7 @@ namespace Cog {
 
 				if (!ent) throw IllegalArgumentException(string_format("Animation %s not found", anim));
 
-				Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(ent->type);
+				Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(ent->type);
 				Behavior* behavior;
 				if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);
 				else behavior = prototype->CreatePrototype();
@@ -41,11 +42,18 @@ namespace Cog {
 			if (actual == nullptr) actual = anim;
 		}
 
+		bool Repeat() {
+			return repeat;
+		}
+
+		void SetRepeat(bool repeat) {
+			this->repeat = repeat;
+		}
 
 		void Init() {
 			if (actual != nullptr) {
 				SetOwner(actual, owner);
-				actual->Init();
+				actual->Restart();
 			}
 		}
 
@@ -64,9 +72,16 @@ namespace Cog {
 				if ((it + 1) != animations.end()) {
 					actual = *(++it);
 					SetOwner(actual, owner);
-					actual->Init();
+					actual->Restart();
 				}
-				else Finish();
+				else if (repeat) {
+					actual = animations[0];
+					Init();
+				}
+				else {
+					Finish();
+
+				}
 			}
 		}
 

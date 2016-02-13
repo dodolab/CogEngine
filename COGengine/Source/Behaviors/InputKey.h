@@ -43,6 +43,10 @@ namespace Cog {
 						// write log
 						CogWriteLogActualScene();
 					}
+					else if (key->key == (int)('r')) {
+						key->handlerNodeId = owner->GetId();
+						CogWriteTimeReport(true);
+					}
 
 					Act inAct = GetAction(key->key);
 					if (inAct != Act::NONE)

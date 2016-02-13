@@ -125,7 +125,7 @@ namespace Cog {
 			if (!entity) return spt<T>();
 
 			DEntity* entityPtr = entity.get();
-			COGASSERT(typeid(*entity) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name);
+			COGASSERT(typeid(*entityPtr) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name.c_str());
 
 			// never create another pointer, because it will be destroyed within the original!
 			// always use static_cast of the actual pointer

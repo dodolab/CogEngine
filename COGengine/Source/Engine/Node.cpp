@@ -62,10 +62,14 @@ namespace Cog {
 
 	void Node::UpdateTransform(bool deep) {
 
+		COGMEASURE_BEGIN("NOTE_UPDATE_TRANSFORM");
+
 		if (parent != nullptr) {
 			this->transform.CalcAbsTransform(parent->transform);
 		}
 		else this->transform.SetAbsAsLocal();
+
+		COGMEASURE_END("NOTE_UPDATE_TRANSFORM");
 
 		if (deep) {
 			for (auto it = children.begin(); it != children.end(); ++it) {
@@ -80,6 +84,8 @@ namespace Cog {
 		if (runMode == RunningMode::PAUSED_ALL || runMode == RunningMode::DISABLED) return;
 
 		if (runMode != RunningMode::PAUSED_ITSELF) {
+
+			COGMEASURE_BEGIN("NODE_UPDATE_BEHAVIORS");
 			// update behaviors
 			for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
 				Behavior* beh = *it;
@@ -88,6 +94,8 @@ namespace Cog {
 					beh->Update(delta, absolute);
 				}
 			}
+
+			COGMEASURE_END("NODE_UPDATE_BEHAVIORS");
 		}
 
 		if (runMode != RunningMode::PAUSED_CHILDREN) {

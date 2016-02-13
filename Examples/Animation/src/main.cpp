@@ -13,7 +13,7 @@ class XmlTestingApp : public CogApp {
 		xml->loadFile("config.xml");
 		auto xmlPtr = spt<ofxXml>(xml);
 		
-		COGEngine.Init(xmlPtr);
+		CogEngine::GetInstance().Init(xmlPtr);
 	}
 };
 

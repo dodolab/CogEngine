@@ -33,6 +33,7 @@
 #include "ofTrueTypeFont.h"
 #include "CollageTexture.h"
 #include "SpriteTexture.h"
+#include "TimeMeasure.h"
 #include "Definitions.h"
 #include "Utils.h"
 #include "StringHash.h"

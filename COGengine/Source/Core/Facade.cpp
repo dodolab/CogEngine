@@ -3,96 +3,97 @@
 #include "CogEngine.h"
 #include "Logger.h"
 #include "ResourceCache.h"
+#include "TimeMeasure.h"
 
 namespace Cog {
 
 	EntityStorage* CogGetEntityStorage() {
-		return COGEngine.entityStorage;
+		return CogEngine::GetInstance().entityStorage;
 	}
 
 	// =================== MENVIRONMENT ====================
 
 	void CogAddSound(spt<Sound> sound) {
-		COGEngine.environment->AddSound(sound);
+		CogEngine::GetInstance().environment->AddSound(sound);
 	}
 
 	void CogPlaySound(spt<Sound> sound) {
-		COGEngine.environment->PlaySound(sound);
+		CogEngine::GetInstance().environment->PlaySound(sound);
 	}
 
 	vector<InputAct*>& CogGetPressedKeys() {
-		return COGEngine.environment->GetPressedKeys();
+		return CogEngine::GetInstance().environment->GetPressedKeys();
 	}
 
 	vector<InputAct*>& CogGetPressedPoints() {
-		return COGEngine.environment->GetPressedPoints();
+		return CogEngine::GetInstance().environment->GetPressedPoints();
 	}
 
 	vector<spt<Sound>>& CogGetPlayedSounds() {
-		return COGEngine.environment->GetPlayedSounds();
+		return CogEngine::GetInstance().environment->GetPlayedSounds();
 	}
 
 	bool CogIsKeyPressed(int key) {
-		return COGEngine.environment->IsKeyPressed(key);
+		return CogEngine::GetInstance().environment->IsKeyPressed(key);
 	}
 
 	Vec2i CogGetMousePosition() {
-		return COGEngine.environment->GetMousePosition();
+		return CogEngine::GetInstance().environment->GetMousePosition();
 	}
 
 	int CogGetScreenWidth() {
-		return COGEngine.environment->GetScreenWidth();
+		return CogEngine::GetInstance().environment->GetScreenWidth();
 	}
 
 	int CogGetVirtualWidth() {
-		return COGEngine.environment->GetVirtualWidth();
+		return CogEngine::GetInstance().environment->GetVirtualWidth();
 	}
 
 	int CogGetScreenHeight() {
-		return COGEngine.environment->GetScreenHeight();
+		return CogEngine::GetInstance().environment->GetScreenHeight();
 	}
 
 	int CogGetVirtualHeight() {
-		return COGEngine.environment->GetVirtualHeight();
+		return CogEngine::GetInstance().environment->GetVirtualHeight();
 	}
 
 	float CogGetVirtualAspectRatio() {
-		return COGEngine.environment->GetVirtualAspectRatio();
+		return CogEngine::GetInstance().environment->GetVirtualAspectRatio();
 	}
 
 	float CogGetScreenAspectRatio() {
-		return COGEngine.environment->GetScreenAspectRatio();
+		return CogEngine::GetInstance().environment->GetScreenAspectRatio();
 	}
 
 	Vec2i CogGetScreenSize() {
-		return COGEngine.environment->GetScreenSize();
+		return CogEngine::GetInstance().environment->GetScreenSize();
 	}
 
 	Vec2i CogGetVirtualScreenSize() {
-		return COGEngine.environment->GetVirtualScreenSize();
+		return CogEngine::GetInstance().environment->GetVirtualScreenSize();
 	}
 
 	void CogRunThread(ofThread* thread) {
-		COGEngine.environment->RunThread(thread);
+		CogEngine::GetInstance().environment->RunThread(thread);
 	}
 
 
 	// =================== MSTORAGE ========================
 
 	void CogRegisterGlobalListener(StringHash action, MsgListener* listener) {
-		COGEngine.stage->RegisterGlobalListener(action, listener);
+		CogEngine::GetInstance().stage->RegisterGlobalListener(action, listener);
 	}
 
 	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener) {
-		COGEngine.stage->UnregisterGlobalListener(action, listener);
+		CogEngine::GetInstance().stage->UnregisterGlobalListener(action, listener);
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
-		COGEngine.stage->GetActualScene()->SendMessage(msg, actualNode);
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg, actualNode);
 	}
 
 	void CogSendDirectMessageToListener(Msg& msg, int targetId) {
-		COGEngine.stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
+		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
 	}
 
 	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
@@ -110,33 +111,33 @@ namespace Cog {
 	void CogLogError(const char* module, const char* format, ...) {
 		va_list args;
 		va_start(args, format);
-		COGEngine.logger->LogError(module, 0, format, args);
+		CogEngine::GetInstance().logger->LogError(module, 0, format, args);
 		va_end(args);
 	}
 
 	void CogLogInfo(const char* module, const char* format, ...) {
 		va_list args;
 		va_start(args, format);
-		COGEngine.logger->LogInfo(module, 0, format, args);
+		CogEngine::GetInstance().logger->LogInfo(module, 0, format, args);
 		va_end(args);
 	}
 
 	void CogLogTree(const char* module, int logLevel, const char* format, ...) {
 		va_list args;
 		va_start(args, format);
-		COGEngine.logger->LogInfo(module, logLevel, format, args);
+		CogEngine::GetInstance().logger->LogInfo(module, logLevel, format, args);
 		va_end(args);
 	}
 
 	void CogLogDebug(const char* module, const char* format, ...) {
 		va_list args;
 		va_start(args, format);
-		COGEngine.logger->LogDebug(module, 0, format, args);
+		CogEngine::GetInstance().logger->LogDebug(module, 0, format, args);
 		va_end(args);
 	}
 
 	void CogLoggerFlush() {
-		COGEngine.logger->Flush();
+		CogEngine::GetInstance().logger->Flush();
 	}
 
 	void CogWriteLogStage() {
@@ -150,63 +151,67 @@ namespace Cog {
 		if (actualScene != nullptr) actualScene->WriteInfo(0);
 	}
 
+	void CogWriteTimeReport(bool restart) {
+		TimeMeasure::GetInstance().Report(restart);
+	}
+
 	// =================== MRENDERER =========================
 	void CogPushNodeForRendering(Node* node) {
-		COGEngine.renderer->PushNode(node);
+		CogEngine::GetInstance().renderer->PushNode(node);
 	}
 
 
 	// =================== MCACHE =======================
 
 	spt<ofImage> CogGet2DImage(string path) {
-		return COGEngine.resourceCache->Get2DImage(path);
+		return CogEngine::GetInstance().resourceCache->Get2DImage(path);
 	}
 
 	spt<ofImage> CogPreload2DImage(string path) {
-		return COGEngine.resourceCache->Preload2DImage(path);
+		return CogEngine::GetInstance().resourceCache->Preload2DImage(path);
 	}
 
 	spt<ofVboMesh> CogGetMesh(string path) {
-		return COGEngine.resourceCache->GetMesh(path);
+		return CogEngine::GetInstance().resourceCache->GetMesh(path);
 	}
 
 	spt<ofTrueTypeFont> CogGetFont(string path, int size) {
-		return COGEngine.resourceCache->GetFont(path, size);
+		return CogEngine::GetInstance().resourceCache->GetFont(path, size);
 	}
 
 	spt<Sound> CogGetSound(string path) {
-		return COGEngine.resourceCache->GetSound(path);
+		return CogEngine::GetInstance().resourceCache->GetSound(path);
 	}
 
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path) {
-		return COGEngine.resourceCache->PreloadXMLFile(path);
+		return CogEngine::GetInstance().resourceCache->PreloadXMLFile(path);
 	}
 
 	spt<ofxXmlSettings> CogLoadXMLFile(string path) {
-		return COGEngine.resourceCache->LoadXMLFile(path);
+		return CogEngine::GetInstance().resourceCache->LoadXMLFile(path);
 	}
 
 	spt<Anim> CogGetAnimation(string name) {
-		return COGEngine.resourceCache->GetAnimation(name);
+		return CogEngine::GetInstance().resourceCache->GetAnimation(name);
 	}
 
 	void CogStoreAnimation(spt<Anim> anim) {
-		COGEngine.resourceCache->StoreAnimation(anim);
+		CogEngine::GetInstance().resourceCache->StoreAnimation(anim);
 	}
 
 
 	// ================== MCOMPONENTSTORAGE ====================
 
 	void CogRegisterComponent(Component* value) {
-		COGEngine.entityStorage->RegisterComponent(value);
+		CogEngine::GetInstance().entityStorage->RegisterComponent(value);
 	}
 
 	bool CogRemoveComponent(StringHash key) {
-		return COGEngine.entityStorage->RemoveComponent(key);
+		return CogEngine::GetInstance().entityStorage->RemoveComponent(key);
 	}
 
 	bool CogExistsComponent(StringHash key) {
-		return COGEngine.entityStorage->ExistsComponent(key);
+		return CogEngine::GetInstance().entityStorage->ExistsComponent(key);
 	}
 
 }// namespace

@@ -24,10 +24,8 @@
 
 namespace Cog {
 
-	Engine COGEngine;
-
 	
-	void Engine::Init() {
+	void CogEngine::Init() {
 
 		RegisterComponents();
 
@@ -45,7 +43,7 @@ namespace Cog {
 		}
 	}
 
-	void Engine::Init(spt<ofxXml> config) {
+	void CogEngine::Init(spt<ofxXml> config) {
 		
 		this->config = config;
 
@@ -58,6 +56,9 @@ namespace Cog {
 		{
 			return a->GetPriority() > b->GetPriority();
 		});
+
+		// init logger twice, because it should be always initialized by default at first
+		this->logger->Init();
 
 		// init all comopnents, using xml file
 		for (auto it = components.begin(); it != components.end(); ++it) {
@@ -75,7 +76,9 @@ namespace Cog {
 	}
 
 
-	void Engine::Update(uint64 delta, uint64 absolute) {
+	void CogEngine::Update(uint64 delta, uint64 absolute) {
+		COGMEASURE_BEGIN("ENGINE_UPDATE");
+
 		frameCounter++;
 
 		// update transforms
@@ -94,9 +97,12 @@ namespace Cog {
 		}
 
 		ofSoundUpdate();
+
+		COGMEASURE_END("ENGINE_UPDATE");
 	}
 
-	void Engine::Draw(uint64 delta, uint64 absolute) {
+	void CogEngine::Draw(uint64 delta, uint64 absolute) {
+		COGMEASURE_BEGIN("ENGINE_DRAW");
 		
 		// has to be here!
 		stage->GetRootObject()->UpdateTransform(true);
@@ -121,9 +127,11 @@ namespace Cog {
 		}
 
 		renderer->EndRender();
+
+		COGMEASURE_END("ENGINE_DRAW");
 	}
 
-	void Engine::RegisterComponents() {
+	void CogEngine::RegisterComponents() {
 		environment = new Environment();
 		resourceCache = new ResourceCache();
 		logger = new Logger();
