@@ -1,18 +1,25 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+
+using namespace std;
+
 namespace Cog {
 
 	/**
 	* Creates formatted string
 	*/
-	std::string string_format(const char* fmt_str, ...);
+	string string_format(const char* fmt_str, ...);
 
 	/**
 	* Adds spaces into string stream
 	*/
-	void spaces(int howMany, std::ostream& ss);
+	void spaces(int howMany, ostream& ss);
 
-	std::vector<std::string> split_string(string str, string delimiter);
+	vector<string> split_string(string str, string delimiter);
 
 
 } // namespace

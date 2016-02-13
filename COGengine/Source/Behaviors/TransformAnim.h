@@ -6,6 +6,7 @@
 #include "TransformMath.h"
 #include "ResourceCache.h"
 #include "Scene.h"
+#include "EasingFunc.h"
 
 namespace Cog {
 
@@ -57,8 +58,12 @@ namespace Cog {
 			auto resCache = GETCOMPONENT(ResourceCache);
 			this->from = resCache->GetEntityC<TransformEnt>(from);
 			this->to = resCache->GetEntityC<TransformEnt>(to);
-
 			this->blend = StrToAnimBlend(setting.GetItemVal("blend"));
+
+			string easing = setting.GetItemVal("easefunc");
+			if (!easing.empty()) {
+				this->fadeFunction = EasingManager::GetFadeFunction(easing);
+			}
 		}
 
 		void Init() {

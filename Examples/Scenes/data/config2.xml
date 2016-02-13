@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+   <transforms>
+    <transform name="t01" pos_x="0" pos_y="0" anchor="0" size="1" rotation_origin="0.5" />
+    <transform name="t02" pos_x="1.5" pos_y="0" anchor_x="1.0" anchor_y="0" size="2" rotation_origin="0.5" />
+
+	<transform name="r01" rotation="0"/>
+	<transform name="r02" rotation="360"/>
+  </transforms>
+  
+  <behaviors>
+    <behavior name="bt01" type="TransformAnim" from="t01" to="t02" duration="1000" repeat="false" blend="additive" easefunc="expo" />
+	<behavior name="bt02" type="TransformAnim" from="t02" to="t01" duration="1000" repeat="false" blend="additive" easefunc="expo"/>
+	
+	<behavior name="rt01" type="TransformAnim" from="r01" to="r02" duration="4000" repeat="true" blend="additive" />
+  </behaviors>
+ 
+  <scenes initial="main">
+    <scene name="main">
+	  <node name="bgr" img="bgr.jpg">
+	  </node>
+	  
+	  <node name="square" img="sheet_squares.png">
+	  <transform stype="loc" size="0.5" z_index="10" rotation_origin="0.5"/>
+		<behavior type="MultiAnim" animations="bt01|bt02" repeat="true" />
+		
+		<behavior name="rt01" />
+		
+		 <node name="square2" img="sheet_squares.png">
+	      <transform stype="loc" pos="0.5" anchor="0.5" size="0.25" z_index="12" rotation_origin="0.5" /> 
+		   <behavior name="rt01" />
+	     </node>
+	  </node>
+    </scene>
+  </scenes>
+</app_config>
