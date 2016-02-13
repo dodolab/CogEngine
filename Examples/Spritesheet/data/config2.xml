@@ -2,12 +2,12 @@
 <app_config>
    <transforms>
     <transform name="t01" pos_x="0" pos_y="0" anchor="0" size="1"/>
-    <transform name="t02" pos_x="1" pos_y="0" anchor_x="1.0" anchor_y="0" size="1"/>
+    <transform name="t02" pos_x="1" pos_y="0" anchor_x="1.0" anchor_y="0" size="2"/>
 	<transform name="t03" pos_x="1" pos_y="1" anchor="1"/>
 	<transform name="t04" pos_x="0" pos_y="1" anchor_y="1"/>
 
 	<transform name="r01" rotation="0"/>
-	<transform name="r02" rotation="0"/>
+	<transform name="r02" rotation="360"/>
   </transforms>
   
   <behaviors>
@@ -25,16 +25,15 @@
 	  </node>
 	  
 	  <node name="square" img="sheet_squares.png">
-	  <transform stype="loc" size="0.75" z_index="10" />
+	  <transform stype="loc" size="0.5" z_index="10" />
 		<behavior type="MultiAnim" animations="bt01|bt02|bt03|bt04" repeat="true" />
 		
 		<behavior name="rt01" />
 		
 		 <node name="square2" img="sheet_squares.png">
-	       <transform stype="loc" size="0.25" z_index="12" rotation="60" />
+	       <transform stype="loc" size="0.25" z_index="12" />
 	     </node>
 	  </node>
-
     </scene>
   </scenes>
 </app_config>
