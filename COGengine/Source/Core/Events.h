@@ -1,9 +1,10 @@
 #pragma once
 
-#include "InputAct.h"
 
 namespace Cog {
-	
+
+	class InputAct;
+
 	enum class StateChange{
 		RESET, SET, SWITCH
 	};

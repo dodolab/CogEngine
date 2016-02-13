@@ -4,6 +4,10 @@
 
 namespace Cog {
 
+	Scene::~Scene() {
+		delete sceneNode;
+	}
+
 	Scene::Scene(string name, bool isLazyLoaded) :name(name), lazyLoad(isLazyLoaded) {
 		sceneNode = new Node(ObjType::SCENE, 0, name);
 		sceneNode->SetScene(this);

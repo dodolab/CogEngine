@@ -18,6 +18,7 @@ namespace Cog {
 		OBJECT(Stage)
 	
 	private:
+
 		// message listeners
 		map<StringHash, vector<MsgListener*>> msgListeners;
 
@@ -34,6 +35,8 @@ namespace Cog {
 		stack<Scene*> sceneStack = stack<Scene*>();
 
 	public:
+
+		~Stage();
 
 		void Init();
 

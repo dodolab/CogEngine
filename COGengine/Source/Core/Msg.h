@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Events.h"
+#include "StringHash.h"
+#include "Enums.h"
 
 namespace Cog {
 

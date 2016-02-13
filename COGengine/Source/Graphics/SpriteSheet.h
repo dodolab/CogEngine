@@ -16,6 +16,7 @@ namespace Cog {
 		string name;
 
 	public:
+
 		SpriteSheet() {
 
 		}

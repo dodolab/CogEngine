@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
+#include "Node.h"
 
 namespace Cog {
 

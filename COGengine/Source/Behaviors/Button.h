@@ -4,6 +4,7 @@
 #include "Bounds.h"
 #include "Collision.h"
 #include "Shape.h"
+#include "Node.h"
 
 namespace Cog {
 

@@ -309,6 +309,7 @@
     <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
+    <ClCompile Include="Source\Attributes\Shape.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
     <ClCompile Include="Source\Components\Network.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
