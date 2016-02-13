@@ -7,6 +7,15 @@ namespace Cog {
 	class Node;
 	class Scene;
 
+	/*! Listener state enumerator */
+	enum class ListenerState {
+		ACTIVE_ALL,			/*!< active for all events */
+		ACTIVE_MESSAGES,	/*!< active for message sending */
+		ACTIVE_UPDATES,		/*!< active for update */
+		DISABLED			/*!< disabled completely */
+	};
+
+
 	/**
 	* Abstract class for all messages listener
 	*

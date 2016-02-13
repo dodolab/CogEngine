@@ -5,6 +5,10 @@
 
 namespace Cog {
 
+	enum class RenderType {
+		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE
+	};
+
 	/**
 	* Entity for rendering
 	*/

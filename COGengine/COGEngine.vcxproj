@@ -239,7 +239,7 @@
     <ClInclude Include="Source\Core\EntityStorage.h" />
     <ClInclude Include="Source\Core\Events.h" />
     <ClInclude Include="Source\Core\Facade.h" />
-    <ClInclude Include="Source\Core\Enums.h" />
+    <ClInclude Include="Source\Core\Constants.h" />
     <ClInclude Include="Source\Core\Error.h" />
     <ClInclude Include="Source\Core\InputAct.h" />
     <ClInclude Include="Source\Core\Msg.h" />

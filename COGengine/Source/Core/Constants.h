@@ -3,30 +3,6 @@
 
 namespace Cog {
 
-	/*! User input action enumerator */
-	enum class RenderType {
-		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE
-	};
-
-	/*! User input action enumerator */
-	enum class Act {
-		NONE = 0,		/*!< none */
-		LEFT = 1,		/*!< move left */
-		RIGHT = 2,	/*!< move right */
-		UP = 3,		/*!< move up */
-		DOWN = 4,		/*!< move down */
-		FIRE = 5,		/*!< fire/action */
-		SWITCH = 6	/*!< switch/action */
-	};
-
-	/*! Scope object for messaging */
-	enum class Scope {
-		ROOT,				 /*!< root object scope */
-		SCENE,				 /*!< scene object scope */
-		OBJECT,				 /*!< source object scope */
-		CHILDREN,			 /*!< children objects scope */
-		DIRECT_NO_TRAVERSE   /*!< no BubblingType made, objects are obtained from map */
-	};
 
 	/*! Action events */
 	#define ACT_BEHAVIOR_ADDED "BEHAVIOR_ADDED"
@@ -76,22 +52,6 @@ namespace Cog {
 	#define STATES_LOCKED "LOCKED"
     #define STATES_SELECTED "SELECTED"
 
-	/*! Listener state enumerator */
-	enum class ListenerState {
-		ACTIVE_ALL,			/*!< active for all events */
-		ACTIVE_MESSAGES,	/*!< active for message sending */
-		ACTIVE_UPDATES,		/*!< active for update */
-		DISABLED			/*!< disabled completely */
-	};
 
-
-	/*! Node type enumerator */
-	enum class ObjType {
-		ROOT,				/*!< root object, usually the topmost parent */
-		SCENE,				/*!< scene root object, topmost parent in the scene */
-		OBJECT,				/*!< common node  */
-		HUD,				/*!< human interface object */
-		INFO				/*!< info object */
-	};
 
 }// namespace

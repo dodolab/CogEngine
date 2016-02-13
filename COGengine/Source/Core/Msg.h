@@ -2,12 +2,21 @@
 
 #include "Events.h"
 #include "StringHash.h"
-#include "Enums.h"
+#include "Constants.h"
 
 namespace Cog {
 
 	class Node;
 	
+	/*! Scope object for messaging */
+	enum class Scope {
+		ROOT,				 /*!< root object scope */
+		SCENE,				 /*!< scene object scope */
+		OBJECT,				 /*!< source object scope */
+		CHILDREN,			 /*!< children objects scope */
+		DIRECT_NO_TRAVERSE   /*!< no BubblingType made, objects are obtained from map */
+	};
+
 	/**
 	* Configuration class that holds information how the message should bubble through the scene tre
 	*/

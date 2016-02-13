@@ -129,6 +129,7 @@ TEST_CASE("SQL test", "[class]")
 	sqlite3_close(sql->getSQLitePtr());
 	ofFile file;
 	file.removeFile("test.db");
+	delete sql;
 }
 
 #endif

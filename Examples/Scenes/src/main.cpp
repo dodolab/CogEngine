@@ -5,7 +5,6 @@
 #include "MultiAnim.h"
 #include "ofxNetwork.h"
 
-
 /**
 * Simple behavior that reloads configuration file when user presses PAGE UP/DOWN button
 */
@@ -62,6 +61,7 @@ public:
 						int actualConfig = this->GetActualConfigIndex();
 
 						CogEngine::GetInstance().Init(newConfig);
+						CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
 						CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
 					};
 
@@ -72,16 +72,14 @@ public:
 	}
 };
 
-
 class ExampleApp : public CogApp {
-
+public:
 
 	void InitComponents() {
 
 	}
 
 	void InitEngine() {
-		
 		// find all configuration files
 		ofDirectory dir = ofDirectory(".");
 		auto files = dir.getFiles();
@@ -99,7 +97,8 @@ class ExampleApp : public CogApp {
 
 		// load first config file
 		CogEngine::GetInstance().Init(configFiles[0]);
-		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles,0));
+		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
+		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
 		return;
 
 
@@ -113,11 +112,11 @@ class ExampleApp : public CogApp {
 		auto anims = vector<spt<Anim>>();
 		spt<Anim> anim = spt<Anim>(new Anim("square_anim", "sheet_squares.png", "", 4, 2, 0, 3, 1, 0.2, 0, false));
 		resCache->StoreAnimation(anim);
-		
+
 		// <spritesheets>
-		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("squares",CogGet2DImage("sheet_squares.png"),4,128,128));
+		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("squares", CogGet2DImage("sheet_squares.png"), 4, 128, 128));
 		resCache->StoreSpriteSheet(spriteSheet);
-		spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr.jpg"),1,800,450));
+		spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr.jpg"), 1, 800, 450));
 		resCache->StoreSpriteSheet(spriteSheet);
 
 		// <transforms>
@@ -182,9 +181,9 @@ class ExampleApp : public CogApp {
 		math.SetTransform(node2, main->GetSceneNode(), node2trans);
 
 		Setting settingAnim = Setting();
-		settingAnim.AddItem("animations","transform1|transform2");
+		settingAnim.AddItem("animations", "transform1|transform2");
 		MultiAnim* multiAnim = new MultiAnim(settingAnim);
-		
+
 		node2->AddBehavior(multiAnim);
 		node2->AddBehavior(bld.CreateBehavior(beh3));
 		main->GetSceneNode()->AddChild(node2);
@@ -198,8 +197,13 @@ class ExampleApp : public CogApp {
 		logger->SetLogLevel(LogLevel::LDEBUG);
 
 	}
+
+	void InitStage(Stage* stage) {
+	}
 };
- 
+
+
+
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	ofRunApp(new ExampleApp());

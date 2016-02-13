@@ -26,6 +26,7 @@ namespace Cog {
 
 	
 	void CogEngine::Init() {
+		Clear();
 
 		RegisterComponents();
 
@@ -51,7 +52,8 @@ namespace Cog {
 	}
 
 	void CogEngine::Init(spt<ofxXml> config) {
-		
+		Clear();
+
 		this->config = config;
 
 		RegisterComponents();
@@ -71,7 +73,9 @@ namespace Cog {
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init(config);
 		}
+	}
 
+	void CogEngine::LoadStageFromXml(spt<ofxXml> config) {
 		// go out
 		config->popAll();
 
@@ -148,6 +152,12 @@ namespace Cog {
 	}
 
 	void CogEngine::RegisterComponents() {
+		
+		// this one is not a component actually; but is necessary
+		// to store all other components
+		entityStorage = new EntityStorage();
+
+
 		environment = new Environment();
 		resourceCache = new ResourceCache();
 		logger = new Logger();
@@ -187,12 +197,7 @@ namespace Cog {
 	}
 
 	void CogEngine::Clear() {
-		delete environment;
-		delete resourceCache;
-		delete stage;
-		delete logger;
-		delete renderer;
-		delete inputHandler;
+		// only entity storage holds all other objects
 		delete entityStorage;
 	}
 

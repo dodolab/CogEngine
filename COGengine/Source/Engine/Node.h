@@ -22,6 +22,15 @@ namespace Cog {
 		DISABLED			/*!< inactive for both, update and draw */
 	};
 
+	/*! Node type enumerator */
+	enum class NodeType {
+		ROOT,				/*!< root object, usually the topmost parent */
+		SCENE,				/*!< scene root object, topmost parent in the scene */
+		OBJECT,				/*!< common node  */
+		HUD,				/*!< human interface object */
+		INFO				/*!< info object */
+	};
+
 	/**
 	* Node with attributes, behaviors, states and transformation matrix
 	*
@@ -54,7 +63,7 @@ namespace Cog {
 		// tag or name
 		string* tag = nullptr;
 		// object type {ROOT, SCENE, OBJECT, HUD, INFO}
-		ObjType type;
+		NodeType type;
 		// subtype (or category)
 		int subType;
 		// groups this objects belongs to
@@ -82,7 +91,7 @@ namespace Cog {
 		* @param subType subtype/category number
 		* @param tag tag/name
 		*/
-		Node(ObjType type, int subType, string tag);
+		Node(NodeType type, int subType, string tag);
 
 		Node(const Node& copy);
 
@@ -212,22 +221,22 @@ namespace Cog {
 		* Finds the first predecessor of given object type
 		* @param type predecessor type {ROOT, SCENE, OBJECT, HUD, INFO}
 		*/
-		Node* FindPredecessor(ObjType type);
+		Node* FindPredecessor(NodeType type);
 
 		/**
 		* Gets the nearest parent that is a scene root (if exists)
 		*/
 		Node* GetSceneRoot() {
-			if (type == ObjType::SCENE) return this;
-			else return FindPredecessor(ObjType::SCENE);
+			if (type == NodeType::SCENE) return this;
+			else return FindPredecessor(NodeType::SCENE);
 		}
 
 		/**
 		* Gets the root of the whole scene
 		*/
 		Node* GetRoot() {
-			if (type == ObjType::ROOT) return this;
-			else return FindPredecessor(ObjType::ROOT);
+			if (type == NodeType::ROOT) return this;
+			else return FindPredecessor(NodeType::ROOT);
 		}
 
 		/**
@@ -270,7 +279,7 @@ namespace Cog {
 		/**
 		* Gets type/category of this node {ROOT, SCENE, OBJECT, HUD, INFO}
 		*/
-		ObjType GetType() const {
+		NodeType GetType() const {
 			return this->type;
 		}
 

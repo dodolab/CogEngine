@@ -8,11 +8,11 @@ namespace Cog {
 	// first id is always 1
 	int Node::idCounter = 1;
 
-	Node::Node(string tag) : type(ObjType::OBJECT), subType(0), id(idCounter++), transform(0, 0) {
+	Node::Node(string tag) : type(NodeType::OBJECT), subType(0), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(ObjType type, int subType, string tag) : type(type), subType(subType), id(idCounter++), transform(0, 0) {
+	Node::Node(NodeType type, int subType, string tag) : type(type), subType(subType), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
@@ -51,7 +51,7 @@ namespace Cog {
 		}*/
 
 		// root node doesn't deallocate its children
-		if (this->type != ObjType::ROOT) {
+		if (this->type != NodeType::ROOT) {
 			// delete all children
 			for (auto it = children.begin(); it != children.end(); ++it)
 			{
@@ -238,7 +238,7 @@ namespace Cog {
 	}
 
 
-	Node* Node::FindPredecessor(ObjType type) {
+	Node* Node::FindPredecessor(NodeType type) {
 		Node* parent = this->parent;
 
 		while (parent != nullptr && parent->type != type) parent = parent->parent;
@@ -255,7 +255,7 @@ namespace Cog {
 			behaviors.push_back(beh);
 			
 			// todo: root node can't have its behaviors stored in the scene
-			if (this->type != ObjType::ROOT) {
+			if (this->type != NodeType::ROOT) {
 				scene->AddBehavior(beh);
 			}
 
@@ -271,7 +271,7 @@ namespace Cog {
 			child->parent = this;
 			
 			// root has no scene
-			if (this->type != ObjType::ROOT) {
+			if (this->type != NodeType::ROOT) {
 				child->scene = this->scene;
 				scene->AddNode(child);
 			}

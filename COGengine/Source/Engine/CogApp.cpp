@@ -2,17 +2,19 @@
 
 #include "CogApp.h"
 #include "CogEngine.h"
+#include "Stage.h"
 
 #define APP_SPEED 60
 
 namespace Cog {
 
-	void CogApp::InitComponents() {
-
-	}
-
 	void CogApp::InitEngine() {
-		CogEngine::GetInstance().Init();
+		if (!xmlConfig) {
+			CogEngine::GetInstance().Init();
+		}
+		else {
+			CogEngine::GetInstance().Init(xmlConfig);
+		}
 	}
 
 void CogApp::setup(){
@@ -21,9 +23,13 @@ void CogApp::setup(){
 	ofSetFrameRate(APP_SPEED);
 	ofEnableAntiAliasing();
 	// initialize COG engine
-	this->InitComponents();
-	this->InitEngine();
 	
+	this->InitEngine();
+	this->InitComponents();
+
+	auto stage = GETCOMPONENT(Stage);
+	this->InitStage(stage);
+
 	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();

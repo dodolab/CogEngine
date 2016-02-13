@@ -19,7 +19,7 @@ namespace Cog {
 
 	void Stage::Init() {
 		// create root object with default behaviors, states and attributes
-		this->rootObject = new Node(ObjType::ROOT, 0, "root");
+		this->rootObject = new Node(NodeType::ROOT, 0, "root");
 		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
 		CogRegisterGlobalListener(ACT_SCREEN_CHANGED, this);
 		this->rootObject->AddBehavior(new InputKey(map<int,Act>()));

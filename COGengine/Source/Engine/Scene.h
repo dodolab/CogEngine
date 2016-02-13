@@ -22,7 +22,7 @@ namespace Cog
 		// settings
 		Settings settings;
 		// node on top
-		Node* sceneNode;
+		Node* sceneNode = nullptr;
 		// settings for all layers presented in this scene
 		vector<LayerEnt> layers;
 

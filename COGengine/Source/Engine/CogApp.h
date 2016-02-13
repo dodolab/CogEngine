@@ -8,6 +8,8 @@
 
 namespace Cog {
 
+	class Stage;
+
 	/**
 	* Application wrapper for all platforms
 	*/
@@ -24,23 +26,38 @@ namespace Cog {
 		// time elapsed between frames
 		uint64 delta;
 		
+		string configFile;
+		spt<ofxXml> xmlConfig;
+
 	public:
 
 		/**
 		* Creates a new application wrapper
 		*/
-		CogApp() {
+		CogApp() : configFile("") {
+		}
+
+		CogApp(string configFile) : configFile(configFile) {
+			ofxXml* xml = new ofxXml();
+			xml->loadFile(configFile);
+			this->xmlConfig = spt<ofxXml>(xml);
 		}
 
 		/**
 		* Virtual method that can be overriden to initialize custom components
 		*/
-		virtual void InitComponents();
+		virtual void InitComponents() {
+
+		}
 
 		/**
 		* Virtual method that can be overriden to initialize engine with custom configuration
 		*/
 		virtual void InitEngine();
+
+		virtual void InitStage(Stage* stage) {
+			// nothing to do here
+		}
 
 		// setup function, called before first draw and update
 		void setup();

@@ -5,6 +5,18 @@
 
 namespace Cog {
 
+	/*! User input action enumerator */
+	enum class Act {
+		NONE = 0,		/*!< none */
+		LEFT = 1,		/*!< move left */
+		RIGHT = 2,	/*!< move right */
+		UP = 3,		/*!< move up */
+		DOWN = 4,		/*!< move down */	/*! User input action enumerator */
+		FIRE = 5,		/*!< fire/action */
+		SWITCH = 6	/*!< switch/action */
+	};
+
+
 	/**x
 	* Behavior for mapping key inputs to ACTIONS
 	*/

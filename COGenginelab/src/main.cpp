@@ -5,7 +5,6 @@
 #include "MultiAnim.h"
 #include "ofxNetwork.h"
 
-
 /**
 * Simple behavior that reloads configuration file when user presses PAGE UP/DOWN button
 */
@@ -62,6 +61,7 @@ public:
 						int actualConfig = this->GetActualConfigIndex();
 
 						CogEngine::GetInstance().Init(newConfig);
+						CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
 						CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
 					};
 
@@ -72,16 +72,14 @@ public:
 	}
 };
 
-
 class ExampleApp : public CogApp {
-
+public:
 
 	void InitComponents() {
 
 	}
 
 	void InitEngine() {
-
 		// find all configuration files
 		ofDirectory dir = ofDirectory(".");
 		auto files = dir.getFiles();
@@ -99,6 +97,7 @@ class ExampleApp : public CogApp {
 
 		// load first config file
 		CogEngine::GetInstance().Init(configFiles[0]);
+		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
 		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
 		return;
 
@@ -198,7 +197,11 @@ class ExampleApp : public CogApp {
 		logger->SetLogLevel(LogLevel::LDEBUG);
 
 	}
+
+	void InitStage(Stage* stage) {
+	}
 };
+
 
 #ifdef WIN32
 

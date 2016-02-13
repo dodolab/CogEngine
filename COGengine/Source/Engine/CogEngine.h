@@ -42,7 +42,6 @@ namespace Cog {
 		InputHandler* inputHandler = nullptr;
 		
 		CogEngine() {
-			entityStorage = new EntityStorage();
 		}
 
 		~CogEngine() {
@@ -65,6 +64,11 @@ namespace Cog {
 		* @param config configuration xml
 		*/
 		void Init(spt<ofxXml> config);
+
+		/**
+		* Loads stage from xml
+		*/
+		void LoadStageFromXml(spt<ofxXml> config);
 
 		/**
 		* Executes one update cycle; this method is called by App

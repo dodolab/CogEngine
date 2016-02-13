@@ -19,6 +19,16 @@ namespace Cog {
 
 	public:
 
+		~EntityStorage() {
+			for (auto& key : components) {
+				delete key.second;
+			}
+
+			for (auto& key : behaviorPrototypes) {
+				delete key.second;
+			}
+		}
+
 		/**
 		* Gets list of all components
 		*/

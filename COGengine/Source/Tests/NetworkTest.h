@@ -63,6 +63,7 @@ TEST_CASE("Network test", "[class]")
 		
 		client.sendRawBytes(bytes,4);
 		
+		delete bytes;
 		bytes = new char[4];
 
 		// wait for message from client
@@ -80,6 +81,7 @@ TEST_CASE("Network test", "[class]")
 
 		server.close();
 		client.close();
+		delete bytes;
 	}
 
 
@@ -98,7 +100,7 @@ TEST_CASE("Network test", "[class]")
 		char* bytes = new char[4]{ 'a','b','c','d' };
 
 		sender.Send(bytes,4);
-
+		delete bytes;
 		bytes = new char[4];
 
 		// wait for message from client
@@ -115,6 +117,7 @@ TEST_CASE("Network test", "[class]")
 
 		receiver.Close();
 		sender.Close();
+		delete bytes;
 	}
 }
 
