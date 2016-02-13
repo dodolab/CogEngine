@@ -46,6 +46,9 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* Not-renderable rectangle
+	*/
 	class Rectangle : public Shape {
 	private:
 		float width = 0;
@@ -53,6 +56,35 @@ namespace Cog {
 
 	public:
 		Rectangle(float width, float height) : width(width), height(height), Shape(RenderType::RECTANGLE) {
+		}
+
+		float GetWidth() {
+			return width;
+		}
+
+		void SetWidth(float width) {
+			this->width = width;
+		}
+
+		float GetHeight() {
+			return height;
+		}
+
+		float SetHeight(float height) {
+			this->height = height;
+		}
+	};
+
+	/**
+	* Renderable rectangle
+	*/
+	class Plane : public Shape {
+	private:
+		float width = 0;
+		float height = 0;
+
+	public:
+		Plane(float width, float height) : width(width), height(height), Shape(RenderType::PLANE) {
 		}
 
 		float GetWidth() {

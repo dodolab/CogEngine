@@ -72,7 +72,7 @@ namespace Cog {
 		* Renders a rectangle
 		* @param owner owner node
 		*/
-		void RenderRectangle(Node* owner);
+		void RenderPlane(Node* owner);
 
 		/**
 		* Renders a text

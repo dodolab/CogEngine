@@ -43,6 +43,11 @@ namespace Cog {
 		node->SetShape(spriteShape);
 	}
 
+	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color) {
+		auto planeShape = CreatePlaneShape(size, color);
+		node->SetShape(planeShape);
+	}
+
 	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column) {
 
 		LayerEnt layerEntity = scene->FindLayerSettings(layer);
@@ -73,6 +78,12 @@ namespace Cog {
 
 	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, int row, int column) {
 		return CreateSpriteShape(scene, layer, "", row, column);
+	}
+
+	spt<Plane> NodeBuilder::CreatePlaneShape(ofVec2f size, ofColor color) {
+		spt<Plane> plane = spt<Plane>(new Plane(size.x, size.y));
+		plane->SetColor(color);
+		return plane;
 	}
 
 	Behavior* NodeBuilder::CreateBehavior(spt<BehaviorEnt> entity) {
@@ -261,6 +272,24 @@ namespace Cog {
 		}
 		else if (type.compare("text") == 0) {
 			// todo
+		}
+		else if (type.compare("plane") == 0) {
+			float width = 0;
+			float height = 0;
+
+			if (xml->attributeExists("size")) {
+				width = height = xml->getAttributex("size", 1.0);
+			}
+			else {
+				width = xml->getAttributex("width", 0);
+				height = xml->getAttributex("height", 0);
+			}
+
+			ofVec2f size = ofVec2f(width, height);
+			string colorStr = xml->getAttributex("color", "0x000000");
+			int hexColor = ofHexToInt(colorStr.substr(2));
+			ofColor color = ofColor::fromHex(hexColor);
+			SetPlaneNode(node, size, color);
 		}
 		else if (type.compare("sprite") == 0) {
 

@@ -131,6 +131,7 @@ namespace Cog {
 					case RenderType::IMAGE:
 					case RenderType::POLYGON:
 					case RenderType::RECTANGLE:
+					case RenderType::PLANE:
 					case RenderType::TEXT:
 						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
 					case RenderType::SPRITE:
@@ -164,8 +165,8 @@ namespace Cog {
 				case RenderType::POLYGON:
 					RenderPolygon(node);
 					break;
-				case RenderType::RECTANGLE:
-					RenderRectangle(node);
+				case RenderType::PLANE:
+					RenderPlane(node);
 					break;
 				case RenderType::TEXT:
 					RenderText(node);
@@ -200,18 +201,20 @@ namespace Cog {
 		}
 	}
 
-	void Renderer::RenderRectangle(Node* owner) {
+	void Renderer::RenderPlane(Node* owner) {
+		auto trans = owner->GetTransform();
 		// load absolute matrix
 		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
 		ofLoadMatrix(absM);
 
-		/*
-		ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
-		ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
+		ofSetColor(0x000000ff);
+		spt<Plane> rect = static_cast<spt<Plane>>(owner->GetShape());
+
+		ofColor color = rect->GetColor();
 		ofSetColor(color);
 		ofFill();
-		ofRect(-size.x / 2, -size.y / 2, size.x, size.y);*/
-		ofEndShape();
+		ofRect(0, 0, 0, rect->GetWidth(), rect->GetHeight());
+
 	}
 
 	void Renderer::RenderText(Node* owner) {

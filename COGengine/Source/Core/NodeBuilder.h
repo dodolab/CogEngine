@@ -32,9 +32,13 @@ namespace Cog {
 
 		void SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column);
 
+		void SetPlaneNode(Node* node, ofVec2f size, ofColor color);
+
 		spt<SpriteShape> CreateSpriteShape(Scene* scene, string layer, int row, int column);
 
 		spt<SpriteShape> CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column);
+
+		spt<Plane> CreatePlaneShape(ofVec2f size, ofColor color);
 
 		Behavior* CreateBehavior(spt<BehaviorEnt> behEntity);
 
