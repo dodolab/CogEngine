@@ -16,38 +16,34 @@ namespace Cog {
 	void Trans::CalcAbsTransform(Trans& parent) {
 		absScale = parent.absScale*scale;
 	    absRotation = rotation + parent.absRotation;
+		absPos = localPos*parent.absScale + parent.absPos;
+		absRotationOrigin = rotationOrigin * parent.absScale;
 
+		if (parent.absRotation != 0) {
+			// rotate around parent's origin
+			
+			// calculate real local position against parent's rotation origin
+			ofVec2f realLocPos =   (absPos + absRotationOrigin) - (parent.absPos + parent.absRotationOrigin);
+			float length = realLocPos.length();
 
-		if (parent.absRotation == 0) {
-			// calculate easily
-			absPos = localPos*parent.absScale + parent.absPos;
-		}
-		else {
-			absPos = localPos*parent.absScale + parent.absPos;
-
-			ofVec2f diffFromParent = -((parent.absPos + parent.rotationOrigin*parent.absScale) - (absPos+rotationOrigin*absScale));
-
-			// calc absolute angle
-			float angle = ofDegToRad(parent.absRotation) + (atan2(diffFromParent.y, diffFromParent.x));
-			// calc local vector length
-			float length = sqrt(diffFromParent.x*diffFromParent.x + diffFromParent.y*diffFromParent.y);
-			// calc unscaled absolute position
+			// calculate angle against parent
+			float angle = ofDegToRad(parent.absRotation) + (atan2(realLocPos.y, realLocPos.x));
+		
+			// calculate rotation offset
 			ofVec3f rotPos = ofVec3f(length*(cos(angle)), length*(sin(angle)), localPos.z);
-			// calc absolute position
-			absPos = rotPos + parent.absPos + parent.rotationOrigin*parent.absScale - rotationOrigin*absScale;
 
+			// calculate absolute position according to the parent's rotation origin
+			absPos = parent.absPos + parent.absRotationOrigin + rotPos - absRotationOrigin;
 		}
-
-
 	}
 
 
 	ofMatrix4x4 Trans::GetAbsMatrix() {
 		ofMatrix4x4 matrix;
 
-		matrix.translate(-rotationOrigin);
+		matrix.translate(-absRotationOrigin / absScale);
 		matrix.rotate(absRotation, 0, 0, 1);
-		matrix.translate(rotationOrigin);
+		matrix.translate(absRotationOrigin  / absScale);
 
 		matrix.scale(absScale);
 		matrix.translate(absPos);
@@ -57,9 +53,9 @@ namespace Cog {
 
 	ofMatrix4x4 Trans::GetMatrix() {
 		ofMatrix4x4 matrix;
-		matrix.translate(-rotationOrigin);
+		matrix.translate(-rotationOrigin*absScale);
 		matrix.rotate(rotation, 0, 0, 1);
-		matrix.translate(rotationOrigin);
+		matrix.translate(rotationOrigin*absScale);
 
 
 		matrix.scale(scale);

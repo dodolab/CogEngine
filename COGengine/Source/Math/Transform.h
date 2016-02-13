@@ -37,7 +37,7 @@ namespace Cog {
 		ofVec3f absScale = ofVec3f(0);
 		// absolute rotation - recalculated due to parent's transform
 		float absRotation = 0;
-
+		ofVec3f absRotationOrigin = ofVec3f(0);
 
 		/**
 		* Sets absolute coordinates to be the same as local
