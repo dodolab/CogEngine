@@ -262,8 +262,9 @@
     <ClInclude Include="Source\Entities\LayerEnt.h" />
     <ClInclude Include="Source\Entities\AttrAnimEnt.h" />
     <ClInclude Include="Source\Entities\TransformEnt.h" />
+    <ClInclude Include="Source\Graphics\CommonAnim.h" />
     <ClInclude Include="Source\Graphics\SheetAnim.h" />
-    <ClInclude Include="Source\Graphics\AnimSheetLoader.h" />
+    <ClInclude Include="Source\Graphics\AnimLoader.h" />
     <ClInclude Include="Source\Graphics\CollageTexture.h" />
     <ClInclude Include="Source\Graphics\MapLoader.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />

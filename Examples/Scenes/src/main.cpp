@@ -1,5 +1,5 @@
 #include "ofxCogMain.h"
-#include "AnimSheetLoader.h"
+#include "AnimLoader.h"
 #include "BehaviorEnt.h"
 #include "NodeBuilder.h"
 #include "MultiAnim.h"

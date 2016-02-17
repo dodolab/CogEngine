@@ -3,7 +3,7 @@
 #include "SheetAnim.h"
 #include "SpriteSheet.h"
 #include "Facade.h"
-#include "AnimSheetLoader.h"
+#include "AnimLoader.h"
 #include "TransformEnt.h"
 #include "NodeBuilder.h"
 #include "BehaviorEnt.h"
@@ -63,12 +63,18 @@ namespace Cog {
 			// load animations
 			if (xml->pushTagIfExists("animations")) {
 
-				auto animLoader = AnimSheetLoader();
-				auto rootAnims = vector<spt<SheetAnim>>();
-				animLoader.LoadAnimationsFromXml(xml, rootAnims);
+				auto animLoader = AnimLoader();
+				auto rootAnims = vector<spt<CommonAnim>>();
+
+				auto builder = [](void) {
+					return new SheetAnim();
+				};
+
+				animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
 				// store animation
-				for (spt<SheetAnim> anim : rootAnims) {
+				for (spt<CommonAnim> anim : rootAnims) {
+					anim = static_cast<spt<SheetAnim>>(anim);
 					StoreAnimation(anim);
 				}
 

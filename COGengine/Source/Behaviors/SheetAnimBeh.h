@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
-#include "AnimSheetLoader.h"
+#include "AnimLoader.h"
 
 namespace Cog {
 
