@@ -66,6 +66,7 @@ namespace Cog {
 			this->SetRepeat(reference->GetRepeat());
 			this->SetIsRevert(reference->GetIsRevert());
 
+
 			// insert children
 			vector<spt<Anim>>& refChildren = reference->children;
 

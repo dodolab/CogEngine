@@ -8,7 +8,7 @@
 namespace Cog {
 
 	class SoundFile;
-	class Anim;
+	class SheetAnim;
 	class SpriteSheet;
 
 	/**
@@ -28,7 +28,7 @@ namespace Cog {
 		// cached xml files
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
-		map<string, spt<Anim>> loadedAnimations;
+		map<string, spt<SheetAnim>> loadedAnimations;
 		// cached entities
 		map<string, spt<DEntity>> loadedEntities;
 		// cached spritesheets
@@ -107,13 +107,13 @@ namespace Cog {
 		* Gets animation
 		* @param name animation name
 		*/
-		spt<Anim> GetAnimation(string name);
+		spt<SheetAnim> GetAnimation(string name);
 
 		/**
 		* Stores animation
 		* @param anim animation to store
 		*/
-		void StoreAnimation(spt<Anim> anim);
+		void StoreAnimation(spt<SheetAnim> anim);
 
 		/**
 		* Gets stored entity by name

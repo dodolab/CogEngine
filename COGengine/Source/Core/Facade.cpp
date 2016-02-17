@@ -191,11 +191,11 @@ namespace Cog {
 		return CogEngine::GetInstance().resourceCache->LoadXMLFile(path);
 	}
 
-	spt<Anim> CogGetAnimation(string name) {
+	spt<SheetAnim> CogGetAnimation(string name) {
 		return CogEngine::GetInstance().resourceCache->GetAnimation(name);
 	}
 
-	void CogStoreAnimation(spt<Anim> anim) {
+	void CogStoreAnimation(spt<SheetAnim> anim) {
 		CogEngine::GetInstance().resourceCache->StoreAnimation(anim);
 	}
 

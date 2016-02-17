@@ -2,7 +2,6 @@
 #include "Node.h"
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
-#include "SheetAnim.h"
 #include "Button.h"
 #include "Collider.h"
 #include "DelayAction.h"
@@ -21,6 +20,8 @@
 #include "InputHandler.h"
 #include "Selection.h"
 #include "Network.h"
+#include "AttribsAnim.h"
+#include "SheetAnimBeh.h"
 
 namespace Cog {
 
@@ -178,7 +179,7 @@ namespace Cog {
 		auto network = new Network();
 		REGISTER_COMPONENT(network);
 
-		REGISTER_BEHAVIOR(SheetAnim);
+		REGISTER_BEHAVIOR(SheetAnimBeh);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(Collider);
 		REGISTER_BEHAVIOR(DelayAction);
@@ -193,6 +194,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(SlideTween);
 		REGISTER_BEHAVIOR(FloatingScene);
 		REGISTER_BEHAVIOR(Selection);
+		REGISTER_BEHAVIOR(AttribsAnim);
 
 	}
 

@@ -2,7 +2,7 @@
 
 #include "ofxCogCommon.h"
 #include "Component.h"
-#include "Anim.h"
+#include "SheetAnim.h"
 #include "Settings.h"
 
 namespace Cog {

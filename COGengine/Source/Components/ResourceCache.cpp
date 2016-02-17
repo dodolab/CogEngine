@@ -1,12 +1,13 @@
 #include "ResourceCache.h"
 #include "SoundFile.h"
-#include "Anim.h"
+#include "SheetAnim.h"
 #include "SpriteSheet.h"
 #include "Facade.h"
-#include "AnimationLoader.h"
+#include "AnimSheetLoader.h"
 #include "TransformEnt.h"
 #include "NodeBuilder.h"
 #include "BehaviorEnt.h"
+#include "AttrAnimEnt.h"
 
 namespace Cog {
 
@@ -62,13 +63,33 @@ namespace Cog {
 			// load animations
 			if (xml->pushTagIfExists("animations")) {
 
-				auto animLoader = AnimationLoader();
-				auto rootAnims = vector<spt<Anim>>();
+				auto animLoader = AnimSheetLoader();
+				auto rootAnims = vector<spt<SheetAnim>>();
 				animLoader.LoadAnimationsFromXml(xml, rootAnims);
 
 				// store animation
-				for (spt<Anim> anim : rootAnims) {
+				for (spt<SheetAnim> anim : rootAnims) {
 					StoreAnimation(anim);
+				}
+
+				xml->popTag();
+			}
+
+			// load transform animations
+			if (xml->pushTagIfExists("attranimations")) {
+				int transAnimNum = xml->getNumTags("attranim");
+
+				for (int i = 0; i < transAnimNum; i++) {
+					xml->pushTag("attranim", i);
+					spt<AttrAnimEnt> trans = spt<AttrAnimEnt>(new AttrAnimEnt());
+					auto dummySet = Setting();
+					trans->LoadFromXml(xml, dummySet);
+
+					COGASSERT(!trans->name.empty(), "ResourceCache", "TransAnim entity on index %d in configuration file must have a name!", i);
+
+					StoreEntity(trans->name, trans);
+
+					xml->popTag();
 				}
 
 				xml->popTag();
@@ -258,13 +279,13 @@ namespace Cog {
 		return xmlPtr;
 	}
 
-	spt<Anim> ResourceCache::GetAnimation(string name) {
+	spt<SheetAnim> ResourceCache::GetAnimation(string name) {
 		auto found = loadedAnimations.find(name);
 		if (found != loadedAnimations.end()) return found->second;
-		else return spt<Anim>();
+		else return spt<SheetAnim>();
 	}
 
-	void ResourceCache::StoreAnimation(spt<Anim> anim) {
+	void ResourceCache::StoreAnimation(spt<SheetAnim> anim) {
 		COGASSERT(anim->GetName().compare("") != 0, "ResourceCache", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());

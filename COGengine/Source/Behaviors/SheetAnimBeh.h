@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
-#include "AnimationLoader.h"
+#include "AnimSheetLoader.h"
 
 namespace Cog {
 
@@ -11,14 +11,14 @@ namespace Cog {
 	* Context entity used in animation behavior as
 	* it goes through the animation tree
 	*/
-	class AnimStage {
+	class AnimContext {
 	public:
 		// index of actual loop
 		int actualLoop;
 		// must be floating point, because of variable speed
-		double actualFrameIndex;
+		float actualFrameIndex;
 		// actual node whose children are just processing
-		spt<Anim> node;
+		spt<SheetAnim> node;
 		// index of actual child being processed
 		int actualChildIndex;
 		// indicator, if scope of actual node is reverted
@@ -26,17 +26,20 @@ namespace Cog {
 		bool isScopeReverted;
 		// indicator, if the node entity is a root node
 		bool isRootNode;
+		// speed of the scope
+		float scopeSpeed; 
 
-		AnimStage() {
+		AnimContext() {
 
 		}
 
-		AnimStage(spt<Anim> node, bool isScopeReverted, bool isRootNode) {
+		AnimContext(spt<SheetAnim> node, bool isScopeReverted, float scopeSpeed, bool isRootNode) {
 
 			this->isRootNode = isRootNode;
 			this->actualLoop = 0;
 			this->node = node;
 			this->isScopeReverted = isScopeReverted;
+			this->scopeSpeed = scopeSpeed;
 
 			if (isScopeReverted) {
 				// start at end
@@ -74,7 +77,7 @@ namespace Cog {
 		/*
 		* Gets actual child being processed
 		*/
-		spt<Anim> GetActualChild() {
+		spt<SheetAnim> GetActualChild() {
 			if (isRootNode) return node;
 			else return node->GetChildren()[actualChildIndex];
 		}
@@ -84,29 +87,31 @@ namespace Cog {
 	/**x
 	* Behavior for common animations
 	*/
-	class SheetAnim : public Behavior {
-		OBJECT_PROTOTYPE_INIT(SheetAnim)
+	class SheetAnimBeh : public Behavior {
+		OBJECT_PROTOTYPE_INIT(SheetAnimBeh)
 	private:
 		// animation root
-		spt<Anim> root = spt<Anim>();
+		spt<SheetAnim> root = spt<SheetAnim>();
 		// actual tree context
-		AnimStage context;
+		AnimContext context;
 		// stack of processing tree
-		stack<AnimStage> nodeStack;
+		stack<AnimContext> nodeStack;
 	public:
 
-		SheetAnim(spt<Anim> anim) : root(anim) {
+		SheetAnimBeh(spt<SheetAnim> anim) : root(anim) {
 
 		}
 
-		SheetAnim(Setting& setting) {
+		SheetAnimBeh(Setting& setting) {
 			string animation = setting.GetItemVal("animation");
+			string renderTypeStr = setting.GetItemVal("render_type");
+
 			auto resCache = GETCOMPONENT(ResourceCache);
 			this->root = resCache->GetAnimation(animation);
 		}
 
 		void Init() {
-			if (root == spt<Anim>()) {
+			if (!root) {
 				CogLogError("Anim", "Animation cant' run, entity is null");
 				ended = true;
 				return;
@@ -114,11 +119,10 @@ namespace Cog {
 
 			//int gridWidth = settings.GetSettingValInt("transform", "grid_width");
 			//int gridHeight = settings.GetSettingValInt("transform", "grid_height");
-
 			// the root is not in inverted scope (but it can be inverted itself)
-			context = AnimStage(root, false, true);
+			context = AnimContext(root, false, 1, true);
 			// start with -SPEED so the first update will get the proper frame
-			context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames() - root->GetSpeed()) : -root->GetSpeed();
+			context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames() - context.scopeSpeed) : -context.scopeSpeed;
 		}
 
 		// debug only, will be deleted
@@ -131,7 +135,7 @@ namespace Cog {
 
 			if (!Ended()) {
 				int actualIndex = (int)context.actualFrameIndex;
-				spt<Anim> actualNode = context.GetActualChild();
+				spt<SheetAnim> actualNode = context.GetActualChild();
 
 				if (actualNodeName != actualNode->GetName()) {
 					actualNodeName = actualNode->GetName();
@@ -154,9 +158,11 @@ namespace Cog {
 						owner->GetShape<spt<SpriteShape>>()->SetSprite(spt<Sprite>(new Sprite(spriteSet, frameIndex)));
 					}
 					else {
+						if (!owner->HasRenderType(RenderType::IMAGE)) {
+							owner->SetShape(spt<Image>(new Image(spriteSheet)));
+						}
 
 						// images
-
 						int frameRow = frameIndex / actualNode->GetFrames();
 						int frameColumn = frameIndex % actualNode->GetFrames();
 						int cellWidth = (int)(spriteSheet->getWidth() / actualNode->GetFrames());
@@ -187,8 +193,6 @@ namespace Cog {
 					else {
 						owner->SetShape(spt<Image>(new Image(image)));
 					}
-
-
 				}
 			}
 		}
@@ -199,15 +203,15 @@ namespace Cog {
 		* Tries to go to the next frame
 		* @return true, if there is a frame to go to
 		*/
-		bool TryNextFrame(spt<Anim> actualNode) {
+		bool TryNextFrame(spt<SheetAnim> actualNode) {
 
 			// must by cast to int, because of rounding
-			if (!context.IsChildReverted() && ((int)(context.actualFrameIndex + actualNode->GetSpeed())) < actualNode->GetTotalFrames()) {
-				context.actualFrameIndex += actualNode->GetSpeed();
+			if (!context.IsChildReverted() && ((int)(context.actualFrameIndex + context.scopeSpeed)) < actualNode->GetTotalFrames()) {
+				context.actualFrameIndex += context.scopeSpeed;
 				return true;
 			}// no cast to int, because we need exactly value higher than 0
-			else if (context.IsChildReverted() && (context.actualFrameIndex - actualNode->GetSpeed()) >= 0) {
-				context.actualFrameIndex -= actualNode->GetSpeed();
+			else if (context.IsChildReverted() && (context.actualFrameIndex - context.scopeSpeed) >= 0) {
+				context.actualFrameIndex -= context.scopeSpeed;
 				return true;
 			}
 			else return false;
@@ -217,24 +221,27 @@ namespace Cog {
 		* Tries to go to the nearest child
 		* @return true, if there is a child to go to
 		*/
-		bool TryChildren(spt<Anim> actualNode) {
+		bool TryChildren(spt<SheetAnim> actualNode) {
+
 
 			if (actualNode->GetChildren().size() != 0) {
 				// node has children -> process them
 				nodeStack.push(context);
 				// XOR function -> two inverted parents give non-inverted animation for children
 				bool invertedScope = context.IsChildReverted();
-				context = AnimStage(actualNode, invertedScope, false);
+				float scopeSpeed = context.scopeSpeed;
+				context = AnimContext(actualNode, invertedScope, actualNode->GetSpeed()*scopeSpeed, false);
 				return true;
 			}
 			else return false;
 		}
 
+
 		/**
 		* Tries to start next loop
 		* @return true if there is a loop to go to
 		*/
-		bool TryNextLoop(spt<Anim> actualNode) {
+		bool TryNextLoop(spt<SheetAnim> actualNode) {
 			context.actualLoop++;
 			if (context.actualLoop < actualNode->GetRepeat() || actualNode->GetRepeat() == 0) {
 				// repeat animation of this node
@@ -242,7 +249,7 @@ namespace Cog {
 					context.actualFrameIndex = 0;
 				}
 				else {
-					context.actualFrameIndex = actualNode->GetTotalFrames() - actualNode->GetSpeed();
+					context.actualFrameIndex = actualNode->GetTotalFrames() - context.scopeSpeed;
 				}
 				return true;
 			}
@@ -254,6 +261,8 @@ namespace Cog {
 		* @return true if there is a sibling to go to
 		*/
 		bool TrySibling() {
+
+			if (context.isRootNode) return false;
 
 			if (!context.isScopeReverted && context.actualChildIndex < (int)(context.node->GetChildren().size() - 1)) {
 				// go to the next element
@@ -279,7 +288,7 @@ namespace Cog {
 		*/
 		void MoveToNext() {
 
-			spt<Anim> actualNode;
+			spt<SheetAnim> actualNode;
 
 			do {
 

@@ -9,6 +9,34 @@ namespace Cog {
 		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE
 	};
 
+	struct RenderTypeConverter {
+		static RenderType StrToRenderType(string val) {
+			if (val.compare("image") == 0) {
+				return RenderType::IMAGE;
+			}
+			else if (val.compare("rectangle") == 0) {
+				return RenderType::RECTANGLE;
+			}
+			else if (val.compare("polygon") == 0) {
+				return RenderType::POLYGON;
+			}
+			else if (val.compare("text") == 0) {
+				return RenderType::TEXT;
+			}
+			else if (val.compare("plane") == 0) {
+				return RenderType::PLANE;
+			}
+			else if (val.compare("sprite") == 0) {
+				return RenderType::SPRITE;
+			}
+			else if (val.compare("multisprite") == 0) {
+				return RenderType::MULTISPRITE;
+			}
+
+			return RenderType::NONE;
+		}
+	};
+
 	/**
 	* Entity for rendering
 	*/

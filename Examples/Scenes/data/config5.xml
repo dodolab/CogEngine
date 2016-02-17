@@ -1,59 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
 
-<!-- repository for all animations -->
-<animations>
-    <anim name="action1" repeat="1" sheet="sheetanim02.png" frames="8" lines="4" start="0" end="31" increment="1" />
 
-    
-  <!-- already declared animations can be reused: -->
-  <anim name="sampleAnim" speed="0.5">
-	<anim ref="action1" revert="true" speed="0.1" />		<!-- 31 - 0 slowly-->
-	<anim ref="action1" revert="false" speed="0.1" />
-	
-	<anim speed="2">
-	  <anim ref="action1" />
-	  <anim ref="action1" />
-	  
-	  <anim speed="2">
-	    <anim ref="action1" />
-		<anim ref="action1" />
-	  </anim>
-	</anim>
-  </anim>
-</animations>
-
-
-
-  <scenes initial="main">
-    <scene name="main">
-      <node img="bgr.jpg" />
-      <node name="anim" >
-	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" />
-		<shape type="plane" width="1" height="1" />
-		<behavior type="SheetAnimBeh">
-		  <setting>
-		    <item key="animation" value="sampleAnim" />
-		  </setting>
-		</behavior> 
-		
-	  </node>
-    </scene>
-  </scenes>
-
-
-
-
-<!--
   <animations>
     <anim name="square_anim" sheet="sheet_squares.png" frames="4" lines="2"  start="0" end="3"  repeat="0" increment="1" speed="0.2"></anim>
   </animations>
 
   <attranimations>
-	<attranimset name="mojo" repeat="12" bidirect="true">
-	  <attranim name="tranim1" attr="pos_x" from="150" to="250" ttype="abs" mtype="direct" duration="1000"  repeat="0" bidirect="true" easefunc="cosine_in" />
-	  <attranim name="tranim2" attr="pos_y" from="150" to="250" ttype="abs" mtype="direct" duration="1000"  repeat="0" bidirect="true" easefunc="sin_in"/>
-	</attranimset>
+    <attranim name="tranim1" attr="rotation" 	from="0" to="360" duration="1000" repeat="1" />
+	<attranim name="tranim2" attr="scale" from="1" to="2" ttype="per" duration="1000" repeat="1" /> 
+	<attranim name="tranim3" attr="position" from="x" to="200" ttype="abs" mtype="diff" duration="1000" repeat="1" />
   </attranimations>
   
   <spritesheets>
@@ -89,8 +45,9 @@
         <shape type="sprite" layer="squares" row="0" column="1" />
 		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
 		
-		<behavior type="AttribsAnim" animations="tranim1|tranim2" />
+		<behavior type="MultiAnim" animations="transform1|transform2" />
+		<behavior name="squareanim" />
 	  </node>
     </scene>
-  </scenes>-->
+  </scenes>
 </app_config>

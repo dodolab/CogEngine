@@ -4,7 +4,7 @@
 #include "Msg.h"
 #include "InputAct.h"
 #include "SoundFile.h"
-#include "Anim.h"
+#include "SheetAnim.h"
 
 namespace Cog {
 
@@ -75,8 +75,8 @@ namespace Cog {
 	spt<Sound> CogGetSound(string path);
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
-	spt<Anim> CogGetAnimation(string name);
-	void CogStoreAnimation(spt<Anim> anim);
+	spt<SheetAnim> CogGetAnimation(string name);
+	void CogStoreAnimation(spt<SheetAnim> anim);
 
 	// ================== MCOMPONENTSTORAGE ====================
 

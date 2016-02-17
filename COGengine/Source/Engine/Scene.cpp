@@ -284,6 +284,7 @@ namespace Cog {
 			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this);
 			sceneNode->AddChild(node);
 			xml->popTag();
+
 		}
 
 		loaded = true;

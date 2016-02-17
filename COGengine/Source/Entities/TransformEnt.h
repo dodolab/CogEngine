@@ -21,7 +21,7 @@ namespace Cog {
 	class TransformEnt : public DEntity{
 	public:
 
-		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(1), sType(CalcType::LOC), rotation(0), rotationOrigin(0.5f){
+		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(1), sType(CalcType::LOC), rotation(0), rotationCentroid(0.5f){
 			this->name = "";
 		}
 
@@ -38,20 +38,20 @@ namespace Cog {
 
 		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc) :pos(position), zIndex(zIndex), pType(positionCalc), anchor(anchor),
-			size(size), sType(sizeCalc), rotation(0), rotationOrigin(0.5f){
+			size(size), sType(sizeCalc), rotation(0), rotationCentroid(0.5f){
 			this->name = "";
 		}
 
 		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation):pos(position),zIndex(zIndex),pType(positionCalc),anchor(anchor),
-			size(size),sType(sizeCalc), rotation(rotation), rotationOrigin(0.5f){
+			size(size),sType(sizeCalc), rotation(rotation), rotationCentroid(0.5f){
 			this->name = name;
 		}
 
 		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation, ofVec2f rotationOrigin) 
 			:pos(position), zIndex(zIndex), pType(positionCalc), anchor(anchor),
-			size(size), sType(sizeCalc), rotation(rotation), rotationOrigin(rotationOrigin) {
+			size(size), sType(sizeCalc), rotation(rotation), rotationCentroid(rotationOrigin) {
 			this->name = name;
 		}
 
@@ -64,7 +64,7 @@ namespace Cog {
 		CalcType pType;
 		ofVec2f anchor;
 		ofVec2f size;
-		ofVec2f rotationOrigin;
+		ofVec2f rotationCentroid;
 		CalcType sType;
 		float rotation;
 
@@ -120,11 +120,11 @@ namespace Cog {
 
 			if (xml->attributeExists("rotation_origin")) {
 				float rotOrigin = xml->getAttributex("rotation_origin", 0.5);
-				rotationOrigin = ofVec2f(rotOrigin);
+				rotationCentroid = ofVec2f(rotOrigin);
 			}
 			else {
-				rotationOrigin.x = xml->getAttributex("rotation_origin_x", defaultSettings.GetItemValFloat("rotation_origin_x", 0.0));
-				rotationOrigin.y = xml->getAttributex("rotation_origin_y", defaultSettings.GetItemValFloat("rotation_origin_y", 0.0));
+				rotationCentroid.x = xml->getAttributex("rotation_origin_x", defaultSettings.GetItemValFloat("rotation_origin_x", 0.0));
+				rotationCentroid.y = xml->getAttributex("rotation_origin_y", defaultSettings.GetItemValFloat("rotation_origin_y", 0.0));
 			}
 		}
 
