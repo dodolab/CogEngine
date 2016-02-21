@@ -70,18 +70,18 @@ namespace Cog {
 		* Finds recursively child by name
 		* @param name according  to find the child
 		*/
-		spt<CommonAnim> FindChild(string name) {
-			if (this->GetName().compare(name) == 0) return spt<CommonAnim>(this);
+		CommonAnim* FindChild(string name) {
+			if (this->GetName().compare(name) == 0) return this;
 
 			for (auto it = children.begin(); it != children.end(); ++it) {
 				if ((*it)->GetName().compare(name) == 0) return (*it);
 				else {
 					auto childFound = (*it)->FindChild(name);
-					if (childFound != spt<CommonAnim>()) return childFound;
+					if (childFound != nullptr) return childFound;
 				}
 			}
 
-			return spt<CommonAnim>();
+			return nullptr;
 		}
 
 	
@@ -120,9 +120,19 @@ namespace Cog {
 			this->SetName(xml->getAttribute(":", "name", this->GetName()));
 		}
 
+		virtual void LoadAttributesFromXml(spt<ofxXml> xml) {
+			this->SetSpeed(xml->getAttribute(":", "speed", this->GetSpeed()));
+			if (this->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", this->GetName().c_str()));
+			this->SetRepeat(xml->getAttribute(":", "repeat", this->GetRepeat()));
+			if (this->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", this->GetName().c_str()));
+			this->SetIsRevert(xml->getBoolAttribute(":", "revert", this->GetIsRevert()));
+		}
 
-		virtual void LoadAttributesFromXml(spt<ofxXml> xml) = 0;
+		virtual bool IsAnimatable() = 0;
 
+		virtual bool IsMeasurable() = 0;
+
+		virtual int GetDuration() = 0;
 
 		/**
 		* Gets name of this animation

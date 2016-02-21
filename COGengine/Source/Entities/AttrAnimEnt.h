@@ -41,11 +41,10 @@ namespace Cog {
 			this->name = name;
 		}
 
-		AttrAnimEnt(string name, AttributeType attribute, float fromVal, float toVal, int duration, int repeat)
-			:attributeType(attribute), fromVal(fromVal), toVal(toVal), duration(duration), repeat(repeat)
+		AttrAnimEnt(string name, AttributeType attribute, float fromVal, float toVal, int begin, int end, int duration, int repeat)
+			:attributeType(attribute), fromVal(fromVal), toVal(toVal), begin(begin), end(end), duration(duration)
 		{
-			this->isInfinite = this->repeat == 0; // todo: dangerous !!
-			this->hasValues = !this->attribute.empty(); // todo: dangerous !!
+			RecalcDuration();
 		}
 
 		~AttrAnimEnt() {
@@ -57,21 +56,20 @@ namespace Cog {
 		float fromVal = 0;
 		bool isFixed = false;
 		float toVal = 0;
+
 		int duration = 0;
-		int repeat = 1;
-		bool isInfinite = false;
+		int begin = 0;
+		int end = 0;
+		
 		CalcType transformType = CalcType::ABS;
 		MeasureType measureType = MeasureType::DIRECT;
-		bool biDirectional = false;
-		FadeFunction fadeFunction;
-		bool inverted = false;
-		bool hasValues = false;
+		FadeFunction fadeFunction = nullptr;
 
 		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
 			this->name = xml->getAttributex("name", "");
 			this->attribute = xml->getAttributex("attr","");
 
-			this->hasValues = !this->attribute.empty();
+			if (this->attribute.empty()) throw IllegalArgumentException("Argument must be specified!");
 
 			if (xml->getAttributex("from", "x").compare("x") == 0) {
 				isFixed = true;
@@ -82,18 +80,18 @@ namespace Cog {
 				this->fromVal = xml->getAttributex("from", 0.0f);
 			}
 
-
 			this->toVal = xml->getAttributex("to", 0.0f);
+
 			this->duration = xml->getAttributex("duration", 0);
-			this->repeat = xml->getAttributex("repeat", 1);
-			this->isInfinite = this->repeat == 0;
-			this->biDirectional = xml->getBoolAttributex("bidirect", false);
-			this->inverted = xml->getBoolAttributex("inverted", false);
+			this->begin = xml->getAttributex("begin", 0);
+			this->end = xml->getAttributex("end", 0);
 
 			this->transformType = StrToCalcType(xml->getAttributex("ttype", "abs"));
 			this->measureType = StrToMeasureType(xml->getAttributex("mtype", "direct"));
 			this->attributeType = StrToAttributeType(xml->getAttributex("attr", ""));
 			
+			RecalcDuration();
+
 			string easing = xml->getAttributex("easefunc","");
 			if (!easing.empty()) {
 				this->fadeFunction = EasingManager::GetFadeFunction(easing);
@@ -101,6 +99,13 @@ namespace Cog {
 		}
 
 	private:
+
+		void RecalcDuration() {
+			// recalculate duration and end
+			if (this->end == 0) this->end = duration;
+			if (this->duration == 0) this->duration = (end - begin);
+		}
+
 		CalcType StrToCalcType(string val) {
 			if (val.compare("per") == 0) return CalcType::PER;
 			else if (val.compare("abs") == 0) return CalcType::ABS;

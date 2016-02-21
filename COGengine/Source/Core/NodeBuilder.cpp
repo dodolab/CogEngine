@@ -194,9 +194,7 @@ namespace Cog {
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
 			xml->popTag();
 		}
-
-
-
+		
 		if (xml->tagExists("behavior")) {
 			int behaviors = xml->getNumTags("behavior");
 

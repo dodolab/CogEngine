@@ -95,6 +95,7 @@ public:
 			throw ConfigErrorException("No configuration file found!");
 		}
 
+
 		// load first config file
 		CogEngine::GetInstance().Init(configFiles[0]);
 		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));

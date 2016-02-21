@@ -20,12 +20,11 @@
 #include "InputHandler.h"
 #include "Selection.h"
 #include "Network.h"
-#include "AttribsAnim.h"
-#include "SheetAnimBeh.h"
+#include "SheetAnimator.h"
+#include "AttribAnimator.h"
 
 namespace Cog {
 
-	
 	void CogEngine::Init() {
 		Clear();
 
@@ -179,7 +178,7 @@ namespace Cog {
 		auto network = new Network();
 		REGISTER_COMPONENT(network);
 
-		REGISTER_BEHAVIOR(SheetAnimBeh);
+		REGISTER_BEHAVIOR(SheetAnimator);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(Collider);
 		REGISTER_BEHAVIOR(DelayAction);
@@ -194,7 +193,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(SlideTween);
 		REGISTER_BEHAVIOR(FloatingScene);
 		REGISTER_BEHAVIOR(Selection);
-		REGISTER_BEHAVIOR(AttribsAnim);
+		REGISTER_BEHAVIOR(AttribAnimator);
 
 	}
 
