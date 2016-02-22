@@ -26,6 +26,9 @@
 namespace Cog {
 
 	void CogEngine::Init() {
+
+		COGASSERT(fps != 0, "COGENGINE", "FPS attribute is not set! Use SetFps(int fps) to set frames per second");
+
 		Clear();
 
 		RegisterComponents();

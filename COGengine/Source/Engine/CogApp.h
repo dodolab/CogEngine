@@ -6,6 +6,9 @@
 #include "ofxAndroid.h"
 #endif
 
+#define APP_SPEED 60
+
+
 namespace Cog {
 
 	class Stage;
@@ -25,7 +28,8 @@ namespace Cog {
 		uint64 absolute;
 		// time elapsed between frames
 		uint64 delta;
-		
+		// frames per second
+		uint64 fps;
 		string configFile;
 		spt<ofxXml> xmlConfig;
 
@@ -34,13 +38,17 @@ namespace Cog {
 		/**
 		* Creates a new application wrapper
 		*/
-		CogApp() : configFile("") {
+		CogApp() : configFile(""), fps(APP_SPEED){
 		}
 
-		CogApp(string configFile) : configFile(configFile) {
+		CogApp(string configFile) : configFile(configFile), fps(APP_SPEED){
 			ofxXml* xml = new ofxXml();
 			xml->loadFile(configFile);
 			this->xmlConfig = spt<ofxXml>(xml);
+		}
+
+		uint64 GetFps() {
+			return fps;
 		}
 
 		/**

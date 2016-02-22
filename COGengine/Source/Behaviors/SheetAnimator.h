@@ -7,7 +7,7 @@
 namespace Cog {
 
 	/**x
-	* Behavior for common animations
+	* Behavior for sheet animations
 	*/
 	class SheetAnimator : public Behavior {
 		OBJECT_PROTOTYPE_INIT(SheetAnimator)
@@ -20,16 +20,15 @@ namespace Cog {
 		}
 
 		SheetAnimator(Setting& setting) {
+			// load animation by name
 			string animation = setting.GetItemVal("animation");
-			string renderTypeStr = setting.GetItemVal("render_type");
-
 			auto resCache = GETCOMPONENT(ResourceCache);
 			contextStack.SetRootNode(resCache->GetAnimation(animation));
 		}
 
 		void Init() {
 			if (!contextStack.GetRootNode()) {
-				CogLogError("Anim", "Animation cant' run, entity is null");
+				CogLogError("SheetAnimator", "Animation cant' run, entity is null");
 				ended = true;
 				return;
 			}
@@ -37,17 +36,19 @@ namespace Cog {
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
-			this->contextStack.MoveToNext(delta);
+			// get next frame
+			this->contextStack.MoveToNext(delta, CogEngine::GetInstance().GetFps());
 
 			if (this->contextStack.Ended()) {
 				Finish();
 			}
 			else {
-				int actualIndex = (int)contextStack.GetContext().actualProgress;
+				// get actual frame index
+				int actualIndex = (int)contextStack.GetActualProgress();
 				spt<SheetAnim> actualNode = contextStack.GetContext().GetActualChild();
 
 				if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1) {
-					// image is a spritesheet
+					// image is a spritesheet (more than one sprite per image)
 					string imagePath = actualNode->GetSheet(0);
 					spt<ofImage> spriteSheet = CogGet2DImage(imagePath);
 
@@ -55,9 +56,9 @@ namespace Cog {
 					int frameIndex = actualIndex + actualNode->GetStart();
 
 					if (owner->HasRenderType(RenderType::SPRITE)) {
-						// sprites
+						// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
 
-						// todo: performance problem because of recalculation
+						// todo: recalculation always...
 						auto spriteSet = owner->GetShape<spt<SpriteShape>>()->GetSprite()->GetSpriteSet();
 						owner->GetShape<spt<SpriteShape>>()->SetSprite(spt<Sprite>(new Sprite(spriteSet, frameIndex)));
 					}
@@ -66,7 +67,7 @@ namespace Cog {
 							owner->SetShape(spt<Image>(new Image(spriteSheet)));
 						}
 
-						// images
+						// render as a ImageShape
 						int frameRow = frameIndex / actualNode->GetFrames();
 						int frameColumn = frameIndex % actualNode->GetFrames();
 						int cellWidth = (int)(spriteSheet->getWidth() / actualNode->GetFrames());
@@ -86,7 +87,7 @@ namespace Cog {
 					}
 				}
 				else {
-					// image is only a common image
+					// image is a common image (one sprite per image)
 					if (owner->HasAttr(ATTR_IMGBOUNDS)) owner->RemoveAttr(ATTR_IMGBOUNDS, true);
 
 					string imagePath = actualNode->GetSheet(actualIndex);

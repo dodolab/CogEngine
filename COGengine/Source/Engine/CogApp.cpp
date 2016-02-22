@@ -4,8 +4,6 @@
 #include "CogEngine.h"
 #include "Stage.h"
 
-#define APP_SPEED 60
-
 namespace Cog {
 
 	void CogApp::InitEngine() {
@@ -20,10 +18,12 @@ namespace Cog {
 void CogApp::setup(){
 	// never set vertical sync
 	ofSetVerticalSync(false);
-	ofSetFrameRate(APP_SPEED);
+	ofSetFrameRate(this->fps);
 	ofEnableAntiAliasing();
 	// initialize COG engine
 	
+	CogEngine::GetInstance().SetFps(this->fps);
+
 	this->InitEngine();
 	this->InitComponents();
 
@@ -45,7 +45,9 @@ void CogApp::update(){
 	delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
 
-	uint64 semiFixedDelta = (delta < 16) ? 16 : (delta < 32) ? delta : 32;
+	float fpsThreshold = 1000 / this->GetFps();
+
+	uint64 semiFixedDelta = (delta < fpsThreshold) ? fpsThreshold : (delta < (2* fpsThreshold)) ? delta : (2* fpsThreshold);
 
 	CogEngine::GetInstance().Update(semiFixedDelta, absolute);
 }
