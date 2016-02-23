@@ -521,5 +521,11 @@
     <ClCompile Include="Source\Attributes\Shape.cpp">
       <Filter>Source\Attributes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\AnimContextStack.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\AnimLoader.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

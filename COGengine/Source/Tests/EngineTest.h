@@ -59,6 +59,7 @@ TEST_CASE("COG Engine test", "[class]")
 	SECTION("Engine run")
 	{
 		// 1. init engine
+		CogEngine::GetInstance().SetFps(20);
 		CogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
@@ -81,6 +82,7 @@ TEST_CASE("COG Engine test", "[class]")
 	SECTION("Engine message")
 	{
 		// 1. init engine
+		CogEngine::GetInstance().SetFps(20);
 		CogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);

@@ -23,6 +23,12 @@ void CogApp::setup(){
 	// initialize COG engine
 	
 	CogEngine::GetInstance().SetFps(this->fps);
+}
+
+void CogApp::setupEngine() {
+	if (!this->splashScreen.empty()) {
+		DrawSplashScreen();
+	}
 
 	this->InitEngine();
 	this->InitComponents();
@@ -33,23 +39,35 @@ void CogApp::setup(){
 	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
+
+	engineInitialized = true;
 }
 
 void CogApp::draw(){
-	// drawing loop
-	CogEngine::GetInstance().Draw(delta, absolute);
+	if (engineInitialized) {
+		// drawing loop
+		CogEngine::GetInstance().Draw(delta, absolute);
+	}
 }
 
 void CogApp::update(){
-	// update loop
-	delta = ofGetSystemTime() - absolute;
-	absolute = ofGetSystemTime();
 
-	float fpsThreshold = 1000 / this->GetFps();
+	if (!engineInitialized) {
+		// a small hack that provides the possibility to
+		// show a splashscreen during the engine initialization 
+		setupEngine();
+	}
+	else {
+		// update loop
+		delta = ofGetSystemTime() - absolute;
+		absolute = ofGetSystemTime();
 
-	uint64 semiFixedDelta = (delta < fpsThreshold) ? fpsThreshold : (delta < (2* fpsThreshold)) ? delta : (2* fpsThreshold);
+		float fpsThreshold = 1000 / this->GetFps();
 
-	CogEngine::GetInstance().Update(semiFixedDelta, absolute);
+		uint64 semiFixedDelta = (delta < fpsThreshold) ? fpsThreshold : (delta < (2 * fpsThreshold)) ? delta : (2 * fpsThreshold);
+
+		CogEngine::GetInstance().Update(semiFixedDelta, absolute);
+	}
 }
 
 void CogApp::keyPressed(int key){
@@ -61,7 +79,9 @@ void CogApp::keyReleased(int key){
 }
 
 void CogApp::windowResized(int w, int h){
-	CogEngine::GetInstance().environment->OnScreenSizeChanged(w, h);
+	if (engineInitialized) {
+		CogEngine::GetInstance().environment->OnScreenSizeChanged(w, h);
+	}
 }
 
 
@@ -147,5 +167,29 @@ void CogApp::touchCancelled(int x, int y, int id){
 }
 
 #endif
+
+void CogApp::DrawSplashScreen() {
+#ifdef WIN32
+	ofImage image = ofImage();
+	image.loadImage(this->splashScreen);
+	GLFWwindow* window = glfwGetCurrentContext();
+	glfwShowWindow(window);
+	ofSetMatrixMode(OF_MATRIX_PROJECTION);
+	ofLoadIdentityMatrix();
+	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
+	ofLoadIdentityMatrix();
+	ofScale(-1, 1);
+	ofRotate(180);
+	ofClear(0, 0, 0);
+	image.update();
+	image.draw(-1, -1, 2, 2);
+	glfwSwapBuffers(window);
+	glFlush();
+
+	//set the context back to main for rest of setup
+	glfwMakeContextCurrent(window);
+	ofSetupScreen();
+#endif
+}
 
 }// namespace

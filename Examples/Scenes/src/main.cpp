@@ -75,6 +75,10 @@ public:
 class ExampleApp : public CogApp {
 public:
 
+	ExampleApp() {
+		this->splashScreen = "splash_screen.png";
+	}
+
 	void InitComponents() {
 
 	}

@@ -332,6 +332,8 @@
     <ClCompile Include="Source\Engine\MsgListener.cpp" />
     <ClCompile Include="Source\Engine\Node.cpp" />
     <ClCompile Include="Source\Engine\Scene.cpp" />
+    <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
+    <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSet.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />

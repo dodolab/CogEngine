@@ -130,6 +130,7 @@ namespace Cog {
 		// set default shape
 		node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
 
+
 		return node;
 	}
 

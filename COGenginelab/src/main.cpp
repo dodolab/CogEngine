@@ -85,6 +85,10 @@ public:
 class ExampleApp : public CogApp {
 public:
 
+	ExampleApp() {
+		this->splashScreen = "splash_screen.png";
+	}
+
 	void InitComponents() {
 
 	}
@@ -105,19 +109,18 @@ public:
 			throw ConfigErrorException("No configuration file found!");
 		}
 
+
 		// load first config file
 		CogEngine::GetInstance().Init(configFiles[0]);
 		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
 		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
-		return;
-
-
 
 	}
 
 	void InitStage(Stage* stage) {
 	}
 };
+
 
 
 #ifdef WIN32
