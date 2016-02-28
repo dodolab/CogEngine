@@ -102,7 +102,7 @@ public:
 		path->AddSegment(ofVec2f(100, 50));
 		path->AddSegment(ofVec2f(50, 50));
 
-		pointer->AddBehavior(new FollowBehavior(path, 100,15));
+		pointer->AddBehavior(new ArriveBehavior(100,15));
 		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);
