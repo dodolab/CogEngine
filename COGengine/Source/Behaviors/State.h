@@ -2,6 +2,7 @@
 
 #include "ofxCogCommon.h"
 #include "Behavior.h"
+#include "StateMachine.h"
 
 namespace Cog {
 
@@ -10,21 +11,33 @@ namespace Cog {
 	*/
 	class State : public Behavior {
 	private:
-		unsigned state = 0;
+		StringHash state = 0;
+		StateMachine* parent = nullptr;
 
 	public:
 
-		/**
-		* Executes the state behavior
-		*/
-		virtual void Execute(Node* owner) = 0;
+		State(StringHash state) : state(state){
 
-		unsigned GetState() {
+		}
+
+		void Init() {
+			this->owner = parent->GetOwner();
+		}
+
+		StringHash GetState() {
 			return state;
 		}
 
-		void SetState(unsigned state) {
+		void SetState(StringHash state) {
 			this->state = state;
+		}
+
+		StateMachine* GetParent() {
+			return parent;
+		}
+
+		void SetParent(StateMachine* parent) {
+			this->parent = parent;
 		}
 
 	};

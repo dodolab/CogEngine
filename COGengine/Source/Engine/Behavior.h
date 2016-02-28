@@ -23,7 +23,9 @@ namespace Cog {
 		// owner node
 		Node* owner;
 		// indicator if this behavior has ended
-		bool ended;
+		bool ended = false;
+		// indicator, if this behavior has been initialized
+		bool initialized = false;
 
 		/**
 		* Creates a new behavior
@@ -50,7 +52,7 @@ namespace Cog {
 		/**
 		* Gets the owner node
 		*/
-		const Node* GetOwner() const {
+		Node* GetOwner() const {
 			return owner;
 		}
 
@@ -79,6 +81,20 @@ namespace Cog {
 			Init();
 		}
 
+		/**
+		* Gets indicator, if this behavior has been initialized
+		*/
+		bool GetIsInitialized() {
+			return initialized;
+		}
+
+		/**
+		* Sets the indicator, if this behavior has been initialized
+		*/
+		void SetIsInitialized(bool isInitialized) {
+			this->initialized = isInitialized;
+		}
+	public:
 	
 		/**
 		* Updates behavior and owning object inner state

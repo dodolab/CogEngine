@@ -48,8 +48,10 @@ namespace Cog {
 	class SeekBehavior : public SteeringBehavior {
 	private:
 		float maxAcceleration = 0;
+		StringHash forceId;
 	public:
 		SeekBehavior(float maxAcceleration) :maxAcceleration(maxAcceleration){
+			forceId = StringHash(this->GetId());
 		}
 
 		void Init() {
@@ -66,7 +68,7 @@ namespace Cog {
 			ofVec2f direction = dest - transform.localPos;
 			direction = direction.normalize();
 			// todo verify the time scale
-			movement.SetAcceleration(direction*maxAcceleration);
+			movement.AddForce(forceId, direction*maxAcceleration);
 			
 			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
 		}
@@ -77,11 +79,13 @@ namespace Cog {
 		float accelerationSpeed = 0;
 		float rotationSpeed = 0;
 		float decelerateDistance = 0;
+		StringHash forceId;
 	public:
 
 		ArriveBehavior(float accelerationSpeed, float rotationSpeed, float decelerateDistance) :
 			accelerationSpeed(accelerationSpeed),
 			rotationSpeed(rotationSpeed), decelerateDistance(decelerateDistance){
+			forceId = StringHash(this->GetId());
 		}
 
 
@@ -116,7 +120,7 @@ namespace Cog {
 
 			ofVec2f acceleration = direction*desiredSpeed - movement.GetVelocity();
 
-			movement.SetAcceleration(acceleration);
+			movement.AddForce(forceId, acceleration);
 			this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
 		}
 	};
@@ -125,9 +129,11 @@ namespace Cog {
 	private:
 		float maxAcceleration = 0;
 		float fleeDistance = 0;
+		StringHash forceId;
 	public:
 		FleeBehavior(float maxAcceleration, float fleeDistance) :maxAcceleration(maxAcceleration),
 	    fleeDistance(fleeDistance){
+			forceId = StringHash(this->GetId());
 		}
 
 		void Init() {
@@ -155,7 +161,7 @@ namespace Cog {
 			
 			ofVec2f acceleration = desiredSpeed - movement.GetVelocity();
 
-			movement.SetAcceleration(acceleration);
+			movement.AddForce(forceId,acceleration);
 
 			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
 		}
@@ -168,9 +174,11 @@ namespace Cog {
 		float currentPathPoint = 0;
 		float maxAcceleration = 0;
 		float pointTolerance = 0;
+		StringHash forceId;
 	public:
 		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance) 
 			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance){
+			forceId = StringHash(this->GetId());
 		}
 
 		void Init() {
@@ -200,8 +208,7 @@ namespace Cog {
 
 			ofVec2f direction = destination - transform.localPos;
 			direction = direction.normalize();
-			// todo verify the time scale
-			movement.SetAcceleration(direction*maxAcceleration);
+			movement.AddForce(forceId, direction*maxAcceleration);
 
 			this->SetRotationDirection(movement, transform, transform.localPos+movement.GetVelocity(), maxAcceleration, delta);
 		}

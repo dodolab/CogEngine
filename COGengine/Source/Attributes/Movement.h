@@ -1,15 +1,23 @@
 #pragma once
 #include "ofMain.h"
+#include "StringHash.h"
 
 namespace Cog {
 
 	class Movement {
 	private:
+		// map of forces
+		map<StringHash, ofVec2f>* forces = nullptr;
 		ofVec2f acceleration = ofVec2f(0);
 		ofVec2f velocity = ofVec2f(0);
 		float angularSpeed = 0;
 
 	public:
+
+		~Movement() {
+			delete forces;
+		}
+
 		/**
 		* Gets the acceleration vector
 		*/
@@ -18,10 +26,34 @@ namespace Cog {
 		}
 
 		/**
-		* Sets the acceleration vector
+		* Sets the acceleration vector directly (no forces used)
 		*/
 		void SetAcceleration(ofVec2f acceleration) {
 			this->acceleration = acceleration;
+		}
+
+		/**
+		* Gets the force
+		*/
+		void AddForce(StringHash key, ofVec2f force) {
+			if (forces == nullptr) forces = new map<StringHash, ofVec2f>();
+
+			(*forces)[key] = force;
+		}
+
+		/**
+		* Calculates resultant force according to all stored forces
+		*/
+		ofVec2f CalcAccelerationForce() {
+			if (forces == nullptr) return acceleration;
+
+			ofVec2f result = ofVec2f(0);
+
+			for (auto& key : *forces) {
+				result += key.second;
+			}
+
+			return result;
 		}
 
 		/**
