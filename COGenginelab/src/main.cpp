@@ -4,6 +4,7 @@
 #include "MultiAnim.h"
 #include "Movement.h"
 #include "Move.h"
+#include "Path.h"
 #include "SteeringBehavior.h"
 
 class PointerBehavior : public Behavior {
@@ -73,7 +74,7 @@ public:
 		bld.SetImageNode(pointer, "pawn.png");
 
 		TransformEnt node2trans = TransformEnt();
-		node2trans.pos = ofVec2f(0.5f,0.5f);
+		node2trans.pos = ofVec2f(0,0);
 		node2trans.anchor = ofVec2f(0.5f, 0.5f);
 		node2trans.pType = CalcType::PER;
 		node2trans.sType = CalcType::GRID;
@@ -91,7 +92,17 @@ public:
 
 		pointer->AddAttr(ATTR_MOVEMENT, movement);
 		pointer->AddBehavior(new Move());
-		pointer->AddBehavior(new FleeBehavior(100,100));
+
+		Path* path = new Path(ofVec2f(0, 0), ofVec2f(10, 10));
+		path->AddSegment(ofVec2f(50, 50));
+		path->AddSegment(ofVec2f(100, 50));
+		path->AddSegment(ofVec2f(200, 50));
+		path->AddSegment(ofVec2f(200, 100));
+		path->AddSegment(ofVec2f(200, 150));
+		path->AddSegment(ofVec2f(100, 50));
+		path->AddSegment(ofVec2f(50, 50));
+
+		pointer->AddBehavior(new FollowBehavior(path, 100,15));
 		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);
