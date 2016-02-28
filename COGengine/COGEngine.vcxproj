@@ -211,6 +211,7 @@
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
     <ClInclude Include="Source\Behaviors\AttribAnimator.h" />
+    <ClInclude Include="Source\Behaviors\Goal.h" />
     <ClInclude Include="Source\Behaviors\SheetAnimator.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\Collider.h" />
@@ -292,6 +293,7 @@
     <ClInclude Include="Source\ofxCogMain.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
+    <ClInclude Include="Source\Tests\GoalTest.h" />
     <ClInclude Include="Source\Tests\MeasureTest.h" />
     <ClInclude Include="Source\Tests\NetworkTest.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
