@@ -73,8 +73,13 @@ public:
 		Node* pointer = new Node("pointer");
 		bld.SetImageNode(pointer, "pawn.png");
 
+		Node* pointer2 = new Node("pointer2");
+		bld.SetImageNode(pointer2, "pawn.png");
+		pointer2->GetTransform().scale = ofVec3f(0.1f);
+		main->GetSceneNode()->AddChild(pointer2);
+
 		TransformEnt node2trans = TransformEnt();
-		node2trans.pos = ofVec2f(0,0);
+		node2trans.pos = ofVec2f(0.5f,0.5f);
 		node2trans.anchor = ofVec2f(0.5f, 0.5f);
 		node2trans.pType = CalcType::PER;
 		node2trans.sType = CalcType::GRID;
@@ -91,7 +96,7 @@ public:
 		//movement.SetAcceleration(ofVec2f(10));
 
 		pointer->AddAttr(ATTR_MOVEMENT, movement);
-		pointer->AddBehavior(new Move());
+		pointer->AddBehavior(new Move(true));
 
 		Path* path = new Path(ofVec2f(0, 0), ofVec2f(10, 10));
 		path->AddSegment(ofVec2f(50, 50));
@@ -102,7 +107,8 @@ public:
 		path->AddSegment(ofVec2f(100, 50));
 		path->AddSegment(ofVec2f(50, 50));
 
-		pointer->AddBehavior(new ArriveBehavior(100,15));
+		//pointer->AddBehavior(new ArriveBehavior(10,15));
+		pointer->AddBehavior(new WanderBehavior(15,15,0.5f));
 		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);

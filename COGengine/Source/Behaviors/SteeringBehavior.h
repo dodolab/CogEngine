@@ -8,6 +8,7 @@
 #include "Movement.h"
 #include "Path.h"
 #include "SteeringMath.h"
+#include "Scene.h"
 
 namespace Cog {
 
@@ -92,6 +93,7 @@ namespace Cog {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
 		}
+		ofVec2f wanderTarget = ofVec2f(0);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
@@ -138,7 +140,6 @@ namespace Cog {
 		}
 	};
 
-	// must be with seekBehavior
 	class FollowBehavior : public SteeringBehavior {
 	private:
 		Path* path;
@@ -172,6 +173,42 @@ namespace Cog {
 
 			movement.AddForce(forceId, force);
 			this->SetRotationDirection(movement, transform, transform.localPos+movement.GetVelocity(), maxAcceleration, delta);
+		}
+	};
+
+	class WanderBehavior : public SteeringBehavior {
+	private:
+		float wanderRadius = 0;
+		float wanderDistance = 0;
+		float wanderJitter = 0;
+		StringHash forceId;
+	public:
+		WanderBehavior(float wanderRadius, float wanderDistance, float wanderJitter) :
+			wanderRadius(wanderRadius), wanderDistance(wanderDistance), wanderJitter(wanderJitter){
+			forceId = StringHash(this->GetId());
+		}
+
+		void Init() {
+			if (!owner->HasAttr(ATTR_STEERING_BEH_WANDER)) {
+				owner->AddAttr(ATTR_STEERING_BEH_WANDER, ofVec2f(0));
+			}
+		}
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+			auto& transform = owner->GetTransform();
+			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
+
+			ofVec2f behWander = owner->GetAttr<ofVec2f>(StringHash(ATTR_STEERING_BEH_WANDER));
+			ofVec2f force = steeringMath.Wander(transform, movement, behWander, wanderRadius, wanderDistance, wanderJitter,delta);
+			owner->ChangeAttr(StringHash(ATTR_STEERING_BEH_WANDER), behWander);
+
+			// debug display
+			//Node* pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
+			//pointer2->GetTransform().localPos = transform.localPos+force*10;
+
+			// add velocity dependency
+			movement.AddForce(forceId, force-movement.GetVelocity()/2);
+			this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), 4, delta);
 		}
 	};
 

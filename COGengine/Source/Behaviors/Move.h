@@ -15,9 +15,12 @@ namespace Cog {
 	class Move : public Behavior {
 		OBJECT_PROTOTYPE(Move)
 	protected:
-
+		bool infiniteBoard;
 	public:
+		// todo: refactor
+		Move(bool infiniteBoard): infiniteBoard(infiniteBoard) {
 
+		}
 
 		void Init() {
 			if (!owner->HasAttr(ATTR_MOVEMENT)) {
@@ -34,6 +37,15 @@ namespace Cog {
 			transform.localPos.x += movement.GetVelocity().x*0.001f*delta;
 			transform.localPos.y += movement.GetVelocity().y*0.001f*delta;
 			transform.rotation += movement.GetAngularSpeed()*0.001f*delta;
+
+			if (infiniteBoard) {
+				if (transform.absPos.x < 0) transform.localPos.x = CogGetScreenWidth() / transform.absScale.x*transform.scale.x;
+				else if (transform.absPos.x > (CogGetScreenWidth()+10)) transform.localPos.x = 0;
+
+				if (transform.absPos.y < 0) transform.localPos.y = CogGetScreenHeight() / transform.absScale.y*transform.scale.y;
+				else if (transform.absPos.y > (CogGetScreenHeight()+10)) transform.localPos.y = 0;
+				
+			}
 		}
 
 	};
