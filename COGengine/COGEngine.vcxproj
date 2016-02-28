@@ -207,6 +207,7 @@
     <ClInclude Include="3rdParty\xml\tinyxml.h" />
     <ClInclude Include="Source\Attributes\Bounds.h" />
     <ClInclude Include="Source\Attributes\Collision.h" />
+    <ClInclude Include="Source\Attributes\Movement.h" />
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
     <ClInclude Include="Source\Behaviors\AttribAnimator.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Source\Behaviors\Selection.h" />
     <ClInclude Include="Source\Behaviors\State.h" />
     <ClInclude Include="Source\Behaviors\StateMachine.h" />
+    <ClInclude Include="Source\Behaviors\SteeringBehavior.h" />
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
@@ -277,6 +279,8 @@
     <ClInclude Include="Source\Math\AStarSearch.h" />
     <ClInclude Include="Source\Math\EasingFunc.h" />
     <ClInclude Include="Source\Math\Flags.h" />
+    <ClInclude Include="Source\Math\Path.h" />
+    <ClInclude Include="Source\Math\PathSegment.h" />
     <ClInclude Include="Source\Math\Vec2i.h" />
     <ClInclude Include="Source\Math\StringHash.h" />
     <ClInclude Include="Source\Math\Transform.h" />
@@ -342,6 +346,8 @@
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />
     <ClCompile Include="Source\Math\EasingFunc.cpp" />
     <ClCompile Include="Source\Math\Flags.cpp" />
+    <ClCompile Include="Source\Math\Path.cpp" />
+    <ClCompile Include="Source\Math\PathSegment.cpp" />
     <ClCompile Include="Source\Math\StringHash.cpp" />
     <ClCompile Include="Source\Math\Transform.cpp" />
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />

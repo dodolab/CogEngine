@@ -2,118 +2,104 @@
 #include "BehaviorEnt.h"
 #include "NodeBuilder.h"
 #include "MultiAnim.h"
-#include "ofxNetwork.h"
+#include "Movement.h"
+#include "Move.h"
+#include "SteeringBehavior.h"
 
-/**
-* Simple behavior that reloads configuration file when user presses PAGE UP/DOWN button
-*/
-class SwitchBehavior : public Behavior {
-private:
-	// index of actual configuration file
-	int actualConfig = 0;
-	// path to config files
-	vector<string> configFiles;
+class PointerBehavior : public Behavior {
+protected:
+
 public:
 
-	SwitchBehavior(vector<string> configFiles, int fileIndex) : actualConfig(fileIndex) {
-		this->configFiles = configFiles;
-	}
-
 	void Init() {
-
+		RegisterListening(owner->GetScene(), ACT_OBJECT_HIT_STARTED);
 	}
 
-	vector<string> GetConfigFiles() {
-		return configFiles;
-	}
+	void OnMessage(Msg& msg) {
 
-	int GetActualConfigIndex() {
-		return actualConfig;
-	}
+		if (msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
 
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		string newConfig = "";
+			InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
+			
+			auto pointer = this->owner->GetScene()->FindNodeByTag("pointer");
 
-		// for touch
-		for (InputAct* touch : CogGetPressedPoints()) {
-			if (!touch->IsHandled()) {
-				touch->handlerNodeId = 1;
-				actualConfig = (actualConfig + 1) % configFiles.size();
-				newConfig = configFiles[actualConfig];
-			}
-		}
-
-		for (auto key : CogGetPressedKeys()) {
-			if (!key->IsHandled()) {
-				
-
-				if (key->key == (int)(OF_KEY_END)) {
-					// restarts actual config file
-					newConfig = configFiles[actualConfig];
-				}
-				else if (key->key == OF_KEY_PAGE_UP) {
-					// goes to previous config file
-					actualConfig = (actualConfig == 0 ? (configFiles.size() - 1) : (actualConfig - 1)) % configFiles.size();
-					newConfig = configFiles[actualConfig];
-				}
-				else if (key->key == OF_KEY_PAGE_DOWN) {
-					// goes to next config file
-					actualConfig = (actualConfig + 1) % configFiles.size();
-					newConfig = configFiles[actualConfig];
-				}
-			}
-		}
-
-		if (!newConfig.empty()) {
-			// insert action that resets the engine
-			auto action = [newConfig, this]() {
-				CogLogInfo("Main", "Loading config %s", newConfig.c_str());
-				// this will be deallocated, we need to keep path to files:
-				vector<string> configFiles = this->GetConfigFiles();
-				int actualConfig = this->GetActualConfigIndex();
-
-				CogEngine::GetInstance().Init(newConfig);
-				CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
-				CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
-			};
-
-			CogEngine::GetInstance().AddPostUpdateAction(action);
+			ofVec2f& dest = pointer->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
+			dest.x = evt->input->position.x;
+			dest.y = evt->input->position.y;
 		}
 	}
+
+	void Update(const uint64 delta, const uint64 absolute) {
+	
+	}
+
 };
+
 
 class ExampleApp : public CogApp {
 public:
-
-	ExampleApp() {
-		this->splashScreen = "splash_screen.png";
-	}
 
 	void InitComponents() {
 
 	}
 
 	void InitEngine() {
-		// find all configuration files
-		ofDirectory dir = ofDirectory(".");
-		auto files = dir.getFiles();
-		auto configFiles = vector<string>();
+		// this example is an alternative for config1.xml
+		CogEngine::GetInstance().Init();
 
-		for (auto& file : files) {
-			if (ofToLower(file.getExtension()).compare("xml") == 0) {
-				configFiles.push_back(file.getFileName());
-			}
-		}
+		auto resCache = GETCOMPONENT(ResourceCache);
 
-		if (configFiles.size() == 0) {
-			throw ConfigErrorException("No configuration file found!");
-		}
+		// <spritesheets>
+		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr2.jpg"), 1, 800, 450));
+		resCache->StoreSpriteSheet(spriteSheet);
 
+		// <scenes>
+		Scene* main = new Scene("main", false);
 
-		// load first config file
-		CogEngine::GetInstance().Init(configFiles[0]);
-		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
-		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
+		//  <scene_layers>
+		LayerEnt layer1 = LayerEnt("bgr", "bgr", 100, 30);
+		main->AddLayer(layer1);
+
+		// <node>
+		NodeBuilder bld = NodeBuilder();
+		Node* node1 = new Node("bgr");
+		bld.SetSpriteNode(main, node1, "bgr", 0, 0);
+		main->GetSceneNode()->AddChild(node1);
+		node1->GetStates().SetState(StringHash(STATES_HITTABLE));
+		node1->AddBehavior(new HitEvent());
+		node1->AddBehavior(new PointerBehavior());
+
+		Node* pointer = new Node("pointer");
+		bld.SetImageNode(pointer, "pawn.png");
+
+		TransformEnt node2trans = TransformEnt();
+		node2trans.pos = ofVec2f(0.5f,0.5f);
+		node2trans.anchor = ofVec2f(0.5f, 0.5f);
+		node2trans.pType = CalcType::PER;
+		node2trans.sType = CalcType::GRID;
+		node2trans.size = ofVec2f(2, 2);
+		node2trans.zIndex = 10;
+
+		TransformMath math = TransformMath();
+		math.SetTransform(pointer, main->GetSceneNode(), node2trans,100,50);
+
+		main->GetSceneNode()->AddChild(pointer);
+		pointer->GetTransform().SetRotationToPosition(ofVec2f(500,500));
+
+		auto movement = Movement();
+		//movement.SetAcceleration(ofVec2f(10));
+
+		pointer->AddAttr(ATTR_MOVEMENT, movement);
+		pointer->AddBehavior(new Move());
+		pointer->AddBehavior(new FleeBehavior(100,100));
+		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
+		// add scene into stage
+		auto stage = GETCOMPONENT(Stage);
+		stage->AddScene(main, true);
+
+		// init logging
+		auto logger = GETCOMPONENT(Logger);
+		logger->SetLogLevel(LogLevel::LDEBUG);
 
 	}
 

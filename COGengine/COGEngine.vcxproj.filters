@@ -387,6 +387,18 @@
     <ClInclude Include="Source\Behaviors\State.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Attributes\Movement.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\SteeringBehavior.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Path.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\PathSegment.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -532,6 +544,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\AnimLoader.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Path.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\PathSegment.cpp">
+      <Filter>Source\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
