@@ -62,14 +62,39 @@ public:
 		main->AddLayer(layer1);
 
 		// <node>
+		TransformMath math = TransformMath();
 		NodeBuilder bld = NodeBuilder();
 		Node* node1 = new Node("bgr");
 		bld.SetSpriteNode(main, node1, "bgr", 0, 0);
+		math.SetSizeToScreen(node1, main->GetSceneNode());
 		main->GetSceneNode()->AddChild(node1);
 		node1->GetStates().SetState(StringHash(STATES_HITTABLE));
 		node1->AddBehavior(new HitEvent());
-		node1->AddBehavior(new PointerBehavior());
+		//node1->AddBehavior(new PointerBehavior());
 
+		for (int i = 0; i < 20; i++) {
+			Node* pointer = new Node("pointer");
+			bld.SetImageNode(pointer, "pawn.png");
+
+			TransformEnt node2trans = TransformEnt();
+			node2trans.pos = ofVec2f(0.5f, 0.5f);
+			node2trans.anchor = ofVec2f(0.5f, 0.5f);
+			node2trans.pType = CalcType::PER;
+			node2trans.sType = CalcType::GRID;
+			node2trans.size = ofVec2f(3, 3);
+			node2trans.zIndex = 10;
+
+			
+			math.SetTransform(pointer, main->GetSceneNode(), node2trans, 100, 50);
+			main->GetSceneNode()->AddChild(pointer);
+			pointer->GetTransform().SetRotationToPosition(ofVec2f(500, 500));
+			auto movement = Movement();
+			pointer->AddAttr(ATTR_MOVEMENT, movement);
+			pointer->AddBehavior(new Move(true));
+			pointer->AddBehavior(new WanderBehavior(300*(ofRandomf()+1), 50* (ofRandomf() + 1), 1000000));
+		}
+
+		/*
 		Node* pointer = new Node("pointer");
 		bld.SetImageNode(pointer, "pawn.png");
 
@@ -109,7 +134,7 @@ public:
 
 		//pointer->AddBehavior(new ArriveBehavior(10,15));
 		pointer->AddBehavior(new WanderBehavior(15,15,0.5f));
-		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
+		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));*/
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);
 		stage->AddScene(main, true);

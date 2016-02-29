@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+
+
 #define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>(#className)
 #define GETBEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)
 #define CREATE_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
