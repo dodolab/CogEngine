@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <ClCompile>
-<AdditionalIncludeDirectories>../COGEngine/3rdParty/cpplinq;../COGEngine/3rdParty/catch;../COGEngine/3rdParty/dukbind;../COGengine/3rdParty/duktape;../COGengine/3rdParty/network;../COGEngine/3rdParty/smartptr;../COGEngine/3rdParty/sqlite;../COGEngine/3rdParty/xml;../COGengine/Source;../COGEngine/Source/Attributes;../COGEngine/Source/Entities;../COGEngine/Source/Behaviors;../COGEngine/Source/Components;../COGEngine/Source/Communication;../COGEngine/Source/Core;../COGengine/Source/Engine;../COGEngine/Source/Misc;../COGEngine/Source/Math;../COGEngine/Source/Graphics;../COGEngine/Source/Tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+<AdditionalIncludeDirectories>../COGEngine/3rdParty/cpplinq;../COGEngine/3rdParty/catch;../COGEngine/3rdParty/dukbind;../COGengine/3rdParty/duktape;../COGengine/3rdParty/network;../COGEngine/3rdParty/smartptr;../COGEngine/3rdParty/sqlite;../COGEngine/3rdParty/xml;../COGEngine/3rdParty/ofxTextAlign;../COGEngine/3rdParty/ofxGui;../COGEngine/3rdParty/ofxTextLabel;../COGengine/Source;../COGEngine/Source/Attributes;../COGEngine/Source/Entities;../COGEngine/Source/Behaviors;../COGEngine/Source/Components;../COGEngine/Source/Communication;../COGEngine/Source/Core;../COGengine/Source/Engine;../COGEngine/Source/Misc;../COGEngine/Source/Math;../COGEngine/Source/Graphics;../COGEngine/Source/Tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -6,7 +6,7 @@
 namespace Cog {
 
 	enum class RenderType {
-		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE
+		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE, LABEL
 	};
 
 	struct RenderTypeConverter {
@@ -31,6 +31,9 @@ namespace Cog {
 			}
 			else if (val.compare("multisprite") == 0) {
 				return RenderType::MULTISPRITE;
+			}
+			else if (val.compare("label") == 0) {
+				return RenderType::LABEL;
 			}
 
 			return RenderType::NONE;
@@ -168,17 +171,14 @@ namespace Cog {
 	};
 
 	class Text : public Shape {
-	private:
+	protected:
 		spt<ofTrueTypeFont> font;
-		float size;
-		string text;
-
+		stringstream stream;
 	public:
 
-		Text(spt<ofTrueTypeFont> font, string text, float size) : Shape(RenderType::TEXT) {
+		Text(spt<ofTrueTypeFont> font, string text) : Shape(RenderType::TEXT) {
 			this->font = font;
-			this->size = size;
-			this->text = text;
+			stream << text;
 		}
 
 		spt<ofTrueTypeFont> GetFont() {
@@ -187,14 +187,6 @@ namespace Cog {
 
 		void SetFont(spt<ofTrueTypeFont> font) {
 			this->font = font;
-		}
-
-		float GetSize() {
-			return size;
-		}
-
-		void SetSize(float size) {
-			this->size = size;
 		}
 
 		float GetWidth() {
@@ -207,20 +199,56 @@ namespace Cog {
 		}
 
 		float GetTextWidth() {
-			return font->stringWidth(text);
+			return font->stringWidth(stream.str());
 
 		}
 
 		float GetTextHeight() {
-			return font->stringHeight(text);
+			return font->stringHeight(stream.str());
 		}
 
 		string GetText() {
-			return text;
+			return stream.str();
 		}
 
 		void SetText(string text) {
-			this->text = text;
+			stream.str(""); 
+			stream << text;
+		}
+
+		void AppendText(string text) {
+			stream << text;
+		}
+
+		void AppendLine(string text) {
+			stream << text << endl;
+		}
+	};
+
+	class Label : public Text {
+	protected:
+		int labelWidth;
+	public:
+		
+		Label(spt<ofTrueTypeFont> font, string text, int labelWidth) : Text(font, text) {
+			this->renderType = RenderType::LABEL;
+			this->labelWidth = labelWidth;
+		}
+
+		void SetLabelWidth(int width) {
+			this->labelWidth = width;
+		}
+
+		int GetLabelWidth() {
+			return labelWidth;
+		}
+
+		spt<ofTrueTypeFont> GetFont() {
+			return font;
+		}
+
+		void SetFont(spt<ofTrueTypeFont> font) {
+			this->font = font;
 		}
 	};
 

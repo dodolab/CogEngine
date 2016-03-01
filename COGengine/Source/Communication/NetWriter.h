@@ -29,13 +29,21 @@ namespace Cog {
 			*current = 0;
 		}
 
-		void WriteBit(BYTE value);
+		void WriteBit(bool value);
 
 		void WriteByte(BYTE value);
 
 		void WriteDWord(DWORD value);
 
-		void WriteData(BYTE* data, unsigned size);
+		void WriteFloat(float value);
+
+		void WriteBytes(BYTE* data, unsigned size);
+
+		void WriteDWords(DWORD* data, unsigned size);
+
+		void WriteFloats(float* data, unsigned size);
+
+		void WriteString(string str);
 
 		BYTE* GetBuffer() {
 			return buffer;

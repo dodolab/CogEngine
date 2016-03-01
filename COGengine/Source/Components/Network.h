@@ -78,7 +78,7 @@ namespace Cog {
 			writer->WriteDWord(param1);
 			writer->WriteDWord(param2);
 			writer->WriteDWord(size);
-			writer->WriteData(data, size);
+			writer->WriteBytes(data, size);
 			auto buffer = writer->GetBuffer();
 			udpSender.Send((char*)buffer, writer->GetBufferBites()/8);
 			delete writer;
@@ -91,8 +91,6 @@ namespace Cog {
 			NetReader* bufferStream = new NetReader(100000);
 			
 			while (true) {
-				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) return nullptr;
-
 				bufferStream->Reset();
 				auto mojo = bufferStream->GetBufferBites() / 8;
 				udpReceiver.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites()/8);
@@ -100,9 +98,11 @@ namespace Cog {
 				if (bufferStream->ReadDWord() == param1 && bufferStream->ReadDWord() == param2) {
 					// get the right message
 					unsigned int size = bufferStream->ReadDWord();
-					unsigned char* data = bufferStream->ReadData(size);
+					unsigned char* data = bufferStream->ReadBytes(size);
 					return new NetReader(data, size);
 				}
+
+				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) return nullptr;
 			}
 
 		}

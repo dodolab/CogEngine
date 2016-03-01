@@ -3,11 +3,10 @@
 
 namespace Cog {
 
-	void NetReader::ReadBit(BYTE& value) {
-		COGASSERT(FreeSpace(1), "NetReader", "Buffer length exceeded");
+	void NetReader::ReadBit(bool& value) {
+		COGASSERT(FreeSpace(1), "NetWriter", "Buffer length exceeded");
 
-		value = *current & (1 << (7-bitOffset));
-		if (value != 0) value = 1;
+		value = (*current & (1 << (7-bitOffset))) != 0;
 
 		bitOffset++;
 
@@ -18,7 +17,7 @@ namespace Cog {
 	}
 
 	void NetReader::ReadByte(BYTE& value) {
-		COGASSERT(FreeSpace(8), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -34,15 +33,24 @@ namespace Cog {
 	}
 
 	void NetReader::ReadDWord(DWORD& value) {
-		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
+		value = 0;
 		value |= ReadByte() << 24;
 		value |= ReadByte() << 16;
 		value |= ReadByte() << 8;
 		value |= ReadByte();
 	}
 
-	void NetReader::ReadData(BYTE* data, unsigned size) {
-		COGASSERT(FreeSpace(size*8), "NetReader", "Buffer length exceeded");
+	void NetReader::ReadFloat(float& value) {
+		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
+
+		DWORD iVal = ReadDWord();
+		
+		value = *((float*)(&iVal));
+	}
+
+	void NetReader::ReadBytes(BYTE* data, unsigned size) {
+		COGASSERT(FreeSpace(size*8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -55,6 +63,28 @@ namespace Cog {
 				ReadByte(data[i]);
 			}
 		}
+	}
+
+	void NetReader::ReadDWords(DWORD* data, unsigned size) {
+		for (unsigned i = 0; i < size; i++) {
+			ReadDWord(data[i]);
+		}
+	}
+
+	void NetReader::ReadFloats(float* data, unsigned size) {
+		for (unsigned i = 0; i < size; i++) {
+			ReadFloat(data[i]);
+		}
+	}
+
+	string NetReader::ReadString() {
+		DWORD size = ReadDWord();
+		COGASSERT(size < 100000, "NetWriter", "Unexpected string size in byte array");
+
+		BYTE* bytes = ReadBytes(size);
+		string output = string((char*)bytes, (int)size);
+		delete bytes;
+		return output;
 	}
 
 } // namespace

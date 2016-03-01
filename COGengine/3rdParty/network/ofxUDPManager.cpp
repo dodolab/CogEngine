@@ -326,7 +326,7 @@ int	ofxUDPManager::Receive(char* pBuff, const int iSize)
 	if (ret	> 0)
 	{
 		//ofLogNotice("ofxUDPManager") << "received from: " << inet_ntoa((in_addr)saClient.sin_addr);
-		canGetRemoteAddress= true;
+		canGetRemoteAddress= true;	
 	}
 	else
 	{

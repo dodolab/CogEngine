@@ -423,6 +423,42 @@
     <ClInclude Include="Source\Communication\NetWriter.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\ofxTextAlign\ofxTextAlign.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxTextAlign\ofxTextAlignTTF.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxGuiGroup.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxLabel.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxPanel.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxSlider.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxSliderGroup.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxToggle.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxBaseGui.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxButton.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxGui\ofxGui.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -580,6 +616,39 @@
     </ClCompile>
     <ClCompile Include="Source\Communication\NetReader.cpp">
       <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxTextAlign\ofxTextAlignTTF.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxTextAlign\ofxTextAlign.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxLabel.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxPanel.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxSlider.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxSliderGroup.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxToggle.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxBaseGui.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxButton.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxGui\ofxGuiGroup.cpp">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
+      <Filter>3rdParty</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

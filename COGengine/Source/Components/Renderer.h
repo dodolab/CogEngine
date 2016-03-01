@@ -83,6 +83,8 @@ namespace Cog {
 		void RenderSprite(Node* owner);
 
 		void RenderMultiSprite(Node* owner);
+
+		void RenderLabel(Node* owner);
 	};
 
 

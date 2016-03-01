@@ -6,6 +6,7 @@
 #include "Move.h"
 #include "Path.h"
 #include "SteeringBehavior.h"
+#include "ofxTextLabel.h"
 
 class PointerBehavior : public Behavior {
 protected:
@@ -38,7 +39,6 @@ public:
 
 
 class ExampleApp : public CogApp {
-public:
 
 	void InitComponents() {
 
@@ -94,34 +94,28 @@ public:
 			pointer->AddBehavior(new WanderBehavior(300*(ofRandomf()+1), 50* (ofRandomf() + 1), 1000000));
 		}
 
-		/*
-		Node* pointer = new Node("pointer");
-		bld.SetImageNode(pointer, "pawn.png");
-
-		Node* pointer2 = new Node("pointer2");
-		bld.SetImageNode(pointer2, "pawn.png");
-		pointer2->GetTransform().scale = ofVec3f(0.1f);
-		main->GetSceneNode()->AddChild(pointer2);
+		
+		Node* wanderer = new Node("pointer2");
+		bld.SetImageNode(wanderer, "pawn2.png");
 
 		TransformEnt node2trans = TransformEnt();
 		node2trans.pos = ofVec2f(0.5f,0.5f);
 		node2trans.anchor = ofVec2f(0.5f, 0.5f);
 		node2trans.pType = CalcType::PER;
 		node2trans.sType = CalcType::GRID;
-		node2trans.size = ofVec2f(2, 2);
+		node2trans.size = ofVec2f(5, 5);
 		node2trans.zIndex = 10;
 
-		TransformMath math = TransformMath();
-		math.SetTransform(pointer, main->GetSceneNode(), node2trans,100,50);
+		math = TransformMath();
+		math.SetTransform(wanderer, main->GetSceneNode(), node2trans,100,50);
 
-		main->GetSceneNode()->AddChild(pointer);
-		pointer->GetTransform().SetRotationToPosition(ofVec2f(500,500));
+		main->GetSceneNode()->AddChild(wanderer);
+		wanderer->GetTransform().SetRotationToPosition(ofVec2f(500,500));
 
 		auto movement = Movement();
-		//movement.SetAcceleration(ofVec2f(10));
-
-		pointer->AddAttr(ATTR_MOVEMENT, movement);
-		pointer->AddBehavior(new Move(true));
+		
+		wanderer->AddAttr(ATTR_MOVEMENT, movement);
+		wanderer->AddBehavior(new Move(true));
 
 		Path* path = new Path(ofVec2f(0, 0), ofVec2f(10, 10));
 		path->AddSegment(ofVec2f(50, 50));
@@ -133,8 +127,10 @@ public:
 		path->AddSegment(ofVec2f(50, 50));
 
 		//pointer->AddBehavior(new ArriveBehavior(10,15));
-		pointer->AddBehavior(new WanderBehavior(15,15,0.5f));
-		pointer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));*/
+		wanderer->AddBehavior(new FollowBehavior(path, 10, 10));
+		wanderer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200,200));
+
+
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);
 		stage->AddScene(main, true);

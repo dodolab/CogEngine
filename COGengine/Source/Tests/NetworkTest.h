@@ -6,6 +6,8 @@
 #include "NetReader.h"
 #include "NetWriter.h"
 
+#define TESTING
+
 #ifdef TESTING
 
 using namespace Cog;
@@ -166,7 +168,8 @@ TEST_CASE("Network test", "[class]")
 		data[1] = 2;
 		data[2] = 3;
 
-		writer->WriteData(data, 3);
+		writer->WriteBytes(data, 3);
+		writer->WriteString("mojo_message");
 		writer->WriteDWord(987654321);
 		writer->WriteBit(1);
 		writer->WriteBit(0);
@@ -175,7 +178,9 @@ TEST_CASE("Network test", "[class]")
 		writer->WriteDWord(123456789);
 		writer->WriteByte(100);
 		writer->WriteByte(128);
+		writer->WriteFloat(12.1234f);
 		writer->WriteByte(255);
+		writer->WriteDWord(7800); writer->WriteDWord(10300);
 
 		unsigned size=0;
 		data = writer->CopyData(size);
@@ -187,7 +192,9 @@ TEST_CASE("Network test", "[class]")
 		unsigned char b3 = reader->ReadByte();
 		unsigned char b4 = reader->ReadBit();
 		unsigned char b5 = reader->ReadBit();
-		data = reader->ReadData(3);
+		
+		data = reader->ReadBytes(3);
+		string msg = reader->ReadString();
 
 		unsigned int dw1 = reader->ReadDWord();
 		unsigned char b6 = reader->ReadBit();
@@ -197,7 +204,11 @@ TEST_CASE("Network test", "[class]")
 		unsigned int dw2 = reader->ReadDWord();
 		unsigned char b10 = reader->ReadByte();
 		unsigned char b11 = reader->ReadByte();
+		float f1 = reader->ReadFloat();
 		unsigned char b12 = reader->ReadByte();
+
+		unsigned int ints[2];
+		reader->ReadDWords(ints, 2);
 
 		REQUIRE(b1 == 12);
 		REQUIRE(b2 == 13);
@@ -215,7 +226,10 @@ TEST_CASE("Network test", "[class]")
 		REQUIRE(dw2 == 123456789);
 		REQUIRE(b10 == 100);
 		REQUIRE(b11 == 128);
+		REQUIRE(isEqual(f1,12.1234f));
 		REQUIRE(b12 == 255);
+		REQUIRE(ints[0] == 7800);
+		REQUIRE(ints[1] == 10300);
 	}
 
 	SECTION("Message sending")
