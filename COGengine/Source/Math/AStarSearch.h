@@ -18,17 +18,6 @@ using std::priority_queue;
 using std::pair;
 
 
-namespace std {
-	// overriding hash function for position
-	template <>
-	struct hash<Cog::Vec2i> {
-		inline size_t operator()(const Cog::Vec2i& pos) const {
-			return pos.x * 1812433253 + pos.y;
-		}
-	};
-}
-
-
 namespace Cog {
 
 	/**
@@ -52,6 +41,10 @@ namespace Cog {
 		Grid(int width, int height)
 			: width(width), height(height) {}
 
+
+		void AddBlock(int x, int y) {
+			blocks.insert(Vec2i(x, y));
+		}
 
 		/**
 		* Inserts a rectangle area into grid that couldn't be crossed

@@ -110,7 +110,7 @@ namespace Cog {
 		* @param filename path to file
 		* @param idNameMap map with identifier->human-readable-name, can be empty
 		*/
-		BrickMap LoadFromPNGImage(string filename, Setting& idNameMap) {
+		BrickMap* LoadFromPNGImage(string filename, Setting& idNameMap) {
 			ofFloatPixels pix;
 			ofLoadImage(pix, filename);
 
@@ -138,7 +138,7 @@ namespace Cog {
 				}
 			}
 
-			return BrickMap(pix.getWidth(), pix.getHeight(), bricks);
+			return new BrickMap(pix.getWidth(), pix.getHeight(), bricks);
 		}
 
 

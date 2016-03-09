@@ -18,10 +18,11 @@
 #include "Component.h"
 #include "FloatingScene.h"
 #include "InputHandler.h"
-#include "Selection.h"
+#include "MultiSelection.h"
 #include "Network.h"
 #include "SheetAnimator.h"
 #include "AttribAnimator.h"
+#include "Selection.h"
 
 namespace Cog {
 
@@ -98,9 +99,9 @@ namespace Cog {
 		stage->GetRootObject()->UpdateTransform(true);
 		// update scene
 		stage->GetRootObject()->Update(delta, absolute);
-		
+
 		inputHandler->HandleInputs();
-		
+
 		// remove ended inputs
 		environment->RemoveEndedProcesses();
 
@@ -122,20 +123,20 @@ namespace Cog {
 
 	void CogEngine::Draw(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_DRAW");
-		
+
 		// has to be here!
 		stage->GetRootObject()->UpdateTransform(true);
-		
+
 		Node* root = stage->GetRootObject();
 		auto children = root->GetChildren();
-		
+
 		renderer->BeginRender();
 
 		for (auto it = children.begin(); it != children.end(); ++it) {
 			// render scene one by one
 			Node* scene = (*it);
 
-			if (scene->GetRunningMode() != RunningMode::INVISIBLE && 
+			if (scene->GetRunningMode() != RunningMode::INVISIBLE &&
 				scene->GetRunningMode() != RunningMode::DISABLED) {
 				renderer->InitViewPort(scene->GetScene());
 				renderer->ClearCounters();
@@ -155,7 +156,7 @@ namespace Cog {
 	}
 
 	void CogEngine::RegisterComponents() {
-		
+
 		// this one is not a component actually; but is necessary
 		// to store all other components
 		entityStorage = new EntityStorage();
@@ -174,7 +175,7 @@ namespace Cog {
 		REGISTER_COMPONENT(stage);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);
-		
+
 		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
 
@@ -195,8 +196,9 @@ namespace Cog {
 		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);
 		REGISTER_BEHAVIOR(FloatingScene);
-		REGISTER_BEHAVIOR(Selection);
+		REGISTER_BEHAVIOR(MultiSelection);
 		REGISTER_BEHAVIOR(AttribAnimator);
+		REGISTER_BEHAVIOR(Selection);
 
 	}
 

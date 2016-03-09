@@ -171,9 +171,6 @@
     <ClInclude Include="Source\Core\EntityStorage.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Events.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\FloatingScene.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -185,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="Source\Components\InputHandler.h">
       <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\Selection.h">
-      <Filter>Source\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Definitions.h">
       <Filter>Source\Core</Filter>
@@ -459,6 +453,21 @@
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\MultiSelection.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Selection.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Events.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\HitBox.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\SpriteEntity.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -649,6 +658,12 @@
     </ClCompile>
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
       <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\HitBox.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteEntity.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -73,4 +73,16 @@ namespace Cog {
 			return sqrt((a.x-b.x)*(a.x - b.x) + (a.y-b.y)*(a.y-b.y));
 		}
 	};
+
 }
+
+namespace std {
+	// overriding hash function for position
+	template <>
+	struct hash<Cog::Vec2i> {
+		inline size_t operator()(const Cog::Vec2i& pos) const {
+			return pos.x * 1812433253 + pos.y;
+		}
+	};
+}
+

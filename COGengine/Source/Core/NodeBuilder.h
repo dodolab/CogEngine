@@ -6,7 +6,6 @@
 #include "Node.h"
 #include "ResourceCache.h"
 #include "TransformMath.h"
-#include "Selection.h"
 #include "BehaviorEnt.h"
 
 namespace Cog {
@@ -24,7 +23,9 @@ namespace Cog {
 
 		void SetButtonNode(Node* node, string defaultImg, string clickedImg, string disabledImg);
 
-		void SetSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup);
+		void SetMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup);
+
+		void SetSelectionNode(Node* node, string defaultImg, string selectImg);
 
 		void SetTextNode(Node* node, string font, float size, ofColor color, string text);
 
@@ -33,6 +34,8 @@ namespace Cog {
 		void SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column);
 
 		void SetPlaneNode(Node* node, ofVec2f size, ofColor color);
+
+		void SetBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable);
 
 		spt<SpriteShape> CreateSpriteShape(Scene* scene, string layer, int row, int column);
 
