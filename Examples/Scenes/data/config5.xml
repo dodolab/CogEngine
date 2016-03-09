@@ -7,9 +7,9 @@
   </animations>
 
   <attranimations>
-    <attranim name="tranim1" attr="rotation" 	from="0" to="360" duration="1000" repeat="1" />
-	<attranim name="tranim2" attr="scale" from="1" to="2" ttype="per" duration="1000" repeat="1" /> 
-	<attranim name="tranim3" attr="position" from="x" to="200" ttype="abs" mtype="diff" duration="1000" repeat="1" />
+    <attranim name="tranim1" attr="rotation" from="0un" to="360un" duration="1000" repeat="1" />
+	<attranim name="tranim2" attr="scale" from="1r" to="2r" duration="1000" repeat="1" /> 
+	<attranim name="tranim3" attr="position" from="x" to="200un" mtype="diff" duration="1000" repeat="1" />
   </attranimations>
   
   <spritesheets>
@@ -20,8 +20,8 @@
    <transforms>
     <transform name="rot_begin" rotation="0" />
     <transform name="rot_end" rotation="360" />
-	<transform name="scale_begin" size="1" stype="loc" />
-	<transform name="scale_end" size="-1" stype="loc" />
+	<transform name="scale_begin" size="1" />
+	<transform name="scale_end" size="-1" />
   </transforms>
   
   <behaviors>
@@ -43,7 +43,7 @@
 	  
 	  <node name="square_2">
         <shape type="sprite" layer="squares" row="0" column="1" />
-		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
+		<transform pos_x="0.15r" pos_y="0.15r"  z_index="10" />
 		
 		<behavior type="MultiAnim" animations="transform1|transform2" />
 		<behavior name="squareanim" />

@@ -5,14 +5,14 @@
   <scenes initial="main">
     <scene name="main">	  
 	  <node name="square_red" img="square_red.png">
-	    <transform stype="loc" size="1" rotation="0" pos="0.5" ptype="per" anchor="0.5"   z_index="10" rotation_origin="0" />
+	    <transform size="1" rotation="0" pos="0.5r" anchor="0.5" z_index="10" rotation_origin="0" />
 		
 		
 	  <node name="square_blue" img="square_blue.png">
-	    <transform stype="loc" size="0.5" rotation="-45" pos="1" ptype="per" anchor="0" z_index="10" rotation_origin="0"/>
+	    <transform  size="0.5" rotation="-45" pos="1r" anchor="0" z_index="10" rotation_origin="0"/>
 		
 		<node name="square_green" img="square_green.png">
-	      <transform stype="loc" size="0.5" rotation="-45" pos="1" ptype="per" anchor="0" z_index="10" rotation_origin="0"/>
+	      <transform size="0.5" rotation="-45" pos="1r"  anchor="0" z_index="10" rotation_origin="0"/>
 	    </node>
 		
 	  </node>

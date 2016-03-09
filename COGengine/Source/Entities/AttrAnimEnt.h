@@ -74,7 +74,7 @@ namespace Cog {
 		// end of the animation in ms (needed when there is more than one animation at a time)
 		int end = 0;
 		// transformation type
-		CalcType transformType = CalcType::ABS;
+		CalcType transformType = CalcType::LOC;
 		// measure type 
 		MeasureType measureType = MeasureType::DIRECT;
 		// fade function of the animation
@@ -93,15 +93,19 @@ namespace Cog {
 			}
 			else {
 				fromValFromActual = false;
-				this->fromVal = xml->getAttributex("from", 0.0f);
+				string fromValStr = xml->getAttributex("from", "");
+				if(!fromValStr.empty()) this->transformType = CalcTypeConverter::GetUnitValue(fromValStr, fromVal);
+				else fromVal = 0;
 			}
 
-			this->toVal = xml->getAttributex("to", 0.0f);
+			string toValStr = xml->getAttributex("to", "");
+			if(!toValStr.empty()) this->transformType = CalcTypeConverter::GetUnitValue(toValStr, toVal);
+			else toVal = 0;
+
 			this->duration = xml->getAttributex("duration", 0);
 			this->begin = xml->getAttributex("begin", 0);
 			this->end = xml->getAttributex("end", 0);
 
-			this->transformType = StrToCalcType(xml->getAttributex("ttype", "abs"));
 			this->measureType = StrToMeasureType(xml->getAttributex("mtype", "direct"));
 			this->attributeType = StrToAttributeType(xml->getAttributex("attr", ""));
 			
@@ -119,19 +123,6 @@ namespace Cog {
 			// recalculate duration according to the beginning and end
 			if (this->end == 0) this->end = duration;
 			if (this->duration == 0) this->duration = (end - begin);
-		}
-
-		/**
-		* Transforms string into CalcType enum
-		*/
-		CalcType StrToCalcType(string val) {
-			if (val.compare("per") == 0) return CalcType::PER;
-			else if (val.compare("abs") == 0) return CalcType::ABS;
-			else if (val.compare("grid") == 0) return CalcType::GRID;
-			else if (val.compare("absper") == 0) return CalcType::ABS_PER;
-			else if (val.compare("loc") == 0) return CalcType::LOC;
-
-			return CalcType::PER;
 		}
 
 		/**
