@@ -32,7 +32,7 @@ namespace Cog {
 		spt<ofxXml> config;
 
 		// component storage
-		EntityStorage* entityStorage = nullptr;
+		EntityStorage* entityStorage = new EntityStorage();
 
 		// main components that are simply accessible from this object
 		Environment* environment = nullptr;

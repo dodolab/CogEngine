@@ -87,6 +87,9 @@ namespace Cog {
 		void RenderLabel(Node* owner);
 
 		void RenderBoundingBox(Node* owner);
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+		}
 	};
 
 

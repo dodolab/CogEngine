@@ -106,6 +106,7 @@ public: \
 #endif
 
 #define PIF 3.141592653f
+#define SCREEN_TOLERANCE 25;
 
 typedef float(*FadeFunction)(float);
 

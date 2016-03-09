@@ -174,6 +174,9 @@ namespace Cog {
 		Setting GetGlobalSettings(string name);
 
 		Setting GetProjectSettings(string name);
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+		}
 	};
 
 }// namespace

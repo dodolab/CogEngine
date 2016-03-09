@@ -239,6 +239,12 @@ namespace Cog {
 			channel = new FileLoggerChannel(path, append);
 		}
 
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+			// flush each 4 second
+			if (absolute % 4000 == 0) {
+				Flush();
+			}
+		}
 	};
 
 }// namespace

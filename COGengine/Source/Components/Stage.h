@@ -91,6 +91,8 @@ namespace Cog {
 
 		void WriteInfo(int logLevel = 0);
 
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+		}
 	};
 
 }// namespace

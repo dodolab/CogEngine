@@ -30,8 +30,6 @@ namespace Cog {
 
 		COGASSERT(fps != 0, "COGENGINE", "FPS attribute is not set! Use SetFps(int fps) to set frames per second");
 
-		Clear();
-
 		RegisterComponents();
 
 		vector<Component*> components = entityStorage->GetAllComponents();
@@ -56,8 +54,7 @@ namespace Cog {
 	}
 
 	void CogEngine::Init(spt<ofxXml> config) {
-		Clear();
-
+		
 		this->config = config;
 
 		RegisterComponents();
@@ -100,14 +97,11 @@ namespace Cog {
 		// update scene
 		stage->GetRootObject()->Update(delta, absolute);
 
-		inputHandler->HandleInputs();
+		// update components
+		map<StringHash, Component*>& components = entityStorage->GetComponents();
 
-		// remove ended inputs
-		environment->RemoveEndedProcesses();
-
-		// flush each 100th frame
-		if (frameCounter % 100 == 0) {
-			logger->Flush();
+		for (auto& comp : components) {
+			comp.second->Update(delta, absolute);
 		}
 
 		// execute post-update actions
@@ -143,7 +137,6 @@ namespace Cog {
 				scene->Draw(delta, absolute);
 				renderer->Render();
 			}
-
 		}
 
 		renderer->EndRender();
@@ -156,11 +149,6 @@ namespace Cog {
 	}
 
 	void CogEngine::RegisterComponents() {
-
-		// this one is not a component actually; but is necessary
-		// to store all other components
-		entityStorage = new EntityStorage();
-
 
 		environment = new Environment();
 		resourceCache = new ResourceCache();
@@ -205,6 +193,7 @@ namespace Cog {
 	void CogEngine::Clear() {
 		// only entity storage holds all other objects
 		delete entityStorage;
+		entityStorage = new EntityStorage();
 	}
 
 }// namespace

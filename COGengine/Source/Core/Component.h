@@ -47,6 +47,8 @@ namespace Cog {
 			// call the common init method 
 			Init();
 		}
+
+		virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 	};
 
 }// namespace
