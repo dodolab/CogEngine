@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofxSmartPointer.h"
 
 namespace Cog {
 
@@ -49,6 +50,21 @@ namespace Cog {
 
 		ValueChangeEvent(T before, T after):before(before), after(after) {
 
+		}
+	};
+
+	class NetMessage;
+
+	class NetworkMsgEvent : public MsgEvent {
+	public:
+		spt<NetMessage> msg;
+
+		NetworkMsgEvent(spt<NetMessage> msg) : msg(msg) {
+
+		}
+
+		~NetworkMsgEvent(){
+			delete msg;
 		}
 	};
 

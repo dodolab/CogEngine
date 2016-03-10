@@ -17,8 +17,9 @@ namespace Cog {
 
 		}
 
-		BehaviorEnt(string name, Setting setting) : setting(setting){
-			this->name = name;
+		BehaviorEnt(string ref, Setting setting) : setting(setting){
+			this->name = ref;
+			this->ref = ref;
 		}
 
 		BehaviorEnt(string name, string type, Setting setting) : setting(setting), type(type) {
@@ -29,12 +30,19 @@ namespace Cog {
 
 		}
 
+		string ref;
 		string type;
 		Setting setting;
 
 		void LoadFromXml(spt<ofxXml> xml, Setting& set) {
 
-			this->name = xml->getAttributex("name", "");
+			this->ref = xml->getAttributex("ref", "");
+
+			if (this->ref.empty()) {
+				this->name = xml->getAttributex("name", "");
+			}
+			else this->name = this->ref;
+
 			this->type = xml->getAttributex("type", "");
 			
 			this->setting = Setting();
@@ -49,7 +57,7 @@ namespace Cog {
 			xml->getAttributeNames(":", allAttributes);
 
 			for (string attr : allAttributes) {
-				if (attr.compare("name") != 0 && attr.compare("type") != 0) {
+				if (attr.compare("name") != 0 && attr.compare("type") != 0 && attr.compare("ref") != 0) {
 					// settings could be specified even as attributes of the behavior tag!
 					string val = xml->getAttributex(attr, "");
 

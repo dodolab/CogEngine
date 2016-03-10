@@ -126,7 +126,7 @@ namespace Cog {
 		}
 		else {
 			// load from reference
-			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->name);
+			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->ref);
 			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(refent->type);
 
 			if (!refent->setting.Empty()) behavior = prototype->CreatePrototype(refent->setting);

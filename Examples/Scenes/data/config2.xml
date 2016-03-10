@@ -24,11 +24,11 @@
 	  <transform size="0.5" z_index="10" rotation_origin="0.5"/>
 		<behavior type="MultiAnim" animations="bt01|bt02" repeat="true" />
 		
-		<behavior name="rt01" />
+		<behavior ref="rt01" />
 		
 		 <node name="square2" img="sheet_squares.png">
 	      <transform pos="0.5" anchor="0.5" size="0.25" z_index="12" rotation_origin="0.5" /> 
-		   <behavior name="rt01" />
+		   <behavior ref="rt01" />
 	     </node>
 	  </node>
     </scene>
