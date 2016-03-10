@@ -17,7 +17,7 @@ private:
 	NetworkBinder* binder;
 
 public:
-	NetworkBehavior(bool receiver): receiver(receiver) {
+	NetworkBehavior(bool receiver) : receiver(receiver) {
 
 	}
 
@@ -26,7 +26,7 @@ public:
 			netReceiver = new NetworkBindReceiver();
 			REGISTER_COMPONENT(netReceiver);
 			netReceiver->Init(1000, 1001, 11987);
-			
+
 			binder = GETCOMPONENT(NetworkBinder);
 		}
 		else {
@@ -36,76 +36,46 @@ public:
 		}
 	}
 
-	int param = 0;
+	float param = 0;
 	int frame = 0;
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (frame++ % 10 == 0) {
-			if (receiver) {
-				param = this->binder->parameter;
-				owner->GetShape<spt<Label>>()->SetText(ofToString(param));
-			}
-			else {
+
+		if (receiver) {
+			param = this->binder->parameter;
+			cout << this->param << endl;
+			owner->GetTransform().rotation = param;
+		}
+		else {
+			if (frame++ % 10 == 0) {
 				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::DELTA_UPDATE, StringHash("FOFKA")));
 				msg->SetMsgTime(absolute);
-				cout << "SENDING " << param << endl;;
-				msg->SetParameter(param);
-				param += 10;
 
+
+				float sendParam = owner->GetTransform().rotation;
+				cout << "SENDING " << sendParam << endl;
+
+				msg->SetFloatParameter(sendParam);
 				netSender->SendNetworkMessage(msg);
-				delete msg;
 			}
 		}
 	}
 };
+
 
 class ExampleApp : public CogApp {
 
 	void RegisterComponents() {
 		auto binder = new NetworkBinder();
 		REGISTER_COMPONENT(binder);
-
 	}
 
 	void InitEngine() {
-		// this example is an alternative for config1.xml
-		CogEngine::GetInstance().Init();
 
-		auto resCache = GETCOMPONENT(ResourceCache);
+		CogEngine::GetInstance().Init("config.xml");
+		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 
-		// <spritesheets>
-		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr.jpg"), 1, 800, 450));
-		resCache->StoreSpriteSheet(spriteSheet);
+		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(true));
 
-		// <scenes>
-		Scene* main = new Scene("main", false);
-
-		//  <scene_layers>
-		LayerEnt layer1 = LayerEnt("bgr", "bgr", 100, 30);
-		main->AddLayer(layer1);
-
-		// <node>
-		TransformMath math = TransformMath();
-		NodeBuilder bld = NodeBuilder();
-		Node* node1 = new Node("bgr");
-		bld.SetSpriteNode(main, node1, "bgr", 0, 0);
-		math.SetSizeToScreen(node1, main->GetSceneNode());
-		main->GetSceneNode()->AddChild(node1);
-		
-		auto font = CogGetFont("cousine.ttf", 25);
-		Node* text = new Node("text");
-		auto label = spt<Label>(new Label(font, "test", CogGetScreenWidth()));
-		label->SetColor(ofColor(255, 255, 0));
-		text->SetShape(label);
-		text->AddBehavior(new NetworkBehavior(true));
-		main->GetSceneNode()->AddChild(text);
-
-		// add scene into stage
-		auto stage = GETCOMPONENT(Stage);
-		stage->AddScene(main, true);
-
-		// init logging
-		auto logger = GETCOMPONENT(Logger);
-		//logger->SetLogLevel(LogLevel::LDEBUG);
 
 	}
 
