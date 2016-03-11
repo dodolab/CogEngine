@@ -167,9 +167,6 @@ namespace Cog {
 		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
 
-		auto network = new Network();
-		REGISTER_COMPONENT(network);
-
 		REGISTER_BEHAVIOR(SheetAnimator);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(Collider);

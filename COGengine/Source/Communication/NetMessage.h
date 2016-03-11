@@ -7,7 +7,10 @@
 namespace Cog {
 
 	enum class NetMsgType {
-		DELTA_UPDATE = 1
+		HANDSHAKE_REQUEST = 1,
+		UPDATE = 2,
+		CLIENT_CALLBACK = 3,
+		DISCONNECT = 4 
 	};
 
 	class NetMessage {
@@ -38,9 +41,10 @@ namespace Cog {
 
 		}
 
-		NetMessage(NetMsgType type, StringHash action) : 
-			ipAddress(ipAddress), port(port), msgType(type), action(action) {
+		NetMessage(NetMsgType type, StringHash action) : msgType(type), action(action) {
+		}
 
+		NetMessage(NetMsgType type) : msgType(type) {
 		}
 
 		~NetMessage() {

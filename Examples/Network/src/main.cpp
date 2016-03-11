@@ -5,61 +5,50 @@
 #include "Network.h"
 #include "Shape.h"
 #include "NetworkBinder.h"
-#include "NetworkBindReceiver.h"
-#include "NetworkBindSender.h"
+#include "NetworkCommunicator.h"
 #include "NetMessage.h"
 
 class NetworkBehavior : public Behavior {
 private:
-	bool receiver;
-	NetworkBindReceiver* netReceiver;
-	NetworkBindSender* netSender;
+	bool server;
+	NetworkCommunicator* communicator;
 	NetworkBinder* binder;
 
 public:
-	NetworkBehavior(bool receiver) : receiver(receiver) {
+	NetworkBehavior(bool server) : server(server) {
 
 	}
 
 	void Init() {
-		if (receiver) {
-			netReceiver = new NetworkBindReceiver();
-			REGISTER_COMPONENT(netReceiver);
-			netReceiver->Init(1000, 1001, 11987);
-
-			binder = GETCOMPONENT(NetworkBinder);
-		}
-		else {
-			netSender = new NetworkBindSender();
-			REGISTER_COMPONENT(netSender);
-			netSender->Init(1000, 1001, "127.0.0.1", 11987);
-		}
+		communicator = new NetworkCommunicator();
+		REGISTER_COMPONENT(communicator);
+		binder = GETCOMPONENT(NetworkBinder);
+		communicator->Init(1234, 11987, server);
 	}
 
 	float param = 0;
 	int frame = 0;
-	virtual void Update(const uint64 delta, const uint64 absolute) {
 
-		if (receiver) {
+	virtual void Update(const uint64 delta, const uint64 absolute) {
+		if (!server) {
 			param = this->binder->parameter1;
-			cout << this->param << endl;
+			//cout << this->param << endl;
 			owner->GetTransform().rotation = binder->parameter1;
 			owner->GetTransform().localPos.x = binder->parameter2;
 			owner->GetTransform().localPos.y = binder->parameter3;
 		}
 		else {
 			if (frame++ % 35 == 0) {
-				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::DELTA_UPDATE, StringHash("FOFKA")));
+				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::UPDATE, StringHash("FOFKA")));
 				msg->SetMsgTime(absolute);
 
 
 				float sendParam = owner->GetTransform().rotation;
-				cout << "SENDING " << sendParam << endl;
-
+				
 				msg->SetFloatParameter1(owner->GetTransform().rotation);
 				msg->SetFloatParameter2(owner->GetTransform().localPos.x);
 				msg->SetFloatParameter3(owner->GetTransform().localPos.y);
-				netSender->SendNetworkMessage(msg);
+				communicator->SendNetworkMessage(msg);
 			}
 		}
 	}
@@ -77,7 +66,7 @@ class ExampleApp : public CogApp {
 		CogEngine::GetInstance().Init("config.xml");
 		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 
-		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(true));
+		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(false));
 
 	}
 

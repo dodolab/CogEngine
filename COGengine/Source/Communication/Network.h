@@ -9,31 +9,20 @@
 
 namespace Cog {
 
-	class Network : public  Component {
-		OBJECT(Network)
-
+	class Network  {
+		
 	private:
 		ofxTCPClient tcpClient;
 		ofxTCPServer tcpServer;
 		ofxUDPManager udpManager;
+		int udpListenPort = 0;
 
 		// udp receiver buffers
 		NetReader* bufferStream;
 	public:
 
-
-		/**
-		* Initializes controller
-		*/
-		void Init() {
-
-		}
-
-		/**
-		* Initializes controller, using xml
-		*/
-		void Init(spt<ofxXml> xml) {
-
+		Network() {
+			udpManager.Create();
 		}
 
 		void SetupTCPClient(string ip, int port, string msgDelimiter) {
@@ -56,7 +45,6 @@ namespace Cog {
 		}
 
 		void SetupUDPSender(string ip, int port, bool nonBlocking) {
-			udpManager.Create();
 			udpManager.Connect(ip.c_str(), port);
 			udpManager.SetNonBlocking(nonBlocking);
 		}
@@ -66,27 +54,26 @@ namespace Cog {
 		}
 
 		void SetupUDPReceiver(int port, int bufferSize, bool nonBlocking) {
-			udpManager.Create();
 			udpManager.Bind(port);
 			udpManager.SetNonBlocking(nonBlocking);
 			udpManager.SetReceiveBufferSize(bufferSize);
-
+			this->udpListenPort = port;
 			bufferStream = new NetReader(bufferSize);
 		}
 
-		void SendUDPMessage(unsigned int applicationId, unsigned int communicationId, unsigned char* data, unsigned int size) {
-			NetWriter* writer = new NetWriter(size + 4 + 4 + 4);
+		void SendUDPMessage(unsigned int applicationId, spt<NetMessage> msg) {
+			NetWriter* writer = new NetWriter(msg->GetMessageLength() + 4 + 4);
 			// write two parameters and content length
 			writer->WriteDWord(applicationId);
-			writer->WriteDWord(communicationId);
-			writer->WriteDWord(size);
-			writer->WriteBytes(data, size);
+			writer->WriteDWord(msg->GetMessageLength());
+			msg->SaveToStream(writer);
+
 			auto buffer = writer->GetBuffer();
 			udpManager.Send((char*)buffer, writer->GetBufferBites() / 8);
 			delete writer;
 		}
 
-		spt<NetMessage> ReceiveUDPMessage(unsigned int applicationId, unsigned int communicationId, int timeoutSec) {
+		spt<NetMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec) {
 
 			auto time = ofGetElapsedTimeMillis();
 			int timeOutMillis = timeoutSec * 1000;
@@ -98,7 +85,7 @@ namespace Cog {
 				bufferStream->Reset();
 				int bytesBuff = udpManager.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
 
-				if (bytesBuff > 0 && bufferStream->ReadDWord() == applicationId && bufferStream->ReadDWord() == communicationId) {
+				if (bytesBuff > 0 && bufferStream->ReadDWord() == applicationId) {
 
 					unsigned int size = bufferStream->ReadDWord();
 					// from now, bufferStream1 contains the proper content
@@ -110,7 +97,6 @@ namespace Cog {
 					udpManager.GetRemoteAddr(ipAddress, port);
 					msg->SetIpAddress(ipAddress);
 					msg->SetPort(port);
-					cout << "receiver from " << ipAddress << " und port " << port << endl;
 
 					return msg;
 				}
@@ -119,9 +105,6 @@ namespace Cog {
 					return spt<NetMessage>();
 				}
 			}
-		}
-
-		virtual void Update(const uint64 delta, const uint64 absolute) {
 		}
 	};
 
