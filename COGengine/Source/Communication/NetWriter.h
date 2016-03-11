@@ -21,7 +21,6 @@ namespace Cog {
 	public:
 
 		NetWriter(unsigned bytes) {
-		
 			this->buffer = new BYTE[bytes];
 			this->bufferLength = bytes *8;
 			this->current = buffer;

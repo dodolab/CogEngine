@@ -4,9 +4,9 @@
 
 <attranimations>
   <anim name="mojo" repeat="1">
-    <attranim attr="pos_x" from="0" to="1" ttype="per" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="pos_y" from="0" to="1" ttype="per" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="rotation" from="0" to="360" ttype="abs" mtype="direct" duration="5000"  />
+    <attranim attr="pos_x" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+	<attranim attr="pos_y" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+	<attranim attr="rotation" from="0" to="360" mtype="direct" duration="5000"  />
 	<anim name="dojo" ref="mojo" revert="true" />
   </anim>
 </attranimations>
@@ -17,7 +17,8 @@
     <scene name="main">
       <node img="bgr.jpg" />
       <node name="anim" img="sheet_squares.png">
-	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0" rotation_origin="0.5" />
+	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" rotation_origin="0.5" />
+		<behavior type="AttribAnimator" animation="mojo" />
 	  </node>
     </scene>
   </scenes>

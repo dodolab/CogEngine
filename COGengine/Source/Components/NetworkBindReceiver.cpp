@@ -13,7 +13,7 @@ namespace Cog {
 		this->param2 = param2;
 
 		network = GETCOMPONENT(Network);
-		network->SetupUDPReceiver(port, true);
+		network->SetupUDPReceiver(port, 10000, true);
 	}
 
 	void NetworkBindReceiver::OnMessage(Msg& msg) {
@@ -21,17 +21,14 @@ namespace Cog {
 	}
 
 	void NetworkBindReceiver::Update(const uint64 delta, const uint64 absolute) {
-		auto reader = network->ReceiveUDPMessage(param1, param2, 0);
+		auto message = network->ReceiveUDPMessage(param1, param2, 0);
 
-		if (reader != nullptr) {
-			spt<NetMessage> msg = spt<NetMessage>(new NetMessage());
-			msg->LoadFromStream(reader);
-			if (msg->GetId() > this->lastReceivedMsgId) {
+		if (message) {
+			if (message->GetId() > this->lastReceivedMsgId) {
 				// dispose old messages
-				this->lastReceivedMsgId = msg->GetId();
-				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(msg), nullptr);
+				this->lastReceivedMsgId = message->GetId();
+				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 			}
-			delete reader;
 		}
 	}
 

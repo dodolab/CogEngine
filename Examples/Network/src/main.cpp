@@ -41,12 +41,14 @@ public:
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 
 		if (receiver) {
-			param = this->binder->parameter;
+			param = this->binder->parameter1;
 			cout << this->param << endl;
-			owner->GetTransform().rotation = param;
+			owner->GetTransform().rotation = binder->parameter1;
+			owner->GetTransform().localPos.x = binder->parameter2;
+			owner->GetTransform().localPos.y = binder->parameter3;
 		}
 		else {
-			if (frame++ % 10 == 0) {
+			if (frame++ % 35 == 0) {
 				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::DELTA_UPDATE, StringHash("FOFKA")));
 				msg->SetMsgTime(absolute);
 
@@ -54,7 +56,9 @@ public:
 				float sendParam = owner->GetTransform().rotation;
 				cout << "SENDING " << sendParam << endl;
 
-				msg->SetFloatParameter(sendParam);
+				msg->SetFloatParameter1(owner->GetTransform().rotation);
+				msg->SetFloatParameter2(owner->GetTransform().localPos.x);
+				msg->SetFloatParameter3(owner->GetTransform().localPos.y);
 				netSender->SendNetworkMessage(msg);
 			}
 		}
@@ -70,12 +74,10 @@ class ExampleApp : public CogApp {
 	}
 
 	void InitEngine() {
-
 		CogEngine::GetInstance().Init("config.xml");
 		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 
 		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(true));
-
 
 	}
 

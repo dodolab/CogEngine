@@ -11,7 +11,9 @@ namespace Cog {
 		this->action = StringHash(reader->ReadDWord());
 		this->msgTime = reader->ReadDWord();
 		this->dwordParam = reader->ReadDWord();
-		this->floatParam = reader->ReadFloat();
+		this->floatParam1 = reader->ReadFloat();
+		this->floatParam2 = reader->ReadFloat();
+		this->floatParam3 = reader->ReadFloat();
 		this->dataLength = reader->ReadDWord();
 		if (this->dataLength != 0) {
 			this->data = new BYTE[this->dataLength];
@@ -27,7 +29,9 @@ namespace Cog {
 		writer->WriteDWord(this->action.Value());
 		writer->WriteDWord(this->msgTime);
 		writer->WriteDWord(this->dwordParam);
-		writer->WriteFloat(this->floatParam);
+		writer->WriteFloat(this->floatParam1);
+		writer->WriteFloat(this->floatParam2);
+		writer->WriteFloat(this->floatParam3);
 		writer->WriteDWord(this->dataLength);
 
 		if (dataLength != 0) {
