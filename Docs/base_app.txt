@@ -1,0 +1,32 @@
+class ExampleApp : public CogApp {
+
+	void InitEngine() {
+	    auto config = spt<ofxXml>(new ofxXml("myConfig"));
+		CogEngine::GetInstance().Init(config);
+		CogEngine::GetInstance().LoadStageFromXml(config);
+	}
+
+};
+
+#ifndef WIN32
+#include <jni.h>
+#endif
+
+int main() {
+	ofSetupOpenGL(800, 450, OF_WINDOW);
+	ofRunApp(new ExampleApp());
+	return 0;
+}
+
+#ifndef WIN32
+
+//========================================================================
+extern "C" {
+	void Java_cc_openframeworks_OFAndroid_init(JNIEnv*  env, jobject  thiz) {
+		main();
+	}
+}
+#endif
+
+
+

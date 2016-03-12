@@ -240,44 +240,17 @@ class ExampleApp2 : public CogApp {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ifdef WIN32
-
-int main() {
-	ofSetupOpenGL(800, 450, OF_WINDOW);
-	ofRunApp(new ExampleApp2());
-	return 0;
-}
-
-#else
+#ifndef WIN32
 #include <jni.h>
+#endif
 
 int main() {
-
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	ofRunApp(new ExampleApp2());
 	return 0;
 }
 
+#ifndef WIN32
 
 //========================================================================
 extern "C" {
