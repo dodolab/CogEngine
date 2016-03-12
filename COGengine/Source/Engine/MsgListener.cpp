@@ -15,6 +15,24 @@ namespace Cog {
 		CogRegisterGlobalListener(action1, this);
 	}
 
+	void MsgListener::RegisterGlobalListening(StringHash action1, StringHash action2) {
+		CogRegisterGlobalListener(action1, this);
+		CogRegisterGlobalListener(action2, this);
+	}
+
+	void MsgListener::RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3) {
+		CogRegisterGlobalListener(action1, this);
+		CogRegisterGlobalListener(action2, this);
+		CogRegisterGlobalListener(action3, this);
+	}
+
+	void MsgListener::RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4) {
+		CogRegisterGlobalListener(action1, this);
+		CogRegisterGlobalListener(action2, this);
+		CogRegisterGlobalListener(action3, this);
+		CogRegisterGlobalListener(action4, this);
+	}
+
 	void MsgListener::RegisterListening(Scene* scene, StringHash action1) {
 		scene->RegisterListener(action1, this);
 	}
