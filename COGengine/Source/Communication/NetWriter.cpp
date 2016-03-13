@@ -4,7 +4,7 @@
 namespace Cog {
 
 	void NetWriter::WriteBit(bool value) {
-		COGASSERT(FreeSpace(1), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(1), "NetWriter", "Buffer length exceeded");
 
 		*current &= (0xFF << (8 - bitOffset));
 		*current |= ((value ? 1 : 0) << (7-bitOffset));
@@ -17,7 +17,7 @@ namespace Cog {
 	}
 
 	void NetWriter::WriteByte(BYTE value) {
-		COGASSERT(FreeSpace(8), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -32,8 +32,14 @@ namespace Cog {
 		}
 	}
 
+	void NetWriter::WriteWord(WORD value) {
+		COGASSERT(FreeSpace(16), "NetWriter", "Buffer length exceeded");
+		WriteByte(value >> 8);
+		WriteByte(value);
+	}
+
 	void NetWriter::WriteDWord(DWORD value) {
-		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		WriteByte(value >> 24);
 		WriteByte(value >> 16);
 		WriteByte(value >> 8);
@@ -41,14 +47,14 @@ namespace Cog {
 	}
 
 	void NetWriter::WriteFloat(float value) {
-		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		
 		DWORD ivalue = *((DWORD*)&value);
 		WriteDWord(ivalue);
 	}
 
 	void NetWriter::WriteBytes(BYTE* data, unsigned size) {
-		COGASSERT(FreeSpace(size * 8), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(size * 8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -65,7 +71,7 @@ namespace Cog {
 	}
 
 	void NetWriter::WriteDWords(DWORD* data, unsigned size) {
-		COGASSERT(FreeSpace(size * 32), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(size * 32), "NetWriter", "Buffer length exceeded");
 
 		for (unsigned i = 0; i < size; i++) {
 			WriteDWord(data[i]);
@@ -73,7 +79,7 @@ namespace Cog {
 	}
 
 	void NetWriter::WriteFloats(float* data, unsigned size) {
-		COGASSERT(FreeSpace(size * 32), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(size * 32), "NetWriter", "Buffer length exceeded");
 
 		for (unsigned i = 0; i < size; i++) {
 			WriteFloat(data[i]);
@@ -81,8 +87,8 @@ namespace Cog {
 	}
 
 	void NetWriter::WriteString(string str) {
-		COGASSERT(FreeSpace(str.size() * 8 + 32), "NetReader", "Buffer length exceeded");
-		COGASSERT(str.size() < 100000, "NetReader", "String limit exceeded");
+		COGASSERT(FreeSpace(str.size() * 8 + 32), "NetWriter", "Buffer length exceeded");
+		COGASSERT(str.size() < 100000, "NetWriter", "String limit exceeded");
 
 		// write info about size separately
 		WriteDWord(str.size());

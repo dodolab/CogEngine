@@ -8,6 +8,7 @@ namespace Cog {
 
 	typedef unsigned char BYTE;
 	typedef unsigned int DWORD;
+	typedef unsigned short WORD;
 
 	using namespace std;
 
@@ -32,6 +33,8 @@ namespace Cog {
 
 		void WriteByte(BYTE value);
 
+		void WriteWord(WORD value);
+
 		void WriteDWord(DWORD value);
 
 		void WriteFloat(float value);
@@ -54,6 +57,10 @@ namespace Cog {
 			return bufferLength;
 		}
 
+		unsigned GetUsedBites() {
+			return (current - buffer) * 8 + bitOffset;
+		}
+
 		void Reset() {
 			this->current = buffer;
 			this->bitOffset = 0;
@@ -62,7 +69,7 @@ namespace Cog {
 
 	private:
 		inline bool FreeSpace(unsigned bits) {
-			return (bufferLength - (buffer-current)) * 8 - bitOffset >= bits;
+			return (bufferLength - GetUsedBites()) >= bits;
 		}
 
 		inline void IncrementCurrent() {

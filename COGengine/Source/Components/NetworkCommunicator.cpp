@@ -105,12 +105,14 @@ namespace Cog {
 					network->SetupUDPSender(message->GetIpAddress(), port, true);
 					networkState = NetworkComState::UPDATING_CLIENT;
 					serverLastUpdate = absolute;
+					this->lastReceivedMsgId = -1;
 				}
 			}
 		}
 		else if (networkState == NetworkComState::UPDATING_CLIENT) {
 			auto message = network->ReceiveUDPMessage(applicationId, 0);
-			if (message && message->GetId() > this->lastReceivedMsgId) {
+
+			if (message && (message->GetId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetId()) > 128)) { // check overflow
 				// dispose old messages
 				this->lastReceivedMsgId = message->GetId();
 				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
