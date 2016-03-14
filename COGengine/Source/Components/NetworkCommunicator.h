@@ -3,8 +3,10 @@
 #include "ofxSmartPointer.h"
 #include "Component.h"
 
+
 namespace Cog {
 
+	class NetOutputMessage;
 	class Network;
 
 	enum class NetworkComState {
@@ -22,10 +24,11 @@ namespace Cog {
 		int port;
 		string clientIp;
 		Network* network;
-		int lastReceivedMsgId = -1;
+		BYTE lastReceivedMsgId = -1;
+		BYTE lastSentMsgId = 0;
 		bool isServer = false;
 		NetworkComState networkState;
-		spt<NetMessage> msgToSent = spt<NetMessage>();
+		spt<NetOutputMessage> msgToSent = spt<NetOutputMessage>();
 		uint64 clientLastCallBack = 0;
 		uint64 serverLastUpdate = 0;
 
@@ -67,7 +70,7 @@ namespace Cog {
 
 		void OnMessage(Msg& msg);
 
-		void SendNetworkMessage(spt<NetMessage> msg);
+		void SendNetworkMessage(spt<NetOutputMessage> msg);
 
 		virtual void Update(const uint64 delta, const uint64 absolute);
 

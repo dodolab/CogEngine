@@ -3,76 +3,87 @@
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "StringHash.h"
+#include "DeltaInfo.h"
 
 namespace Cog {
 
 	enum class NetMsgType {
-		HANDSHAKE_REQUEST = 1,
+		CONNECT_REQUEST = 1,
 		UPDATE = 2,
 		CLIENT_CALLBACK = 3,
 		DISCONNECT = 4
 	};
 
-	class NetMessage {
-	private:
-		// identifier counter
-		static BYTE idCounter;
+	class NetData {
+	public:
+		virtual void LoadFromStream(NetReader* reader) = 0;
 
-		string ipAddress;
-		int port;
-		// id of this message
+		virtual void SaveToStream(NetWriter* writer) = 0;
+
+		virtual int GetDataLength() = 0;
+	};
+
+	class NetInputMessage {
+	private:
+		string sourceIp;
+		int sourcePort;
 		BYTE id = 0;
-		// message type
-		NetMsgType msgType;
-		// id of action that has been invoked
-		StringHash action;
-		DWORD msgTime = 0; // time the message was sent
-		DWORD dwordParam = 0; // custom parameter
-		float floatParam1 = 0;
-		float floatParam2 = 0;
-		float floatParam3 = 0;
+		NetMsgType msgType = NetMsgType::CLIENT_CALLBACK;
+		StringHash action = StringHash();
+		DWORD msgTime = 0;
 		BYTE* data = nullptr;
 		int dataLength = 0;
 
-
 	public:
-
-		NetMessage() {
-
+		NetInputMessage(int messageLength){
+			this->dataLength = messageLength - GetHeaderLength();
 		}
 
-		NetMessage(NetMsgType type, StringHash action) : msgType(type), action(action) {
+		NetInputMessage(int messageLength, int id) : NetInputMessage(messageLength) {
+			this->id = id;
 		}
 
-		NetMessage(NetMsgType type) : msgType(type) {
+		NetInputMessage(int messageLength, int id, NetMsgType msgType) : NetInputMessage(messageLength, id) {
+			this->msgType = msgType;
 		}
 
-		~NetMessage() {
+		~NetInputMessage() {
 			delete[] data;
 		}
 
-		string GetIpAddress() {
-			return ipAddress;
+		string GetSourceIp() {
+			return sourceIp;
 		}
 
-		void SetIpAddress(string address) {
-			this->ipAddress = address;
+		void SetSourceIp(string ip) {
+			this->sourceIp = ip;
 		}
 
-		int GetPort() {
-			return port;
+		int GetSourcePort() {
+			return sourcePort;
 		}
 
-		void SetPort(int port) {
-			this->port = port;
+		void SetSourcePort(int sourcePort) {
+			this->sourcePort = sourcePort;
 		}
 
 		BYTE GetId() {
 			return id;
 		}
 
+		void SetId(BYTE id) {
+			this->id = id;
+		}
+
 		int GetMessageLength() {
-			return GetDataLength() + 256;
+			return GetHeaderLength() + GetDataLength();
+		}
+
+		int GetHeaderLength() {
+			return 	1 // id
+				+ 1 // msgType
+				+ 4 // action
+				+ 4; // msgTime
 		}
 
 		NetMsgType GetMsgType() {
@@ -81,38 +92,6 @@ namespace Cog {
 
 		void SetMsgType(NetMsgType msgType) {
 			this->msgType = msgType;
-		}
-
-		DWORD GetDWORDParameter() {
-			return dwordParam;
-		}
-
-		void SetDWORDParameter(DWORD param) {
-			this->dwordParam = param;
-		}
-
-		float GetFloatParameter1() {
-			return floatParam1;
-		}
-
-		void SetFloatParameter1(float param) {
-			this->floatParam1 = param;
-		}
-
-		float GetFloatParameter2() {
-			return floatParam2;
-		}
-
-		void SetFloatParameter2(float param) {
-			this->floatParam2 = param;
-		}
-
-		float GetFloatParameter3() {
-			return floatParam3;
-		}
-
-		void SetFloatParameter3(float param) {
-			this->floatParam3 = param;
 		}
 
 		DWORD GetMsgTime() {
@@ -145,17 +124,83 @@ namespace Cog {
 		}
 
 		void LoadFromStream(NetReader* reader);
+	};
 
+
+
+	class NetOutputMessage {
+	private:
+		BYTE id = 0;
+		NetMsgType msgType = NetMsgType::CLIENT_CALLBACK;
+		StringHash action = StringHash();
+		DWORD msgTime = 0;
+		NetData* data = nullptr;
+
+	public:
+		NetOutputMessage(int id) : id(id) {
+
+		}
+
+		NetOutputMessage(int id, NetMsgType msgType) : id(id), msgType(msgType) {
+
+		}
+
+		~NetOutputMessage() {
+			delete data;
+		}
+
+
+		BYTE GetId() {
+			return id;
+		}
+
+		void SetId(BYTE id) {
+			this->id = id;
+		}
+
+		int GetMessageLength() {
+			return (data == nullptr ? 0 : data->GetDataLength())
+				+ 1 // id
+				+ 1 // msgType
+				+ 4 // action
+				+ 4; // msgTime
+
+		}
+
+		NetMsgType GetMsgType() {
+			return msgType;
+		}
+
+		void SetMsgType(NetMsgType msgType) {
+			this->msgType = msgType;
+		}
+
+		DWORD GetMsgTime() {
+			return msgTime;
+		}
+
+		void SetMsgTime(DWORD time) {
+			this->msgTime = time;
+		}
+
+		StringHash GetAction() {
+			return action;
+		}
+
+		void SetAction(StringHash action) {
+			this->action = action;
+		}
+
+		NetData* GetData() {
+			return data;
+		}
+
+		void SetData(NetData* data) {
+			this->data = data;
+		}
+	
 		void SaveToStream(NetWriter* writer);
 
-	protected:
-		// this method can be overridden by some derived class
-		virtual void LoadDataFromStream(NetReader* reader) {
-			if (this->dataLength != 0) {
-				this->data = new BYTE[this->dataLength];
-				reader->ReadBytes(this->data, this->dataLength);
-			}
-		}
 	};
 
 } // namespace
