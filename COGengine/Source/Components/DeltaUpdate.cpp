@@ -22,7 +22,8 @@ namespace Cog {
 				spt<DeltaMessage> deltaMsg = spt<DeltaMessage>(new DeltaMessage());
 				deltaMsg->LoadFromStream(netReader);
 				spt<DeltaInfo> deltaInfo = spt<DeltaInfo>(new DeltaInfo());
-				deltaInfo->deltas = deltaMsg->vals;
+				deltaInfo->deltas = deltaMsg->deltas;
+				deltaInfo->teleports = deltaMsg->teleports;
 				deltaInfo->time = netMsg->GetMsgTime();
 				AcceptDeltaUpdate(deltaInfo);
 			}
@@ -64,6 +65,7 @@ namespace Cog {
 				}
 				else if (this->actual->time > this->next->time) {
 					deltaSpeed /= 1.1f;
+					this->actual->time -= (this->actual->time - this->next->time)/2;
 				}
 				else {
 					deltaSpeed = 1;
@@ -73,7 +75,7 @@ namespace Cog {
 				int diffLow = ((int)this->actual->time) - this->previous->time;
 
 				for (auto& dt : next->deltas) {
-					auto& prevIt = previous->deltas.find(dt.first);
+					auto prevIt = previous->deltas.find(dt.first);
 					
 					float nextVal = dt.second;
 					float prevVal = prevIt != previous->deltas.end() ? (*prevIt).second : nextVal;

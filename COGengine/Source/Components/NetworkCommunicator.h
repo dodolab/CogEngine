@@ -6,6 +6,10 @@
 
 namespace Cog {
 
+	typedef unsigned char BYTE;
+	typedef unsigned int DWORD;
+	typedef unsigned short WORD;
+
 	class NetOutputMessage;
 	class Network;
 
