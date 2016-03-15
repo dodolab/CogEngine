@@ -9,13 +9,15 @@ namespace Cog {
 		OBJECT(DeltaUpdate)
 
 	private:
-		int extrapolationTimeout = 640;
+		int messagesObtained = 0;
+		uint64 initTime = 0;
 	public:
 		spt<DeltaInfo> previous;
 		spt<DeltaInfo> actual;
 		spt<DeltaInfo> next;
 
 		float deltaSpeed = 1;
+		
 
 		void Init();
 

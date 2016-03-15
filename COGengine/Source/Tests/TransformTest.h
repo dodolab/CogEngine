@@ -36,7 +36,6 @@ using namespace Cog;
 		CogEngine::GetInstance().environment->SetVirtualAspectRatio(1);
 		CogEngine::GetInstance().environment->OnScreenSizeChanged(400, 400);
 		auto math = TransformMath();
-		
 
 		SECTION("Topleft corner")
 		{

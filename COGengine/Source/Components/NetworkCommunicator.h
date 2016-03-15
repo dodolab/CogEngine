@@ -36,6 +36,8 @@ namespace Cog {
 		uint64 clientLastCallBack = 0;
 		uint64 serverLastUpdate = 0;
 
+		map<BYTE, spt<NetOutputMessage>> confirmations;
+
 	public:
 
 		int GetApplicationId() {

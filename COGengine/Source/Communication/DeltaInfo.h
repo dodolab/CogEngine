@@ -4,6 +4,15 @@ namespace Cog {
 
 	class DeltaInfo {
 	public:
+
+		DeltaInfo() {
+
+		}
+
+		DeltaInfo(uint64 time) : time(time){
+
+		}
+
 		uint64 time;
 		map<StringHash, float> deltas;
 		map<StringHash, float> teleports;

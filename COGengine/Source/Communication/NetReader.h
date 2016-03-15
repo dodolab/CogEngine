@@ -112,6 +112,10 @@ namespace Cog {
 			return buffer;
 		}
 
+		BYTE* GetActualPointer() {
+			return current;
+		}
+
 		unsigned GetBufferBites() {
 			return bufferLength;
 		}

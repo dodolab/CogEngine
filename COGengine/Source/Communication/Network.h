@@ -14,8 +14,7 @@ namespace Cog {
 	private:
 		ofxTCPClient tcpClient;
 		ofxTCPServer tcpServer;
-		ofxUDPManager udpSender;
-		ofxUDPManager udpReceiver;
+		ofxUDPManager udpManager;
 
 		int udpListenPort = 0;
 
@@ -24,8 +23,7 @@ namespace Cog {
 	public:
 
 		Network() {
-			udpSender.Create();
-			udpReceiver.Create();
+			udpManager.Create();
 		}
 
 		void SetupTCPClient(string ip, int port, string msgDelimiter) {
@@ -48,23 +46,23 @@ namespace Cog {
 		}
 
 		void SetupUDPSender(string ip, int port, bool nonBlocking) {
-			udpSender.Connect(ip.c_str(), port);
-			udpSender.SetNonBlocking(nonBlocking);
+			udpManager.Connect(ip.c_str(), port);
+			udpManager.SetNonBlocking(nonBlocking);
 		}
 
 
 		ofxUDPManager& GetUDPSender() {
-			return udpSender;
+			return udpManager;
 		}
 
 		ofxUDPManager& GetUDPReceiver() {
-			return udpSender;
+			return udpManager;
 		}
 
 		void SetupUDPReceiver(int port, int bufferSize, bool nonBlocking) {
-			udpReceiver.Bind(port);
-			udpReceiver.SetNonBlocking(nonBlocking);
-			udpReceiver.SetReceiveBufferSize(bufferSize);
+			udpManager.Bind(port);
+			udpManager.SetNonBlocking(nonBlocking);
+			udpManager.SetReceiveBufferSize(bufferSize);
 			this->udpListenPort = port;
 			bufferStream = new NetReader(bufferSize);
 		}
@@ -76,12 +74,20 @@ namespace Cog {
 			msg->SaveToStream(writer);
 
 			auto buffer = writer->GetBuffer();
-			udpSender.Send((char*)buffer, writer->GetUsedBites() / 8);
+			udpManager.Send((char*)buffer, writer->GetUsedBites() / 8);
 			delete writer;
 		}
 
-		spt<NetInputMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec) {
+		void SendUDPMessage(unsigned int applicationId, NetWriter* writer) {
+			NetWriter* writer2 = new NetWriter(writer->GetUsedBites()*8+2);
+			writer2->WriteWord(applicationId);
+			writer2->WriteBytes(writer->GetBuffer(), writer->GetUsedBites() * 8);
+			auto buffer = writer2->GetBuffer();
+			udpManager.Send((char*)buffer, writer2->GetUsedBites() / 8);
+			delete writer2;
+		}
 
+		NetReader* ReceiveUDPMessage(unsigned int applicationId, int timeoutSec) {
 			auto time = ofGetElapsedTimeMillis();
 			int timeOutMillis = timeoutSec * 1000;
 
@@ -90,7 +96,33 @@ namespace Cog {
 			while (true) {
 
 				bufferStream->Reset();
-				int bytesBuff = udpReceiver.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
+				int bytesBuff = udpManager.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
+
+				if (bytesBuff > 0 && bufferStream->ReadWord() == applicationId) {
+
+					unsigned int size = bytesBuff - 2;
+					NetWriter* writer = new NetWriter(size);
+					writer->WriteBytes(bufferStream->GetActualPointer(), size);
+					filledBuffer = new NetReader(writer->GetBuffer(),size);
+					return filledBuffer;
+				}
+				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) {
+					return nullptr;
+				}
+			}
+		}
+
+		spt<NetInputMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec, bool emptyBuffer) {
+
+			auto time = ofGetElapsedTimeMillis();
+			int timeOutMillis = timeoutSec * 1000;
+
+			spt<NetInputMessage> receivedMsg = spt<NetInputMessage>();
+
+			while (true) {
+
+				bufferStream->Reset();
+				int bytesBuff = udpManager.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
 
 				if (bytesBuff > 0 && bufferStream->ReadWord() == applicationId) {
 					
@@ -98,15 +130,20 @@ namespace Cog {
 					unsigned int size = bytesBuff - 2;
 
 					// from now, bufferStream1 contains the proper content
-					spt<NetInputMessage> msg = spt<NetInputMessage>(new NetInputMessage(size));
-					msg->LoadFromStream(bufferStream);
+					receivedMsg = spt<NetInputMessage>(new NetInputMessage(size));
+					receivedMsg->LoadFromStream(bufferStream);
 					string ipAddress = "";
 					int port = 0;
-					udpReceiver.GetRemoteAddr(ipAddress, port);
-					msg->SetSourceIp(ipAddress);
-					msg->SetSourcePort(port);
+					udpManager.GetRemoteAddr(ipAddress, port);
+					receivedMsg->SetSourceIp(ipAddress);
+					receivedMsg->SetSourcePort(port);
 
-					return msg;
+					// if emptyBuffer is set to true, the whole UDP buffer will be read and the last message will be returned
+					if(!emptyBuffer) return receivedMsg;
+					else continue;
+				}
+				else {
+					if (receivedMsg) return receivedMsg;
 				}
 
 				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) {

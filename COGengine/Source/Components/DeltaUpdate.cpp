@@ -40,39 +40,57 @@ namespace Cog {
 	void DeltaUpdate::AcceptDeltaUpdate(spt<DeltaInfo> msg) {
 
 		if (!previous) {
+			initTime = msg->time;
+			messagesObtained = 1;
 			previous = msg;
 			actual->time = msg->time;
 		}
 		else if (!next) {
 			next = msg;
-			actual->time = previous->time;
+			messagesObtained++;
 		}
 		else {
-			this->previous = next;
-			this->next = msg;
+			previous = next;
+			next = msg;
+			messagesObtained++;
 		}
 	}
 
 	void DeltaUpdate::Update(const uint64 delta, const uint64 absolute) {
 		if (previous && next) {
 
+			if (abs((int)((int)actual->time - this->next->time)) > 10000) {
+				// disconnected for a long time
+				this->actual->time = this->next->time;
+				messagesObtained = 1;
+				initTime = next->time;
+			}
+
 			actual->time += (int)(delta*deltaSpeed);
 
-			if ((actual->time < this->next->time) || (actual->time - this->next->time < extrapolationTimeout)) {
+			float averageFrameDiff = ((int)(next->time - initTime)) / ((float)messagesObtained);
+
+			if ((actual->time < this->next->time) || ((actual->time - this->next->time) < averageFrameDiff*2)) {
 
 				if (this->actual->time < this->previous->time) {
-					deltaSpeed *= 1.1f;
+					if(deltaSpeed < 2.5f) deltaSpeed *= 1.1f;
+
 				}
 				else if (this->actual->time > this->next->time) {
-					deltaSpeed /= 1.1f;
-					this->actual->time -= (this->actual->time - this->next->time)/2;
+					if(deltaSpeed > 0.8f) deltaSpeed /= 1.1f;
+					//this->actual->time -= (this->actual->time - this->next->time)/2;
+					// extrapolation 
+					
 				}
 				else {
-					deltaSpeed = 1;
+					if (deltaSpeed > 1) deltaSpeed /= 1.2f;
+					else if (deltaSpeed < 1) deltaSpeed *= 1.2f;
+					else deltaSpeed = 1;
 				}
 			
-				int diffTime = ((int)this->next->time) - this->previous->time;
-				int diffLow = ((int)this->actual->time) - this->previous->time;
+				int diffTotal = (int)(this->next->time - this->previous->time);
+				int diffActual = (int)(this->actual->time - this->previous->time);
+				float ratio =diffActual / ((float)diffTotal);
 
 				for (auto& dt : next->deltas) {
 					auto prevIt = previous->deltas.find(dt.first);
@@ -80,12 +98,10 @@ namespace Cog {
 					float nextVal = dt.second;
 					float prevVal = prevIt != previous->deltas.end() ? (*prevIt).second : nextVal;
 
-					float actualVal = prevVal + (nextVal - prevVal)*(((float)diffLow) / diffTime);
+					float actualVal = prevVal + (nextVal - prevVal)*ratio;
 					actual->deltas[dt.first] = actualVal;
 				}
 			}
 		}
 	}
-
-
 }// namespace

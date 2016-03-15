@@ -41,6 +41,7 @@ public:
 
 
 	int frame = 0;
+	int period = 3;
 
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 		if (!server) {
@@ -51,7 +52,7 @@ public:
 			owner->GetTransform().localPos.y = delta->GetVal(StringHash("POS_Y"));
 		}
 		else {
-			if (frame++ % 3 == 0) {
+			if (frame++ % period == 0) {
 				
 				spt<DeltaInfo> delta = spt<DeltaInfo>(new DeltaInfo());
 				delta->deltas[StringHash("ROTATION")] = owner->GetTransform().rotation;
@@ -62,7 +63,19 @@ public:
 				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1));
 				netMsg->SetData(msg);
 				netMsg->SetAction(StringHash(NET_MSG_DELTA_UPDATE));
-				communicator->SendNetworkMessage(netMsg);
+
+				// if R is pressed, sending is stopped
+				auto pressedKeys = CogGetPressedKeys();
+				if (pressedKeys.size() == 0 || pressedKeys[0]->key != 'r') {
+					communicator->SendNetworkMessage(netMsg);
+				}
+
+				if (pressedKeys.size() != 0) {
+					if (pressedKeys[0]->key == 'm' && period < 20) period++;
+					else if (pressedKeys[0]->key == 'n' && period > 2) period--;
+
+					cout << "period changed to " << period << endl;
+				}
 			}
 		}
 	}
