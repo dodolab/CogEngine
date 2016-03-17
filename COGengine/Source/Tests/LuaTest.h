@@ -7,21 +7,53 @@
 #include "catch.hpp"
 using namespace Cog;
 
-extern "C"
-{
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
+
+#include <LuaBridge.h>
+#include <iostream>
+extern "C" {
+# include "lua.h"
+# include "lauxlib.h"
+# include "lualib.h"
 }
 
+struct BindObject {
+public:
+
+	BindObject() {
+		staticInt = 0;
+		staticFloat = 0;
+	}
+
+	
+	static int staticInt;
+	static float staticFloat;
+
+	int intProp;
+	float floatProp;
+
+	static int Add(int x, int y) {
+		return x + y;
+	}
+
+	int GetIntProp() const {
+		return intProp;
+	}
+
+	void SetIntProp(int newProp) {
+		this->intProp = newProp;
+	}
+
+};
+
+int BindObject::staticInt;
+float BindObject::staticFloat;
+
+using namespace luabridge;
 
 int lastGlobalFuncParam = 0;
 int LuaGlobalFunction(lua_State *L)
 {
 	int argc = lua_gettop(L);
-
-	std::cerr << "-- my_function() called with " << argc
-		<< " arguments:" << std::endl;
 
 	for (int n = 1; n <= argc; ++n) {
 		lastGlobalFuncParam = lua_tointeger(L, n);
@@ -112,16 +144,19 @@ param = LuaGlobalFunction(param)"
 		luaL_openlibs(pl);
 
 #define lua_sample " \
-class 'Person' \
-function Person:__init(salary) \
-  self.Salary = salary \
+function Person(salary) \
+ local person = { \
+  salary = salary; \
+  GetSalary = function() \
+  return salary; \
+  end; \
+  SetSalary = function(howMuch) \
+  salary = howMuch; \
+  end; \
+  } \
+  return person; \
 end \
-\
-function Person:GetSalary()\
-  return self.Salary \
-end \
-\
-thomas = Person(12000) "
+thomas = Person(12000)  "
 
 		int status = luaL_loadstring(pl, lua_sample);
 		if (status != 0) {
@@ -132,18 +167,96 @@ thomas = Person(12000) "
 			lua_pcall(pl, 0, LUA_MULTRET, 0);
 		}
 
-		lua_getglobal(pl, "add");
-		lua_pushnumber(pl, 10);
-		lua_pushnumber(pl, 20);
+		LuaRef s = getGlobal(pl, "thomas");
+		LuaRef getSalary = s["GetSalary"];
+		LuaRef setSalary = s["SetSalary"];
 
-		// 2 input parameters and 1 return parameter
-		lua_call(pl, 2, 1);
+		int result1 = getSalary();
+		setSalary(13000);
+		int result2 = getSalary();
+		
+		REQUIRE(result1 == 12000);
+		REQUIRE(result2 == 13000);
 
-		int result = (int)lua_tonumber(pl, -1);
+		//don't call lua_close; LuaBridge closes it automatically
+	}
 
-		REQUIRE(result == 30);
+	SECTION("LuaBridge arrays")
+	{
+		lua_State* pl = luaL_newstate();
+		luaL_openlibs(pl);
 
-		lua_pop(pl, 1);
-		lua_close(pl);
+#define lua_sample " \
+ghost = { \
+  name = \"LittleGhost\", \
+  sprite = \"ghost_sprite.png\", \
+  size = 12 \
+}"
+
+		int status = luaL_loadstring(pl, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+		}
+		else {
+			// execute program
+			lua_pcall(pl, 0, LUA_MULTRET, 0);
+		}
+
+		LuaRef s = getGlobal(pl, "ghost");
+		LuaRef nameRef = s["name"];
+		LuaRef spriteRef = s["sprite"];
+		LuaRef sizeRef = s["size"];
+
+		string name = nameRef.cast<string>();
+		string sprite = spriteRef.cast<string>();
+		int size = sizeRef.cast<int>();
+
+		REQUIRE(name.compare("LittleGhost") == 0);
+		REQUIRE(sprite.compare("ghost_sprite.png") == 0);
+		REQUIRE(size == 12);
+
+		//don't call lua_close; LuaBridge closes it automatically
+	}
+
+	SECTION("LuaBridge C++-to-Lua")
+	{
+		lua_State* pl = luaL_newstate();
+		luaL_openlibs(pl);
+
+		getGlobalNamespace(pl)
+			.beginClass<BindObject>("BindObject")
+			.addConstructor <void(*) (void)>() // necessary
+			.addStaticFunction("Add", &BindObject::Add)
+			.addStaticData("staticInt", &BindObject::staticInt)
+			.addStaticData("staticFloat", &BindObject::staticFloat)
+			.addData("floatProp", &BindObject::floatProp)
+			.addProperty("intProp", &BindObject::GetIntProp, &BindObject::SetIntProp)
+			.endClass();
+
+#define lua_sample " \
+ bind = BindObject() \
+ bind.floatProp = 85 \
+ bind.intProp = BindObject.Add(1,4) \
+ BindObject.staticInt = 120 \
+ BindObject.staticFloat = 7 "
+
+		int status = luaL_loadstring(pl, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(pl, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+			}
+		}
+
+		LuaRef s = getGlobal(pl, "bind");
+		auto bindObj = s.cast<BindObject>();
+		REQUIRE(BindObject::staticFloat == 7);
+		REQUIRE(BindObject::staticInt == 120);
+		REQUIRE(bindObj.floatProp == 85);
+		REQUIRE(bindObj.intProp == 5);
 	}
 }
