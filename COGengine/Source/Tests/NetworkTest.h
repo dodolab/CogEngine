@@ -9,10 +9,8 @@
 #include "DeltaUpdate.h"
 #include "NetworkCommunicator.h"
 
-#define TESTING
 
-#ifdef TESTING
-
+#include "catch.hpp"
 using namespace Cog;
 
 class DummyMessage {
@@ -397,6 +395,4 @@ TEST_CASE("Network test", "[class]")
 		}*/
 	}
 }
-
-#endif
 

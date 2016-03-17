@@ -3,9 +3,6 @@
 #include "ofMain.h"
 #include "CogEngine.h"
 
-#ifdef TESTING
-
-
 class DummyShape : public Shape {
 public:
 	int width;
@@ -1025,6 +1022,3 @@ using namespace Cog;
 			delete third;
 		}
 	}
-
-#endif
-	

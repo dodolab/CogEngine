@@ -3,8 +3,6 @@
 #include "ofMain.h"
 #include "CogEngine.h"
 
-#ifdef TESTING
-
 
 #include "catch.hpp"
 using namespace Cog;
@@ -214,6 +212,3 @@ using namespace Cog;
 			REQUIRE(st1.HasState(13));
 		}
 	}
-
-#endif
-	

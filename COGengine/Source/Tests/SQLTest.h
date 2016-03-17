@@ -5,8 +5,6 @@
 #include "ofxSQLite.h"
 #include "SQLiteEntity.h"
 
-#ifdef TESTING
-
 
 #include "catch.hpp"
 using namespace Cog;
@@ -131,5 +129,3 @@ TEST_CASE("SQL test", "[class]")
 	file.removeFile("test.db");
 	delete sql;
 }
-
-#endif
