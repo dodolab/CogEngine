@@ -10,11 +10,11 @@ namespace Cog {
 	
 	/*! Scope object for messaging */
 	enum class Scope {
-		ROOT,				 /*!< root object scope */
-		SCENE,				 /*!< scene object scope */
-		OBJECT,				 /*!< source object scope */
-		CHILDREN,			 /*!< children objects scope */
-		DIRECT_NO_TRAVERSE   /*!< no BubblingType made, objects are obtained from map */
+		ROOT = 0,				 /*!< root object scope */
+		SCENE = 1,				 /*!< scene object scope */
+		OBJECT = 2,				 /*!< source object scope */
+		CHILDREN = 3,			 /*!< children objects scope */
+		DIRECT_NO_TRAVERSE = 4   /*!< no BubblingType made, objects are obtained from map */
 	};
 
 	/**

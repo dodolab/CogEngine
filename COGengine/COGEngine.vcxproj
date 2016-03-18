@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -295,6 +295,7 @@
     <ClInclude Include="Source\Components\InputHandler.h" />
     <ClInclude Include="Source\Components\Logger.h" />
     <ClInclude Include="Source\Components\DeltaUpdate.h" />
+    <ClInclude Include="Source\Components\LuaScripting.h" />
     <ClInclude Include="Source\Components\NetworkCommunicator.h" />
     <ClInclude Include="Source\Components\ResourceCache.h" />
     <ClInclude Include="Source\Components\Environment.h" />
@@ -354,6 +355,9 @@
     <ClInclude Include="Source\Misc\Utils.h" />
     <ClInclude Include="Source\ofxCogCommon.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
+    <ClInclude Include="Source\Scripting\BehaviorLua.h" />
+    <ClInclude Include="Source\Scripting\MsgLua.h" />
+    <ClInclude Include="Source\Scripting\NodeLua.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\GoalTest.h" />
@@ -565,6 +569,9 @@
     <ClCompile Include="Source\Math\Transform.cpp" />
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />
+    <ClCompile Include="Source\Scripting\BehaviorLua.cpp" />
+    <ClCompile Include="Source\Scripting\MsgLua.cpp" />
+    <ClCompile Include="Source\Scripting\NodeLua.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

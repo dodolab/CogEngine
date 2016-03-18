@@ -259,4 +259,105 @@ ghost = { \
 		REQUIRE(bindObj.floatProp == 85);
 		REQUIRE(bindObj.intProp == 5);
 	}
+
+	SECTION("LuaBridge C++-to-Lua Trans")
+	{
+		lua_State* pl = luaL_newstate();
+		luaL_openlibs(pl);
+
+
+		getGlobalNamespace(pl)
+			.beginClass<ofVec3f>("ofVec3f")
+			.addConstructor<void(*)(float, float, float)>()
+			.endClass()
+			.beginClass<ofVec2f>("ofVec2f")
+			.addConstructor<void(*)(float, float)>()
+			.endClass()
+			.beginClass<Trans>("Trans")
+			.addConstructor <void(*) (void)>()
+			.addData("absPos", &Trans::absPos)
+			.addData("absRotation", &Trans::absRotation)
+			.addData("absRotationCentroid", &Trans::absRotationCentroid)
+			.addData("absScale", &Trans::absScale)
+			.addData("localPos", &Trans::localPos)
+			.addData("rotation", &Trans::rotation)
+			.addData("rotationCentroid", &Trans::rotationCentroid)
+			.addData("scale", &Trans::scale)
+			.addData("absPos", &Trans::absPos)
+			.addFunction("SetAbsAsLocal", &Trans::SetAbsAsLocal)
+			.addFunction("CalcAbsTransform", &Trans::CalcAbsTransform)
+			.addFunction("CalcRotationToPosition", &Trans::CalcRotationToPosition)
+			.addFunction("SetRotationToPosition", &Trans::SetRotationToPosition)
+			.endClass();
+
+#define lua_sample " \
+ trans = Trans() \
+ trans.absPos = ofVec3f(1,1,1) \
+ trans.absRotation = 30 \
+ trans.absScale = ofVec3f(20,20,20) \
+ trans.rotation = 50 \
+ rotPos = trans:CalcRotationToPosition(ofVec2f(10,10))"
+
+
+		int status = luaL_loadstring(pl, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(pl, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+			}
+		}
+
+		LuaRef s = getGlobal(pl, "trans");
+		LuaRef t = getGlobal(pl, "rotPos");
+		auto bindObj = s.cast<Trans>();
+		float rotPos = t.cast<float>();
+
+		REQUIRE(((int)rotPos) == 135);
+		REQUIRE(bindObj.absPos == ofVec3f(1));
+		REQUIRE(bindObj.absRotation == 30);
+		REQUIRE(bindObj.absScale == ofVec3f(20));
+		REQUIRE(bindObj.rotation == 50);
+	}
+
+	SECTION("LuaBridge C++-to-Lua object passing")
+	{
+		lua_State* pl = luaL_newstate();
+		luaL_openlibs(pl);
+
+		getGlobalNamespace(pl)
+			.beginClass<ofVec3f>("ofVec3f")
+			.addConstructor<void(*)(float, float, float)>()
+			.addData("x", &ofVec3f::x)
+			.addData("y", &ofVec3f::y)
+			.addData("z", &ofVec3f::z)
+			.endClass();
+
+#define lua_sample " \
+ testVec.x = 60 "
+
+		ofVec3f testVec(1, 2, 3);
+
+		int status = luaL_loadstring(pl, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+		}
+		else {
+			
+			push(pl, &testVec);
+			lua_setglobal(pl, "testVec");
+
+			// execute program
+			status = lua_pcall(pl, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+			}
+		}
+
+		
+		REQUIRE(testVec.x == 60);
+	}
 }
