@@ -35,14 +35,6 @@ namespace Cog {
 			return L;
 		}
 
-		static int RegisterBehavior(lua_State* state) {
-			GETCOMPONENT(LuaScripting)->RegisterBehaviorCt(state);
-		}
-
-		void RegisterBehaviorCt(lua_State* state) {
-			int r = luaL_ref(L, LUA_REGISTRYINDEX); 
-			lua_rawgeti(L, LUA_REGISTRYINDEX, r);
-		}
 
 		void Init() {
 			L = luaL_newstate();
@@ -63,6 +55,14 @@ namespace Cog {
 				.addData("x", &ofVec3f::x)
 				.addData("y", &ofVec3f::y)
 				.addData("z", &ofVec3f::z)
+				.endClass();
+
+			// Vec2i
+			getGlobalNamespace(L)
+				.beginClass<Vec2i>("Vec2i")
+				.addConstructor<void(*)(int, int)>()
+				.addData("x", &Vec2i::x)
+				.addData("y", &Vec2i::y)
 				.endClass();
 
 			// Trans
@@ -87,7 +87,7 @@ namespace Cog {
 			// StringHash
 			getGlobalNamespace(L)
 				.beginClass<StringHash>("StringHash")
-				.addConstructor<void(*)(unsigned)>()
+				.addConstructor<void(*)(string)>()
 				.LUA_REGFUNC(StringHash, Value)
 				.endClass();
 
@@ -105,13 +105,25 @@ namespace Cog {
 				.beginClass<BehaviorLua>("Behavior")
 				.addConstructor<void(*)(void)>()
 				.addFunction("RegisterListening", &BehaviorLua::RegisterListeningLua)
-				.addCFunction("Update", &BehaviorLua::UpdateLua)
-				.addFunction("Init", &BehaviorLua::Init)
+				.addCFunction("RegisterBehavior", &BehaviorLua::RegisterBehaviorCt)
+				.addFunction("SendMessage", &BehaviorLua::SendMessage)
+				.addData("owner", &BehaviorLua::ownerLua)
+				.endClass();
+
+			// Flags proxy
+			getGlobalNamespace(L)
+				.beginClass<Flags>("Flags")
+				.addConstructor<void(*)(StringHash)>()
+				.addFunction("HasState", &Flags::HasState)
+				.addFunction("SetState", &Flags::SetState)
+				.addFunction("SwitchState", &Flags::SwitchState)
+				.addFunction("ResetState", &Flags::ResetState)
 				.endClass();
 
 			// Node proxy
 			getGlobalNamespace(L)
 				.beginClass<NodeLua>("Node")
+				.addConstructor<void(*)(string)>()
 				.addProperty("id", &NodeLua::GetId)
 				.addProperty("parent", &NodeLua::GetParent, &NodeLua::SetParent)
 				.addProperty("tag", &NodeLua::GetTag)
@@ -126,40 +138,46 @@ namespace Cog {
 				.addFunction("SubmitChanges", &NodeLua::SubmitChanges)
 				.addFunction("Update", &NodeLua::Update)
 				.addFunction("UpdateTransform", &NodeLua::UpdateTransform)
+				.addFunction("HasGroups", &NodeLua::HasGroups)
+				.addProperty("groups", &NodeLua::GetGroups, &NodeLua::SetGroups)
+				.addFunction("IsInGroup", &NodeLua::IsInGroup)
+				.addFunction("SetGroup", &NodeLua::SetGroup)
+				.addFunction("UnsetGroup", &NodeLua::UnsetGroup)
+				.addFunction("HasStates", &NodeLua::HasStates)
+				.addProperty("states", &NodeLua::GetStates, &NodeLua::SetStates)
+				.addFunction("HasState", &NodeLua::HasState)
+				.addFunction("SetState", &NodeLua::SetState)
+				.addFunction("ResetState", &NodeLua::ResetState)
+				.addFunction("SwitchState", &NodeLua::SwitchState)
+				.addFunction("AddAttrString", &NodeLua::AddAttrString)
+				.addFunction("AddAttrInt", &NodeLua::AddAttrInt)
+				.addFunction("AddAttrFloat", &NodeLua::AddAttrFloat)
+				.addFunction("AddAttrVector2f", &NodeLua::AddAttrVector2f)
+				.addFunction("AddAttrVector3f", &NodeLua::AddAttrVector3f)
+				.addFunction("AddAttrVec2i", &NodeLua::AddAttrVec2i)
+				.addFunction("GetAttrString", &NodeLua::GetAttrString)
+				.addFunction("GetAttrInt", &NodeLua::GetAttrInt)
+				.addFunction("GetAttrFloat", &NodeLua::GetAttrFloat)
+				.addFunction("GetAttrVector2f", &NodeLua::GetAttrVector2f)
+				.addFunction("GetAttrVector3f", &NodeLua::GetAttrVector3f)
+				.addFunction("GetAttrVec2i", &NodeLua::GetAttrVec2i)
+				.addFunction("AddToActualScene", &NodeLua::AddToActualScene)
 				.endClass();
-
-			getGlobalNamespace(L)
-				.beginClass<LuaScripting>("Lua")
-				.addStaticCFunction("RegisterBehavior", &LuaScripting::RegisterBehavior)
-				.endClass();
-
-#define lua_sample " \
-mojo = { \
- attr1 = 12, \
- Update = function(delta, absolute) \
- end, \
- Init = function() \
- end \
- } \
- Lua.RegisterBehavior(mojo) "
-
-
-			int status = luaL_loadstring(L, lua_sample);
-			if (status != 0) {
-				std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
-			}
-			else {
-				// execute program
-				status = lua_pcall(L, 0, LUA_MULTRET, 0);
-				if (status != 0) {
-					std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
-				}
-			}
-
 		}
 		
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 			
+		}
+
+		vector<BehaviorLua*> behs = vector<BehaviorLua*>();
+		vector<NodeLua*> nodes = vector<NodeLua*>();
+
+		void StoreBehavior(BehaviorLua* beh) {
+			this->behs.push_back(beh);
+		}
+
+		void StoreNode(NodeLua* node) {
+			this->nodes.push_back(node);
 		}
 	};
 

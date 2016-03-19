@@ -26,6 +26,7 @@ namespace Cog {
 		bool ended = false;
 		// indicator, if this behavior has been initialized
 		bool initialized = false;
+		bool isExternal = false;
 
 		/**
 		* Creates a new behavior
@@ -94,8 +95,14 @@ namespace Cog {
 		void SetIsInitialized(bool isInitialized) {
 			this->initialized = isInitialized;
 		}
-	public:
+
+		bool IsExternal() {
+			return isExternal;
+		}
 	
+		void SetIsExternal(bool ext) {
+			this->isExternal = ext;
+		}
 
 		// allow to access Node private members
 		friend class Node;

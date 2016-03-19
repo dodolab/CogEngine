@@ -76,6 +76,7 @@ namespace Cog {
 		spt<Shape> shape = spt<Shape>(new Shape(RenderType::NONE));
 		// running mode
 		RunningMode runMode = RunningMode::RUNNING;
+		bool isExternal = false;
 
 	public:
 
@@ -316,6 +317,14 @@ namespace Cog {
 		*/
 		bool IsRenderable() {
 			return shape->GetRenderType() != RenderType::NONE;
+		}
+
+		bool IsExternal() {
+			return isExternal;
+		}
+
+		void SetIsExternal(bool ext) {
+			this->isExternal = ext;
 		}
 
 		/**

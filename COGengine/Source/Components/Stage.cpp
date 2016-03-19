@@ -10,6 +10,10 @@
 namespace Cog {
 
 	Stage::~Stage() {
+
+		rootObject->InsertElementsForAdding(true);
+		rootObject->DeleteElementsForRemoving(true);
+
 		for (Scene* scene : scenes) {
 			delete scene;
 		}
