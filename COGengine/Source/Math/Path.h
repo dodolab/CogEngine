@@ -27,7 +27,7 @@ namespace Cog {
 		* to the given 2D point that doesn't lie on the path
 		* Returns value between the beginning point and the last segment of the path <beginning, pathLength>
 		*/
-		float CalcPathPoint(float beginning, const ofVec2f & point);
+		float CalcPathPoint(float beginning, const ofVec2f & point, int& segment);
 
 		/**
 		* Calculates 2D position on the path according to the given point on the path

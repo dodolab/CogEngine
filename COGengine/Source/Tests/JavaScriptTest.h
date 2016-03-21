@@ -275,7 +275,7 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 
 		JavaScriptBehavior* beh = new JavaScriptBehavior(ctx,12345);
 		beh->Update(10, 10);
-		beh->OnMessage(Msg(BubblingType(Scope::DIRECT_NO_TRAVERSE, false, false), StringHash("UPDATE_PARAM"), 0, 0, nullptr, nullptr));
+		beh->OnMessage(Msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, false, false), StringHash("UPDATE_PARAM"), 0, 0, nullptr, nullptr));
 
 		int param = beh->GetParameter();
 		int updateCnt = beh->GetUpdateCounter();

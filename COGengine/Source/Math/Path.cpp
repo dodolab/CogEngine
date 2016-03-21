@@ -3,6 +3,7 @@
 
 namespace Cog {
 
+
 	Path::Path(const ofVec2f & start, const ofVec2f & end)
 	{
 		PathSegment firstSegment(start, end);
@@ -11,7 +12,7 @@ namespace Cog {
 	}
 
 
-	float Path::CalcPathPoint(float beginning, const ofVec2f & point)
+	float Path::CalcPathPoint(float beginning, const ofVec2f & point, int& segment)
 	{
 		COGASSERT(beginning >= 0, "PATH", "beginning must be >= 0");
 		COGASSERT(segments.size() >= 1, "PATH", "there is no segment to compute");
@@ -51,16 +52,20 @@ namespace Cog {
 						break;
 					}
 				}
-
+				segment = i;
 				return pathPointSoFar + segmentPoint;
 			}
 			else if (i == segments.size() - 1) {
+				segment = i;
 				return -1;
 			}
 
+			segment = i;
 			minDistance -= segments[i].length;
 			pathPointSoFar += segments[i].length;
 		}
+
+		return -1;
 	}
 
 	ofVec2f Path::CalcPathPosition(float pathPoint)
@@ -78,7 +83,7 @@ namespace Cog {
 		}
 		
 		// there is no such point...
-		return ofVec2f();
+		return segments.back().end;
 	}
 
 	void Path::AddSegment(const ofVec2f & segmentEndPoint)

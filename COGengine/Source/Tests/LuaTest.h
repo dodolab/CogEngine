@@ -481,7 +481,7 @@ mojo5:RegisterBehavior(next) "
 		REQUIRE(node->HasAttr(StringHash("TEST_ATTR")));
 		REQUIRE(node->GetAttrInt(StringHash("TEST_ATTR")) == 10);
 		// send message (owner will have MSG_ACCEPTED state set)
-		scr->behs[0]->OnMessage(Msg(BubblingType(Scope::ROOT, true, true), StringHash("TEST_ACTION"), 10, 0, nullptr, nullptr));
+		scr->behs[0]->OnMessage(Msg(HandlingType(Scope::ROOT, true, true), StringHash("TEST_ACTION"), 10, 0, nullptr, nullptr));
 		REQUIRE(node->HasState(StringHash("MSG_ACCEPTED")));
 		// update node (owner will have TEST_ATTR set to 20)
 		scr->nodes[0]->Update(10, 10);

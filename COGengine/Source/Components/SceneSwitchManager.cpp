@@ -14,16 +14,19 @@ namespace Cog {
 
 
 	void SceneSwitchManager::OnMessage(Msg& msg) {
-		if (msg.GetAction() == ACT_TWEEN_ENDED && waitingForTween) {
+		if (msg.HasAction(ACT_TWEEN_ENDED) && waitingForTween) {
 			MLOGDEBUG("SceneSwitchManager", "Scene %s switched", to->GetTag().c_str());
 
 			to->SetRunningMode(RUNNING);
-			from->SetRunningMode(DISABLED);
-			from->GetScene()->Dispose();
+			
+			if (to->GetScene()->GetSceneType() != SceneType::DIALOG) {
+				from->SetRunningMode(DISABLED);
+				from->GetScene()->Dispose();
+			}
 
 			waitingForTween = false;
 
-			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
+			SendMessageToListeners(ACT_SCENE_SWITCHED, 0, nullptr, to);
 			CheckWaitingTweens();
 		}
 	}
@@ -86,23 +89,31 @@ namespace Cog {
 
 		to->GetScene()->Init();
 
+		bool isDialog = to->GetScene()->GetSceneType() == SceneType::DIALOG;
+
 		if (tweenDir == TweenDirection::NONE) {
 			// switch immediately
-			from->SetRunningMode(DISABLED);
+			from->SetRunningMode(isDialog  ? PAUSED_ALL : DISABLED);
 			to->SetRunningMode(RUNNING);
 			// set viewport to proper position
 			to->GetScene()->GetViewPortOffset().x = 0;
 			to->GetScene()->GetViewPortOffset().y = 0;
-			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
-
+			SendMessageToListeners(ACT_SCENE_SWITCHED, 0, nullptr, to);
+			
 			CheckWaitingTweens();
 		}
 		else {
-			auto slide = new SlideTween(tweenDir, from, to, 1);
-
-			slide->SetFadeFunction(EasingManager::cosineInOut);
-
-			to->AddBehavior(slide);
+			if (isDialog) {
+				auto slide = new OverrideTween(tweenDir, to, 1);
+				slide->SetFadeFunction(EasingManager::cosineInOut);
+				to->AddBehavior(slide);
+			}
+			else {
+				auto slide = new SlideTween(tweenDir, from, to, 1);
+				slide->SetFadeFunction(EasingManager::cosineInOut);
+				to->AddBehavior(slide);
+			}
+			
 			// node will be set visible at first update
 			to->SetRunningMode(INVISIBLE);
 

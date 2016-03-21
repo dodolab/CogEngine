@@ -20,6 +20,11 @@ namespace Cog {
 		UPDATING_CLIENT
 	};
 
+	enum class NetworkComMode {
+		CHECKING,		// accept messages but don't answer
+		ESTABLISHING	// accept messages and answer
+	};
+
 	class NetworkCommunicator : public Component {
 		OBJECT(NetworkCommunicator)
 
@@ -35,8 +40,8 @@ namespace Cog {
 		spt<NetOutputMessage> msgToSent = spt<NetOutputMessage>();
 		uint64 clientLastCallBack = 0;
 		uint64 serverLastUpdate = 0;
-
 		map<BYTE, spt<NetOutputMessage>> confirmations;
+		NetworkComMode mode = NetworkComMode::ESTABLISHING;
 
 	public:
 
@@ -70,6 +75,18 @@ namespace Cog {
 
 		uint64 GetServerLastUpdate() {
 			return serverLastUpdate;
+		}
+
+		NetworkComMode GetMode() {
+			return mode;
+		}
+
+		void SetMode(NetworkComMode mode) {
+			this->mode = mode;
+		}
+
+		bool IsServer() {
+			return isServer;
 		}
 
 		void Init(int applicationId, int port, bool isServer);

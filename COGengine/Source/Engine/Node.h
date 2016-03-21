@@ -384,14 +384,14 @@ namespace Cog {
 		/**
 		* Returns true, if this object is in selected group
 		*/
-		bool IsInGroup(int groupId) {
+		bool IsInGroup(unsigned groupId) {
 			return HasGroups() && groups->HasState(groupId);
 		}
 
 		/**
 		* Sets selected group
 		*/
-		void SetGroup(int groupId) {
+		void SetGroup(unsigned groupId) {
 			if (groups == nullptr) groups = new Flags();
 			groups->SetState(groupId);
 		}
@@ -399,7 +399,7 @@ namespace Cog {
 		/**
 		* Resets selected group
 		*/
-		void UnsetGroup(int groupId) {
+		void UnsetGroup(unsigned groupId) {
 			if (groups == nullptr) groups = new Flags();
 			groups->ResetState(groupId);
 		}
@@ -443,7 +443,7 @@ namespace Cog {
 		void SetState(unsigned state) {
 			GetStates().SetState(state);
 
-			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SET, state), this, -1);
+			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SET, state), this, -1);
 		}
 
 		/**
@@ -452,7 +452,7 @@ namespace Cog {
 		void ResetState(unsigned state) {
 			GetStates().ResetState(state);
 
-			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::RESET, state), this, -1);
+			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::RESET, state), this, -1);
 		}
 
 		/**
@@ -461,7 +461,7 @@ namespace Cog {
 		void SwitchState(unsigned state1, unsigned state2) {
 			GetStates().SwitchState(state1, state2);
 			// send message
-			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SWITCH, state1, state2), this, -1);
+			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SWITCH, state1, state2), this, -1);
 		}
 
 		/**
@@ -492,14 +492,28 @@ namespace Cog {
 		}
 
 		/**
+		* Adds a new attribute if not exists
+		* @param key key of the attribute
+		* @param value reference
+		*/
+		template<class T> bool AddAttrIfNotExists(StringHash key, T value) {
+			if (HasAttr(key)) {
+				return false;
+			}
+
+			attributes[key] = new AttrR<T>(key, value, this);
+			return true;
+		}
+
+		/**
 		* Gets an attribute by key; call this method only if you are sure that the attribute exists
 		* @param key attribute key
 		*/
 		template<class T> T& GetAttr(StringHash key) {
 			auto it = attributes.find(key);
 
-			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %d doesn't exists", tag->c_str(), (unsigned)key);
-			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %d is of the wrong type!", tag->c_str(), (unsigned)key);
+			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue(key.Value()).c_str());
+			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue(key.Value()).c_str());
 
 			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 			return attr->GetValue();

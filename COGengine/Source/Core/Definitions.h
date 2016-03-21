@@ -109,7 +109,12 @@ public: \
 #endif
 
 #define PIF 3.141592653f
+
+#ifdef ANDROID
 #define SCREEN_TOLERANCE 25;
+#else
+#define SCREEN_TOLERANCE 50;
+#endif
 
 typedef float(*FadeFunction)(float);
 

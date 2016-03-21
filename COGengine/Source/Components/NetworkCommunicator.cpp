@@ -12,6 +12,22 @@ namespace Cog {
 		this->port = port;
 		this->applicationId = applicationId;
 
+		if (network != nullptr) {
+			network->CloseUDP();
+			delete network;
+		}
+
+		// init values
+		clientIp = "";
+		lastReceivedMsgId = -1;
+		lastSentMsgId = 0;
+		msgToSent = spt<NetOutputMessage>();
+		clientLastCallBack = 0;
+		serverLastUpdate = 0;
+		confirmations.clear();
+		mode = NetworkComMode::ESTABLISHING;
+
+
 		network = new Network();
 		// client will always have different port than server
 		network->SetupUDPReceiver(isServer ? port : port+1, 10000, true);
@@ -33,9 +49,10 @@ namespace Cog {
 	}
 
 	void NetworkCommunicator::Update(const uint64 delta, const uint64 absolute) {
-
-		if (isServer) ServerUpdate(delta, absolute);
-		else ClientUpdate(delta, absolute);
+		if (network != nullptr) {
+			if (isServer) ServerUpdate(delta, absolute);
+			else ClientUpdate(delta, absolute);
+		}
 	}
 
 	void NetworkCommunicator::ServerUpdate(const uint64 delta, const uint64 absolute) {
@@ -50,7 +67,15 @@ namespace Cog {
 					this->clientIp = message->GetSourceIp();
 
 					clientLastCallBack = absolute;
-					networkState = NetworkComState::UPDATING_SERVER;
+					if (mode == NetworkComMode::ESTABLISHING) {
+						networkState = NetworkComState::UPDATING_SERVER;
+					}
+
+					// send only confirmation message
+					auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
+					network->SendUDPMessage(applicationId, msg);
+
+					SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
 				}
 			}
 		}
@@ -76,7 +101,7 @@ namespace Cog {
 					BYTE acceptedMsgId = message->GetId();
 					confirmations.erase(acceptedMsgId);
 					clientLastCallBack = absolute;
-					SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+					SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 				}
 				else if (message->GetMsgType() == NetMsgType::DISCONNECT) {
 					CogLogInfo("NETWORK", "Disconnected client %s", message->GetSourceIp().c_str());
@@ -111,10 +136,17 @@ namespace Cog {
 			}
 			else {
 				auto message = network->ReceiveUDPMessage(applicationId, 0, false);
-				if (message && message->GetMsgType() == NetMsgType::UPDATE) {
+				if (message && (message->GetMsgType() == NetMsgType::CONNECT_RESPONSE || message->GetMsgType() == NetMsgType::UPDATE)) {
 					CogLogInfo("NETWORK", "Connected to server %s", message->GetSourceIp().c_str());
 					network->SetupUDPSender(message->GetSourceIp(), port, true);
-					networkState = NetworkComState::UPDATING_CLIENT;
+
+					if (mode == NetworkComMode::ESTABLISHING) {
+						networkState = NetworkComState::UPDATING_CLIENT;
+					}
+					else {
+						SendMessageToListeners(StringHash(ACT_NET_SERVER_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+					}
+					
 					serverLastUpdate = absolute;
 					this->lastReceivedMsgId = message->GetId();
 				}
@@ -126,7 +158,7 @@ namespace Cog {
 			if (message && (message->GetId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetId()) > 128)) { // check overflow
 				// dispose old messages
 				this->lastReceivedMsgId = message->GetId();
-				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 				serverLastUpdate = absolute;
 			}
 

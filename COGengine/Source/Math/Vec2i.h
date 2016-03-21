@@ -26,6 +26,10 @@ namespace Cog {
 			y = copy.y;
 		}
 
+		Vec2i(ofVec2f pos) : x(pos.x), y(pos.y) {
+
+		}
+
 		/** position on the x axis */
 		int x;
 		/** position on the y axis */

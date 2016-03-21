@@ -309,6 +309,7 @@ namespace Cog {
 		ofxTextLabel::stringToLines(*font, shape->GetText(), drawBounds.width, textLines, textBounds);
 		auto text = shape->GetText();
 
+
 		float lineX, lineY;
 		lineX = drawBounds.x;
 		lineY = drawBounds.y;

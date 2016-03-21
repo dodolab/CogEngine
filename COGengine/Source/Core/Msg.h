@@ -14,31 +14,31 @@ namespace Cog {
 		SCENE = 1,				 /*!< scene object scope */
 		OBJECT = 2,				 /*!< source object scope */
 		CHILDREN = 3,			 /*!< children objects scope */
-		DIRECT_NO_TRAVERSE = 4   /*!< no BubblingType made, objects are obtained from map */
+		DIRECT_NO_TRAVERSE = 4   /*!< no HandlingType made, objects are obtained from map */
 	};
 
 	/**
 	* Configuration class that holds information how the message should bubble through the scene tre
 	*/
-	class BubblingType {
+	class HandlingType {
 
 	public:
 
 		/**
-		* Creates a new bubbling configuration
-		* @param scopeType type of object bubbling should start from
-		* @param deep if true, message will be sent to near nodes as well
-		* @param bubbleDown if true, bubbling will go from top to bottom; otherwise it will go from bottom
+		* Creates a new handling configuration
+		* @param scopeType type of object handling should start from
+		* @param deep if true, message will be sent to children as well
+		* @param tunneling if true, handling will go from top to bottom; otherwise it will go from bottom (bubbling)
 		*/
-		BubblingType(Scope scopeType, bool deep, bool bubbleDown) : scope(scopeType), deep(deep), bubbleDown(bubbleDown) {
+		HandlingType(Scope scopeType, bool deep, bool tunneling) : scope(scopeType), deep(deep), tunneling(tunneling) {
 
 		}
 		// scope object
 		Scope scope;
 		// if true, message will be sent to near nodes as well
 		bool deep;
-		// if true, bubbling will go from top to bottom; otherwise it will go from bottom 
-		bool bubbleDown;
+		// if true, handling will go from top to bottom; otherwise it will go from bottom (bubbling)
+		bool tunneling;
 	};
 
 	/**
@@ -55,8 +55,8 @@ namespace Cog {
 		StringHash action;
 		// id of subaction that has been invoked
 		int subAction;
-		// bubbling settings
-		BubblingType bubblingType;
+		// handling settings
+		HandlingType handlingType;
 		// data payload
 		MsgEvent* data = nullptr;
 		// id of behavior that sent this message
@@ -69,14 +69,14 @@ namespace Cog {
 
 		/**
 		* Creates a new message
-		* @param bubblingType bubbling settings
+		* @param handlingType handling settings
 		* @param action id of action that has been invoked
 		* @param subAction id of subaction that has been invoked
 		* @param behaviorId id of behavior that sent this message
 		* @param sourceObj source object
 		* @param data payload
 		*/
-		Msg(BubblingType bubblingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
+		Msg(HandlingType handlingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
 
 		~Msg() {
 
@@ -90,6 +90,13 @@ namespace Cog {
 		}
 
 		/**
+		* Gets indicator, if the action is equal to selected value
+		*/
+		const bool HasAction(StringHash actionCmp) const {
+			return action == actionCmp;
+		}
+
+		/**
 		* Gets id of subaction; see Actions for common action ids
 		*/
 		const int GetSubaction() const {
@@ -99,8 +106,8 @@ namespace Cog {
 		/**
 		* Gets bubbling configuration
 		*/
-		BubblingType& GetBubblingType() {
-			return bubblingType;
+		HandlingType& GetHandlingType() {
+			return handlingType;
 		}
 
 		/**

@@ -11,7 +11,8 @@ namespace Cog {
 		CONNECT_REQUEST = 1,
 		UPDATE = 2,
 		CLIENT_CALLBACK = 3,
-		DISCONNECT = 4
+		DISCONNECT = 4,
+		CONNECT_RESPONSE = 5
 	};
 
 	class NetData {

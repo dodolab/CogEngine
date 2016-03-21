@@ -31,11 +31,11 @@ namespace Cog {
 	}
 
 	void Stage::OnMessage(Msg& msg) {
-		if (msg.GetAction() == ACT_SCENE_SWITCHED) {
+		if (msg.HasAction(ACT_SCENE_SWITCHED)) {
 			Node* scene =  (Node*)msg.GetSourceObject();
 			actualScene = scene->GetScene();
 		}
-		else if (msg.GetAction() == ACT_SCREEN_CHANGED) {
+		else if (msg.HasAction(ACT_SCREEN_CHANGED)) {
 			// scale root node
 			if (actualScene != nullptr) {
 				auto environment = GETCOMPONENT(Environment);
