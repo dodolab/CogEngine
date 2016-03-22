@@ -26,7 +26,7 @@ public:
 
 	}
 
-	void Init() {
+	void OnInit() {
 		communicator = new NetworkCommunicator();
 		REGISTER_COMPONENT(communicator);
 		if (!server) {

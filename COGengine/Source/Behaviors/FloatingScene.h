@@ -32,7 +32,7 @@ namespace Cog {
 			scrollEnabled = setting.GetItem("scroll_enabled").GetValBool();
 		}
 
-		void Init() {
+		void OnInit() {
 			if (scrollEnabled) {
 				RegisterListening(ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST, ACT_KEY_PRESSED);
 			}

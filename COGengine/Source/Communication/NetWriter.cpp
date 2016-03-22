@@ -16,7 +16,7 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteByte(BYTE value) {
+	void NetWriter::WriteByte(tBYTE value) {
 		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
@@ -32,13 +32,13 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteWord(WORD value) {
+	void NetWriter::WriteWord(tWORD value) {
 		COGASSERT(FreeSpace(16), "NetWriter", "Buffer length exceeded");
 		WriteByte(value >> 8);
 		WriteByte(value);
 	}
 
-	void NetWriter::WriteDWord(DWORD value) {
+	void NetWriter::WriteDWord(tDWORD value) {
 		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		WriteByte(value >> 24);
 		WriteByte(value >> 16);
@@ -49,11 +49,11 @@ namespace Cog {
 	void NetWriter::WriteFloat(float value) {
 		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		
-		DWORD ivalue = *((DWORD*)&value);
+		tDWORD ivalue = *((tDWORD*)&value);
 		WriteDWord(ivalue);
 	}
 
-	void NetWriter::WriteBytes(BYTE* data, unsigned size) {
+	void NetWriter::WriteBytes(tBYTE* data, unsigned size) {
 		COGASSERT(FreeSpace(size * 8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
@@ -70,7 +70,7 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteDWords(DWORD* data, unsigned size) {
+	void NetWriter::WriteDWords(tDWORD* data, unsigned size) {
 		COGASSERT(FreeSpace(size * 32), "NetWriter", "Buffer length exceeded");
 
 		for (unsigned i = 0; i < size; i++) {
@@ -92,13 +92,13 @@ namespace Cog {
 
 		// write info about size separately
 		WriteDWord(str.size());
-		WriteBytes((BYTE*)str.c_str(),str.size());
+		WriteBytes((tBYTE*)str.c_str(),str.size());
 	}
 
-	BYTE* NetWriter::CopyData(unsigned& size) {
+	tBYTE* NetWriter::CopyData(unsigned& size) {
 		size = current - buffer;
 		if (bitOffset > 0) size++;
-		BYTE* data = new BYTE[size];
+		tBYTE* data = new tBYTE[size];
 		memcpy(data, buffer, size);
 		return data;
 	}

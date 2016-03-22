@@ -24,7 +24,7 @@ namespace Cog {
 
 		}
 
-		void Init();
+		void OnInit();
 
 		int RegisterBehaviorCt(luabridge::lua_State* L);
 

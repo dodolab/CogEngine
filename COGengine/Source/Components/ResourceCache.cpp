@@ -172,7 +172,7 @@ namespace Cog {
 		}
 
 
-		MLOGDEBUG("ResourceCache","Loading image %s",path.c_str());
+		COGLOGDEBUG("ResourceCache","Loading image %s",path.c_str());
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -204,7 +204,7 @@ namespace Cog {
 			return (found->second);
 		}
 
-		MLOGDEBUG("ResourceCache", "Preloading image %s", path.c_str());
+		COGLOGDEBUG("ResourceCache", "Preloading image %s", path.c_str());
 		ofImage* img = new ofImage();
 		// don't use texture because images are loaded in separate thread
 		img->setUseTexture(false);
@@ -239,7 +239,7 @@ namespace Cog {
 			fontSet = fontSetIt->second;
 		}
 
-		MLOGDEBUG("ResourceCache", "Loading font %s", path.c_str());
+		COGLOGDEBUG("ResourceCache", "Loading font %s", path.c_str());
 		map<int, spt<ofTrueTypeFont>>& fs = loadedFonts.find(path)->second;
 
 		auto font = (fs).find(size);
@@ -262,7 +262,7 @@ namespace Cog {
 			return (found->second);
 		}
 
-		MLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
+		COGLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
 		Sound* snd = new Sound(path);
 		return spt<Sound>(snd);
 	}

@@ -12,53 +12,42 @@
 #define LUA_REGFUNC(className, funcName) addFunction(#funcName, &className::funcName)
 #define LUA_REGDATA(className, dataName) addData(#dataName, &className::dataName)
 
-#define OBJECT_VIRTUAL() \
-public: \
-virtual string GetClassName() { \
-	return string(); \
-} 
-
-#define PROTOTYPE_VIRTUAL(compName) \
-public: \
-virtual compName* CreatePrototype(){ \
- return nullptr; \
-}
-
-#define PROTOTYPE_VIRTUAL_INIT(compName) \
-PROTOTYPE_VIRTUAL(compName) \
-public: \
-virtual compName* CreatePrototype(Setting& setting){ \
-  return nullptr; \
-}
 
 #define OBJECT(compName) \
-  public: \
-  virtual string GetClassName() { \
-      return GetClassNameStatic(); \
-  } \
+public: \
+virtual string GetClassName() { \
+  return GetClassNameStatic(); \
+} \
   \
-  static string GetClassNameStatic() { \
-	  return string(#compName); \
-  }
+static string GetClassNameStatic() { \
+ return string(#compName); \
+}
 
 #define DEFAULT_CONST(compName) \
 public: \
   compName(){ \
-  } 
+} 
 
 
 #define OBJECT_PROTOTYPE(compName) \
-  OBJECT(compName) \
-  DEFAULT_CONST(compName) \
-  compName* CreatePrototype(){ \
-	return new compName(); \
-  }
+OBJECT(compName) \
+DEFAULT_CONST(compName) \
+compName* CreatePrototype(){ \
+  return new compName(); \
+}
 
 #define OBJECT_PROTOTYPE_INIT(compName) \
-  OBJECT_PROTOTYPE(compName) \
-  compName* CreatePrototype(Setting& setting) { \
-    return new compName(setting); \
-  }
+OBJECT_PROTOTYPE(compName) \
+compName* CreatePrototype(Setting& setting) { \
+  return new compName(setting); \
+}
+
+#define BEHAVIOR_MAXCOUNT(count) \
+virtual int GetMaxCount() { \
+	return count; \
+}
+
+#define BEHAVIOR_UNIQUE() BEHAVIOR_MAXCOUNT(1)
 
 
 // assertion with formatted message
@@ -100,12 +89,12 @@ public: \
 
 // macro for debug-only logging
 #ifdef DEBUG
-#   define MLOGDEBUG(module, message, ...) \
+#   define COGLOGDEBUG(module, message, ...) \
     do { \
              CogLogDebug(module, message, ##__VA_ARGS__); \
 				    } while (false)
 #else
-#   define MLOGDEBUG(message, ...) do { } while (false)
+#   define COGLOGDEBUG(message, ...) do { } while (false)
 #endif
 
 #define PIF 3.141592653f
@@ -119,3 +108,9 @@ public: \
 typedef float(*FadeFunction)(float);
 
 typedef unsigned long long uint64;
+
+namespace Cog {
+	typedef unsigned char tBYTE;
+	typedef unsigned int tDWORD;
+	typedef unsigned short tWORD;
+}

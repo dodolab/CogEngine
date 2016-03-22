@@ -17,6 +17,8 @@ namespace Cog {
 	*/
 	class HitEvent : public Behavior {
 		OBJECT_PROTOTYPE_INIT(HitEvent)
+		BEHAVIOR_UNIQUE()
+
 	protected:
 		// if true, device will vibrate when object is hit
 		bool vibrate = false;
@@ -47,9 +49,8 @@ namespace Cog {
 			preciseTest = setting.GetItemValBool("precise_test", false);
 		}
 
-		void Init() {
+		void OnStart() {
 			owner->SetState(StringHash(STATES_HITTABLE));
-
 		}
 
 

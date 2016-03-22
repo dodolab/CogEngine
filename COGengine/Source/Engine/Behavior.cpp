@@ -3,8 +3,17 @@
 
 namespace Cog {
 
-	Behavior::Behavior() : ended(false) {
+	Behavior::Behavior() {
 
+	}
+
+	void Behavior::Finish() {
+		if (!finished) {
+			finished = true;
+			OnFinish();
+			SendMessageToListeners(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
+			if (removeWhenFinish) owner->RemoveBehavior(this, true);
+		}
 	}
 
 	void Behavior::RegisterListening(StringHash action1) {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "Sprite.h"
 
 namespace Cog {
+
+	class Node;
 
 	class HitBox  {
 	private:

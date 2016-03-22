@@ -15,6 +15,10 @@ namespace Cog {
 		return CogEngine::GetInstance().GetFrameCounter();
 	}
 
+	uint64 CogGetAbsoluteTime() {
+		return CogEngine::GetInstance().GetAbsoluteTime();
+	}
+
 	// =================== MENVIRONMENT ====================
 
 	void CogAddSound(spt<Sound> sound) {
@@ -108,6 +112,20 @@ namespace Cog {
 	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
 		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
 		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
+	}
+
+	void CogSendDirectMessageToListener(Scene* scene, Msg& msg, int targetId) {
+		scene->SendDirectMessageToListener(msg, targetId);
+	}
+
+	void CogSendMessageToListeners(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
+		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+		scene->SendMessage(msg, source);
+	}
+
+	void CogSendDirectMessageToListener(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
+		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+		scene->SendDirectMessageToListener(msg, targetId);
 	}
 
 	// =================== MLOGGER =========================

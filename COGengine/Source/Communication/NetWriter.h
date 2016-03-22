@@ -6,23 +6,19 @@
 
 namespace Cog {
 
-	typedef unsigned char BYTE;
-	typedef unsigned int DWORD;
-	typedef unsigned short WORD;
-
 	using namespace std;
 
 	class NetWriter {
 	private:
-		BYTE* buffer;
-		BYTE* current;
+		tBYTE* buffer;
+		tBYTE* current;
 		unsigned bufferLength;
 		unsigned bitOffset;
 
 	public:
 
 		NetWriter(unsigned bytes) {
-			this->buffer = new BYTE[bytes];
+			this->buffer = new tBYTE[bytes];
 			this->bufferLength = bytes *8;
 			this->current = buffer;
 			this->bitOffset = 0;
@@ -31,27 +27,27 @@ namespace Cog {
 
 		void WriteBit(bool value);
 
-		void WriteByte(BYTE value);
+		void WriteByte(tBYTE value);
 
-		void WriteWord(WORD value);
+		void WriteWord(tWORD value);
 
-		void WriteDWord(DWORD value);
+		void WriteDWord(tDWORD value);
 
 		void WriteFloat(float value);
 
-		void WriteBytes(BYTE* data, unsigned size);
+		void WriteBytes(tBYTE* data, unsigned size);
 
-		void WriteDWords(DWORD* data, unsigned size);
+		void WriteDWords(tDWORD* data, unsigned size);
 
 		void WriteFloats(float* data, unsigned size);
 
 		void WriteString(string str);
 
-		BYTE* GetBuffer() {
+		tBYTE* GetBuffer() {
 			return buffer;
 		}
 
-		BYTE* CopyData(unsigned& size);
+		tBYTE* CopyData(unsigned& size);
 
 		unsigned GetBufferBites() {
 			return bufferLength;

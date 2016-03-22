@@ -26,7 +26,7 @@ namespace Cog {
 		int fps = 0;
 		void RegisterComponents();
 		vector<function<void()>> actions;
-
+		uint64 lastAbsoluteTime = 0;
 	public:
 		// global configuration file
 		spt<ofxXml> config;
@@ -94,6 +94,10 @@ namespace Cog {
 
 		void ResetFrameCounter() {
 			this->frameCounter = 0;
+		}
+
+		uint64 GetAbsoluteTime() {
+			return this->lastAbsoluteTime;
 		}
 
 		int GetFps() {

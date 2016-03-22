@@ -58,7 +58,7 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
@@ -90,7 +90,7 @@ namespace Cog {
 		}
 
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
@@ -128,7 +128,7 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
@@ -160,7 +160,7 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
@@ -200,7 +200,7 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_WANDER)) {
 				owner->AddAttr(ATTR_STEERING_BEH_WANDER, ofVec2f(0));
 			}

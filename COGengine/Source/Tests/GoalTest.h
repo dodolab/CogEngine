@@ -13,7 +13,7 @@ class DummyGoal : public Goal {
  public:
 	bool complete;
 
-	DummyGoal(bool complete) : complete(complete) {
+	DummyGoal(bool complete) : Goal(StringHash()), complete(complete) {
 
 	}
 
@@ -42,7 +42,7 @@ TEST_CASE("GoalTest", "[class]")
 		Goal* g3 = new DummyGoal(true);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(true);
-		GoalComposite* composite = new GoalComposite(true);
+		GoalComposite* composite = new GoalComposite(StringHash(), true);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);
@@ -84,7 +84,7 @@ TEST_CASE("GoalTest", "[class]")
 		Goal* g3 = new DummyGoal(false);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(false);
-		GoalComposite* composite = new GoalComposite(false);
+		GoalComposite* composite = new GoalComposite(StringHash(), false);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);

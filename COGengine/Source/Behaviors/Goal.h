@@ -22,15 +22,15 @@ namespace Cog {
 		StringHash stateId;
 
 
-		virtual void OnComplete() {
+		virtual void OnGoalComplete() {
 
 		}
 
-		virtual void OnAbort() {
+		virtual void OnGoalAbort() {
 
 		}
 
-		virtual void OnFail() {
+		virtual void OnGoalFail() {
 
 		}
 
@@ -46,7 +46,7 @@ namespace Cog {
 		inline bool IsAborted() { return goalState == GoalState::ABORTED; }
 		inline bool IsFailed() { return goalState == GoalState::FAILED; }
 		
-		inline bool HasEnded() { return IsCompleted() || IsAborted() || IsFailed(); }
+		inline bool GoalEnded() { return IsCompleted() || IsAborted() || IsFailed(); }
 
 		GoalState GetGoalState() {
 			return goalState;
@@ -58,19 +58,19 @@ namespace Cog {
 
 		void Complete() {
 			SetGoalState(GoalState::COMPLETED);
-			OnComplete();
+			OnGoalComplete();
 			Finish();
 		}
 
 		void Fail() {
 			SetGoalState(GoalState::FAILED);
-			OnFail();
+			OnGoalFail();
 			Finish();
 		}
 
 		void Abort() {
 			SetGoalState(GoalState::ABORTED);
-			OnAbort();
+			OnGoalAbort();
 			Finish();
 		}
 
@@ -94,7 +94,7 @@ namespace Cog {
 
 		}
 
-		void Init() {
+		void OnStart() {
 			if (subgoals.size() > 0) {
 				SwitchToSubgoal(subgoals[subgoalIndex]);
 			}
@@ -106,7 +106,7 @@ namespace Cog {
 			}
 		}
 
-		virtual void OnAbort() {
+		virtual void OnGoalAbort() {
 			if (actualSubgoal != nullptr) {
 				actualSubgoal->Abort();
 			}
@@ -125,7 +125,7 @@ namespace Cog {
 				do {
 					actualSubgoal->Update(delta, absolute);
 
-					if (actualSubgoal->IsCompleted() || (actualSubgoal->IsFailed() && continueOnFail)) {
+					if (actualSubgoal->IsCompleted() || ((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) && continueOnFail)) {
 						if (subgoalIndex < (subgoals.size() - 1)) {
 							SwitchToSubgoal(subgoals[++subgoalIndex]);
 						}
@@ -151,7 +151,7 @@ namespace Cog {
 			SetOwner(goal, owner);
 			goal->SetGoalState(GoalState::PROCESSING);
 			// goal can fail during initialization, so that the state should be changed before init
-			goal->Init();
+			goal->Start();
 		}
 	};
 

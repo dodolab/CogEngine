@@ -479,6 +479,19 @@ namespace Cog {
 		}
 
 		/**
+		* Gets behavior by its type
+		*/
+		template<class T> T* GetBehavior() {
+			for (auto beh : this->behaviors) {
+				if (typeid(*beh) == typeid(T)) {
+					return static_cast<T*>(beh);
+				}
+			}
+
+			return nullptr;
+		}
+
+		/**
 		* Adds a new attribute; or replace already existing attribute
 		* @param key key of the attribute
 		* @param value reference

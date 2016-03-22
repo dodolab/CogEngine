@@ -11,7 +11,7 @@ namespace Cog {
 		this->msgTime = reader->ReadDWord();
 
 		if (this->dataLength != 0) {
-			this->data = new BYTE[this->dataLength];
+			this->data = new tBYTE[this->dataLength];
 			reader->ReadBytes(this->data, this->dataLength);
 		}
 	}
@@ -19,7 +19,7 @@ namespace Cog {
 	void NetOutputMessage::SaveToStream(NetWriter* writer) {
 		
 		writer->WriteByte(this->id);
-		writer->WriteByte((BYTE)this->msgType);
+		writer->WriteByte((tBYTE)this->msgType);
 		writer->WriteDWord(this->action.Value());
 		writer->WriteDWord(this->msgTime);
 

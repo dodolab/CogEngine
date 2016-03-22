@@ -72,9 +72,9 @@ namespace Cog {
 
 		void threadedFunction()
 		{
-			MLOGDEBUG("AsyncProcess", "Running threaded job %s", this->job->GetClassName().c_str());
+			COGLOGDEBUG("AsyncProcess", "Running threaded job %s", this->job->GetClassName().c_str());
 			job->DoJob();
-			MLOGDEBUG("AsyncProcess", "Finishing threaded job %s", this->job->GetClassName().c_str());
+			COGLOGDEBUG("AsyncProcess", "Finishing threaded job %s", this->job->GetClassName().c_str());
 			delete job;
 			
 		}

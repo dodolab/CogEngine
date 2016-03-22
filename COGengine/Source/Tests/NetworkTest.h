@@ -289,7 +289,7 @@ TEST_CASE("Network test", "[class]")
 		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12));
 		msg->SetAction(StringHash("MOJO"));
 		msg->SetMsgTime(12345);
-		msg->SetMsgType(NetMsgType::CLIENT_CALLBACK);
+		msg->SetMsgType(NetMsgType::CALLBACK_UPDATE);
 
 		// send message
 		network->SendUDPMessage(1000,msg);
@@ -302,7 +302,7 @@ TEST_CASE("Network test", "[class]")
 		if (inputMsg) {
 			REQUIRE(inputMsg->GetAction() == StringHash("MOJO"));
 			REQUIRE(inputMsg->GetMsgTime() == 12345);
-			REQUIRE(inputMsg->GetMsgType() == NetMsgType::CLIENT_CALLBACK);
+			REQUIRE(inputMsg->GetMsgType() == NetMsgType::CALLBACK_UPDATE);
 			REQUIRE(inputMsg->GetId() == 12);
 		}
 
@@ -351,7 +351,7 @@ TEST_CASE("Network test", "[class]")
 		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) <= 37);
 	}
 
-	SECTION("Lost packet test")
+	SECTION("Client connect test")
 	{
 		auto netCom = new NetworkCommunicator();
 		REGISTER_COMPONENT(netCom);
@@ -363,36 +363,23 @@ TEST_CASE("Network test", "[class]")
 		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// start server
-		netCom->Init(1000, 12345, true);
+		netCom->InitServer(1000, 12345);
 		
 		// start client
-		Network* network = new Network();
-		network->SetupUDPSender("127.0.0.1", 12345, true);
-		network->SetupUDPReceiver(12345, 1000, true);
+		netCom->InitClient(1000, 12346, 12345);
+		netCom->GetClient()->ConnectToServer("127.0.0.1");
 
 		// send message to server
 		auto msg = spt<NetOutputMessage>(new NetOutputMessage(1));
 		msg->SetMsgType(NetMsgType::CONNECT_REQUEST);
-		network->SendUDPMessage(1000, msg);
+		netCom->GetClient()->SetMessageForSending(msg);
+
+
 		// update
 		CogEngine::GetInstance().ResetFrameCounter();
 		CogEngine::GetInstance().Update(10, 10);
 		// client should be connected
-		REQUIRE(netCom->ClientConnected());
-
-	/*	// send message to client
-		auto clMsg = spt<NetOutputMessage>(new NetOutputMessage(2));
-		clMsg->SetMsgType(NetMsgType::UPDATE);
-		clMsg->SetMsgTime(98798);
-		netCom->SendNetworkMessage(clMsg);
-		CogEngine::GetInstance().Update(10, 10);
-
-		auto msgFromServer = network->ReceiveUDPMessage(1000, 5000, false);
-		REQUIRE(msgFromServer);
-
-		if (msgFromServer) {
-			REQUIRE(msgFromServer->GetMsgTime() == 98798);
-		}*/
+		REQUIRE(!netCom->GetServer()->GetClientIp().empty());
 	}
 }
 

@@ -8,11 +8,13 @@
 namespace Cog {
 
 	enum class NetMsgType {
-		CONNECT_REQUEST = 1,
-		UPDATE = 2,
-		CLIENT_CALLBACK = 3,
-		DISCONNECT = 4,
-		CONNECT_RESPONSE = 5
+		DISCOVER_REQUEST = 1,
+		DISCOVER_RESPONSE = 2,
+		CONNECT_REQUEST = 3,
+		CONNECT_RESPONSE = 4,
+		UPDATE = 5,
+		CALLBACK_UPDATE = 6,
+		DISCONNECT = 7
 	};
 
 	class NetData {
@@ -28,11 +30,11 @@ namespace Cog {
 	private:
 		string sourceIp;
 		int sourcePort;
-		BYTE id = 0;
-		NetMsgType msgType = NetMsgType::CLIENT_CALLBACK;
+		tBYTE id = 0;
+		NetMsgType msgType = NetMsgType::CALLBACK_UPDATE;
 		StringHash action = StringHash();
-		DWORD msgTime = 0;
-		BYTE* data = nullptr;
+		tDWORD msgTime = 0;
+		tBYTE* data = nullptr;
 		int dataLength = 0;
 
 	public:
@@ -68,11 +70,11 @@ namespace Cog {
 			this->sourcePort = sourcePort;
 		}
 
-		BYTE GetId() {
+		tBYTE GetId() {
 			return id;
 		}
 
-		void SetId(BYTE id) {
+		void SetId(tBYTE id) {
 			this->id = id;
 		}
 
@@ -95,11 +97,11 @@ namespace Cog {
 			this->msgType = msgType;
 		}
 
-		DWORD GetMsgTime() {
+		tDWORD GetMsgTime() {
 			return msgTime;
 		}
 
-		void SetMsgTime(DWORD time) {
+		void SetMsgTime(tDWORD time) {
 			this->msgTime = time;
 		}
 
@@ -111,7 +113,7 @@ namespace Cog {
 			this->action = action;
 		}
 
-		BYTE* GetData() {
+		tBYTE* GetData() {
 			return data;
 		}
 
@@ -119,7 +121,7 @@ namespace Cog {
 			return dataLength;
 		}
 
-		void SetData(BYTE* data, int dataLength) {
+		void SetData(tBYTE* data, int dataLength) {
 			this->data = data;
 			this->dataLength = dataLength;
 		}
@@ -131,10 +133,10 @@ namespace Cog {
 
 	class NetOutputMessage {
 	private:
-		BYTE id = 0;
-		NetMsgType msgType = NetMsgType::CLIENT_CALLBACK;
+		tBYTE id = 0;
+		NetMsgType msgType = NetMsgType::CALLBACK_UPDATE;
 		StringHash action = StringHash();
-		DWORD msgTime = 0;
+		tDWORD msgTime = 0;
 		NetData* data = nullptr;
 
 	public:
@@ -151,11 +153,11 @@ namespace Cog {
 		}
 
 
-		BYTE GetId() {
+		tBYTE GetId() {
 			return id;
 		}
 
-		void SetId(BYTE id) {
+		void SetId(tBYTE id) {
 			this->id = id;
 		}
 
@@ -176,11 +178,11 @@ namespace Cog {
 			this->msgType = msgType;
 		}
 
-		DWORD GetMsgTime() {
+		tDWORD GetMsgTime() {
 			return msgTime;
 		}
 
-		void SetMsgTime(DWORD time) {
+		void SetMsgTime(tDWORD time) {
 			this->msgTime = time;
 		}
 

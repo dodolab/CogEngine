@@ -1,5 +1,6 @@
 #pragma once
-#include "ofMain.h"
+
+#include "ofVec2f.h"
 #include "StringHash.h"
 
 namespace Cog {

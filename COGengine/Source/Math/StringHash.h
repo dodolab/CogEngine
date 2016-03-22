@@ -20,6 +20,9 @@ namespace Cog
 	class StringHash
 	{
 	public:
+#ifdef DEBUG
+		string strValue;
+#endif
 		// Construct with zero value.
 		StringHash() :
 			value_(0)

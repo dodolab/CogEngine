@@ -36,7 +36,7 @@ namespace Cog {
 
 		}
 
-		void Init() {
+		void OnStart() {
 			vector<spt<Collision>> collisions = vector<spt<Collision>>();
 			if (!owner->HasAttr(ATTR_COLLISIONS)) {
 				owner->AddAttr(ATTR_COLLISIONS, collisions);

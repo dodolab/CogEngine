@@ -66,7 +66,7 @@ namespace Cog {
 			}
 		}
 
-		void Init() {
+		void OnStart() {
 			TransformMath math = TransformMath();
 
 			Settings& sceneSettings = owner->GetScene()->GetSettings();

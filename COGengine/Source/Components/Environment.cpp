@@ -56,7 +56,7 @@ namespace Cog {
 
 		float realVirtual = ((virtualWidth)/((float)virtualHeight));
 
-		MLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
+		COGLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
 		if (CogEngine::GetInstance().stage->GetActualScene() != nullptr) {
