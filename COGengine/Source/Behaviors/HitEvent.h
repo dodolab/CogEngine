@@ -53,22 +53,12 @@ namespace Cog {
 			owner->SetState(StringHash(STATES_HITTABLE));
 		}
 
-
-		bool RectangleHitTest(spt<Rectangle> rectangle, ofVec3f testPos) {
+		template<class CShape>
+		bool CShapeHitTest(spt<CShape> shape, ofVec3f testPos) {
 			if (testPos.x < 0
 				|| testPos.y < 0
-				|| testPos.x >(float)rectangle->GetWidth()
-				|| testPos.y >(float)rectangle->GetHeight())
-				return false;
-
-			return true;
-		}
-
-		bool PlaneHitTest(spt<Plane> plane, ofVec3f testPos) {
-			if (testPos.x < 0
-				|| testPos.y < 0
-				|| testPos.x >(float)plane->GetWidth()
-				|| testPos.y >(float)plane->GetHeight())
+				|| testPos.x >(float)shape->GetWidth()
+				|| testPos.y >(float)shape->GetHeight())
 				return false;
 
 			return true;
@@ -109,29 +99,6 @@ namespace Cog {
 			else return true;
 		}
 
-		/**
-		* Tests if the sprite has been hit
-		*/
-		bool MultiSpriteHitTest(spt<SpritesShape> shape, ofVec3f testPos) {
-			if (testPos.x < 0
-				|| testPos.y < 0
-				|| testPos.x >(float)shape->GetWidth()
-				|| testPos.y >(float)shape->GetHeight())
-				return false;
-
-			return true;
-		}
-
-		bool SpriteHitTest(spt<SpriteShape> shape, ofVec3f testPos) {
-			if (testPos.x < 0
-				|| testPos.y < 0
-				|| testPos.x >(float)shape->GetSprite()->GetWidth()
-				|| testPos.y >(float)shape->GetSprite()->GetHeight())
-				return false;
-
-			return true;
-		}
-
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 			if (owner->HasState(StringHash(STATES_HITTABLE))) {
@@ -153,16 +120,16 @@ namespace Cog {
 
 					if (owner->HasRenderType(RenderType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
 					else if (owner->HasRenderType(RenderType::MULTISPRITE)) {
-						hasHitTest = MultiSpriteHitTest(owner->GetShape<spt<SpritesShape>>(), touchTrans);
+						hasHitTest = CShapeHitTest(owner->GetShape<spt<SpritesShape>>(), touchTrans);
 					}
 					else if (owner->HasRenderType(RenderType::SPRITE)) {
-						hasHitTest = SpriteHitTest(owner->GetShape<spt<SpriteShape>>(), touchTrans);
+						hasHitTest = CShapeHitTest(owner->GetShape<spt<SpriteShape>>(), touchTrans);
 					}
 					else if (owner->HasRenderType(RenderType::RECTANGLE)) {
-						hasHitTest = RectangleHitTest(owner->GetShape<spt<Rectangle>>(), touchTrans);
+						hasHitTest = CShapeHitTest(owner->GetShape<spt<Rectangle>>(), touchTrans);
 					}
 					else if (owner->HasRenderType(RenderType::PLANE)) {
-						hasHitTest = PlaneHitTest(owner->GetShape<spt<Plane>>(), touchTrans);
+						hasHitTest = CShapeHitTest(owner->GetShape<spt<Plane>>(), touchTrans);
 					}
 					else if (owner->HasRenderType(RenderType::BOUNDING_BOX)) {
 						hasHitTest = BoundingBoxHitTest(owner->GetShape<spt<BoundingBox>>(), touchVector);

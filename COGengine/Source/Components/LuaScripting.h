@@ -105,7 +105,7 @@ namespace Cog {
 				.beginClass<BehaviorLua>("Behavior")
 				.addConstructor<void(*)(void)>()
 				.addFunction("RegisterListening", &BehaviorLua::RegisterListeningLua)
-				.addCFunction("RegisterBehavior", &BehaviorLua::RegisterBehaviorCt)
+				.addCFunction("Register", &BehaviorLua::RegisterCt)
 				.addFunction("SendMessage", &BehaviorLua::SendMessage)
 				.addData("owner", &BehaviorLua::ownerLua)
 				.endClass();

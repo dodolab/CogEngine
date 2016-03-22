@@ -25,7 +25,7 @@ namespace Cog {
 		init();
 	}
 
-	int BehaviorLua::RegisterBehaviorCt(luabridge::lua_State* L) {
+	int BehaviorLua::RegisterCt(luabridge::lua_State* L) {
 		int r = luaL_ref(L, LUA_REGISTRYINDEX);
 		lua_rawgeti(L, LUA_REGISTRYINDEX, r);
 		this->reference = r;

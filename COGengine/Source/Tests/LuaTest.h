@@ -305,7 +305,7 @@ ghost = { \
  trans.rotation = 50 \
  rotPos = trans:CalcRotationToPosition(ofVec2f(10,10))"
 
-
+		
 		int status = luaL_loadstring(pl, lua_sample);
 		if (status != 0) {
 			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
@@ -384,7 +384,7 @@ mojo = { \
  end \
  } \
 mojo2 = Behavior() \
-mojo2:RegisterBehavior(mojo) \
+mojo2:Register(mojo) \
 mojo3 = { \
  attr1 = 12, \
  Update = function(delta, absolute) \
@@ -394,7 +394,7 @@ mojo3 = { \
  end \
  } \
 mojo4 = Behavior() \
-mojo4:RegisterBehavior(mojo3) \
+mojo4:Register(mojo3) \
 \
 next = { \
  Update = function(delta, absolute) \
@@ -402,7 +402,7 @@ next = { \
  end \
 } \
 mojo5 = Behavior() \
-mojo5:RegisterBehavior(next) "
+mojo5:Register(next) "
 
 		auto L = scr->GetLua();
 
@@ -453,7 +453,7 @@ mojo5:RegisterBehavior(next) "
    end \
   } \
  testBeh = Behavior() \
- testBeh:RegisterBehavior(test) \
+ testBeh:Register(test) \
  mNode = Node(\"testNode\") \
  mNode:AddBehavior(testBeh) \
  mNode:AddToActualScene() "

@@ -26,7 +26,7 @@ namespace Cog {
 
 		void OnInit();
 
-		int RegisterBehaviorCt(luabridge::lua_State* L);
+		int RegisterCt(luabridge::lua_State* L);
 
 		void SendMessage(StringHash msg);
 
