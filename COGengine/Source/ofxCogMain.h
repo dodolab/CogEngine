@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "CogApp.h"
 #include "Node.h"
+#include "Scene.h"
 #include "RotateAnim.h"
 #include "TranslateAnim.h"
 #include "HitEvent.h"

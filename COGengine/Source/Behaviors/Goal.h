@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Behavior.h"
 
 namespace Cog {
@@ -56,23 +55,11 @@ namespace Cog {
 			this->goalState = goalState;
 		}
 
-		void Complete() {
-			SetGoalState(GoalState::COMPLETED);
-			OnGoalComplete();
-			Finish();
-		}
+		void Complete();
 
-		void Fail() {
-			SetGoalState(GoalState::FAILED);
-			OnGoalFail();
-			Finish();
-		}
+		void Fail();
 
-		void Abort() {
-			SetGoalState(GoalState::ABORTED);
-			OnGoalAbort();
-			Finish();
-		}
+		void Abort();
 
 		StringHash GetStateId() {
 			return stateId;
@@ -120,39 +107,10 @@ namespace Cog {
 			return subgoals;
 		}
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			if (actualSubgoal != nullptr) {
-				do {
-					actualSubgoal->Update(delta, absolute);
-
-					if (actualSubgoal->IsCompleted() || ((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) && continueOnFail)) {
-						if (subgoalIndex < (subgoals.size() - 1)) {
-							SwitchToSubgoal(subgoals[++subgoalIndex]);
-						}
-						else {
-							Complete();
-							break;
-						}
-					}
-					else if(actualSubgoal->IsFailed() && !continueOnFail) {
-						Fail();
-						break;
-					}
-					else {
-						break;
-					}
-				} while (true); // safe
-			}
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 
 	protected:
-		void SwitchToSubgoal(Goal* goal) {
-			this->actualSubgoal = goal;
-			SetOwner(goal, owner);
-			goal->SetGoalState(GoalState::PROCESSING);
-			// goal can fail during initialization, so that the state should be changed before init
-			goal->Start();
-		}
+		void SwitchToSubgoal(Goal* goal);
 	};
 
 }// namespace

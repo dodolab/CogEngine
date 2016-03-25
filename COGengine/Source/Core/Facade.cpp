@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "ResourceCache.h"
 #include "TimeMeasure.h"
+#include "Scene.h"
 
 namespace Cog {
 

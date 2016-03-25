@@ -3,6 +3,7 @@
 #include "CogEngine.h"
 #include "Stage.h"
 #include "LuaScripting.h"
+#include "Scene.h"
 
 namespace Cog {
 
