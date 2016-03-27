@@ -180,7 +180,7 @@ namespace Cog {
 			lastReceivedMsgTime = absolute;
 			networkState = NetworkComState::COMMUNICATING;
 		}
-		else if(message &&message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
+		else if (message &&message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
 			// both peers can connect at the same time
 			CogLogInfo("NETWORK", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
@@ -198,18 +198,19 @@ namespace Cog {
 	}
 
 	void NetworkCommunicator::UpdateCommunicating(const uint64 absolute) {
-		
-		auto message = network->ReceiveUDPMessage(applicationId, 0, false);
-		
-		if (message) {
-			
+
+		while (true) {
+			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
+
+			if (!message) break;
+
 			auto type = message->GetMsgType();
 
-			if ((type == NetMsgType::UPDATE || type == NetMsgType::ACCEPT)) { 
+			if ((type == NetMsgType::UPDATE || type == NetMsgType::ACCEPT)) {
 
 				tBYTE acceptedMsgId = message->GetAcceptedId();
 				unconfirmedMessages.erase(acceptedMsgId);
-				
+
 				if (type != NetMsgType::ACCEPT) {
 					if (find(acceptedMessages.begin(), acceptedMessages.end(), lastReceivedMsgId) == acceptedMessages.end()) {
 						acceptedMessages.push_back(lastReceivedMsgId);
@@ -256,15 +257,15 @@ namespace Cog {
 
 			for (auto& msg : messagesToSend) {
 				msg->SetSyncId(lastSentMsgId++);
-				
+
 				if (!acceptedMessages.empty()) {
 					msg->SetAcceptedId(acceptedMessages.back());
 					acceptedMessages.erase(acceptedMessages.end() - 1);
 				}
-				
+
 				msg->SetMsgType(NetMsgType::UPDATE);
 				msg->SetMsgTime(time);
-				
+
 				// delta updates don't need to be confirmed
 				if (msg->GetAction() != NET_MSG_DELTA_UPDATE) {
 					unconfirmedMessages[msg->GetSyncId()] = msg;
@@ -277,12 +278,12 @@ namespace Cog {
 
 			// send all messages that haven't been confirmed
 			for (auto& key : unconfirmedMessages) {
-					network->SendUDPMessage(applicationId, key.second);
+				network->SendUDPMessage(applicationId, key.second);
 			}
 
 			messagesToSend.clear();
 		}
-		else if(!acceptedMessages.empty()) {
+		else if (!acceptedMessages.empty()) {
 			// send all acceptation messages
 			for (auto& acc : acceptedMessages) {
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::ACCEPT));

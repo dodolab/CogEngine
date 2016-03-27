@@ -176,6 +176,9 @@ namespace Cog {
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
 			attributes.erase(it);
+
+			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::REMOVE), this, -1);
+
 			if (erase) delete attr;
 			return true;
 		}
@@ -262,8 +265,15 @@ namespace Cog {
 				child->GetScene()->AddNode(child);
 			}
 
-			if (applyToChildren) child->InsertElementsForAdding(true, init);
 		}
+
+		// initialize when all children are loaded
+		if (applyToChildren) {
+			for (auto& child : childrenToAdd) {
+				child->InsertElementsForAdding(true, init);
+			}
+		}
+
 		childrenToAdd.clear();
 
 		// insert behaviors

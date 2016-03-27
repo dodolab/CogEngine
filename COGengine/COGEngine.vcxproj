@@ -278,6 +278,7 @@
     <ClInclude Include="Source\Behaviors\MultiAnim.h" />
     <ClInclude Include="Source\Behaviors\RotateAnim.h" />
     <ClInclude Include="Source\Behaviors\MultiSelection.h" />
+    <ClInclude Include="Source\Behaviors\Slider.h" />
     <ClInclude Include="Source\Behaviors\State.h" />
     <ClInclude Include="Source\Behaviors\StateMachine.h" />
     <ClInclude Include="Source\Behaviors\SteeringBehavior.h" />
@@ -546,6 +547,7 @@
     <ClCompile Include="Source\Behaviors\RotateAnim.cpp" />
     <ClCompile Include="Source\Behaviors\Selection.cpp" />
     <ClCompile Include="Source\Behaviors\SheetAnimator.cpp" />
+    <ClCompile Include="Source\Behaviors\Slider.cpp" />
     <ClCompile Include="Source\Behaviors\StateMachine.cpp" />
     <ClCompile Include="Source\Behaviors\SteeringBehavior.cpp" />
     <ClCompile Include="Source\Behaviors\TransformAnim.cpp" />

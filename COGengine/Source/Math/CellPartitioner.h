@@ -13,6 +13,7 @@ namespace Cog {
 	public:
 		// nodes in the cell
 		vector<Node*> nodes;
+
 		// cell's bounding box
 		ofRectangle boundingBox;
 
@@ -26,6 +27,7 @@ namespace Cog {
 	*/
 	class CellSpace {
 		vector<Cell*> cells;
+		map<int, ofVec2f> nodesAndPositions;
 
 		ofVec2f spaceSize;
 		int rows;
@@ -42,7 +44,7 @@ namespace Cog {
 			this->rows = spaceSize.y / partitionIndex;
 
 			this->cellWidth = spaceSize.x / columns;
-			this->cellHeight = spaceSize.y / columns;
+			this->cellHeight = spaceSize.y / rows;
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {
@@ -55,6 +57,13 @@ namespace Cog {
 		void AddNode(Node* node) {
 			int pos = CalcIndex(node->GetTransform().localPos);
 			cells[pos]->nodes.push_back(node);
+
+			nodesAndPositions[node->GetId()] = node->GetTransform().localPos;
+		}
+
+		void UpdateNode(Node* node) {
+			ofVec2f previousPos = nodesAndPositions[node->GetId()];
+			UpdateNode(node, previousPos);
 		}
 
 		void UpdateNode(Node* node, ofVec2f previousPos) {
@@ -73,6 +82,8 @@ namespace Cog {
 
 				cells[newPos]->nodes.push_back(node);
 			}
+
+			nodesAndPositions[node->GetId()] = node->GetTransform().localPos;
 		}
 
 		vector<Node*> CalcNeighbors(ofVec2f position, float radius) {
@@ -82,11 +93,12 @@ namespace Cog {
 
 			for (auto& it = cells.begin(); it != cells.end(); ++it) {
 				Cell* cell = (*it);
-				if (cell->boundingBox.inside(queryRect) && cell->nodes.size() > 0) {
+				if (cell->nodes.size() > 0 && cell->boundingBox.intersects(queryRect)) {
 					
-					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++it) {
+					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
 						Node* node = *jt;
-						if (node->GetTransform().localPos.distanceSquared(position) < radius*radius) {
+						auto nodePos = node->GetTransform().localPos;
+						if (position.distanceSquared(nodePos) < radius*radius) {
 							neighbors.push_back(node);
 						}
 					}
@@ -101,9 +113,9 @@ namespace Cog {
 
 			for (auto& it = cells.begin(); it != cells.end(); ++it) {
 				Cell* cell = (*it);
-				if (cell->boundingBox.inside(queryRect) && cell->nodes.size() > 0) {
+				if (cell->nodes.size() > 0 && cell->boundingBox.intersects(queryRect)) {
 
-					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++it) {
+					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
 						Node* node = *jt;
 						if (node->GetTransform().localPos.distanceSquared(position) < radius*radius) {
 							return true;
@@ -111,6 +123,7 @@ namespace Cog {
 					}
 				}
 			}
+
 			return false;
 		}
 
@@ -121,8 +134,10 @@ namespace Cog {
 		}
 
 		int CalcIndex(ofVec2f position) {
-			int pos = (int)(columns * position.x / spaceSize.x) +
-				((int)((rows)* position.y / spaceSize.y) * columns);
+
+			int posX = (int)(columns * position.x/spaceSize.x);
+			int posY = (int)(rows * position.y/spaceSize.y);
+			int pos = posY*columns + posX;
 
 			if (pos > (int)cells.size() - 1) pos = (int)cells.size() - 1;
 
