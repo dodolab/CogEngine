@@ -28,6 +28,7 @@ namespace Cog {
 				lastMousePos = Vec2i(0); // restart mouse position
 				originalMousePos = Vec2i(0);
 				scrollStarted = false;
+				lastDistance = 0;
 			}
 			else if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
 

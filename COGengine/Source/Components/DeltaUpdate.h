@@ -18,7 +18,6 @@ namespace Cog {
 
 		float deltaSpeed = 1;
 		
-
 		void Init();
 
 		void OnMessage(Msg& msg);

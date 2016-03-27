@@ -51,6 +51,8 @@ namespace Cog {
 
 		void OnMessage(Msg& msg);
 
+		void ProcessCheckMessage(Msg& msg, bool setDirectly);
+
 		void Update(const uint64 delta, const uint64 absolute) {
 
 		}

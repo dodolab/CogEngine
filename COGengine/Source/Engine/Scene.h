@@ -31,7 +31,8 @@ namespace Cog
 		Node* sceneNode = nullptr;
 		// settings for all layers presented in this scene
 		vector<LayerEnt> layers;
-
+		// parent scene; only for partial scenes such as dialogs
+		Scene* parentScene;
 		// message listeners
 		map<StringHash, vector<MsgListener*>> msgListeners;
 		// listeners ids and their registered actions
@@ -113,6 +114,14 @@ namespace Cog
 
 		void SetSceneType(SceneType sceneType) {
 			this->sceneType = sceneType;
+		}
+
+		Scene* GetParentScene() {
+			return parentScene;
+		}
+
+		void SetParentScene(Scene* parent) {
+			this->parentScene = parent;
 		}
 
 		/**

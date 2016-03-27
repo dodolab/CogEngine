@@ -14,20 +14,20 @@ namespace Cog {
 		}
 
 		uint64 time;
-		map<StringHash, float> deltas;
-		map<StringHash, float> teleports;
+		map<int, float> deltas;
+		map<int, float> teleports;
 
-		float GetDelta(StringHash val) {
+		float GetDelta(int val) {
 			auto found = deltas.find(val);
 			return (found != deltas.end()) ? (*found).second : 0;
 		}
 		
-		float GetTeleport(StringHash val) {
+		float GetTeleport(int val) {
 			auto found = teleports.find(val);
 			return (found != teleports.end()) ? (*found).second : 0;
 		}
 
-		float GetVal(StringHash val) {
+		float GetVal(int val) {
 			auto foundDelta = deltas.find(val);
 
 			if (foundDelta != deltas.end()) return (*foundDelta).second;

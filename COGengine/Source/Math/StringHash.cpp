@@ -11,7 +11,6 @@ namespace Cog
 	{
 #ifdef DEBUG
 		StringHash::strValues[value_] = string(str);
-		this->strValue = string(str);
 #endif
 	}
 
@@ -20,7 +19,6 @@ namespace Cog
 	{
 #ifdef DEBUG
 		StringHash::strValues[value_] = str;
-		this->strValue = str;
 #endif
 	}
 

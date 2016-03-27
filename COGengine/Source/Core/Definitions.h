@@ -114,3 +114,5 @@ namespace Cog {
 	typedef unsigned int tDWORD;
 	typedef unsigned short tWORD;
 }
+
+#define SIZE_STR(str) sizeof(tBYTE)*str.size()+sizeof(tDWORD)

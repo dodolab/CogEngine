@@ -30,40 +30,46 @@ namespace Cog {
 	}
 
 	void MultiSelection::OnInit() {
-		RegisterListening(ACT_OBJECT_HIT_ENDED);
+		RegisterListening(ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
 	}
 
 	void MultiSelection::OnStart() {
-		if (selectedImg && owner->HasState(selectedState)) {
-			owner->GetShape<spt<Image>>()->SetImage(selectedImg);
-		}
-		else if (defaultImg) {
-			owner->GetShape<spt<Image>>()->SetImage(defaultImg);
-		}
+		CheckState();
 		owner->SetGroup(selectionGroup);
 	}
 
 	void MultiSelection::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_OBJECT_HIT_ENDED) && msg.GetSourceObject()->IsInGroup(selectionGroup)) {
 			// check if the object was clicked (user could click on different area and release touch event over the button)
-			InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
+			InputEvent* evt = msg.GetDataS<InputEvent>();
 			if (evt->input->handlerNodeId == msg.GetSourceObject()->GetId()) {
 
-				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
-					// selected actual node
-					if (!owner->HasState(selectedState)) {
-						owner->SetState(selectedState);
-						SendMessageToListeners(ACT_OBJECT_SELECTED, 0, nullptr, owner);
-						CheckState();
-					}
-				}
-				else {
-					if (owner->HasState(selectedState)) {
-						owner->ResetState(selectedState);
-						CheckState();
-					}
+				ProcessCheckMessage(msg, false);
+			}
+		}
+		else if (msg.HasAction(ACT_STATE_CHANGED) && msg.GetSourceObject()->IsInGroup(selectionGroup)) {
+			ProcessCheckMessage(msg, true); // set directly, because STATE_CHANGED event has been already raised
+		}
+	}
 
-				}
+	void MultiSelection::ProcessCheckMessage(Msg& msg, bool setDirectly) {
+		if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+			// selected actual node
+			if (!owner->HasState(selectedState)) {
+				if (setDirectly) owner->GetStates().SetState(selectedState);
+				else owner->SetState(selectedState);
+				SendMessageToListeners(ACT_OBJECT_SELECTED, 0, nullptr, owner);
+				CheckState();
+			}
+			else {
+				CheckState();
+			}
+		}
+		else {
+			if (owner->HasState(selectedState)) {
+				if (setDirectly) owner->GetStates().ResetState(selectedState);
+				else owner->ResetState(selectedState);
+				CheckState();
 			}
 		}
 	}

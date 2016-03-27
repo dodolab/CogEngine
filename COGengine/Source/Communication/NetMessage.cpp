@@ -5,7 +5,8 @@ namespace Cog {
 	
 	void NetInputMessage::LoadFromStream(NetReader* reader) {
 
-		this->id = reader->ReadByte();
+		this->syncId = reader->ReadByte();
+		this->acceptedId = reader->ReadByte();
 		this->msgType = (NetMsgType) reader->ReadByte();
 		this->action = StringHash(reader->ReadDWord());
 		this->msgTime = reader->ReadDWord();
@@ -18,7 +19,8 @@ namespace Cog {
 
 	void NetOutputMessage::SaveToStream(NetWriter* writer) {
 		
-		writer->WriteByte(this->id);
+		writer->WriteByte(this->syncId);
+		writer->WriteByte(this->acceptedId);
 		writer->WriteByte((tBYTE)this->msgType);
 		writer->WriteDWord(this->action.Value());
 		writer->WriteDWord(this->msgTime);

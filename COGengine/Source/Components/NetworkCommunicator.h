@@ -2,6 +2,7 @@
 
 #include "ofxSmartPointer.h"
 #include "Component.h"
+#include <unordered_set>
 
 
 namespace Cog {
@@ -9,166 +10,89 @@ namespace Cog {
 	class NetOutputMessage;
 	class Network;
 
-	enum class ClientComState {
+	enum class NetworkComState {
+		NONE,
+		LISTENING,
 		DISCOVERING,
 		CONNECTING,
 		COMMUNICATING
-	};
-
-	enum class ServerComState {
-		LISTENING,
-		COMMUNICATING
-	};
-
-	// forward decl
-	class NetworkCommunicator;
-
-	class ClientCommunicator {
-	private:
-		int applicationId;
-		int clientPort;
-		int serverPort;
-		string serverIp = "";
-		Network* network;
-		NetworkCommunicator* netcom;
-
-		tBYTE lastReceivedMsgId = -1;
-		tBYTE lastSentMsgId = 0;
-
-		ClientComState networkState = ClientComState::DISCOVERING;
-		spt<NetOutputMessage> msgToSent = spt<NetOutputMessage>();
-		uint64 lastReceivedMsgTime = 0;
-		map<string, uint64> discoveredServers;
-	public:
-
-		ClientCommunicator(int applicationId, int clientPort, int serverPort, Network* network, NetworkCommunicator* netcom)
-			: applicationId(applicationId), clientPort(clientPort), serverPort(serverPort), network(network), netcom(netcom) {
-
-		}
-
-		int GetApplicationId() {
-			return applicationId;
-		}
-
-		int GetClientPort() {
-			return clientPort;
-		}
-
-		int GetServerPort() {
-			return serverPort;
-		}
-
-		string GetServerIp() {
-			return serverIp;
-		}
-
-		int GetLastReceivedMsgId() {
-			return lastReceivedMsgId;
-		}
-
-		uint64 GetLastMessageTime() {
-			return lastReceivedMsgTime;
-		}
-
-		map<string, uint64>& GetDiscoveredServers() {
-			return discoveredServers;
-		}
-
-		void SetMessageForSending(spt<NetOutputMessage> msg);
-
-		void ConnectToServer();
-
-		void ConnectToServer(string ip);
-
-		virtual void Update(const uint64 delta, const uint64 absolute);
-
-	protected:
-		void Broadcast();
-
-		void SendCallbackMessage(uint64 time);
-	};
-
-	class ServerCommunicator {
-	private:
-		int applicationId;
-		int serverPort;
-
-		int clientPort;
-		string clientIp = "";
-		Network* network;
-		NetworkCommunicator* netcom;
-
-		tBYTE lastReceivedMsgId = -1;
-		tBYTE lastSentMsgId = 0;
-
-		ServerComState networkState = ServerComState::LISTENING;
-		spt<NetOutputMessage> msgToSent = spt<NetOutputMessage>();
-		uint64 lastReceivedMsgTime = 0;
-		map<tBYTE, spt<NetOutputMessage>> confirmations;
-
-	public:
-
-		ServerCommunicator(int applicationId, int serverPort, Network* network, NetworkCommunicator* netcom)
-			: applicationId(applicationId), serverPort(serverPort), network(network), netcom(netcom) {
-			CogLogInfo("NETWORK", "Listening on port %d", serverPort);
-		}
-
-		int GetApplicationId() {
-			return applicationId;
-		}
-
-		int GetPort() {
-			return serverPort;
-		}
-
-		string GetClientIp() {
-			return clientIp;
-		}
-
-		uint64 GetLastMessageTime() {
-			return lastReceivedMsgTime;
-		}
-
-		void SetMessageForSending(spt<NetOutputMessage> msg);
-
-		virtual void Update(const uint64 delta, const uint64 absolute);
-
-	protected:
-		void SendUpdateMessage(uint64 time);
 	};
 
 	class NetworkCommunicator : public Component {
 		OBJECT(NetworkCommunicator)
 
 	private:
-		ClientCommunicator* client = nullptr;
-		ServerCommunicator* server = nullptr;
 		Network* network = nullptr;
+		NetworkComState networkState = NetworkComState::NONE;
+		int applicationId;
+		int myPort;
+		int peerPort;
+		string peerIp = "";
+
+		vector<tBYTE> acceptedMessages;
+		tBYTE lastReceivedMsgId = -1;
+		tBYTE lastSentMsgId = 0;
+		vector<spt<NetOutputMessage>> messagesToSend;
+		uint64 lastReceivedMsgTime = 0;
+		map<string, uint64> discoveredPeers;
+		map<tBYTE, spt<NetOutputMessage>> unconfirmedMessages;
 
 	public:
 
-		void InitClient(int applicationId, int clientPort, int serverPort);
+		void InitBroadcast(int applicationId, int myPort, int peerPort);
 
-		void InitServer(int applicationId, int port);
+		void InitListening(int applicationId, int myPort);
 
-		ClientCommunicator* GetClient() {
-			return client;
+		NetworkComState GetNetworkState() {
+			return networkState;
 		}
 
-		ServerCommunicator* GetServer() {
-			return server;
+
+		int GetApplicationId() {
+			return applicationId;
 		}
 
-		void CloseClient();
+		int GetMyPort() {
+			return myPort;
+		}
 
-		void CloseServer();
+		int GetPeerPort() {
+			return peerPort;
+		}
+
+		string GetPeerIp() {
+			return peerIp;
+		}
+
+		uint64 GetLastReceivedMsgTime() {
+			return lastReceivedMsgTime;
+		}
+
+		map<string, uint64>& GetDiscoveredPeers() {
+			return discoveredPeers;
+		}
+
+		void PushMessageForSending(spt<NetOutputMessage> msg);
+		
+		void Close();
+
+		void ConnectToPeer(string ip);
 
 		void OnMessage(Msg& msg);
 
 		virtual void Update(const uint64 delta, const uint64 absolute);
 
-		friend class ClientCommunicator;
-		friend class ServerCommunicator;
+	protected:
+
+		void UpdateListening(int frame, const uint64 absolute);
+
+		void UpdateDiscovering(int frame, const uint64 absolute);
+
+		void UpdateConnecting(int frame, const uint64 absolute);
+
+		void UpdateCommunicating(int frame, const uint64 absolute);
+
+		void SendUpdateMessage(uint64 time);
 	};
 
 }// namespace

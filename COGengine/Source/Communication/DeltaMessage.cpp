@@ -26,12 +26,12 @@ namespace Cog {
 		writer->WriteDWord(teleports.size());
 
 		for (auto& key : deltas) {
-			writer->WriteDWord(key.first.Value());
+			writer->WriteDWord(key.first);
 			writer->WriteFloat(key.second);
 		}
 
 		for (auto& key : teleports) {
-			writer->WriteDWord(key.first.Value());
+			writer->WriteDWord(key.first);
 			writer->WriteFloat(key.second);
 		}
 	}

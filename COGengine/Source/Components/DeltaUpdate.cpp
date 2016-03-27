@@ -6,33 +6,16 @@
 namespace Cog {
 
 	void DeltaUpdate::Init() {
-		RegisterGlobalListening(ACT_DELTA_MESSAGE_RECEIVED, ACT_NET_MESSAGE_RECEIVED);
+		RegisterGlobalListening(ACT_DELTA_MESSAGE_RECEIVED);
 		actual = spt<DeltaInfo>(new DeltaInfo());
 	}
 
 	void DeltaUpdate::OnMessage(Msg& msg) {
 
-		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED)) {
-			// todo: message could be various types
-			NetworkMsgEvent* msgEvent = msg.GetDataS<NetworkMsgEvent>();
-			auto netMsg = msgEvent->msg;
-			
-			if (netMsg->GetAction() == StringHash(NET_MSG_DELTA_UPDATE)) {
-				auto netReader = new NetReader(netMsg->GetData(), netMsg->GetDataLength());
-				spt<DeltaMessage> deltaMsg = spt<DeltaMessage>(new DeltaMessage());
-				deltaMsg->LoadFromStream(netReader);
-				spt<DeltaInfo> deltaInfo = spt<DeltaInfo>(new DeltaInfo());
-				deltaInfo->deltas = deltaMsg->deltas;
-				deltaInfo->teleports = deltaMsg->teleports;
-				deltaInfo->time = netMsg->GetMsgTime();
-				AcceptDeltaUpdate(deltaInfo);
-			}
-
-		}else if (msg.HasAction(ACT_DELTA_MESSAGE_RECEIVED)) {
-
+		if (msg.HasAction(ACT_DELTA_MESSAGE_RECEIVED)) {
 			// received delta message
-			DeltaMsgEvent* msgEvent = msg.GetDataS<DeltaMsgEvent>();
-			spt<DeltaInfo> netMsg = msgEvent->msg;
+			CommonEvent<DeltaInfo>* msgEvent = msg.GetDataS<CommonEvent<DeltaInfo>>();
+			spt<DeltaInfo> netMsg = msgEvent->value;
 			AcceptDeltaUpdate(netMsg);
 		}
 	}
@@ -78,8 +61,6 @@ namespace Cog {
 				}
 				else if (this->actual->time > this->next->time) {
 					if(deltaSpeed > 0.8f) deltaSpeed /= 1.1f;
-					//this->actual->time -= (this->actual->time - this->next->time)/2;
-					// extrapolation 
 					
 				}
 				else {
