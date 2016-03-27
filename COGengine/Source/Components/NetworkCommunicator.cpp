@@ -13,7 +13,7 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->peerPort = peerPort;
-		CogLogInfo("NETWORK", "Initialized broadcasting for application %? on ports %d and %d", applicationId, myPort, peerPort);
+		CogLogInfo("NETWORK", "Initialized broadcasting for application %d on ports %d and %d", applicationId, myPort, peerPort);
 		network = new Network();
 		network->SetupUDPReceiver(myPort, 10000, true);
 		network->GetUDPSender().SetEnableBroadcast(true);
@@ -25,7 +25,7 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->myPort = port;
-		CogLogInfo("NETWORK", "Initialized listening for application %? on port %d", applicationId, port);
+		CogLogInfo("NETWORK", "Initialized listening for application %d on port %d", applicationId, port);
 		network = new Network();
 		network->SetupUDPReceiver(port, 10000, true);
 		networkState = NetworkComState::LISTENING;
@@ -38,7 +38,6 @@ namespace Cog {
 			messagesToSend.clear();
 		}
 
-		cout << "pushing msg of type " << StringHash::GetStringValue(msg->GetAction()).c_str() << endl;
 		messagesToSend.push_back(msg);
 	}
 
@@ -70,70 +69,69 @@ namespace Cog {
 
 
 	void NetworkCommunicator::Update(const uint64 delta, const uint64 absolute) {
-		int frame = CogGetFrameCounter();
-
-		switch (networkState) {
-		case NetworkComState::LISTENING:
-			UpdateListening(frame, absolute);
-			break;
-		case NetworkComState::DISCOVERING:
-			UpdateDiscovering(frame, absolute);
-			break;
-		case NetworkComState::CONNECTING:
-			UpdateConnecting(frame, absolute);
-			break;
-		case NetworkComState::COMMUNICATING:
-			UpdateCommunicating(frame, absolute);
-			break;
-		}
-	}
-
-	void NetworkCommunicator::UpdateListening(int frame, const uint64 absolute) {
-
-		if ((frame - 1) % 100 == 0) {
-			auto message = network->ReceiveUDPMessage(applicationId, 0, true);
-
-			if (message) {
-				if (message->GetMsgType() == NetMsgType::DISCOVER_REQUEST) {
-					// received discover request -> send discover response
-					CogLogInfo("NETWORK", "Received discover message from %s:%d", message->GetSourceIp().c_str(), message->GetSourcePort());
-					network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
-					auto response = spt<NetOutputMessage>();
-					if (!messagesToSend.empty()) {
-						// if there is a message for sending, send is as a payload, but don't delete it, because the discover process is static
-						response = messagesToSend.back();
-						response->SetMsgTime(absolute);
-						response->SetMsgType(NetMsgType::DISCOVER_RESPONSE);
-					}
-					else {
-						response = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::DISCOVER_RESPONSE));
-					}
-
-					network->SendUDPMessage(applicationId, response);
-				}
-				else if (message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
-					// received connect request -> send connect response and switch to communicating state
-					CogLogInfo("NETWORK", "Connected peer %s", message->GetSourceIp().c_str());
-					network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
-					this->peerIp = message->GetSourceIp();
-					this->peerPort = message->GetSourcePort();
-					lastReceivedMsgTime = absolute;
-					networkState = NetworkComState::COMMUNICATING;
-
-					// send confirmation message
-					auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-					SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
-					messagesToSend.clear();
-
-					network->SendUDPMessage(applicationId, msg);
-				}
+		if (network != nullptr) {
+			switch (networkState) {
+			case NetworkComState::LISTENING:
+				UpdateListening(absolute);
+				break;
+			case NetworkComState::DISCOVERING:
+				UpdateDiscovering(absolute);
+				break;
+			case NetworkComState::CONNECTING:
+				UpdateConnecting(absolute);
+				break;
+			case NetworkComState::COMMUNICATING:
+				UpdateCommunicating(absolute);
+				break;
 			}
 		}
 	}
 
-	void NetworkCommunicator::UpdateDiscovering(int frame, const uint64 absolute) {
+	void NetworkCommunicator::UpdateListening(const uint64 absolute) {
 
-		if (frame % 100 == 0) {
+		auto message = network->ReceiveUDPMessage(applicationId, 0, true);
+
+		if (message) {
+			if (message->GetMsgType() == NetMsgType::DISCOVER_REQUEST) {
+				// received discover request -> send discover response
+				CogLogInfo("NETWORK", "Received discover message from %s:%d", message->GetSourceIp().c_str(), message->GetSourcePort());
+				network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
+				auto response = spt<NetOutputMessage>();
+				if (!messagesToSend.empty()) {
+					// if there is a message for sending, send is as a payload, but don't delete it, because the discover process is static
+					response = messagesToSend.back();
+					response->SetMsgTime(absolute);
+					response->SetMsgType(NetMsgType::DISCOVER_RESPONSE);
+				}
+				else {
+					response = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::DISCOVER_RESPONSE));
+				}
+
+				network->SendUDPMessage(applicationId, response);
+			}
+			else if (message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
+				// received connect request -> send connect response and switch to communicating state
+				CogLogInfo("NETWORK", "Connected peer %s", message->GetSourceIp().c_str());
+				network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
+				this->peerIp = message->GetSourceIp();
+				this->peerPort = message->GetSourcePort();
+				lastReceivedMsgTime = absolute;
+				networkState = NetworkComState::COMMUNICATING;
+
+				// send confirmation message
+				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
+				SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+				messagesToSend.clear();
+
+				network->SendUDPMessage(applicationId, msg);
+			}
+		}
+	}
+
+	void NetworkCommunicator::UpdateDiscovering(const uint64 absolute) {
+
+		if (IsProperTime(lastBroadcastTime, absolute, broadcastingFrequency)) {
+			lastBroadcastTime = absolute;
 			// send broadcast every nth frame
 			spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::DISCOVER_REQUEST));
 
@@ -146,7 +144,9 @@ namespace Cog {
 			network->SetupUDPSender("127.0.0.1", peerPort, true);
 			network->SendUDPMessage(applicationId, msg);
 		}
-		else {
+		else if (IsProperTime(lastDiscoveringTime, absolute, connectingFrequency)) {
+			lastDiscoveringTime = absolute;
+
 			// check for discover responses
 			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 			if (message && (message->GetMsgType() == NetMsgType::DISCOVER_RESPONSE)) {
@@ -162,11 +162,14 @@ namespace Cog {
 	}
 
 
-	void NetworkCommunicator::UpdateConnecting(int frame, const uint64 absolute) {
+	void NetworkCommunicator::UpdateConnecting(const uint64 absolute) {
 
-		// send connection request
-		auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::CONNECT_REQUEST));
-		network->SendUDPMessage(applicationId, msg);
+		if (IsProperTime(lastConnectingTime, absolute, connectingFrequency)) {
+			lastConnectingTime = absolute;
+			// send connection request
+			auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::CONNECT_REQUEST));
+			network->SendUDPMessage(applicationId, msg);
+		}
 
 		if (lastReceivedMsgTime == 0) lastReceivedMsgTime = absolute;
 
@@ -186,15 +189,15 @@ namespace Cog {
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::COMMUNICATING;
 		}
-		else if ((absolute - lastReceivedMsgTime) > 40000) {
-			CogLogInfo("NETWORK", "No message received from peer for 40s, disconnecting...");
+		else if ((absolute - lastReceivedMsgTime) > 20000) {
+			CogLogInfo("NETWORK", "No message received from peer for 20s, disconnecting...");
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::DISCONNECT));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::DISCOVERING;
 		}
 	}
 
-	void NetworkCommunicator::UpdateCommunicating(int frame, const uint64 absolute) {
+	void NetworkCommunicator::UpdateCommunicating(const uint64 absolute) {
 		
 		auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 		
@@ -236,8 +239,11 @@ namespace Cog {
 			}
 		}
 
-		// send regular message
-		SendUpdateMessage(absolute);
+		if (IsProperTime(lastSendingTime, absolute, sendingFrequency)) {
+			lastSendingTime = absolute;
+			// send regular message
+			SendUpdateMessage(absolute);
+		}
 
 		if ((absolute - lastReceivedMsgTime) > 4000) {
 			CogLogInfo("NETWORK", "No message received from peer for 4s, reconnecting...");
@@ -264,16 +270,14 @@ namespace Cog {
 					unconfirmedMessages[msg->GetSyncId()] = msg;
 				}
 				else {
-					cout << "sending delta" << endl;
+					//cout << "sending delta" << endl;
 					network->SendUDPMessage(applicationId, msg);
 				}
 			}
 
 			// send all messages that haven't been confirmed
 			for (auto& key : unconfirmedMessages) {
-				if ((time - key.second->GetMsgTime()) < 20 || (time - key.second->GetMsgTime()) > 100) {
 					network->SendUDPMessage(applicationId, key.second);
-				}
 			}
 
 			messagesToSend.clear();

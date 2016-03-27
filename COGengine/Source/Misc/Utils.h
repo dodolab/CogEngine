@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include "ofColor.h"
+#include "Definitions.h"
 
 using namespace std;
 
@@ -36,5 +37,7 @@ namespace Cog {
 	vector<string> split_string(string str, string delimiter);
 
 	ofColor StringToColor(string col);
+
+	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency);
 
 } // namespace
