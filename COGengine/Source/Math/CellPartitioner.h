@@ -26,8 +26,6 @@ namespace Cog {
 	*/
 	class CellSpace {
 		vector<Cell*> cells;
-		vector<Node*> neighbors;
-		vector<Node*>::iterator currentNeighbor;
 
 		ofVec2f spaceSize;
 		int rows;
@@ -37,8 +35,12 @@ namespace Cog {
 		int partitionIndex;
 	public:
 
-		CellSpace(ofVec2f spaceSize, int rows, int columns, int partitionIndex)
-		:spaceSize(spaceSize), rows(rows), columns(columns), partitionIndex(partitionIndex){
+		CellSpace(ofVec2f spaceSize, int partitionIndex)
+		:spaceSize(spaceSize), partitionIndex(partitionIndex){
+
+			this->columns = spaceSize.x / partitionIndex;
+			this->rows = spaceSize.y / partitionIndex;
+
 			this->cellWidth = spaceSize.x / columns;
 			this->cellHeight = spaceSize.y / columns;
 
@@ -73,10 +75,8 @@ namespace Cog {
 			}
 		}
 
-		void CalcNeighbors(ofVec2f position, float radius) {
-			neighbors.clear();
-
-			auto currentNeighbor = neighbors.begin();
+		vector<Node*> CalcNeighbors(ofVec2f position, float radius) {
+			auto neighbors = vector<Node*>();
 
 			ofRectangle queryRect = ofRectangle(position-ofVec2f(radius),position+ofVec2f(radius));
 
@@ -89,24 +89,29 @@ namespace Cog {
 						if (node->GetTransform().localPos.distanceSquared(position) < radius*radius) {
 							neighbors.push_back(node);
 						}
-						
 					}
 				}
 			}
+
+			return neighbors;
 		}
 
-		Node* GetPreviousNeighbor() {
-			currentNeighbor--;
-			return *currentNeighbor;
-		}
+		bool ExistsNode(ofVec2f position, float radius) {
+			ofRectangle queryRect = ofRectangle(position - ofVec2f(radius), position + ofVec2f(radius));
 
-		Node* GetNextNeighbor() {
-			currentNeighbor++;
-			return *currentNeighbor;
-		}
+			for (auto& it = cells.begin(); it != cells.end(); ++it) {
+				Cell* cell = (*it);
+				if (cell->boundingBox.inside(queryRect) && cell->nodes.size() > 0) {
 
-		bool HasNextNeighbor() {
-			return currentNeighbor != neighbors.end();
+					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++it) {
+						Node* node = *jt;
+						if (node->GetTransform().localPos.distanceSquared(position) < radius*radius) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 		void ClearCells() {
@@ -126,33 +131,5 @@ namespace Cog {
 
 	};
 
-	/**
-	* Class that divides scene into a grid of cells so that
-	* fast searching querys can be made
-	*/
-	class CellPartitioner : public Component{
-		OBJECT(CellPartitioner)
-	
-	private:
-		
-	public:
-
-		~CellPartitioner() {
-			
-		}
-
-		void Init() {
-
-		}
-
-		void Init(spt<ofxXml> xml) {
-
-		}
-
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-
-		}
-	
-	};
 
 }// namespace

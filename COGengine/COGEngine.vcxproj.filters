@@ -408,9 +408,6 @@
     <ClInclude Include="Source\Tests\GoalTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\CellPartitioner.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Communication\NetReader.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
@@ -623,6 +620,9 @@
     </ClInclude>
     <ClInclude Include="Source\Components\LuaScripting.h">
       <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\CellPartitioner.h">
+      <Filter>Source\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

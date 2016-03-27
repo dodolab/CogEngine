@@ -52,7 +52,7 @@ namespace Cog {
 			MeasureBlock& block = rec.second;
 			int percentage = (int)((block.duration / ((float)total))*100);
 
-			CogLogInfo("Measure", "%s:Total[%d %%],Calls[%d],Dur[%d ms]",block.name.c_str(), percentage, block.numCalls,block.duration/1000);
+			CogLogInfo("Measure", "%s:Total[%d %%],Calls[%d],Dur[%d ms],Freq[%.2f]",block.name.c_str(), percentage, block.numCalls,block.duration/1000, block.numCalls/(total/1000000.0f));
 		}
 
 		if (restart) this->Restart();

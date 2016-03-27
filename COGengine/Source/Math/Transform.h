@@ -15,6 +15,7 @@ namespace Cog {
 
 		}
 
+		
 		/**
 		* Creates a new transformation entity
 		* @param posX position in X axis
