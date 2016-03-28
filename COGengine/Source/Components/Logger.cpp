@@ -23,12 +23,11 @@ namespace Cog {
 				else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
 			}
 
-
 			string channelStr = ofToLower(set.GetItemVal("channel"));
 			if (!channelStr.empty()) {
 				if (channelStr.compare("console") == 0) SetOutputToConsole();
 				else if (channelStr.compare("file") == 0) {
-					bool append = ofToBool(set.GetItemVal("append"));
+					bool append = set.GetItemValBool("append",false);
 					string path = set.GetItemVal("path");
 					string fullPath = ofToDataPath(path);
 					SetOutputToFile(fullPath, append);
