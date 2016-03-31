@@ -660,6 +660,12 @@
     <ClInclude Include="Source\AI\RandomAgent.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AI\UCTAgent.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\ActionFilter.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

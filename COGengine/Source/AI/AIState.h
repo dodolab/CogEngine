@@ -4,14 +4,14 @@
 
 class AIState{
 protected:
-	virtual bool Equals(AIState*)  = 0;
+	int agentOnTurn = 0;
+
 public:
-	bool operator ==(AIState* rhs)  { return rhs->Equals(this); }
+	int GetAgentOnTurn() const {
+		return agentOnTurn;
+	}
 
-	// Test for inequality with another hash.
-	bool operator !=(AIState* rhs)  { return !rhs->Equals(this); }
-
-	virtual int GetAgentOnTurn() = 0;
-
-	virtual spt<AIState> DeepCopy() = 0;
+	void SetAgentOnTurn(int agentOnTurn) {
+		this->agentOnTurn = agentOnTurn;
+	}
 };

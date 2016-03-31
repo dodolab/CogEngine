@@ -1,11 +1,14 @@
 #pragma once
 
 #include <string>
+#include "StringHash.h"
 #include "Simulator.h"
+#include "ofxSmartPointer.h"
 
 using namespace std;
+using namespace Cog;
 
-template<class S, class A>
+template<class S>
 class AIAgent {
 protected:
 	// identifier incremental counter
@@ -21,7 +24,7 @@ public:
 		this->name = name;
 	}
 
-	virtual A ChooseAction(spt<Simulator<S, A>> simulator) = 0;
+	virtual StringHash ChooseAction(spt<Simulator<S>> simulator) = 0;
 
 	int GetId() {
 		return id;
@@ -36,5 +39,5 @@ public:
 	}
 };
 
-template<class S, class A>
-int AIAgent<S, A>::idCounter = 0;
+template<class S>
+int AIAgent<S>::idCounter = 0;

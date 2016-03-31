@@ -61,6 +61,10 @@ public:
 		rewards[agentIndex] = reward;
 	}
 
+	void AddVal(int agentIndex, int addition) {
+		rewards[agentIndex] += addition;
+	}
+
 	void Merge(AgentsReward& agRewards) {
 		for (int i = 0; i < agentsNum; i++) {
 			rewards[i] += agRewards.rewards[i];
