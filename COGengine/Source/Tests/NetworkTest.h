@@ -289,7 +289,7 @@ TEST_CASE("Network test", "[class]")
 		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12));
 		msg->SetAction(StringHash("MOJO"));
 		msg->SetMsgTime(12345);
-		msg->SetMsgType(NetMsgType::CALLBACK_UPDATE);
+		msg->SetMsgType(NetMsgType::UPDATE);
 
 		// send message
 		network->SendUDPMessage(1000,msg);
@@ -302,8 +302,8 @@ TEST_CASE("Network test", "[class]")
 		if (inputMsg) {
 			REQUIRE(inputMsg->GetAction() == StringHash("MOJO"));
 			REQUIRE(inputMsg->GetMsgTime() == 12345);
-			REQUIRE(inputMsg->GetMsgType() == NetMsgType::CALLBACK_UPDATE);
-			REQUIRE(inputMsg->GetId() == 12);
+			REQUIRE(inputMsg->GetMsgType() == NetMsgType::UPDATE);
+			REQUIRE(inputMsg->GetSyncId() == 12);
 		}
 
 		receiver.Close();
@@ -363,23 +363,23 @@ TEST_CASE("Network test", "[class]")
 		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// start server
-		netCom->InitServer(1000, 12345);
+		netCom->InitListening(1000, 12345);
 		
 		// start client
-		netCom->InitClient(1000, 12346, 12345);
-		netCom->GetClient()->ConnectToServer("127.0.0.1");
+		netCom->InitBroadcast(1000, 12346, 12345);
+		netCom->ConnectToPeer("127.0.0.1");
 
 		// send message to server
 		auto msg = spt<NetOutputMessage>(new NetOutputMessage(1));
 		msg->SetMsgType(NetMsgType::CONNECT_REQUEST);
-		netCom->GetClient()->SetMessageForSending(msg);
+		netCom->PushMessageForSending(msg);
 
 
 		// update
 		CogEngine::GetInstance().ResetFrameCounter();
 		CogEngine::GetInstance().Update(10, 10);
 		// client should be connected
-		REQUIRE(!netCom->GetServer()->GetClientIp().empty());
+		REQUIRE(!netCom->GetPeerIp().empty());
 	}
 }
 

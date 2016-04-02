@@ -648,15 +648,6 @@
     <ClInclude Include="Source\AI\AgentsReward.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\HydroqAction.h">
-      <Filter>Source\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\HydroqSimulator.h">
-      <Filter>Source\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\HydroqState.h">
-      <Filter>Source\AI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\AI\RandomAgent.h">
       <Filter>Source\AI</Filter>
     </ClInclude>

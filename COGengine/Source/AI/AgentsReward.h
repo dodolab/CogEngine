@@ -5,9 +5,14 @@ using namespace std;
 
 namespace Cog {
 
+	/**
+	* Class that holds rewards for each game agent
+	*/
 	class AgentsReward {
 	protected:
+		// collection of rewards
 		vector<int> rewards;
+		// number of agents
 		int agentsNum = 0;
 	public:
 
@@ -67,6 +72,9 @@ namespace Cog {
 			rewards[agentIndex] += addition;
 		}
 
+		/**
+		* Merges rewards from another entity
+		*/
 		void Merge(AgentsReward& agRewards) {
 			for (int i = 0; i < agentsNum; i++) {
 				rewards[i] += agRewards.rewards[i];
