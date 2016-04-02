@@ -56,13 +56,13 @@ namespace Cog {
 					if(!isSimulation) cout << "Rudej lajznul modrou" << endl;
 					actualState.RemoveBlueRig(index);
 					actualState.distancesRed.push_back(1);
-					rewards = AgentsReward(10, -10);
+					rewards = AgentsReward(10, 0);
 				}
 				else {
 					if (!isSimulation) cout << "Modrej lajznul rudou" << endl;
 					actualState.RemoveRedRig(index);
 					actualState.distancesBlue.push_back(1);
-					rewards = AgentsReward(-10, 10);
+					rewards = AgentsReward(0, 10);
 				}
 			}
 			else if (act.type == HydroqActionType::CAPTURE_EMPTY_RIG) {
@@ -70,13 +70,13 @@ namespace Cog {
 					if (!isSimulation) cout << "Rudej lajznul prazdnou" << endl;
 					actualState.distancesRed.push_back(actualState.distancesRedEmpty[index]);
 					actualState.RemoveEmptyRig(index);
-					rewards = AgentsReward(10, 0);
+					rewards = AgentsReward(5, 0);
 				}
 				else {
 					if (!isSimulation) cout << "Modrej lajznul prazdnou" << endl;
 					actualState.distancesBlue.push_back(actualState.distancesBlueEmpty[index]);
 					actualState.RemoveEmptyRig(index);
-					rewards = AgentsReward(0, 10);
+					rewards = AgentsReward(0, 5);
 				}
 			}
 			else if (act.type == HydroqActionType::GO_TO_EMPTY_RIG) {

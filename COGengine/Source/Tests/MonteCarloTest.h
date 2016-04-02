@@ -37,14 +37,8 @@ public:
 		this->player2Pos = copy.player2Pos;
 	}
 
-	int GetHashCode() const{return ((unsigned)player1Pos) * 1812433253 + ((unsigned)player2Pos) + this->agentOnTurn;}
-	inline bool operator==(const MCTestState& a) const {return GetHashCode() == a.GetHashCode();}
-	inline bool operator!=(const MCTestState& a) const {return GetHashCode() == a.GetHashCode();}
-	inline bool operator<(const MCTestState& a) const {return GetHashCode() < a.GetHashCode();}
-	inline bool operator>(const MCTestState& a) const {return GetHashCode() > a.GetHashCode();}
-public:
-	bool operator !=(const MCTestState& rhs) { return !(*this == rhs); }
-	bool operator ==(const MCTestState& rhs) {return GetHashCode() != rhs.GetHashCode();}
+	inline bool operator==(const MCTestState& a) const { return player1Pos == a.player1Pos && player2Pos == a.player2Pos; }
+	inline bool operator!=(const MCTestState& a) const { return !(*this == a); }
 };
 
 class MCTestSimulator : public Simulator<MCTestState, MCTestAction>
@@ -151,16 +145,6 @@ protected:
 };
 
 
-namespace std {
-	// overriding hash function for position
-	template <>
-	struct hash<MCTestState> {
-		inline size_t operator()(const MCTestState& state) const {
-			return state.GetHashCode();
-		}
-	};
-}
-
 TEST_CASE("MonteCarloTest test", "[class]")
 {
 
@@ -168,6 +152,10 @@ TEST_CASE("MonteCarloTest test", "[class]")
 	{
 		// set seed so that the randomness will behave as expected
 		ofSeedRandom(120);
+		
+		// there are two agents, one random and the second one is UCT. 
+		// random agent is at location 10,10; UCT agent is at the location 0,0
+		// UCT agent has to catch the Random agent; at each step, they can only go in 4 directions
 		auto simulator = spt<MCTestSimulator>(new MCTestSimulator());
 		auto agents = vector<spt<AIAgent<MCTestState, MCTestAction>>>();
 		agents.push_back(spt<UCTAgent<MCTestState, MCTestAction>>(new UCTAgent<MCTestState, MCTestAction>("UCTAgent",64,32,16)));
@@ -175,7 +163,7 @@ TEST_CASE("MonteCarloTest test", "[class]")
 		auto mt = new MonteCarloSearch<MCTestState, MCTestAction>(simulator, agents);
 		mt->RunSearch(1);
 
-
 		REQUIRE(mt->GetNumberOfWins(0) == 1);
+		REQUIRE(mt->GetRewardSum(0) == 419);
 	}
 }

@@ -37,8 +37,6 @@ public:
 #include "MonteCarloTest.h"
 
 int main() {
-	int result = Catch::Session().run();
-
 	
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	auto start = ofGetSystemTimeMicros();
@@ -47,10 +45,12 @@ int main() {
 	auto simulator = spt<HydroqSimulator>(new HydroqSimulator());
 	auto agents = vector<spt<AIAgent<HydroqState, HydroqAction>>>();
 	//agents.push_back(spt<RandomAgentSmazat<HydroqState, HydroqAction>>(new RandomAgentSmazat<HydroqState, HydroqAction>()));
-	//agents.push_back(spt<RandomAgent<HydroqState, HydroqAction>>(new RandomAgent<HydroqState, HydroqAction>()));
-	agents.push_back(spt<UCTAgent<HydroqState, HydroqAction>>(new UCTAgent<HydroqState, HydroqAction>("firstAgent", 16, 32, -1)));
-	agents.push_back(spt<UCTAgent<HydroqState, HydroqAction>>(new UCTAgent<HydroqState, HydroqAction>("secondAgent", 16, 32, -1)));
 
+	agents.push_back(spt<UCTAgent<HydroqState, HydroqAction>>(new UCTAgent<HydroqState, HydroqAction>("firstAgent", 20, sqrt(2))));
+	agents.push_back(spt<UCTAgent<HydroqState, HydroqAction>>(new UCTAgent<HydroqState, HydroqAction>("firstAgent", 20, sqrt(2))));
+	//agents.push_back(spt<RandomAgent<HydroqState, HydroqAction>>(new RandomAgent<HydroqState, HydroqAction>()));
+
+	
 	auto mt = new MonteCarloSearch<HydroqState, HydroqAction>(simulator,agents);
 	mt->RunSearch(1);
 

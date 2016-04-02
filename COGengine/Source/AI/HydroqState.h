@@ -13,8 +13,6 @@ namespace Cog {
 		vector<int> distancesBlueEmpty;
 		vector<int> distancesRedEmpty;
 
-		int hashCode = 0;
-
 		HydroqState() {
 
 		}
@@ -28,7 +26,6 @@ namespace Cog {
 			this->distancesBlue = copy.distancesBlue;
 			this->distancesBlueEmpty = copy.distancesBlueEmpty;
 			this->distancesRedEmpty = copy.distancesRedEmpty;
-			this->hashCode = copy.hashCode;
 			this->agentOnTurn = copy.agentOnTurn;
 		}
 
@@ -98,10 +95,6 @@ namespace Cog {
 			this->agentOnTurn = (agentOnTurn == 0) ? 1 : 0;
 		}
 
-		int GetHashCode() const {
-			return hashCode + this->agentOnTurn;
-		}
-
 		int GetBlueRigsNum() {
 			return distancesBlue.size();
 		}
@@ -111,8 +104,6 @@ namespace Cog {
 		}
 
 		void Recalc() {
-			hashCode = 0;
-
 			sort(distancesRed.begin(), distancesRed.end(),
 				[](const int & a, const int & b) -> bool
 			{
@@ -129,53 +120,36 @@ namespace Cog {
 				return a > b;
 			});
 
-			for (auto dist : distancesRed) {
-				hashCode = HashCombine(hashCode, dist);
+			sort(distancesBlueEmpty.begin(), distancesBlueEmpty.end(),
+				[](const int & a, const int & b) -> bool
+			{
+				return a > b;
+			});
+		}
+
+		bool operator ==(const HydroqState& rhs) const 
+		{ 
+			for (int i = 0; i < distancesRed.size(); i++) {
+				if (distancesRed[i] != rhs.distancesRed[i]) return false;
 			}
 
-			for (auto dist : distancesBlue) {
-				hashCode = HashCombine(hashCode, dist);
+			for (int i = 0; i < distancesBlue.size(); i++) {
+				if (distancesBlue[i] != rhs.distancesBlue[i]) return false;
 			}
 
-			for (auto dist : distancesRedEmpty) {
-				hashCode = HashCombine(hashCode, dist);
+			for (int i = 0; i < distancesRedEmpty.size(); i++) {
+				if (distancesRedEmpty[i] != rhs.distancesRedEmpty[i]) return false;
+			}
+
+			for (int i = 0; i < distancesBlueEmpty.size(); i++) {
+				if (distancesBlueEmpty[i] != rhs.distancesBlueEmpty[i]) return false;
 			}
 		}
 
-		inline bool operator==(const HydroqState& a) const {
-			return GetHashCode() == a.GetHashCode();
-		}
+		bool operator !=(const HydroqState& rhs) const { return !(*this == rhs); }
 
-		inline bool operator!=(const HydroqState& a) const {
-			return GetHashCode() == a.GetHashCode();
-		}
 
-		inline bool operator<(const HydroqState& a) const {
-			return GetHashCode() < a.GetHashCode();
-		}
-
-		inline bool operator>(const HydroqState& a) const {
-			return GetHashCode() > a.GetHashCode();
-		}
-
-	public:
-
-		bool operator !=(const HydroqState& rhs) { return !(*this == rhs); }
-
-		bool operator ==(const HydroqState& rhs) {
-			return GetHashCode() != rhs.GetHashCode();
-		}
 	};
 
 
 } // namespace
-
-namespace std {
-	// overriding hash function for position
-	template <>
-	struct hash<Cog::HydroqState> {
-		inline size_t operator()(const Cog::HydroqState& state) const {
-			return state.GetHashCode();
-		}
-	};
-}
