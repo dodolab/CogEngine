@@ -7,60 +7,62 @@ using namespace std;
 #include "ofxSmartPointer.h"
 #include "StringHash.h"
 
-using namespace Cog;
+namespace Cog {
 
-template<class S>
-class Simulator {
-protected:
-	S actualState;
-	vector<StringHash> possibleActions;
-	AgentsReward rewards;
-	int agentsNumber;
+	template<class S, class A>
+	class Simulator {
+	protected:
+		S actualState;
+		vector<A> possibleActions;
+		AgentsReward rewards;
+		int agentsNumber;
 
-public:
+	public:
 
-	Simulator() {
+		Simulator() {
 
-	}
+		}
 
-	virtual void InitState() = 0;
+		virtual void InitState() = 0;
 
-	S& GetActualState() {
-		return actualState;
-	}
+		S& GetActualState() {
+			return actualState;
+		}
 
-	virtual spt<Simulator> DeepCopy() = 0;
+		virtual spt<Simulator> DeepCopy() = 0;
 
-	void SetActualState(S state) {
-		this->actualState = state;
-		RecalcPossibleActions();
-	}
+		void SetActualState(S state) {
+			this->actualState = state;
+			RecalcPossibleActions();
+		}
 
-	void SetActualState(S state, vector<StringHash> possibleActions) {
-		this->actualState = state;
-		this->possibleActions = possibleActions;
-		this->rewards = AgentsReward(agentsNumber);
-	}
+		void SetActualState(S state, vector<A> possibleActions) {
+			this->actualState = state;
+			this->possibleActions = possibleActions;
+			this->rewards = AgentsReward(agentsNumber);
+		}
 
-	virtual void MakeAction(StringHash action) = 0;
+		virtual void MakeAction(A action, bool isSimulation = true) = 0;
 
-	vector<StringHash>& GetPossibleActions() {
-		return possibleActions;
-	}
+		vector<A>& GetPossibleActions() {
+			return possibleActions;
+		}
 
-	AgentsReward& GetRewards() {
-		return rewards;
-	}
+		AgentsReward& GetRewards() {
+			return rewards;
+		}
 
 
-	bool IsDeadEnd() {
-		return possibleActions.size() == 0;
-	}
+		bool IsDeadEnd() {
+			return possibleActions.size() == 0;
+		}
 
-	int GetAgentsNumber() {
-		return agentsNumber;
-	}
+		int GetAgentsNumber() {
+			return agentsNumber;
+		}
 
-protected:
-	virtual void RecalcPossibleActions() = 0;
-};
+	protected:
+		virtual void RecalcPossibleActions() = 0;
+	};
+
+} // namespace

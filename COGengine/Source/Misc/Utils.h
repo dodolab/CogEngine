@@ -40,4 +40,8 @@ namespace Cog {
 
 	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency);
 
+	inline int HashCombine(int hash, int value) {
+		return (hash + (324723947 + value)) ^ 93485734985;
+	}
+
 } // namespace

@@ -37,7 +37,7 @@ namespace Cog {
 
 
 		inline operator size_t() const {
-			// we use seed for Mersenne Twister generator
+			// seed for Mersenne Twister generator
 			return x * 1812433253 + y;
 		}
 
@@ -75,6 +75,10 @@ namespace Cog {
 
 		static int Distance(const Vec2i& a, const Vec2i& b) {
 			return sqrt((a.x-b.x)*(a.x - b.x) + (a.y-b.y)*(a.y-b.y));
+		}
+
+		static float Distancef(const Vec2i& a, const Vec2i& b) {
+			return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 		}
 	};
 
