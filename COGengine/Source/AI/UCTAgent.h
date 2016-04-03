@@ -12,10 +12,87 @@
 
 namespace Cog {
 
-	enum class UCTCalcMethod {
-		HIGHEST_REWARD,
-		BEST_AVG_REWARD
+
+	/**
+	* Table that stores number of all rewards and visits; needed for ensemble
+	*/
+	class RewardTable {
+	private:
+		double** rewards;
+		int** visits;
+		int numberOfUCTTrees = 0;
+		int actions = 0;
+	public:
+
+		RewardTable(int numberOfUCTTrees, int actions) {
+			Allocate(numberOfUCTTrees, actions);
+		}
+
+		~RewardTable() {
+			Clear();
+		}
+
+		int GetNumberOfUCTTrees() {
+			return numberOfUCTTrees;
+		}
+
+		int GetActionNum() {
+			return actions;
+		}
+
+		// allocates table
+		void Allocate(int numberOfUCTTrees, int actions) {
+
+			this->numberOfUCTTrees = numberOfUCTTrees;
+			this->actions = actions;
+
+			rewards = new double*[numberOfUCTTrees];
+			visits = new int*[numberOfUCTTrees];
+
+			for (int i = 0; i < numberOfUCTTrees; i++) {
+				rewards[i] = new double[actions];
+				visits[i] = new int[actions];
+
+				memset(rewards[i], 0, sizeof(double)*actions);
+				memset(visits[i], 0, sizeof(int)*actions);
+
+			}
+		}
+
+		// deallocate table
+		void Clear() {
+			for (int i = 0; i < numberOfUCTTrees; i++) {
+				delete[] rewards[i];
+				delete[] visits[i];
+			}
+
+			delete[] rewards;
+			delete[] visits;
+		}
+
+		inline void StoreReward(int i, int j, double val) {
+			rewards[i][j] = val;
+		}
+
+		inline void StoreVisit(int i, int j, int val) {
+			visits[i][j] = val;
+		}
+
+		inline void StoreData(int i, int j, double reward, int visit) {
+			rewards[i][j] = reward;
+			visits[i][j] = visit;
+		}
+
+		inline double GetReward(int i, int j) {
+			return rewards[i][j];
+		}
+
+		inline int GetVisit(int i, int j) {
+			return visits[i][j];
+		}
 	};
+
+
 
 	template<class S, class A>
 	class UCTAgent : public AIAgent<S, A> {
@@ -30,8 +107,9 @@ namespace Cog {
 		int iterationLimit = -1;
 		// base agent that is used for random play (usually random agent)
 		spt<AIAgent<S, A>> baseAgent;
-		// calculation method, used for final action selection
-		UCTCalcMethod calcMethod = UCTCalcMethod::HIGHEST_REWARD;
+		// agent for opponent (usually random agent)
+		spt<AIAgent<S, A>> opponentAgent;
+
 
 	public:
 
@@ -67,12 +145,20 @@ namespace Cog {
 			this->iterationLimit = iterationLimit;
 		}
 
-		UCTCalcMethod GetCalcMethod() {
-			return calcMethod;
+		spt<AIAgent<S, A>> GetBaseAgent() {
+			return baseAgent;
 		}
 
-		void SetCalcMethod(UCTCalcMethod calcMethod) {
-			this->calcMethod = calcMethod;
+		void SetBaseAgent(spt<AIAgent<S, A>> agent) {
+			this->baseAgent = agent;
+		}
+
+		spt<AIAgent<S, A>> GetOpponentAgent() {
+			return opponentAgent;
+		}
+
+		void SetOpponentAgent(spt<AIAgent<S, A>> agent) {
+			this->opponentAgent = agent;
 		}
 
 		/**
@@ -228,85 +314,6 @@ namespace Cog {
 			}
 		};
 
-		/**
-		* Table that stores number of all rewards and visits; needed for ensemble
-		*/
-		class RewardTable {
-		private:
-			double** rewards;
-			int** visits;
-			int numberOfUCTTrees = 0;
-			int actions = 0;
-		public:
-
-			RewardTable(int numberOfUCTTrees, int actions) {
-				Allocate(numberOfUCTTrees, actions);
-			}
-
-			~RewardTable() {
-				Clear();
-			}
-
-			int GetNumberOfUCTTrees() {
-				return numberOfUCTTrees;
-			}
-
-			int GetActionNum() {
-				return actions;
-			}
-
-			// allocates table
-			void Allocate(int numberOfUCTTrees, int actions) {
-
-				this->numberOfUCTTrees = numberOfUCTTrees;
-				this->actions = actions;
-
-				rewards = new double*[numberOfUCTTrees];
-				visits = new int*[numberOfUCTTrees];
-
-				for (int i = 0; i < numberOfUCTTrees; i++) {
-					rewards[i] = new double[actions];
-					visits[i] = new int[actions];
-
-					memset(rewards[i], 0, sizeof(double)*actions);
-					memset(visits[i], 0, sizeof(int)*actions);
-
-				}
-			}
-
-			// deallocate table
-			void Clear() {
-				for (int i = 0; i < numberOfUCTTrees; i++) {
-					delete[] rewards[i];
-					delete[] visits[i];
-				}
-
-				delete[] rewards;
-				delete[] visits;
-			}
-
-			inline void StoreReward(int i, int j, double val) {
-				rewards[i][j] = val;
-			}
-
-			inline void StoreVisit(int i, int j, int val) {
-				visits[i][j] = val;
-			}
-
-			inline void StoreData(int i, int j, double reward, int visit) {
-				rewards[i][j] = reward;
-				visits[i][j] = visit;
-			}
-
-			inline double GetReward(int i, int j) {
-				return rewards[i][j];
-			}
-
-			inline int GetVisit(int i, int j) {
-				return visits[i][j];
-			}
-		};
-
 
 	public:
 
@@ -325,6 +332,7 @@ namespace Cog {
 		{
 			this->name = name;
 			this->baseAgent = spt<AIAgent>(new RandomAgent<S, A>());
+			this->opponentAgent = spt<AIAgent>(new RandomAgent<S, A>());
 		}
 
 
@@ -352,8 +360,9 @@ namespace Cog {
 			auto actions = simulator->GetPossibleActions();
 
 			if (actions.size() == 1) return actions[0];
+			
 			// get index of actual agent
-			int agentOnTurn = simulator->GetActualState().GetAgentOnTurn();
+			int thisAgentIndex = simulator->GetActualState().GetAgentOnTurn();
 
 
 			// allocate 2D array of rewards per each action per each ensemble
@@ -365,7 +374,7 @@ namespace Cog {
 
 				// play simulations
 				for (int j = 0; j < this->numberOfSims; j++) {
-					PlaySimulation(root, simulator->DeepCopy());
+					PlaySimulation(root, simulator->DeepCopy(), thisAgentIndex);
 				}
 
 				// fill array according to the results, stored in the tree
@@ -373,7 +382,7 @@ namespace Cog {
 
 				for (int j = 0; j < children.size(); j++) {
 					if (children[j]->GetVisits() > 0) {
-						rewardTable.StoreReward(i, j, children[j]->GetReward(agentOnTurn));
+						rewardTable.StoreReward(i, j, children[j]->GetReward(thisAgentIndex));
 						rewardTable.StoreVisit(i, j, children[j]->GetVisits());
 					}
 				}
@@ -394,71 +403,27 @@ namespace Cog {
 			int actionIndex = 0;
 			int size = rewardTable.GetActionNum();
 
-			if (calcMethod == UCTCalcMethod::HIGHEST_REWARD) {
-				// sum all rewards and visits
-				auto rewards = new double[size];
-				memset(rewards, 0, sizeof(double)*size);
-				auto visits = new int[size];
-				memset(visits, 0, sizeof(int)*size);
+			// sum all rewards and visits
+			auto rewards = new double[size];
+			memset(rewards, 0, sizeof(double)*size);
+			auto visits = new int[size];
+			memset(visits, 0, sizeof(int)*size);
 
-				for (int i = 0; i < numberOfUCTTrees; i++) {
-					for (int j = 0; j < size; j++) {
-						rewards[j] += rewardTable.GetReward(i, j);
-						visits[j] += rewardTable.GetVisit(i, j);
-					}
+			for (int i = 0; i < numberOfUCTTrees; i++) {
+				for (int j = 0; j < size; j++) {
+					rewards[j] += rewardTable.GetReward(i, j);
+					visits[j] += rewardTable.GetVisit(i, j);
 				}
-				// select action with the best reward/visit ratio
-				for (int i = 1; i < size; i++) {
-					if (visits[i] > 0 && (visits[actionIndex] == 0 || (rewards[i] / visits[i]) >(rewards[actionIndex] / visits[actionIndex]))) {
-						actionIndex = i;
-					}
-				}
-
-				delete[] rewards;
-				delete[] visits;
 			}
-			else if (calcMethod == UCTCalcMethod::BEST_AVG_REWARD) {
-
-				// at each index, the array holds, how many times had the action
-				// under the selected index best avg ratio
-				auto actionsVotes = new int[size];
-				memset(actionsVotes, 0, sizeof(int)*size);
-
-				for (int i = 0; i < numberOfUCTTrees; i++) {
-					int bestAvgRewardIndex = -1;
-					double bestAvgReward = 0;
-
-					// for each action, calculate reward/visit ratio
-					for (int j = 0; j < size; j++) {
-						if (rewardTable.GetVisit(i, j) > 0) {
-							double avgReward = rewardTable.GetReward(i, j) / rewardTable.GetVisit(i, j);
-							if (bestAvgRewardIndex == -1 || avgReward > bestAvgReward) {
-								bestAvgRewardIndex = j;
-								bestAvgReward = avgReward;
-							}
-						}
-					}
-					actionsVotes[bestAvgRewardIndex] += 1;
+			// select action with the best reward/visit ratio
+			for (int i = 1; i < size; i++) {
+				if (visits[i] > 0 && (visits[actionIndex] == 0 || (rewards[i] / visits[i]) >(rewards[actionIndex] / visits[actionIndex]))) {
+					actionIndex = i;
 				}
-
-				vector<int> selectedVotes = vector<int>();
-				selectedVotes.push_back(0);
-
-				for (int i = 1; i < size; i++) {
-					// store only indices with the highest vote
-					if (actionsVotes[i] >= actionsVotes[selectedVotes[0]]) {
-						if (actionsVotes[i] > actionsVotes[selectedVotes[0]]) {
-							// delete previous votes, because a higher number was found
-							selectedVotes.clear();
-						}
-						selectedVotes.push_back(i);
-					}
-				}
-				// select randomly the index, because the array contains now only indices with the same vote
-				actionIndex = selectedVotes[(int)(ofRandom(0, 1)*selectedVotes.size())];
-
-				delete[] actionsVotes;
 			}
+
+			delete[] rewards;
+			delete[] visits;
 
 			return actionIndex;
 		}
@@ -467,17 +432,17 @@ namespace Cog {
 		* Starts the simulation for the selected state node; walks down the tree until it reaches an
 		* unexplored leaf; then it simulates a random game to explore its values
 		*/
-		AgentsReward PlaySimulation(spt<StateNode<S, A>> node, spt<Simulator<S, A>> simulator) {
+		AgentsReward PlaySimulation(spt<StateNode<S, A>> node, spt<Simulator<S, A>> simulator, int thisAgentIndex) {
 			COGMEASURE_BEGIN("PlaySimulation");
 			AgentsReward rewards;
 
 			if (simulator->IsDeadEnd() || node->GetVisits() == 0) {
 				// dead end or unexplored leaf node -> play random game
-				rewards = SimulateRandomGame(simulator);
+				rewards = SimulateRandomGame(simulator, thisAgentIndex);
 			}
 			else {
 				// play simulation from the selected node
-				rewards = PlaySimulation(node->SelectActionNodeFromUCTValue(), simulator);
+				rewards = PlaySimulation(node->SelectActionNodeFromUCTValue(), simulator, thisAgentIndex);
 			}
 			
 			node->UpdateRewardsAndVisits(rewards);
@@ -488,14 +453,14 @@ namespace Cog {
 		/**
 		* Starts the simulation from the selected action node
 		*/
-		AgentsReward PlaySimulation(spt<ActionNode<S, A>> node, spt<Simulator<S, A>> simulator) {
+		AgentsReward PlaySimulation(spt<ActionNode<S, A>> node, spt<Simulator<S, A>> simulator, int thisAgentIndex) {
 			// use the action node to find the stateNode by applying the appropriate action to the simulator
 			spt<StateNode<S, A>> child = node->SelectStateNodeFromAction(simulator);
 			// now set the new state to the simulator
 			simulator->SetActualState(child->GetState(), child->GetPossibleActions());
 			
 			// play simulation with updated simulator and get rewards
-			auto rewards = PlaySimulation(child, simulator);
+			auto rewards = PlaySimulation(child, simulator, thisAgentIndex);
 			// update rewards
 			node->UpdateRewardsAndVisits(rewards);
 			return rewards;
@@ -505,7 +470,7 @@ namespace Cog {
 		* Simulates random game for unexplored leaf node
 		* Returns sum of all rewards; simulation can be limited with the maximum numbner of iterations
 		*/
-		AgentsReward SimulateRandomGame(spt<Simulator<S, A>> simulator) {
+		AgentsReward SimulateRandomGame(spt<Simulator<S, A>> simulator, int thisAgentIndex) {
 			COGMEASURE_BEGIN("SimulateRandomGame");
 
 			AgentsReward totalRewards = simulator->GetRewards();
@@ -513,15 +478,19 @@ namespace Cog {
 
 			int iteration = 0;
 
-			while (!simulator->IsDeadEnd() && (iterationLimit == -1 || iteration <= iterationLimit)) {
+			while (!simulator->IsDeadEnd() && (iterationLimit == -1 || iteration < iterationLimit)) {
 
-				// standard simulation
-				A action = baseAgent->ChooseAction(simulator->DeepCopy());
-				simulator->MakeAction(action);
+				A action;
 
-				for (int i = 0; i < totalRewards.GetAgentsNum(); i++) {
-					totalRewards.AddVal(i, simulator->GetRewards().GetReward(i));
+				if (simulator->GetActualState().GetAgentOnTurn() == thisAgentIndex) {
+					action = baseAgent->ChooseAction(simulator->DeepCopy());
 				}
+				else {
+					action = opponentAgent->ChooseAction(simulator->DeepCopy());
+				}
+
+				simulator->MakeAction(action);
+				totalRewards.Merge(simulator->GetRewards());
 
 				iteration++;
 			}

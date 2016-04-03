@@ -108,8 +108,7 @@ public:
 
 		float distance2 = Vec2i::Distancef(actualState.player1Pos, actualState.player2Pos);
 		
-		if (!isSimulation) cout << "   DISTANCE: " << ((int)distance2) << " ; ["<<actualState.player1Pos.x << "," << actualState.player1Pos.y
-			<< "] : [" << actualState.player2Pos.x << "," <<actualState.player2Pos.y << "]" << endl;
+		if (!isSimulation) cout << ((int)distance2) << ", ";
 		
 		int distDiff = (distance2 - distance1);
 
@@ -167,7 +166,7 @@ public:
 	}
 
 	TicTacToeState(const TicTacToeState& copy) {
-		this->agentOnTurn = agentOnTurn;
+		this->agentOnTurn = copy.agentOnTurn;
 		this->marks = copy.marks;
 	}
 
@@ -203,6 +202,8 @@ public:
 			}
 		}
 		this->rewards = AgentsReward(0, 0);
+		// important as well
+		this->actualState.SetAgentOnTurn(0);
 		RecalcPossibleActions();
 	}
 
@@ -340,14 +341,14 @@ public:
 		if (counter >= 5) gameOver = true;
 		totalReward += (counter - 1);
 
-		if (gameOver) totalReward = 100;
+		if (gameOver) totalReward = 10000;
 
-		if (!isSimulation) {
+		if (!isSimulation && gameOver) {
 			cout << WriteInfo().c_str() << endl;
-			bool mojo = false;
+
 		}
-		if (actualState.GetAgentOnTurn() == 0) rewards = AgentsReward(totalReward, 0);
-		else rewards = AgentsReward(0, totalReward);
+		if (actualState.GetAgentOnTurn() == 0) rewards = AgentsReward(totalReward, gameOver ? -1000 : 0);
+		else rewards = AgentsReward(gameOver ? -1000 : 0, totalReward);
 
 		this->actualState.SwapAgentOnTurn(this->agentsNumber);
 		RecalcPossibleActions();
@@ -393,11 +394,9 @@ protected:
 
 };
 
-
-
 TEST_CASE("MonteCarloTest test", "[class]")
 {
-
+	
 	SECTION("UCT agent tries to catch the random agent")
 	{
 		// set seed so that the randomness will behave as expected
@@ -412,28 +411,51 @@ TEST_CASE("MonteCarloTest test", "[class]")
 		agents.push_back(spt<RandomAgent<MCTestState, MCTestAction>>(new RandomAgent<MCTestState, MCTestAction>()));
 		auto mt = new MonteCarloSearch<MCTestState, MCTestAction>(simulator, agents);
 		mt->RunSimulations(1);
-
+		cout << endl;
 		REQUIRE(mt->GetNumberOfWins(0) == 1);
-		REQUIRE(mt->GetRewardSum(0) == 419);
+		auto sum = mt->GetRewardSum(0);
+		REQUIRE(mt->GetRewardSum(0) == 589);
 	}
 
-	SECTION("TIC TAC TOE test for UCT agent")
+	SECTION("TIC TAC TOE test for UCT agent and random agent")
 	{
 		// set seed so that the randomness will behave as expected
-		ofSeedRandom(120);
+		ofSeedRandom(125);
 
-		// there are two agents, one random and the second one is UCT. 
-		// both play tic tac toe
+		// Tic tac toe game between UCT agent and random agent
 		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
 		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
-		auto agent = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent",8, sqrt(2),10));
-		agent->SetNumberOfUCTTrees(5);
-		agents.push_back(agent);
-		agents.push_back(spt<RandomAgent<TicTacToeState, TicTacToeAction>>(new RandomAgent<TicTacToeState, TicTacToeAction>()));
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 1, sqrt(2)));
+		auto agent2 = spt<RandomAgent<TicTacToeState, TicTacToeAction>>(new RandomAgent<TicTacToeState, TicTacToeAction>());
+		agents.push_back(agent1);
+		agents.push_back(agent2);
+
 		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
 		mt->RunSimulations(1);
 
+		// UCT agent won with score 10006
 		REQUIRE(mt->GetNumberOfWins(0) == 1);
-		REQUIRE(mt->GetRewardSum(0) == 419);
+		REQUIRE(mt->GetRewardSum(0) == 10006);
+	}
+
+	SECTION("TIC TAC TOE test for two UCT agents")
+	{
+		// set seed so that the randomness will behave as expected
+		ofSeedRandom(125);
+
+		// Tic tac toe game between two uct agents
+		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
+		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 2, sqrt(2)));
+		auto agent2 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 2, sqrt(2)));
+		agents.push_back(agent1);
+		agents.push_back(agent2);
+
+		
+		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
+		mt->RunSimulations(1);
+		auto sum = mt->GetRewardSum(1);
+		REQUIRE(mt->GetNumberOfWins(1) == 1);
+		REQUIRE(mt->GetRewardSum(1) == 10021);
 	}
 }
