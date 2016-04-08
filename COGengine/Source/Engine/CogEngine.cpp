@@ -104,7 +104,10 @@ namespace Cog {
 		map<StringHash, Component*>& components = entityStorage->GetComponents();
 
 		for (auto& comp : components) {
-			comp.second->Update(delta, absolute);
+			auto state = comp.second->GetListenerState();
+			if (state == ListenerState::ACTIVE_UPDATES || state == ListenerState::ACTIVE_ALL) {
+				comp.second->Update(delta, absolute);
+			}
 		}
 
 		// execute post-update actions

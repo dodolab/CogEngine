@@ -45,6 +45,8 @@ namespace Cog {
 		*/
 		void pasteImage(int x, int y, string texturePath, int glType = GL_RGBA);
 
+		void pasteImage(int x, int y, int w, int h, ofImage* image);
+
 		/**
 		* Pastes an image into texture
 		* @param x left offset in pixels
@@ -55,6 +57,7 @@ namespace Cog {
 		* @param glType type of texture (GL_RGBA or GL_RGB)
 		*/
 		void pasteImage(int x, int y, int w, int h, unsigned char * pxls, int glType = GL_RGBA);
+
 
 		/**
 		* Finishes pasting images and creates a texture

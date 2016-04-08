@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "InputAct.h"
 #include "Component.h"
 

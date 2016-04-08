@@ -1,9 +1,17 @@
 #pragma once
 
+#include <map>
+#include "ofxSmartPointer.h"
 #include "NetMessage.h"
-#include "ofxCogCommon.h"
+#include "DeltaInfo.h"
+
+using namespace std;
 
 namespace Cog {
+
+	class NetReader;
+	class NetWriter;
+	
 
 	class DeltaMessage : public NetData {
 	public:

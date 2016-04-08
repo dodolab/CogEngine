@@ -146,6 +146,7 @@ namespace Cog {
 			}
 	
 			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+			ofFill();
 			renderer->draw();
 		}
 		
@@ -219,7 +220,16 @@ namespace Cog {
 
 		ofColor color = rect->GetColor();
 		ofSetColor(color);
-		ofFill();
+		
+		if (rect->IsNoFill()) {
+			ofNoFill();
+			ofSetLineWidth(1);
+		}
+		else {
+			ofFill();
+			ofSetLineWidth(0);
+		}
+		
 		ofRect(0, 0, 0, rect->GetWidth(), rect->GetHeight());
 
 	}

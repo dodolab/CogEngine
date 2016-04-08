@@ -98,7 +98,7 @@ namespace Cog
 
 
 		static string GetStringValue(unsigned val) {
-#ifdef DEBUG
+#ifdef _DEBUG
 			auto fnd = strValues.find(val);
 
 			if (fnd != strValues.end()) {
@@ -114,7 +114,7 @@ namespace Cog
 		// Hash value.
 		unsigned value_;
 
-#ifdef DEBUG
+#ifdef _DEBUG
 		// value-string map for logging, only for debug mode
 		static map<unsigned, string>  strValues;
 #endif

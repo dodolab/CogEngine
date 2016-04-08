@@ -11,7 +11,7 @@ namespace Cog {
 	class AgentsReward {
 	protected:
 		// collection of rewards
-		vector<int> rewards;
+		vector<float> rewards;
 		// number of agents
 		int agentsNum = 0;
 	public:
@@ -20,20 +20,20 @@ namespace Cog {
 			this->agentsNum = 0;
 		}
 
-		AgentsReward(int reward1, int reward2) {
+		AgentsReward(float reward1, float reward2) {
 			this->agentsNum = 2;
 			rewards.push_back(reward1);
 			rewards.push_back(reward2);
 		}
 
-		AgentsReward(int reward1, int reward2, int reward3) {
+		AgentsReward(float reward1, float reward2, float reward3) {
 			this->agentsNum = 3;
 			rewards.push_back(reward1);
 			rewards.push_back(reward2);
 			rewards.push_back(reward3);
 		}
 
-		AgentsReward(int reward1, int reward2, int reward3, int reward4) {
+		AgentsReward(float reward1, float reward2, float reward3, float reward4) {
 			this->agentsNum = 4;
 			rewards.push_back(reward1);
 			rewards.push_back(reward2);
@@ -41,7 +41,7 @@ namespace Cog {
 			rewards.push_back(reward4);
 		}
 
-		AgentsReward(int reward1, int reward2, int reward3, int reward4, int reward5) {
+		AgentsReward(float reward1, float reward2, float reward3, float reward4, float reward5) {
 			this->agentsNum = 5;
 			rewards.push_back(reward1);
 			rewards.push_back(reward2);
@@ -60,15 +60,15 @@ namespace Cog {
 			return agentsNum;
 		}
 
-		int GetReward(int agentIndex) {
+		float GetReward(int agentIndex) {
 			return rewards[agentIndex];
 		}
 
-		void StoreReward(int agentIndex, int reward) {
+		void StoreReward(int agentIndex, float reward) {
 			rewards[agentIndex] = reward;
 		}
 
-		void AddVal(int agentIndex, int addition) {
+		void AddVal(int agentIndex, float addition) {
 			rewards[agentIndex] += addition;
 		}
 

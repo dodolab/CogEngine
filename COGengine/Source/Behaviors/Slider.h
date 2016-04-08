@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Node.h"
 
 namespace Cog {
 
+	class Node;
 
 	class Slider : public Behavior {
 		OBJECT_PROTOTYPE_INIT(Slider)
@@ -16,16 +16,9 @@ namespace Cog {
 		bool msgLocked = false;
 	public:
 
-		Slider(Node* body, Node* text) :body(body), text(text) {
-
-		}
-
-		Slider(Setting& setting) {
-			this->bodyNodeTag = setting.GetItemVal("body");
-			this->textNodeTag = setting.GetItemVal("text");
-
-			if (this->bodyNodeTag.empty()) throw IllegalArgumentException("Error while loading Slider behavior; expected 'body' attribute in settings");
-		}
+		Slider(Node* body, Node* text);
+		
+		Slider(Setting& setting);
 		
 		void OnInit();
 

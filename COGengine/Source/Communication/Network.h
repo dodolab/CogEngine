@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Component.h"
 #include "ofxNetwork.h"
 #include "NetReader.h"
@@ -8,6 +7,8 @@
 #include "NetMessage.h"
 
 namespace Cog {
+
+	class NetReader;
 
 	class Network  {
 		

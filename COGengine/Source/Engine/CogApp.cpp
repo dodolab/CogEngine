@@ -133,7 +133,9 @@ namespace Cog {
 	}
 
 	bool CogApp::backPressed() {
-		CogEngine::GetInstance().stage->SwitchBackToScene(TweenDirection::NONE);
+		if (OnBackPress()) {
+			CogEngine::GetInstance().stage->SwitchBackToScene(TweenDirection::NONE);
+		}
 		return true;
 	}
 

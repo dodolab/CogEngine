@@ -3,8 +3,20 @@
 #include "Events.h"
 #include "CogEngine.h"
 #include "Scene.h"
+#include "Node.h"
 
 namespace Cog {
+
+	Slider::Slider(Node* body, Node* text) :body(body), text(text) {
+
+	}
+
+	Slider::Slider(Setting& setting) {
+		this->bodyNodeTag = setting.GetItemVal("body");
+		this->textNodeTag = setting.GetItemVal("text");
+
+		if (this->bodyNodeTag.empty()) throw IllegalArgumentException("Error while loading Slider behavior; expected 'body' attribute in settings");
+	}
 
 	void Slider::OnInit() {
 		Slider::RegisterListening(ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_OVER, ACT_ATTR_CHANGED);
