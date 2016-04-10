@@ -40,7 +40,7 @@ namespace Cog {
 		// identifier incremental counter
 		static int idCounter;
 		// attributes, mapped by their keys
-		map<StringHash, Attr*> attributes;
+		map<StrId, Attr*> attributes;
 		// list of childrens
 		list<Node*> children;
 		// list of behaviors
@@ -139,12 +139,12 @@ namespace Cog {
 		* @param erase if true, memory will be released
 		* @return true, if attribute has been removed
 		*/
-		bool RemoveAttr(StringHash key, bool erase);
+		bool RemoveAttr(StrId key, bool erase);
 
 		/**
 		* Returns true, if this node has an attribute with given key
 		*/
-		bool HasAttr(StringHash key) const;
+		bool HasAttr(StrId key) const;
 
 		/**
 		* Updates collections of behaviors and children nodes
@@ -496,7 +496,7 @@ namespace Cog {
 		* @param key key of the attribute
 		* @param value reference
 		*/
-		template<class T> void AddAttr(StringHash key, T value) {
+		template<class T> void AddAttr(StrId key, T value) {
 			if (HasAttr(key)) {
 				RemoveAttr(key, true);
 			}
@@ -510,7 +510,7 @@ namespace Cog {
 		* @param key key of the attribute
 		* @param value reference
 		*/
-		template<class T> bool AddAttrIfNotExists(StringHash key, T value) {
+		template<class T> bool AddAttrIfNotExists(StrId key, T value) {
 			if (HasAttr(key)) {
 				return false;
 			}
@@ -524,11 +524,11 @@ namespace Cog {
 		* Gets an attribute by key; call this method only if you are sure that the attribute exists
 		* @param key attribute key
 		*/
-		template<class T> T& GetAttr(StringHash key) {
+		template<class T> T& GetAttr(StrId key) {
 			auto it = attributes.find(key);
 
-			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue(key.Value()).c_str());
-			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue(key.Value()).c_str());
+			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue(key.GetValue()).c_str());
+			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue(key.GetValue()).c_str());
 
 			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 			return attr->GetValue();
@@ -539,7 +539,7 @@ namespace Cog {
 		* @param key attribute key
 		* @param value new value
 		*/
-		template<class T> void ChangeAttr(StringHash key, T value) {
+		template<class T> void ChangeAttr(StrId key, T value) {
 			auto it = attributes.find(key);
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);

@@ -8,7 +8,7 @@ namespace Cog {
 		this->syncId = reader->ReadByte();
 		this->acceptedId = reader->ReadByte();
 		this->msgType = (NetMsgType) reader->ReadByte();
-		this->action = StringHash(reader->ReadDWord());
+		this->action = StrId(reader->ReadDWord());
 		this->msgTime = reader->ReadDWord();
 
 		if (this->dataLength != 0) {
@@ -22,7 +22,7 @@ namespace Cog {
 		writer->WriteByte(this->syncId);
 		writer->WriteByte(this->acceptedId);
 		writer->WriteByte((tBYTE)this->msgType);
-		writer->WriteDWord(this->action.Value());
+		writer->WriteDWord(this->action.GetValue());
 		writer->WriteDWord(this->msgTime);
 
 		if (this->data != nullptr) {

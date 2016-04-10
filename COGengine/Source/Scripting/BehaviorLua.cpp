@@ -32,7 +32,7 @@ namespace Cog {
 		return 0; // number of return values
 	}
 
-	void BehaviorLua::SendMessage(StringHash msg) {
+	void BehaviorLua::SendMessage(StrId msg) {
 		this->SendMessageToListeners(msg, 0, nullptr, this->owner);
 	}
 
@@ -64,8 +64,8 @@ namespace Cog {
 		method((int)delta, (int)absolute);
 	}
 
-	void BehaviorLua::RegisterListeningLua(string action) {
-		RegisterListening(StringHash(action));
+	void BehaviorLua::SubscribeForMessagesLua(string action) {
+		SubscribeForMessages(StrId(action));
 	}
 
 } // namespace

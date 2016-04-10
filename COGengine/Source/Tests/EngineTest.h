@@ -9,7 +9,7 @@
 using namespace Cog;
 
 class CheckBehavior : public Behavior {
-	OBJECT_PROTOTYPE(CheckBehavior)
+	OBJECT_BEHAVIOR(CheckBehavior)
 
 	void OnInit() {
 	}
@@ -35,7 +35,7 @@ public:
 	}
 
 	void OnInit() {
-		if (!send) RegisterListening(StringHash("MESSAGE_TEST"));
+		if (!send) SubscribeForMessages(StrId("MESSAGE_TEST"));
 	}
 
 	void OnMessage(Msg& msg) {

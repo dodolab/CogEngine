@@ -7,7 +7,6 @@ namespace Cog {
 	class Node;
 
 	class Slider : public Behavior {
-		OBJECT_PROTOTYPE_INIT(Slider)
 	protected:
 		Node* body = nullptr;
 		Node* text = nullptr;
@@ -16,9 +15,13 @@ namespace Cog {
 		bool msgLocked = false;
 	public:
 
+		Slider() {
+
+		}
+
 		Slider(Node* body, Node* text);
 		
-		Slider(Setting& setting);
+		virtual void Load(Setting& setting);
 		
 		void OnInit();
 

@@ -33,7 +33,7 @@ namespace Cog {
 	public:
 		void AddRecord(S state, A action, int agentIndex) {
 
-			if (records.find(agentIndex) == records.end()) records[agentIndex] = vector<ActionRecord>();
+			if (records.count(agentIndex) == 0) records[agentIndex] = vector<ActionRecord>();
 
 			auto& agentRecords = records[agentIndex];
 			agentRecords.push_back(ActionRecord(state, action));

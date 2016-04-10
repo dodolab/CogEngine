@@ -20,11 +20,15 @@ namespace Cog {
 	* Behavior for mapping key inputs to ACTIONS
 	*/
 	class InputKey : public Behavior {
-		OBJECT_PROTOTYPE(InputKey)
 	private:
 		map<int, Act> keyMapping;
 
 	public:
+
+		InputKey() {
+
+		}
+
 		/**
 		* Creates a new behavior that maps keys to actions
 		* @param keyMapping key-to-action map

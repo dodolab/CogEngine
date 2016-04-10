@@ -39,11 +39,11 @@ namespace Cog {
 		return node->RemoveBehavior(beh, erase);
 	}
 
-	bool NodeLua::RemoveAttr(StringHash key, bool erase) {
+	bool NodeLua::RemoveAttr(StrId key, bool erase) {
 		return node->RemoveAttr(key, erase);
 	}
 
-	bool NodeLua::HasAttr(StringHash key) const {
+	bool NodeLua::HasAttr(StrId key) const {
 		return node->HasAttr(key);
 	}
 
@@ -95,15 +95,15 @@ namespace Cog {
 		node->SetGroups(val);
 	}
 
-	bool NodeLua::IsInGroup(StringHash group) {
+	bool NodeLua::IsInGroup(StrId group) {
 		return node->IsInGroup(group);
 	}
 
-	void NodeLua::SetGroup(StringHash group) {
+	void NodeLua::SetGroup(StrId group) {
 		node->SetGroup(group);
 	}
 
-	void NodeLua::UnsetGroup(StringHash group) {
+	void NodeLua::UnsetGroup(StrId group) {
 		node->UnsetGroup(group);
 	}
 
@@ -119,67 +119,67 @@ namespace Cog {
 		node->SetStates(val);
 	}
 
-	bool NodeLua::HasState(StringHash state) const{
+	bool NodeLua::HasState(StrId state) const{
 		return node->HasState(state);
 	}
 
-	void NodeLua::SetState(StringHash state) {
+	void NodeLua::SetState(StrId state) {
 		node->SetState(state);
 	}
 
-	void NodeLua::ResetState(StringHash state) {
+	void NodeLua::ResetState(StrId state) {
 		node->ResetState(state);
 	}
 
-	void NodeLua::SwitchState(StringHash state1, StringHash state2) {
+	void NodeLua::SwitchState(StrId state1, StrId state2) {
 		node->SwitchState(state1, state2);
 	}
 
-	void NodeLua::AddAttrString(StringHash key, string val) {
+	void NodeLua::AddAttrString(StrId key, string val) {
 		node->AddAttr(key, val);
 	}
 
-	void NodeLua::AddAttrInt(StringHash key, int val) {
+	void NodeLua::AddAttrInt(StrId key, int val) {
 		node->AddAttr(key, val);
 	}
 
-	void NodeLua::AddAttrFloat(StringHash key, float val) {
+	void NodeLua::AddAttrFloat(StrId key, float val) {
 		node->AddAttr(key, val);
 	}
 
-	void NodeLua::AddAttrVector2f(StringHash key, ofVec2f val) {
+	void NodeLua::AddAttrVector2f(StrId key, ofVec2f val) {
 		node->AddAttr(key, val);
 	}
 
-	void NodeLua::AddAttrVector3f(StringHash key, ofVec3f val) {
+	void NodeLua::AddAttrVector3f(StrId key, ofVec3f val) {
 		node->AddAttr(key, val);
 	}
 
-	void NodeLua::AddAttrVec2i(StringHash key, Vec2i val) {
+	void NodeLua::AddAttrVec2i(StrId key, Vec2i val) {
 		node->AddAttr(key, val);
 	}
 
-	string NodeLua::GetAttrString(StringHash key) {
+	string NodeLua::GetAttrString(StrId key) {
 		return node->GetAttr<string>(key);
 	}
 
-	int NodeLua::GetAttrInt(StringHash key) {
+	int NodeLua::GetAttrInt(StrId key) {
 		return node->GetAttr<int>(key);
 	}
 
-	float NodeLua::GetAttrFloat(StringHash key) {
+	float NodeLua::GetAttrFloat(StrId key) {
 		return node->GetAttr<float>(key);
 	}
 
-	ofVec2f NodeLua::GetAttrVector2f(StringHash key) {
+	ofVec2f NodeLua::GetAttrVector2f(StrId key) {
 		return node->GetAttr<ofVec2f>(key);
 	}
 
-	ofVec3f NodeLua::GetAttrVector3f(StringHash key) {
+	ofVec3f NodeLua::GetAttrVector3f(StrId key) {
 		return node->GetAttr<ofVec3f>(key);
 	}
 
-	Vec2i NodeLua::GetAttrVec2i(StringHash key) {
+	Vec2i NodeLua::GetAttrVec2i(StrId key) {
 		return node->GetAttr<Vec2i>(key);
 	}
 

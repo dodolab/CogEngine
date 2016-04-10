@@ -106,6 +106,17 @@ namespace Cog {
 		bool operator() (const T& x, const T& y) const { return x > y; }
 	};
 
+	struct AStarSearchContext {
+		// collection that will be filled with jumps/steps from start to goal
+		unordered_map<Vec2i, Vec2i> jumps;
+		// collection that will be filled with visited positions and current price of the path
+		unordered_map<Vec2i, int> costSum;
+		// nearest found block
+		Vec2i nearestBlock = Vec2i(0);
+		// manhattan distance of the nearest found block
+		int nearestDistance = -1;
+	};
+
 	/**
 	* AStar search algorithm class
 	* A* is a computer algorithm that is widely used in pathfinding and graph traversal,
@@ -121,11 +132,10 @@ namespace Cog {
 		* @param grid grid, above which will be conducted searching 
 		* @param start start position
 		* @param goal target position
-		* @param jumps collection that will be filled with jumps/steps from start to goal
-		* @param costSum collection that will be filled with visited positions and current price of the path
+		* @param outputCtx output context
 		* @return true, if the path was found
 		*/
-		bool Search(const Grid& grid, Vec2i start, Vec2i goal, unordered_map<Vec2i, Vec2i>& jumps, unordered_map<Vec2i, int>& costSum, int maxIteration)
+		bool Search(const Grid& grid, Vec2i start, Vec2i goal, AStarSearchContext& outputCtx, int maxIteration)
 		{
 			// initialize priority queue
 			typedef pair<int, Vec2i> QueueElem;
@@ -133,8 +143,8 @@ namespace Cog {
 
 			// start with the first position
 			priorityQueue.emplace(0, start);
-			jumps[start] = start;
-			costSum[start] = 0;
+			outputCtx.jumps[start] = start;
+			outputCtx.costSum[start] = 0;
 			int iteration = 0;
 
 			while (!priorityQueue.empty()) {
@@ -149,15 +159,22 @@ namespace Cog {
 				// explore its neighbors
 				for (auto next : grid.Neighbors(current)) {
 					// calculate the increment of the cost on the current path
-					int newCostSum = costSum[current] + grid.GetCost(next);
+					int newCostSum = outputCtx.costSum[current] + grid.GetCost(next);
 					// verify if there hasn't been found a better way
-					if (!costSum.count(next) || newCostSum < costSum[next]) {
-						costSum[next] = newCostSum;
+					if (!outputCtx.costSum.count(next) || newCostSum < outputCtx.costSum[next]) {
+						outputCtx.costSum[next] = newCostSum;
 						// priority is price + manhattan distance between next position and the target
-						int priority = newCostSum + CalcDistance(next, goal);
+						int manhattanDist = Vec2i::ManhattanDist(next, goal);
+						int priority = newCostSum + manhattanDist;
+
+						if (outputCtx.nearestDistance == -1 || outputCtx.nearestDistance > manhattanDist) {
+							outputCtx.nearestDistance = manhattanDist;
+							outputCtx.nearestBlock = next;
+						}
+
 						// explore next position
 						priorityQueue.emplace(priority, next);
-						jumps[next] = current;
+						outputCtx.jumps[next] = current;
 					}
 				}
 
@@ -188,14 +205,6 @@ namespace Cog {
 			return path;
 		}
 
-	private:
-		/**
-		* Calculates distance between two points
-		* uses simple Manhattan distance 
-		*/
-		inline int CalcDistance(Vec2i a, Vec2i b) {
-			return abs(a.x - b.x) + abs(a.y - b.y);
-		}
 	};
 
 } // namespace

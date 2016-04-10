@@ -5,11 +5,11 @@
 namespace Cog {
 
 
-	MultiSelection::MultiSelection(Setting& setting) {
+	void MultiSelection::Load(Setting& setting) {
 		string group = setting.GetItemVal("selection_group");
 		if (group.empty()) throw IllegalArgumentException("Error while loading MultiSelection behavior: expected parameter selection_group");
 
-		this->selectionGroup = StringHash(group);
+		this->selectionGroup = StrId(group);
 
 		string defaultImg = setting.GetItemVal("default_img");
 		string selectedImg = setting.GetItemVal("selected_img");
@@ -30,7 +30,7 @@ namespace Cog {
 	}
 
 	void MultiSelection::OnInit() {
-		RegisterListening(ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
+		SubscribeForMessages(ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
 	}
 
 	void MultiSelection::OnStart() {

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "StringHash.h"
+#include "StrId.h"
 #include "AIAgent.h"
 #include "ofMath.h"
 #include "ofxSmartPointer.h"
@@ -170,19 +170,18 @@ namespace Cog {
 			}
 		};
 
-		template<class, class> class ActionNode;
-		template<class, class> class StateNode;
+		class ActionNode;
+		class StateNode;
 
 
 		/**
 		* State node that represents one state; has link to collection of action nodes
 		* that represents actions this state can go from
 		*/
-		template<class S, class A>
 		class StateNode : public UCTNode {
 		protected:
 			S state;
-			vector<spt<ActionNode<S, A>>> children;
+			vector<spt<ActionNode>> children;
 			vector<A> possibleActions;
 			UCTAgent* agent;
 
@@ -190,24 +189,24 @@ namespace Cog {
 			StateNode(spt<Simulator<S, A>> simulator, UCTAgent* agent) : agent(agent) {
 				this->state = simulator->GetActualState();
 				this->possibleActions = simulator->GetPossibleActions();
-				this->children = vector<spt<ActionNode<S, A>>>(possibleActions.size());
+				this->children = vector<spt<ActionNode>>(possibleActions.size());
 
 
 				int counter = 0;
 				// create node for each action
 				for (auto& act : possibleActions) {
-					this->children[counter++] = spt<ActionNode<S, A>>(new ActionNode<S, A>(act, simulator, agent));
+					this->children[counter++] = spt<ActionNode>(new ActionNode(act, simulator, agent));
 				}
 			}
 
 			/**
 			* Selects child with best UCT value
 			*/
-			spt<ActionNode<S, A>> SelectActionNodeFromUCTValue() {
-				if (visits <= children.size()) {
+			spt<ActionNode> SelectActionNodeFromUCTValue() {
+				if (this->visits <= children.size()) {
 
 					// if number of visits is small, return random unvisited node
-					auto unvisited = vector<spt<ActionNode<S, A>>>();
+					auto unvisited = vector<spt<ActionNode>>();
 
 					for (auto child : children) {
 						if (child->GetVisits() == 0) unvisited.push_back(child);
@@ -216,15 +215,17 @@ namespace Cog {
 					return unvisited[(int)(ofRandom(0, 1)*unvisited.size())];
 				}
 				else {
-					auto result = spt<ActionNode<S, A>>();
+					auto result = spt<ActionNode>();
 					double bestUCT = 0;
 					double uctValue;
 					for (auto child : children) {
 
 						float wins = child->GetWins(this->agent->agentIndex);
+						auto childVisits = child->GetVisits();
+						auto thisVisits = this->visits;
 
 						// calculate uct value (UCB1 formula derived by Auer, Cesa-Bianchi and Fischer)
-						uctValue = wins / child->GetVisits() + agent->uctParameter * sqrt(log(GetVisits()) / child->GetVisits());
+						uctValue = wins / childVisits + agent->uctParameter * sqrt(log(thisVisits) / childVisits);
 
 						if (!result || uctValue > bestUCT) {
 							bestUCT = uctValue;
@@ -243,7 +244,7 @@ namespace Cog {
 				return possibleActions;
 			}
 
-			vector<spt<ActionNode<S, A>>>& GetChildren() {
+			vector<spt<ActionNode>>& GetChildren() {
 				return children;
 			}
 		};
@@ -252,11 +253,10 @@ namespace Cog {
 		* Action node that represents one action; has link to collection of state nodes
 		* that represents states this action can make
 		*/
-		template<class S, class A>
 		class ActionNode : public UCTNode {
 		protected:
 			A action;
-			spt<StateNode<S, A>> child = spt<StateNode<S, A>>();
+			spt<StateNode> child = spt<StateNode>();
 			spt<Simulator<S, A>> simulator;
 			UCTAgent* agent;
 
@@ -269,11 +269,11 @@ namespace Cog {
 			* Applies action this node represents to given simulator; finds or creates a child node according to
 			* the state the simulator returns
 			*/
-			spt<StateNode<S, A>> GetStateChild() {
+			spt<StateNode> GetStateChild() {
 				if (!child) {
 					this->simulator = simulator->DeepCopy();
 					simulator->MakeAction(action);
-					child = spt<StateNode<S, A>>(new StateNode<S, A>(simulator, agent));
+					child = spt<StateNode>(new StateNode(simulator, agent));
 				}
 
 				return child;
@@ -301,8 +301,8 @@ namespace Cog {
 			: numberOfSims(numberOfSims), uctParameter(uctParameter)
 		{
 			this->name = name;
-			this->baseAgent = spt<AIAgent>(new RandomAgent<S, A>());
-			this->opponentAgent = spt<AIAgent>(new RandomAgent<S, A>());
+			this->baseAgent = spt<AIAgent<S,A>>(new RandomAgent<S, A>());
+			this->opponentAgent = spt<AIAgent<S,A>>(new RandomAgent<S, A>());
 		}
 
 
@@ -335,7 +335,7 @@ namespace Cog {
 			this->agentIndex = simulator->GetActualState().GetAgentOnTurn();
 
 			// create root node
-			spt<StateNode<S, A>> root = spt<StateNode<S, A>>(new StateNode<S, A>(simulator, this));
+			spt<StateNode> root = spt<StateNode>(new StateNode(simulator, this));
 
 			// play simulations
 			for (int j = 0; j < this->numberOfSims; j++) {
@@ -397,7 +397,7 @@ namespace Cog {
 		* Starts the simulation for the selected state node; walks down the tree until it reaches an
 		* unexplored leaf; then it simulates a random game to explore its values
 		*/
-		AgentsReward PlaySimulation(spt<StateNode<S, A>> node, spt<Simulator<S, A>> simulator, int thisAgentIndex) {
+		AgentsReward PlaySimulation(spt<StateNode> node, spt<Simulator<S, A>> simulator, int thisAgentIndex) {
 			AgentsReward rewards;
 
 			if (simulator->IsDeadEnd() || node->GetVisits() == 0) {
@@ -406,7 +406,7 @@ namespace Cog {
 			}
 			else {
 				auto uctNode = node->SelectActionNodeFromUCTValue();
-				spt<StateNode<S, A>> child = uctNode->GetStateChild();
+				spt<StateNode> child = uctNode->GetStateChild();
 				simulator->SetActualState(child->GetState(), child->GetPossibleActions());
 				rewards = PlaySimulation(child, simulator, thisAgentIndex);
 				uctNode->UpdateRewardsAndVisits(rewards);

@@ -13,16 +13,18 @@ namespace Cog {
 	* Behavior for per-attribute animation
 	*/
 	class AttribAnimator : public Behavior {
-		OBJECT_PROTOTYPE_INIT(AttribAnimator)
 	private:
 		AnimContextStack contextStack;
 	public:
+		AttribAnimator() {
+
+		}
 
 		AttribAnimator(spt<SheetAnim> anim) {
 			contextStack = AnimContextStack(anim);
 		}
 
-		AttribAnimator(Setting& setting);
+		virtual void Load(Setting& setting);
 
 		void OnStart();
 

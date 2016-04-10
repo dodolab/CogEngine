@@ -13,8 +13,6 @@ namespace Cog {
 	*/
 	class Renderer : public  Component {
 
-		OBJECT(Renderer)
-
 	protected:
 		// buffer for z-indices and nodes with those indices
 		map<int, vector<Node*>> zIndexImageBuffer;
@@ -23,7 +21,7 @@ namespace Cog {
 
 		SpriteSheetRenderer* renderer = nullptr;
 		Tile drawingTile;
-		vector<string> rendererLayers = vector<string>();
+		vector<string> rendererLayers;
 
 	public:
 		Renderer() {

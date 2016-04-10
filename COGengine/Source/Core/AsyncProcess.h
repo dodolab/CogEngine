@@ -11,7 +11,7 @@ namespace Cog {
 	* Abstract class for all jobs
 	*/
 	class Job {
-		OBJECT(Job)
+
 	public:
 		virtual void DoJob() = 0;
 	};
@@ -20,7 +20,7 @@ namespace Cog {
 	* Job that runs scene loading from XML
 	*/
 	class SceneLoader : public Job {
-		OBJECT(SceneLoader)
+
 	private:
 		spt<ofxXml> config;
 		Scene* scene;
@@ -72,9 +72,9 @@ namespace Cog {
 
 		void threadedFunction()
 		{
-			COGLOGDEBUG("AsyncProcess", "Running threaded job %s", this->job->GetClassName().c_str());
+			COGLOGDEBUG("AsyncProcess", "Running threaded job %s", typeid(this->job).name());
 			job->DoJob();
-			COGLOGDEBUG("AsyncProcess", "Finishing threaded job %s", this->job->GetClassName().c_str());
+			COGLOGDEBUG("AsyncProcess", "Finishing threaded job %s", typeid(this->job).name());
 			delete job;
 			
 		}

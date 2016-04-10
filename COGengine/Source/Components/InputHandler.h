@@ -33,8 +33,6 @@ namespace Cog {
 	*/
 	class InputHandler : public  Component {
 
-		OBJECT(InputHandler)
-
 	private:
 		vector<InputHandlerRequest> requests;
 
@@ -59,7 +57,7 @@ namespace Cog {
 				}
 
 				reqToHandle.touch->handlerNodeId = reqToHandle.owner->GetId();
-				reqToHandle.owner->SetState(StringHash(STATES_HIT));
+				reqToHandle.owner->SetState(StrId(STATES_HIT));
 
 				if (reqToHandle.handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(reqToHandle.touch), reqToHandle.owner);
 				else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(reqToHandle.touch), reqToHandle.owner, reqToHandle.handlerBehId);

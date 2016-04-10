@@ -14,20 +14,18 @@ namespace Cog {
 	* Node context
 	*/
 	class Stage : public Component{
-	
-		OBJECT(Stage)
-	
+
 	private:
 
 		// message listeners
-		map<StringHash, vector<MsgListener*>> msgListeners;
+		map<StrId, vector<MsgListener*>> msgListeners;
 
 		// actual scene
 		Scene* actualScene = nullptr;
 
 		Scene* loadingScene = nullptr;
 		// list of all scenes
-		vector<Scene*> scenes = vector<Scene*>();
+		vector<Scene*> scenes;
 
 		// root object, should be created only once
 		Node* rootObject = nullptr;
@@ -67,13 +65,13 @@ namespace Cog {
 		* @param action action to register
 		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterGlobalListener(StringHash action, MsgListener* listener);
+		void RegisterGlobalListener(StrId action, MsgListener* listener);
 
 		/**
 		* Unregisters global message listener for selected action
 		* @return true if listener has been found and erased
 		*/
-		bool UnregisterGlobalListener(StringHash action, MsgListener* listener);
+		bool UnregisterGlobalListener(StrId action, MsgListener* listener);
 
 		/**
 		* Finds scene by its name

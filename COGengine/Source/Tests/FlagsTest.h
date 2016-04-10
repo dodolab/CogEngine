@@ -167,10 +167,10 @@ using namespace Cog;
 			REQUIRE(st.HasState(12));
 		}
 
-		SECTION("Overriding operator = StringHash")
+		SECTION("Overriding operator = StrId")
 		{
-			unsigned mojo = StringHash("MOJO");
-			Flags st = StringHash("MOJO");
+			unsigned mojo = StrId("MOJO");
+			Flags st = StrId("MOJO");
 			REQUIRE(st.HasState(mojo));
 		}
 

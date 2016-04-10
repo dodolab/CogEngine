@@ -9,15 +9,18 @@ namespace Cog {
 	* Behavior for finite state machine
 	*/
 	class StateMachine : public Behavior {
-		OBJECT_PROTOTYPE(StateMachine)
 	private:
 		
 		State* currentState = nullptr;
 		State* previousState = nullptr;
 		vector<State*> globalStates;
-		map<StringHash, State*> localStates;
+		map<StrId, State*> localStates;
 
 	public:
+
+		StateMachine() {
+
+		}
 
 		void OnInit();
 
@@ -37,9 +40,9 @@ namespace Cog {
 		/**
 		* Changes state according to its key
 		*/
-		bool ChangeState(StringHash state);
+		bool ChangeState(StrId state);
 
-		State* FindLocalState(StringHash state);
+		State* FindLocalState(StrId state);
 
 		State* GetCurrentState() {
 			return currentState;

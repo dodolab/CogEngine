@@ -24,7 +24,7 @@ namespace Cog {
 	std::vector<std::string> split_string(string str, string delimiter) {
 		size_t pos = 0;
 		std::string token;
-		vector<string> output = vector<string>();
+		vector<string> output;
 
 		while ((pos = str.find(delimiter)) != std::string::npos) {
 			token = str.substr(0, pos);

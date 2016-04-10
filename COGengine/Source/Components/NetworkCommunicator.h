@@ -19,8 +19,7 @@ namespace Cog {
 	};
 
 	class NetworkCommunicator : public Component {
-		OBJECT(NetworkCommunicator)
-
+		
 	private:
 		Network* network = nullptr;
 		NetworkComState networkState = NetworkComState::NONE;

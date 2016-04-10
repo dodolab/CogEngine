@@ -287,7 +287,7 @@ TEST_CASE("Network test", "[class]")
 		msg1.SaveToStream(writer);
 
 		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12));
-		msg->SetAction(StringHash("MOJO"));
+		msg->SetAction(StrId("MOJO"));
 		msg->SetMsgTime(12345);
 		msg->SetMsgType(NetMsgType::UPDATE);
 
@@ -300,7 +300,7 @@ TEST_CASE("Network test", "[class]")
 
 		// check message data
 		if (inputMsg) {
-			REQUIRE(inputMsg->GetAction() == StringHash("MOJO"));
+			REQUIRE(inputMsg->GetAction() == StrId("MOJO"));
 			REQUIRE(inputMsg->GetMsgTime() == 12345);
 			REQUIRE(inputMsg->GetMsgType() == NetMsgType::UPDATE);
 			REQUIRE(inputMsg->GetSyncId() == 12);
@@ -318,37 +318,37 @@ TEST_CASE("Network test", "[class]")
 
 		// time[10] = 10
 		spt<DeltaInfo> deltaInf = spt<DeltaInfo>(new DeltaInfo(10));
-		deltaInf->deltas[StringHash("MOJO")] = 10;
+		deltaInf->deltas[StrId("MOJO")] = 10;
 		delta->AcceptDeltaUpdate(deltaInf);
 		
 		// time[20] = 20
 		deltaInf = spt<DeltaInfo>(new DeltaInfo(20));
-		deltaInf->deltas[StringHash("MOJO")] = 20;
+		deltaInf->deltas[StrId("MOJO")] = 20;
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[15] = 15
 		delta->Update(5, 0);
-		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) == 15);
+		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) == 15);
 
 		// time[30] = 20
 		deltaInf = spt<DeltaInfo>(new DeltaInfo(30));
-		deltaInf->deltas[StringHash("MOJO")] = 20;
+		deltaInf->deltas[StrId("MOJO")] = 20;
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[30] = 20
 		delta->Update(15, 0);
-		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) == 20);
+		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) == 20);
 
 		// time[60] = 70
 		deltaInf = spt<DeltaInfo>(new DeltaInfo(60));
-		deltaInf->deltas[StringHash("MOJO")] = 70;
+		deltaInf->deltas[StrId("MOJO")] = 70;
 		deltaInf->time = 60;
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[40] >= 36 && time[40] <= 37
 		delta->Update(10, 0);
-		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) >= 36);
-		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) <= 37);
+		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) >= 36);
+		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) <= 37);
 	}
 
 	SECTION("Client connect test")

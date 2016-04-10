@@ -47,7 +47,6 @@ namespace Cog {
 	* Behavior for tweening with override (usable for dialogs)
 	*/
 	class OverrideTween : public Tween {
-		OBJECT_PROTOTYPE(OverrideTween)
 	private:
 		// tween direction
 		TweenDirection direction;
@@ -77,12 +76,14 @@ namespace Cog {
 	* Behavior for slide tweening
 	*/
 	class SlideTween : public Tween {
-		OBJECT_PROTOTYPE(SlideTween)
 	private:
 		// tween direction
 		TweenDirection direction;
 
 	public:
+		SlideTween() {
+
+		}
 
 		/**
 		* Creates a new behavior for slide tweening

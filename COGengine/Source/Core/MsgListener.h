@@ -98,14 +98,14 @@ namespace Cog {
 		* Registers itself as a global action listener
 		* @param action1 action to listen to
 		*/
-		void RegisterGlobalListening(StringHash action1);
+		void GlobalSubscribeForMessages(StrId action1);
 
 		/**
 		* Registers itself as a global action listener
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		*/
-		void RegisterGlobalListening(StringHash action1, StringHash action2);
+		void GlobalSubscribeForMessages(StrId action1, StrId action2);
 
 		/**
 		* Registers itself as a global action listener
@@ -113,7 +113,7 @@ namespace Cog {
 		* @param action2 action to listen to
 		* @param action3 action to listen to
 		*/
-		void RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3);
+		void GlobalSubscribeForMessages(StrId action1, StrId action2, StrId action3);
 
 		/**
 		* Registers itself as a global action listener
@@ -122,20 +122,20 @@ namespace Cog {
 		* @param action3 action to listen to
 		* @param action4 action to listen to
 		*/
-		void RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+		void GlobalSubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4);
 
 		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		*/
-		void RegisterListening(Scene* scene, StringHash action1);
+		void SubscribeForMessages(Scene* scene, StrId action1);
 
 		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		*/
-		void RegisterListening(Scene* scene, StringHash action1, StringHash action2);
+		void SubscribeForMessages(Scene* scene, StrId action1, StrId action2);
 
 		/**
 		* Registers itself as a action listener
@@ -143,7 +143,7 @@ namespace Cog {
 		* @param action2 action to listen to
 		* @param action3 action to listen to
 		*/
-		void RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3);
+		void SubscribeForMessages(Scene* scene, StrId action1, StrId action2, StrId action3);
 
 		/**
 		* Registers itself as a action listener
@@ -152,7 +152,7 @@ namespace Cog {
 		* @param action3 action to listen to
 		* @param action4 action to listen to
 		*/
-		void RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+		void SubscribeForMessages(Scene* scene, StrId action1, StrId action2, StrId action3, StrId action4);
 
 
 		/**
@@ -163,7 +163,7 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessage(HandlingType handlingType, StringHash action, int subaction, MsgEvent* data, Node* source) const;
+		void SendMessage(HandlingType handlingType, StrId action, int subaction, MsgEvent* data, Node* source) const;
 
 		/**
 		* Sends a message to any set of behaviors without tree-bubbling
@@ -172,7 +172,7 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source) const;
+		void SendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source) const;
 
 		/**
 		* Sends a message to one behavior with specific id
@@ -182,7 +182,7 @@ namespace Cog {
 		* @param source source node that is a part of message
 		* @param listenerId id of listener that should get this message
 		*/
-		void SendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) const;
+		void SendDirectMessage(StrId action, int subaction, MsgEvent* data, Node* source, int listenerId) const;
 	};
 
 }// namespace

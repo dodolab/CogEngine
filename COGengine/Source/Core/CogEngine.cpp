@@ -101,7 +101,7 @@ namespace Cog {
 		stage->GetRootObject()->Update(delta, absolute);
 
 		// update components
-		map<StringHash, Component*>& components = entityStorage->GetComponents();
+		auto& components = entityStorage->GetComponents();
 
 		for (auto& comp : components) {
 			auto state = comp.second->GetListenerState();

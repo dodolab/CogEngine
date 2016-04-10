@@ -11,7 +11,7 @@ namespace Cog {
 
 	}
 
-	Slider::Slider(Setting& setting) {
+	void Slider::Load(Setting& setting) {
 		this->bodyNodeTag = setting.GetItemVal("body");
 		this->textNodeTag = setting.GetItemVal("text");
 
@@ -19,7 +19,7 @@ namespace Cog {
 	}
 
 	void Slider::OnInit() {
-		Slider::RegisterListening(ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_OVER, ACT_ATTR_CHANGED);
+		SubscribeForMessages(ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_OVER, ACT_ATTR_CHANGED);
 	}
 
 	void Slider::OnStart() {

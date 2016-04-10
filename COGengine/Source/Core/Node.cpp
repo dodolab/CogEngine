@@ -35,23 +35,17 @@ namespace Cog {
 		InsertElementsForAdding(false, false);
 
 
-			// delete all behaviors
-		for (list<Behavior*>::iterator it = behaviors.begin(); it != behaviors.end(); ++it)
+		// delete all behaviors
+		for (auto& beh : behaviors)
 		{
 			if (scene != nullptr) {
-				this->scene->RemoveBehavior(*it);
+				this->scene->RemoveBehavior(beh);
 			}
-			if (!(*it)->IsExternal()) {
-				delete (*it);
+			if (!beh->IsExternal()) {
+				delete beh;
 			}
 		}
 		behaviors.clear();
-
-		/* don't delete attributes
-		// delete attributes
-		for (map<int, Attr*>::iterator it = attributes.begin(); it != attributes.end(); ++it){
-		delete (it->second);
-		}*/
 
 		// root node doesn't deallocate its children
 		if (this->type != NodeType::ROOT) {
@@ -169,9 +163,9 @@ namespace Cog {
 		return result;
 	}
 
-	bool Node::RemoveAttr(StringHash key, bool erase) {
+	bool Node::RemoveAttr(StrId key, bool erase) {
 
-		map<StringHash, Attr*>::iterator it = attributes.find(key);
+		map<StrId, Attr*>::iterator it = attributes.find(key);
 
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
@@ -185,8 +179,8 @@ namespace Cog {
 		return false;
 	}
 
-	bool Node::HasAttr(StringHash key) const {
-		return attributes.find(key) != attributes.end();
+	bool Node::HasAttr(StrId key) const {
+		return attributes.count(key) != 0;
 	}
 
 
@@ -280,15 +274,10 @@ namespace Cog {
 		for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it) {
 			Behavior* beh = (*it);
 
-			if (beh->GetMaxCount() != INT_MAX) {
-				// check the number of already stored behavior
-				int stored = 0;
-				for (auto cBeh : behaviors) {
-					if (typeid(*cBeh).name() == typeid(*beh).name()) stored++;
-				}
-				if (stored >= beh->GetMaxCount()) {
-					CogLogError("Node", "Attempt to add more behaviors of type %s than allowed; max number is %d", beh->GetClassName().c_str(), beh->GetMaxCount());
-					continue;
+			for (auto jt = behaviors.begin(); jt != behaviors.end(); ++jt) {
+				if (typeid(*(*jt)) == typeid(*beh)) {
+					behaviors.erase(jt);
+					break;
 				}
 			}
 
@@ -346,8 +335,8 @@ namespace Cog {
 		if(attributes.size() > 0) CogLogTree("INFO_NODE", logLevel+1, "Attributes:");
 
 		for (auto it = attributes.begin(); it != attributes.end(); ++it) {
-			StringHash key = (*it).first;
-			CogLogTree("INFO_NODE", logLevel + 2, StringHash::GetStringValue(key).c_str());
+			StrId key = (*it).first;
+			CogLogTree("INFO_NODE", logLevel + 2, StrId::GetStringValue(key).c_str());
 		}
 #endif
 
@@ -369,7 +358,7 @@ namespace Cog {
 				CogLogTree("INFO_FLAGS", logLevel+1, "Flags: %d", allStates.size());
 
 				for (unsigned un : allStates) {
-					CogLogTree("INFO_FLAGS", logLevel + 2, StringHash::GetStringValue(un).c_str());
+					CogLogTree("INFO_FLAGS", logLevel + 2, StrId::GetStringValue(un).c_str());
 				}
 			}
 		}

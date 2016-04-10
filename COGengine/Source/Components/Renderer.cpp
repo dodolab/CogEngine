@@ -47,7 +47,7 @@ namespace Cog {
 			(*it).second.push_back(node);
 		}
 		else {
-			vector<Node*> arr = vector<Node*>();
+			vector<Node*> arr;
 			arr.push_back(node);
 			buffer[zIndex] = arr;
 		}
@@ -250,14 +250,14 @@ namespace Cog {
 	void Renderer::RenderSprite(Node* owner) {
 
 		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
-		spt<Sprite> sprite = shape->GetSprite();
+		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
 		renderer->setActualBuffer(shape->GetSheetName());
 
-		drawingTile.width = sprite->GetWidth();
-		drawingTile.height = sprite->GetHeight();
-		drawingTile.offsetX = sprite->GetPosX();
-		drawingTile.offsetY = sprite->GetPosY();
+		drawingTile.width = sprite.GetWidth();
+		drawingTile.height = sprite.GetHeight();
+		drawingTile.offsetX = sprite.GetPosX();
+		drawingTile.offsetY = sprite.GetPosY();
 
 		drawingTile.posX = trans.absPos.x +trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
 		drawingTile.posY = trans.absPos.y +trans.absScale.y*drawingTile.height / 2.0f;
@@ -278,14 +278,14 @@ namespace Cog {
 		vector<spt<SpriteEntity>> sprites = shape->GetSprites();
 
 		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			spt<Sprite> sprite = (*it)->sprite;
+			Sprite& sprite = (*it)->sprite;
 			Trans& trans = (*it)->transform;
 			trans.CalcAbsTransform(owner->GetTransform());
 
-			drawingTile.width = sprite->GetWidth();
-			drawingTile.height = sprite->GetHeight();
-			drawingTile.offsetX = sprite->GetPosX();
-			drawingTile.offsetY = sprite->GetPosY();
+			drawingTile.width = sprite.GetWidth();
+			drawingTile.height = sprite.GetHeight();
+			drawingTile.offsetX = sprite.GetPosX();
+			drawingTile.offsetY = sprite.GetPosY();
 
 			drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
 			drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;

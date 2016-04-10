@@ -43,8 +43,8 @@ namespace Cog {
 	}
 
 	Act InputKey::GetAction(int key) {
-		auto find = keyMapping.find(key);
-		if (find != keyMapping.end()) return (*find).second;
+		auto found = keyMapping.find(key);
+		if (found != keyMapping.end()) return (*found).second;
 
 		return Act::NONE;
 	}

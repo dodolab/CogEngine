@@ -315,14 +315,14 @@ namespace Cog {
 
 	void ResourceCache::StoreEntity(spt<DEntity> entity) {
 
-		COGASSERT(loadedEntities.find(entity->name) == loadedEntities.end() || typeid(loadedEntities[entity->name]) == typeid(entity.get),
+		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
 			"RESOURCE", "Diferent type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[entity->name] = entity;
 	}
 
 	void ResourceCache::StoreEntity(string name, spt<DEntity> entity) {
-		COGASSERT(loadedEntities.find(entity->name) == loadedEntities.end() || typeid(loadedEntities[entity->name]) == typeid(entity.get),
+		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
 			"RESOURCE", "Diferent type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[name] = entity;

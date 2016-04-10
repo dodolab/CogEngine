@@ -6,7 +6,7 @@
 namespace Cog {
 
 	void DeltaUpdate::Init() {
-		RegisterGlobalListening(ACT_DELTA_MESSAGE_RECEIVED);
+		GlobalSubscribeForMessages(ACT_DELTA_MESSAGE_RECEIVED);
 		actual = spt<DeltaInfo>(new DeltaInfo());
 	}
 

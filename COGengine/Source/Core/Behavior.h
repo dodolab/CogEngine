@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BehaviorCreator.h"
 #include "ofxCogCommon.h"
 #include "Msg.h"
 #include "Facade.h"
@@ -17,24 +18,10 @@ namespace Cog {
 	*/
 	class Behavior : public MsgListener {
 	public: 
-		virtual string GetClassName() {
-			return typeid(*this).name();
-		}
 
-		virtual Behavior* CreatePrototype() {
-			return nullptr; 
-		}
 
-		virtual Behavior* CreatePrototype(Setting& setting) {
-			return this->CreatePrototype();
-		}
+		virtual void Load(Setting& setting) {
 
-		/**
-		* Gets maximal number the specific behavior the node could contain
-		* May be overidden for specific purposes
-		*/
-		virtual int GetMaxCount() {
-			return INT_MAX;
 		}
 
 	protected:
@@ -144,11 +131,11 @@ namespace Cog {
 
 		}
 
-		void RegisterListening(StringHash action1);
-		void RegisterListening(StringHash action1, StringHash action2);
-		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
-		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
-		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4, StringHash action5);
+		void SubscribeForMessages(StrId action1);
+		void SubscribeForMessages(StrId action1, StrId action2);
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3);
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4);
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4, StrId action5);
 
 		/**
 		* Sets owner to behavior

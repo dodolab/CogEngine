@@ -11,20 +11,24 @@ namespace Cog {
 	*/
 	class State : public Behavior {
 	private:
-		StringHash state = 0;
+		StrId state = 0;
 		StateMachine* parent = nullptr;
 
 	public:
 
-		State(StringHash state) : state(state){
+		State() {
 
 		}
 
-		StringHash GetState() {
+		State(StrId state) : state(state){
+
+		}
+
+		StrId GetState() {
 			return state;
 		}
 
-		void SetState(StringHash state) {
+		void SetState(StrId state) {
 			this->state = state;
 		}
 
@@ -35,6 +39,7 @@ namespace Cog {
 		void SetParent(StateMachine* parent) {
 			this->parent = parent;
 		}
+
 	};
 
 }// namespace

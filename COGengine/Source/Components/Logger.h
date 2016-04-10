@@ -142,8 +142,6 @@ namespace Cog {
 	*/
 	class Logger : public Component {
 
-		OBJECT(Logger)
-
 	protected:
 		LoggerChannel* channel = nullptr;
 		LogLevel logLevel;

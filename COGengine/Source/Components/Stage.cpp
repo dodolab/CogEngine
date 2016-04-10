@@ -72,7 +72,7 @@ namespace Cog {
 
 		// copy global listeners
 		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
-			StringHash action = (*it).first;
+			StrId action = (*it).first;
 			vector <MsgListener*>& listeners = (*it).second;
 
 			for (auto jt = listeners.begin(); jt != listeners.end(); ++jt) {
@@ -86,8 +86,8 @@ namespace Cog {
 		scene->GetSceneNode()->SubmitChanges(true);
 	}
 
-	void Stage::RegisterGlobalListener(StringHash action, MsgListener* listener) {
-		if (msgListeners.find(action) == msgListeners.end()) {
+	void Stage::RegisterGlobalListener(StrId action, MsgListener* listener) {
+		if (msgListeners.count(action) == 0) {
 			msgListeners[action] = vector <MsgListener*>();
 		}
 
@@ -99,8 +99,8 @@ namespace Cog {
 		}
 	}
 
-	bool Stage::UnregisterGlobalListener(StringHash action, MsgListener* listener) {
-		if (msgListeners.find(action) != msgListeners.end()) {
+	bool Stage::UnregisterGlobalListener(StrId action, MsgListener* listener) {
+		if (msgListeners.count(action) != 0) {
 			vector<MsgListener*>& listeners = msgListeners[action];
 
 			for (auto it = listeners.begin(); it != listeners.end(); ++it) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StringHash.h"
+#include "StrId.h"
 
 namespace Cog {
 
@@ -14,7 +14,7 @@ namespace Cog {
 		MsgLua(Msg* msg):msg(msg) {
 		}
 
-		StringHash GetAction() const;
+		StrId GetAction() const;
 		int GetSubAction() const;
 		int GetBehaviorId() const;
 		NodeLua* GetSourceObj() const;

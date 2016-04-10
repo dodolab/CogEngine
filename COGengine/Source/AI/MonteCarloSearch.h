@@ -96,11 +96,11 @@ namespace Cog {
 			return total;
 		}
 
-		void RunSimulations(int attempts) {
+		void RunSimulations(int attempts, bool initState = true) {
 
 			// run simulation
 			for (int i = 0; i < attempts; i++) {
-				RunSimulation();
+				RunSimulation(initState);
 			}
 
 			COGLOGDEBUG("AI", WriteInfo().c_str());
@@ -111,33 +111,33 @@ namespace Cog {
 		/**
 		* Executes simulation for one attempt
 		*/
-		void RunSimulation() {
+		void RunSimulation(bool initState) {
 
-			// initialize main simulator at the beginning of each loop
-			mainSimulator->InitState();
+			auto loopSimulator = mainSimulator->DeepCopy(); // simulator for this loop
+			auto agentSimulator = mainSimulator->DeepCopy(); // simulator for agents (let them do it with it what they want)
+
+			if(initState) loopSimulator->InitState();
+			
 			int stepCounter = 0;
 			AgentsReward rw = AgentsReward(agents.size());
 
-			// this simulator can be used by agent for additional search
-			spt<Simulator<S,A>> simCopy = mainSimulator->DeepCopy();
-
-			while (!mainSimulator->IsDeadEnd()) {
+			while (!loopSimulator->IsDeadEnd()) {
 				// get agent on turn
-				int agentOnTurn = mainSimulator->GetActualState().GetAgentOnTurn();
+				int agentOnTurn = loopSimulator->GetActualState().GetAgentOnTurn();
 
 				// copy state of main simulator into its copy
-				simCopy->SetActualState(mainSimulator->GetActualState());
+				agentSimulator->SetActualState(loopSimulator->GetActualState());
 				auto agent = agents[agentOnTurn];
 				// let the agent choose the appropriate action
-				A action = agent->ChooseAction(simCopy);
+				A action = agent->ChooseAction(agentSimulator);
 
 				// apply the selected action into the simulator
-				mainSimulator->MakeAction(action,false);
+				loopSimulator->MakeAction(action,false);
 				// get rewards of the selected action
 				stepCounter++;
-				rw.Merge(mainSimulator->GetRewards());
+				rw.Merge(loopSimulator->GetRewards());
 				// update history
-				actionHistory.AddRecord(mainSimulator->GetActualState(), action, agentOnTurn);
+				actionHistory.AddRecord(loopSimulator->GetActualState(), action, agentOnTurn);
 			}
 
 			this->totalRewards.push_back(rw);

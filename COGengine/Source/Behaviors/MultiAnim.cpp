@@ -5,7 +5,7 @@
 
 namespace Cog {
 
-	MultiAnim::MultiAnim(Setting setting) {
+	void MultiAnim::Load(Setting& setting) {
 		auto animations = setting.GetItemVals("animations");
 		this->repeat = setting.GetItemValBool("repeat");
 		auto resourceCache = GETCOMPONENT(ResourceCache);
@@ -15,11 +15,9 @@ namespace Cog {
 
 			if (!ent) throw IllegalArgumentException(string_format("Animation %s not found", anim.c_str()));
 
-			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(ent->type);
-			Behavior* behavior;
-			if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);
-			else behavior = prototype->CreatePrototype();
-
+			Behavior* behavior = CogGetEntityStorage()->CreateBehaviorPrototype(ent->type);
+			if (!ent->setting.Empty()) behavior->Load(ent->setting);
+			
 			AddAnimation(behavior);
 		}
 	}

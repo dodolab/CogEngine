@@ -125,9 +125,9 @@ namespace Cog {
 		auto& transform = owner->GetTransform();
 		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
-		ofVec2f behWander = owner->GetAttr<ofVec2f>(StringHash(ATTR_STEERING_BEH_WANDER));
+		ofVec2f behWander = owner->GetAttr<ofVec2f>(StrId(ATTR_STEERING_BEH_WANDER));
 		ofVec2f force = steeringMath.Wander(transform, movement, behWander, wanderRadius, wanderDistance, wanderJitter, delta);
-		owner->ChangeAttr(StringHash(ATTR_STEERING_BEH_WANDER), behWander);
+		owner->ChangeAttr(StrId(ATTR_STEERING_BEH_WANDER), behWander);
 
 		// debug display
 		//Node* pointer2 = owner->GetScene()->FindNodeByTag("pointer2");

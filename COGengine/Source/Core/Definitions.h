@@ -3,51 +3,15 @@
 #include <iostream>
 
 
-#define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>(#className)
-#define GETBEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)
-#define CREATE_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
+#define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>()
 #define REGISTER_COMPONENT(object) CogEngine::GetInstance().entityStorage->RegisterComponent(object)
-#define REGISTER_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->RegisterBehaviorPrototype(#className, new className())
+#define REGISTER_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->RegisterBehaviorBuilder<className>(#className)
 
 #define LUA_REGFUNC(className, funcName) addFunction(#funcName, &className::funcName)
 #define LUA_REGDATA(className, dataName) addData(#dataName, &className::dataName)
 
 
-#define OBJECT(compName) \
-public: \
-virtual string GetClassName() { \
-  return GetClassNameStatic(); \
-} \
-  \
-static string GetClassNameStatic() { \
- return string(#compName); \
-}
 
-#define DEFAULT_CONST(compName) \
-public: \
-  compName(){ \
-} 
-
-
-#define OBJECT_PROTOTYPE(compName) \
-OBJECT(compName) \
-DEFAULT_CONST(compName) \
-compName* CreatePrototype(){ \
-  return new compName(); \
-}
-
-#define OBJECT_PROTOTYPE_INIT(compName) \
-OBJECT_PROTOTYPE(compName) \
-compName* CreatePrototype(Setting& setting) { \
-  return new compName(setting); \
-}
-
-#define BEHAVIOR_MAXCOUNT(count) \
-virtual int GetMaxCount() { \
-	return count; \
-}
-
-#define BEHAVIOR_UNIQUE() BEHAVIOR_MAXCOUNT(1)
 
 // assertion with formatted message
 // this macro can be used widely for severe conditions, no matter how difficult
@@ -99,9 +63,15 @@ virtual int GetMaxCount() { \
 #define PIF 3.141592653f
 
 #ifdef ANDROID
-#define SCREEN_TOLERANCE 25
+#define TOUCHMOVE_TOLERANCE 25
 #else
-#define SCREEN_TOLERANCE 50
+#define TOUCHMOVE_TOLERANCE 50
+#endif
+
+#ifdef ANDROID
+#define TOUCHPOINT_TOLERANCE 80
+#else
+#define TOUCHPOINT_TOLERANCE 12
 #endif
 
 typedef float(*FadeFunction)(float);

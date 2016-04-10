@@ -7,7 +7,6 @@ namespace Cog {
 
 	class Sprite {
 	private:
-		spt<SpriteSet> spriteSet;
 		int frame;
 
 		int posX;
@@ -15,7 +14,7 @@ namespace Cog {
 		int width;
 		int height;
 
-		void Recalc() {
+		void Recalc(spt<SpriteSet> spriteSet) {
 			width = spriteSet->GetSpriteWidth();
 			height = spriteSet->GetSpriteHeight();
 
@@ -62,19 +61,19 @@ namespace Cog {
 
 	public:
 
-		Sprite(spt<SpriteSet> spriteSet, int row, int column) : spriteSet(spriteSet) {
+		Sprite() {
+
+		}
+
+		Sprite(spt<SpriteSet> spriteSet, int row, int column)  {
 
 			int columns = spriteSet->GetSpriteSetWidth() / spriteSet->GetSpriteWidth();
 			this->frame = row*columns + column;
-			Recalc();
+			Recalc(spriteSet);
 		}
 
-		Sprite(spt<SpriteSet> spriteSet, int frame) : spriteSet(spriteSet), frame(frame) {
-			Recalc();
-		}
-
-		spt<SpriteSet> GetSpriteSet() {
-			return spriteSet;
+		Sprite(spt<SpriteSet> spriteSet, int frame) : frame(frame) {
+			Recalc(spriteSet);
 		}
 
 		int GetFrame() {

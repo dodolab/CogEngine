@@ -30,6 +30,10 @@ namespace Cog {
 
 		}
 
+		Vec2i(ofVec3f pos) : x(pos.x), y(pos.y) {
+
+		}
+
 		/** position on the x axis */
 		int x;
 		/** position on the y axis */
@@ -43,6 +47,10 @@ namespace Cog {
 
 		inline operator ofVec2f() const {
 			return ofVec2f(float(x), (float)y);
+		}
+
+		inline operator ofVec3f() const {
+			return ofVec3f(float(x), (float)y);
 		}
 
 		inline bool operator==(const Vec2i& a) const {
@@ -71,6 +79,10 @@ namespace Cog {
 
 		inline Vec2i operator-(const Vec2i& a) const {
 			return Vec2i(x - a.x, y - a.y);
+		}
+
+		static int ManhattanDist(const Vec2i& a, const Vec2i& b) {
+			return abs(a.x - b.x) + abs(a.y - b.y);
 		}
 
 		static int Distance(const Vec2i& a, const Vec2i& b) {

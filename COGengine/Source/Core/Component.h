@@ -23,8 +23,6 @@ namespace Cog {
 		InitPriority initPriority = InitPriority::LOW;
 	public:
 
-		virtual string GetClassName() = 0;
-
 		virtual ~Component() {
 
 		}

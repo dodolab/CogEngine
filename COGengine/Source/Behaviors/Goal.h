@@ -18,7 +18,7 @@ namespace Cog {
 	class Goal : public Behavior {
 	protected:
 		GoalState goalState = GoalState::INACTIVE;
-		StringHash stateId;
+		StrId stateId;
 
 
 		virtual void OnGoalComplete() {
@@ -35,7 +35,11 @@ namespace Cog {
 
 	public:
 
-		Goal(StringHash stateId) : stateId(stateId) {
+		Goal() {
+
+		}
+
+		Goal(StrId stateId) : stateId(stateId) {
 
 		}
 
@@ -61,7 +65,7 @@ namespace Cog {
 
 		void Abort();
 
-		StringHash GetStateId() {
+		StrId GetStateId() {
 			return stateId;
 		}
 	};
@@ -71,13 +75,13 @@ namespace Cog {
 	*/
 	class GoalComposite : public Goal {
 	protected:
-		vector<Goal*> subgoals = vector<Goal*>();
+		vector<Goal*> subgoals;
 		int subgoalIndex = 0;
 		Goal* actualSubgoal = nullptr;
 		bool continueOnFail = false;
 	public:
 
-		GoalComposite(StringHash stateId, bool continueOnFail) : Goal(stateId), continueOnFail(continueOnFail){
+		GoalComposite(StrId stateId, bool continueOnFail) : Goal(stateId), continueOnFail(continueOnFail){
 
 		}
 

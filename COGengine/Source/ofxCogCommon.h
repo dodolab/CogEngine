@@ -29,7 +29,7 @@
 #include "TimeMeasure.h"
 #include "Definitions.h"
 #include "Utils.h"
-#include "StringHash.h"
+#include "StrId.h"
 #include "Flags.h"
 #include "Vec2i.h"
 #include "Transform.h"

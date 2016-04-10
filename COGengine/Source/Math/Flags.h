@@ -8,7 +8,7 @@ using std::vector;
 
 namespace Cog {
 
-	class StringHash;
+	class StrId;
 
 	/**
 	* State machine class that holds collection of states
@@ -47,7 +47,7 @@ namespace Cog {
 		/**
 		* Creates a new state machine, initialized with one state
 		*/
-		Flags(StringHash state);
+		Flags(StrId state);
 
 
 		Flags(const Flags& obj);

@@ -35,9 +35,9 @@ namespace Cog {
 		return LayerEnt();
 	}
 
-	void Scene::RegisterListener(StringHash action, MsgListener* listener) {
+	void Scene::RegisterListener(StrId action, MsgListener* listener) {
 
-		if (msgListeners.find(action) == msgListeners.end()) {
+		if (msgListeners.count(action) == 0) {
 			msgListeners[action] = vector <MsgListener*>();
 		}
 
@@ -47,8 +47,8 @@ namespace Cog {
 			listeners.push_back(listener);
 		}
 		
-		if (msgListenerActions.find(listener->GetId()) == msgListenerActions.end()) {
-			msgListenerActions[listener->GetId()] = vector<StringHash>();
+		if (msgListenerActions.count(listener->GetId()) == 0) {
+			msgListenerActions[listener->GetId()] = vector<StrId>();
 		}
 
 		auto msgAction = msgListenerActions[listener->GetId()];
@@ -58,8 +58,8 @@ namespace Cog {
 		}
 	}
 
-	bool Scene::UnregisterListener(StringHash action, MsgListener* listener) {
-		if (msgListeners.find(action) != msgListeners.end()) {
+	bool Scene::UnregisterListener(StrId action, MsgListener* listener) {
+		if (msgListeners.count(action) != 0) {
 			vector<MsgListener*>& listeners = msgListeners[action];
 
 			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
@@ -77,7 +77,7 @@ namespace Cog {
 
 		if (found != msgListenerActions.end()) {
 
-			vector<StringHash> actions = found->second;
+			vector<StrId> actions = found->second;
 
 			// unregister all actions
 			for (auto action : actions) {
@@ -91,7 +91,7 @@ namespace Cog {
 
 	void Scene::SendMessage(Msg& msg, Node* actualNode) {
 
-		COGLOGDEBUG("Messaging", "Message %s:%s", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
+		COGLOGDEBUG("Messaging", "Message %s:%s", StrId::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
 
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
@@ -113,7 +113,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToListener(Msg& msg, int targetId) {
 
-		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", StrId::GetStringValue(msg.GetAction()).c_str(), targetId);
 
 		Behavior* beh = FindBehaviorById(targetId);
 
@@ -128,7 +128,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToNode(Msg& msg, int targetId) {
 
-		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", StrId::GetStringValue(msg.GetAction()).c_str(), targetId);
 
 		Node* node = FindNodeById(targetId);
 
@@ -141,14 +141,14 @@ namespace Cog {
 		}
 	}
 
-	bool Scene::IsRegisteredListener(StringHash action) const {
-		return msgListeners.find(action) != msgListeners.end();
+	bool Scene::IsRegisteredListener(StrId action) const {
+		return msgListeners.count(action) != 0;
 	}
 
 	bool Scene::IsRegisteredListener(int action, MsgListener* beh) {
-		if (msgListenerActions.find(beh->GetId()) == msgListenerActions.end()) return false;
+		if (msgListenerActions.count(beh->GetId()) == 0) return false;
 
-		vector<StringHash>& actions = msgListenerActions[beh->GetId()];
+		vector<StrId>& actions = msgListenerActions[beh->GetId()];
 
 		return (std::find(actions.begin(), actions.end(), action) != actions.end());
 	}
@@ -216,7 +216,7 @@ namespace Cog {
 		return output;
 	}
 
-	vector<Node*> Scene::FindNodesByGroup(StringHash group) const {
+	vector<Node*> Scene::FindNodesByGroup(StrId group) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -308,7 +308,7 @@ namespace Cog {
 			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
 				(beh->GetId() != msg.GetBehaviorId())) {
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
-					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", StringHash::GetStringValue(msg.GetAction()).c_str(), beh->GetClassName().c_str(), beh->GetId());
+					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", StrId::GetStringValue(msg.GetAction()).c_str(), typeid(beh).name(), beh->GetId());
 					beh->OnMessage(msg);
 				}
 			}
@@ -395,8 +395,8 @@ namespace Cog {
 	}
 
 	bool Scene::AddBehavior(Behavior* beh) {
-		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		COGLOGDEBUG("Scene", "Adding behavior %s to node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", typeid(beh).name());
+		COGLOGDEBUG("Scene", "Adding behavior %s to node %s", typeid(beh).name(), beh->GetOwner()->GetTag().c_str());
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found == allBehaviors.end()) {
 			allBehaviors.push_back(beh);
@@ -407,8 +407,8 @@ namespace Cog {
 	}
 
 	void Scene::RemoveBehavior(Behavior* beh) {
-		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		COGLOGDEBUG("Scene", "Removing behavior %s from node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", typeid(beh).name());
+		COGLOGDEBUG("Scene", "Removing behavior %s from node %s", typeid(beh).name(), beh->GetOwner()->GetTag().c_str());
 
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found != allBehaviors.end()) allBehaviors.erase(found);
@@ -425,11 +425,11 @@ namespace Cog {
 		if(msgListeners.size() > 0) CogLogTree("INFO_SCENE", logLevel+1, "Message listeners: %d",msgListeners.size());
 
 		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
-			StringHash key = (*it).first;
+			StrId key = (*it).first;
 			int listeners = (*it).second.size();
 
 			if (listeners > 0) {
-				string str = StringHash::GetStringValue(key)+":"+ofToString(listeners);
+				string str = StrId::GetStringValue(key)+":"+ofToString(listeners);
 				CogLogTree("INFO_SCENE", logLevel+2, str.c_str());
 			}
 		}

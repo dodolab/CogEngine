@@ -17,7 +17,6 @@ namespace Cog {
 		NodeLua(string tag);
 
 		~NodeLua() {
-			bool mojo = false;
 		}
 
 		void AddToActualScene();
@@ -32,9 +31,9 @@ namespace Cog {
 
 		bool RemoveBehavior(BehaviorLua* beh, bool erase);
 
-		bool RemoveAttr(StringHash key, bool erase);
+		bool RemoveAttr(StrId key, bool erase);
 
-		bool HasAttr(StringHash key) const;
+		bool HasAttr(StrId key) const;
 
 		void SubmitChanges(bool applyToChildren);
 
@@ -60,11 +59,11 @@ namespace Cog {
 
 		void SetGroups(Flags val);
 
-		bool IsInGroup(StringHash group);
+		bool IsInGroup(StrId group);
 
-		void SetGroup(StringHash group);
+		void SetGroup(StrId group);
 
-		void UnsetGroup(StringHash group);
+		void UnsetGroup(StrId group);
 
 		bool HasStates() const;
 
@@ -72,37 +71,37 @@ namespace Cog {
 
 		void SetStates(Flags val);
 
-		bool HasState(StringHash state) const;
+		bool HasState(StrId state) const;
 
-		void SetState(StringHash state);
+		void SetState(StrId state);
 
-		void ResetState(StringHash state);
+		void ResetState(StrId state);
 
-		void SwitchState(StringHash state1, StringHash state2);
+		void SwitchState(StrId state1, StrId state2);
 
-		void AddAttrString(StringHash key, string val);
+		void AddAttrString(StrId key, string val);
 
-		void AddAttrInt(StringHash key, int val);
+		void AddAttrInt(StrId key, int val);
 
-		void AddAttrFloat(StringHash key, float val);
+		void AddAttrFloat(StrId key, float val);
 
-		void AddAttrVector2f(StringHash key, ofVec2f val);
+		void AddAttrVector2f(StrId key, ofVec2f val);
 
-		void AddAttrVector3f(StringHash key, ofVec3f val);
+		void AddAttrVector3f(StrId key, ofVec3f val);
 
-		void AddAttrVec2i(StringHash key, Vec2i val);
+		void AddAttrVec2i(StrId key, Vec2i val);
 
-		string GetAttrString(StringHash key);
+		string GetAttrString(StrId key);
 		
-		int GetAttrInt(StringHash key);
+		int GetAttrInt(StrId key);
 
-		float GetAttrFloat(StringHash key);
+		float GetAttrFloat(StrId key);
 
-		ofVec2f GetAttrVector2f(StringHash key);
+		ofVec2f GetAttrVector2f(StrId key);
 
-		ofVec3f GetAttrVector3f(StringHash key);
+		ofVec3f GetAttrVector3f(StrId key);
 		
-		Vec2i GetAttrVec2i(StringHash key);
+		Vec2i GetAttrVec2i(StrId key);
 	};
 
 } // namespace

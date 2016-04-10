@@ -10,9 +10,9 @@ namespace Cog {
 		static int idCounter;
 		int id;
 		Trans transform;
-		spt<Sprite> sprite;
+		Sprite sprite;
 
-		SpriteEntity(spt<Sprite> sprite, Trans transform) : transform(transform), sprite(sprite), id(idCounter++) {
+		SpriteEntity(Sprite& sprite, Trans& transform) : transform(transform), sprite(sprite), id(idCounter++) {
 
 		}
 	};

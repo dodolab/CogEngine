@@ -1,14 +1,14 @@
 #pragma once
 
 #include "ofVec2f.h"
-#include "StringHash.h"
+#include "StrId.h"
 
 namespace Cog {
 
 	class Movement {
 	private:
 		// map of forces
-		map<StringHash, ofVec2f>* forces = nullptr;
+		map<StrId, ofVec2f>* forces = nullptr;
 		ofVec2f acceleration = ofVec2f(0);
 		ofVec2f velocity = ofVec2f(0);
 		float angularSpeed = 0;
@@ -36,8 +36,8 @@ namespace Cog {
 		/**
 		* Gets the force
 		*/
-		void AddForce(StringHash key, ofVec2f force) {
-			if (forces == nullptr) forces = new map<StringHash, ofVec2f>();
+		void AddForce(StrId key, ofVec2f force) {
+			if (forces == nullptr) forces = new map<StrId, ofVec2f>();
 
 			(*forces)[key] = force;
 		}

@@ -5,7 +5,7 @@
 
 namespace Cog {
 
-	TransformAnim::TransformAnim(Setting setting) {
+	void TransformAnim::Load(Setting& setting) {
 		string from = setting.GetItemVal("from");
 		string to = setting.GetItemVal("to");
 		this->duration = setting.GetItem("duration").GetValFloat();

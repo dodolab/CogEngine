@@ -6,7 +6,7 @@ namespace Cog {
 
 	void FloatingScene::OnInit() {
 		if (scrollEnabled) {
-			RegisterListening(ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST, ACT_KEY_PRESSED);
+			SubscribeForMessages(ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST, ACT_KEY_PRESSED);
 		}
 	}
 
@@ -68,7 +68,7 @@ namespace Cog {
 							originalMousePos = lastMousePos;
 						}
 
-						bool isPointerOver = Vec2i::Distance(lastMousePos, originalMousePos) >= CogGetScreenWidth() / SCREEN_TOLERANCE;
+						bool isPointerOver = Vec2i::Distance(lastMousePos, originalMousePos) >= CogGetScreenWidth() / TOUCHMOVE_TOLERANCE;
 
 						if (lastMousePos != Vec2i(0) && (scrollStarted || isPointerOver)) { // scroll prevention
 

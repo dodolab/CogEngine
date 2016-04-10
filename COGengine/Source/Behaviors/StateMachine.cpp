@@ -82,7 +82,7 @@ namespace Cog {
 		this->currentState = state;
 
 		// add the state into map
-		if (localStates.find(state->GetState()) == localStates.end()) {
+		if (localStates.count(state->GetState()) == 0) {
 			localStates[state->GetState()] = state;
 		}
 
@@ -100,15 +100,15 @@ namespace Cog {
 	/**
 	* Changes state according to its key
 	*/
-	bool StateMachine::ChangeState(StringHash state) {
-		if (localStates.find(state) != localStates.end()) {
+	bool StateMachine::ChangeState(StrId state) {
+		if (localStates.count(state) != 0) {
 			this->ChangeState(localStates.find(state)->second);
 			return true;
 		}
 		return false;
 	}
 
-	State* StateMachine::FindLocalState(StringHash state) {
+	State* StateMachine::FindLocalState(StrId state) {
 		auto found = localStates.find(state);
 		if (found != localStates.end()) return found->second;
 		else return nullptr;

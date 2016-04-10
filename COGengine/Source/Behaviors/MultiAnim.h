@@ -8,7 +8,6 @@ namespace Cog {
 	* Behavior for animation sequence; can store a collection of animations
 	*/
 	class MultiAnim : public Behavior {
-		OBJECT_PROTOTYPE_INIT(MultiAnim)
 	private:
 		Behavior* actual = nullptr;
 		vector<Behavior*> animations;
@@ -16,7 +15,11 @@ namespace Cog {
 
 	public:
 
-		MultiAnim(Setting setting);
+		MultiAnim() {
+
+		}
+
+		virtual void Load(Setting& setting);
 
 		~MultiAnim();
 

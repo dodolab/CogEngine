@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -310,7 +310,12 @@
     <ClInclude Include="Source\Components\Renderer.h" />
     <ClInclude Include="Source\Components\Stage.h" />
     <ClInclude Include="Source\Components\SceneSwitchManager.h" />
+    <ClInclude Include="Source\Core\AsyncProcess.h" />
     <ClInclude Include="Source\Core\Attr.h" />
+    <ClInclude Include="Source\Core\Behavior.h" />
+    <ClInclude Include="Source\Core\BehaviorCreator.h" />
+    <ClInclude Include="Source\Core\CogApp.h" />
+    <ClInclude Include="Source\Core\CogEngine.h" />
     <ClInclude Include="Source\Core\Component.h" />
     <ClInclude Include="Source\Core\Definitions.h" />
     <ClInclude Include="Source\Core\EntityStorage.h" />
@@ -320,17 +325,14 @@
     <ClInclude Include="Source\Core\Error.h" />
     <ClInclude Include="Source\Core\InputAct.h" />
     <ClInclude Include="Source\Core\Msg.h" />
+    <ClInclude Include="Source\Core\MsgListener.h" />
+    <ClInclude Include="Source\Core\Node.h" />
     <ClInclude Include="Source\Core\NodeBuilder.h" />
+    <ClInclude Include="Source\Core\Scene.h" />
     <ClInclude Include="Source\Core\Settings.h" />
     <ClInclude Include="Source\Core\SoundFile.h" />
+    <ClInclude Include="Source\Core\CoroutineContext.h" />
     <ClInclude Include="Source\Core\TransformMath.h" />
-    <ClInclude Include="Source\Engine\AsyncProcess.h" />
-    <ClInclude Include="Source\Engine\Behavior.h" />
-    <ClInclude Include="Source\Engine\CogApp.h" />
-    <ClInclude Include="Source\Engine\CogEngine.h" />
-    <ClInclude Include="Source\Engine\MsgListener.h" />
-    <ClInclude Include="Source\Engine\Node.h" />
-    <ClInclude Include="Source\Engine\Scene.h" />
     <ClInclude Include="Source\Entities\BehaviorEnt.h" />
     <ClInclude Include="Source\Entities\DEntity.h" />
     <ClInclude Include="Source\Entities\LayerEnt.h" />
@@ -358,7 +360,7 @@
     <ClInclude Include="Source\Math\PathSegment.h" />
     <ClInclude Include="Source\Math\SteeringMath.h" />
     <ClInclude Include="Source\Math\Vec2i.h" />
-    <ClInclude Include="Source\Math\StringHash.h" />
+    <ClInclude Include="Source\Math\StrId.h" />
     <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\Misc\TimeMeasure.h" />
@@ -368,6 +370,7 @@
     <ClInclude Include="Source\Scripting\BehaviorLua.h" />
     <ClInclude Include="Source\Scripting\MsgLua.h" />
     <ClInclude Include="Source\Scripting\NodeLua.h" />
+    <ClInclude Include="Source\Tests\CoroutineTest.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\GoalTest.h" />
@@ -379,7 +382,7 @@
     <ClInclude Include="Source\Tests\SettingsTest.h" />
     <ClInclude Include="Source\Tests\SQLTest.h" />
     <ClInclude Include="Source\Tests\StateMachineTest.h" />
-    <ClInclude Include="Source\Tests\StringHashTest.h" />
+    <ClInclude Include="Source\Tests\StrIdTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
   </ItemGroup>
   <ItemGroup>
@@ -576,16 +579,16 @@
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\Stage.cpp" />
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
+    <ClCompile Include="Source\Core\Behavior.cpp" />
+    <ClCompile Include="Source\Core\CogApp.cpp" />
+    <ClCompile Include="Source\Core\CogEngine.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
+    <ClCompile Include="Source\Core\MsgListener.cpp" />
+    <ClCompile Include="Source\Core\Node.cpp" />
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />
+    <ClCompile Include="Source\Core\Scene.cpp" />
     <ClCompile Include="Source\Core\TransformMath.cpp" />
-    <ClCompile Include="Source\Engine\Behavior.cpp" />
-    <ClCompile Include="Source\Engine\CogApp.cpp" />
-    <ClCompile Include="Source\Engine\CogEngine.cpp" />
-    <ClCompile Include="Source\Engine\MsgListener.cpp" />
-    <ClCompile Include="Source\Engine\Node.cpp" />
-    <ClCompile Include="Source\Engine\Scene.cpp" />
     <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
     <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
@@ -597,7 +600,7 @@
     <ClCompile Include="Source\Math\Flags.cpp" />
     <ClCompile Include="Source\Math\Path.cpp" />
     <ClCompile Include="Source\Math\PathSegment.cpp" />
-    <ClCompile Include="Source\Math\StringHash.cpp" />
+    <ClCompile Include="Source\Math\StrId.cpp" />
     <ClCompile Include="Source\Math\Transform.cpp" />
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />

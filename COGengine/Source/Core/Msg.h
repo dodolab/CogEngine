@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events.h"
-#include "StringHash.h"
+#include "StrId.h"
 #include "Constants.h"
 
 namespace Cog {
@@ -52,7 +52,7 @@ namespace Cog {
 		// id of this message
 		int id;
 		// id of action that has been invoked
-		StringHash action;
+		StrId action;
 		// id of subaction that has been invoked
 		int subAction;
 		// handling settings
@@ -76,7 +76,7 @@ namespace Cog {
 		* @param sourceObj source object
 		* @param data payload
 		*/
-		Msg(HandlingType handlingType, StringHash action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
+		Msg(HandlingType handlingType, StrId action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
 
 		~Msg() {
 
@@ -85,14 +85,14 @@ namespace Cog {
 		/**
 		* Gets id of action; see Actions for common action ids
 		*/
-		const StringHash GetAction() const {
+		const StrId GetAction() const {
 			return action;
 		}
 
 		/**
 		* Gets indicator, if the action is equal to selected value
 		*/
-		const bool HasAction(StringHash actionCmp) const {
+		const bool HasAction(StrId actionCmp) const {
 			return action == actionCmp;
 		}
 

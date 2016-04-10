@@ -6,8 +6,6 @@
 namespace Cog {
 
 	class DeltaUpdate : public Component {
-		OBJECT(DeltaUpdate)
-
 	private:
 		int messagesObtained = 0;
 		uint64 initTime = 0;

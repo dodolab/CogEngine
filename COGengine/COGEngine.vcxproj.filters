@@ -25,9 +25,6 @@
     <Filter Include="Source\Misc">
       <UniqueIdentifier>{c8638d57-2ba7-4acc-b2f1-85d75cb97470}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine">
-      <UniqueIdentifier>{b59afc77-2c40-4f13-a87a-e541b9c542ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Entities">
       <UniqueIdentifier>{6ba6d7d2-4245-4910-b5db-1085bee33925}</UniqueIdentifier>
     </Filter>
@@ -207,9 +204,6 @@
     <ClInclude Include="Source\Math\Flags.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\StringHash.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Transform.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
@@ -240,35 +234,11 @@
     <ClInclude Include="Source\Graphics\SpriteSheet.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\CogApp.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\CogEngine.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\AsyncProcess.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Behavior.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Msg.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Scene.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\MsgListener.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Node.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Vec2i.h">
       <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Tests\StringHashTest.h">
-      <Filter>Source\Tests</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tests\SettingsTest.h">
       <Filter>Source\Tests</Filter>
@@ -660,6 +630,42 @@
     <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\CoroutineContext.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\CoroutineTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\StrId.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\StrIdTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\BehaviorCreator.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CogApp.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CogEngine.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\MsgListener.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Node.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Scene.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\AsyncProcess.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Behavior.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -722,9 +728,6 @@
     <ClCompile Include="Source\Math\Flags.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\StringHash.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\CollageTexture.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
@@ -737,26 +740,8 @@
     <ClCompile Include="Source\Misc\Utils.cpp">
       <Filter>Source\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\CogEngine.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Behavior.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\CogApp.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Msg.cpp">
       <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Scene.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\MsgListener.cpp">
-      <Filter>Source\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Node.cpp">
-      <Filter>Source\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\TransformMath.cpp">
       <Filter>Source\Core</Filter>
@@ -1036,6 +1021,27 @@
     </ClCompile>
     <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\StrId.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\CogEngine.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\MsgListener.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Node.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Scene.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Behavior.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\CogApp.cpp">
+      <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
