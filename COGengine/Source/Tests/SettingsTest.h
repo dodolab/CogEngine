@@ -6,7 +6,17 @@
 #include "catch.hpp"
 using namespace Cog;
 
-TEST_CASE("Settings test", "[class]")
+
+
+
+
+
+
+
+
+
+
+TEST_CASE("Settings test")
 {
 
 	SECTION("Simple settings parser")

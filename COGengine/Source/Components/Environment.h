@@ -23,7 +23,7 @@ namespace Cog {
 		// collection of actually pressed buttons
 		vector<InputAct*> pressedPoints;
 		// collection of played sounds
-		vector<spt<Sound>> playedSounds;
+		vector<Sound*> playedSounds;
 		// screen orientation
 		ScreenOrient screenOrient;
 
@@ -48,28 +48,33 @@ namespace Cog {
 		vector<ofThread*> runningThreads;
 	public:
 
+		~Environment() {
+			for (auto snd : playedSounds) {
+				delete snd;
+			}
+		}
 
 		/**
 		* Initializes environment controller
 		*/
-		void Init();
+		void OnInit();
 
 		/**
 		* Initializes environment controller, using xml
 		*/
-		void Init(spt<ofxXml> xml);
+		void OnInit(spt<ofxXml> xml);
 
 		/**
 		* Adds a new sound
 		*/
-		void AddSound(spt<Sound> sound) {
+		void AddSound(Sound* sound) {
 			playedSounds.push_back(sound);
 		}
 
 		/**
 		* Plays sound and adds it to the collection
 		*/
-		void PlaySound(spt<Sound> sound) {
+		void PlaySound(Sound* sound) {
 			sound->Play();
 			playedSounds.push_back(sound);
 		}
@@ -98,7 +103,7 @@ namespace Cog {
 		/**
 		* Gets collection of currently played sounds
 		*/
-		vector<spt<Sound>>& GetPlayedSounds() {
+		vector<Sound*>& GetPlayedSounds() {
 			return playedSounds;
 		}
 

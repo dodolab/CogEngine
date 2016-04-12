@@ -12,13 +12,13 @@
 
 namespace Cog {
 
-	void ResourceCache::Init() {
+	void ResourceCache::OnInit() {
 		// set global dpi so font will have the same pixel size on each display
 		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
 	}
 
 
-	void ResourceCache::Init(spt<ofxXml> xml) {
+	void ResourceCache::OnInit(spt<ofxXml> xml) {
 		xml->popAll();
 
 		if (xml->tagExists("app_config")) {
@@ -256,15 +256,14 @@ namespace Cog {
 		}
 	}
 
-	spt<Sound> ResourceCache::GetSound(string path) {
+	Sound* ResourceCache::GetSound(string path) {
 		auto found = loadedSounds.find(path);
 		if (found != loadedSounds.end()) {
 			return (found->second);
 		}
 
 		COGLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
-		Sound* snd = new Sound(path);
-		return spt<Sound>(snd);
+		return new Sound(path);
 	}
 
 	spt<ofxXmlSettings> ResourceCache::PreloadXMLFile(string path) {

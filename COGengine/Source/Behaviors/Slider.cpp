@@ -53,7 +53,7 @@ namespace Cog {
 
 			if (msg.GetSourceObject()->GetId() == owner->GetId()) {
 				if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
-					InputEvent* evt = msg.GetDataS<InputEvent>();
+					InputEvent* evt = msg.GetData<InputEvent>();
 					auto image = body->GetShape<spt<Image>>();
 
 					int width = image->GetWidth();
@@ -69,7 +69,7 @@ namespace Cog {
 
 				}
 				else if (msg.HasAction(ACT_ATTR_CHANGED)) {
-					AttributeChangeEvent* changeEvt = msg.GetDataS<AttributeChangeEvent>();
+					AttributeChangeEvent* changeEvt = msg.GetData<AttributeChangeEvent>();
 					if (changeEvt->attribute == ATTR_SLIDER_VALUE) {
 						int percentage = owner->GetAttr<int>(ATTR_SLIDER_VALUE);
 						SetValue(percentage);

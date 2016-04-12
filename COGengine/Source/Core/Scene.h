@@ -39,6 +39,10 @@ namespace Cog
 		map<int, vector<StrId>> msgListenerActions;
 		// list of all nodes
 		vector<Node*> allNodes;
+		// all nodes mapped by tag
+		map<StrId, Node*> allNodes_tag; 
+		// all nodes mapped by id
+		map<int, Node*> allNodes_id; 
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
 		// type of the scene
@@ -50,6 +54,8 @@ namespace Cog
 		bool loaded = false;
 		// indicator, if this scene has been initialized (and can be displayed)
 		bool initialized = false;
+		// indicator, if this scene should be buffered when it is switched
+		bool buffered = false;
 
 		// viewport offset of the scene
 		ofVec2f viewPortOffset = ofVec2f(0,0);
@@ -78,6 +84,14 @@ namespace Cog
 
 		void SetLazyLoad(bool lazyLoad) {
 			this->lazyLoad = lazyLoad;
+		}
+
+		bool IsBuffered() {
+			return buffered;
+		}
+
+		void SetIsBuffered(bool buffered) {
+			this->buffered = buffered;
 		}
 
 		bool Loaded() {
@@ -230,6 +244,11 @@ namespace Cog
 		void Dispose();
 
 		/**
+		* Clears all resources
+		*/
+		void Finish();
+
+		/**
 		* Loads scene from xml
 		*/
 		void LoadFromXml(spt<ofxXml> xml);
@@ -251,6 +270,8 @@ namespace Cog
 		}
 
 		private:
+
+			void CreateSceneNode();
 
 			/**
 			* Sends message to behaviors

@@ -8,7 +8,7 @@
 
 namespace Cog {
 
-	void SceneSwitchManager::Init() {
+	void SceneSwitchManager::OnInit() {
 		GlobalSubscribeForMessages(ACT_TWEEN_ENDED);
 	}
 

@@ -43,7 +43,7 @@ namespace Cog {
 
 		// init all components
 		for (auto it = components.begin(); it != components.end(); ++it) {
-			(*it)->Init();
+			(*it)->OnInit();
 		}
 	}
 
@@ -69,11 +69,11 @@ namespace Cog {
 		});
 
 		// init logger twice, because it should be always initialized by default at first
-		this->logger->Init();
+		this->logger->OnInit();
 
 		// init all comopnents, using xml file
 		for (auto it = components.begin(); it != components.end(); ++it) {
-			(*it)->Init(config);
+			(*it)->OnInit(config);
 		}
 	}
 

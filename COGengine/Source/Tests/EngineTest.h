@@ -3,70 +3,12 @@
 #include "ofMain.h"
 #include "CogEngine.h"
 #include "ofxCogMain.h"
-
-
 #include "catch.hpp"
 using namespace Cog;
 
-class CheckBehavior : public Behavior {
-	OBJECT_BEHAVIOR(CheckBehavior)
+#include "EngineTestAssets.h"
 
-	void OnInit() {
-	}
-
-	void OnMessage(Msg& msg) {
-
-	}
-
-public:
-	int updateCounter = 0;
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		updateCounter++;
-	}
-};
-
-class MessageBehavior : public Behavior {
-
-	bool send;
-
-public:
-	MessageBehavior(bool send) : send(send) {
-
-	}
-
-	void OnInit() {
-		if (!send) SubscribeForMessages(StrId("MESSAGE_TEST"));
-	}
-
-	void OnMessage(Msg& msg) {
-		if (!send && msg.GetAction() == "MESSAGE_TEST") {
-			acceptedMessage = true;
-		}
-	}
-
-public:
-	bool acceptedMessage = false;
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (send) this->SendMessageToListeners("MESSAGE_TEST", 0, nullptr, owner);
-	}
-};
-
-class MaxCountBehavior : public Behavior {
-public:
-	int maxCount;
-	virtual int GetMaxCount() {
-		return maxCount;
-	}
-
-	MaxCountBehavior(int maxCount) : maxCount(maxCount) {
-	}
-
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-
-	}
-};
-
-TEST_CASE("COG Engine test", "[class]")
+TEST_CASE("COG Engine test")
 {
 	SECTION("Engine run")
 	{

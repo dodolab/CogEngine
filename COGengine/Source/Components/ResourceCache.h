@@ -22,7 +22,7 @@ namespace Cog {
 		// cached meshes
 		map<string, spt<ofVboMesh>> loadedMeshes;
 		// cached sounds and music
-		map<string, spt<Sound>> loadedSounds;
+		map<string, Sound*> loadedSounds;
 		// cached xml files
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
@@ -53,9 +53,9 @@ namespace Cog {
 		/**
 		* Initializes controller
 		*/
-		void Init();
+		void OnInit();
 
-		void Init(spt<ofxXml> xml);
+		void OnInit(spt<ofxXml> xml);
 
 		/**
 		* Loads 2D image from file
@@ -87,7 +87,7 @@ namespace Cog {
 		* Loads sound from file
 		* @param path path to file
 		*/
-		spt<Sound> GetSound(string path);
+		Sound* GetSound(string path);
 
 		/**
 		* Preloads xml file; if the file is in the cache, returns cached xml

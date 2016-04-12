@@ -609,12 +609,6 @@
     <ClInclude Include="Source\AI\AIAgent.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\MonteCarloSearch.h">
-      <Filter>Source\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AI\ActionHistory.h">
-      <Filter>Source\AI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\AI\AgentsReward.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
@@ -665,6 +659,39 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Behavior.h">
       <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\CompositeBehavior.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\EngineTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\GoalTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\JavaScriptTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\LuaTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\MonteCarloTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\NetworkTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\SQLTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\StateMachineTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\TransformTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\GameSimulator.h">
+      <Filter>Source\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1042,6 +1069,12 @@
     </ClCompile>
     <ClCompile Include="Source\Core\CogApp.cpp">
       <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Component.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp">
+      <Filter>Source\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

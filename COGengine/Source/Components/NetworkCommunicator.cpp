@@ -38,7 +38,7 @@ namespace Cog {
 			messagesToSend.clear();
 		}
 
-		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", StrId::GetStringValue(msg->GetAction()).c_str());
+		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", msg->GetAction().GetStringValue().c_str());
 		messagesToSend.push_back(msg);
 	}
 

@@ -9,6 +9,7 @@ namespace Cog
 	{
 #ifdef _DEBUG
 		StrId::strValues[val] = string(str);
+		this->strVal = str;
 #endif
 	}
 
@@ -17,6 +18,7 @@ namespace Cog
 	{
 #ifdef _DEBUG
 		StrId::strValues[val] = str;
+		this->strVal = str;
 #endif
 	}
 

@@ -6,7 +6,7 @@
 
 namespace Cog {
 
-	void Renderer::Init() {
+	void Renderer::OnInit() {
 		zIndexImageBuffer = map<int, vector<Node*>>();
 		zIndexSheetBuffer = map<int, vector<Node*>>();
 		renderer = new SpriteSheetRenderer();

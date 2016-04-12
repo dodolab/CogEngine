@@ -66,8 +66,9 @@ namespace Cog
 		// calculates hash from c string
 		static unsigned Calculate(const char* str);
 
-		static string GetStringValue(unsigned val) {
+		string GetStringValue() const {
 #ifdef _DEBUG
+			if (!strVal.empty()) return strVal;
 			auto fnd = strValues.find(val);
 
 			if (fnd != strValues.end()) {
@@ -86,6 +87,7 @@ namespace Cog
 #ifdef _DEBUG
 		// value-string map for logging, only for debug mode
 		static map<unsigned, string>  strValues;
+		string strVal = "";
 #endif
 
 	};

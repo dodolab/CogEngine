@@ -21,7 +21,7 @@ namespace Cog {
 		delete rootObject;
 	}
 
-	void Stage::Init() {
+	void Stage::OnInit() {
 		// create root object with default behaviors, states and attributes
 		this->rootObject = new Node(NodeType::ROOT, 0, "root");
 		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
@@ -41,7 +41,7 @@ namespace Cog {
 				auto environment = GETCOMPONENT(Environment);
 				// set scale according to the new ratio
 				Node* sceneNode = actualScene->GetSceneNode();
-				auto changeEvent = msg.GetDataS<ValueChangeEvent<Vec2i>>();
+				auto changeEvent = msg.GetData<ValueChangeEvent<Vec2i>>();
 				
 
 				auto virtuals = CogGetVirtualScreenSize();
@@ -70,6 +70,15 @@ namespace Cog {
 			scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
 		}
 
+		CopyGlobalListenersToScene(scene);
+
+		this->scenes.push_back(scene);
+
+		COGLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
+		scene->GetSceneNode()->SubmitChanges(true);
+	}
+
+	void Stage::CopyGlobalListenersToScene(Scene* scene) {
 		// copy global listeners
 		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
 			StrId action = (*it).first;
@@ -79,11 +88,6 @@ namespace Cog {
 				scene->RegisterListener(action, (*jt));
 			}
 		}
-
-		this->scenes.push_back(scene);
-
-		COGLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
-		scene->GetSceneNode()->SubmitChanges(true);
 	}
 
 	void Stage::RegisterGlobalListener(StrId action, MsgListener* listener) {
@@ -196,6 +200,11 @@ namespace Cog {
 
 			Node* from = actualScene->GetSceneNode();
 			Node* to = scene->GetSceneNode();
+			
+			if (!actualScene->IsBuffered() && actualScene->IsLazyLoad()) {
+				actualScene->Finish();
+			}
+
 			actualScene = scene;
 
 			COGLOGDEBUG("Stage", "Switching to previous scene");

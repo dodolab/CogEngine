@@ -5,7 +5,7 @@
 
 namespace Cog {
 
-	void DeltaUpdate::Init() {
+	void DeltaUpdate::OnInit() {
 		GlobalSubscribeForMessages(ACT_DELTA_MESSAGE_RECEIVED);
 		actual = spt<DeltaInfo>(new DeltaInfo());
 	}
@@ -14,7 +14,7 @@ namespace Cog {
 
 		if (msg.HasAction(ACT_DELTA_MESSAGE_RECEIVED)) {
 			// received delta message
-			CommonEvent<DeltaInfo>* msgEvent = msg.GetDataS<CommonEvent<DeltaInfo>>();
+			CommonEvent<DeltaInfo>* msgEvent = msg.GetData<CommonEvent<DeltaInfo>>();
 			spt<DeltaInfo> netMsg = msgEvent->value;
 			AcceptDeltaUpdate(netMsg);
 		}

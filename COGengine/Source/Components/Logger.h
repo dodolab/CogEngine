@@ -163,7 +163,7 @@ namespace Cog {
 			delete channel;
 		}
 
-		void Init() {
+		void OnInit() {
 			delete channel;
 			channel = new ConsoleLoggerChannel();
 			logLevel = LogLevel::LINFO;
@@ -172,7 +172,7 @@ namespace Cog {
 		/**
 		* Initializes component, using xml settings or default one
 		*/
-		void Init(spt<ofxXmlSettings> config);
+		void OnInit(spt<ofxXmlSettings> config);
 	
 
 		/**

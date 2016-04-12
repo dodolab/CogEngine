@@ -28,7 +28,7 @@ namespace Cog {
 			drawingTile  = Tile();
 		}
 
-		void Init();
+		void OnInit();
 
 		void AddTileLayer(spt<ofImage> img, string name, int bufferSize, int zindex);
 

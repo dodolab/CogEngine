@@ -41,7 +41,7 @@ namespace Cog {
 	void MultiSelection::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_OBJECT_HIT_ENDED) && msg.GetSourceObject()->IsInGroup(selectionGroup)) {
 			// check if the object was clicked (user could click on different area and release touch event over the button)
-			InputEvent* evt = msg.GetDataS<InputEvent>();
+			InputEvent* evt = msg.GetData<InputEvent>();
 			if (evt->input->handlerNodeId == msg.GetSourceObject()->GetId()) {
 
 				ProcessCheckMessage(msg, false);
