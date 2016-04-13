@@ -3,17 +3,14 @@
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
 #include "Button.h"
-#include "Collider.h"
 #include "DelayAction.h"
 #include "DelayRemove.h"
 #include "HitEvent.h"
 #include "InputKey.h"
 #include "Move.h"
 #include "MultiAnim.h"
-#include "RotateAnim.h"
 #include "SceneSwitchManager.h"
 #include "TransformAnim.h"
-#include "TranslateAnim.h"
 #include "Tween.h"
 #include "Component.h"
 #include "FloatingScene.h"
@@ -175,16 +172,13 @@ namespace Cog {
 
 		REGISTER_BEHAVIOR(SheetAnimator);
 		REGISTER_BEHAVIOR(Button);
-		REGISTER_BEHAVIOR(Collider);
 		REGISTER_BEHAVIOR(DelayAction);
 		REGISTER_BEHAVIOR(DelayRemove);
 		REGISTER_BEHAVIOR(HitEvent);
 		REGISTER_BEHAVIOR(InputKey);
 		REGISTER_BEHAVIOR(Move);
 		REGISTER_BEHAVIOR(MultiAnim);
-		REGISTER_BEHAVIOR(RotateAnim);
 		REGISTER_BEHAVIOR(TransformAnim);
-		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);
 		REGISTER_BEHAVIOR(FloatingScene);
 		REGISTER_BEHAVIOR(MultiSelection);

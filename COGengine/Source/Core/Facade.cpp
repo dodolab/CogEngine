@@ -22,11 +22,11 @@ namespace Cog {
 
 	// =================== MENVIRONMENT ====================
 
-	void CogAddSound(Sound* sound) {
+	void CogAddSound(Soundfx* sound) {
 		CogEngine::GetInstance().environment->AddSound(sound);
 	}
 
-	void CogPlaySound(Sound* sound) {
+	void CogPlaySound(Soundfx* sound) {
 		CogEngine::GetInstance().environment->PlaySound(sound);
 	}
 
@@ -38,7 +38,7 @@ namespace Cog {
 		return CogEngine::GetInstance().environment->GetPressedPoints();
 	}
 
-	vector<Sound*>& CogGetPlayedSounds() {
+	vector<Soundfx*>& CogGetPlayedSounds() {
 		return CogEngine::GetInstance().environment->GetPlayedSounds();
 	}
 
@@ -202,7 +202,7 @@ namespace Cog {
 		return CogEngine::GetInstance().resourceCache->GetFont(path, size);
 	}
 
-	Sound* CogGetSound(string path) {
+	Soundfx* CogGetSound(string path) {
 		return CogEngine::GetInstance().resourceCache->GetSound(path);
 	}
 

@@ -7,7 +7,7 @@
 #include "TransformEnt.h"
 namespace Cog {
 
-	class SoundFile;
+	class Soundfx;
 	class SheetAnim;
 	class SpriteSheet;
 
@@ -22,7 +22,7 @@ namespace Cog {
 		// cached meshes
 		map<string, spt<ofVboMesh>> loadedMeshes;
 		// cached sounds and music
-		map<string, Sound*> loadedSounds;
+		map<string, Soundfx*> loadedSounds;
 		// cached xml files
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
@@ -87,7 +87,7 @@ namespace Cog {
 		* Loads sound from file
 		* @param path path to file
 		*/
-		Sound* GetSound(string path);
+		Soundfx* GetSound(string path);
 
 		/**
 		* Preloads xml file; if the file is in the cache, returns cached xml

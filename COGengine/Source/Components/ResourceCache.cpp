@@ -1,5 +1,5 @@
 #include "ResourceCache.h"
-#include "SoundFile.h"
+#include "Soundfx.h"
 #include "SheetAnim.h"
 #include "SpriteSheet.h"
 #include "Facade.h"
@@ -256,14 +256,14 @@ namespace Cog {
 		}
 	}
 
-	Sound* ResourceCache::GetSound(string path) {
+	Soundfx* ResourceCache::GetSound(string path) {
 		auto found = loadedSounds.find(path);
 		if (found != loadedSounds.end()) {
 			return (found->second);
 		}
 
 		COGLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
-		return new Sound(path);
+		return new Soundfx(path);
 	}
 
 	spt<ofxXmlSettings> ResourceCache::PreloadXMLFile(string path) {

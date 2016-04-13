@@ -7,7 +7,7 @@ namespace Cog {
 	/**
 	* Entity for sound attachment
 	*/
-	class Sound {
+	class Soundfx {
 	private:
 		ofSoundPlayer* soundPlayer;
 	public:
@@ -15,7 +15,7 @@ namespace Cog {
 		bool started;
 		float volume;
 
-		Sound(string filename) : filename(filename) {
+		Soundfx(string filename) : filename(filename) {
 			started = false;
 			// music must be streamed; otherwise it won't work on android
 			soundPlayer = new ofSoundPlayer();
@@ -23,7 +23,7 @@ namespace Cog {
 			SetVolume(1.0f);
 		}
 
-		~Sound() {
+		~Soundfx() {
 			soundPlayer->stop();
 		}
 

@@ -23,7 +23,7 @@ namespace Cog {
 		// collection of actually pressed buttons
 		vector<InputAct*> pressedPoints;
 		// collection of played sounds
-		vector<Sound*> playedSounds;
+		vector<Soundfx*> playedSounds;
 		// screen orientation
 		ScreenOrient screenOrient;
 
@@ -67,14 +67,14 @@ namespace Cog {
 		/**
 		* Adds a new sound
 		*/
-		void AddSound(Sound* sound) {
+		void AddSound(Soundfx* sound) {
 			playedSounds.push_back(sound);
 		}
 
 		/**
 		* Plays sound and adds it to the collection
 		*/
-		void PlaySound(Sound* sound) {
+		void PlaySound(Soundfx* sound) {
 			sound->Play();
 			playedSounds.push_back(sound);
 		}
@@ -103,7 +103,7 @@ namespace Cog {
 		/**
 		* Gets collection of currently played sounds
 		*/
-		vector<Sound*>& GetPlayedSounds() {
+		vector<Soundfx*>& GetPlayedSounds() {
 			return playedSounds;
 		}
 
