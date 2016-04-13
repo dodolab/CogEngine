@@ -11,57 +11,34 @@ using namespace std;
 
 namespace Cog {
 
-	enum class RenderType {
-		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE, LABEL, BOUNDING_BOX
-	};
-
-	struct RenderTypeConverter {
-		static RenderType StrToRenderType(string val) {
-			if (val.compare("image") == 0) {
-				return RenderType::IMAGE;
-			}
-			else if (val.compare("rectangle") == 0) {
-				return RenderType::RECTANGLE;
-			}
-			else if (val.compare("polygon") == 0) {
-				return RenderType::POLYGON;
-			}
-			else if (val.compare("text") == 0) {
-				return RenderType::TEXT;
-			}
-			else if (val.compare("plane") == 0) {
-				return RenderType::PLANE;
-			}
-			else if (val.compare("sprite") == 0) {
-				return RenderType::SPRITE;
-			}
-			else if (val.compare("multisprite") == 0) {
-				return RenderType::MULTISPRITE;
-			}
-			else if (val.compare("label") == 0) {
-				return RenderType::LABEL;
-			}
-			else if (val.compare("bounding_box") == 0) {
-				return RenderType::BOUNDING_BOX;
-			}
-
-			return RenderType::NONE;
-		}
+	/**
+	* Type of a shape
+	*/
+	enum class ShapeType {
+		NONE,				/** Undefined */
+		IMAGE,				/** 2D image */
+		RECTANGLE,			/** Unrenderable rectangle */
+		PLANE,				/** Renderable rectangle */
+		TEXT,				/** 2D text */
+		LABEL,				/** Text not affected by transformations */
+		SPRITE,				/** 2D sprite */
+		MULTISPRITE,		/** Collection of sprites */
+		BOUNDING_BOX		/** Box sizeable due to children nodes */
 	};
 
 	/**
-	* Entity for rendering
+	* Common class for shapes
 	*/
 	class Shape {
 	protected:
-		RenderType renderType = RenderType::NONE;
+		ShapeType shapeType = ShapeType::NONE;
 		ofColor color;
 	public:
 
 		Shape() {
 		}
 
-		Shape(RenderType renderType) : renderType(renderType) {
+		Shape(ShapeType shapeType) : shapeType(shapeType) {
 
 		}
 
@@ -69,11 +46,14 @@ namespace Cog {
 
 		}
 
-		RenderType GetRenderType() {
-			return renderType;
+		/**
+		* Gets type of the shape
+		*/
+		ShapeType GetShapeType() const {
+			return shapeType;
 		}
 
-		ofColor GetColor() {
+		ofColor GetColor() const {
 			return color;
 		}
 
@@ -81,17 +61,27 @@ namespace Cog {
 			this->color = color;
 		}
 
-		virtual float GetWidth() {
-			return 1; // must be 1
+		/**
+		* Gets shape width
+		* If undefined, it returns 1
+		*/
+		virtual float GetWidth() const {
+			return 1; 
 		}
 
-		virtual float GetHeight() {
-			return 1; // must be 1
+		/**
+		* Gets shape height
+		* If undefined, it returns 1
+		*/
+		virtual float GetHeight() const {
+			return 1; 
 		}
 	};
 
+
 	/**
-	* Not-renderable rectangle
+	* Nonrenderable rectangle, used primarily for 
+	* transformation calculations
 	*/
 	class Rectangle : public Shape {
 	private:
@@ -99,10 +89,11 @@ namespace Cog {
 		float height = 0;
 
 	public:
-		Rectangle(float width, float height) : width(width), height(height), Shape(RenderType::RECTANGLE) {
+		Rectangle(float width, float height) 
+			: width(width), height(height), Shape(ShapeType::RECTANGLE) {
 		}
 
-		float GetWidth() {
+		float GetWidth() const{
 			return width;
 		}
 
@@ -110,11 +101,11 @@ namespace Cog {
 			this->width = width;
 		}
 
-		float GetHeight() {
+		float GetHeight() const {
 			return height;
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height)  {
 			this->height = height;
 		}
 	};
@@ -126,13 +117,15 @@ namespace Cog {
 	private:
 		float width = 0;
 		float height = 0;
+		// indicator, if only borders should be drawn
 		bool noFill = false;
 
 	public:
-		Plane(float width, float height) : width(width), height(height), Shape(RenderType::PLANE) {
+		Plane(float width, float height) 
+			: width(width), height(height), Shape(ShapeType::PLANE) {
 		}
 
-		float GetWidth() {
+		float GetWidth() const {
 			return width;
 		}
 
@@ -140,7 +133,7 @@ namespace Cog {
 			this->width = width;
 		}
 
-		float GetHeight() {
+		float GetHeight() const {
 			return height;
 		}
 
@@ -148,27 +141,36 @@ namespace Cog {
 			this->height = height;
 		}
 
-		bool IsNoFill() {
+		/**
+		* Gets indicator whether only borders should be drawn
+		*/
+		bool IsNoFill() const {
 			return noFill;
 		}
 
+		/**
+		* Sets the indicator whether only borders should be drawn
+		*/
 		void SetNoFill(bool noFill) {
 			this->noFill = noFill;
 		}
 	};
 
+	/**
+	* 2D image, wrapper for ofImage
+	*/
 	class Image : public Shape {
 	private:
 		spt<ofImage> image;
 	public:
 
-		Image(spt<ofImage> img) : Shape(RenderType::IMAGE) {
+		Image(spt<ofImage> img) : Shape(ShapeType::IMAGE) {
 			this->image = img; 
 		}
 
-		spt<ofImage> GetImage() {
+		spt<ofImage> GetImage(){
 			if (!image->isUsingTexture()) {
-				// for preloaded images, they need to be copied to the texture
+				// preloaded images must be updated before the first use
 				image->setUseTexture(true);
 				image->update();
 			}
@@ -179,27 +181,30 @@ namespace Cog {
 			this->image = img;
 		}
 
-		float GetWidth() {
+		float GetWidth() const {
 			return image->getWidth();
 		}
 
-		float GetHeight() {
+		float GetHeight() const {
 			return image->getHeight();
 		}
 	};
 
+	/**
+	* 2D text
+	*/
 	class Text : public Shape {
 	protected:
 		spt<ofTrueTypeFont> font;
 		stringstream stream;
 	public:
 
-		Text(spt<ofTrueTypeFont> font, string text) : Shape(RenderType::TEXT) {
+		Text(spt<ofTrueTypeFont> font, string text) : Shape(ShapeType::TEXT) {
 			this->font = font;
 			stream << text;
 		}
 
-		spt<ofTrueTypeFont> GetFont() {
+		spt<ofTrueTypeFont> GetFont() const {
 			return font;
 		}
 
@@ -207,21 +212,29 @@ namespace Cog {
 			this->font = font;
 		}
 
-		float GetWidth() {
+		float GetWidth() const {
 			return GetTextWidth();
 		}
 
-		float GetHeight() {
+		float GetHeight() const {
 			return GetTextHeight();
 		
 		}
 
-		float GetTextWidth() {
+		/**
+		* Gets raster width of the current string
+		*/
+		float GetTextWidth() const {
 			return font->stringWidth(stream.str());
 
 		}
 
-		float GetTextHeight() {
+		/**
+		* Gets raster height of the current string
+		*/
+		float GetTextHeight() const {
+			// Height of Ay pair should cover the height
+			// of all possible bounding boxes
 			return font->stringHeight("Ay");
 		}
 
@@ -243,25 +256,40 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* Text not affected by transformations
+	*/
 	class Label : public Text {
 	protected:
 		int labelWidth;
 	public:
 		
+		/**
+		* Creates a new label
+		* @param font font of the label
+		* @param text text of the label
+		* @param labelWidth absolute width of the label in pixels
+		*/
 		Label(spt<ofTrueTypeFont> font, string text, int labelWidth) : Text(font, text) {
-			this->renderType = RenderType::LABEL;
+			this->shapeType = ShapeType::LABEL;
 			this->labelWidth = labelWidth;
 		}
 
+		/**
+		* Sets absolute label width in pixels
+		*/
 		void SetLabelWidth(int width) {
 			this->labelWidth = width;
 		}
 
-		int GetLabelWidth() {
+		/**
+		* Gets absolute label width in pixels
+		*/
+		int GetLabelWidth() const {
 			return labelWidth;
 		}
 
-		spt<ofTrueTypeFont> GetFont() {
+		spt<ofTrueTypeFont> GetFont() const {
 			return font;
 		}
 
@@ -270,19 +298,29 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* 2D sprite that is a part of a spritesheet with given frame index
+	*/
 	class SpriteShape : public Shape {
 	private:
+		// sprite entity
 		Sprite sprite;
-		string sheetName;
+		// sprite set this sprite makes a part
 		spt<SpriteSet> spriteSet;
+		// name of layer or sprite sheet this shape belongs to
+		string layerName;
 	public:
 
-		SpriteShape(Sprite& sprite, spt<SpriteSet> spriteSet, string sheetName) : Shape(RenderType::SPRITE), sprite(sprite), 
-			spriteSet(spriteSet), sheetName(sheetName) {
+		SpriteShape(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
+			: Shape(ShapeType::SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
 		}
 
-		string GetSheetName() {
-			return sheetName;
+		/**
+		* Gets name of layer or sprite sheet this sprite belongs to
+		* Note that the name could differ from the name of original sprite sheet
+		*/
+		string GetLayerName() const {
+			return layerName;
 		}
 
 		Sprite& GetSprite() {
@@ -293,80 +331,115 @@ namespace Cog {
 			this->sprite = sprite;
 		}
 
-		spt<SpriteSet> GetSpriteSet() {
+		spt<SpriteSet> GetSpriteSet(){
 			return spriteSet;
 		}
 
 	};
 
-	class SpritesShape : public Shape {
+	/**
+	*  Collection of sprites
+	*/
+	class MultiSpriteShape : public Shape {
 	private:
 		vector<spt<SpriteEntity>> sprites;
-
+		
+		// width that is recalculated with each new sprite
 		int width = 1;
+		// height that is recalculated with each new sprite
 		int height = 1;
-		string sheetName;
-
+		// name of the layer or sprite sheet this sprites is made of
+		string layerName;
+		
 	public:
-		SpritesShape(string sheetName, vector<spt<SpriteEntity>> sprites) :
-			Shape(RenderType::MULTISPRITE), sheetName(sheetName), sprites(sprites) {
-			Recalc();
+		MultiSpriteShape(string layerName)
+			: Shape(ShapeType::MULTISPRITE), layerName(layerName) {
 		}
 
-		void Recalc();
-
-		void RefreshZIndex() {
-			sort(sprites.begin(), sprites.end(),
-				[](const spt<SpriteEntity>  a, const spt<SpriteEntity> b) -> bool
-			{
-				return a->transform.localPos.z < b->transform.localPos.z;
-			});
+		MultiSpriteShape(string layerName, vector<spt<SpriteEntity>>& sprites)
+			: Shape(ShapeType::MULTISPRITE), layerName(layerName), sprites(sprites) {
+			Recalc();
 		}
 
 		vector<spt<SpriteEntity>>& GetSprites() {
 			return sprites;
 		}
 
+		/**
+		* Recalculates size of this shape, according to collection of sprites
+		*/
+		void Recalc();
+
+		/**
+		* Sorts all sprites by their z-index, starting at the furthest
+		*/
+		void RefreshZIndex();
+
+		/**
+		* Adds a new sprite 
+		* Note: don't forget to call RefreshZIndex when finish 
+		*/
+		void AddSprite(spt<SpriteEntity> entity) {
+			sprites.push_back(entity);
+		}
+
+		/**
+		* Removes sprite
+		*/
 		void RemoveSprite(spt<SpriteEntity> entity) {
-			// todo: performance!
-			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-				if ((*it)->id == entity->id) {
-					sprites.erase(it);
-					break;
-				}
+			auto found = find(sprites.begin(), sprites.end(), entity);
+			if (found != sprites.end()) {
+				sprites.erase(found);
 			}
 		}
 
-		string GetSheetName() {
-			return sheetName;
+		string GetLayerName() {
+			return layerName;
 		}
 
-		float GetWidth() {
+		/**
+		* Gets width of the whole sprite set
+		*/
+		float GetWidth() const {
 			return (float)width;
 		}
 
-		float GetHeight() {
+		/**
+		* Gets height of the whole sprite set
+		*/
+		float GetHeight() const {
 			return (float)height;
 		}
 	};
 
 	/**
-	* Renderable bounding box
+	* Renderable bounding box that sets its size according to children
+	* of the selected node
 	*/
 	class BoundingBox : public Shape {
 	private:
 		float width = 0;
 		float height = 0;
+		// indicator, if the box should be rendered
 		bool renderable = true;
 		ofRectangle boundingBox;
+		// margin in percentage size
 		float margin = 0;
 
 	public:
-		BoundingBox(float width, float height, float margin, bool renderable) : width(width), height(height), margin(margin), renderable(renderable),
-			Shape(RenderType::BOUNDING_BOX) {
+		/**
+		* Creates a new bounding box
+		* @param width width of the bounding box
+		* @param height height of the bounding box
+		* @param margin margin in percentage size of the inner box
+		* @param renderable indicator whether this box should be rendered
+		*/
+		BoundingBox(float width, float height, float margin, bool renderable) 
+			: width(width), height(height), margin(margin), renderable(renderable),
+			Shape(ShapeType::BOUNDING_BOX) {
 		}
 
-		float GetWidth() {
+		float GetWidth() const {
 			return width;
 		}
 
@@ -374,7 +447,7 @@ namespace Cog {
 			this->width = width;
 		}
 
-		float GetHeight() {
+		float GetHeight() const {
 			return height;
 		}
 
@@ -382,25 +455,44 @@ namespace Cog {
 			this->height = height;
 		}
 
-		bool IsRenderable() {
+		/**
+		* Gets indicator whether this box should be rendered
+		*/
+		bool IsRenderable() const {
 			return renderable;
 		}
 
+		/**
+		* Sets the indicator whether this box should be rendered
+		*/
 		void SetIsRenderable(bool renderable) {
 			this->renderable = renderable;
 		}
 
-		float GetMargin() {
+		/**
+		* Gets magin in percentage size of the inner box
+		*/
+		float GetMargin() const {
 			return margin;
 		}
 
+		/**
+		* Sets margin in percentage size of the inner box
+		*/
 		void SetMargin(float margin) {
 			this->margin = margin;
 		}
 
+		/**
+		* Recalculates size of this bounding box according to children of
+		* the selected node
+		*/
 		void Recalc(Node* owner);
 
-		ofRectangle GetBoundingBox() {
+		/**
+		* Gets bounding box rectangle
+		*/
+		ofRectangle GetBoundingBox() const {
 			return boundingBox;
 		}
 

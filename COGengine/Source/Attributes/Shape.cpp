@@ -3,7 +3,7 @@
 
 namespace Cog{
 
-	void SpritesShape::Recalc() {
+	void MultiSpriteShape::Recalc() {
 
 		int minX = 0;
 		int minY = 0;
@@ -12,9 +12,9 @@ namespace Cog{
 		int mWidth = 0;
 		int mHeight = 0;
 
-		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			Sprite& crt = (*it)->sprite;
-			Trans transform = (*it)->transform;
+		for (auto& spr : sprites) {
+			Sprite& crt = spr->sprite;
+			Trans& transform = spr->transform;
 
 			int posX = (int)transform.localPos.x;
 			int posY = (int)transform.localPos.y;
@@ -32,20 +32,27 @@ namespace Cog{
 				mHeight = crt.GetHeight();
 			}
 		}
-
+		// set size of bounding box of all sprite coordinates
 		this->width = (maxX - minX) + mWidth;
 		this->height = (maxY - minY) + mHeight;
 
 		RefreshZIndex();
+	}
 
+	void MultiSpriteShape::RefreshZIndex() {
+		sort(sprites.begin(), sprites.end(),
+			[](const spt<SpriteEntity>&  a, const spt<SpriteEntity>& b) -> bool
+		{
+			return a->transform.localPos.z < b->transform.localPos.z;
+		});
 	}
 
 	void BoundingBox::Recalc(Node* owner) {
 
-		float minX = 10000;
-		float minY = 10000;
-		float maxX = -10000;
-		float maxY = -10000;
+		float minX = 1000000;
+		float minY = 1000000;
+		float maxX = -1000000;
+		float maxY = -1000000;
 
 		for (auto& child : owner->GetChildren()) {
 			auto& trans = child->GetTransform();

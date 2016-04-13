@@ -79,8 +79,8 @@ namespace Cog {
 				.LUA_REGDATA(Trans, absPos)
 				.LUA_REGFUNC(Trans, SetAbsAsLocal)
 				.LUA_REGFUNC(Trans, CalcAbsTransform)
-				.LUA_REGFUNC(Trans, CalcRotationToPosition)
-				.LUA_REGFUNC(Trans, SetRotationToPosition)
+				.LUA_REGFUNC(Trans, CalcAngle)
+				.LUA_REGFUNC(Trans, SetRotationAsAngleToPosition)
 				.endClass();
 
 			// StrId

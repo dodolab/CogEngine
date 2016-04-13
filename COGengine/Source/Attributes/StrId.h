@@ -10,10 +10,9 @@ using std::string;
 namespace Cog
 {
 
-
 	/**
-	* Entity that transforms string into unsigned value; is used for quicker access to hashmaps where
-	* numbers are used as keys
+	* Entity that transforms string into unsigned value; 
+	* can be used as a replacement of strings for performance-critical parts such as maps
 	*/
 	class StrId
 	{
@@ -25,19 +24,16 @@ namespace Cog
 
 		explicit StrId(unsigned value) : val(value){}
 
-		// Construct from a C string
 		StrId(const char* str);
-		// Construct from a string
+		
 		StrId(const string& str);
 
-		// Assign from another hash.
 		StrId& operator =(const StrId& rhs)
 		{
 			val = rhs.val;
 			return *this;
 		}
 
-		// Add a hash.
 		StrId operator +(const StrId& rhs) const
 		{
 			StrId ret;
@@ -45,7 +41,6 @@ namespace Cog
 			return ret;
 		}
 
-		// Add-assign a hash.
 		StrId& operator +=(const StrId& rhs)
 		{
 			val += rhs.val;
@@ -57,15 +52,21 @@ namespace Cog
 		bool operator <(const StrId& rhs) const { return val < rhs.val; }
 		bool operator >(const StrId& rhs) const { return val > rhs.val; }
 
-		// return unsigned value
 		operator unsigned() const { return val; }
 
-		// Return hash value.
+		/**
+		* Gets the hash value
+		*/
 		unsigned GetValue() const { return val; }
 
-		// calculates hash from c string
+		/**
+		* Calculates hash value from C string, using SDBM algorithm
+		*/
 		static unsigned Calculate(const char* str);
 
+		/**
+		* Gets string value of this hash (only for debug mode)
+		*/
 		string GetStringValue() const {
 #ifdef _DEBUG
 			if (!strVal.empty()) return strVal;
@@ -81,11 +82,11 @@ namespace Cog
 		}
 
 	private:
-		// Hash value.
+		// hash value.
 		unsigned val;
 
 #ifdef _DEBUG
-		// value-string map for logging, only for debug mode
+		// value-string map for debug purposes such as logging
 		static map<unsigned, string>  strValues;
 		string strVal = "";
 #endif

@@ -39,7 +39,7 @@ namespace Cog {
 		if (owner->HasState(StrId(STATES_HITTABLE))) {
 
 			// get inverse matrix
-			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
+			ofMatrix4x4 inverse = owner->GetTransform().CalcAbsMatrix().getInverse();
 
 			bool atLeastOneTouch = false;
 
@@ -53,20 +53,20 @@ namespace Cog {
 				bool hasHitTest = false;
 
 
-				if (owner->HasRenderType(RenderType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
-				else if (owner->HasRenderType(RenderType::MULTISPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<SpritesShape>>(), touchTrans);
+				if (owner->HasShapeType(ShapeType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
+				else if (owner->HasShapeType(ShapeType::MULTISPRITE)) {
+					hasHitTest = CShapeHitTest(owner->GetShape<spt<MultiSpriteShape>>(), touchTrans);
 				}
-				else if (owner->HasRenderType(RenderType::SPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<SpriteShape>>(), touchTrans);
+				else if (owner->HasShapeType(ShapeType::SPRITE)) {
+					hasHitTest = CShapeHitTest(owner->GetShape<spt<MultiSpriteShape>>(), touchTrans);
 				}
-				else if (owner->HasRenderType(RenderType::RECTANGLE)) {
+				else if (owner->HasShapeType(ShapeType::RECTANGLE)) {
 					hasHitTest = CShapeHitTest(owner->GetShape<spt<Rectangle>>(), touchTrans);
 				}
-				else if (owner->HasRenderType(RenderType::PLANE)) {
+				else if (owner->HasShapeType(ShapeType::PLANE)) {
 					hasHitTest = CShapeHitTest(owner->GetShape<spt<Plane>>(), touchTrans);
 				}
-				else if (owner->HasRenderType(RenderType::BOUNDING_BOX)) {
+				else if (owner->HasShapeType(ShapeType::BOUNDING_BOX)) {
 					hasHitTest = BoundingBoxHitTest(owner->GetShape<spt<BoundingBox>>(), touchVector);
 				}
 

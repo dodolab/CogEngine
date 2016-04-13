@@ -11,11 +11,11 @@ public:
 
 	}
 
-	float GetWidth() {
+	float GetWidth() const {
 		return width;
 	}
 
-	float GetHeight() {
+	float GetHeight() const {
 		return height;
 	}
 };

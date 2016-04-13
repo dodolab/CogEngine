@@ -5,17 +5,17 @@
 namespace Cog {
 
 	/**
-	* Transformation entity that holds local and absolute position
-	* For now 2D transformation is supported with the possibility of setting Z position and scale
+	* Entity that holds local and absolute transformation vectors
+	* Only 2D transformations are supported; the Z axis is used for z-index
 	*/
 	class Trans {
 
 	public:
+
 		Trans() {
 
 		}
 
-		
 		/**
 		* Creates a new transformation entity
 		* @param posX position in X axis
@@ -48,25 +48,30 @@ namespace Cog {
 		void SetAbsAsLocal();
 
 		/**
-		* Calculates absolute coordinates
-		* @param parent parent whose transform will be calculated according to
+		* Calculates absolute coordinates according to the parent's transformation
 		*/
 		void CalcAbsTransform(Trans& parent);
 
 		/**
-		* Calculates rotation to the selected position
+		* Calculates angle in degrees between local position and given position
 		*/
-		float CalcRotationToPosition(ofVec2f pos);
+		float CalcAngle(ofVec2f pos);
 
 		/**
-		* Sets rotation to the selected local position so that the object will
-		* be oriented to the direction
+		* Sets rotation as a angle between local position and given position so that
+		* the object will be oriented in the direction of the position vector
 		*/
-		void SetRotationToPosition(ofVec2f pos);
+		void SetRotationAsAngleToPosition(ofVec2f pos);
 
-		ofMatrix4x4 GetAbsMatrix();
+		/**
+		* Calculates absolute transformation matrix
+		*/
+		ofMatrix4x4 CalcAbsMatrix();
 
-		ofMatrix4x4 GetMatrix();
+		/**
+		* Calculates local transformation matrix
+		*/
+		ofMatrix4x4 CalcMatrix();
 	};
 }// namespace
 

@@ -5,9 +5,12 @@
 
 namespace Cog {
 
+	/**
+	* Container for physical forces
+	*/
 	class Movement {
 	private:
-		// map of forces
+		// map of forces acting on the object
 		map<StrId, ofVec2f>* forces = nullptr;
 		ofVec2f acceleration = ofVec2f(0);
 		ofVec2f velocity = ofVec2f(0);
@@ -21,31 +24,38 @@ namespace Cog {
 
 		/**
 		* Gets the acceleration vector
+		* Note: if more forces used, the acceleration vector is usually
+		* calculated, using the CalcForce method
 		*/
-		ofVec2f GetAcceleration() {
+		ofVec2f GetAcceleration() const {
 			return acceleration;
 		}
 
 		/**
-		* Sets the acceleration vector directly (no forces used)
+		* Sets the acceleration vector
+		* Note: if you want to calculate with more than one force, use
+		* AddForce method instead
 		*/
 		void SetAcceleration(ofVec2f acceleration) {
 			this->acceleration = acceleration;
 		}
 
 		/**
-		* Gets the force
+		* Sets the force according to its key
+		* @param key key of the force
+		* @param force force to set 
 		*/
-		void AddForce(StrId key, ofVec2f force) {
+		void SetForce(StrId key, ofVec2f force) {
 			if (forces == nullptr) forces = new map<StrId, ofVec2f>();
 
 			(*forces)[key] = force;
 		}
 
 		/**
-		* Calculates resultant force according to all stored forces
+		* Calculates the resulting force according to all forces stored
+		* If no force is set, returns acceleration
 		*/
-		ofVec2f CalcAccelerationForce() {
+		ofVec2f CalcForce() const {
 			if (forces == nullptr) return acceleration;
 
 			ofVec2f result = ofVec2f(0);
@@ -58,30 +68,36 @@ namespace Cog {
 		}
 
 		/**
-		* Gets the velocity vector
+		* Gets velocity vector
 		*/
-		ofVec2f GetVelocity() {
+		ofVec2f GetVelocity() const {
 			return velocity;
 		}
 
 		/**
-		* Sets the velocity vector
+		* Sets velocity vector
 		*/
 		void SetVelocity(ofVec2f velocity) {
 			this->velocity = velocity;
 		}
 
-		float GetAngularSpeed() {
+		/**
+		* Gets angular speed
+		*/
+		float GetAngularSpeed() const {
 			return angularSpeed;
 		}
 
 		/**
-		* Sets the angular speed
+		* Sets angular speed
 		*/
 		void SetAngularSpeed(float angularSpeed) {
 			this->angularSpeed = angularSpeed;
 		}
 
+		/**
+		* Stops the movement by setting all vectors to zero
+		*/
 		void Stop() {
 			if (forces != nullptr) {
 				forces->clear();

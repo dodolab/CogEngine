@@ -234,8 +234,8 @@ ghost = { \
 			.addData("absPos", &Trans::absPos)
 			.addFunction("SetAbsAsLocal", &Trans::SetAbsAsLocal)
 			.addFunction("CalcAbsTransform", &Trans::CalcAbsTransform)
-			.addFunction("CalcRotationToPosition", &Trans::CalcRotationToPosition)
-			.addFunction("SetRotationToPosition", &Trans::SetRotationToPosition)
+			.addFunction("CalcAngle", &Trans::CalcAngle)
+			.addFunction("SetRotationAsAngleToPosition", &Trans::SetRotationAsAngleToPosition)
 			.endClass();
 
 #define lua_sample " \
@@ -244,7 +244,7 @@ ghost = { \
  trans.absRotation = 30 \
  trans.absScale = ofVec3f(20,20,20) \
  trans.rotation = 50 \
- rotPos = trans:CalcRotationToPosition(ofVec2f(10,10))"
+ rotPos = trans:CalcAngle(ofVec2f(10,10))"
 
 		
 		int status = luaL_loadstring(pl, lua_sample);

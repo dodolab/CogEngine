@@ -73,7 +73,7 @@ namespace Cog {
 		// transformation matrix
 		Trans  transform;
 		// mash object
-		spt<Shape> shape = spt<Shape>(new Shape(RenderType::NONE));
+		spt<Shape> shape = spt<Shape>(new Shape(ShapeType::NONE));
 		// running mode
 		RunningMode runMode = RunningMode::RUNNING;
 		bool isExternal = false;
@@ -316,7 +316,7 @@ namespace Cog {
 		* Gets indicator, if this entity is renderable
 		*/
 		bool IsRenderable() {
-			return shape->GetRenderType() != RenderType::NONE;
+			return shape->GetShapeType() != ShapeType::NONE;
 		}
 
 		bool IsExternal() {
@@ -352,8 +352,8 @@ namespace Cog {
 		/**
 		* Returns true, if the shape is of the selected type
 		*/
-		bool HasRenderType(RenderType type) {
-			return shape->GetRenderType() == type;
+		bool HasShapeType(ShapeType type) {
+			return shape->GetShapeType() == type;
 		}
 
 		/**
