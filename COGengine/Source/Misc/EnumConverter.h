@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include "Definitions.h"
 using namespace std;
 
 namespace Cog {
@@ -28,6 +28,8 @@ namespace Cog {
 		static CalcType GetUnitValue(string val, float& floatVal);
 
 		static CalcType StrToCalcType(string val);
+
+		static FadeFunction GetFadeFunction(string name);
 	};
 
 } // namespace

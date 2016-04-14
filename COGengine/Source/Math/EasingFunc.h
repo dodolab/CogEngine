@@ -10,80 +10,47 @@ using namespace std;
 namespace Cog {
 
 
-	// easing functions container
-	class EasingManager {
+	/**
+	* Container for easing functions
+	* Each function takes a number in the range 0 to 1 and
+	* returns a number in the same range 
+	*/
+	class EasingFunc {
 
 	public:
+		/** linear easing */
 		static FadeFunction linear;
+		/** smooth elastic in easing */
 		static FadeFunction elasticIn;
+		/** smooth elastic out easing */
 		static FadeFunction elasticOut;
+		/** smooth elastic in-out easing */
 		static FadeFunction elasticInOut;
+		/** exponential in easing */
 		static FadeFunction expoIn;
+		/** exponential out easing */
 		static FadeFunction expoOut;
+		/** exponential in-out easing */
 		static FadeFunction expoInOut;
+		/** quadratic in easing */
 		static FadeFunction quadIn;
+		/** quadratic out easing */
 		static FadeFunction quadOut;
+		/** quadratic in-out easing */
 		static FadeFunction quadInOut;
+		/** cosine in easing */
 		static FadeFunction cosineIn;
+		/** cosine out easing */
 		static FadeFunction cosineOut;
+		/** cosine in-out easing */
 		static FadeFunction cosineInOut;
+		/** sine in easing */
 		static FadeFunction sinIn;
+		/** sine out easing */
 		static FadeFunction sinOut;
+		/** sine in-out easing */
 		static FadeFunction sinInOut;
 		
-		static FadeFunction GetFadeFunction(string name) {
-			if (name.compare("linear") == 0) {
-				return linear;
-			}
-			if (name.compare("elastic_in") == 0) {
-				return elasticIn;
-			}
-			if (name.compare("elastic_out") == 0) {
-				return elasticOut;
-			}
-			if (name.compare("elastic") == 0) {
-				return elasticInOut;
-			}
-			if (name.compare("expo_in") == 0) {
-				return expoIn;
-			}
-			if (name.compare("expo_out") == 0) {
-				return expoOut;
-			}
-			if (name.compare("expo") == 0) {
-				return expoInOut;
-			}
-			if (name.compare("quad_in") == 0) {
-				return quadIn;
-			}
-			if (name.compare("quad_out") == 0) {
-				return quadOut;
-			}
-			if (name.compare("quad") == 0) {
-				return quadInOut;
-			}
-			if (name.compare("cosine_in") == 0) {
-				return cosineIn;
-			}
-			if (name.compare("cosine_out") == 0) {
-				return cosineOut;
-			}
-			if (name.compare("cosine") == 0) {
-				return cosineInOut;
-			}
-			if (name.compare("sin_in") == 0) {
-				return sinIn;
-			}
-			if (name.compare("sin_out") == 0) {
-				return sinOut;
-			}
-			if (name.compare("sin") == 0) {
-				return sinInOut;
-			}
-
-
-			throw IllegalArgumentException(string_format("No such easing function : %s",name.c_str()));
-		}
 	};
 
 } // namespace

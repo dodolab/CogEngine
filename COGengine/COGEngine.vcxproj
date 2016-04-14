@@ -349,10 +349,11 @@
     <ClInclude Include="Source\Graphics\SpriteSheet.h" />
     <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h" />
     <ClInclude Include="Source\Math\AStarSearch.h" />
-    <ClInclude Include="Source\Math\CellPartitioner.h" />
+    <ClInclude Include="Source\Math\GridSpace.h" />
     <ClInclude Include="Source\Math\EasingFunc.h" />
+    <ClInclude Include="Source\Math\GridGraph.h" />
+    <ClInclude Include="Source\Math\NodeCellObject.h" />
     <ClInclude Include="Source\Math\Path.h" />
-    <ClInclude Include="Source\Math\PathSegment.h" />
     <ClInclude Include="Source\Math\SteeringMath.h" />
     <ClInclude Include="Source\Misc\EnumConverter.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
@@ -601,9 +602,11 @@
     <ClCompile Include="Source\Graphics\SpriteEntity.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSet.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
+    <ClCompile Include="Source\Math\AStarSearch.cpp" />
     <ClCompile Include="Source\Math\EasingFunc.cpp" />
+    <ClCompile Include="Source\Math\GridGraph.cpp" />
     <ClCompile Include="Source\Math\Path.cpp" />
-    <ClCompile Include="Source\Math\PathSegment.cpp" />
+    <ClCompile Include="Source\Math\SteeringMath.cpp" />
     <ClCompile Include="Source\Misc\EnumConverter.cpp" />
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />

@@ -2,6 +2,7 @@
 #include "TransformAnim.h"
 #include "CogEngine.h"
 #include "Scene.h"
+#include "EnumConverter.h"
 
 namespace Cog {
 
@@ -19,7 +20,7 @@ namespace Cog {
 
 		string easing = setting.GetItemVal("easefunc");
 		if (!easing.empty()) {
-			this->fadeFunction = EasingManager::GetFadeFunction(easing);
+			this->fadeFunction = EnumConverter::GetFadeFunction(easing);
 		}
 	}
 
