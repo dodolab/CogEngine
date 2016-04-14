@@ -215,7 +215,7 @@ namespace Cog {
 	}
 
 	spt<SheetAnim> CogGetAnimation(string name) {
-		return CogEngine::GetInstance().resourceCache->GetAnimation(name);
+		return static_pointer_cast<SheetAnim>(CogEngine::GetInstance().resourceCache->GetAnimation(name));
 	}
 
 	void CogStoreAnimation(spt<SheetAnim> anim) {

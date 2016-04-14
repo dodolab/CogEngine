@@ -19,7 +19,7 @@ namespace Cog {
 
 		// for rectangles, width and height is set directly instead of scale
 		if (entity.sType == CalcType::PER && (shape->GetShapeType() == ShapeType::RECTANGLE) || shape->GetShapeType() == ShapeType::BOUNDING_BOX) {
-			auto rectShape = node->GetShape<spt<Rectangle>>();
+			auto rectShape = node->GetShape<Rectangle>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
 			nodeTransform.scale = ofVec3f(1);

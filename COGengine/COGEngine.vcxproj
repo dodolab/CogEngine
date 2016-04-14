@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextAlign;$(ProjectDir)/3rdParty/ofxGui;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -240,19 +240,7 @@
     <ClInclude Include="3rdParty\network\ofxTCPManager.h" />
     <ClInclude Include="3rdParty\network\ofxTCPServer.h" />
     <ClInclude Include="3rdParty\network\ofxUDPManager.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxBaseGui.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxButton.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxGui.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxGuiGroup.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxLabel.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxPanel.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxSlider.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxSliderGroup.h" />
-    <ClInclude Include="3rdParty\ofxGui\ofxToggle.h" />
-    <ClInclude Include="3rdParty\ofxTextAlign\ofxTextAlign.h" />
-    <ClInclude Include="3rdParty\ofxTextAlign\ofxTextAlignTTF.h" />
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h" />
-    <ClInclude Include="3rdParty\smartptr\ofxSmartPointer.h" />
     <ClInclude Include="3rdParty\sqlite\ofxSQLite.h" />
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\xml\ofxXmlSettings.h" />
@@ -526,16 +514,6 @@
     <ClCompile Include="3rdParty\network\ofxTCPManager.cpp" />
     <ClCompile Include="3rdParty\network\ofxTCPServer.cpp" />
     <ClCompile Include="3rdParty\network\ofxUDPManager.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxBaseGui.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxButton.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxGuiGroup.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxLabel.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxPanel.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxSlider.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxSliderGroup.cpp" />
-    <ClCompile Include="3rdParty\ofxGui\ofxToggle.cpp" />
-    <ClCompile Include="3rdParty\ofxTextAlign\ofxTextAlign.cpp" />
-    <ClCompile Include="3rdParty\ofxTextAlign\ofxTextAlignTTF.cpp" />
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp" />
     <ClCompile Include="3rdParty\sqlite\ofxSQLite.cpp" />
     <ClCompile Include="3rdParty\sqlite\sqlite3.c">

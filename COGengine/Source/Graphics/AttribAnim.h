@@ -102,8 +102,8 @@ namespace Cog {
 		/**
 		* Copies all parameters from other animation
 		*/
-		void GetParametersFromReference(CommonAnim* reference) {
-			auto attribAnimRef = static_cast<AttribAnim*>(reference);
+		void GetParametersFromReference(spt<CommonAnim> reference) {
+			auto attribAnimRef = static_pointer_cast<AttribAnim>(reference);
 
 			this->SetDuration(attribAnimRef->GetDuration());
 			

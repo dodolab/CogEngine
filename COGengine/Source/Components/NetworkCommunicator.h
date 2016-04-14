@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "Component.h"
 #include <unordered_set>
 

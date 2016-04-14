@@ -85,13 +85,13 @@ namespace Cog {
 
 			if (ref.length() != 0) {
 				// got referenced animation
-				CommonAnim* refAnim = referencedAnims[actualAnimIndex];
+				auto refAnim = referencedAnims[actualAnimIndex];
 
 				if (ref.find(".") == -1) {
 					// reference doesn't contain dot - it means that we can find its reference in actual scope (under the root animation)
-					CommonAnim* reference = rootAnims[rootAnimIndex]->FindChild(ref);
+					auto reference = rootAnims[rootAnimIndex]->FindChild(ref);
 
-					if (reference != nullptr) {
+					if (reference) {
 						// reference was found -> load other parameters
 						refAnim->GetParametersFromReference(reference);
 					}
@@ -109,8 +109,8 @@ namespace Cog {
 					string subAnim = ref.substr(ref.find(".") + 1);
 					// get sub-animation
 					spt<CommonAnim> root = FindAnimByName(rootAnimName, rootAnims);
-					CommonAnim* scopeAnim = root->FindChild(subAnim);
-					if (!root || scopeAnim == nullptr) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
+					auto scopeAnim = root->FindChild(subAnim);
+					if (!root || !scopeAnim) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 
 					// reference was found -> load other parameters
 					refAnim->GetParametersFromReference(scopeAnim);

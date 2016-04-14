@@ -193,7 +193,7 @@ namespace Cog {
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
-		spt<Image> imgShp = static_cast<spt<Image>>(owner->GetShape());
+		spt<Image> imgShp = static_pointer_cast<Image>(owner->GetShape());
 		spt<ofImage> image = imgShp->GetImage();
 
 		if (owner->HasAttr(ATTR_IMGBOUNDS)) {
@@ -212,7 +212,7 @@ namespace Cog {
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
-		spt<Plane> rect = static_cast<spt<Plane>>(owner->GetShape());
+		spt<Plane> rect = static_pointer_cast<Plane>(owner->GetShape());
 
 		ofColor color = rect->GetColor();
 		ofSetColor(color);
@@ -234,7 +234,7 @@ namespace Cog {
 		// load absolute matrix
 		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
-		spt<Text> shape = owner->GetShape<spt<Text>>();
+		spt<Text> shape = owner->GetShape<Text>();
 		ofSetColor(shape->GetColor());
 
 		spt<ofTrueTypeFont> font = shape->GetFont();
@@ -245,7 +245,7 @@ namespace Cog {
 
 	void Renderer::RenderSprite(Node* owner) {
 
-		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
+		spt<SpriteShape> shape = static_pointer_cast<SpriteShape>(owner->GetShape());
 		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
 		renderer->setActualBuffer(shape->GetLayerName());
@@ -269,7 +269,7 @@ namespace Cog {
 
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
-		spt<MultiSpriteShape> shape = static_cast<spt<MultiSpriteShape>>(owner->GetShape());
+		spt<MultiSpriteShape> shape = static_pointer_cast<MultiSpriteShape>(owner->GetShape());
 		renderer->setActualBuffer(shape->GetLayerName());
 		auto& sprites = shape->GetSprites();
 
@@ -302,7 +302,7 @@ namespace Cog {
 		auto& trans = owner->GetTransform();
 		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 
-		spt<Label> shape = owner->GetShape<spt<Label>>();
+		spt<Label> shape = owner->GetShape<Label>();
 		ofSetColor(shape->GetColor());
 
 		spt<ofTrueTypeFont> font = shape->GetFont();
@@ -338,7 +338,7 @@ namespace Cog {
 	}
 
 	void Renderer::RenderBoundingBox(Node* owner) {
-		spt<BoundingBox> shape = static_cast<spt<BoundingBox>>(owner->GetShape());
+		spt<BoundingBox> shape = static_pointer_cast<BoundingBox>(owner->GetShape());
 		
 		if (shape->IsRenderable()) {
 			auto bbox = shape->GetBoundingBox();

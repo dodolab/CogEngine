@@ -31,7 +31,7 @@ namespace Cog {
 		else {
 			// get actual frame index
 			int actualIndex = (int)contextStack.GetActualProgress();
-			spt<SheetAnim> actualNode = contextStack.GetContext().GetActualChild();
+			spt<SheetAnim> actualNode = static_pointer_cast<SheetAnim>(contextStack.GetContext().GetActualChild());
 
 			if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1) {
 				// image is a spritesheet (more than one sprite per image)
@@ -45,8 +45,8 @@ namespace Cog {
 					// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
 
 					// todo: recalculation always...
-					auto spriteSet = owner->GetShape<spt<SpriteShape>>()->GetSpriteSet();
-					owner->GetShape<spt<SpriteShape>>()->SetSprite(Sprite(spriteSet, frameIndex));
+					auto spriteSet = owner->GetShape<SpriteShape>()->GetSpriteSet();
+					owner->GetShape<SpriteShape>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
 					if (!owner->HasShapeType(ShapeType::IMAGE)) {
@@ -61,10 +61,10 @@ namespace Cog {
 
 					ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
 					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
-					owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
+					owner->GetShape<Image>()->SetImage(spriteSheet);
 
 					if (owner->HasShapeType(ShapeType::IMAGE)) {
-						owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
+						owner->GetShape<Image>()->SetImage(spriteSheet);
 					}
 					else if (owner->HasShapeType(ShapeType::NONE)) {
 						// set the first image
@@ -79,7 +79,7 @@ namespace Cog {
 				string imagePath = actualNode->GetSheet(actualIndex);
 				spt<ofImage> image = CogGet2DImage(imagePath);
 				if (owner->HasShapeType(ShapeType::IMAGE)) {
-					owner->GetShape<spt<Image>>()->SetImage(image);
+					owner->GetShape<Image>()->SetImage(image);
 				}
 				else {
 					owner->SetShape(spt<Image>(new Image(image)));

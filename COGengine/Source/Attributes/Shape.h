@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "ofRectangle.h"
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "Sprite.h"
 #include "SpriteEntity.h"
 

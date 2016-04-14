@@ -78,7 +78,7 @@ namespace Cog {
 
 		if (owner->HasState(selectedState)) {
 			if (selectedImg) {
-				owner->GetShape<spt<Image>>()->SetImage(selectedImg);
+				owner->GetShape<Image>()->SetImage(selectedImg);
 			}
 			else {
 				owner->GetShape()->SetColor(selectedColor);
@@ -86,7 +86,7 @@ namespace Cog {
 		}
 		else if (!owner->HasState(selectedState)) {
 			if (defaultImg) {
-				owner->GetShape<spt<Image>>()->SetImage(defaultImg);
+				owner->GetShape<Image>()->SetImage(defaultImg);
 			}
 			else {
 				owner->GetShape()->SetColor(defaultColor);

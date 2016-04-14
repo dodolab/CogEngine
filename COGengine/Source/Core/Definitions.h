@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-
+#include <memory>
 
 #define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>()
 #define REGISTER_COMPONENT(object) CogEngine::GetInstance().entityStorage->RegisterComponent(object)
@@ -77,6 +77,9 @@
 typedef float(*FadeFunction)(float);
 
 typedef unsigned long long uint64;
+
+template<typename T>
+using spt = std::shared_ptr<T>;
 
 namespace Cog {
 	typedef unsigned char tBYTE;
