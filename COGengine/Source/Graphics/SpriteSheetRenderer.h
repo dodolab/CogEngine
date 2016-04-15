@@ -1,15 +1,26 @@
 #pragma once
 
-#include "ofMain.h"
-#include "CollageTexture.h"
+#include "ofTexture.h"
+#include "SpriteSheetTexture.h"
 
 namespace Cog {
 
-	enum flipDirection { F_NONE = 0, F_HORIZ, F_VERT, F_HORIZ_VERT };
+	/**
+	* Flip direction of the rendered tile
+	*/
+	enum FlipDirection { 
+		NONE = 0, 
+		HORIZONTALLY = 1, 
+		VERTICALLY = 2, 
+		HORIZ_VERT = 3
+	};
 
-	struct Tile {
+	/**
+	* Renderable sprite with given transform and texture coordinates
+	*/
+	struct SpriteTile {
 
-		Tile() {
+		SpriteTile() {
 			offsetX = 0;
 			offsetY = 0;
 			width = 0;
@@ -17,30 +28,69 @@ namespace Cog {
 			posX = 0;
 			posY = 0;
 			posZ = 0;
-			dir = flipDirection::F_NONE;
+			dir = FlipDirection::NONE;
 			scaleX = 1;
 			scaleY = 1;
 			rotation = 0;
-			col = ofColor(1.0f);
+			col = ofColor(255);
 		}
 
+		// x offset in pixels on a texture
 		int offsetX;
+		// y offset in pixels on a texture
 		int offsetY;
+		// tile width
 		int width;
+		// tile height
 		int height;
+		
+		// absolute position on the x axis
 		float posX;
+		// absolute position on the y axis
 		float posY;
+		// absolute position on the z axis
 		float posZ;
-		flipDirection dir;
+		// flip direction
+		FlipDirection dir;
+		// absolute x-axis scale 
 		float scaleX;
+		// absolute y-axis scale
 		float scaleY;
+		// rotation in degrees
 		float rotation;
+		// tile color
 		ofColor col;
 	};
 
-	struct SpriteBuffer {
+	/**
+	* Buffer for one rendered layer, contains vertex data
+	*/
+	struct SpriteLayer {
+		// z-index of the layer
+		int zIndex;
+		// layer name
+		string name;
+		// texture x-axis coefficient (equal to 1 for non opengl-es cards) 
+		float textureCoeffX;
+		// texture y-axis coefficient (equal to 1 for non opengl-es card)
+		float textureCoeffY;
+		// indicator whether the texture is external (and therefore it shouldn't be deleted)
+		bool textureIsExternal;
+		// pointer to texture
+		ofTexture* texture;
+		// vertex data
+		float* verts;
+		// texture coordinates data
+		float* coords;
+		// color data
+		unsigned char * colors;
+		
+		// size of the buffer
+		int bufferSize;
+		// total number of sprites
+		int numSprites;
 
-		SpriteBuffer(int zIndex) : zIndex(zIndex){
+		SpriteLayer(int zIndex) : zIndex(zIndex){
 			texture = nullptr;
 			verts = nullptr;
 			coords = nullptr;
@@ -50,7 +100,7 @@ namespace Cog {
 			textureIsExternal = false;
 		}
 
-		~SpriteBuffer() {
+		~SpriteLayer() {
 			if (texture != nullptr) {
 				if (textureIsExternal) texture->clear();
 				else delete texture;
@@ -63,133 +113,178 @@ namespace Cog {
 			if (colors != nullptr)
 				delete[] colors;
 		}
-
-		int zIndex;
-		string name;
-		float textureCoeffX;
-		float textureCoeffY;
-		bool textureIsExternal;
-
-		ofTexture* texture;
-		int bufferSize;
-
-		float* verts;
-		float* coords;
-		unsigned char * colors;
-
-		int numSprites;
-
 	};
 
 
-	//class -------------------------------------------
 	class SpriteSheetRenderer
 	{
-	public:
-		int brushIndex;
+	protected:
 		float brushX;
 		float brushY;
+		map<string, SpriteLayer*> buffers;
+		SpriteLayer* actualBuffer;
+	public:
 
-		float brushSize;
-		float halfBrushSize;
-
-		bool safeMode;
-
-		/**
-		*
-		* @param _numLayers number of layers
-		* @param _tilesPerLayer layer capacity (how much tiles can be stored in one layer)
-		* @param _defaultLayer default layer index (0)
-		* @param _tileSize default size of one tile
-		*/
 		SpriteSheetRenderer();
 		~SpriteSheetRenderer();
 
-		void reAllocateArrays(string sheetName, int bufferSize);
+		/**
+		* Allocates a new layer buffer
+		* @param sheetName name of a sheet or layer
+		* @param textureWidth width of the sheet image
+		* @param textureHeight height of the sheet image
+		* @param glScaleMode openGL scale mode (GL_LINEAR, GL_NEAREST etc)
+		*/
+		void Allocate(string sheetName, int textureWidth, int textureHeight, int glScaleMode);
 
 		/**
-		* Loads texture from file
-		* @param widthHeight - texture size (should be power of 2)
-		* @param internalGLScaleMode - opengl scaling, possibles values: GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST,
-		* GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_LINEAR
+		* Pastes sprite image to the texture under the buffer with given name
+		* Note that there must be a SpriteTexture associated with the given sheet
+		* @param fileName path to the image
+		* @param sheetName name of a sheet
+		* @param x x coordinate of the pasted image
+		* @param y y coordinate of the pasted image
+		* @param glType opengl type (GL_RGB or GL_RGBA)
 		*/
-		void loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode, int zIndex);
-		void loadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal = true);
-		void loadTexture(CollageTexture * texture, string sheetName, int bufferSize, int zIndex);
+		void PasteSpriteTexture(string fileName, string sheetName, int x, int y, int glType = GL_RGBA);
 
-		// -----------------------------------------
-		void setBrushIndex(int index, int wh = 1);
+		/**
+		* Loads a sprite sheet texture
+		* @param sheetName name of the sheet
+		* @param bufferSize maximum number of sprites for this buffer
+		* @param zIndex z-index of the layer
+		*/
+		void LoadTexture(SpriteSheetTexture * texture, string sheetName, int bufferSize, int zIndex);
 
-		//shapes (require a brushTexture to be on the sprite sheet)
-		bool addRect(float x, float y, float z, float w, float h, float scale, float rot, int r = 255, int g = 255, int b = 255, int alpha = 255);
+		/**
+		* Loads a texture
+		* @param texture texture to load
+		* @param sheetName name of the sheet
+		* @param bufferSize maximum number of sprites for this buffer
+		* @param zIndex z-index of the layer
+		* @param isExternal indicator whether this texture is external and therefore it shouldn't be deleted
+		*/
+		void LoadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal = true);
 
-		// -----------------------------------------
-		void clearCounters(string sheetName);
+		/**
+		* Loads a texture from file and creates a sprite buffer
+		* @param fileName path to the file
+		* @param sheetName name of the new sheet
+		* @param bufferSize maximum number of sprites for this buffer
+		* @param width width of the sprite sheet
+		* @param height height of the sprite sheet
+		* @param glScaleMode opengl scale mode (GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST etc.)
+		* @param zIndex z-index of the layer
+		*/
+		void LoadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int glScaleMode, int zIndex);
 
+		/**
+		* Reallocates buffer with given name to the new size
+		* @param sheetName name of the sheet to reallocate
+		* @param bufferSize new size of the buffer
+		*/
+		void ReallocateBuffer(string sheetName, int bufferSize);
 
-		bool addTile(Tile& tile);
+		/**
+		* Adds a tile into the actual buffer
+		*/
+		bool AddTile(SpriteTile& tile);
 
-		void draw();
+		/**
+		* Adds a rectangle into the actual buffer
+		* @param x x coordinate
+		* @param y y coordinate
+		* @param z z coordinate
+		* @param w width
+		* @param h height
+		* @param scale absolute scale
+		* @param rot rotation
+		* @param col rectangle color
+		*/
+		bool AddRect(float x, float y, float z, float w, float h, float scale, float rot, ofColor& col);
 
-		// texture creation ------------------------
-		void allocate(string sheetName, int textureWidth, int textureHeight, int internalGLScaleMode);
+		/**
+		* Clears counter of sprites of given sheet
+		*/
+		void ClearCounters(string sheetName);
 
-		void clearTexture(string sheetName);
+		/**
+		* Clears texture of given sheet
+		*/
+		void ClearTexture(string sheetName);
 
-		void addMisc(string fileName, string sheetName, int x, int y, int glType = GL_RGBA);
+		/**
+		* Finishes texture of given sheet
+		*/
+		void FinishTexture(string sheetName);
 
-		void finishTexture(string sheetName);
+		/**
+		* Sets actual buffer that will be drawn
+		*/
+		void SetActualBuffer(string sheetName);
 
-		void setActualBuffer(string sheetName) {
-			auto buff = buffers.find(sheetName);
-
-			if (buff != buffers.end()) actualBuffer = buff->second;
-			else actualBuffer = nullptr;
-		}
-
-		// -----------------------------------------
+		/**
+		* Draws the actual buffer
+		*/
+		void Draw();
 
 	protected:
 
-		map<string, SpriteBuffer*> buffers;
-		SpriteBuffer* actualBuffer;
-
-
-
-		inline float getX(float x, float y, float angle) {
+		// calculates X-coordinate on the texture according to the angle
+		inline float GetX(float x, float y, float angle) {
 			return (angle == 0) ? x : ((float)x*cosf(angle) - (float)y*sinf(angle));
 		}
 
-		inline float getY(float x, float y, float angle) {
+		// calculates Y-coordinate on the texture according to the angle
+		inline float GetY(float x, float y, float angle) {
 			return (angle == 0) ? y : ((float)x*sinf(angle) + (float)y*cosf(angle));
 		}
 
-		void setTexCoeffs(int textureWidth, int textureHeight);
+		/**
+		* Adds texture coordinates of the given tile into the actual buffer
+		*/
+		void AddTexCoords(SpriteTile& tile);
 
-		void addTexCoords(flipDirection f, float posX, float posY, float x = 1, float y = 1);
+		/**
+		* Adds given texture coordinates
+		*/
+		void AddTexCoords(FlipDirection f, float posX, float posY, float x = 1, float y = 1);
 
-		void addTexCoords(Tile& tile);
+		/**
+		* Ads texture coordinates to the current texture array
+		*/
+		void AddTexCoords(int offset, float x1, float y1, float x2, float y2);
 
-		// creates quad for vertex array
-		void makeQuad(int offset, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4);
+		/**
+		* Sets texture coefficients
+		*/
+		void SetTexCoeffs(int textureWidth, int textureHeight);
 
-		void makeQuad(int offset, Tile& tile);
+		/**
+		* Creates vertices from tile
+		*/
+		void MakeQuad(int offset, SpriteTile& tile);
 
-		// creates quad for color array
-		void makeColorQuad(int offset, int a, int r, int g, int b);
+		/**
+		* Creates vertices (two triangles) from given parameters
+		*/
+		void MakeQuad(int offset, float x1, float y1, float z1, float x2, float y2, float z2, 
+			float x3, float y3, float z3, float x4, float y4, float z4);
 
-		// adds texture coordinates to texture array
-		void addTexCoords(int offset, float x1, float y1, float x2, float y2);
+		/**
+		* Creates color vertices
+		*/
+		void MakeColorQuad(int offset, ofColor& col);
 
-		inline int getVertexOffset() {
+		inline int GetVertexOffset() {
 			return  (actualBuffer->numSprites) * 18;
 		}
 
-		inline int getColorOffset() {
+		inline int GetColorOffset() {
 			return (actualBuffer->numSprites) * 24;
 		}
 
-		inline int getCoordOffset() {
+		inline int GetCoordOffset() {
 			return (actualBuffer->numSprites) * 12;
 		}
 	};

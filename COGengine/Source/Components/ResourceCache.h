@@ -26,7 +26,7 @@ namespace Cog {
 		// cached xml files
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
-		map<string, spt<CommonAnim>> loadedAnimations;
+		map<string, spt<GeneralAnim>> loadedAnimations;
 		// cached entities
 		map<string, spt<DEntity>> loadedEntities;
 		// cached spritesheets
@@ -105,13 +105,13 @@ namespace Cog {
 		* Gets animation
 		* @param name animation name
 		*/
-		spt<CommonAnim> GetAnimation(string name);
+		spt<GeneralAnim> GetAnimation(string name);
 
 		/**
 		* Stores animation
 		* @param anim animation to store
 		*/
-		void StoreAnimation(spt<CommonAnim> anim);
+		void StoreAnimation(spt<GeneralAnim> anim);
 
 		/**
 		* Gets stored entity by name

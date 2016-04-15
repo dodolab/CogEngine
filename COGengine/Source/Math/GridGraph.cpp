@@ -1,4 +1,5 @@
 #include "GridGraph.h"
+#include "Error.h"
 
 namespace Cog {
 
@@ -16,11 +17,18 @@ namespace Cog {
 	}
 
 	void GridGraph::AddBlocks(int x1, int y1, int x2, int y2) {
+
+		if (x1 > x2 || y1 > y2) throw IllegalArgumentException("Rectangle block must be defined from topleft corner!");
+
 		for (int x = x1; x <= x2; x++) {
 			for (int y = y1; y <= y2; y++) {
 				blocks.insert(Vec2i{ x, y });
 			}
 		}
+	}
+
+	bool GridGraph::HasBlock(int x, int y) {
+		return find(blocks.begin(), blocks.end(), Vec2i(x, y)) != blocks.end();
 	}
 
 	void GridGraph::GetNeighbors(Vec2i pos, vector<Vec2i>& output) const {

@@ -66,7 +66,7 @@ namespace Cog {
 			if (xml->pushTagIfExists("animations")) {
 
 				auto animLoader = AnimLoader();
-				auto rootAnims = vector<spt<CommonAnim>>();
+				auto rootAnims = vector<spt<GeneralAnim>>();
 
 				auto builder = [](void) {
 					return new SheetAnim();
@@ -75,7 +75,7 @@ namespace Cog {
 				animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
 				// store animation
-				for (spt<CommonAnim> anim : rootAnims) {
+				for (spt<GeneralAnim> anim : rootAnims) {
 					anim = static_pointer_cast<SheetAnim>(anim);
 					StoreAnimation(anim);
 				}
@@ -86,7 +86,7 @@ namespace Cog {
 			// load attribute animations
 			if (xml->pushTagIfExists("attranimations")) {
 				auto animLoader = AnimLoader();
-				auto rootAnims = vector<spt<CommonAnim>>();
+				auto rootAnims = vector<spt<GeneralAnim>>();
 
 				auto builder = [](void) {
 					return new AttribAnim();
@@ -95,7 +95,7 @@ namespace Cog {
 				animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
 				// store animation
-				for (spt<CommonAnim> anim : rootAnims) {
+				for (spt<GeneralAnim> anim : rootAnims) {
 					anim = static_pointer_cast<AttribAnim>(anim);
 					StoreAnimation(anim);
 				}
@@ -286,13 +286,13 @@ namespace Cog {
 		return xmlPtr;
 	}
 
-	spt<CommonAnim> ResourceCache::GetAnimation(string name) {
+	spt<GeneralAnim> ResourceCache::GetAnimation(string name) {
 		auto found = loadedAnimations.find(name);
 		if (found != loadedAnimations.end()) return found->second;
-		else return spt<CommonAnim>();
+		else return spt<GeneralAnim>();
 	}
 
-	void ResourceCache::StoreAnimation(spt<CommonAnim> anim) {
+	void ResourceCache::StoreAnimation(spt<GeneralAnim> anim) {
 		COGASSERT(anim->GetName().compare("") != 0, "ResourceCache", "Attempt to store animation without a name!");
 
 

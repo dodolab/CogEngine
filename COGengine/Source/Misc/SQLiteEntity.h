@@ -3,24 +3,20 @@
 
 namespace Cog {
 
-#define SQL_BOOL "BOOLEAN"
-#define SQL_DATETIME "DATETIME"
-#define SQL_CREATETABLE "CREATE TABLE IF NOT EXISTS"
-#define SQL_PKAUTOINCREMENT "INTEGER PRIMARY KEY AUTOINCREMENT"
-#define SQL_VARCHAR(size) "VARCHAR("+size+")"
-#define SQL_DEFAULT "DEFAULT"
-#define SQL_BEGINTRANS "BEGIN TRANSACTION"
-#define SQL_COMMIT "COMMIT;"
-
-	class ofxSQLiteEntity {
+	/**
+	* Base class for all SQL entities
+	*/
+	class SQLiteEntity {
 	protected:
+		// link to sqlite 
 		ofxSQLite* sqlite;
-
+		// identifier
 		int id;
 
 		virtual void InternalCreate(ofxSQLiteInsert& insert) = 0;
 		virtual void InternalUpdate(ofxSQLiteUpdate& update) = 0;
 		virtual void InternalLoad(ofxSQLiteSelect& select) = 0;
+	
 		virtual string GetIdName() {
 			return "id";
 		}
@@ -29,19 +25,25 @@ namespace Cog {
 
 
 	public:
-		ofxSQLiteEntity() {
+		SQLiteEntity() {
 
 		}
 
-		ofxSQLiteEntity(ofxSQLite* sqlite) :sqlite(sqlite) {
+		SQLiteEntity(ofxSQLite* sqlite) :sqlite(sqlite) {
 			this->id = 0;
 		}
 
+		/**
+		* Gets entity id
+		*/
 		int GetId() {
 			return this->id;
 		}
 
-		void GetById(int id) {
+		/**
+		* Loads entity by id
+		*/
+		void LoadById(int id) {
 			ofxSQLiteSelect select = sqlite->select("*")
 				.from(GetTableName().c_str())
 				.where(GetIdName().c_str(), id)
@@ -50,6 +52,9 @@ namespace Cog {
 			this->InternalLoad(select);
 		}
 
+		/**
+		* Creates or updates the entity
+		*/
 		int Save() {
 			if (this->id == 0) {
 				// save
@@ -67,12 +72,14 @@ namespace Cog {
 			}
 		}
 
+		/**
+		* Removes the entity
+		*/
 		int Remove() {
 			return sqlite->remove(GetTableName().c_str())
 				.where(GetIdName().c_str(), this->id)
 				.execute();
 		}
-
 	};
 
 }// namespace

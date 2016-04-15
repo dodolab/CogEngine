@@ -9,7 +9,9 @@ namespace luabridge {
 
 namespace Cog {
 
-
+	/**
+	* Behavior wrapper for Lua scripts
+	*/
 	class BehaviorLua : public Behavior {
 	private:
 		int reference = 0;

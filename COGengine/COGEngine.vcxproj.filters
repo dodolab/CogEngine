@@ -198,9 +198,6 @@
     <ClInclude Include="Source\Misc\Utils.h">
       <Filter>Source\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\MapLoader.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\Sprite.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
@@ -294,9 +291,6 @@
     <ClInclude Include="Source\Graphics\SheetAnim.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\CommonAnim.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\AnimLoader.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
@@ -356,9 +350,6 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Events.h">
       <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteEntity.h">
-      <Filter>Source\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Communication\NetMessage.h">
       <Filter>Source\Communication</Filter>
@@ -609,9 +600,6 @@
     <ClInclude Include="Source\AI\GameSimulator.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\CollageTexture.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Soundfx.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -638,6 +626,27 @@
     </ClInclude>
     <ClInclude Include="Source\Math\NodeCellObject.h">
       <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\MathTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\MathTestAssets.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\SpriteSheetTexture.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\GeneralAnim.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\MapLoader.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Tile.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\SpriteInst.h">
+      <Filter>Source\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -757,9 +766,6 @@
     </ClCompile>
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
       <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteEntity.cpp">
-      <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Communication\NetMessage.cpp">
       <Filter>Source\Communication</Filter>
@@ -959,9 +965,6 @@
     <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\CollageTexture.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Attributes\Transform.cpp">
       <Filter>Source\Attributes</Filter>
     </ClCompile>
@@ -994,6 +997,36 @@
     </ClCompile>
     <ClCompile Include="Source\Math\GridGraph.cpp">
       <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\AttribAnim.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteSheetTexture.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SheetAnim.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Sprite.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteSheet.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteSheetGenerator.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Settings.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GeneralAnim.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\MapLoader.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteInst.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

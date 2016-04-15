@@ -1,5 +1,6 @@
 #include "Shape.h"
 #include "Node.h"
+#include "ofRectangle.h"
 
 namespace Cog{
 
@@ -41,7 +42,7 @@ namespace Cog{
 
 	void MultiSpriteShape::RefreshZIndex() {
 		sort(sprites.begin(), sprites.end(),
-			[](const spt<SpriteEntity>&  a, const spt<SpriteEntity>& b) -> bool
+			[](const spt<SpriteInst>&  a, const spt<SpriteInst>& b) -> bool
 		{
 			return a->transform.localPos.z < b->transform.localPos.z;
 		});

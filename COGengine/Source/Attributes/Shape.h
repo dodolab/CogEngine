@@ -5,7 +5,7 @@
 #include "ofRectangle.h"
 #include "Definitions.h"
 #include "Sprite.h"
-#include "SpriteEntity.h"
+#include "SpriteInst.h"
 
 using namespace std;
 
@@ -25,6 +25,8 @@ namespace Cog {
 		MULTISPRITE,		/** Collection of sprites */
 		BOUNDING_BOX		/** Box sizeable due to children nodes */
 	};
+
+	class Node;
 
 	/**
 	* Common class for shapes
@@ -342,7 +344,7 @@ namespace Cog {
 	*/
 	class MultiSpriteShape : public Shape {
 	private:
-		vector<spt<SpriteEntity>> sprites;
+		vector<spt<SpriteInst>> sprites;
 		
 		// width that is recalculated with each new sprite
 		int width = 1;
@@ -356,12 +358,12 @@ namespace Cog {
 			: Shape(ShapeType::MULTISPRITE), layerName(layerName) {
 		}
 
-		MultiSpriteShape(string layerName, vector<spt<SpriteEntity>>& sprites)
+		MultiSpriteShape(string layerName, vector<spt<SpriteInst>>& sprites)
 			: Shape(ShapeType::MULTISPRITE), layerName(layerName), sprites(sprites) {
 			Recalc();
 		}
 
-		vector<spt<SpriteEntity>>& GetSprites() {
+		vector<spt<SpriteInst>>& GetSprites() {
 			return sprites;
 		}
 
@@ -379,14 +381,14 @@ namespace Cog {
 		* Adds a new sprite 
 		* Note: don't forget to call RefreshZIndex when finish 
 		*/
-		void AddSprite(spt<SpriteEntity> entity) {
+		void AddSprite(spt<SpriteInst> entity) {
 			sprites.push_back(entity);
 		}
 
 		/**
 		* Removes sprite
 		*/
-		void RemoveSprite(spt<SpriteEntity> entity) {
+		void RemoveSprite(spt<SpriteInst> entity) {
 			auto found = find(sprites.begin(), sprites.end(), entity);
 			if (found != sprites.end()) {
 				sprites.erase(found);

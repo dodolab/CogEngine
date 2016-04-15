@@ -18,6 +18,7 @@ namespace Cog {
 	class Msg;
 	class MsgEvent;
 	class InputAct;
+	class SheetAnim;
 
 	EntityStorage* CogGetEntityStorage();
 

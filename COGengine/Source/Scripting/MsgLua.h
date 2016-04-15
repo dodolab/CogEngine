@@ -7,6 +7,9 @@ namespace Cog {
 	class Msg;
 	class NodeLua;
 
+	/**
+	* Msg wrapper for Lua script
+	*/
 	class MsgLua {
 		Msg* msg;
 	public:

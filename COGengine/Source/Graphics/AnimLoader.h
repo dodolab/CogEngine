@@ -1,13 +1,12 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "Component.h"
-#include "SheetAnim.h"
+#include <vector>
+#include "Definitions.h"
+#include "GeneralAnim.h"
 
 namespace Cog {
 
-	typedef std::function<CommonAnim*()> SheetAnimBuilder;
-
+	typedef std::function<GeneralAnim*()> SheetAnimBuilder;
 
 	/**
 	* Class that loads animations from XML
@@ -20,9 +19,9 @@ namespace Cog {
 		* Loads animation from xml
 		* @param xml xml to load from
 		* @param rootAnims output collection that will contain all animations on the top of the tree
-		* @param builder instance that creates new instances of the animation object
+		* @param builder builder that creates new instances of the animation object
 		*/
-		void LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<CommonAnim>>& rootAnims, SheetAnimBuilder builder);
+		void LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder);
 
 	private:
 
@@ -31,14 +30,15 @@ namespace Cog {
 		* @param xml xml to load from
 		* @param referencedAnims output array that will be filled with found referenced animations
 		* @param actualAnimIndex index of actual animation being processed
-		* @param builder instance that creates new instances of the animation object
+		* @param builder builder that creates new instances of the animation object
 		*/
-		CommonAnim* CreateAnimationFromXml(spt<ofxXml> xml, map<int, CommonAnim*>& referencedAnims, int& actualAnimIndex, SheetAnimBuilder builder);
+		GeneralAnim* CreateAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims, 
+			int& actualAnimIndex, SheetAnimBuilder builder);
 
 		/**
-		* Finds animation by name, in selected collection
+		* Finds animation by name in given collection
 		*/
-		spt<CommonAnim> FindAnimByName(string name, vector<spt<CommonAnim>> anims);
+		spt<GeneralAnim> FindAnimByName(string name, vector<spt<GeneralAnim>>& anims);
 
 		/**
 		* Processes referenced animations from XML
@@ -48,8 +48,8 @@ namespace Cog {
 		* @rootAnims list of all root animations found during the first phase
 		* @actualAnimIndex index of actual animation being processed
 		*/
-		void ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, CommonAnim*>& referencedAnims,
-			int rootAnimIndex, vector<spt<CommonAnim>>& rootAnims, int& actualAnimIndex);
+		void ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims,
+			int rootAnimIndex, vector<spt<GeneralAnim>>& rootAnims, int& actualAnimIndex);
 
 	};
 

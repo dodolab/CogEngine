@@ -19,7 +19,7 @@ namespace Cog {
 			(*existing).second.CallBegin(ofGetElapsedTimeMicros());
 		}
 		else {
-			blocks[blockName] = MeasureBlock(blockName, ofGetElapsedTimeMicros());
+			blocks[blockName] = MeasureScope(blockName, ofGetElapsedTimeMicros());
 		}
 
 		this->endTime = ofGetElapsedTimeMicros();
@@ -35,11 +35,11 @@ namespace Cog {
 		this->endTime = ofGetElapsedTimeMicros();
 	}
 
-	MeasureBlock TimeMeasure::GetMeasureBlock(string blockName) {
+	MeasureScope TimeMeasure::GetMeasureScope(string blockName) {
 		auto found = blocks.find(blockName);
 
 		if (found != blocks.end()) return (*found).second;
-		else return MeasureBlock();
+		else return MeasureScope();
 
 	}
 
@@ -48,16 +48,14 @@ namespace Cog {
 		int total = (this->endTime - this->startTime);
 		CogLogInfo("Measure", "Report:: total %d ms",total/1000);
 		for (auto& rec : blocks) {
-			MeasureBlock& block = rec.second;
-			int percentage = (int)((block.duration / ((float)total))*100);
+			MeasureScope& scope = rec.second;
+			int percentage = (int)((scope.duration / ((float)total))*100);
 
-			CogLogInfo("Measure", "%s:Total[%d %%],Calls[%d],Dur[%d ms],Freq[%.2f]",block.name.c_str(), percentage, block.numCalls,block.duration/1000, block.numCalls/(total/1000000.0f));
+			CogLogInfo("Measure", "%s:Total[%d %%],Calls[%d],Dur[%d ms],Freq[%.2f]", 
+				scope.name.c_str(), percentage, scope.numCalls, scope.duration/1000, scope.numCalls/(total/1000000.0f));
 		}
 
 		if (restart) this->Restart();
 	}
-
-
-
 
 } // namespace
