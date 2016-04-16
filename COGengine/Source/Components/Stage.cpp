@@ -32,7 +32,7 @@ namespace Cog {
 
 	void Stage::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_SCENE_SWITCHED)) {
-			Node* scene =  (Node*)msg.GetSourceObject();
+			Node* scene =  (Node*)msg.GetContextNode();
 			actualScene = scene->GetScene();
 		}
 		else if (msg.HasAction(ACT_SCREEN_CHANGED)) {

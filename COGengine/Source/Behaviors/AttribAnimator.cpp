@@ -64,7 +64,7 @@ namespace Cog {
 
 		if (contextStack.Ended()) {
 			Finish();
-			SendMessageToListeners(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+			SendMessage(ACT_TRANSFORM_ENDED, owner);
 		}
 		else {
 

@@ -422,7 +422,7 @@ mojo5:Register(next) "
 		REQUIRE(node->HasAttr(StrId("TEST_ATTR")));
 		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 10);
 		// send message (owner will have MSG_ACCEPTED state set)
-		scr->behs[0]->OnMessage(Msg(HandlingType(Scope::ROOT, true, true), StrId("TEST_ACTION"), 10, 0, nullptr, nullptr));
+		scr->behs[0]->OnMessage(Msg(StrId("TEST_ACTION"),MsgObjectType::OTHER,-1, MsgObjectType::SUBSCRIBERS,nullptr,spt<MsgEvent>()));
 		REQUIRE(node->HasState(StrId("MSG_ACCEPTED")));
 		// update node (owner will have TEST_ATTR set to 20)
 		scr->nodes[0]->Update(10, 10);

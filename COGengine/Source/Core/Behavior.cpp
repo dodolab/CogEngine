@@ -12,7 +12,7 @@ namespace Cog {
 		if (!finished) {
 			finished = true;
 			OnFinish();
-			SendMessageToListeners(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
+			SendMessage(ACT_BEHAVIOR_FINISHED, owner);
 			if (removeWhenFinish) owner->RemoveBehavior(this, true);
 		}
 	}
@@ -48,6 +48,43 @@ namespace Cog {
 		MsgListener::SubscribeForMessages(owner->GetScene(), action5);
 	}
 
+	void Behavior::SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const {
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::SUBSCRIBERS, contextNode, data);
+		owner->GetScene()->SendMessage(msg);
+	}
+
+	void Behavior::SendMessage(StrId action, spt<MsgEvent> data) const {
+		SendMessage(action, data, owner);
+	}
+
+	void Behavior::SendMessage(StrId action, Node* contextNode) const {
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::SUBSCRIBERS, contextNode, spt<MsgEvent>());
+		owner->GetScene()->SendMessage(msg);
+	}
+
+	void Behavior::SendMessage(StrId action) const {
+		SendMessage(action, owner);
+	}
+
+	void Behavior::SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const {
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, spt<MsgEvent>());
+		owner->GetScene()->SendMessage(msg);
+	}
+
+	void Behavior::SendMessageToBehavior(StrId action, int recipientId) const {
+		SendMessageToBehavior(action, owner, recipientId);
+	}
+
+	void Behavior::SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const {
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, data);
+		owner->GetScene()->SendMessage(msg);
+	}
+
+	void Behavior::SendMessageToBehavior(StrId action, spt<MsgEvent> data, int recipientId) const {
+		SendMessageToBehavior(action, data, owner, recipientId);
+	}
+
+	/*
 	void Behavior::SendMessage(HandlingType handlingType, StrId action, int subaction, MsgEvent* data, Node* source) const {
 		Msg msg(handlingType, action, subaction, id, source, data);
 		owner->GetScene()->SendMessage(msg, source);
@@ -62,7 +99,7 @@ namespace Cog {
 		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, id, source, data);
 		owner->GetScene()->SendDirectMessageToListener(msg, targetId);
 	}
-
+	*/
 
 
 }// namespace

@@ -88,57 +88,42 @@ namespace Cog {
 		}
 	}
 
-	void Scene::SendMessage(Msg& msg, Node* actualNode) {
+	void Scene::SendMessage(Msg& msg) {
 
-		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
+		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), msg.GetContextNode()  ? msg.GetContextNode()->GetTag().c_str() : "");
 
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
+		auto recType = msg.GetRecipientType();
 
-		HandlingType& trav = msg.GetHandlingType();
-
-		if (trav.scope == Scope::DIRECT_NO_TRAVERSE) {
-			// no HandlingType - just iterate over the proper collection of behaviors and callbacks
+		if (recType == MsgObjectType::SUBSCRIBERS) {
 			SendDirectMessage(msg);
-
 		}
-		else if(actualNode != nullptr) SendTunnelingMessage(msg, actualNode);
-
-		if (!msg.DataKept()) {
-			msg.DeleteData();
+		else if (recType == MsgObjectType::BEHAVIOR) {
+			auto beh = FindBehaviorById(msg.GetRecipientId());
+			if (beh != nullptr) beh->OnMessage(msg);
 		}
-	}
-
-
-	void Scene::SendDirectMessageToListener(Msg& msg, int targetId) {
-
-		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", msg.GetAction().GetStringValue().c_str(), targetId);
-
-		Behavior* beh = FindBehaviorById(targetId);
-
-		if (beh != nullptr) {
-			beh->OnMessage(msg);
+		else if (recType == MsgObjectType::COMPONENT) {
+			auto cmp = CogGetEntityStorage()->GetComponentById(msg.GetRecipientId());
+			if (cmp != nullptr) cmp->OnMessage(msg);
 		}
-
-		if (!msg.DataKept()) {
-			msg.DeleteData();
+		else if (recType == MsgObjectType::NODE_CHILDREN ||
+			recType == MsgObjectType::NODE_COMMON ||
+			recType == MsgObjectType::NODE_ROOT ||
+			recType == MsgObjectType::NODE_SCENE) {
+			if (msg.GetRecipientId() == -1) {
+				auto node = this->FindNodeById(msg.GetRecipientId());
+				if (node != nullptr) SendTunnelingMessage(msg, node);
+			}
+			else {
+				SendTunnelingMessage(msg, msg.GetContextNode());
+			}
 		}
-	}
-
-	void Scene::SendDirectMessageToNode(Msg& msg, int targetId) {
-
-		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", msg.GetAction().GetStringValue().c_str(), targetId);
-
-		Node* node = FindNodeById(targetId);
-
-		if (node != nullptr) {
-			SendTunnelingMessage(msg, node);
-		}
-
-		if (!msg.DataKept()) {
-			msg.DeleteData();
+		else {
+			throw IllegalArgumentException("Message recipient mustn't be of type OTHER!");
 		}
 	}
+
 
 	bool Scene::IsRegisteredListener(StrId action) const {
 		return msgListeners.count(action) != 0;
@@ -324,14 +309,14 @@ namespace Cog {
 	void Scene::CreateSceneNode() {
 		sceneNode = new Node(NodeType::SCENE, 0, name);
 		sceneNode->SetScene(this);
-		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
+		sceneNode->SetMesh(spt<Mesh>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
 			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
-				(beh->GetId() != msg.GetBehaviorId())) {
+				(msg.GetSenderType() != MsgObjectType::BEHAVIOR || beh->GetId() != msg.GetSenderId())) { // don't send to the same behavior!
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
 					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", msg.GetAction().GetStringValue().c_str(), typeid(beh).name(), beh->GetId());
 					beh->OnMessage(msg);
@@ -342,47 +327,44 @@ namespace Cog {
 
 	void Scene::SendTunnelingMessageToChildren(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
-			CogSendMessage(msg, (*it));
+			SendTunnelingMessage(msg, (*it));
 		}
 	}
 
 	void Scene::SendTunnelingMessage(Msg& msg, Node* actualNode) {
 
-		HandlingType& trav = msg.GetHandlingType();
-
-		if (trav.scope == Scope::ROOT) {
-			trav.scope = Scope::OBJECT;
+		if (msg.GetRecipientType() == MsgObjectType::NODE_ROOT) {
+			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
 			// find root and call recursion
 			Node* root = actualNode->GetRoot();
 			if (root != nullptr) {
 				// call this method again from the root
-				if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, root);
+				if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::BUBBLING) SendTunnelingMessageToChildren(msg, root);
 				SendMessageToBehaviors(msg, root);
-				if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, root);
+				if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::TUNNELING) SendTunnelingMessageToChildren(msg, root);
 			}
 			return;
 		}
-		else if (trav.scope == Scope::SCENE) {
-			trav.scope = Scope::OBJECT;
+		else if (msg.GetRecipientType() == MsgObjectType::NODE_SCENE) {
+			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
 			// find scene and call recursion
 			Node* scRoot = actualNode->GetSceneRoot();
 			if (scRoot != nullptr) {
-				if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, scRoot);
+				if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::BUBBLING) SendTunnelingMessageToChildren(msg, scRoot);
 				SendMessageToBehaviors(msg, scRoot);
-				if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, scRoot);
+				if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::TUNNELING) SendTunnelingMessageToChildren(msg, scRoot);
 			}
 			return;
 		}
 
-		if (trav.scope == Scope::OBJECT) {
-			trav.scope = Scope::OBJECT;
+		if (msg.GetRecipientType() == MsgObjectType::NODE_COMMON) {
 			// call children and itself
-			if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, actualNode);
+			if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::BUBBLING) SendTunnelingMessageToChildren(msg, actualNode);
 			SendMessageToBehaviors(msg, actualNode);
-			if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, actualNode);
+			if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::TUNNELING) SendTunnelingMessageToChildren(msg, actualNode);
 		}
-		else if (trav.scope == Scope::CHILDREN) {
-			trav.scope = Scope::OBJECT;
+		else if (msg.GetRecipientType() == MsgObjectType::NODE_CHILDREN) {
+			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
 			// call children only
 			SendTunnelingMessageToChildren(msg, actualNode);
 		}

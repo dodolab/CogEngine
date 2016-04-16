@@ -33,8 +33,8 @@ namespace Cog {
 
 	void Renderer::PushNode(Node* node) {
 
-		auto renderType = node->GetShape()->GetShapeType();
-		auto& buffer = (renderType == ShapeType::SPRITE || renderType == ShapeType::MULTISPRITE)
+		auto renderType = node->GetMesh()->GetMeshType();
+		auto& buffer = (renderType == MeshType::SPRITE || renderType == MeshType::MULTISPRITE)
 			? zIndexSheetBuffer : zIndexImageBuffer;
 
 
@@ -126,18 +126,18 @@ namespace Cog {
 				for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
 					Node* node = (*it2);
 
-					switch (node->GetShape()->GetShapeType()) {
-					case ShapeType::IMAGE:
-					case ShapeType::RECTANGLE:
-					case ShapeType::PLANE:
-					case ShapeType::TEXT:
-					case ShapeType::LABEL:
-					case ShapeType::BOUNDING_BOX:
+					switch (node->GetMesh()->GetMeshType()) {
+					case MeshType::IMAGE:
+					case MeshType::RECTANGLE:
+					case MeshType::PLANE:
+					case MeshType::TEXT:
+					case MeshType::LABEL:
+					case MeshType::BOUNDING_BOX:
 						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
-					case ShapeType::SPRITE:
+					case MeshType::SPRITE:
 						RenderSprite(node);
 						break;
-					case ShapeType::MULTISPRITE:
+					case MeshType::MULTISPRITE:
 						RenderMultiSprite(node);
 						break;
 					}
@@ -159,24 +159,24 @@ namespace Cog {
 			for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
 				Node* node = (*it2);
 
-				switch (node->GetShape()->GetShapeType()) { 
-				case ShapeType::IMAGE:
+				switch (node->GetMesh()->GetMeshType()) { 
+				case MeshType::IMAGE:
 					RenderImage(node);
 					break;
-				case ShapeType::PLANE:
+				case MeshType::PLANE:
 					RenderPlane(node);
 					break;
-				case ShapeType::TEXT:
+				case MeshType::TEXT:
 					RenderText(node);
 					break;
-				case ShapeType::LABEL:
+				case MeshType::LABEL:
 					RenderLabel(node);
 					break;
-				case ShapeType::BOUNDING_BOX:
+				case MeshType::BOUNDING_BOX:
 					RenderBoundingBox(node);
 					break;
-				case ShapeType::SPRITE:
-				case ShapeType::MULTISPRITE:
+				case MeshType::SPRITE:
+				case MeshType::MULTISPRITE:
 					throw IllegalOperationException("Trying to render sprite node by default renderer!");
 				}
 			}
@@ -193,7 +193,7 @@ namespace Cog {
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
-		spt<Image> imgShp = static_pointer_cast<Image>(owner->GetShape());
+		spt<Image> imgShp = static_pointer_cast<Image>(owner->GetMesh());
 		spt<ofImage> image = imgShp->GetImage();
 
 		if (owner->HasAttr(ATTR_IMGBOUNDS)) {
@@ -212,7 +212,7 @@ namespace Cog {
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
-		spt<Plane> rect = static_pointer_cast<Plane>(owner->GetShape());
+		spt<Plane> rect = static_pointer_cast<Plane>(owner->GetMesh());
 
 		ofColor color = rect->GetColor();
 		ofSetColor(color);
@@ -234,7 +234,7 @@ namespace Cog {
 		// load absolute matrix
 		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
-		spt<Text> shape = owner->GetShape<Text>();
+		spt<Text> shape = owner->GetMesh<Text>();
 		ofSetColor(shape->GetColor());
 
 		spt<ofTrueTypeFont> font = shape->GetFont();
@@ -245,7 +245,7 @@ namespace Cog {
 
 	void Renderer::RenderSprite(Node* owner) {
 
-		spt<SpriteShape> shape = static_pointer_cast<SpriteShape>(owner->GetShape());
+		spt<SpriteShape> shape = static_pointer_cast<SpriteShape>(owner->GetMesh());
 		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
 		renderer->SetActualBuffer(shape->GetLayerName());
@@ -269,7 +269,7 @@ namespace Cog {
 
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
-		spt<MultiSpriteShape> shape = static_pointer_cast<MultiSpriteShape>(owner->GetShape());
+		spt<MultiSpriteShape> shape = static_pointer_cast<MultiSpriteShape>(owner->GetMesh());
 		renderer->SetActualBuffer(shape->GetLayerName());
 		auto& sprites = shape->GetSprites();
 
@@ -302,7 +302,7 @@ namespace Cog {
 		auto& trans = owner->GetTransform();
 		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 
-		spt<Label> shape = owner->GetShape<Label>();
+		spt<Label> shape = owner->GetMesh<Label>();
 		ofSetColor(shape->GetColor());
 
 		spt<ofTrueTypeFont> font = shape->GetFont();
@@ -338,7 +338,7 @@ namespace Cog {
 	}
 
 	void Renderer::RenderBoundingBox(Node* owner) {
-		spt<BoundingBox> shape = static_pointer_cast<BoundingBox>(owner->GetShape());
+		spt<BoundingBox> shape = static_pointer_cast<BoundingBox>(owner->GetMesh());
 		
 		if (shape->IsRenderable()) {
 			auto bbox = shape->GetBoundingBox();

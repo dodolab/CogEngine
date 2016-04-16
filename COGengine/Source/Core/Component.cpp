@@ -1,18 +1,35 @@
 #include "Component.h"
+#include "CogEngine.h"
+#include "Stage.h"
+#include "Scene.h"
 
 namespace Cog {
 
-	void Component::SendMessage(HandlingType handlingType, StrId action, int subaction, MsgEvent* data, Node* source) const {
-		Msg msg(handlingType, action, subaction, id, source, data);
-		CogSendMessage(msg, source);
+
+	void Component::SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const {
+		Msg msg(action, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, contextNode, data);
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
 	}
 
-	void Component::SendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source) const {
-		CogSendMessageToListeners(action, subaction, data, source, id);
+	void Component::SendMessage(StrId action, spt<MsgEvent> data) const {
+		Msg msg(action, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, nullptr, data);
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
 	}
 
-	void Component::SendDirectMessage(StrId action, int subaction, MsgEvent* data, Node* source, int targetId) const {
-		CogSendDirectMessageToListener(action, subaction, data, source, targetId, id);
+	void Component::SendMessage(StrId action, Node* contextNode) const {
+		Msg msg(action, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, contextNode, spt<MsgEvent>());
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
+	}
+
+	void Component::SendMessage(StrId action) const {
+		Msg msg(action, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, nullptr, spt<MsgEvent>());
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
+	}
+
+
+	void Component::SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const {
+		Msg msg(action, MsgObjectType::COMPONENT, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, data);
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
 	}
 
 } // namespace

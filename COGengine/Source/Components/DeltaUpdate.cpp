@@ -14,7 +14,7 @@ namespace Cog {
 
 		if (msg.HasAction(ACT_DELTA_MESSAGE_RECEIVED)) {
 			// received delta message
-			CommonEvent<DeltaInfo>* msgEvent = msg.GetData<CommonEvent<DeltaInfo>>();
+			spt<CommonEvent<DeltaInfo>> msgEvent = msg.GetData<CommonEvent<DeltaInfo>>();
 			spt<DeltaInfo> netMsg = msgEvent->value;
 			AcceptDeltaUpdate(netMsg);
 		}

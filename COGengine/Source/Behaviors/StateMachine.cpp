@@ -29,7 +29,7 @@ namespace Cog {
 	}
 
 	void StateMachine::OnMessage(Msg& msg) {
-		if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+		if (msg.GetContextNode()->GetId() == owner->GetId()) {
 
 			for (auto& globalState : globalStates) {
 				globalState->OnMessage(msg);

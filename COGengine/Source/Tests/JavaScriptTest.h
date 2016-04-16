@@ -101,7 +101,7 @@ TEST_CASE("JavaScriptTest")
 
 		JavaScriptBehavior* beh = new JavaScriptBehavior(ctx,12345);
 		beh->Update(10, 10);
-		beh->OnMessage(Msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, false, false), StrId("UPDATE_PARAM"), 0, 0, nullptr, nullptr));
+		beh->OnMessage(Msg(StrId("UPDATE_PARAM"), MsgObjectType::BEHAVIOR,-1,MsgObjectType::SUBSCRIBERS, nullptr, spt<MsgEvent>()));
 
 		int param = beh->GetParameter();
 		int updateCnt = beh->GetUpdateCounter();

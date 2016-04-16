@@ -121,7 +121,7 @@ namespace Cog {
 
 				// send confirmation message
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-				SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				messagesToSend.clear();
 
 				network->SendUDPMessage(applicationId, msg);
@@ -154,7 +154,7 @@ namespace Cog {
 				CogLogInfo("NETWORK", "Found peer %s", message->GetSourceIp().c_str());
 
 				network->SetupUDPSender(message->GetSourceIp(), peerPort, true);
-				SendMessageToListeners(StrId(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessage(ACT_NET_MESSAGE_RECEIVED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 
 				// update list of discovered servers
 				discoveredPeers[message->GetSourceIp()] = absolute;
@@ -186,7 +186,7 @@ namespace Cog {
 			CogLogInfo("NETWORK", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-			SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+			SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::COMMUNICATING;
 		}
@@ -233,7 +233,7 @@ namespace Cog {
 							if(message->GetSyncId() > this->lastReceivedMsgId || this->lastReceivedMsgId - message->GetSyncId() > 128) lastReceivedMsgId = message->GetSyncId();
 							
 							COGLOGDEBUG("NETWORK_SYNC", "informing listeners");
-							SendMessageToListeners(StrId(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+							SendMessage(ACT_NET_MESSAGE_RECEIVED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 						}
 
 						acceptedMessageTimes.insert(message->GetMsgTime());
@@ -262,7 +262,7 @@ namespace Cog {
 				CogLogInfo("NETWORK", "Peer %s is reconnecting", message->GetSourceIp().c_str());
 				lastReceivedMsgTime = absolute;
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-				SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				network->SendUDPMessage(applicationId, msg);
 			}
 		}

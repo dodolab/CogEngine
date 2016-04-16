@@ -94,9 +94,9 @@ namespace Cog {
 			getGlobalNamespace(L)
 				.beginClass<MsgLua>("Msg")
 				.addProperty("action", &MsgLua::GetAction)
-				.addProperty("behaviorId", &MsgLua::GetBehaviorId)
-				.addProperty("sourceObj", &MsgLua::GetSourceObj)
-				.addProperty("subAction", &MsgLua::GetSubAction)
+				.addProperty("senderId", &MsgLua::GetSenderId)
+				.addProperty("contextNode", &MsgLua::GetContextNode)
+				.addProperty("parameter", &MsgLua::GetParameter)
 				.endClass();
 
 			// Behavior proxy

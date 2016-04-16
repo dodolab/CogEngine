@@ -8,16 +8,16 @@ namespace Cog {
 		return msg->GetAction();
 	}
 
-	int MsgLua::GetSubAction() const {
-		return msg->GetSubaction();
+	int MsgLua::GetParameter() const {
+		return msg->GetParameter();
 	}
 
-	int MsgLua::GetBehaviorId() const {
-		return msg->GetBehaviorId();
+	int MsgLua::GetSenderId() const {
+		return msg->GetSenderId();
 	}
 
-	NodeLua* MsgLua::GetSourceObj() const {
-		return new NodeLua(msg->GetSourceObject());
+	NodeLua* MsgLua::GetContextNode() const {
+		return new NodeLua(msg->GetContextNode());
 	}
 
 } // namespace

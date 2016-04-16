@@ -8,7 +8,7 @@ namespace Cog {
 		actual += (int)delta;
 
 		if (actual > millis) {
-			SendDirectMessage(ACT_DELAY_ACTION, 0, data, owner, targetId);
+			SendMessageToBehavior(ACT_DELAY_ACTION, data, owner, targetId);
 			Finish();
 		}
 	}

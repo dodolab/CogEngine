@@ -60,7 +60,7 @@ namespace Cog {
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
 		if (CogEngine::GetInstance().stage->GetActualScene() != nullptr) {
-			SendMessageToListeners(ACT_SCREEN_CHANGED, 0, new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize()),nullptr);
+			SendMessage(ACT_SCREEN_CHANGED, spt<ValueChangeEvent<Vec2i>>(new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize())));
 		}
 	}
 
@@ -85,7 +85,7 @@ namespace Cog {
 			}
 
 			pressedKeys.push_back(new InputAct(key));
-			CogSendMessageToListeners(StrId(ACT_KEY_PRESSED), 0, nullptr, nullptr, this->GetId());
+			SendMessage(ACT_KEY_PRESSED);
 		}
 		else {
 			// key up

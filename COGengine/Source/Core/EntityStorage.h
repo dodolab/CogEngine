@@ -137,6 +137,13 @@ namespace Cog {
 			return attr;
 		}
 
+		Component* GetComponentById(int id) {
+			for (auto& cmp : components) {
+				if (cmp.second->GetId() == id) return cmp.second;
+			}
+			return nullptr;
+		}
+
 		Behavior* CreateBehaviorPrototype(StrId key) {
 			auto it = behaviorBuilders.find(key);
 

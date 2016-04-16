@@ -1,4 +1,3 @@
-
 #include "FloatingScene.h"
 #include "CogEngine.h"
 
@@ -23,7 +22,7 @@ namespace Cog {
 				SetNewScale(scale, transform, mousePos);
 			}
 		}
-		else if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+		else if (msg.GetContextNode()->GetId() == owner->GetId()) {
 			if (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST)) {
 				lastMousePos = Vec2i(0); // restart mouse position
 				originalMousePos = Vec2i(0);
@@ -32,7 +31,7 @@ namespace Cog {
 			}
 			else if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
 
-				InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
+				spt<InputEvent> evt = msg.GetData<InputEvent>();
 
 				// handle only the first touch
 				if (evt->input->touchId == 0) {
@@ -97,8 +96,8 @@ namespace Cog {
 
 	// calculates minimal possible scale so that the scene fills entire screen
 	float FloatingScene::CalcMinScale(Trans& parentTransform) {
-		float shapeWidth = owner->GetShape()->GetWidth();
-		float shapeHeight = owner->GetShape()->GetHeight();
+		float shapeWidth = owner->GetMesh()->GetWidth();
+		float shapeHeight = owner->GetMesh()->GetHeight();
 
 		float minScaleX = CogGetScreenWidth() / shapeWidth / parentTransform.absScale.x;
 		float minScaleY = CogGetScreenHeight() / shapeHeight / parentTransform.absScale.y;
@@ -107,8 +106,8 @@ namespace Cog {
 	}
 
 	void FloatingScene::CheckNewPosition(Trans& transform, ofVec3f& newPos) {
-		float shapeWidth = owner->GetShape()->GetWidth();
-		float shapeHeight = owner->GetShape()->GetHeight();
+		float shapeWidth = owner->GetMesh()->GetWidth();
+		float shapeHeight = owner->GetMesh()->GetHeight();
 
 		// calculate absolute width and height
 		float width = shapeWidth*transform.absScale.x;

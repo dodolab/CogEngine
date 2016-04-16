@@ -17,7 +17,7 @@ namespace Cog {
 		// id of target behavior
 		int targetId = -1;
 		// message payload
-		MsgEvent* data = nullptr;
+		spt<MsgEvent> data;
 
 	public:
 
@@ -31,7 +31,7 @@ namespace Cog {
 		* @param targetId id of target whom the message will be sent to
 		* @param data message payload
 		*/
-		DelayAction(int millis, int targetId, MsgEvent* data) : millis(millis), targetId(targetId), data(data) {
+		DelayAction(int millis, int targetId, spt<MsgEvent> data) : millis(millis), targetId(targetId), data(data) {
 
 		}
 

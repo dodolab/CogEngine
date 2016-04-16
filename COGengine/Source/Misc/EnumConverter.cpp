@@ -1,38 +1,38 @@
 #include "EnumConverter.h"
-#include "Shape.h"
+#include "Mesh.h"
 #include "AttrAnimEnt.h"
 #include "TransformEnt.h"
 #include "EasingFunc.h"
 
 namespace Cog {
 
-	ShapeType EnumConverter::StrToShapeType(string val) {
+	MeshType EnumConverter::StrToMeshType(string val) {
 		if (val.compare("image") == 0) {
-			return ShapeType::IMAGE;
+			return MeshType::IMAGE;
 		}
 		else if (val.compare("rectangle") == 0) {
-			return ShapeType::RECTANGLE;
+			return MeshType::RECTANGLE;
 		}
 		else if (val.compare("text") == 0) {
-			return ShapeType::TEXT;
+			return MeshType::TEXT;
 		}
 		else if (val.compare("plane") == 0) {
-			return ShapeType::PLANE;
+			return MeshType::PLANE;
 		}
 		else if (val.compare("sprite") == 0) {
-			return ShapeType::SPRITE;
+			return MeshType::SPRITE;
 		}
 		else if (val.compare("multisprite") == 0) {
-			return ShapeType::MULTISPRITE;
+			return MeshType::MULTISPRITE;
 		}
 		else if (val.compare("label") == 0) {
-			return ShapeType::LABEL;
+			return MeshType::LABEL;
 		}
 		else if (val.compare("bounding_box") == 0) {
-			return ShapeType::BOUNDING_BOX;
+			return MeshType::BOUNDING_BOX;
 		}
 
-		return ShapeType::NONE;
+		return MeshType::NONE;
 	}
 
 	TransformType EnumConverter::StrToMeasureType(string val) {

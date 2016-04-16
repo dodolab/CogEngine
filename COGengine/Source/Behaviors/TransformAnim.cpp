@@ -95,7 +95,7 @@ namespace Cog {
 			}
 			else {
 				Finish();
-				SendMessageToListeners(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+				SendMessage(ACT_TRANSFORM_ENDED);
 			}
 		}
 	}

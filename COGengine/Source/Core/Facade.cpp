@@ -97,37 +97,10 @@ namespace Cog {
 		CogEngine::GetInstance().stage->UnregisterGlobalListener(action, listener);
 	}
 
-	void CogSendMessage(Msg& msg, Node* actualNode) {
-		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg, actualNode);
+	void CogSendMessage(Msg& msg) {
+		CogEngine::GetInstance().stage->GetActualScene()->SendMessage(msg);
 	}
 
-	void CogSendDirectMessageToListener(Msg& msg, int targetId) {
-		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
-	}
-
-	void CogSendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source, int listenerId) {
-		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
-		CogSendMessage(msg, source);
-	}
-
-	void CogSendDirectMessageToListener(StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
-		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
-		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
-	}
-
-	void CogSendDirectMessageToListener(Scene* scene, Msg& msg, int targetId) {
-		scene->SendDirectMessageToListener(msg, targetId);
-	}
-
-	void CogSendMessageToListeners(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int listenerId) {
-		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
-		scene->SendMessage(msg, source);
-	}
-
-	void CogSendDirectMessageToListener(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
-		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
-		scene->SendDirectMessageToListener(msg, targetId);
-	}
 
 	// =================== MLOGGER =========================
 
@@ -194,8 +167,8 @@ namespace Cog {
 		return CogEngine::GetInstance().resourceCache->Preload2DImage(path);
 	}
 
-	spt<ofVboMesh> CogGetMesh(string path) {
-		return CogEngine::GetInstance().resourceCache->GetMesh(path);
+	spt<ofVboMesh> CogGetVboMesh(string path) {
+		return CogEngine::GetInstance().resourceCache->GetVboMesh(path);
 	}
 
 	spt<ofTrueTypeFont> CogGetFont(string path, int size) {

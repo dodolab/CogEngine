@@ -128,7 +128,7 @@ public:
 		duk_get_prop_string(ctx, -1, "OnMessage");
 		duk_dup(ctx, -2);
 		duk_push_number(ctx, msg.GetAction());
-		duk_push_number(ctx, msg.GetBehaviorId());
+		duk_push_number(ctx, msg.GetSenderId());
 		if (duk_pcall_method(ctx, 2) != 0) {
 			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
 		}

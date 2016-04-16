@@ -52,14 +52,8 @@ namespace Cog {
 	// =================== MNODESTORAGE ========================
 	void CogRegisterGlobalListener(StrId action, MsgListener* listener);
 	void CogUnregisterGlobalListener(StrId action, MsgListener* listener);
-	void CogSendMessage(Msg& msg, Node* actualNode);
-	void CogSendDirectMessageToListener(Msg& msg, int targetId);
-	void CogSendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source, int listenerId);
-	void CogSendDirectMessageToListener(StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
+	void CogSendMessage(Msg& msg);
 
-	void CogSendDirectMessageToListener(Scene* scene, Msg& msg, int targetId);
-	void CogSendMessageToListeners(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int listenerId);
-	void CogSendDirectMessageToListener(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 	// =================== MLOGGER =========================
 
 	void CogLogError(const char* module, const char* format, ...);
@@ -79,7 +73,7 @@ namespace Cog {
 
 	spt<ofImage> CogGet2DImage(string path);
 	spt<ofImage> CogPreload2DImage(string path);
-	spt<ofVboMesh> CogGetMesh(string path);
+	spt<ofVboMesh> CogGetVboMesh(string path);
 	spt<ofTrueTypeFont> CogGetFont(string path, int size);
 	Soundfx* CogGetSound(string path);
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);

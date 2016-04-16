@@ -31,7 +31,7 @@ TEST_CASE("Transformation test")
 	SECTION("Topleft corner")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -53,7 +53,7 @@ TEST_CASE("Transformation test")
 	SECTION("Center")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -75,7 +75,7 @@ TEST_CASE("Transformation test")
 	SECTION("Center centered")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -97,7 +97,7 @@ TEST_CASE("Transformation test")
 	SECTION("Scaled centered")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -119,7 +119,7 @@ TEST_CASE("Transformation test")
 	SECTION("Grid")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -141,9 +141,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child topLeft")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -180,9 +180,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child bottomRight absolute")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -217,9 +217,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child bottomRight percentage")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -254,9 +254,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child center")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -291,9 +291,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child center absper")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -328,9 +328,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child bottom-right local")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -365,9 +365,9 @@ TEST_CASE("Transformation test")
 	SECTION("Child bottom-right scaled local")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -402,11 +402,11 @@ TEST_CASE("Transformation test")
 	SECTION("Three topleft")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -454,11 +454,11 @@ TEST_CASE("Transformation test")
 	SECTION("Three right-bottom percentage")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -506,11 +506,11 @@ TEST_CASE("Transformation test")
 	SECTION("Three centered absper")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -558,11 +558,11 @@ TEST_CASE("Transformation test")
 	SECTION("Bottomright for each next per/per")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -610,11 +610,11 @@ TEST_CASE("Transformation test")
 	SECTION("Bottomright for each next per/absper")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -662,11 +662,11 @@ TEST_CASE("Transformation test")
 	SECTION("Bottomright for each next per/abs")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(100, 100)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(100, 100)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(50, 50)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(50, 50)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -715,9 +715,9 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation center")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -757,9 +757,9 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation topleft")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -802,9 +802,9 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation double")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -845,9 +845,9 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation double topleft")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -889,11 +889,11 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation triple bottomleft")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,
@@ -956,11 +956,11 @@ TEST_CASE("Transformation test")
 	SECTION("Relative rotation triple bottomright")
 	{
 		Node* first = new Node("first");
-		first->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		first->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* second = new Node("second");
-		second->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		second->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* third = new Node("third");
-		third->SetShape(spt<DummyShape>(new DummyShape(200, 200)));
+		third->SetMesh(spt<DummyShape>(new DummyShape(200, 200)));
 		Node* root = new Node("root");
 		Trans tr = Trans(0, 0);
 		math.CalcTransform(tr, first, root,

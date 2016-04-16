@@ -18,9 +18,9 @@ namespace Cog {
 		}
 
 		StrId GetAction() const;
-		int GetSubAction() const;
-		int GetBehaviorId() const;
-		NodeLua* GetSourceObj() const;
+		int GetParameter() const;
+		int GetSenderId() const;
+		NodeLua* GetContextNode() const;
 	};
 
 } // namespace

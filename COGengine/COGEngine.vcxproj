@@ -254,7 +254,7 @@
     <ClInclude Include="Source\AI\UCTAgent.h" />
     <ClInclude Include="Source\Attributes\Flags.h" />
     <ClInclude Include="Source\Attributes\Movement.h" />
-    <ClInclude Include="Source\Attributes\Shape.h" />
+    <ClInclude Include="Source\Attributes\Mesh.h" />
     <ClInclude Include="Source\Attributes\StrId.h" />
     <ClInclude Include="Source\Attributes\Transform.h" />
     <ClInclude Include="Source\Attributes\Vec2i.h" />
@@ -527,7 +527,7 @@
     <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Flags.cpp" />
-    <ClCompile Include="Source\Attributes\Shape.cpp" />
+    <ClCompile Include="Source\Attributes\Mesh.cpp" />
     <ClCompile Include="Source\Attributes\StrId.cpp" />
     <ClCompile Include="Source\Attributes\Transform.cpp" />
     <ClCompile Include="Source\Behaviors\AttribAnimator.cpp" />
