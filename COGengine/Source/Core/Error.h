@@ -1,10 +1,13 @@
 #pragma once
+
 #include <string>
 #include <stdexcept>
 
 namespace Cog {
 
 	using namespace std;
+
+	// =========================== Section for all custom exceptions =============================
 
 	/**
 	* Exception that occurs when configuration is wrong
@@ -23,7 +26,7 @@ namespace Cog {
 	};
 
 	/**
-	* Exception that occurs when the engine is doing illegal operation
+	* Exception that occurs when the engine is forced to do an illegal operation
 	*/
 	class IllegalOperationException : public runtime_error {
 	public:

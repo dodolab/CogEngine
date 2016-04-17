@@ -4,7 +4,7 @@
 
 namespace Cog{
 
-	void MultiSpriteShape::Recalc() {
+	void MultiSpriteMesh::Recalc() {
 
 		int minX = 0;
 		int minY = 0;
@@ -40,7 +40,7 @@ namespace Cog{
 		RefreshZIndex();
 	}
 
-	void MultiSpriteShape::RefreshZIndex() {
+	void MultiSpriteMesh::RefreshZIndex() {
 		sort(sprites.begin(), sprites.end(),
 			[](const spt<SpriteInst>&  a, const spt<SpriteInst>& b) -> bool
 		{

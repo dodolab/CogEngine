@@ -2,6 +2,7 @@
 #include "Move.h"
 #include "CogEngine.h"
 #include "Movement.h"
+#include "Node.h"
 
 namespace Cog {
 

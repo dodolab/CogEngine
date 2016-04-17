@@ -15,3 +15,13 @@ using namespace std;
 using namespace Cog;
 
 #include "CogEngine.h"
+#include "ResourceCache.h"
+#include "Logger.h"
+#include "Node.h"
+#include "Stage.h"
+#include "Tween.h"
+#include "SceneSwitchManager.h"
+#include "Renderer.h"
+#include "Environment.h"
+#include "EntityStorage.h"
+#include "InputHandler.h"

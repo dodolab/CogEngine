@@ -1,4 +1,10 @@
 #include "NodeBuilder.h"
+#include "Node.h"
+#include "Behavior.h"
+#include "Scene.h"
+#include "HitEvent.h"
+#include "Button.h"
+#include "TransformMath.h"
 #include "CogEngine.h"
 #include "BehaviorEnt.h"
 #include "Selection.h"
@@ -7,15 +13,11 @@
 #include "EnumConverter.h"
 #include "SpriteSheet.h"
 
+
 namespace Cog {
 
 
-	void NodeBuilder::SetImageNode(Node* node, string path) {
-		spt<ofImage> image = CogPreload2DImage(path);
-		node->SetMesh(spt<Image>(new Image(image)));
-	}
-
-	void NodeBuilder::SetButtonNode(Node* node, string defaultImg, string clickedImg, string disabledImg) {
+	void NodeBuilder::CreateButtonNode(Node* node, string defaultImg, string clickedImg, string disabledImg) {
 
 		spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogPreload2DImage(disabledImg);
 
@@ -25,17 +27,22 @@ namespace Cog {
 	}
 
 
-	void NodeBuilder::SetMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
+	void NodeBuilder::CreateMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 		node->AddBehavior(new HitEvent(-1, false, false));
 		node->AddBehavior(new MultiSelection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StrId(selectionGroup)));
 		node->GetGroups().SetState(StrId(selectionGroup));
 	}
 
-	void NodeBuilder::SetSelectionNode(Node* node, string defaultImg, string selectImg) {
+	void NodeBuilder::CreateSelectionNode(Node* node, string defaultImg, string selectImg) {
 		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg)));
 	}
 
-	void NodeBuilder::SetTextNode(Node* node, string font, float size, ofColor color, string text) {
+	void NodeBuilder::CreateImageNode(Node* node, string path) {
+		spt<ofImage> image = CogPreload2DImage(path);
+		node->SetMesh(spt<Image>(new Image(image)));
+	}
+
+	void NodeBuilder::CreateTextNode(Node* node, string font, float size, ofColor color, string text) {
 		spt<ofTrueTypeFont> fontVal = CogGetFont(font, (int)size);
 
 		auto textShape = new Text(fontVal, text);
@@ -43,38 +50,39 @@ namespace Cog {
 		node->SetMesh(spt<Text>(textShape));
 	}
 
-	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
-		auto spriteShape = CreateSpriteShape(scene, layer, spriteSet, row, column);
+	void NodeBuilder::CreateSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
+		auto spriteShape = CreateSpriteMesh(scene, layer, spriteSet, row, column);
 		node->SetMesh(spriteShape);
 	}
 
-	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, int row, int column) {
-		auto spriteShape = CreateSpriteShape(scene, layer, row, column);
+	void NodeBuilder::CreateSpriteNode(Scene* scene, Node* node, string layer, int row, int column) {
+		auto spriteShape = CreateSpriteMesh(scene, layer, row, column);
 		node->SetMesh(spriteShape);
 	}
 
-	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
+	void NodeBuilder::CreatePlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
 		auto planeShape = CreatePlaneShape(size, color);
 		planeShape->SetNoFill(noFill);
 		node->SetMesh(planeShape);
 	}
 
-	void NodeBuilder::SetBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
+	void NodeBuilder::CreateBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
 		Settings& settings = scene->GetSettings();
 
-		// get reference width and height
+		// get reference width and height from scene settings
 		int refWidth = settings.GetSettingValInt("transform", "ref_width");
 		int refHeight = settings.GetSettingValInt("transform", "ref_height");
 
 		if (refWidth == 0) refWidth = CogGetScreenWidth();
 		if (refHeight == 0) refHeight = CogGetScreenHeight();
 
+		// create bounding box
 		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight,margin,renderable));
 		bbox->SetColor(color);
 		node->SetMesh(bbox);
 	}
 
-	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column) {
+	spt<SpriteMesh> NodeBuilder::CreateSpriteMesh(Scene* scene, string layer, string spriteSet, int row, int column) {
 
 		LayerEnt layerEntity = scene->FindLayerSettings(layer);
 		string spriteSheetName = layerEntity.spriteSheetName;
@@ -82,7 +90,7 @@ namespace Cog {
 		auto cache = GETCOMPONENT(ResourceCache);
 		auto spriteSheet = cache->GetSpriteSheet(spriteSheetName);
 
-		if (!spriteSheet) throw IllegalArgumentException("Error while loading sprite sheet. No such spritesheed found!");
+		if (!spriteSheet) CogLogError("NodeBuilder", "Error while loading sprite sheet. SpriteSheet %s not found!", spriteSheetName.c_str());
 
 		spt<SpriteSet> spriteSetEntity;
 
@@ -95,15 +103,15 @@ namespace Cog {
 			spriteSetEntity = spriteSheet->GetSpriteSetByName(spriteSet);
 		}
 
-		if (!spriteSetEntity) throw IllegalArgumentException(string_format("Spriteset %s not found!", spriteSet.c_str()));
+		if (!spriteSetEntity) CogLogError("NodeBuilder", "Spriteset %s not found!", spriteSet.c_str());
 
 		Sprite sprite = Sprite(spriteSetEntity, row, column);
-		auto shape = spt<SpriteShape>(new SpriteShape(sprite, spriteSetEntity, layer));
+		auto shape = spt<SpriteMesh>(new SpriteMesh(sprite, spriteSetEntity, layer));
 		return shape;
 	}
 
-	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, int row, int column) {
-		return CreateSpriteShape(scene, layer, "", row, column);
+	spt<SpriteMesh> NodeBuilder::CreateSpriteMesh(Scene* scene, string layer, int row, int column) {
+		return CreateSpriteMesh(scene, layer, "", row, column);
 	}
 
 	spt<Plane> NodeBuilder::CreatePlaneShape(ofVec2f size, ofColor color) {
@@ -117,14 +125,21 @@ namespace Cog {
 
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 
+		// entity has two attributes: ref and type. If the type is filled,
+		// behavior is created directly by its type. If the ref is filled,
+		// a reference behavior entity is loaded and the behavior prototype
+		// is created according to this entity (BehaviorEnt)
+
 		if (!entity->type.empty()) {
+			// create prototype
 			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(entity->type);
 			if (!entity->setting.Empty()) {
+				// use setting loader
 				behavior->Load(entity->setting);
 			}
 		}
 		else {
-			// load from reference
+			// load from reference behavior descriptor
 			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->ref);
 			
 			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(refent->type);
@@ -162,7 +177,7 @@ namespace Cog {
 		Node* node = CreateNode(name, scene);
 
 		if (!img.empty()) {
-			SetImageNode(node, img);
+			CreateImageNode(node, img);
 		}
 
 		if (xml->attributeExists("img_click")) {
@@ -170,20 +185,20 @@ namespace Cog {
 			string imgClick = xml->getAttributex("img_click", "");
 			string imgDisabled = xml->getAttributex("img_disabled", "");
 
-			SetButtonNode(node, img, imgClick, imgDisabled);
+			CreateButtonNode(node, img, imgClick, imgDisabled);
 		}
 
 		if (xml->attributeExists("img_multiselect")) {
 			// set image on selection
 			string imgSelect = xml->getAttributex("img_multiselect", "");
 			string selectGroup = xml->getAttributex("select_group", "");
-			SetMultiSelectionNode(node, img, imgSelect, selectGroup);
+			CreateMultiSelectionNode(node, img, imgSelect, selectGroup);
 		}
 
 		if (xml->attributeExists("img_select")) {
 			// set image on selection
 			string imgSelect = xml->getAttributex("img_select", "");
-			SetSelectionNode(node, img, imgSelect);
+			CreateSelectionNode(node, img, imgSelect);
 		}
 
 		// scene node will always fit to screen size
@@ -192,8 +207,8 @@ namespace Cog {
 		}
 
 		if (xml->pushTagIfExists("shape")) {
-			// load shape
-			LoadShapeFromXml(xml, node, scene);
+			// load mesh
+			LoadMeshFromXml(xml, node, scene);
 			xml->popTag();
 		}
 
@@ -204,7 +219,7 @@ namespace Cog {
 		}
 
 		if (xml->pushTagIfExists("transform")) {
-
+			// load transformation
 			TransformEnt transformEnt = TransformEnt();
 			transformEnt.LoadFromXml(xml, settings.GetSetting("transform"));
 
@@ -213,16 +228,14 @@ namespace Cog {
 			int gridHeight = settings.GetSettingValInt("transform", "grid_height");
 			
 			TransformMath math = TransformMath();
-
 			// set transform according to the parsed values
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
-
 			xml->popTag();
 		}
 		
 		if (xml->tagExists("behavior")) {
 			int behaviors = xml->getNumTags("behavior");
-
+			// load behaviors
 			for (int i = 0; i < behaviors; i++) {
 				xml->pushTag("behavior", i);
 				LoadBehaviorFromXml(xml, node);
@@ -232,7 +245,7 @@ namespace Cog {
 
 		if (xml->tagExists("state")) {
 			int states = xml->getNumTags("state");
-
+			// load states
 			for (int i = 0; i < states; i++) {
 				string stateName = xml->getValue("state", "", i);
 				node->GetStates().SetState(StrId(stateName));
@@ -241,7 +254,6 @@ namespace Cog {
 
 		if (xml->tagExists("node")) {
 			int children = xml->getNumTags("node");
-
 			// load children
 			for (int i = 0; i < children; i++) {
 				xml->pushTag("node", i);
@@ -262,12 +274,10 @@ namespace Cog {
 		string colorStr = xml->getAttributex("color", "0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
-		SetTextNode(node, font, size, color, value);
+		CreateTextNode(node, font, size, color, value);
 	}
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
-		
-		
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 		auto dummySet = Setting();
@@ -278,18 +288,21 @@ namespace Cog {
 		node->AddBehavior(behavior);
 	}
 
-	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
+	void NodeBuilder::LoadMeshFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
+		
+		// get type of the mesh
 		MeshType renderType = EnumConverter::StrToMeshType(type);
 
 		if (renderType == MeshType::IMAGE) {
 			string img = xml->getAttributex("img", "");
-			this->SetImageNode(node, img);
+			this->CreateImageNode(node, img);
 		}
 		else if (renderType == MeshType::PLANE) {
 			float width = 0;
 			float height = 0;
 
+			// load other attributes
 			if (xml->attributeExists("size")) {
 				width = height = xml->getAttributex("size", 1.0);
 			}
@@ -302,18 +315,18 @@ namespace Cog {
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
 			bool noFill = xml->getBoolAttributex("no_fill", false);
-			SetPlaneNode(node, size, color, noFill);
+			CreatePlaneNode(node, size, color, noFill);
 		}
 		else if (renderType == MeshType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");
 
-			if (layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
+			if (layer.empty()) CogLogError("NodeBuilder", "Error while loading sprite sheet. Layer not specified (node %s)", node->GetTag().c_str());
 
 			string spriteSet = xml->getAttributex("spriteset", "");
 			int row = xml->getAttributex("row", 0);
 			int column = xml->getAttributex("column", 0);
 
-			SetSpriteNode(scene, node, layer, spriteSet, row, column);
+			CreateSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
 		else if (renderType == MeshType::BOUNDING_BOX) {
 			string colorStr = xml->getAttributex("color", "0x000000");
@@ -322,7 +335,7 @@ namespace Cog {
 			bool renderable = xml->getBoolAttributex("renderable", false);
 			float margin = xml->getAttributex("margin", 0.0f);
 
-			SetBoundingBoxNode(scene, node, color, margin,renderable);
+			CreateBoundingBoxNode(scene, node, color, margin,renderable);
 		}
 	}
 

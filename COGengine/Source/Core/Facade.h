@@ -22,15 +22,17 @@ namespace Cog {
 
 	EntityStorage* CogGetEntityStorage();
 
-	/*************************************************************************/
-	/* Facade methods that are used for centralized access to all components */
-	/*************************************************************************/
+	/**********************************************************************************/
+	/* Facade methods that may be used for centralized access to important components */
+	/**********************************************************************************/
 
-	// =================== COGENGINE ====================
+	// =================== CogEngine ====================
+	
 	int CogGetFrameCounter();
 	uint64 CogGetAbsoluteTime();
 
-	// =================== MENVIRONMENT ====================
+	// =================== Environment ====================
+	
 	void CogAddSound(Soundfx* sound);
 	void CogPlaySound(Soundfx* sound);
 	vector<InputAct*>& CogGetPressedKeys();
@@ -49,12 +51,13 @@ namespace Cog {
 	void CogRunThread(ofThread* thread);
 
 	
-	// =================== MNODESTORAGE ========================
+	// =================== Scene ========================
+	
 	void CogRegisterGlobalListener(StrId action, MsgListener* listener);
 	void CogUnregisterGlobalListener(StrId action, MsgListener* listener);
 	void CogSendMessage(Msg& msg);
 
-	// =================== MLOGGER =========================
+	// =================== Logger =========================
 
 	void CogLogError(const char* module, const char* format, ...);
 	void CogLogInfo(const char* module, const char* format, ...);
@@ -66,10 +69,11 @@ namespace Cog {
 	void CogWriteLogActualScene();
 	void CogWriteTimeReport(bool restart);
 
-	// =================== MRENDERER =========================
+	// =================== Renderer =========================
+	
 	void CogPushNodeForRendering(Node* node);
 
-	// =================== MCACHE =======================
+	// =================== ResourceCache =======================
 
 	spt<ofImage> CogGet2DImage(string path);
 	spt<ofImage> CogPreload2DImage(string path);

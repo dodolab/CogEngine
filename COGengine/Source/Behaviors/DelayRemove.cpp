@@ -1,6 +1,7 @@
 
 #include "DelayRemove.h"
 #include "CogEngine.h"
+#include "Node.h"
 
 namespace Cog {
 

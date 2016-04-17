@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Settings.h"
 #include "LayerEnt.h"
 

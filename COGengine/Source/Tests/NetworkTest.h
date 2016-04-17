@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxCogMain.h"
-
+#include "Stage.h"
 #include "catch.hpp"
 using namespace Cog;
 

@@ -1,5 +1,15 @@
 #include "CogEngine.h"
+#include "ResourceCache.h"
+#include "Logger.h"
 #include "Node.h"
+#include "Stage.h"
+#include "Tween.h"
+#include "SceneSwitchManager.h"
+#include "Renderer.h"
+#include "Environment.h"
+#include "EntityStorage.h"
+#include "InputHandler.h"
+
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
 #include "Button.h"
@@ -9,9 +19,7 @@
 #include "InputKey.h"
 #include "Move.h"
 #include "MultiAnim.h"
-#include "SceneSwitchManager.h"
 #include "TransformAnim.h"
-#include "Tween.h"
 #include "Component.h"
 #include "FloatingScene.h"
 #include "InputHandler.h"
@@ -22,15 +30,20 @@
 #include "Selection.h"
 #include "Slider.h"
 
+
 namespace Cog {
+
+	CogEngine::CogEngine() {
+		entityStorage = new EntityStorage();
+	}
 
 	void CogEngine::Init() {
 
-		COGASSERT(fps != 0, "COGENGINE", "FPS attribute is not set! Use SetFps(int fps) to set frames per second");
-
 		RegisterComponents();
 
-		vector<Component*> components = entityStorage->GetAllComponents();
+		vector<Component*> components;
+		entityStorage->GetAllComponents(components);
+	
 		// sort by priority
 		sort(components.begin(), components.end(),
 			[this](const Component* a, const Component* b) -> bool
@@ -57,7 +70,9 @@ namespace Cog {
 
 		RegisterComponents();
 
-		vector<Component*> components = entityStorage->GetAllComponents();
+		vector<Component*> components;  
+		entityStorage->GetAllComponents(components);
+
 		// sort by priority
 		sort(components.begin(), components.end(),
 			[this](const Component* a, const Component* b) -> bool
@@ -68,14 +83,13 @@ namespace Cog {
 		// init logger twice, because it should be always initialized by default at first
 		this->logger->OnInit();
 
-		// init all comopnents, using xml file
+		// init all components, using xml file
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->OnInit(config);
 		}
 	}
 
 	void CogEngine::LoadStageFromXml(spt<ofxXml> config) {
-		// go out
 		config->popAll();
 
 		if (config->pushTagIfExists("app_config") && config->pushTagIfExists("scenes")) {
@@ -89,10 +103,9 @@ namespace Cog {
 		COGMEASURE_BEGIN("ENGINE_UPDATE");
 
 		lastAbsoluteTime = absolute;
-
 		frameCounter++;
 
-		// update transforms
+		// update transform tree
 		stage->GetRootObject()->UpdateTransform(true);
 		// update scene
 		stage->GetRootObject()->Update(delta, absolute);
@@ -111,8 +124,13 @@ namespace Cog {
 		for (auto action : actions) {
 			action();
 		}
+
 		actions.clear();
 
+		// update transform tree again
+		stage->GetRootObject()->UpdateTransform(true);
+
+		// update sound buffer
 		ofSoundUpdate();
 
 		COGMEASURE_END("ENGINE_UPDATE");
@@ -121,16 +139,13 @@ namespace Cog {
 	void CogEngine::Draw(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_DRAW");
 
-		// has to be here!
-		stage->GetRootObject()->UpdateTransform(true);
-
 		Node* root = stage->GetRootObject();
 		auto children = root->GetChildren();
 
 		renderer->BeginRender();
 
 		for (auto it = children.begin(); it != children.end(); ++it) {
-			// render scene one by one
+			// render scene nodes one by one
 			Node* sceneNode = (*it);
 
 			if (sceneNode->GetRunningMode() != RunningMode::INVISIBLE &&
@@ -170,6 +185,7 @@ namespace Cog {
 		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
 
+		// register all behaviors that are part of the engine
 		REGISTER_BEHAVIOR(SheetAnimator);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(DelayAction);
@@ -185,7 +201,6 @@ namespace Cog {
 		REGISTER_BEHAVIOR(AttribAnimator);
 		REGISTER_BEHAVIOR(Selection);
 		REGISTER_BEHAVIOR(Slider);
-
 	}
 
 	void CogEngine::Clear() {

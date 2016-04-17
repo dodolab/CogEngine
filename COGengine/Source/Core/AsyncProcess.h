@@ -1,14 +1,15 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "Scene.h"
-#include "Behavior.h"
-#include "Node.h"
+#include "Definitions.h"
+#include "ofxXmlSettings.h"
 
 namespace Cog {
 
+	enum class TweenDirection;
+	class Scene;
+
 	/**
-	* Abstract class for all jobs
+	* Abstract class for asynchronous processes
 	*/
 	class Job {
 
@@ -17,7 +18,7 @@ namespace Cog {
 	};
 
 	/**
-	* Job that runs scene loading from XML
+	* Job that asynchronously loads a scene from XML
 	*/
 	class SceneLoader : public Job {
 
@@ -27,39 +28,14 @@ namespace Cog {
 		TweenDirection tweenDir;
 	public:
 
-		SceneLoader(spt<ofxXml> config, Scene* scene, TweenDirection tweenDir) : config(config), scene(scene), tweenDir(tweenDir) {
+		SceneLoader(spt<ofxXml> config, Scene* scene, TweenDirection tweenDir);
 
-		}
-
-		void DoJob() {
-			config->popAll();
-			config->pushTag("app_config");
-			config->pushTag("scenes");
-
-			for (int i = 0; i < config->getNumTags("scene"); i++) {
-				config->pushTag("scene", i);
-
-				string name = config->getAttributex("name", "");
-				if (name.compare(scene->GetName()) == 0) {
-					scene->LoadFromXml(config);
-					config->popTag();
-					break;
-				}
-
-				config->popTag();
-			}
-
-			config->popAll();
-
-			// switch to scene
-			auto stage = GETCOMPONENT(Stage);
-			scene->GetSceneNode()->SubmitChanges(true);
-			stage->SwitchToScene(scene, tweenDir);
-		}
+		void DoJob();
 	};
 
 	/**
-	* Asynchronous process
+	* Thread that runs a job asynchronously
+	* Note that some structures couldn't be loaded asynchronously (fonts, for instance)
 	*/
 	class AsyncProcess : public ofThread {
 	private:
@@ -70,15 +46,7 @@ namespace Cog {
 			this->job = job;
 		}
 
-		void threadedFunction()
-		{
-			COGLOGDEBUG("AsyncProcess", "Running threaded job %s", typeid(this->job).name());
-			job->DoJob();
-			COGLOGDEBUG("AsyncProcess", "Finishing threaded job %s", typeid(this->job).name());
-			delete job;
-			
-		}
-
+		void threadedFunction();
 	};
 
 

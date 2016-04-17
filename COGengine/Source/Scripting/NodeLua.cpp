@@ -4,6 +4,7 @@
 #include "Stage.h"
 #include "LuaScripting.h"
 #include "Scene.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 

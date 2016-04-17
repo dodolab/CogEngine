@@ -1,6 +1,9 @@
 #include "CogApp.h"
 #include "CogEngine.h"
 #include "Stage.h"
+#include "Environment.h"
+#include "EntityStorage.h"
+#include "Tween.h"
 
 namespace Cog {
 
@@ -13,21 +16,19 @@ namespace Cog {
 		}
 	}
 
+	void CogApp::InitStage(Stage* stage) {
+		// nothing to do here
+	}
+
 	void CogApp::setup() {
-		// never set vertical sync
+		// never set vertical sync since it may cause flickering
 		ofSetVerticalSync(false);
 		ofSetFrameRate(this->fps);
 		ofEnableAntiAliasing();
-		// initialize COG engine
-
-		CogEngine::GetInstance().SetFps(this->fps);
+		setupEngine();
 	}
 
 	void CogApp::setupEngine() {
-		if (!this->splashScreen.empty()) {
-			DrawSplashScreen();
-		}
-
 		this->RegisterComponents();
 		this->InitEngine();
 		this->InitComponents();
@@ -51,20 +52,14 @@ namespace Cog {
 
 	void CogApp::update() {
 
-		if (!engineInitialized) {
-			// a small hack that provides the possibility to
-			// show a splashscreen during the engine initialization 
-			setupEngine();
-		}
-		else {
+		if (engineInitialized) {
 			// update loop
 			delta = ofGetSystemTime() - absolute;
 			absolute = ofGetSystemTime();
 
 			float fpsThreshold = 1000 / this->GetFps();
-
+			// when performance goes down, the maximum delta value is fixed
 			uint64 semiFixedDelta = (delta < fpsThreshold) ? fpsThreshold : (delta < (2 * fpsThreshold)) ? delta : (2 * fpsThreshold);
-
 			CogEngine::GetInstance().Update(semiFixedDelta, absolute);
 		}
 	}
@@ -169,27 +164,5 @@ namespace Cog {
 
 #endif
 
-	void CogApp::DrawSplashScreen() {
-#ifdef WIN32
-		ofImage image = ofImage();
-		image.loadImage(this->splashScreen);
-		GLFWwindow* window = glfwGetCurrentContext();
-		glfwShowWindow(window);
-		ofSetMatrixMode(OF_MATRIX_PROJECTION);
-		ofLoadIdentityMatrix();
-		ofSetMatrixMode(OF_MATRIX_MODELVIEW);
-		ofLoadIdentityMatrix();
-		ofScale(-1, 1);
-		ofRotate(180);
-		ofClear(0, 0, 0);
-		image.update();
-		image.draw(-1, -1, 2, 2);
-		glfwSwapBuffers(window);
-		glFlush();
-		//set the context back to main for rest of setup
-		glfwMakeContextCurrent(window);
-		ofSetupScreen();
-#endif
-	}
 
 }// namespace

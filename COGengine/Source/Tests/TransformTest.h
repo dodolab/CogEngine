@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "CogEngine.h"
-
+#include "Environment.h"
 #include "catch.hpp"
 using namespace Cog;
 

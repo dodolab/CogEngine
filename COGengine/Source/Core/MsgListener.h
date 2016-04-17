@@ -8,22 +8,22 @@ namespace Cog {
 	class Node;
 	class Scene;
 
-	/*! Listener state enumerator */
+	/** Listener states */
 	enum class ListenerState {
-		ACTIVE_ALL,			/*!< active for all events */
-		ACTIVE_MESSAGES,	/*!< active for message sending */
-		ACTIVE_UPDATES,		/*!< active for update */
-		DISABLED			/*!< disabled completely */
+		ACTIVE_ALL,			/** active for all events */
+		ACTIVE_MESSAGES,	/** active for message sending */
+		ACTIVE_UPDATES,		/** active for update loop */
+		DISABLED			/** disabled completely */
 	};
 
 
 	/**
-	* Abstract class for all messages listener
-	*
+	* Abstract class for all objects that can subscribe itself as listeners
+	* for messaging systesms
 	*/
 	class MsgListener {
 	protected:
-		// identifier incremental counter
+		// incremental counter
 		static int idCounter;
 		// identifier
 		const int id;
@@ -54,7 +54,7 @@ namespace Cog {
 		}
 
 		/**
-		* Handler for accepting the message
+		* Message handler, accepts a message
 		* @param Msg received message
 		*/
 		virtual void OnMessage(Msg& msg) {
@@ -62,7 +62,7 @@ namespace Cog {
 		}
 
 		/**
-		* Gets element identifier
+		* Gets object identifier
 		* @return incremental value
 		*/
 		const int GetId() const {
@@ -70,9 +70,9 @@ namespace Cog {
 		}
 
 		/**
-		* Updates components inner state
-		* @param delta delta time from the last loop
-		* @param absolute absolute time since the application begun
+		* Updates inner state 
+		* @param delta delta time since the last loop
+		* @param absolute absolute time since the engine was initialized
 		*/
 		virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
@@ -125,20 +125,23 @@ namespace Cog {
 		void GlobalSubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4);
 
 		/**
-		* Registers itself as a action listener
+		* Registers itself as an action listener
+		* @param scene scene whose messages will be handled
 		* @param action1 action to listen to
 		*/
 		void SubscribeForMessages(Scene* scene, StrId action1);
 
 		/**
-		* Registers itself as a action listener
+		* Registers itself as an action listener
+		* @param scene scene whose messages will be handled
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		*/
 		void SubscribeForMessages(Scene* scene, StrId action1, StrId action2);
 
 		/**
-		* Registers itself as a action listener
+		* Registers itself as an action listener
+		* @param scene scene whose messages will be handled
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		* @param action3 action to listen to
@@ -146,7 +149,8 @@ namespace Cog {
 		void SubscribeForMessages(Scene* scene, StrId action1, StrId action2, StrId action3);
 
 		/**
-		* Registers itself as a action listener
+		* Registers itself as an action listener
+		* @param scene scene whose messages will be handled
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		* @param action3 action to listen to

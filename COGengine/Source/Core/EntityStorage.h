@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include "Behavior.h"
+#include "BehaviorCreator.h"
 #include "Component.h"
 #include <typeindex>
 #include <typeinfo>
@@ -9,19 +10,24 @@
 namespace Cog {
 
 	/**
-	* Storage for registered entities such as behaviors, components and attributes
+	* Storage for registered behavior prototypes and component instances
 	*/
 	class EntityStorage {
 
 	protected:
-		// components, mapped by their keys
+		// components, mapped by their types
 		map<type_index, Component*> components;
-		// behaviors, mapped by their keys
+		// behaviors, mapped by their hashed names
 		map<StrId, BehaviorCreator*> behaviorBuilders;
 
 	public:
 
+		EntityStorage() {
+
+		}
+
 		~EntityStorage() {
+			// delete content
 			for (auto& key : components) {
 				delete key.second;
 			}
@@ -34,58 +40,39 @@ namespace Cog {
 		/**
 		* Gets list of all components
 		*/
-		vector<Component*> GetAllComponents() {
-			
-			vector<Component*> output;
-			
+		void GetAllComponents(vector<Component*>& output) {
 			for (auto it = components.begin(); it != components.end(); ++it) {
 				output.push_back((*it).second);
 			}
-
-			return output;
 		}
 
+		/** 
+		* Gets link to map of all components
+		*/
 		map<type_index, Component*>& GetComponents() {
 			return components;
 		}
 
-
 		/**
-		* Adds a new component; or replaces already existing component
-		* @param key key of the component
-		* @param component reference
+		* Eitehr adds a new component or replaces already existing component
+		* @param value instance of the component
+		* @tparam type of the component
 		*/
 		template<class T>
 		void RegisterComponent(T* value) {
 			
 			if (ExistsComponent<T>()) {
-				COGLOGDEBUG("ENTITY_STORAGE", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
+				COGLOGDEBUG("EntityStorage", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
 				RemoveComponent<T>();
 			}
 
 			components[typeid(T)] = value;
 		}
 
-		
-		/**
-		* Adds a new behaviors; or replaces already existing behavior
-		* @param key key of the component
-		* @param component reference
-		*/
-		template<class T>
-		void RegisterBehaviorBuilder(StrId name) {
-			
-			if (ExistsBehaviorBuilder(name)) {
-				RemoveBehaviorBuilder(name);
-			}
-			
-			static_assert(std::is_default_constructible<T>::value, "All Behavior classes must have default constructor");
-			auto builder = new BehaviorCreatorImpl<T>(); //T::creator;
-			behaviorBuilders[name] = builder;
-		}
 
 		/**
-		* Removes existing components (by its key)
+		* Removes existing components by its type
+		* @tparam type of the component
 		* @return true, if components has been removed
 		*/
 		template<class T>
@@ -98,19 +85,8 @@ namespace Cog {
 		}
 
 		/**
-		* Removes existing behavior builder
-		* @return true, if builder has been removed
-		*/
-		bool RemoveBehaviorBuilder(StrId key) {
-			if (ExistsBehaviorBuilder(key)) {
-				behaviorBuilders.erase(key);
-				return true;
-			}
-			return false;
-		}
-
-		/**
-		* Returns true, if the component is presented
+		* Returns true, if the component exists in the collection
+		* @tparam type of the component
 		*/
 		template<class T>
 		bool ExistsComponent() const {
@@ -118,20 +94,13 @@ namespace Cog {
 		}
 
 		/**
-		* Returns true, if the behavior is presented
-		*/
-		bool ExistsBehaviorBuilder(StrId key) const {
-			return behaviorBuilders.count(key) != 0;
-		}
-
-		/**
-		* Gets component by key; call this method only if you are sure that the component exists
-		* @param key component key
+		* Gets component by its type
+		* @tparam type of the component
 		*/
 		template<class T> T* GetComponent() {
 			auto it = components.find(typeid(T));
 
-			COGASSERT(it != components.end(), "ENTITY_STORAGE", "Component %s doesn't exists", typeid(T).name());
+			COGASSERT(it != components.end(), "EntityStorage", "Component %s doesn't exists", typeid(T).name());
 
 			T* attr = static_cast<T*>(it->second);
 			return attr;
@@ -144,12 +113,53 @@ namespace Cog {
 			return nullptr;
 		}
 
+		/**
+		* Either adds a new behavior prototype builder or replaces already existing
+		* @param name name of the behavior
+		* @tparam type of the behavior
+		*/
+		template<class T>
+		void RegisterBehaviorBuilder(StrId name) {
+
+			if (ExistsBehaviorBuilder(name)) {
+				RemoveBehaviorBuilder(name);
+			}
+
+			static_assert(std::is_default_constructible<T>::value, "All Behavior classes must have default constructor");
+			auto builder = new BehaviorCreatorImpl<T>(); //T::creator;
+			behaviorBuilders[name] = builder;
+		}
+
+		/**
+		* Removes existing behavior builder by its name
+		* @param key hashed name of the type of the behavior
+		* @return true, if builder has been removed
+		*/
+		bool RemoveBehaviorBuilder(StrId key) {
+			if (ExistsBehaviorBuilder(key)) {
+				behaviorBuilders.erase(key);
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		* Returns true, if the behavior builder exists in the collection
+		* @param key hashed name of the behavior
+		*/
+		bool ExistsBehaviorBuilder(StrId key) const {
+			return behaviorBuilders.count(key) != 0;
+		}
+
+		/**
+		* Creates a new behavior using the prototype builder
+		*/
 		Behavior* CreateBehaviorPrototype(StrId key) {
 			auto it = behaviorBuilders.find(key);
 
-			COGASSERT(it != behaviorBuilders.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
+			COGASSERT(it != behaviorBuilders.end(), "EntityStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
 			auto builder = it->second;
-			return builder->CreateDefault();
+			return builder->Create();
 		}
 	};
 

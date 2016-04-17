@@ -5,7 +5,8 @@
 
 namespace Cog {
 
-	int MsgListener::idCounter = 0;
+	// first id is always 1
+	int MsgListener::idCounter = 1;
 
 	MsgListener::MsgListener() : id(idCounter++) {
 

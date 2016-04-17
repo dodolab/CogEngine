@@ -245,7 +245,7 @@ namespace Cog {
 
 	void Renderer::RenderSprite(Node* owner) {
 
-		spt<SpriteShape> shape = static_pointer_cast<SpriteShape>(owner->GetMesh());
+		spt<SpriteMesh> shape = static_pointer_cast<SpriteMesh>(owner->GetMesh());
 		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
 		renderer->SetActualBuffer(shape->GetLayerName());
@@ -269,7 +269,7 @@ namespace Cog {
 
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
-		spt<MultiSpriteShape> shape = static_pointer_cast<MultiSpriteShape>(owner->GetMesh());
+		spt<MultiSpriteMesh> shape = static_pointer_cast<MultiSpriteMesh>(owner->GetMesh());
 		renderer->SetActualBuffer(shape->GetLayerName());
 		auto& sprites = shape->GetSprites();
 

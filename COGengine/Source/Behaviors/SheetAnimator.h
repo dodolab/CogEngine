@@ -2,8 +2,10 @@
 
 #include "Behavior.h"
 #include "AnimContextStack.h"
+#include "SheetAnim.h"
 
 namespace Cog {
+
 
 	/**x
 	* Behavior for sheet animations

@@ -7,9 +7,9 @@ namespace Cog {
 
 	class InputAct;
 
-	enum class StateChange{
-		RESET, SET, SWITCH
-	};
+	// ========================================================
+	// This section contains all events that make a payload
+	// of a message
 	
 	/**
 	* Abstract class for all events
@@ -18,21 +18,36 @@ namespace Cog {
 
 	};
 
-	class StateChangeEvent : public MsgEvent {
+	/**
+	* Type of flag change
+	*/
+	enum class FlagChangeType {
+		RESET, SET, SWITCH
+	};
+
+	/**
+	* Event invoked when a flag of a node is changed 
+	*/
+	class FlagChangeEvent : public MsgEvent {
 	public:
-		StateChange changeType = StateChange::SET;
+		FlagChangeType changeType = FlagChangeType::SET;
 		unsigned state1 = 0;
 		unsigned state2 = 0;
 
-		StateChangeEvent(StateChange changeType, unsigned state1) : changeType(changeType), state1(state1) {
+		FlagChangeEvent(FlagChangeType changeType, unsigned state1) 
+			: changeType(changeType), state1(state1) {
 
 		}
 
-		StateChangeEvent(StateChange changeType, unsigned state1, unsigned state2) : changeType(changeType), state1(state1), state2(state2) {
+		FlagChangeEvent(FlagChangeType changeType, unsigned state1, unsigned state2) 
+			: changeType(changeType), state1(state1), state2(state2) {
 
 		}
 	};
 
+	/**
+	* User input event (keyboard click, mouse click or touch)
+	*/
 	class InputEvent : public MsgEvent {
 	public:
 		InputAct* input;
@@ -42,22 +57,30 @@ namespace Cog {
 		}
 	};
 
-
-	enum class AttrChange {
+	/**
+	* Type of attribute change
+	*/
+	enum class AttrChangeType {
 		ADD, MODIFY, REMOVE
 	};
 	
-
+	/**
+	* Event invoked when an attribute was changed
+	*/
 	class AttributeChangeEvent : public MsgEvent {
 	public:
-		AttrChange changeType;
+		AttrChangeType changeType;
 		StrId attribute;
 
-		AttributeChangeEvent(StrId attribute, AttrChange changeType) : attribute(attribute), changeType(changeType) {
+		AttributeChangeEvent(StrId attribute, AttrChangeType changeType) 
+			: attribute(attribute), changeType(changeType) {
 
 		}
 	};
 
+	/**
+	* Event invoked when a value is changed
+	*/
 	template <class  T>
 	class ValueChangeEvent : public MsgEvent {
 	public:
@@ -71,6 +94,9 @@ namespace Cog {
 
 	class NetInputMessage;
 
+	/**
+	* Event invoked when a network message arrived
+	*/
 	class NetworkMsgEvent : public MsgEvent {
 	public:
 		spt<NetInputMessage> msg;
@@ -84,6 +110,9 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* A common generic event with a value
+	*/
 	template <class  T>
 	class CommonEvent : public MsgEvent {
 	public:

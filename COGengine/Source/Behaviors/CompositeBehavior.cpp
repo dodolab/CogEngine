@@ -36,7 +36,7 @@ namespace Cog {
 
 	void CompositeBehavior::OnFinish() {
 		for (auto beh : behaviors) {
-			if (!beh->IsFinished()) beh->Finish();
+			if (!beh->HasFinished()) beh->Finish();
 		}
 	}
 
@@ -52,7 +52,7 @@ namespace Cog {
 
 		for (auto it = behaviors.begin(); it != behaviors.end();) {
 			auto beh = (*it);
-			if (beh->IsFinished()) {
+			if (beh->HasFinished()) {
 				it = behaviors.erase(it);
 				continue;
 			}

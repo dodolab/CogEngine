@@ -1,40 +1,44 @@
 #pragma once
 
-
-#include "ResourceCache.h"
-#include "Logger.h"
-#include "Node.h"
-#include "Stage.h"
-#include "Tween.h"
-#include "SceneSwitchManager.h"
-#include "Renderer.h"
-#include "Environment.h"
-#include "EntityStorage.h"
-#include "InputHandler.h"
+#include "Definitions.h"
+#include <vector>
+#include "ofxXmlSettings.h"
 
 namespace Cog {
 
+	class EntityStorage;
+	class Environment;
+	class Logger;
+	class ResourceCache;
+	class Renderer;
+	class InputHandler;
+	class Stage;
+
 	/**
-	* COG engine that holds references to all other components and
+	* COG engine that holds references to important components and
 	* executes drawing and update loops
 	*/
 	class CogEngine {
 	private:
 		// frame counter
 		int frameCounter = 0;
-		// frames per second
-		int fps = 0;
-		void RegisterComponents();
+		// actions that should be executed after update loop
 		vector<function<void()>> actions;
 		uint64 lastAbsoluteTime = 0;
+
+		/**
+		* Registers important components
+		*/
+		void RegisterComponents();
+	
 	public:
 		// global configuration file
 		spt<ofxXml> config;
 
 		// component storage
-		EntityStorage* entityStorage = new EntityStorage();
+		EntityStorage* entityStorage;
 
-		// main components that are simply accessible from this object
+		// important components that are simply accessible from this object
 		Environment* environment = nullptr;
 		ResourceCache* resourceCache = nullptr;
 		Logger* logger = nullptr;
@@ -42,8 +46,7 @@ namespace Cog {
 		Stage* stage = nullptr;
 		InputHandler* inputHandler = nullptr;
 		
-		CogEngine() {
-		}
+		CogEngine();
 
 		~CogEngine() {
 			Clear();
@@ -72,48 +75,61 @@ namespace Cog {
 		void LoadStageFromXml(spt<ofxXml> config);
 
 		/**
-		* Executes one update cycle; this method is called by App
-		* @param delta time Tween frames
-		* @param absolute time elapsed after initialization
+		* Executes one update cycle; this method is called by CogApp
+		* @param delta time between frames
+		* @param absolute time elapsed since initialization
 		*/
 		void Update(uint64 delta, uint64 absolute);
 
 		/**
-		* Executes one drawing cycle; this method is called by App
-		* @param delta time Tween frames
-		* @param absolute time elapsed after initialization
+		* Executes one drawing cycle; this method is called by CogApp
+		* @param delta time between frames
+		* @param absolute time elapsed since initialization
 		*/
 		void Draw(uint64 delta, uint64 absolute);
 
 		/**
 		* Gets actual frame number
 		*/
-		int GetFrameCounter() {
+		int GetFrameCounter() const {
 			return frameCounter;
 		}
 
+		/**
+		* Resets frame counter
+		*/
 		void ResetFrameCounter() {
 			this->frameCounter = 0;
 		}
 
-		uint64 GetAbsoluteTime() {
+		/**
+		* Gets time elapsed since the initialization
+		*/
+		uint64 GetAbsoluteTime() const {
 			return this->lastAbsoluteTime;
 		}
 
+		/**
+		* Gets actual framerate
+		*/
 		int GetFps() {
-			return fps;
-		}
-
-		void SetFps(int fps) {
-			this->fps = fps;
+			return ofGetFrameRate();
 		}
 
 		/**
-		* Adds a new action that is executed when the update process is finished
+		* Sets the framerate
+		*/
+		void SetFps(int fps) {
+			ofSetFrameRate(fps);
+		}
+
+		/**
+		* Adds a new action that is executed after the update process is finished
 		*/
 		void AddPostUpdateAction(function<void()> action);
 
 	private:
+		// clears resources
 		void Clear();
 
 		// ================================= SINGLETON PART ==========================

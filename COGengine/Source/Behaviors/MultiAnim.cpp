@@ -2,6 +2,11 @@
 #include "MultiAnim.h"
 #include "CogEngine.h"
 #include "BehaviorEnt.h"
+#include "Node.h"
+#include "ResourceCache.h"
+#include "Definitions.h"
+#include "EntityStorage.h"
+#include "BehaviorEnt.h"
 
 namespace Cog {
 
@@ -49,7 +54,7 @@ namespace Cog {
 	void MultiAnim::Update(const uint64 delta, const uint64 absolute) {
 
 		if (actual != nullptr) actual->Update(delta, absolute);
-		if (actual->IsFinished()) {
+		if (actual->HasFinished()) {
 			// get next behavior
 			auto it = std::find(animations.begin(), animations.end(), actual);
 
