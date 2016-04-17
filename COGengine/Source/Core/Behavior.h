@@ -1,25 +1,27 @@
 #pragma once
 
-#include "BehaviorCreator.h"
-#include "ofxCogCommon.h"
-#include "Msg.h"
-#include "Facade.h"
+#include "Definitions.h"
 #include "MsgListener.h"
+#include "StrId.h"
+#include "Events.h"
 #include "Settings.h"
-
 
 namespace Cog {
 
 	class Node;
 
 	/**
-	* Abstract class for all behaviors
+	* Abstract parent for all behaviors
+	* Behavior is a component attached to a node. Each node represents a game object and hence it is 
+	* fully defined by set of attributes and behaviors attached
 	*
 	*/
 	class Behavior : public MsgListener {
 	public: 
 
-
+		/**
+		* Loads behavior from Setting entity
+		*/
 		virtual void Load(Setting& setting) {
 
 		}
@@ -27,12 +29,15 @@ namespace Cog {
 	protected:
 		// owner node
 		Node* owner;
-		// indicator if this behavior has ended
+		// indicator whether the behavior has ended
 		bool finished = false;
-		// indicator, if this behavior has been initialized
+		// indicator whether the behavior was initialized
 		bool initialized = false;
+		// indicator whether the behavior is external (and therefore it shouldn't be deleted)
 		bool isExternal = false;
+		// indicator whether the behavior started
 		bool started = false;
+		// indicator whether the behavior should be removed when finished
 		bool removeWhenFinish = false;
 
 		/**
@@ -49,9 +54,15 @@ namespace Cog {
 		}
 
 		/**
-		* Initialization procedure;
-		* Any attribute that is owned only by specific behavior should
-		* be created here
+		* Gets the owner node
+		*/
+		Node* GetOwner() const {
+			return owner;
+		}
+
+		/**
+		* Initializes the behavior
+		* Must be called only once
 		*/
 		void Init() {
 			if (!initialized) {
@@ -61,6 +72,10 @@ namespace Cog {
 			}
 		}
 
+		/**
+		* Starts the behavior
+		* May be called repeatedly
+		*/
 		void Start() {
 			this->finished = false;
 			this->OnStart();
@@ -70,75 +85,96 @@ namespace Cog {
 
 		/**
 		* Finishes the behavior
+		* May be called repeatedly
 		*/
 		void Finish();
-		/**
-		* Gets the owner node
-		*/
-		Node* GetOwner() const {
-			return owner;
-		}
 
+		
 
 		/**
-		* Gets indicator, if this behavior has been initialized
+		* Gets indicator whether the behavior was initialized
 		*/
-		bool IsInitialized() {
+		bool IsInitialized() const {
 			return initialized;
 		}
 
-		bool IsExternal() {
+		/**
+		* Gets indicator whether the behavior has started
+		*/
+		bool HasStarted() const {
+			return started;
+		}
+
+		/**
+		* Gets indicator whether the behavior has finished
+		*/
+		bool HasFinished() {
+			return finished;
+		}
+
+		/**
+		* Gets indicator whether the behavior is external and therefore it
+		* shouldn't be deleted
+		*/
+		bool IsExternal() const {
 			return isExternal;
 		}
 
 		/**
-		* Returns true, if the behavior has ended
+		* Sets the indicator whether the behavior is external
 		*/
-		bool IsFinished() {
-			return finished;
-		}
-
-		bool IsStarted() {
-			return started;
-		}
-	
 		void SetIsExternal(bool ext) {
 			this->isExternal = ext;
 		}
 
-		bool RemoveWhenFinish() {
+		/**
+		* Gets indicator whether the behavior should be removed when finished
+		*/
+		bool RemoveWhenFinish() const {
 			return this->removeWhenFinish;
 		}
 
+		/**
+		* Sets the indicator whether the behavior should be removed when finished
+		*/
 		void SetRemoveWhenFinish(bool remove) {
 			this->removeWhenFinish = remove;
 		}
 
-		// allow to access Node private members
+
 		friend class Node;
 
 	protected:
 	
+		/**
+		* Initialization procedure
+		* Appropriate for attribute initialization and message subscribing
+		* Should be called only once
+		*/
 		virtual void OnInit() {
 
 		}
 
+		/**
+		* Starting procedure
+		* Appropriate for reseting all variables
+		* May be called more than once
+		*/
 		virtual void OnStart() {
 
 		}
 
+		/**
+		* Finalization procedure
+		* Appropriate for releasing all resources
+		* May be called more than once
+		*/
 		virtual void OnFinish() {
 
 		}
 
-		void SubscribeForMessages(StrId action1);
-		void SubscribeForMessages(StrId action1, StrId action2);
-		void SubscribeForMessages(StrId action1, StrId action2, StrId action3);
-		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4);
-		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4, StrId action5);
-
 		/**
-		* Sets owner to behavior
+		* Sets owner to any behavior
 		* @param beh behavior
 		* @param owner node to set as an owner
 		*/
@@ -146,38 +182,33 @@ namespace Cog {
 			beh->owner = owner;
 		}
 
+		/** Subscribes for listening given action */
+		void SubscribeForMessages(StrId action1);
+		/** Subscribes for listening given actions */
+		void SubscribeForMessages(StrId action1, StrId action2);
+		/** Subscribes for listening given actions */
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3);
+		/** Subscribes for listening given actions */
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4);
+		/** Subscribes for listening given actions */
+		void SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4, StrId action5);
 		
-		/**
-		* Sends a message to any set of behaviors without tree-bubbling
-		* @param action id of action; see Actions namespace for common action ids
-		* @param subaction id of subaction; see Actions namespace for common action ids
-		* @param data payload
-		* @param source source node that is a part of message
-		*/
-		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
-
-		void SendMessage(StrId action, spt<MsgEvent> data) const;
-
-		void SendMessage(StrId action, Node* contextNode) const;
-
+		/** Sends message to subscribers listening to selected action */
 		void SendMessage(StrId action) const;
-
-		
-		/**
-		* Sends a message to one behavior with specific id
-		* @param action id of action; see Actions namespace for common action ids
-		* @param subaction id of subaction; see Actions namespace for common action ids
-		* @param data payload
-		* @param source source node that is a part of message
-		* @param listenerId id of listener that should get this message
-		*/
-		void SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const;
-
+		/** Sends message with custom context node to subscribers listening to selected action */
+		void SendMessage(StrId action, Node* contextNode) const;
+		/** Sends message with payload to subscribers listening to selected action */
+		void SendMessage(StrId action, spt<MsgEvent> data) const;
+		/** Sends message with payload and custom context node to subscribers listening to selected action */
+		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
+		/** Sends message to recipient with selected id */
 		void SendMessageToBehavior(StrId action, int recipientId) const;
-
-		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
-
+		/** Sends message with custom context node to recipient with selected id */
+		void SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const;
+		/** Sends message with payload to recipient with selected id */
 		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, int recipientId) const;
+		/** Sends message with payload and custom context node to recipient with selected id */
+		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
 	};
 
 }// namespace

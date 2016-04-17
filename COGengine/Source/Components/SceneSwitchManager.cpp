@@ -123,8 +123,9 @@ namespace Cog {
 	void SceneSwitchManager::StopSceneAndNotify() {
 		// run the first scene until message is sent
 		from->SetRunningMode(RUNNING);
-		to->GetScene()->SendMessage(Msg(ACT_SCENE_SWITCHED,MsgObjectType::COMPONENT,this->id,MsgObjectType::SUBSCRIBERS,to,spt<MsgEvent>()));
-		from->GetScene()->SendMessage(Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to, spt<MsgEvent>()));
+		auto msg = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to, spt<MsgEvent>());
+		to->GetScene()->SendMessage(msg);
+		from->GetScene()->SendMessage(msg);
 
 		if (to->GetScene()->GetSceneType() != SceneType::DIALOG) {
 			from->SetRunningMode(DISABLED);

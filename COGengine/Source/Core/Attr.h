@@ -6,7 +6,7 @@ namespace Cog {
 	class Node;
 
 	/**
-	* Common class for generic attributes
+	* Wrapper for node attributes
 	*
 	*/
 	class Attr {
@@ -14,11 +14,11 @@ namespace Cog {
 		// owner node
 		Node* owner;
 		// key identifier
-		const int key;
+		const unsigned key;
 
 	public:
 
-		Attr(int key, Node* owner) : owner(owner), key(key) {
+		Attr(unsigned key, Node* owner) : owner(owner), key(key) {
 
 		}
 
@@ -37,7 +37,7 @@ namespace Cog {
 		/**
 		* Gets key identifier
 		*/
-		const int GetKey() const {
+		unsigned GetKey() const {
 			return key;
 		}
 	};
@@ -50,7 +50,6 @@ namespace Cog {
 	template <class  T>
 	class AttrR : public Attr {
 	protected:
-		// generic value
 		T value;
 
 	public:
@@ -61,12 +60,13 @@ namespace Cog {
 		}
 
 		/**
-		* Creates a new generic attribute
-		* @param key attribute key identifier
+		* Creates a new attribute wrapper
+		* @param key attribute identifier
 		* @param val attribute value
 		* @param owner owner node
 		*/
-		AttrR(int key, T val, Node* owner) : Attr(key, owner), value(val) {
+		AttrR(unsigned key, T val, Node* owner) 
+			: Attr(key, owner), value(val) {
 
 		}
 
@@ -80,11 +80,9 @@ namespace Cog {
 		/**
 		* Sets attribute value
 		*/
-		void SetValue(T val) {
-			T& temp = value;
+		void SetValue(T& val) {
 			this->value = val;
 		}
-
 	};
 
 }// namespace

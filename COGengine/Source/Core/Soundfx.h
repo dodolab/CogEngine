@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include "Definitions.h"
+#include "ofSoundPlayer.h"
 
 namespace Cog {
 

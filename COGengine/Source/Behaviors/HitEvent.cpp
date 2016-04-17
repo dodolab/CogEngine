@@ -55,10 +55,10 @@ namespace Cog {
 
 				if (owner->HasMeshType(MeshType::IMAGE)) hasHitTest = ImageHitTest(owner->GetMesh<Image>()->GetImage(), touchTrans, preciseTest);
 				else if (owner->HasMeshType(MeshType::MULTISPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteShape>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
 				}
 				else if (owner->HasMeshType(MeshType::SPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteShape>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
 				}
 				else if (owner->HasMeshType(MeshType::RECTANGLE)) {
 					hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);

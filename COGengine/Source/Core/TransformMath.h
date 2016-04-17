@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "TransformEnt.h"
 
 namespace Cog {

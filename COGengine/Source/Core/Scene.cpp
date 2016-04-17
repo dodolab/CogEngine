@@ -2,6 +2,9 @@
 #include "CogEngine.h"
 #include "NodeBuilder.h"
 #include "SpriteSheet.h"
+#include "Renderer.h"
+#include "Stage.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 
@@ -177,14 +180,14 @@ namespace Cog {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSubType() == subtype) counter++;
+			if ((*it)->GetSecondaryId() == subtype) counter++;
 		}
 		return counter;
 	}
 
 	Node* Scene::FindNodeBySubType(int subtype) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSubType() == subtype) return (*it);
+			if ((*it)->GetSecondaryId() == subtype) return (*it);
 		}
 		return nullptr;
 	}
@@ -193,7 +196,7 @@ namespace Cog {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSubType() == subtype) output.push_back(*it);
+			if ((*it)->GetSecondaryId() == subtype) output.push_back(*it);
 		}
 		return output;
 	}

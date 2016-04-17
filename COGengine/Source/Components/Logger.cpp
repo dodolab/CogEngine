@@ -1,5 +1,8 @@
 #include "Logger.h"
 #include "CogEngine.h"
+#include "Settings.h"
+#include "ResourceCache.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 

@@ -3,6 +3,13 @@
 #include "CogEngine.h"
 #include "Scene.h"
 #include "EnumConverter.h"
+#include "Node.h"
+#include "ResourceCache.h"
+#include "TransformMath.h"
+#include "Definitions.h"
+#include "TransformEnt.h"
+#include "Stage.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 

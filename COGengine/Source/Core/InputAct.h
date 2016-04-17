@@ -5,14 +5,14 @@
 
 namespace Cog {
 
-	/*! Type of device that invoked the input */
+	/** Type of device that invoked the input */
 	enum InputType {
-		KEYBOARD,   /*!< keyboard */
-		TOUCH		/*!< pointing device (finger or mouse) */
+		KEYBOARD,   /** keyboard */
+		TOUCH		/** pointing device (touch or mouse) */
 	};
 
 	/**
-	* Entity for input activity
+	* Entity describing input action
 	*/
 	class InputAct {
 
@@ -26,11 +26,10 @@ namespace Cog {
 		// position (touch input only)
 		Vec2i position;
 
-		// handlerId, -1 if there is none
+		// id of node that handled the event, -1 if there is none
 		int handlerNodeId = -1;
 		// first behavior that will serve the action will set this flag
 		bool isProcessed = false;
-
 		// indicates, if input has just started
 		bool started = true;
 		// indicates, if input has ended (e.g. key release)
@@ -40,7 +39,8 @@ namespace Cog {
 		* Creates a new input action
 		* @param keyboardKey pressed key
 		*/
-		InputAct(int keyboardKey) : inputType(InputType::KEYBOARD), key(keyboardKey) {
+		InputAct(int keyboardKey) 
+			: inputType(InputType::KEYBOARD), key(keyboardKey) {
 		}
 
 		/**
@@ -55,16 +55,22 @@ namespace Cog {
 		}
 
 		/**
-		* Returns true, if the action has been already handled (by some node)
+		* Returns true, if the action has been already handled (by some object)
 		*/
 		bool IsHandled() {
 			return handlerNodeId != -1;
 		}
 
+		/**
+		* Returns true, if there was at least one object that checked the action
+		*/
 		bool IsProcessed() {
 			return isProcessed;
 		}
 
+		/**
+		* Sets the indicator whether an object already checked out this action
+		*/
 		void SetIsProcessed(bool processed) {
 			this->isProcessed = processed;
 		}

@@ -3,6 +3,11 @@
 #include "CogEngine.h"
 #include "Utils.h"
 #include "Events.h"
+#include "Settings.h"
+#include "EntityStorage.h"
+#include "ResourceCache.h"
+#include "Stage.h"
+#include "Scene.h"
 
 namespace Cog {
 

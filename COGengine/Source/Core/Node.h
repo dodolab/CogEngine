@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Attr.h"
 #include "Behavior.h"
 #include "Msg.h"
@@ -12,33 +11,60 @@ namespace Cog {
 
 	class Scene;
 
-	/*! Node running mode */
+	/** Node running mode */
 	enum RunningMode {
-		RUNNING,			/*!< active for update and draw */
-		PAUSED_ALL,			/*!< active for draw */
-		PAUSED_CHILDREN,	/*!< active itself but children are inactive */
-		PAUSED_ITSELF,		/*!< inactive but children are active */
-		INVISIBLE,			/*!< active for update but inactive for draw */
-		DISABLED			/*!< inactive for both, update and draw */
+		RUNNING,			/** active for update and draw loops */
+		PAUSED_ALL,			/** active for draw loop */
+		PAUSED_CHILDREN,	/** active itself but children are inactive */
+		PAUSED_ITSELF,		/** inactive but children are active */
+		INVISIBLE,			/** active for update, inactive for draw */
+		DISABLED			/** inactive for both update and draw */
 	};
 
-	/*! Node type enumerator */
+	/** Node type */
 	enum class NodeType {
-		ROOT,				/*!< root object, usually the topmost parent */
-		SCENE,				/*!< scene root object, topmost parent in the scene */
-		OBJECT,				/*!< common node  */
-		HUD,				/*!< human interface object */
-		INFO				/*!< info object */
+		ROOT,				/** root object, usually the topmost parent */
+		SCENE,				/** scene root object, the root object of each scene */
+		OBJECT,				/** general node  */
 	};
 
 	/**
-	* Node with attributes, behaviors, states and transformation matrix
+	* Scene object; the most important entity in the whole CogEngine
 	*
+	* Each object has set of attributes, behaviors and states. By default it has a
+	* rendering mesh (but there could be non-renderable nodes as well) and 
+	* a transformation.
+	*
+	* The main part of component-oriented approach is to provide modularity and this class goes in this way.
+	* The Node can become a game object, trigger, but also an isolated entity with own scene stored as an attribute
+	* 
 	*/
 	class Node {
 	protected:
 		// identifier incremental counter
 		static int idCounter;
+
+		// id of this node
+		const int id;
+		// tag or name
+		string tag = "";
+		// object type {ROOT, SCENE, OBJECT}
+		NodeType type;
+		// secondary identifier (customizable, doesn't need to be unique)
+		int secondaryId;
+		// groups this objects belongs to
+		Flags* groups = nullptr;
+		// states of this object
+		Flags* states = nullptr;
+		// transformation
+		Trans  transform;
+		// mash object
+		spt<Mesh> mesh = spt<Mesh>(new Mesh(MeshType::NONE));
+		// running mode
+		RunningMode runMode = RunningMode::RUNNING;
+		// indicator, if this node is external and therefore it shouldn't be deleted
+		bool isExternal = false;
+
 		// attributes, mapped by their keys
 		map<StrId, Attr*> attributes;
 		// list of childrens
@@ -49,35 +75,14 @@ namespace Cog {
 		Node* parent = nullptr;
 		// link to the scene
 		Scene* scene = nullptr;
-		// list of children that will be removed at the end of update method
+		// list of children that will be removed at the end of update loop
 		list<std::pair<Node*, bool>> childrenToRemove;
-		// list of behaviors that will be removed at the end of update method
+		// list of behaviors that will be removed at the end of update loop
 		list<std::pair<Behavior*, bool>> behaviorToRemove;
-		// list of children that will be added at the end of update method
+		// list of children that will be inserted at the end of update loop
 		list<Node*> childrenToAdd;
-		// list of behaviors that will be added at the end of update method
+		// list of behaviors that will be added at the end of update loop
 		list<Behavior*> behaviorsToAdd;
-
-		// id of this node
-		const int id;
-		// tag or name
-		string* tag = nullptr;
-		// object type {ROOT, SCENE, OBJECT, HUD, INFO}
-		NodeType type;
-		// subtype (or category)
-		int subType;
-		// groups this objects belongs to
-		Flags* groups = nullptr;
-		// states of this object
-		Flags* states = nullptr;
-		// transformation matrix
-		Trans  transform;
-		// mash object
-		spt<Mesh> mesh = spt<Mesh>(new Mesh(MeshType::NONE));
-		// running mode
-		RunningMode runMode = RunningMode::RUNNING;
-		bool isExternal = false;
-
 	public:
 
 		/**
@@ -88,174 +93,18 @@ namespace Cog {
 
 		/**
 		* Creates a new node
-		* @param type object type {ROOT, SCENE, OBJECT, HUD, INFO}
-		* @param subType subtype/category number
+		* @param type object type {ROOT, SCENE, OBJECT}
+		* @param secondaryId secondary id
 		* @param tag tag/name
 		*/
-		Node(NodeType type, int subType, string tag);
+		Node(NodeType type, int secondaryId, string tag);
 
 		Node(const Node& copy);
 
 		~Node();
 
 		/**
-		* Updates absolute transformations according to the parent
-		* @param depp if true, children will be updated as well
-		*/
-		void UpdateTransform(bool deep);
-
-		/**
-		* Updates all behaviors in the subtree
-		* @param delta delta time from the last loop
-		* @param absolute absolute time since the application started
-		*/
-		void Update(const uint64 delta, const uint64 absolute);
-
-		/**
-		* Draws all objects, calling VIEW behaviors
-		* @param delta delta time from the last loop
-		* @param absolute absolute time since the app begun
-		*/
-		void Draw(const uint64 delta, const uint64 absolute);
-
-		/**
-		* Adds a new behavior
-		* @param beh behavior to add
-		* @return true, if behavior has been successfully added
-		*/
-		bool AddBehavior(Behavior* beh);
-
-		/**
-		* Removes existing behavior (by its id)
-		* @param beh behavior to remove
-		* @param erase if true, memory will be released
-		* @return true, if behavior has been removed
-		*/
-		bool RemoveBehavior(Behavior* beh, bool erase);
-
-		/**
-		* Removes existing attribute (by its key)
-		* @param key key of attribute that will be removed
-		* @param erase if true, memory will be released
-		* @return true, if attribute has been removed
-		*/
-		bool RemoveAttr(StrId key, bool erase);
-
-		/**
-		* Returns true, if this node has an attribute with given key
-		*/
-		bool HasAttr(StrId key) const;
-
-		/**
-		* Updates collections of behaviors and children nodes
-		* Adds elements that are supposed to be added and removes
-		* elements that are supposed to be removed
-		* @param applyToChildren if true, children will be updated as well
-		*/
-		void SubmitChanges(bool applyToChildren);
-
-		/**
-		* Gets copy of list of all behaviors
-		*/
-		list<Behavior*> GetBehaviorsCopy() const {
-			return behaviors;
-		}
-
-		/**
-		* Gets direct reference to list of all behaviors
-		*/
-		const list<Behavior*>& GetBehaviors() const {
-			return behaviors;
-		}
-
-		/**
-		* Gets copy of list of all children
-		*/
-		list<Node*> GetChildrenCopy() const {
-			return children;
-		}
-
-		/**
-		* Gets direct reference to list of all children
-		*/
-		const list<Node*>& GetChildren() const {
-			return children;
-		}
-
-		/**
-		* Adds a new child
-		* @param child child to add
-		* @return true, if child has been successfully added
-		*/
-		bool AddChild(Node* child);
-
-		/**
-		* Removes an existing child
-		* @param child child to remove
-		* @param erase if true, memory will be released
-		* @return true, if child has been removed
-		*/
-		bool RemoveChild(Node* child, bool erase);
-
-		/**
-		* Removes this node from its parent (if it exists)
-		* @param erase if true, memory will be released
-		* @return true, if this object has been removed
-		*/
-		bool RemoveFromParent(bool erase);
-
-		/**
-		* Gets pointer to the parent of this node
-		*/
-		Node* GetParent() {
-			return parent;
-		}
-
-		/**
-		* Sets parent of this node
-		*/
-		void SetParent(Node* val) {
-			parent = val;
-		}
-
-		/**
-		* Finds the first predecessor of given object type
-		* @param type predecessor type {ROOT, SCENE, OBJECT, HUD, INFO}
-		*/
-		Node* FindPredecessor(NodeType type);
-
-		/**
-		* Gets the nearest parent that is a scene root (if exists)
-		*/
-		Node* GetSceneRoot() {
-			if (type == NodeType::SCENE) return this;
-			else return FindPredecessor(NodeType::SCENE);
-		}
-
-		/**
-		* Gets the root of the whole scene
-		*/
-		Node* GetRoot() {
-			if (type == NodeType::ROOT) return this;
-			else return FindPredecessor(NodeType::ROOT);
-		}
-
-		/**
-		* Gets scene of this object
-		*/
-		Scene* GetScene() {
-			return scene;
-		}
-
-		/**
-		* Sets object scene
-		*/
-		void SetScene(Scene* scene) {
-			this->scene = scene;
-		}
-
-		/**
-		* Gets unique identifier of this node
+		* Gets unique identifier
 		*/
 		int GetId() const {
 			return id;
@@ -265,96 +114,37 @@ namespace Cog {
 		* Gets tag/name
 		*/
 		string GetTag() const {
-			if (tag == nullptr) return "";
-			else return string(*tag);
+			return tag;
 		}
 
 		/**
 		* Sets tag/name
 		*/
 		void SetTag(string tag) {
-			delete this->tag;
-			this->tag = new string(tag);
+			this->tag = tag;
 		}
 
 		/**
-		* Gets type/category of this node {ROOT, SCENE, OBJECT, HUD, INFO}
+		* Gets type {ROOT, SCENE, OBJECT}
 		*/
 		NodeType GetType() const {
 			return this->type;
 		}
 
 		/**
-		* Gets subtype/category
+		* Gets secondary id
 		*/
-		int GetSubType() const {
-			return subType;
+		int GetSecondaryId() const {
+			return secondaryId;
 		}
 
 		/**
-		* Sets subtype/category
+		* Sets secondary id
 		*/
-		void SetSubType(int val) {
-			this->subType = val;
+		void SetSecondaryId(int val) {
+			this->secondaryId = val;
 		}
 
-		/**
-		* Gets transformation entity
-		*/
-		Trans& GetTransform() {
-			return transform;
-		}
-
-		/**
-		* Sets transformation entity
-		*/
-		void SetTransform(Trans val) {
-			this->transform = val;
-		}
-
-		/**
-		* Gets indicator, if this entity is renderable
-		*/
-		bool IsRenderable() {
-			return mesh->GetMeshType() != MeshType::NONE;
-		}
-
-		bool IsExternal() {
-			return isExternal;
-		}
-
-		void SetIsExternal(bool ext) {
-			this->isExternal = ext;
-		}
-
-		/**
-		* Gets shaping object
-		*/
-		spt<Mesh> GetMesh() {
-			return mesh;
-		}
-
-		/**
-		* Get shape of selected template; must inherit from Shape entity
-		*/
-		template<class T> spt<T> GetMesh() {
-			auto spMesh = static_pointer_cast<T>(mesh);
-			return spMesh;
-		}
-
-		/**
-		*  Sets shaping object
-		*/
-		void SetMesh(spt<Mesh> mesh) {
-			this->mesh = mesh;
-		}
-
-		/**
-		* Returns true, if the shape is of the selected type
-		*/
-		bool HasMeshType(MeshType type) {
-			return mesh->GetMeshType() == type;
-		}
 
 		/**
 		* Returns true, if groups has been initialized
@@ -389,7 +179,7 @@ namespace Cog {
 		}
 
 		/**
-		* Sets selected group
+		* Sets a group for this node
 		*/
 		void SetGroup(unsigned groupId) {
 			if (groups == nullptr) groups = new Flags();
@@ -430,7 +220,7 @@ namespace Cog {
 		}
 
 		/**
-		* Returns true, if this object has selected state
+		* Returns true, if this object has the selected state
 		*/
 		bool HasState(unsigned state) {
 			if (!HasStates()) return false;
@@ -438,12 +228,12 @@ namespace Cog {
 		}
 
 		/**
-		* Sets new state
+		* Sets a new state
 		*/
 		void SetState(unsigned state);
 
 		/**
-		* Resets selected state
+		* Resets the selected state
 		*/
 		void ResetState(unsigned state);
 
@@ -451,6 +241,57 @@ namespace Cog {
 		* Switches values of two states
 		*/
 		void SwitchState(unsigned state1, unsigned state2);
+
+		/**
+		* Gets transformation entity
+		*/
+		Trans& GetTransform() {
+			return transform;
+		}
+
+		/**
+		* Sets transformation entity
+		*/
+		void SetTransform(Trans val) {
+			this->transform = val;
+		}
+
+
+		/**
+		* Gets mesh object
+		*/
+		spt<Mesh> GetMesh() {
+			return mesh;
+		}
+
+		/**
+		* Get mesh of selected type; must inherit from Mesh entity
+		*/
+		template<class T> spt<T> GetMesh() {
+			auto spMesh = static_pointer_cast<T>(mesh);
+			return spMesh;
+		}
+
+		/**
+		*  Sets mesh
+		*/
+		void SetMesh(spt<Mesh> mesh) {
+			this->mesh = mesh;
+		}
+
+		/**
+		* Returns true, if the shape is of the selected type
+		*/
+		bool HasMeshType(MeshType type) {
+			return mesh->GetMeshType() == type;
+		}
+
+		/**
+		* Gets indicator whether this entity is renderable
+		*/
+		bool IsRenderable() {
+			return mesh->GetMeshType() != MeshType::NONE;
+		}
 
 		/**
 		* Gets running mode
@@ -467,7 +308,167 @@ namespace Cog {
 		}
 
 		/**
+		* Gets indicator whether this entity is external
+		*/
+		bool IsExternal() {
+			return isExternal;
+		}
+
+		/**
+		* Sets indicator whether this entity is external
+		*/
+		void SetIsExternal(bool ext) {
+			this->isExternal = ext;
+		}
+
+
+		/**
+		* Updates absolute transformations according to the parent
+		* @param deep if true, children will be updated as well
+		*/
+		void UpdateTransform(bool deep);
+
+		/**
+		* Updates all behaviors in the subtree
+		* @param delta delta time since the last loop
+		* @param absolute absolute time since the engine initialization
+		*/
+		void Update(const uint64 delta, const uint64 absolute);
+
+		/**
+		* Draws all objects
+		* @param delta delta time since the last loop
+		* @param absolute absolute time since the engine initialization
+		*/
+		void Draw(const uint64 delta, const uint64 absolute);
+
+		/**
+		* Adds a new behavior
+		* @param beh behavior to add
+		* @return true, if behavior has been successfully added
+		*/
+		bool AddBehavior(Behavior* beh);
+
+		/**
+		* Removes existing behavior
+		* @param beh behavior to remove
+		* @param erase if true, behavior will be destroyed
+		* @return true, if behavior has added to the collection for removal
+		*/
+		bool RemoveBehavior(Behavior* beh, bool erase);
+
+		/**
+		* Removes existing attribute directly
+		* @param key key of attribute that will be removed
+		* @param erase if true, attribute will be destroyed
+		* @return true, if attribute has been removed
+		*/
+		bool RemoveAttr(StrId key, bool erase);
+
+		/**
+		* Returns true, if this node has an attribute with given key
+		*/
+		bool HasAttr(StrId key) const;
+
+		/**
+		* Updates collections of behaviors and children nodes
+		* Adds/removes elements that are supposed to be added/removed
+		* @param applyToChildren if true, children will be updated as well
+		*/
+		void SubmitChanges(bool applyToChildren);
+
+
+		/**
+		* Gets direct reference to list of all behaviors
+		*/
+		const list<Behavior*>& GetBehaviors() const {
+			return behaviors;
+		}
+
+		/**
+		* Gets direct reference to list of all children
+		*/
+		const list<Node*>& GetChildren() const {
+			return children;
+		}
+
+		/**
+		* Adds a new child
+		* @param child child to add
+		* @return true, if child has been added into the collection for adding
+		*/
+		bool AddChild(Node* child);
+
+		/**
+		* Removes an existing child
+		* @param child child to remove
+		* @param erase if true, child will be destroyed
+		* @return true, if child has been added to the collection for removal
+		*/
+		bool RemoveChild(Node* child, bool erase);
+
+		/**
+		* Removes this node from its parent (if it exists)
+		* @param erase if true, node will be destroyed
+		* @return true, if this object has been added to the parent's collection for removal
+		*/
+		bool RemoveFromParent(bool erase);
+
+		/**
+		* Gets pointer to the parent of this node
+		*/
+		Node* GetParent() {
+			return parent;
+		}
+
+		/**
+		* Sets parent of this node
+		*/
+		void SetParent(Node* val) {
+			parent = val;
+		}
+
+		/**
+		* Finds the first predecessor of given object type
+		* @param type predecessor type {ROOT, SCENE, OBJECT}
+		*/
+		Node* FindPredecessor(NodeType type);
+
+		/**
+		* Gets the nearest parent which is a scene root (if exists)
+		*/
+		Node* GetSceneRoot() {
+			if (type == NodeType::SCENE) return this;
+			else return FindPredecessor(NodeType::SCENE);
+		}
+
+		/**
+		* Gets the root of the whole stage
+		*/
+		Node* GetRoot() {
+			if (type == NodeType::ROOT) return this;
+			else return FindPredecessor(NodeType::ROOT);
+		}
+
+		/**
+		* Gets scene of this object
+		*/
+		Scene* GetScene() {
+			return scene;
+		}
+
+		/**
+		* Sets object scene
+		*/
+		void SetScene(Scene* scene) {
+			this->scene = scene;
+		}
+
+		/**
 		* Gets behavior by its type
+		* Note: use this method only if you know what you are doing; 
+		* in component oriented approach there shouldn't be any direct communication
+		* between behaviors. 
 		*/
 		template<class T> T* GetBehavior() {
 			for (auto beh : this->behaviors) {
@@ -487,7 +488,7 @@ namespace Cog {
 		}
 
 		/**
-		* Adds a new attribute; or replace already existing attribute
+		* Adds a new attribute or replaces already existing attribute
 		* @param key key of the attribute
 		* @param value reference
 		*/
@@ -497,11 +498,11 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
 		}
 
 		/**
-		* Adds a new attribute if not exists
+		* Adds a new attribute if doesn't exists
 		* @param key key of the attribute
 		* @param value reference
 		*/
@@ -511,7 +512,7 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
 			return true;
 		}
 
@@ -522,8 +523,8 @@ namespace Cog {
 		template<class T> T& GetAttr(StrId key) {
 			auto it = attributes.find(key);
 
-			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue().c_str());
-			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue().c_str());
+			COGASSERT(it != attributes.end(), "Node", "%s: Attribute %s doesn't exists", tag.c_str(), key.GetStringValue().c_str());
+			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "Node", "%s: Attribute %s is of the wrong type!", tag.c_str(), key.GetStringValue().c_str());
 
 			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 			return attr->GetValue();
@@ -539,11 +540,11 @@ namespace Cog {
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 				attr->SetValue(value);
-				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::MODIFY)));
+				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::MODIFY)));
 			}
 			else {
 				AddAttr(key, value);
-				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
+				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
 			}
 		}
 
@@ -567,6 +568,7 @@ namespace Cog {
 		friend class Stage;
 
 	protected:
+
 		/*
 		* Inserts children and behaviors that should be inserted
 		* at the end of update loop
@@ -579,10 +581,18 @@ namespace Cog {
 		*/
 		void DeleteElementsForRemoving(bool applyToChildren);
 
+		/**
+		* Sends message to the scene
+		* @param action message action type
+		* @param data payload
+		*/
 		void SendMessage(StrId action, spt<MsgEvent> data);
 
 
 	public:
+		/**
+		* Writes info about hierarchy of this node into the console
+		*/
 		void WriteInfo(int logLevel = 0);
 	};
 

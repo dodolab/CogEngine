@@ -3,8 +3,11 @@
 
 namespace Cog {
 
-
-	/*! Action events */
+	// ==========================================================================
+	// This section contains actions, attribute names and state names
+	// that are used as StrId objects in the engine
+	
+	/** Action events */
 	#define ACT_BEHAVIOR_ADDED "BEHAVIOR_ADDED"
 	#define ACT_BEHAVIOR_REMOVED "BEHAVIOR_REMOVED"
 	#define ACT_OBJECT_CREATED "OBJECT_CREATED"
@@ -36,7 +39,7 @@ namespace Cog {
 	#define ACT_BUTTON_CLICKED "BUTTON_CLICKED"
 	#define ACT_ATTR_CHANGED "ATTR_CHANGED"
 	
-	/*! Attribute keys */
+	/** Attribute keys */
 	#define ATTR_MOVEMENT "MOVEMENT"
 	#define ATTR_STEERING_BEH_SEEK_DEST "STEERING_BEH_SEEK_DEST"
 	#define ATTR_STEERING_BEH_WANDER "STEERING_BEH_WANDER"
@@ -50,7 +53,7 @@ namespace Cog {
 	#define ATTR_IMGBOUNDS "IMGBOUNDS"
 	#define ATTR_SLIDER_VALUE "SLIDER_VALUE"
 
-	/*! States*/
+	/** States*/
 	#define STATES_HITTABLE "HITTABLE"
 	#define STATES_TOLEFT "TO_LEFT"
 	#define STATES_TORIGHT "TO_RIGHT"
@@ -62,7 +65,7 @@ namespace Cog {
 	#define STATES_LOCKED "LOCKED"
     #define STATES_SELECTED "SELECTED"
 
-	/*! Net message action types*/
+	/** Net messages */
 	#define NET_MSG_DELTA_UPDATE "DELTA_UPDATE"
 
 

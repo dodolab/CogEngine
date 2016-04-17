@@ -1,6 +1,9 @@
 
 #include "SheetAnimator.h"
 #include "CogEngine.h"
+#include "Node.h"
+#include "ResourceCache.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 
@@ -42,11 +45,11 @@ namespace Cog {
 				int frameIndex = actualIndex + actualNode->GetStart();
 
 				if (owner->HasMeshType(MeshType::SPRITE)) {
-					// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
+					// render as a SpriteMesh (better performance than Image, because of using the SpriteSheetManager)
 
 					// todo: recalculation always...
-					auto spriteSet = owner->GetMesh<SpriteShape>()->GetSpriteSet();
-					owner->GetMesh<SpriteShape>()->SetSprite(Sprite(spriteSet, frameIndex));
+					auto spriteSet = owner->GetMesh<SpriteMesh>()->GetSpriteSet();
+					owner->GetMesh<SpriteMesh>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
 					if (!owner->HasMeshType(MeshType::IMAGE)) {

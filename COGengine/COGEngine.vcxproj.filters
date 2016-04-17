@@ -531,9 +531,6 @@
     <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\CoroutineContext.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\CoroutineTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
@@ -647,6 +644,9 @@
     </ClInclude>
     <ClInclude Include="Source\Attributes\Mesh.h">
       <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Misc\CoroutineContext.h">
+      <Filter>Source\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1027,6 +1027,9 @@
     </ClCompile>
     <ClCompile Include="Source\Attributes\Mesh.cpp">
       <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\AsyncProcess.cpp">
+      <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

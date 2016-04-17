@@ -1,6 +1,9 @@
 
 #include "AttribAnimator.h"
 #include "CogEngine.h"
+#include "EntityStorage.h"
+#include "TransformMath.h"
+#include "ResourceCache.h"
 
 namespace Cog {
 

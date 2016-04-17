@@ -1,20 +1,20 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include "ofBaseApp.h"
+#include "Definitions.h"
+#include "ofxXmlSettings.h"
+
 
 #ifdef ANDROID
 #include "ofxAndroid.h"
 #endif
-
-#define APP_SPEED 60
-
 
 namespace Cog {
 
 	class Stage;
 
 	/**
-	* Application wrapper for all platforms
+	* Application ofApp wrapper for both Android and Windows platforms
 	*/
 	class CogApp
 #ifdef WIN32
@@ -24,16 +24,17 @@ namespace Cog {
 #endif
 	{
 	protected:
-		// time elapsed from engine initialization
+		// time elapsed since engine initialization
 		uint64 absolute;
-		// time elapsed between frames
+		// time elapsed since last frame
 		uint64 delta;
 		// frames per second
 		uint64 fps;
+		// path to config file
 		string configFile;
-		// path to splash screen
-		string splashScreen;
+		// xml configuration
 		spt<ofxXml> xmlConfig;
+		// indicator whether the engine was initialized
 		bool engineInitialized = false;
 
 	public:
@@ -41,60 +42,57 @@ namespace Cog {
 		/**
 		* Creates a new application wrapper
 		*/
-		CogApp() : configFile(""), fps(APP_SPEED), splashScreen(""){
+		CogApp() : configFile(""), fps(DEFAULT_APP_SPEED){
 		}
 
-		CogApp(string configFile) : configFile(configFile), fps(APP_SPEED), splashScreen("") {
+		/**
+		* Creates a new application wrapper with configuration file
+		*/
+		CogApp(string configFile) : configFile(configFile), fps(DEFAULT_APP_SPEED) {
 			ofxXml* xml = new ofxXml();
 			xml->loadFile(configFile);
 			this->xmlConfig = spt<ofxXml>(xml);
 		}
 
-		uint64 GetFps() {
+		/**
+		* Gets actual frames per second
+		*/
+		uint64 GetFps() const {
 			return fps;
 		}
 
-		void SetSplashScreenPath(string splashScreen) {
-			this->splashScreen = splashScreen;
-		}
-
-		string GetSplashScreenPath() {
-			return splashScreen;
-		}
-
 		/**
-		* Virtual method that can be overriden to register custom components
+		* Virtual method that can be overridden to register custom components
 		*/
 		virtual void RegisterComponents() {
 
 		}
 
 		/**
-		* Virtual method that can be overriden to initialize custom components
+		* Virtual method that can be overridden to initialize custom components
 		*/
 		virtual void InitComponents() {
 
 		}
 
 		/**
-		* Virtual method that can be overriden to initialize engine with custom configuration
+		* Virtual method that can be overridden to initialize engine with custom configuration
 		*/
 		virtual void InitEngine();
 
-		virtual void InitStage(Stage* stage) {
-			// nothing to do here
-		}
+		/**
+		* Virtual method that can be overridden to initialize stage component
+		*/
+		virtual void InitStage(Stage* stage);
 
 		// setup function, called before first draw and update
 		void setup();
 		// setup function, called during the first draw and update
 		void setupEngine();
-
 		// drawing function
 		void draw();
 		// update function
 		void update();
-
 		// handler for key press
 		void keyPressed(int key);
 		// handler for key release
@@ -123,9 +121,10 @@ namespace Cog {
 		void stop();
 		// handler for android resume
 		void resume();
-		// handler for reloading textures
+		// handler for texture reloading
 		void reloadTextures();
 
+		// default behavior for backpress button, can be overridden
 		virtual bool OnBackPress() {
 			return true;
 		}
@@ -149,8 +148,6 @@ namespace Cog {
 		void touchCancelled(int x, int y, int id);
 	#endif
 
-	private:
-		void DrawSplashScreen();
 	};
 
 }// namespace

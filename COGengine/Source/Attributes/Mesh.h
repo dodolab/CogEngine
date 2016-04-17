@@ -303,7 +303,7 @@ namespace Cog {
 	/**
 	* 2D sprite that is a part of a spritesheet with given frame index
 	*/
-	class SpriteShape : public Mesh {
+	class SpriteMesh : public Mesh {
 	private:
 		// sprite entity
 		Sprite sprite;
@@ -313,7 +313,7 @@ namespace Cog {
 		string layerName;
 	public:
 
-		SpriteShape(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
+		SpriteMesh(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
 			: Mesh(MeshType::SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
 		}
 
@@ -342,7 +342,7 @@ namespace Cog {
 	/**
 	*  Collection of sprites
 	*/
-	class MultiSpriteShape : public Mesh {
+	class MultiSpriteMesh : public Mesh {
 	private:
 		vector<spt<SpriteInst>> sprites;
 		
@@ -354,11 +354,11 @@ namespace Cog {
 		string layerName;
 		
 	public:
-		MultiSpriteShape(string layerName)
+		MultiSpriteMesh(string layerName)
 			: Mesh(MeshType::MULTISPRITE), layerName(layerName) {
 		}
 
-		MultiSpriteShape(string layerName, vector<spt<SpriteInst>>& sprites)
+		MultiSpriteMesh(string layerName, vector<spt<SpriteInst>>& sprites)
 			: Mesh(MeshType::MULTISPRITE), layerName(layerName), sprites(sprites) {
 			Recalc();
 		}

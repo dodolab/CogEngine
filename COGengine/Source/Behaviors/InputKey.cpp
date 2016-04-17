@@ -1,6 +1,7 @@
 
 #include "InputKey.h"
 #include "CogEngine.h"
+#include "Node.h"
 
 namespace Cog {
 

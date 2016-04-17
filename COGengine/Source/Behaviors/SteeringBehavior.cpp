@@ -1,6 +1,7 @@
 
 #include "SteeringBehavior.h"
 #include "CogEngine.h"
+#include "Node.h"
 
 namespace Cog {
 

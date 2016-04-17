@@ -6,6 +6,9 @@
 #include "AsyncProcess.h"
 #include "Tween.h"
 #include "InputKey.h"
+#include "Environment.h"
+#include "EntityStorage.h"
+#include "SceneSwitchManager.h"
 
 namespace Cog {
 

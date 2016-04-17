@@ -1,6 +1,8 @@
 
 #include "StateMachine.h"
 #include "CogEngine.h"
+#include "Facade.h"
+#include "Node.h"
 
 namespace Cog {
 

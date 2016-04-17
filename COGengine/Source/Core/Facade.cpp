@@ -5,6 +5,10 @@
 #include "ResourceCache.h"
 #include "TimeMeasure.h"
 #include "Scene.h"
+#include "Environment.h"
+#include "Stage.h"
+#include "Renderer.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 
@@ -20,7 +24,7 @@ namespace Cog {
 		return CogEngine::GetInstance().GetAbsoluteTime();
 	}
 
-	// =================== MENVIRONMENT ====================
+	// =================== Environment ====================
 
 	void CogAddSound(Soundfx* sound) {
 		CogEngine::GetInstance().environment->AddSound(sound);
@@ -87,7 +91,7 @@ namespace Cog {
 	}
 
 
-	// =================== MSTORAGE ========================
+	// =================== EntityStorage ========================
 
 	void CogRegisterGlobalListener(StrId action, MsgListener* listener) {
 		CogEngine::GetInstance().stage->RegisterGlobalListener(action, listener);
@@ -102,7 +106,7 @@ namespace Cog {
 	}
 
 
-	// =================== MLOGGER =========================
+	// =================== Logger =========================
 
 	void CogLogError(const char* module, const char* format, ...) {
 		va_list args;
@@ -151,13 +155,13 @@ namespace Cog {
 		TimeMeasure::GetInstance().Report(restart);
 	}
 
-	// =================== MRENDERER =========================
+	// =================== Renderer =========================
+	
 	void CogPushNodeForRendering(Node* node) {
 		CogEngine::GetInstance().renderer->PushNode(node);
 	}
 
-
-	// =================== MCACHE =======================
+	// =================== ResourceCache =======================
 
 	spt<ofImage> CogGet2DImage(string path) {
 		return CogEngine::GetInstance().resourceCache->Get2DImage(path);

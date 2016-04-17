@@ -9,15 +9,15 @@ namespace Cog {
 	// first id is always 1
 	int Node::idCounter = 1;
 
-	Node::Node(string tag) : type(NodeType::OBJECT), subType(0), id(idCounter++), transform(0, 0) {
+	Node::Node(string tag) : type(NodeType::OBJECT), secondaryId(0), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(NodeType type, int subType, string tag) : type(type), subType(subType), id(idCounter++), transform(0, 0) {
+	Node::Node(NodeType type, int secondaryId, string tag) : type(type), secondaryId(secondaryId), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(const Node& copy) : type(copy.type), subType(copy.subType), id(idCounter++), transform(0, 0) {
+	Node::Node(const Node& copy) : type(copy.type), secondaryId(copy.secondaryId), id(idCounter++), transform(0, 0) {
 		tag = copy.tag;
 		attributes = copy.attributes;
 		behaviors = copy.behaviors;
@@ -30,7 +30,7 @@ namespace Cog {
 
 	Node::~Node() {
 
-		COGLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
+		COGLOGDEBUG("Node", "Destructing node %s", tag.c_str());
 		// move elements from collection to insert so they can be removed from classic collections
 		InsertElementsForAdding(false, false);
 
@@ -63,21 +63,20 @@ namespace Cog {
 			children.clear();
 		}
 
-		delete tag;
 		delete groups;
 		delete states;
 	}
 
 	void Node::UpdateTransform(bool deep) {
 
-		COGMEASURE_BEGIN("NOTE_UPDATE_TRANSFORM");
+		COGMEASURE_BEGIN("NODE_UPDATE_TRANSFORM");
 
 		if (parent != nullptr) {
 			this->transform.CalcAbsTransform(parent->transform);
 		}
 		else this->transform.SetAbsAsLocal();
 
-		COGMEASURE_END("NOTE_UPDATE_TRANSFORM");
+		COGMEASURE_END("NODE_UPDATE_TRANSFORM");
 
 		if (deep) {
 			for (auto it = children.begin(); it != children.end(); ++it) {
@@ -97,7 +96,7 @@ namespace Cog {
 			// update behaviors
 			for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
 				Behavior* beh = *it;
-				if (!beh->IsFinished() && (beh->GetListenerState() == ListenerState::ACTIVE_ALL
+				if (!beh->HasFinished() && (beh->GetListenerState() == ListenerState::ACTIVE_ALL
 					|| beh->GetListenerState() == ListenerState::ACTIVE_UPDATES)) {
 					beh->Update(delta, absolute);
 				}
@@ -128,18 +127,17 @@ namespace Cog {
 		if (runMode == RunningMode::INVISIBLE || runMode == RunningMode::DISABLED) return;
 
 		if (this->IsRenderable()) {
+			// push node into renderer component
 			CogPushNodeForRendering(this);
 		}
 
 		for (auto it = children.begin(); it != children.end(); ++it) {
-			// draw children
 			(*it)->Draw(delta, absolute);
 		}
 	}
 
 	bool Node::AddBehavior(Behavior* beh) {
-
-		COGLOGDEBUG("Node", "Adding behavior %s into node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
+		COGLOGDEBUG("Node", "Adding behavior %s into node %d (%s)", typeid(*beh).name(), id, tag.c_str());
 		behaviorsToAdd.push_back(beh);
 
 		return true;
@@ -150,7 +148,7 @@ namespace Cog {
 
 		bool result = behaviors.end() != found;
 		if (result) {
-			COGLOGDEBUG("Node", "Removing behavior %s from node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
+			COGLOGDEBUG("Node", "Removing behavior %s from node %d (%s)", typeid(*beh).name(), id, tag.c_str());
 			// behavior found
 			// check if there isn't already such behavior marked for deleting
 			for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it) {
@@ -158,19 +156,17 @@ namespace Cog {
 			}
 
 			behaviorToRemove.push_back(std::make_pair(*found, erase));
-
 		}
 		return result;
 	}
 
 	bool Node::RemoveAttr(StrId key, bool erase) {
-
 		map<StrId, Attr*>::iterator it = attributes.find(key);
 
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
 			attributes.erase(it);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::REMOVE)));
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::REMOVE)));
 
 			if (erase) delete attr;
 			return true;
@@ -188,14 +184,12 @@ namespace Cog {
 		DeleteElementsForRemoving(applyToChildren);
 	}
 
-
 	bool Node::AddChild(Node* child) {
 
-		COGLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag != nullptr ? 
-			child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
+		COGLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag.c_str(), id, tag.c_str());
 		auto existing = std::find(children.begin(), children.end(), child);
 		if (existing != children.end()) {
-			CogLogError("Attempt to add already existing child: %s into %s", child->tag->c_str(), tag->c_str());
+			CogLogError("Attempt to add already existing child: %s into %s", child->tag.c_str(), tag.c_str());
 			return false;
 		}
 
@@ -209,8 +203,7 @@ namespace Cog {
 
 		bool result = children.end() != found;
 		if (result) {
-			COGLOGDEBUG("Node", "Removing child %d (%s) from node %d (%s)", child->id, child->tag != nullptr ? 
-				child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
+			COGLOGDEBUG("Node", "Removing child %d (%s) from node %d (%s)", child->id, child->tag.c_str(), id, tag.c_str());
 			// check if there isn't already such child marked for deleting
 			for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it) {
 				if ((*it).first->GetId() == child->GetId()) return true;
@@ -242,17 +235,17 @@ namespace Cog {
 
 	void Node::SetState(unsigned state) {
 		GetStates().SetState(state);
-		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::SET, state)));
+		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SET, state)));
 	}
 
 	void Node::ResetState(unsigned state) {
 		GetStates().ResetState(state);
-		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::RESET, state)));
+		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::RESET, state)));
 	}
 
 	void Node::SwitchState(unsigned state1, unsigned state2) {
 		GetStates().SwitchState(state1, state2);
-		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::SWITCH, state1, state2)));
+		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SWITCH, state1, state2)));
 	}
 
 
@@ -305,13 +298,13 @@ namespace Cog {
 			beh->owner = this;
 			behaviors.push_back(beh);
 
-			// todo: root node can't have its behaviors stored in the scene
+			// root node can't have its behaviors stored in the scene
 			if (this->type != NodeType::ROOT) {
 				scene->AddBehavior(beh);
 			}
 
 			if (init) {
-				// initialize
+				// initialize behavior
 				beh->Init();
 				beh->Start();
 			}
@@ -350,13 +343,13 @@ namespace Cog {
 
 	void Node::SendMessage(StrId action, spt<MsgEvent> data) {
 		if (scene != nullptr) {
-			scene->SendMessage(Msg(action, MsgObjectType::NODE_COMMON, this->id, MsgObjectType::SUBSCRIBERS,
-				this, data));
+			auto msg = Msg(action, MsgObjectType::NODE_COMMON, this->id, MsgObjectType::SUBSCRIBERS,this, data);
+			scene->SendMessage(msg);
 		}
 	}
 
 	void Node::WriteInfo(int logLevel) {
-		CogLogTree("INFO_NODE", logLevel, "Node %s (%d)", this->tag != nullptr ? this->tag->c_str() : "<noname>", this->id);
+		CogLogTree("INFO_NODE", logLevel, "Node %s (%d)", this->tag.c_str(), this->id);
 
 #if DEBUG
 

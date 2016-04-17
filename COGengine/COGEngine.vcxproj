@@ -316,7 +316,6 @@
     <ClInclude Include="Source\Core\Scene.h" />
     <ClInclude Include="Source\Core\Settings.h" />
     <ClInclude Include="Source\Core\Soundfx.h" />
-    <ClInclude Include="Source\Core\CoroutineContext.h" />
     <ClInclude Include="Source\Core\TransformMath.h" />
     <ClInclude Include="Source\Entities\BehaviorEnt.h" />
     <ClInclude Include="Source\Entities\DEntity.h" />
@@ -344,6 +343,7 @@
     <ClInclude Include="Source\Math\Path.h" />
     <ClInclude Include="Source\Math\SteeringMath.h" />
     <ClInclude Include="Source\Math\Tile.h" />
+    <ClInclude Include="Source\Misc\CoroutineContext.h" />
     <ClInclude Include="Source\Misc\EnumConverter.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\Misc\TimeMeasure.h" />
@@ -562,6 +562,7 @@
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\Stage.cpp" />
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
+    <ClCompile Include="Source\Core\AsyncProcess.cpp" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
     <ClCompile Include="Source\Core\CogApp.cpp" />
     <ClCompile Include="Source\Core\CogEngine.cpp" />

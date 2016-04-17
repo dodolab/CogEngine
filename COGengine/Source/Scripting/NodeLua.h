@@ -1,10 +1,17 @@
 #pragma once
 
-#include "BehaviorLua.h"
+#include "ofVec2f.h"
+#include "Definitions.h"
+#include "StrId.h"
+#include "Flags.h"
+#include "Transform.h"
+#include "Vec2i.h"
 
 namespace Cog {
 
 	class Node;
+	class BehaviorLua;
+
 
 	/**
 	* Node wrapper for Lua script

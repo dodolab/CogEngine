@@ -2,6 +2,7 @@
 #include "MultiSelection.h"
 #include "CogEngine.h"
 #include "EnumConverter.h"
+#include "Node.h"
 
 namespace Cog {
 
