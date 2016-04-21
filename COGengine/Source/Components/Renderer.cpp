@@ -26,7 +26,7 @@ namespace Cog {
 		renderer->ClearTexture(name);
 	}
 
-	void Renderer::ClearCounters() {
+	void Renderer::ClearBuffers() {
 		zIndexImageBuffer = map<int, vector<Node*>>();
 		zIndexSheetBuffer = map<int, vector<Node*>>();
 	}
@@ -47,14 +47,13 @@ namespace Cog {
 			(*it).second.push_back(node);
 		}
 		else {
-			vector<Node*> arr;
-			arr.push_back(node);
-			buffer[zIndex] = arr;
+			buffer[zIndex].push_back(node);
 		}
 
 	}
 
 	void Renderer::BeginRender() {
+		// set projection and clear background with black color
 		Vec2i virtualSize = CogGetVirtualScreenSize();
 		ofSetupScreenOrtho((float)virtualSize.x, (float)virtualSize.y, -1000.0f, 1000.0f);
 		ofBackground(0);
@@ -110,15 +109,16 @@ namespace Cog {
 	void Renderer::Render() {
 
 		COGMEASURE_BEGIN("RENDER");
-
 		COGMEASURE_BEGIN("RENDER_LAYERS");
 
 		if (rendererLayers.size() != 0) {
 
+			// reset all layers
 			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
 				renderer->ClearCounters((*it));
 			}
 
+			// draw sprites
 			for (auto it = zIndexSheetBuffer.begin(); it != zIndexSheetBuffer.end(); ++it) {
 
 				vector<Node*>& arr = (*it).second;
@@ -133,7 +133,7 @@ namespace Cog {
 					case MeshType::TEXT:
 					case MeshType::LABEL:
 					case MeshType::BOUNDING_BOX:
-						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
+						throw IllegalOperationException("Trying to render non-sprite node with sprite sheet renderer!");
 					case MeshType::SPRITE:
 						RenderSprite(node);
 						break;
@@ -144,6 +144,7 @@ namespace Cog {
 				}
 			}
 	
+			// call sprite sheet renderer at the very end
 			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 			ofFill();
 			renderer->Draw();
@@ -152,6 +153,7 @@ namespace Cog {
 		COGMEASURE_END("RENDER_LAYERS");
 		COGMEASURE_BEGIN("RENDER_IMAGES");
 
+		// draw images, planes, texts and labels
 		for (auto it = zIndexImageBuffer.begin(); it != zIndexImageBuffer.end(); ++it) {
 
 			vector<Node*>& arr = (*it).second;
@@ -177,7 +179,7 @@ namespace Cog {
 					break;
 				case MeshType::SPRITE:
 				case MeshType::MULTISPRITE:
-					throw IllegalOperationException("Trying to render sprite node by default renderer!");
+					throw IllegalOperationException("Trying to render sprite node with default renderer!");
 				}
 			}
 		}
@@ -218,6 +220,7 @@ namespace Cog {
 		ofSetColor(color);
 		
 		if (rect->IsNoFill()) {
+			// render just border
 			ofNoFill();
 			ofSetLineWidth(1);
 		}
@@ -227,7 +230,6 @@ namespace Cog {
 		}
 		
 		ofRect(0, 0, 0, rect->GetWidth(), rect->GetHeight());
-
 	}
 
 	void Renderer::RenderText(Node* owner) {
@@ -239,7 +241,6 @@ namespace Cog {
 
 		spt<ofTrueTypeFont> font = shape->GetFont();
 
-		// don't touch it! It works :-)
 		font->drawString(shape->GetText(), 0, font->getLineHeight() / 2);
 	}
 
@@ -250,27 +251,32 @@ namespace Cog {
 		Trans& trans = owner->GetTransform();
 		renderer->SetActualBuffer(shape->GetLayerName());
 
-		drawingTile.width = sprite.GetWidth();
-		drawingTile.height = sprite.GetHeight();
-		drawingTile.offsetX = sprite.GetPosX();
-		drawingTile.offsetY = sprite.GetPosY();
+		// fill tile with all data and send it to the sprite manager
+		spriteTile.width = sprite.GetWidth();
+		spriteTile.height = sprite.GetHeight();
+		spriteTile.offsetX = sprite.GetPosX();
+		spriteTile.offsetY = sprite.GetPosY();
 
-		drawingTile.posX = trans.absPos.x +trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
-		drawingTile.posY = trans.absPos.y +trans.absScale.y*drawingTile.height / 2.0f;
-		drawingTile.posZ = trans.absPos.z;
-		drawingTile.rotation = trans.rotation*DEG_TO_RAD;
-		drawingTile.scaleX = trans.absScale.x;
-		drawingTile.scaleY = trans.absScale.y;
+		spriteTile.posX = trans.absPos.x +trans.absScale.x*spriteTile.width / 2.0f;  // [0,0] is topleft corner
+		spriteTile.posY = trans.absPos.y +trans.absScale.y*spriteTile.height / 2.0f;
+		spriteTile.posZ = trans.absPos.z;
+		spriteTile.rotation = trans.rotation*DEG_TO_RAD;
+		spriteTile.scaleX = trans.absScale.x;
+		spriteTile.scaleY = trans.absScale.y;
 		
-		renderer->AddTile(drawingTile);
+		renderer->AddTile(spriteTile);
 	}
 
 	void Renderer::RenderMultiSprite(Node* owner) {
 
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
+		// Multi-sprites are clear choice when drawing thousands of objects, because they all
+		// will be rendered at once 
+
 		spt<MultiSpriteMesh> shape = static_pointer_cast<MultiSpriteMesh>(owner->GetMesh());
 		renderer->SetActualBuffer(shape->GetLayerName());
+		
 		auto& sprites = shape->GetSprites();
 
 		for (auto& spr : sprites) {
@@ -279,26 +285,26 @@ namespace Cog {
 
 			trans.CalcAbsTransform(owner->GetTransform());
 
-			drawingTile.width = sprite.GetWidth();
-			drawingTile.height = sprite.GetHeight();
-			drawingTile.offsetX = sprite.GetPosX();
-			drawingTile.offsetY = sprite.GetPosY();
+			spriteTile.width = sprite.GetWidth();
+			spriteTile.height = sprite.GetHeight();
+			spriteTile.offsetX = sprite.GetPosX();
+			spriteTile.offsetY = sprite.GetPosY();
 
-			drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
-			drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;
-			drawingTile.posZ = trans.absPos.z;
-			drawingTile.rotation = trans.rotation*DEG_TO_RAD;
-			drawingTile.scaleX = trans.absScale.x;
-			drawingTile.scaleY = trans.absScale.y;
+			spriteTile.posX = trans.absPos.x + trans.absScale.x*spriteTile.width / 2.0f;  // [0,0] is topleft corner
+			spriteTile.posY = trans.absPos.y + trans.absScale.y*spriteTile.height / 2.0f;
+			spriteTile.posZ = trans.absPos.z;
+			spriteTile.rotation = trans.rotation*DEG_TO_RAD;
+			spriteTile.scaleX = trans.absScale.x;
+			spriteTile.scaleY = trans.absScale.y;
 			
-			renderer->AddTile(drawingTile);
+			renderer->AddTile(spriteTile);
 		}
 
 		COGMEASURE_END("RENDER_PREPARE_MULTISPRITE");
 	}
 
 	void Renderer::RenderLabel(Node* owner) {
-		// load absolute matrix
+		
 		auto& trans = owner->GetTransform();
 		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 
@@ -309,17 +315,18 @@ namespace Cog {
 
 		vector<string> textLines;
 		ofRectangle textBounds = ofRectangle();
+		// use absolute positions
 		ofRectangle drawBounds = ofRectangle(trans.absPos.x, trans.absPos.y, shape->GetLabelWidth(), CogGetScreenHeight()-trans.absPos.y);
 		ofxTextLabel::stringToLines(*font, shape->GetText(), drawBounds.width, textLines, textBounds);
 		auto text = shape->GetText();
 
-
+		// draw lines one by one and calculate offsets for each line
 		float lineX, lineY;
 		lineX = drawBounds.x;
 		lineY = drawBounds.y;
 		int counter = 0;
 
-		int lineHeight = font->stringHeight("Ay");
+		int lineHeight = font->stringHeight("Ay"); 
 		int linesToDraw = (drawBounds.height / (1.5f*lineHeight));
 		int startingIndex = textLines.size() - linesToDraw;
 		if (startingIndex < 0) startingIndex = 0;
@@ -327,7 +334,7 @@ namespace Cog {
 		// draw only lines that should be drawn
 		for (auto it = (textLines.begin() + startingIndex); it != textLines.end(); ++it) {
 			if (counter++ == 0) {
-				lineY += font->stringHeight("Ay");  // Easiest way to get ascender height.
+				lineY += font->stringHeight("Ay");  // easiest way to get ascender height.
 			}
 			else {
 				lineY += font->getLineHeight();
@@ -341,6 +348,8 @@ namespace Cog {
 		spt<BoundingBox> shape = static_pointer_cast<BoundingBox>(owner->GetMesh());
 		
 		if (shape->IsRenderable()) {
+			// draw only when it is set as renderable
+
 			auto bbox = shape->GetBoundingBox();
 			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 

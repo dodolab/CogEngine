@@ -7,7 +7,7 @@ namespace Cog {
 	class StateMachine;
 
 	/**
-	* Common behavior for all behavioral states of the finite state machine
+	* Base behavior for all behavioral states of the finite state machine
 	*/
 	class State : public Behavior {
 	private:
@@ -24,15 +24,21 @@ namespace Cog {
 
 		}
 
-		StrId GetState() {
+		/**
+		* Gets state identifier
+		*/
+		StrId GetState() const {
 			return state;
 		}
 
+		/**
+		* Sets the state identifier
+		*/
 		void SetState(StrId state) {
 			this->state = state;
 		}
 
-		StateMachine* GetParent() {
+		StateMachine* GetParent() const {
 			return parent;
 		}
 

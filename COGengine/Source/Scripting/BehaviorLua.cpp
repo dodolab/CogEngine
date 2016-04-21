@@ -4,6 +4,7 @@
 #include "CogEngine.h"
 #include "LuaScripting.h"
 #include "EntityStorage.h"
+#include "NodeLua.h"
 
 using namespace luabridge;
 

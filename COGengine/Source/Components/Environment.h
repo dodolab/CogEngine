@@ -2,15 +2,21 @@
 
 #include "InputAct.h"
 #include "Component.h"
+#include "Vec2i.h"
 
 namespace Cog {
 
+	class AsyncProcess;
+
+	/**
+	* Screen orientation
+	*/
 	enum class ScreenOrient {
 		PORTRAIT, LANDSCAPE
 	};
 
 	/**
-	* Environment controller for device events (especially inputs)
+	* Environment controller for device events (keys, gestures, sounds)
 	*/
 	class Environment : public  Component {
 
@@ -24,9 +30,12 @@ namespace Cog {
 		vector<InputAct*> pressedPoints;
 		// collection of played sounds
 		vector<Soundfx*> playedSounds;
+		// collection of running threads
+		vector<AsyncProcess*> runningThreads;
 		// screen orientation
 		ScreenOrient screenOrient;
-
+		// mouse scrolling
+		Vec2i scroll = Vec2i(0);
 		// scaled screen width
 		int virtualWidth;
 		// scaled screen height
@@ -35,17 +44,15 @@ namespace Cog {
 		int screenWidth;
 		// real screen height
 		int screenHeight;
-		// virtual aspect ratio
+		// virtual aspect ratio (customizable)
 		float virtualAspectRatio;
 		// real aspect ratio
 		float aspectRatio;
 
-		// first width and height
-		int originalWidth = 0;
-		int originalHeight = 0;
+		// initial width and height
+		int initialWidth = 0;
+		int initialHeight = 0;
 
-		// collection of running threads
-		vector<ofThread*> runningThreads;
 	public:
 
 		~Environment() {
@@ -80,7 +87,7 @@ namespace Cog {
 		}
 
 		/**
-		* Returns true, if screen size has changed
+		* Returns true, if screen size has changed since the last update
 		*/
 		bool ScreenSizeChanged() {
 			return screenSizeChanged;
@@ -107,6 +114,16 @@ namespace Cog {
 			return playedSounds;
 		}
 
+		/**
+		* Gets actual mouse scrolling deltas
+		*/
+		Vec2i GetMouseScroll() const {
+			return this->scroll;
+		}
+
+		/**
+		* Returns true, if selected key is pressed
+		*/
 		bool IsKeyPressed(int key) {
 			for (InputAct* act : pressedKeys) {
 				if (act->key == key) return true;
@@ -115,56 +132,92 @@ namespace Cog {
 			return false;
 		}
 
-		int GetScreenWidth() {
+		/**
+		* Gets width of the screen
+		*/
+		int GetScreenWidth() const {
 			return screenWidth;
 		}
 
-		int GetVirtualWidth() {
+		/**
+		* Gets virtual width of the screen, adjusted
+		* by the custom ratio
+		*/
+		int GetVirtualWidth() const {
 			return virtualWidth;
 		}
 
-		int GetScreenHeight() {
+		/**
+		* Gets height of the screen
+		*/
+		int GetScreenHeight() const {
 			return screenHeight;
 		}
 
-		int GetVirtualHeight() {
+		/**
+		* Gets virtual height of the screen, adjusted
+		* by the custom ratio
+		*/
+		int GetVirtualHeight() const {
 			return virtualHeight;
 		}
 
-		int GetOriginalWidth() {
-			return originalWidth;
+		/**
+		* Gets initial width of the screen, set immediately
+		* when application starts
+		*/
+		int GetInitialWidth() const {
+			return initialWidth;
 		}
 
-		int GetOriginalHeight() {
-			return originalHeight;
+		/**
+		* Gets initial height of the screen, set immediately
+		* when application starts
+		*/
+		int GetInitialHeight() const {
+			return initialHeight;
 		}
 
-		float GetVirtualAspectRatio() {
+		/**
+		* Gets customizable aspect ratio
+		*/
+		float GetVirtualAspectRatio() const {
 			return virtualAspectRatio;
 		}
 
-		float GetScreenAspectRatio() {
+		/**
+		* Gets real aspect ratio of the screen
+		*/
+		float GetScreenAspectRatio() const {
 			return aspectRatio;
 		}
 
-		ScreenOrient GetScreenOrientation() {
+		/**
+		* Gets screen orientation
+		*/
+		ScreenOrient GetScreenOrientation() const {
 			return screenOrient;
 		}
 
 		/**
-		* Gets width and height in 2D vector
+		* Gets screen size in vector
 		*/
 		Vec2i GetScreenSize() {
 			return Vec2i(screenWidth, screenHeight);
 		}
 
+		/**
+		* Gets virtual screen size, adjusted by the
+		* custom ratio
+		*/
 		Vec2i GetVirtualScreenSize() {
 			return Vec2i(virtualWidth, virtualHeight);
 		}
 
 
 		/**
-		* Sets virtual aspect ratio
+		* Sets virtual aspect ratio so that the excessing
+		* part of the screen will be black
 		*/
 		void SetVirtualAspectRatio(float ratio) {
 			this->virtualAspectRatio = ratio;
@@ -173,15 +226,15 @@ namespace Cog {
 
 		/**
 		* Handler for key action
-		* @param key id of key
-		* @param pressed indicates, if the key is pressed or released
+		* @param key ascii id of key
+		* @param pressed indicates whether the key is pressed or released
 		*/
 		void OnKeyAction(int key, bool pressed);
 
 		/**
 		* Handler for screen size change
-		* @param newWidth new screen width
-		* @param newHeight new screen height
+		* @param newWidth new width of the screen
+		* @param newHeight new height of the screen
 		*/
 		void OnScreenSizeChanged(int newWidth, int newHeight);
 
@@ -191,62 +244,77 @@ namespace Cog {
 		Vec2i GetMousePosition();
 
 		/**
-		* Handler for multitouch press
-		* @param x coordinate in x axis
-		* @param y coordinate in y axis
+		* Handler for multitouch 
+		* @param x coordinate on x axis
+		* @param y coordinate on y axis
 		* @param button id of pressed button
-		* @param pressed indicates, if the button is pressed or released
+		* @param pressed indicates whether the button is pressed or released
 		*/
 		void OnMultiTouchButton(int x, int y, int button, bool pressed);
 
 		/**
 		* Handler for multitouch motion
-		* @param x coordinate in x axis
-		* @param y coordinate in y axis
+		* @param x coordinate on x axis
+		* @param y coordinate on y axis
 		* @param button id of button
 		*/
 		void OnMultiTouchMotion(int x, int y, int button);
 
 		/**
-		* Handler for single touch press
-		* @param x coordinate in x axis
-		* @param y coordinate in y axis
+		* Handler for single touch 
+		* @param x coordinate on x axis
+		* @param y coordinate on y axis
 		* @param button id of pressed button
-		* @param pressed indicates, if the button is pressed or released
+		* @param pressed indicates whether the button is pressed or released
 		*/
 		void OnSingleTouchButton(int x, int y, int button, bool pressed);
 
 		/**
 		* Handler for single touch motion
-		* @param x coordinate in x axis
-		* @param y coordinate in y axis
+		* @param x coordinate on x axis
+		* @param y coordinate on y axis
 		* @param button id of pressed button
 		*/
 		void OnSingleTouchMotion(int x, int y, int button);
 
 		/**
-		* Removes processes that already ended from collection
+		* Handler for mouse scroll
+		* @param x coordinate on x axis
+		* @param y coordinate on y axis
+		* @param scrollX delta of scrolling on x axis
+		* @param scrollY delta of scrolling on y axis
 		*/
-		void RemoveEndedProcesses();
+		void OnSingleScroll(int x, int y, int scrollX, int scrollY);
 
 		/**
-		* Runs a new thread
-		* @param thread thread to run
+		* Removes processes (threads), sounds and inputs that have just finished
 		*/
-		void RunThread(ofThread* thread);
+		void RemoveEndedStuff();
+
+		/**
+		* Runs a new process
+		* @param process process to run
+		*/
+		void RunProcess(AsyncProcess* process);
+
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
-			RemoveEndedProcesses();
+			RemoveEndedStuff();
 		}
 
 	protected:
 
 		/**
 		* Reinitializes virtual width and height
-		* according to the actual aspect ratio
+		* according to the virtual aspect ratio
 		*/
 		void RecalcVirtualSize();
 
+		/**
+		* Fixes touch position according to the view offset,
+		* because in the case of a virtual ratio, position
+		* of the mouse is displaced
+		*/
 		void FixTouchPosition(int& x, int& y);
 	};
 

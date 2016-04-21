@@ -5,12 +5,14 @@
 
 namespace Cog {
 
-	/**x
-	* Behavior for finite state machine
+	/**
+	* Behavior for finite state machine,
+	* contains collection of global and local states
+	* Global states are active the whole time, whereas the object may
+	* be in only one local state at a time
 	*/
 	class StateMachine : public Behavior {
 	private:
-		
 		State* currentState = nullptr;
 		State* previousState = nullptr;
 		vector<State*> globalStates;
@@ -42,15 +44,21 @@ namespace Cog {
 		*/
 		bool ChangeState(StrId state);
 
+		/**
+		* Finds local state by its key
+		*/
 		State* FindLocalState(StrId state);
 
-		State* GetCurrentState() {
+		State* GetCurrentState() const {
 			return currentState;
 		}
 
 		virtual void Update(const uint64 delta, const uint64 absolute);
 
 	protected:
+		/**
+		* Starts actual state
+		*/
 		void StartState(State* state);
 	};
 

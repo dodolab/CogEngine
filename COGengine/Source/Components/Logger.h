@@ -1,29 +1,32 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include <sstream>
+
 #include "ofUtils.h"
+#include "ofxXmlSettings.h"
+#include "Definitions.h"
 #include "Component.h"
 
 namespace Cog {
 
-	/*! Logging level */
+	/** Logging level */
 	enum class LogLevel {
-		LERROR = 0,		/*!< log only errors */
-		LINFO = 1,		/*!< log errors and info */
-		LDEBUG = 2		/*!< log errors, info and debug messages */
+		LERROR = 0,		/** log only errors */
+		LINFO = 1,		/** log errors and info */
+		LDEBUG = 2		/** log errors, info and debug messages */
 	};
 
 
 	/**
-	* Common class for all logger channels
+	* Base class for all types of logger
 	*/
-	class LoggerChannel {
+	class LoggerOutput {
 	public:
-		virtual ~LoggerChannel() {}
+		virtual ~LoggerOutput() {}
 
 		/**
 		* Logs the message for selected level
-		* @param level logging level
+		* @param level logging level 
 		* @param module source module
 		* @param message message to log
 		*/
@@ -33,10 +36,10 @@ namespace Cog {
 
 		/**
 		* Logs the message for selected level
-		* @param level logging level
+		* @param level logging level 
 		* @param module source module
 		* @param message message to log
-		* @param depth logging depth (provided by text padding)
+		* @param depth logging depth (text indent)
 		*/
 		virtual void Log(LogLevel level, const char* module, string message, int depth) = 0;
 
@@ -68,66 +71,34 @@ namespace Cog {
 	};
 
 	/**
-	* Channel that logs to the console
+	* Logger that logs to the console
 	*/
-	class ConsoleLoggerChannel : public LoggerChannel {
+	class ConsoleLogger : public LoggerOutput {
 	public:
-		virtual ~ConsoleLoggerChannel() {};
+		virtual ~ConsoleLogger() {};
 
-		virtual void Log(LogLevel level, const char* module, string message, int depth) {
-
-			spaces(depth * 2, cout);
-
-#ifdef WIN32
-			cout << GetLogLevel(level);
-			cout << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
-			cout << "[" << module << "]";
-			cout << message << endl;
-#else
-			ofLogNotice("OpenFrameworks") << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]" << "[" << module << "]" << message << endl;
-#endif
-		}
+		virtual void Log(LogLevel level, const char* module, string message, int depth);
 	};
 
 	/**
-	* Channel that logs to the file
+	* Logger that logs to the file
 	*/
-	class FileLoggerChannel : public LoggerChannel {
+	class FileLogger : public LoggerOutput {
 	public:
-		FileLoggerChannel(const string & path, bool append) : path(path), append(append), anyLog(false) {
+		FileLogger(const string & path, bool append) : path(path), append(append), anyLog(false) {
 
 		}
 
-		virtual ~FileLoggerChannel() {
+		virtual ~FileLogger() {
 			st.clear();
 		}
 
-		virtual void Log(LogLevel level, const char* module, string message, int depth) {
-			spaces(depth * 2, st);
+		virtual void Log(LogLevel level, const char* module, string message, int depth);
 
-			st << GetLogLevel(level);
-			st << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
-			st << "[" << module << "]";
-			st << message << endl;
-
-			anyLog = true;
-		}
-
-		virtual void Flush() {
-			if (anyLog) {
-				ofFile file;
-				file.open(path, append ? ofFile::Append : ofFile::WriteOnly);
-				file << st.str();
-				file.close();
-
-				// clear
-				st.str(std::string());
-				anyLog = false;
-			}
-		}
+		virtual void Flush();
 
 	protected:
-		// indicator if some message has been appended
+		// indicator whether there are some new messages
 		bool anyLog;
 		ostringstream st;
 		// path to log file
@@ -143,106 +114,115 @@ namespace Cog {
 	class Logger : public Component {
 
 	protected:
-		LoggerChannel* channel = nullptr;
+		LoggerOutput* logOutput = nullptr;
 		LogLevel logLevel;
 		spt<ofxXmlSettings> config;
+		// collection of modules to include
 		vector<string> includes;
+		// collection of modules to exclude
 		vector<string> excludes;
 
 	public:
 
 		/**
 		* Creates a new logger
-		* @param config configuration xml
 		*/
 		Logger() {
 			initPriority = InitPriority::MEDIUM; // logger will be initialized before environment
 		}
 
 		~Logger() {
-			delete channel;
-		}
-
-		void OnInit() {
-			delete channel;
-			channel = new ConsoleLoggerChannel();
-			logLevel = LogLevel::LINFO;
+			delete logOutput;
 		}
 
 		/**
-		* Initializes component, using xml settings or default one
+		* Gets collection of included modules
+		* If there is neither module to include nor to exclude,
+		* logger will log everything
+		*
+		* If there is at least one module to include, the logger will
+		* log only this module
 		*/
+		vector<string>& GetIncludedModules() {
+			return includes;
+		}
+
+		/**
+		* Gets collection of excluded modules
+		* If there is neither module to include nor to exclude,
+		* logger will log everything
+		*
+		* If there are some excluded modules but no included modules,
+		* logger will log everything except the excluded modules
+		*/
+		vector<string>& GetExcludedModules() {
+			return excludes;
+		}
+
+		void OnInit() {
+			delete logOutput;
+			logOutput = new ConsoleLogger();
+			logLevel = LogLevel::LINFO;
+		}
+
 		void OnInit(spt<ofxXmlSettings> config);
 	
 
 		/**
 		* Logs error message
-		* @param depth log depth (padding from left)
+		* @param module source module
+		* @param depth log depth (text indent)
+		* @param format log message
 		*/
-		void LogError(const char* module, int depth, const char* format, va_list args) {
-			if (((int)logLevel) >= ((int)LogLevel::LERROR)) {
-				channel->Log(LogLevel::LERROR, module, ofVAArgsToString(format, args), depth);
-			}
-		}
+		void LogError(const char* module, int depth, const char* format, va_list args);
 
 		/**
 		* Logs info message
-		* @param depth log depth (padding from left)
+		* @param module source module
+		* @param depth log depth (text indent)
+		* @param format log message
 		*/
-		void LogInfo(const char* module, int depth, const char* format, va_list args) {
-
-			if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
-				(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
-
-				if (((int)logLevel) >= ((int)LogLevel::LINFO)) {
-					channel->Log(LogLevel::LINFO, module, ofVAArgsToString(format, args), depth);
-				}
-			}
-		}
+		void LogInfo(const char* module, int depth, const char* format, va_list args);
 
 		/**
 		* Logs debug message
-		* @param depth log depth (padding from left)
+		* @param module source module
+		* @param depth log depth (text indent)
+		* @param format log message
 		*/
-		void LogDebug(const char* module, int depth, const char* format, va_list args) {
-
-			if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
-				(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
-
-				if (((int)logLevel) >= ((int)LogLevel::LDEBUG)) {
-					channel->Log(LogLevel::LDEBUG, module, ofVAArgsToString(format, args), depth);
-				}
-			}
-		}
+		void LogDebug(const char* module, int depth, const char* format, va_list args);
 
 		/**
 		* Flushes logged messages
-		* e.g. for file channel it saves messages into output file
 		*/
 		void Flush() {
-			channel->Flush();
+			logOutput->Flush();
 		}
 
+		/**
+		* Sets log level
+		*/
 		void SetLogLevel(LogLevel logLevel) {
 			this->logLevel = logLevel;
 		}
 
+		/**
+		* Sets output to the console
+		*/
 		void SetOutputToConsole() {
-			delete channel;
-			channel = new ConsoleLoggerChannel();
+			delete logOutput;
+			logOutput = new ConsoleLogger();
 		}
 
+		/**
+		* Sets output to the file
+		*/
 		void SetOutputToFile(string path, bool append) {
-			delete channel;
-			channel = new FileLoggerChannel(path, append);
+			delete logOutput;
+			logOutput = new FileLogger(path, append);
 		}
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			// flush each 4 second
-			if (CogGetFrameCounter() % 240 == 0) {
-				Flush();
-			}
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 }// namespace

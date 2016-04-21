@@ -110,6 +110,8 @@ namespace Cog {
 		void mousePressed(int x, int y, int button);
 		// handler for mouse release
 		void mouseReleased(int x, int y, int button);
+		// handler for mouse wheel
+		void mouseScrolled(int x, int y, float scrollX, float scrollY);
 		// handler for drag event
 		void dragEvent(ofDragInfo dragInfo);
 	#else

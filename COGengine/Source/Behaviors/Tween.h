@@ -4,24 +4,28 @@
 
 namespace Cog {
 
-	/*! Tween direction Tween scenes */
+	/** Tweening direction */
 	enum class TweenDirection {
-		NONE, LEFT, RIGHT, UP, DOWN
+		NONE,			/** direct tween */ 
+		LEFT,			/** move to the left*/
+		RIGHT,			/** move to the right */
+		UP,				/** move up*/
+		DOWN			/** move down */
 	};
 
-	/**x
+	/**
 	* Behavior for scene tweening
 	*/
 	class Tween : public Behavior {
 		
 	protected:
-		// scene that will be tweened in
+		// scene node that will come up
 		Node* to= nullptr;
-		// scene that will be tweened out
+		// scene node that will be moved off
 		Node* from = nullptr;
-		// tweening speed (in display width per second)
+		// tweening speed (1 is for 1s, 2 for 0.5s and so on)
 		float speed = 0;
-		// actual tween position
+		// actual position of the tweened node
 		float actual = 0;
 		// fade function
 		FadeFunction fadeFunction = nullptr;
@@ -33,18 +37,20 @@ namespace Cog {
 		}
 
 		/**
-		* Creates a new behavior for tweening animation Tween scenes
-		* @param from scene that will be tweened out
-		* @param to scene that will be tweened to
-		* @param speed tweening speed
+		* Creates a new behavior for scene tweening
+		* @param from scene node that will be moved off
+		* @param to scene node that will come up
+		* @param speed tweening speed (1 is for 1s, 2 for 0.5s and so on)
 		*/
-		Tween(Node* from, Node* to, float speed) : from(from), to(to), speed(speed){
+		Tween(Node* from, Node* to, float speed) 
+			: from(from), to(to), speed(speed){
 
 		}
 	};
 
 	/**
-	* Behavior for tweening with override (usable for dialogs)
+	* Behavior that moves one scene in front of the current,
+	* keeping both scenes visible (usable for dialogs)
 	*/
 	class OverrideTween : public Tween {
 	private:
@@ -54,15 +60,15 @@ namespace Cog {
 	public:
 
 		/**
-		* Creates a new behavior for slide tweening
+		* Creates a new behavior for override tweening
 		* @param direction tween direction
-		* @param to scene that will be tweened inm
-		* @param speed tweening speed
+		* @param to scene node that will come up
+		* @param speed tweening speed (1 is for 1s, 2 for 0.5s and so on)
 		*/
-		OverrideTween(TweenDirection direction, Node* to, float speed) : Tween(nullptr, to, speed), direction(direction) {
+		OverrideTween(TweenDirection direction, Node* to, float speed) 
+			: Tween(nullptr, to, speed), direction(direction) {
 
 		}
-
 
 		void SetFadeFunction(FadeFunction func) {
 			this->fadeFunction = func;
@@ -73,7 +79,7 @@ namespace Cog {
 	};
 
 	/**
-	* Behavior for slide tweening
+	* Behavior that moves the current scene off and slide the new
 	*/
 	class SlideTween : public Tween {
 	private:
@@ -88,11 +94,12 @@ namespace Cog {
 		/**
 		* Creates a new behavior for slide tweening
 		* @param direction tween direction
-		* @param from scene that will be tweened out
-		* @param to scene that will be tweened inm
+		* @param from scene node that will be moved off
+		* @param to scene that will come up
 		* @param speed tweening speed
 		*/
-		SlideTween(TweenDirection direction, Node* from, Node* to, float speed) : Tween(from, to, speed), direction(direction) {
+		SlideTween(TweenDirection direction, Node* from, Node* to, float speed) 
+			: Tween(from, to, speed), direction(direction) {
 
 		}
 

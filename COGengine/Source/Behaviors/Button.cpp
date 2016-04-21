@@ -10,6 +10,7 @@ namespace Cog {
 	}
 
 	void Button::OnStart() {
+		// set default image according to object's state
 		if (disabledImg && owner->HasState(stateDisabled)) {
 			owner->GetMesh<Image>()->SetImage(disabledImg);
 		}
@@ -21,18 +22,22 @@ namespace Cog {
 	void Button::OnMessage(Msg& msg) {
 		if (msg.GetContextNode()->GetId() == owner->GetId()) {
 			if (!owner->HasState(stateDisabled) && msg.HasAction(ACT_OBJECT_HIT_STARTED)) {
+				// button has been pressed
 				msg.GetContextNode()->GetMesh<Image>()->SetImage(pressedImg);
 			}
 			else if (!owner->HasState(stateDisabled) && (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST))) {
+				// button has been released
 				msg.GetContextNode()->GetMesh<Image>()->SetImage(defaultImg);
 				if (msg.HasAction(ACT_OBJECT_HIT_ENDED)) {
 					SendMessage(StrId(ACT_BUTTON_CLICKED), owner);
 				}
 			}
 			else if (disabledImg && msg.GetContextNode()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
+				// button has been disabled
 				msg.GetContextNode()->GetMesh<Image>()->SetImage(disabledImg);
 			}
 			else if (defaultImg && !msg.GetContextNode()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
+				// button has been enabled
 				msg.GetContextNode()->GetMesh<Image>()->SetImage(defaultImg);
 			}
 		}

@@ -5,35 +5,6 @@
 
 namespace Cog {
 
-	bool HitEvent::BoundingBoxHitTest(spt<BoundingBox> bbox, ofVec2f touchVector) {
-		bbox->Recalc(owner);
-		ofRectangle bboxRect = bbox->GetBoundingBox();
-
-		if (bboxRect.x <= touchVector.x && (bboxRect.x + bboxRect.width) >= touchVector.x
-			&& bboxRect.y <= touchVector.y && (bboxRect.y + bboxRect.height) >= touchVector.y) return true;
-		return false;
-	}
-
-	bool HitEvent::ImageHitTest(spt<ofImage> image, ofVec3f testPos, bool preciseTest) {
-		// move the test position into "local" coordinate space
-		ofVec3f localPos = testPos;
-		//cout << "X: " << localPos.x << " Y:" << localPos.y << endl;
-		// test for location outside the image rectangle
-		if (localPos.x < 0
-			|| localPos.y < 0
-			|| localPos.x >(float)image->getWidth()
-			|| localPos.y >(float)image->getHeight())
-			return false;
-
-		if (preciseTest) {
-
-			ofColor col = image->getColor((int)localPos.x, (int)localPos.y);
-			// return a hit if the specified local alpha value is greater than half
-			return ((int)col.a) > 0x80;
-		}
-		else return true;
-	}
-
 	void HitEvent::Update(const uint64 delta, const uint64 absolute) {
 
 		if (owner->HasState(StrId(STATES_HITTABLE))) {
@@ -45,34 +16,16 @@ namespace Cog {
 
 			for (InputAct* touch : CogGetPressedPoints()) {
 
-				// calculate vector in image space
+				// calculate vector in local space
 				ofVec2f touchVector = touch->position;
 				ofVec3f touchTrans = ofVec3f(touchVector)*inverse;
 
 				// do hit test
-				bool hasHitTest = false;
+				bool hasHitTest = DoHitTest(touchTrans, touchVector);
 
-
-				if (owner->HasMeshType(MeshType::IMAGE)) hasHitTest = ImageHitTest(owner->GetMesh<Image>()->GetImage(), touchTrans, preciseTest);
-				else if (owner->HasMeshType(MeshType::MULTISPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
-				}
-				else if (owner->HasMeshType(MeshType::SPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
-				}
-				else if (owner->HasMeshType(MeshType::RECTANGLE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
-				}
-				else if (owner->HasMeshType(MeshType::PLANE)) {
-					hasHitTest = CShapeHitTest(owner->GetMesh<Plane>(), touchTrans);
-				}
-				else if (owner->HasMeshType(MeshType::BOUNDING_BOX)) {
-					hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
-				}
-
-
-				if ((touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId()) && hasHitTest) {
-					// image has been hit
+				// check if this touch hasn't been already handled
+				if (hasHitTest && (touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId())) {
+				
 					if (touch->started) {
 #ifdef ANDROID
 						if (vibrate) ofxAndroidVibrator::vibrate(50);
@@ -81,19 +34,17 @@ namespace Cog {
 						hitStarted = true;
 						hitStartedTouchId = touch->touchId;
 
+						// when the touch starts, a request into input handler is registered 
+						// and the object with highest z-index will later be selected
 						auto inputHandler = GETCOMPONENT(InputHandler);
 						inputHandler->RegisterRequest(owner, touch, -1);
-
-						/*
-						touch->handlerNodeId = owner->GetId();
-						owner->SetState(StrId(STATES_HIT));
-						if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
-						else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);*/
 					}
 					else if (touch->ended) {
 
-
 						owner->ResetState(StrId(STATES_HIT));
+						
+						// send messages according to actual state
+
 						if (hitStarted) {
 							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)));
 							else SendMessageToBehavior(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
@@ -105,7 +56,7 @@ namespace Cog {
 							else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
 						}
 
-						if (hitStartedTouchId == touch->touchId && hitStarted) {
+						if (hitStarted && hitStartedTouchId == touch->touchId) {
 							hitStarted = false;
 						}
 					}
@@ -115,10 +66,10 @@ namespace Cog {
 #ifdef ANDROID
 							if (vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
-							// touch hasn't started but this object hasn't been hit
+							// this object hasn't been hit
 							owner->SetState(StrId(STATES_HIT));
 						}
-						// hit started and continues
+						// hit started and goes on
 						if (hitLost) {
 							hitLost = false;
 							// hit started, lost and started again
@@ -134,14 +85,14 @@ namespace Cog {
 				}
 				else {
 					if (touch->ended && touch->touchId == hitStartedTouchId) {
-						// object isn't hit and this hit has already ended
+						// object wasn't hit and this hit has already ended
 						hitStarted = false;
 					}
 				}
 			}
 
 			if (!atLeastOneTouch) {
-				// object could lost its hit
+				// object has probably lost its hit
 				if (owner->HasState(StrId(STATES_HIT))) {
 					owner->ResetState(StrId(STATES_HIT));
 					hitLost = true;
@@ -150,5 +101,47 @@ namespace Cog {
 				}
 			}
 		}
+	}
+
+	bool HitEvent::DoHitTest(ofVec3f touchTrans, ofVec3f touchVector) {
+		bool hasHitTest = false;
+
+		// check hit according to the type of the mesh
+		if (owner->HasMeshType(MeshType::IMAGE)) {
+			if (preciseTest) hasHitTest = ImagePreciseHitTest(owner->GetMesh<Image>()->GetImage(), touchTrans);
+			else hasHitTest = CShapeHitTest(owner->GetMesh<Image>(), touchTrans);
+		}
+		else if (owner->HasMeshType(MeshType::MULTISPRITE)) {
+			hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
+		}
+		else if (owner->HasMeshType(MeshType::SPRITE)) {
+			hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
+		}
+		else if (owner->HasMeshType(MeshType::RECTANGLE)) {
+			hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
+		}
+		else if (owner->HasMeshType(MeshType::PLANE)) {
+			hasHitTest = CShapeHitTest(owner->GetMesh<Plane>(), touchTrans);
+		}
+		else if (owner->HasMeshType(MeshType::BOUNDING_BOX)) {
+			hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
+		}
+		return hasHitTest;
+	}
+
+	bool HitEvent::BoundingBoxHitTest(spt<BoundingBox> bbox, ofVec2f touchVector) {
+		// recalculate bounding box first
+		bbox->Recalc(owner);
+		ofRectangle bboxRect = bbox->GetBoundingBox();
+
+		if (bboxRect.x <= touchVector.x && (bboxRect.x + bboxRect.width) >= touchVector.x
+			&& bboxRect.y <= touchVector.y && (bboxRect.y + bboxRect.height) >= touchVector.y) return true;
+		return false;
+	}
+
+	bool HitEvent::ImagePreciseHitTest(spt<ofImage> image, ofVec3f testPos) {
+		ofColor col = image->getColor((int)testPos.x, (int)testPos.y);
+		// return a hit if the specified local alpha value is greater than half
+		return ((int)col.a) > 0x80;
 	}
 }// namespace

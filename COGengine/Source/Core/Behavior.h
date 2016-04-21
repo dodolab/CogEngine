@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Definitions.h"
-#include "MsgListener.h"
+#include "BaseComponent.h"
 #include "StrId.h"
 #include "Events.h"
 #include "Settings.h"
@@ -16,7 +16,7 @@ namespace Cog {
 	* fully defined by set of attributes and behaviors attached
 	*
 	*/
-	class Behavior : public MsgListener {
+	class Behavior : public BaseComponent {
 	public: 
 
 		/**

@@ -12,6 +12,7 @@ namespace Cog {
 	enum class TransformType;
 	enum class AttributeType;
 	enum class CalcType;
+	enum class AnimBlend;
 
 	/**
 	* Library class for converting between enumerated types and strings
@@ -54,6 +55,10 @@ namespace Cog {
 		*/
 		static ofColor StrToColor(string col);
 
+		/**
+		* Converts string into AnimBlend
+		*/
+		static AnimBlend StrToAnimBlend(string val);
 
 	};
 

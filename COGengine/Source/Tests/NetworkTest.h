@@ -23,56 +23,22 @@ TEST_CASE("Network test")
 		auto network = new Network();
 
 		// setup server and client (server must go first)
-		network->SetupTCPServer(11999,"_");
-		network->SetupTCPClient("127.0.0.1", 11999, "_");
+		network->SetupTCPReceiver(11999, 1000, true);
+		network->SetupTCPSender("127.0.0.1", 11999, true);
 		
-		auto& server = network->GetTCPServer();
-		auto& client = network->GetTCPClient();
+		auto& receiver = network->GetTCPReceiver();
+		auto& sender = network->GetTCPSender();
 
-		// send message directly (server runs in a separate thread)
-		client.send("TEST");
+		char* bytes = new char[4]{ 'a','b','c','d' };
 
-		string msg = "";
-
-		// wait for message from client
-		for (int i = 0; i < 10; i++) {
-			if (server.isClientConnected(0)) {		
-				msg = server.receive(0);
-				if(msg.length() > 0) break;
-			}
-			ofSleepMillis(1000);
-		}
-
-		server.close();
-		client.close();
-
-		REQUIRE(msg.compare("TEST") == 0);
-		delete network;
-	}
-
-	SECTION("TcpClient test bytes")
-	{
-		auto network = new Network();
-
-		// setup server and client (server must go first)
-		network->SetupTCPServer(11999, "_");
-		network->SetupTCPClient("127.0.0.1", 11999, "_");
-
-		auto& server = network->GetTCPServer();
-		auto& client = network->GetTCPClient();
-
-		char* bytes = new char[4]{'a','b','c','d'};
-		
-		client.sendRawBytes(bytes,4);
-		
-		delete bytes;
+		sender.Send(bytes, 4);
+		//delete bytes;
 		bytes = new char[4];
 
 		// wait for message from client
 		for (int i = 0; i < 10; i++) {
-			if (server.isClientConnected(0)) {
-				if (server.receiveRawBytes(0, bytes, 4) == 4) break;
-			}
+			receiver.Receive(bytes, 4);
+			if (bytes[0] == 'a') break;
 			ofSleepMillis(1000);
 		}
 
@@ -81,8 +47,8 @@ TEST_CASE("Network test")
 		REQUIRE(bytes[2] == 'c');
 		REQUIRE(bytes[3] == 'd');
 
-		server.close();
-		client.close();
+		receiver.Close();
+		sender.Close();
 		delete bytes;
 		delete network;
 	}
@@ -282,41 +248,45 @@ TEST_CASE("Network test")
 	SECTION("DeltaUpdate test without networking")
 	{
 		DeltaUpdate* delta = new DeltaUpdate();
-		delta->actual = spt<DeltaInfo>(new DeltaInfo());
+		delta->OnInit();
 
 		// time[10] = 10
-		spt<DeltaInfo> deltaInf = spt<DeltaInfo>(new DeltaInfo(10));
-		deltaInf->deltas[StrId("MOJO")] = 10;
+		auto deltam = map<int, float>();
+		deltam[StrId("MOJO")] = 10;
+		spt<DeltaInfo> deltaInf = spt<DeltaInfo>(new DeltaInfo(10, deltam));
 		delta->AcceptDeltaUpdate(deltaInf);
 		
 		// time[20] = 20
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(20));
-		deltaInf->deltas[StrId("MOJO")] = 20;
+		deltam = map<int, float>();
+		deltam[StrId("MOJO")] = 20;
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(20, deltam));
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[15] = 15
 		delta->Update(5, 0);
-		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) == 15);
+		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) == 15);
 
 		// time[30] = 20
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(30));
-		deltaInf->deltas[StrId("MOJO")] = 20;
+		deltam = map<int, float>();
+		deltam[StrId("MOJO")] = 20;
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(30, deltam));
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[30] = 20
 		delta->Update(15, 0);
-		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) == 20);
+		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) == 20);
 
 		// time[60] = 70
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(60));
-		deltaInf->deltas[StrId("MOJO")] = 70;
-		deltaInf->time = 60;
+		deltam = map<int, float>();
+		deltam[StrId("MOJO")] = 70;
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(60, deltam));
+		deltaInf->SetTime(60);
 		delta->AcceptDeltaUpdate(deltaInf);
 
 		// check that time[40] >= 36 && time[40] <= 37
 		delta->Update(10, 0);
-		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) >= 36);
-		REQUIRE(((int)delta->actual->deltas[StrId("MOJO")]) <= 37);
+		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) >= 36);
+		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) <= 37);
 	}
 
 	SECTION("Client connect test")

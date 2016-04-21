@@ -3,18 +3,53 @@
 #include "Settings.h"
 #include "ResourceCache.h"
 #include "EntityStorage.h"
+#include "Facade.h"
 
 namespace Cog {
 
 
-	/**
-	* Initializes component, using xml settings or default one
-	*/
-	void Logger::OnInit(spt<ofxXmlSettings> config) {
-		delete channel;
-		channel = nullptr;
+	void ConsoleLogger::Log(LogLevel level, const char* module, string message, int depth) {
 
-		// use global settings that is already loaded
+		spaces(depth * 2, cout);
+
+#ifdef WIN32
+		cout << GetLogLevel(level);
+		cout << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
+		cout << "[" << module << "]";
+		cout << message << endl;
+#else
+		ofLogNotice("OpenFrameworks") << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]" << "[" << module << "]" << message << endl;
+#endif
+	}
+
+	void FileLogger::Log(LogLevel level, const char* module, string message, int depth) {
+		spaces(depth * 2, st);
+
+		st << GetLogLevel(level);
+		st << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
+		st << "[" << module << "]";
+		st << message << endl;
+
+		anyLog = true;
+	}
+
+	void FileLogger::Flush() {
+		if (anyLog) {
+			ofFile file;
+			file.open(path, append ? ofFile::Append : ofFile::WriteOnly);
+			file << st.str();
+			file.close();
+
+			// clear
+			st.str(std::string());
+			anyLog = false;
+		}
+	}
+
+	void Logger::OnInit(spt<ofxXmlSettings> config) {
+		delete logOutput;
+		logOutput = nullptr;
+
 		auto resCache = GETCOMPONENT(ResourceCache);
 		Setting set = resCache->GetGlobalSettings("logger");
 
@@ -46,5 +81,39 @@ namespace Cog {
 		}
 	}
 
+	void Logger::LogError(const char* module, int depth, const char* format, va_list args) {
+		if (((int)logLevel) >= ((int)LogLevel::LERROR)) {
+			logOutput->Log(LogLevel::LERROR, module, ofVAArgsToString(format, args), depth);
+		}
+	}
+
+	void Logger::LogInfo(const char* module, int depth, const char* format, va_list args) {
+
+		if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
+			(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
+
+			if (((int)logLevel) >= ((int)LogLevel::LINFO)) {
+				logOutput->Log(LogLevel::LINFO, module, ofVAArgsToString(format, args), depth);
+			}
+		}
+	}
+
+	void Logger::LogDebug(const char* module, int depth, const char* format, va_list args) {
+
+		if ((includes.empty() || find(includes.begin(), includes.end(), string(module)) != includes.end()) &&
+			(excludes.empty() || find(excludes.begin(), excludes.end(), string(module)) == excludes.end())) {
+
+			if (((int)logLevel) >= ((int)LogLevel::LDEBUG)) {
+				logOutput->Log(LogLevel::LDEBUG, module, ofVAArgsToString(format, args), depth);
+			}
+		}
+	}
+
+	void Logger::Update(const uint64 delta, const uint64 absolute) {
+		// flush each 4 second
+		if (CogGetFrameCounter() % 240 == 0) {
+			Flush();
+		}
+	}
 
 } // namespace

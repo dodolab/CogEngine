@@ -20,7 +20,7 @@ namespace Cog {
 	* Type of attribute to animate
 	*/
 	enum class AttributeType {
-		COMMON,				/** not specified */
+		NONE,				/** not specified */
 		POS_X,				/** position on the x axis */
 		POS_Y,				/** position on the y axis */
 		ROTATION,			/** rotation */
@@ -28,9 +28,7 @@ namespace Cog {
 		ROT_CENTER_Y,		/** rotation centroid on the y axis */
 		SIZE_X,				/** size on the x axis */
 		SIZE_Y,				/** size on the y axis */
-		SIZE,				/** size in general */
-		SIZE_CENTER_X,		/** size centroid on the x axis */
-		SIZE_CENTER_Y		/** size centroid on the y axis */
+		SIZE				/** size in general */
 	};
 
 	/**
@@ -70,7 +68,7 @@ namespace Cog {
 		// attribute to animate in string
 		string attribute = "";
 		// type of attribute to animate (should be taken from the string above)
-		AttributeType attributeType = AttributeType::COMMON;
+		AttributeType attributeType = AttributeType::NONE;
 		// initial value of the animation
 		float fromVal = 0;
 		// final value of the animation

@@ -114,13 +114,7 @@
     <ClInclude Include="Source\Behaviors\DelayAction.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\DelayRemove.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\HitEvent.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\InputKey.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behaviors\Move.h">
@@ -546,9 +540,6 @@
     <ClInclude Include="Source\Core\CogEngine.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\MsgListener.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Node.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -647,6 +638,9 @@
     </ClInclude>
     <ClInclude Include="Source\Misc\CoroutineContext.h">
       <Filter>Source\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\BaseComponent.h">
+      <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -893,9 +887,6 @@
     <ClCompile Include="Source\Behaviors\HitEvent.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\InputKey.cpp">
-      <Filter>Source\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Behaviors\Move.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
@@ -932,16 +923,10 @@
     <ClCompile Include="Source\Behaviors\DelayAction.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\DelayRemove.cpp">
-      <Filter>Source\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\CogEngine.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\MsgListener.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Node.cpp">
@@ -1030,6 +1015,15 @@
     </ClCompile>
     <ClCompile Include="Source\Core\AsyncProcess.cpp">
       <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\BaseComponent.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\InputHandler.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\LuaScripting.cpp">
+      <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

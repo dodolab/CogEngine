@@ -18,34 +18,34 @@ namespace Cog {
 	}
 
 	void Behavior::SubscribeForMessages(StrId action1) {
-		MsgListener::SubscribeForMessages(owner->GetScene(), action1);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action1);
 	}
 
 
 	void Behavior::SubscribeForMessages(StrId action1, StrId action2) {
-		MsgListener::SubscribeForMessages(owner->GetScene(), action1);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action2);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action1);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action2);
 	}
 
 	void Behavior::SubscribeForMessages(StrId action1, StrId action2, StrId action3) {
-		MsgListener::SubscribeForMessages(owner->GetScene(), action1);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action2);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action3);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action1);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action2);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action3);
 	}
 
 	void Behavior::SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4) {
-		MsgListener::SubscribeForMessages(owner->GetScene(), action1);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action2);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action3);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action4);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action1);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action2);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action3);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action4);
 	}
 
 	void Behavior::SubscribeForMessages(StrId action1, StrId action2, StrId action3, StrId action4, StrId action5) {
-		MsgListener::SubscribeForMessages(owner->GetScene(), action1);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action2);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action3);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action4);
-		MsgListener::SubscribeForMessages(owner->GetScene(), action5);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action1);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action2);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action3);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action4);
+		BaseComponent::SubscribeForMessages(owner->GetScene(), action5);
 	}
 
 	void Behavior::SendMessage(StrId action) const {

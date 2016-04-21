@@ -3,6 +3,8 @@
 namespace Cog {
 
 	void DeltaMessage::LoadFromStream(NetReader* reader) {
+		
+		// load both collections
 		int deltaSize = reader->ReadDWord();
 		int teleportSize = reader->ReadDWord();
 
@@ -10,14 +12,14 @@ namespace Cog {
 			unsigned key = reader->ReadDWord();
 			float val = reader->ReadFloat();
 
-			deltas[StrId(key)] = val;
+			deltas[key] = val;
 		}
 
 		for (int i = 0; i < teleportSize; i++) {
 			unsigned key = reader->ReadDWord();
 			float val = reader->ReadFloat();
 
-			teleports[StrId(key)] = val;
+			teleports[key] = val;
 		}
 	}
 

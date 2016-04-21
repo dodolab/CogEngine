@@ -12,13 +12,15 @@ namespace Cog {
 		string animation = setting.GetItemVal("animation");
 		string renderTypeStr = setting.GetItemVal("render_type");
 
+		if (animation.empty()) CogLogError("AttribAnimator", "Error while loading AttribAnimator, animation attribute not specified");
+
 		auto resCache = GETCOMPONENT(ResourceCache);
 		contextStack.SetRootNode(resCache->GetAnimation(animation));
 	}
 
 	void AttribAnimator::OnStart() {
 		if (!contextStack.GetRootNode()) {
-			CogLogError("Anim", "Animation cant' run, entity is null");
+			CogLogError("AttribAnimator", "Animation cant' run, entity is null");
 			Finish();
 		}
 	}
@@ -44,6 +46,7 @@ namespace Cog {
 				animEntity->toVal : (GetAttrib(animEntity->attributeType, ownerTrans) + animEntity->toVal));
 		}
 		else {
+			// create transformation entities that will be used during update
 			fromTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->fromVal);
 			Trans fromTrans;
 			math.CalcTransform(fromTrans, owner, owner->GetParent(), fromTransEnt);
@@ -62,7 +65,7 @@ namespace Cog {
 
 	void AttribAnimator::Update(const uint64 delta, const uint64 absolute) {
 
-		// move to the next transformation state
+		// move to the next transformation state according to actual FPS
 		contextStack.MoveToNext(delta, CogEngine::GetInstance().GetFps());
 
 		if (contextStack.Ended()) {
@@ -82,7 +85,7 @@ namespace Cog {
 				// check if this animation should run
 				if (entity->begin < contextStack.GetActualProgress() && entity->end > contextStack.GetActualProgress()) {
 
-					// get actual progress <0-1>
+					// get actual progress in range <0,1>
 					float actual = contextStack.GetActualProgress() == 0 ? 0 : contextStack.GetActualProgress() / entity->duration;
 
 					// apply fade function (if declared)
@@ -108,8 +111,8 @@ namespace Cog {
 		TransformEnt ent = TransformEnt();
 
 		switch (entity->attributeType) {
-		case AttributeType::COMMON:
-			// todo
+		case AttributeType::NONE:
+			// nothing to do here
 			break;
 		case AttributeType::POS_X:
 			ent.pos.x = value;
@@ -135,10 +138,6 @@ namespace Cog {
 		case AttributeType::SIZE:
 			ent.size.x = ent.size.y = value;
 			break;
-		case AttributeType::SIZE_CENTER_X:
-			break;
-		case AttributeType::SIZE_CENTER_Y:
-			break;
 		}
 
 		switch (entity->attributeType) {
@@ -159,8 +158,8 @@ namespace Cog {
 
 	float AttribAnimator::GetAttrib(AttributeType attr, Trans& transform) {
 		switch (attr) {
-		case AttributeType::COMMON:
-			// todo
+		case AttributeType::NONE:
+			// nothing to do here
 			return -1;
 		case AttributeType::POS_X:
 			return transform.localPos.x;
@@ -178,22 +177,16 @@ namespace Cog {
 			return transform.scale.y;
 		case AttributeType::SIZE:
 			return transform.scale.x;
-		case AttributeType::SIZE_CENTER_X:
-			// todo
-			return -1;
-		case AttributeType::SIZE_CENTER_Y:
-			return -1;
 		}
 
-		// todo
 		return -1;
 	}
 
 
 	void AttribAnimator::SetAttrib(AttributeType attr, float value, Trans& transform) {
 		switch (attr) {
-		case AttributeType::COMMON:
-			// todo
+		case AttributeType::NONE:
+			// nothing to do here
 			break;
 		case AttributeType::POS_X:
 			transform.localPos.x = value;
@@ -218,10 +211,6 @@ namespace Cog {
 			break;
 		case AttributeType::SIZE:
 			transform.scale.x = transform.scale.y = value;
-			break;
-		case AttributeType::SIZE_CENTER_X:
-			break;
-		case AttributeType::SIZE_CENTER_Y:
 			break;
 		}
 	}

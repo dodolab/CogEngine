@@ -36,7 +36,7 @@ namespace Cog {
 	/**
 	* Splits string
 	*/
-	vector<string> split_string(string str, string delimiter);
+	void split_string(string str, string delimiter, vector<string>& output);
 
 	/**
 	* Returns true, if it is proper time to execute an action according to the frequency 

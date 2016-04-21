@@ -1,12 +1,10 @@
-
 #include "MultiAnim.h"
-#include "CogEngine.h"
+#include "Settings.h"
 #include "BehaviorEnt.h"
-#include "Node.h"
+#include "Error.h"
 #include "ResourceCache.h"
-#include "Definitions.h"
 #include "EntityStorage.h"
-#include "BehaviorEnt.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -15,10 +13,12 @@ namespace Cog {
 		this->repeat = setting.GetItemValBool("repeat");
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 
+		// load animations one by one
 		for (string anim : animations) {
-			spt<BehaviorEnt> ent = resourceCache->GetEntityC<BehaviorEnt>(anim);
+			// load behavior description entity
+			spt<BehaviorEnt> ent = resourceCache->GetEntity<BehaviorEnt>(anim);
 
-			if (!ent) throw IllegalArgumentException(string_format("Animation %s not found", anim.c_str()));
+			if (!ent) CogLogError("MultiAnim","Animation %s not found", anim.c_str());
 
 			Behavior* behavior = CogGetEntityStorage()->CreateBehaviorPrototype(ent->type);
 			if (!ent->setting.Empty()) behavior->Load(ent->setting);
@@ -59,6 +59,7 @@ namespace Cog {
 			auto it = std::find(animations.begin(), animations.end(), actual);
 
 			if ((it + 1) != animations.end()) {
+				// last behavior to go
 				actual = *(++it);
 				SetOwner(actual, owner);
 				actual->Start();
@@ -72,6 +73,4 @@ namespace Cog {
 			}
 		}
 	}
-
-
 }// namespace

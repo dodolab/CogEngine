@@ -27,7 +27,7 @@ namespace Cog
 		ofVec2f Seek(Trans& transform, Movement& movement, ofVec2f dest, float maxAcceleration);
 
 		/**
-		* Calculates arrive behavior (go and stop at target point)
+		* Calculates arrive behavior (accelerate and stop at target point)
 		* @param transform current transformation of the object
 		* @param movement current movement attribute of the object
 		* @param dest destination point
@@ -61,7 +61,8 @@ namespace Cog
 		ofVec2f Follow(Trans& transform, Movement& movement, Path* path, float& currentPathPoint, float pointTolerance, float finalPointTolerance, float maxAcceleration);
 
 		/**
-		* Calculates wander behavior (random walk with configured randomness)
+		* Calculates wander behavior (realistic casual movement which will make the player think
+		* that the character is really alive and walking around)
 		* @param transform current transformation of the object
 		* @param movement current movement attribute of the object
 		* @param wanderTarget input/output value, indicates normalized direction of the object's velocity

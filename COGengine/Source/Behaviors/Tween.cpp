@@ -1,4 +1,3 @@
-
 #include "Tween.h"
 #include "CogEngine.h"
 #include "Scene.h"
@@ -8,7 +7,6 @@ namespace Cog {
 
 	void OverrideTween::Update(const uint64 delta, const uint64 absolute) {
 
-		// there is a bug for the first render -> the next node flickers
 		if (to->GetRunningMode() == INVISIBLE) {
 			to->SetRunningMode(RUNNING);
 		}
@@ -58,7 +56,6 @@ namespace Cog {
 
 	void SlideTween::Update(const uint64 delta, const uint64 absolute) {
 
-		// there is a bug for the first render -> the next node flickers
 		if (to->GetRunningMode() == INVISIBLE) {
 			to->SetRunningMode(RUNNING);
 		}

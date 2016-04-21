@@ -7,7 +7,9 @@ namespace Cog {
 	void SettingItem::AddValues(string vals) {
 		if (vals.find(MULTIVAL_DELIMITER) != -1) {
 			// more than one value
-			vector<string> multiVals = split_string(vals, MULTIVAL_DELIMITER);
+			vector<string> multiVals; 
+			split_string(vals, MULTIVAL_DELIMITER, multiVals);
+			
 			for (string valpart : multiVals) {
 				values.push_back(valpart);
 			}
@@ -90,7 +92,7 @@ namespace Cog {
 				item.AddValues(xml->getAttributex("value", ""));
 			}
 			else {
-				/* more values:
+				/* more xml elements:
 				<item key="abc">
 				<value>val1</value>
 				<value>val2</value>
@@ -109,7 +111,7 @@ namespace Cog {
 			xml->popTag();
 		}
 
-		// items can be declared as attributes, e.g. <setting name="myset" key1="value1" key2="value2" />
+		// items may be declared as attributes, e.g. <setting name="myset" key1="value1" key2="value2" />
 		vector<string> allAttributes;
 		xml->getAttributeNames(":", allAttributes);
 

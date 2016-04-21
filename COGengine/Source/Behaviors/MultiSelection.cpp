@@ -9,10 +9,11 @@ namespace Cog {
 
 	void MultiSelection::Load(Setting& setting) {
 		string group = setting.GetItemVal("selection_group");
-		if (group.empty()) throw IllegalArgumentException("Error while loading MultiSelection behavior: expected parameter selection_group");
+		if (group.empty()) CogLogError("MultiSelection", "Error while loading MultiSelection behavior: expected parameter selection_group");
 
 		this->selectionGroup = StrId(group);
 
+		// load all attributes 
 		string defaultImg = setting.GetItemVal("default_img");
 		string selectedImg = setting.GetItemVal("selected_img");
 
@@ -42,19 +43,18 @@ namespace Cog {
 
 	void MultiSelection::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_OBJECT_HIT_ENDED) && msg.GetContextNode()->IsInGroup(selectionGroup)) {
-			// check if the object was clicked (user could click on different area and release touch event over the button)
+			// check if the object has been clicked (user could hit a different area and release touch over the button)
 			spt<InputEvent> evt = msg.GetData<InputEvent>();
 			if (evt->input->handlerNodeId == msg.GetContextNode()->GetId()) {
-
-				ProcessCheckMessage(msg, false);
+				ProcessHit(msg, false);
 			}
 		}
 		else if (msg.HasAction(ACT_STATE_CHANGED) && msg.GetContextNode()->IsInGroup(selectionGroup)) {
-			ProcessCheckMessage(msg, true); // set directly, because STATE_CHANGED event has been already raised
+			ProcessHit(msg, true); // set directly, because STATE_CHANGED event has been already invoked
 		}
 	}
 
-	void MultiSelection::ProcessCheckMessage(Msg& msg, bool setDirectly) {
+	void MultiSelection::ProcessHit(Msg& msg, bool setDirectly) {
 		if (msg.GetContextNode()->GetId() == owner->GetId()) {
 			// selected actual node
 			if (!owner->HasState(selectedState)) {

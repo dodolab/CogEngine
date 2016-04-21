@@ -29,7 +29,7 @@ namespace Cog {
 	class Node;
 
 	/**
-	* Common class for meshes
+	* Base class for meshes
 	*/
 	class Mesh {
 	protected:

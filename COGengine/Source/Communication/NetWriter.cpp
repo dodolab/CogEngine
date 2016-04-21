@@ -3,6 +3,14 @@
 
 namespace Cog {
 
+	NetWriter::NetWriter(unsigned capacity) {
+		this->buffer = new tBYTE[capacity];
+		this->bufferLength = capacity * 8;
+		this->current = buffer;
+		this->bitOffset = 0;
+		*current = 0;
+	}
+
 	void NetWriter::WriteBit(bool value) {
 		COGASSERT(FreeSpace(1), "NetWriter", "Buffer length exceeded");
 

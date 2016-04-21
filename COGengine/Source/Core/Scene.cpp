@@ -8,12 +8,59 @@
 
 namespace Cog {
 
+	Scene::Scene(string name, bool isLazyLoaded)
+		: name(name), lazyLoad(isLazyLoaded) {
+		this->CreateSceneNode();
+	}
+
 	Scene::~Scene() {
 		delete sceneNode;
 	}
 
-	Scene::Scene(string name, bool isLazyLoaded) :name(name), lazyLoad(isLazyLoaded) {
-		this->CreateSceneNode();
+
+	void Scene::Init() {
+		auto renderer = GETCOMPONENT(Renderer);
+		auto cache = GETCOMPONENT(ResourceCache);
+
+		// notify renderer that we will use specific layers
+		for (auto layer : layers) {
+			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
+			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
+		}
+	}
+
+	void Scene::Dispose() {
+		auto renderer = GETCOMPONENT(Renderer);
+		auto cache = GETCOMPONENT(ResourceCache);
+
+		// remove layers from renderer
+		for (auto layer : layers) {
+			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
+			renderer->RemoveTileLayer(layer.name);
+		}
+	}
+
+	void Scene::Finish() {
+		loaded = false;
+		initialized = false;
+		this->allBehaviors.clear();
+		this->allNodes.clear();
+
+		// delete listeners but copy global listeners to the stage
+		this->msgListeners.clear();
+		this->msgListenerActions.clear();
+		auto stage = GETCOMPONENT(Stage);
+		stage->CopyGlobalListenersToScene(this);
+
+		// delete scene node
+		auto sceneNodePtr = this->sceneNode;
+		this->sceneNode->RemoveFromParent(true);
+		CreateSceneNode();
+
+		// stop this scene
+		sceneNode->SetRunningMode(RunningMode::DISABLED);
+		// add new scene node into root object
+		stage->GetRootObject()->AddChild(sceneNode);
 	}
 
 	void Scene::SetSceneSettings(Settings& settings) {
@@ -21,15 +68,13 @@ namespace Cog {
 		this->settings = Settings();
 
 		auto cache = GETCOMPONENT(ResourceCache);
-		// always merge from default settings
+		// always merge from default settings that is stored in the resource cache
 		auto defaultSettings = cache->GetDefaultSettings();
 		this->settings.MergeSettings(defaultSettings);
-	
 		this->settings.MergeSettings(settings);
 	}
 
 	LayerEnt Scene::FindLayerSettings(string name) {
-
 		for (LayerEnt& entity : this->layers) {
 			if (entity.name.compare(name) == 0) return entity;
 		}
@@ -37,32 +82,28 @@ namespace Cog {
 		return LayerEnt();
 	}
 
-	void Scene::RegisterListener(StrId action, MsgListener* listener) {
+	void Scene::RegisterListener(StrId action, BaseComponent* listener) {
 
 		if (msgListeners.count(action) == 0) {
-			msgListeners[action] = vector <MsgListener*>();
+			msgListeners[action] = vector <BaseComponent*>();
 		}
 
-		vector<MsgListener*>& listeners = msgListeners[action];
+		vector<BaseComponent*>& listeners = msgListeners[action];
 		
 		if (find(listeners.begin(), listeners.end(), listener) == listeners.end()) {
 			listeners.push_back(listener);
 		}
 		
-		if (msgListenerActions.count(listener->GetId()) == 0) {
-			msgListenerActions[listener->GetId()] = vector<StrId>();
-		}
-
-		auto msgAction = msgListenerActions[listener->GetId()];
+		auto& msgAction = msgListenerActions[listener->GetId()];
 
 		if (find(msgAction.begin(), msgAction.end(), action) == msgAction.end()) {
-			msgListenerActions[listener->GetId()].push_back(action);
+			msgAction.push_back(action);
 		}
 	}
 
-	bool Scene::UnregisterListener(StrId action, MsgListener* listener) {
+	bool Scene::UnregisterListener(StrId action, BaseComponent* listener) {
 		if (msgListeners.count(action) != 0) {
-			vector<MsgListener*>& listeners = msgListeners[action];
+			vector<BaseComponent*>& listeners = msgListeners[action];
 
 			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
 				if ((*it)->GetId() == listener->GetId()) {
@@ -74,8 +115,9 @@ namespace Cog {
 		return false;
 	}
 
-	void Scene::UnregisterListener(MsgListener* beh) {
-		auto found = msgListenerActions.find(beh->GetId());
+	void Scene::UnregisterListener(BaseComponent* listener) {
+
+		auto found = msgListenerActions.find(listener->GetId());
 
 		if (found != msgListenerActions.end()) {
 
@@ -83,11 +125,11 @@ namespace Cog {
 
 			// unregister all actions
 			for (auto action : actions) {
-				UnregisterListener(action, beh);
+				UnregisterListener(action, listener);
 			}
 
 			// remove from the second collection
-			msgListenerActions.erase(beh->GetId());
+			msgListenerActions.erase(listener->GetId());
 		}
 	}
 
@@ -95,8 +137,9 @@ namespace Cog {
 
 		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), msg.GetContextNode()  ? msg.GetContextNode()->GetTag().c_str() : "");
 
-		// there is no such callback or behavior that listens to that type of message
+		// skip if there is no such subscriber
 		if (!IsRegisteredListener(msg.GetAction())) return;
+		
 		auto recType = msg.GetRecipientType();
 
 		if (recType == MsgObjectType::SUBSCRIBERS) {
@@ -132,11 +175,10 @@ namespace Cog {
 		return msgListeners.count(action) != 0;
 	}
 
-	bool Scene::IsRegisteredListener(int action, MsgListener* beh) {
-		if (msgListenerActions.count(beh->GetId()) == 0) return false;
+	bool Scene::IsRegisteredListener(int action, BaseComponent* listener) {
+		if (msgListenerActions.count(listener->GetId()) == 0) return false;
 
-		vector<StrId>& actions = msgListenerActions[beh->GetId()];
-
+		vector<StrId>& actions = msgListenerActions[listener->GetId()];
 		return (std::find(actions.begin(), actions.end(), action) != actions.end());
 	}
 
@@ -167,43 +209,36 @@ namespace Cog {
 		else return found->second;
 	}
 
-	vector<Node*> Scene::FindNodesByTag(char* tag) const {
-		vector<Node*> output;
-
+	void Scene::FindNodesByTag(char* tag, vector<Node*>& output) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) output.push_back(*it);
 		}
-		return output;
 	}
 
-	int Scene::GetNodesCountBySubType(int subtype) const {
+	int Scene::GetNodesCountBySecondaryId(int secondaryId) const {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSecondaryId() == subtype) counter++;
+			if ((*it)->GetSecondaryId() == secondaryId) counter++;
 		}
 		return counter;
 	}
 
-	Node* Scene::FindNodeBySubType(int subtype) const {
+	Node* Scene::FindNodeBySecondaryId(int secondaryId) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSecondaryId() == subtype) return (*it);
+			if ((*it)->GetSecondaryId() == secondaryId) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> Scene::FindNodesBySubType(int subtype) const {
-		vector<Node*> output;
-
+	void Scene::FindNodesBySecondaryId(int subtype, vector<Node*>&output) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetSecondaryId() == subtype) output.push_back(*it);
 		}
-		return output;
 	}
 
-	vector<Node*> Scene::FindNodesByGroup(StrId group) const {
-		vector<Node*> output;
-
+	void Scene::FindNodesByGroup(StrId group, vector<Node*>& output) const {
+		
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			Node* nd = (*it);
 
@@ -211,53 +246,6 @@ namespace Cog {
 				output.push_back(nd);
 			}
 		}
-
-		return output;
-	}
-
-	
-	void Scene::Init() {
-		auto renderer = GETCOMPONENT(Renderer);
-		auto cache = GETCOMPONENT(ResourceCache);
-
-		// notify renderer that we will use specific layers
-		for (auto layer : layers) {
-			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
-			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
-		}
-	}
-
-	void Scene::Dispose() {
-		auto renderer = GETCOMPONENT(Renderer);
-		auto cache = GETCOMPONENT(ResourceCache);
-
-		// remove layers from renderer
-		for (auto layer : layers) {
-			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
-			renderer->RemoveTileLayer(layer.name);
-		}
-	}
-
-	void Scene::Finish() {
-		loaded = false;
-		initialized = false;
-		this->allBehaviors.clear();
-		this->allNodes.clear();
-
-		// delete listeners but copy global again
-		this->msgListeners.clear();
-		this->msgListenerActions.clear();
-		auto stage = GETCOMPONENT(Stage);
-		stage->CopyGlobalListenersToScene(this);
-		
-		// delete scene node with delay
-		auto sceneNodePtr = this->sceneNode;
-		this->sceneNode->RemoveFromParent(true);
-		CreateSceneNode();
-
-		sceneNode->SetRunningMode(RunningMode::DISABLED);
-		// add new scene node into root object
-		stage->GetRootObject()->AddChild(sceneNode);
 	}
 
 	void Scene::LoadFromXml(spt<ofxXml> xml) {
@@ -275,7 +263,6 @@ namespace Cog {
 			Settings set = Settings();
 			set.LoadFromXml(xml);
 			this->SetSceneSettings(set);
-
 			xml->popTag();
 		}
 		
@@ -300,7 +287,6 @@ namespace Cog {
 		// load nodes
 		for (int i = 0; i < nodes; i++) {
 			xml->pushTag("node", i);
-			// load nodes
 			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this);
 			sceneNode->AddChild(node);
 			xml->popTag();
@@ -312,13 +298,14 @@ namespace Cog {
 	void Scene::CreateSceneNode() {
 		sceneNode = new Node(NodeType::SCENE, 0, name);
 		sceneNode->SetScene(this);
+		// default mesh is a rectangle with the size of the window
 		sceneNode->SetMesh(spt<Mesh>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
-			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
+			if ((beh->GetComponentState() == ComponentState::ACTIVE_MESSAGES || beh->GetComponentState() == ComponentState::ACTIVE_ALL) &&
 				(msg.GetSenderType() != MsgObjectType::BEHAVIOR || beh->GetId() != msg.GetSenderId())) { // don't send to the same behavior!
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
 					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", msg.GetAction().GetStringValue().c_str(), typeid(beh).name(), beh->GetId());
@@ -338,7 +325,7 @@ namespace Cog {
 
 		if (msg.GetRecipientType() == MsgObjectType::NODE_ROOT) {
 			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
-			// find root and call recursion
+			// find root and call recursively
 			Node* root = actualNode->GetRoot();
 			if (root != nullptr) {
 				// call this method again from the root
@@ -350,7 +337,7 @@ namespace Cog {
 		}
 		else if (msg.GetRecipientType() == MsgObjectType::NODE_SCENE) {
 			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
-			// find scene and call recursion
+			// find scene and call recursively
 			Node* scRoot = actualNode->GetSceneRoot();
 			if (scRoot != nullptr) {
 				if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::BUBBLING) SendTunnelingMessageToChildren(msg, scRoot);
@@ -374,13 +361,14 @@ namespace Cog {
 	}
 
 	void Scene::SendDirectMessage(Msg& msg) {
+		// find all listeners
 		auto listeners = msgListeners.find(msg.GetAction());
 
 		if (listeners != msgListeners.end()) {
-			vector<MsgListener*>& lsts = listeners->second;
+			vector<BaseComponent*>& lsts = listeners->second;
 
 			for (auto it = lsts.begin(); it != lsts.end(); ++it) {
-				if (((*it)->GetListenerState() == ListenerState::ACTIVE_MESSAGES || (*it)->GetListenerState() == ListenerState::ACTIVE_ALL)) {
+				if (((*it)->GetComponentState() == ComponentState::ACTIVE_MESSAGES || (*it)->GetComponentState() == ComponentState::ACTIVE_ALL)) {
 					(*it)->OnMessage(msg);
 				}
 			}
@@ -389,6 +377,7 @@ namespace Cog {
 
 	bool Scene::AddNode(Node* node) {
 		COGLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
+	
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found == allNodes.end()) {
 			allNodes.push_back(node);
@@ -412,7 +401,7 @@ namespace Cog {
 	}
 
 	bool Scene::AddBehavior(Behavior* beh) {
-		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", typeid(beh).name());
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s has no node assigned", typeid(beh).name());
 		COGLOGDEBUG("Scene", "Adding behavior %s to node %s", typeid(beh).name(), beh->GetOwner()->GetTag().c_str());
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found == allBehaviors.end()) {
@@ -424,7 +413,7 @@ namespace Cog {
 	}
 
 	void Scene::RemoveBehavior(Behavior* beh) {
-		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", typeid(beh).name());
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s has no node assigned", typeid(beh).name());
 		COGLOGDEBUG("Scene", "Removing behavior %s from node %s", typeid(beh).name(), beh->GetOwner()->GetTag().c_str());
 
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);

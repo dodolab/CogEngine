@@ -5,8 +5,11 @@
 namespace Cog {
 
 	void TransformMath::SetSizeToScreen(Node* node, Node* parent) {
-		SetTransform(node, parent, TransformEnt("",ofVec2f(0, 0), 1, CalcType::PER, ofVec2f(0, 0), ofVec2f(1, 0) // zero because we want to scale according to the x axis
-			, CalcType::ABS_PER,0), 0, 0);
+		SetTransform(node, parent, TransformEnt("",ofVec2f(0, 0), 1, 
+			CalcType::PER, 
+			ofVec2f(0, 0), 
+			ofVec2f(1, 0), // zero because we want to scale according to the x axis
+			CalcType::ABS_PER,0), 0, 0);
 	}
 
 	void TransformMath::SetTransform(Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
@@ -17,7 +20,7 @@ namespace Cog {
 
 		auto shape = node->GetMesh();
 
-		// for rectangles, width and height is set directly instead of scale
+		// for rectangles, width and height are set directly instead of scale
 		if (entity.sType == CalcType::PER && (shape->GetMeshType() == MeshType::RECTANGLE) || shape->GetMeshType() == MeshType::BOUNDING_BOX) {
 			auto rectShape = node->GetMesh<Rectangle>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
@@ -27,7 +30,6 @@ namespace Cog {
 
 		// refresh transform (recalculate from parent)
 		nodeTransform.CalcAbsTransform(parent->GetTransform());
-
 		node->SetTransform(nodeTransform);
 	}
 
@@ -40,9 +42,9 @@ namespace Cog {
 		// calculate position
 		ofVec2f absPos = CalcPosition(node, parent, entity.pos, entity.pType, gridWidth, gridHeight);
 
-		// fix position according to the anchor
 		auto shape = node->GetMesh();
 
+		// fix position according to the anchor
 		absPos.x += (0.0f - entity.anchor.x) * shape->GetWidth()*scale.x;
 		absPos.y += (0.0f - entity.anchor.y) * shape->GetHeight()*scale.y;
 
@@ -66,12 +68,12 @@ namespace Cog {
 
 		switch (posCalc) {
 		case CalcType::ABS:
-			// absolute position in device pixels
+			// absolute position in pixels
 			absPos = ofVec2f((pos.x - parentTrans.absPos.x) / parentTrans.absScale.x,
 				(pos.y - parentTrans.absPos.y) / parentTrans.absScale.y);
 			break;
 		case CalcType::LOC:
-			// local position, is scaled according to the parent absolute scale
+			// local position is scaled according to the absolute scale of the parent
 			absPos = pos;
 			break;
 		case CalcType::ABS_PER:
@@ -110,7 +112,7 @@ namespace Cog {
 			scaleY = height / parentTrans.absScale.y;
 			break;
 		case CalcType::LOC:
-			// local scale, is multiplied by parent scale
+			// local scale, multiplied by scale of the parent
 			if (width == 0) width = 1;
 			if (height == 0) height = 1;
 			scaleX = width;
@@ -131,7 +133,7 @@ namespace Cog {
 			break;
 
 		case CalcType::GRID:
-			// grid scale -> todo, not tested yet :-)
+			// grid scale 
 			float percentageWidth = width / gridWidth;
 			float percentageHeight = height / gridHeight;
 			scaleX = (percentageWidth* scrSize.x / node->GetMesh()->GetWidth()) / parentTrans.absScale.x;
@@ -139,11 +141,10 @@ namespace Cog {
 			break;
 		}
 
-
 		// correct auto size
 		if (width != 0 && height != 0) return ofVec3f(scaleX, scaleY, 1);
 		else if (width == 0) return ofVec3f(scaleY, scaleY, 1);
-		else return ofVec3f(scaleX, scaleX, 1); // height == 0
+		else return ofVec3f(scaleX, scaleX, 1);
 
 	}
 

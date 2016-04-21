@@ -9,14 +9,11 @@
 #include "Environment.h"
 #include "EntityStorage.h"
 #include "InputHandler.h"
-
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
 #include "Button.h"
 #include "DelayAction.h"
-#include "DelayRemove.h"
 #include "HitEvent.h"
-#include "InputKey.h"
 #include "Move.h"
 #include "MultiAnim.h"
 #include "TransformAnim.h"
@@ -114,8 +111,8 @@ namespace Cog {
 		auto& components = entityStorage->GetComponents();
 
 		for (auto& comp : components) {
-			auto state = comp.second->GetListenerState();
-			if (state == ListenerState::ACTIVE_UPDATES || state == ListenerState::ACTIVE_ALL) {
+			auto state = comp.second->GetComponentState();
+			if (state == ComponentState::ACTIVE_UPDATES || state == ComponentState::ACTIVE_ALL) {
 				comp.second->Update(delta, absolute);
 			}
 		}
@@ -150,8 +147,9 @@ namespace Cog {
 
 			if (sceneNode->GetRunningMode() != RunningMode::INVISIBLE &&
 				sceneNode->GetRunningMode() != RunningMode::DISABLED) {
+				// set viewports first since the virtual aspect ratio may differ from the real one
 				renderer->InitViewPort(sceneNode->GetScene());
-				renderer->ClearCounters();
+				renderer->ClearBuffers();
 				sceneNode->Draw(delta, absolute);
 				renderer->Render();
 			}
@@ -189,9 +187,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(SheetAnimator);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(DelayAction);
-		REGISTER_BEHAVIOR(DelayRemove);
 		REGISTER_BEHAVIOR(HitEvent);
-		REGISTER_BEHAVIOR(InputKey);
 		REGISTER_BEHAVIOR(Move);
 		REGISTER_BEHAVIOR(MultiAnim);
 		REGISTER_BEHAVIOR(TransformAnim);

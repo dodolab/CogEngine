@@ -5,6 +5,7 @@
 #include "LuaScripting.h"
 #include "Scene.h"
 #include "EntityStorage.h"
+#include "BehaviorLua.h"
 
 namespace Cog {
 

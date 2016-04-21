@@ -9,6 +9,7 @@
 #include "Stage.h"
 #include "Renderer.h"
 #include "EntityStorage.h"
+#include "AsyncProcess.h"
 
 namespace Cog {
 
@@ -54,6 +55,10 @@ namespace Cog {
 		return CogEngine::GetInstance().environment->GetMousePosition();
 	}
 
+	Vec2i CogGetMouseScroll() {
+		return CogEngine::GetInstance().environment->GetMouseScroll();
+	}
+
 	int CogGetScreenWidth() {
 		return CogEngine::GetInstance().environment->GetScreenWidth();
 	}
@@ -86,18 +91,18 @@ namespace Cog {
 		return CogEngine::GetInstance().environment->GetVirtualScreenSize();
 	}
 
-	void CogRunThread(ofThread* thread) {
-		CogEngine::GetInstance().environment->RunThread(thread);
+	void CogRunProcess(AsyncProcess* thread) {
+		CogEngine::GetInstance().environment->RunProcess(thread);
 	}
 
 
 	// =================== EntityStorage ========================
 
-	void CogRegisterGlobalListener(StrId action, MsgListener* listener) {
+	void CogRegisterGlobalListener(StrId action, BaseComponent* listener) {
 		CogEngine::GetInstance().stage->RegisterGlobalListener(action, listener);
 	}
 
-	void CogUnregisterGlobalListener(StrId action, MsgListener* listener) {
+	void CogUnregisterGlobalListener(StrId action, BaseComponent* listener) {
 		CogEngine::GetInstance().stage->UnregisterGlobalListener(action, listener);
 	}
 

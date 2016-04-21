@@ -6,7 +6,7 @@ using namespace std;
 namespace Cog {
 
 	/**
-	* Common class for all description entities
+	* Base class for all description entities
 	* Description entity is an entity, loaded from xml in general, that contains informations required 
 	* to construct the real entity (e.g. Behavior)
 	*/

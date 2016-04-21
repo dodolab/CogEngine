@@ -9,7 +9,7 @@ namespace Cog {
 	class Scene;
 
 	/** Listener states */
-	enum class ListenerState {
+	enum class ComponentState {
 		ACTIVE_ALL,			/** active for all events */
 		ACTIVE_MESSAGES,	/** active for message sending */
 		ACTIVE_UPDATES,		/** active for update loop */
@@ -18,38 +18,35 @@ namespace Cog {
 
 
 	/**
-	* Abstract class for all objects that can subscribe itself as listeners
-	* for messaging systesms
+	* Abstract class for all components that can subscribe itself as listeners
+	* for messaging systems and can be continuously updated in update loop
 	*/
-	class MsgListener {
+	class BaseComponent {
 	protected:
 		// incremental counter
 		static int idCounter;
 		// identifier
 		const int id;
-		// listener state
-		ListenerState listState = ListenerState::ACTIVE_ALL;
+		// component state
+		ComponentState listState = ComponentState::ACTIVE_ALL;
 
-		/**
-		* Creates a new message listener
-		*/
-		MsgListener();
+		BaseComponent();
 
 	public:
 
 		/**
-		* Gets running state
-		* @return running state
+		* Gets component state
+		* @return component state
 		*/
-		const ListenerState GetListenerState() const {
+		const ComponentState GetComponentState() const {
 			return listState;
 		}
 
 		/**
-		* Sets running state
+		* Sets component state
 		* @param val value
 		*/
-		void SetListenerState(ListenerState val) {
+		void SetComponentState(ComponentState val) {
 			listState = val;
 		}
 
@@ -62,7 +59,7 @@ namespace Cog {
 		}
 
 		/**
-		* Gets object identifier
+		* Gets identifier
 		* @return incremental value
 		*/
 		const int GetId() const {
@@ -80,7 +77,7 @@ namespace Cog {
 			return this->id == id;
 		}
 
-		bool operator==(const MsgListener& other) {
+		bool operator==(const BaseComponent& other) {
 			return id == other.id;
 		}
 
@@ -88,7 +85,7 @@ namespace Cog {
 			return this->id != id;
 		}
 
-		bool operator!=(const MsgListener& other) {
+		bool operator!=(const BaseComponent& other) {
 			return id != other.id;
 		}
 

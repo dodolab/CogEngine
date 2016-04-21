@@ -4,8 +4,9 @@
 
 namespace Cog {
 
-	/**x
-	* Behavior that switches button on-click images
+	/**
+	* Behavior for buttons, handles hit messages, changes images and sends messages
+	* The owner node must have HitEvent behavior attached, otherwise it won't work
 	*/
 	class Button : public Behavior {
 	protected:
@@ -20,9 +21,10 @@ namespace Cog {
 		}
 
 		/**
-		* Creates a new switch-button behavior
-		* @param defaultImg default image
-		* @param pressedImg pressed image
+		* Creates a new button behavior
+		* @param defaultImg image of default button
+		* @param pressedImg image of pressed button
+		* @param disabledImg image of disabled button
 		*/
 		Button(spt<ofImage> defaultImg, spt<ofImage> pressedImg, spt<ofImage> disabledImg) :
 			defaultImg(defaultImg), pressedImg(pressedImg), disabledImg(disabledImg) {
@@ -30,9 +32,9 @@ namespace Cog {
 		}
 
 		/**
-		* Creates a new switch-button behavior
-		* @param defaultImg default image
-		* @param pressedImg pressed image
+		* Creates a new button behavior
+		* @param defaultImg image of default button
+		* @param pressedImg image of pressed button
 		*/
 		Button(spt<ofImage> defaultImg, spt<ofImage> pressedImg) :
 			defaultImg(defaultImg), pressedImg(pressedImg) {

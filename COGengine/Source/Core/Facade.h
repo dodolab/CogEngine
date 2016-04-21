@@ -11,7 +11,7 @@ namespace Cog {
 
 	class Behavior;
 	class Component;
-	class MsgListener;
+	class BaseComponent;
 	class EntityStorage;
 	class Scene;
 	class Node;
@@ -19,6 +19,7 @@ namespace Cog {
 	class MsgEvent;
 	class InputAct;
 	class SheetAnim;
+	class AsyncProcess;
 
 	EntityStorage* CogGetEntityStorage();
 
@@ -40,6 +41,7 @@ namespace Cog {
 	vector<Soundfx*>& CogGetPlayedSounds();
 	bool CogIsKeyPressed(int key);
 	Vec2i CogGetMousePosition();
+	Vec2i CogGetMouseScroll();
 	int CogGetScreenWidth();
 	int CogGetVirtualWidth();
 	int CogGetScreenHeight();
@@ -48,13 +50,13 @@ namespace Cog {
 	float CogGetScreenAspectRatio();
 	Vec2i CogGetScreenSize();
 	Vec2i CogGetVirtualScreenSize();
-	void CogRunThread(ofThread* thread);
+	void CogRunProcess(AsyncProcess* thread);
 
 	
 	// =================== Scene ========================
 	
-	void CogRegisterGlobalListener(StrId action, MsgListener* listener);
-	void CogUnregisterGlobalListener(StrId action, MsgListener* listener);
+	void CogRegisterGlobalListener(StrId action, BaseComponent* listener);
+	void CogUnregisterGlobalListener(StrId action, BaseComponent* listener);
 	void CogSendMessage(Msg& msg);
 
 	// =================== Logger =========================

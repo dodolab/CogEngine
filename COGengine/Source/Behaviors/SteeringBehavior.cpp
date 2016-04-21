@@ -6,7 +6,7 @@
 namespace Cog {
 
 
-	float SteeringBehavior::clampAngle(float x) {
+	float SteeringBehavior::ClampAngle(float x) {
 		x = fmod(x + 180, 360);
 		if (x < 0)
 			x += 360;
@@ -17,27 +17,29 @@ namespace Cog {
 		float actualRotation = transform.rotation;
 		float neededRotation = transform.CalcAngle(destination);
 
-		actualRotation = DEG_TO_RAD*clampAngle(actualRotation);
-		neededRotation = DEG_TO_RAD*clampAngle(neededRotation);
+		actualRotation = DEG_TO_RAD*ClampAngle(actualRotation);
+		neededRotation = DEG_TO_RAD*ClampAngle(neededRotation);
 
+		// calculate difference between actual and desired rotation
 		float rotDiff = -RAD_TO_DEG*atan2(sin(actualRotation - neededRotation), cos(actualRotation - neededRotation));
 
 		if (isnan(rotDiff)) rotDiff = 0;
 
+		// rotate to the desired rotation
 		movement.SetAngularSpeed(rotDiff*maxAcceleration);
 	}
 
 
 	void SeekBehavior::OnStart() {
-		if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-			owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
+		if (!owner->HasAttr(seekDest)) {
+			owner->AddAttr(seekDest, ofVec2f(0));
 		}
 	}
 
 	void SeekBehavior::Update(const uint64 delta, const uint64 absolute) {
 		auto& transform = owner->GetTransform();
-		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
+		Movement& movement = owner->GetAttr<Movement>(attrMovement);
+		ofVec2f dest = owner->GetAttr<ofVec2f>(seekDest);
 		ofVec2f force = steeringMath.Seek(transform, movement, dest, maxAcceleration);
 		movement.SetForce(forceId, force);
 		this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
@@ -45,20 +47,20 @@ namespace Cog {
 
 
 	void ArriveBehavior::OnStart() {
-		if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-			owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
+		if (!owner->HasAttr(seekDest)) {
+			owner->AddAttr(seekDest, ofVec2f(0));
 		}
 
-		if (!owner->HasAttr(ATTR_MOVEMENT)) {
-			owner->AddAttr(ATTR_MOVEMENT, Movement());
+		if (!owner->HasAttr(attrMovement)) {
+			owner->AddAttr(attrMovement, Movement());
 		}
 	}
 
 	void ArriveBehavior::Update(const uint64 delta, const uint64 absolute) {
 
 		auto& transform = owner->GetTransform();
-		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
+		Movement& movement = owner->GetAttr<Movement>(attrMovement);
+		ofVec2f dest = owner->GetAttr<ofVec2f>(seekDest);
 		ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed, pointTolerance);
 		if (acceleration != ofVec2f(INT_MIN)) {
 			movement.SetForce(forceId, acceleration);
@@ -72,16 +74,16 @@ namespace Cog {
 
 
 	void FleeBehavior::OnStart() {
-		if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-			owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
+		if (!owner->HasAttr(seekDest)) {
+			owner->AddAttr(seekDest, ofVec2f(0));
 		}
 	}
 
 	void FleeBehavior::Update(const uint64 delta, const uint64 absolute) {
 		auto& transform = owner->GetTransform();
-		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
+		Movement& movement = owner->GetAttr<Movement>(attrMovement);
 
-		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
+		ofVec2f dest = owner->GetAttr<ofVec2f>(seekDest);
 		ofVec2f acceleration = steeringMath.Flee(transform, movement, dest, fleeDistance, maxAcceleration);
 		movement.SetForce(forceId, acceleration);
 
@@ -89,18 +91,18 @@ namespace Cog {
 	}
 
 	void FollowBehavior::OnStart() {
-		if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-			owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
+		if (!owner->HasAttr(seekDest)) {
+			owner->AddAttr(seekDest, ofVec2f(0));
 		}
 
-		if (!owner->HasAttr(ATTR_MOVEMENT)) {
-			owner->AddAttr(ATTR_MOVEMENT, Movement());
+		if (!owner->HasAttr(attrMovement)) {
+			owner->AddAttr(attrMovement, Movement());
 		}
 	}
 
 	void FollowBehavior::Update(const uint64 delta, const uint64 absolute) {
 		auto& transform = owner->GetTransform();
-		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
+		Movement& movement = owner->GetAttr<Movement>(attrMovement);
 
 		ofVec2f force = steeringMath.Follow(transform, movement, path, currentPathPoint,
 			pointTolerance, finalPointTolerance, maxAcceleration);
@@ -117,22 +119,18 @@ namespace Cog {
 
 
 	void WanderBehavior::OnStart() {
-		if (!owner->HasAttr(ATTR_STEERING_BEH_WANDER)) {
-			owner->AddAttr(ATTR_STEERING_BEH_WANDER, ofVec2f(0));
+		if (!owner->HasAttr(wanderDest)) {
+			owner->AddAttr(wanderDest, ofVec2f(0));
 		}
 	}
 
 	void WanderBehavior::Update(const uint64 delta, const uint64 absolute) {
 		auto& transform = owner->GetTransform();
-		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
+		Movement& movement = owner->GetAttr<Movement>(attrMovement);
 
-		ofVec2f behWander = owner->GetAttr<ofVec2f>(StrId(ATTR_STEERING_BEH_WANDER));
+		ofVec2f behWander = owner->GetAttr<ofVec2f>(StrId(wanderDest));
 		ofVec2f force = steeringMath.Wander(transform, movement, behWander, wanderRadius, wanderDistance, wanderJitter, delta);
-		owner->ChangeAttr(StrId(ATTR_STEERING_BEH_WANDER), behWander);
-
-		// debug display
-		//Node* pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
-		//pointer2->GetTransform().localPos = transform.localPos+force*10;
+		owner->ChangeAttr(StrId(wanderDest), behWander);
 
 		// add velocity dependency
 		movement.SetForce(forceId, force - movement.GetVelocity() / 2);

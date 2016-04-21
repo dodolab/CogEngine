@@ -1,4 +1,3 @@
-
 #include "StateMachine.h"
 #include "CogEngine.h"
 #include "Facade.h"
@@ -44,7 +43,7 @@ namespace Cog {
 	void StateMachine::AddGlobalState(State* globalState) {
 		for (auto& global : globalStates) {
 			if (global->GetState() == globalState->GetState()) {
-				CogLogDebug("StateMachine", "An attempt to add already added global state");
+				CogLogError("StateMachine", "An attempt to add already added global state");
 				return;
 			}
 		}
@@ -60,7 +59,7 @@ namespace Cog {
 	void StateMachine::AddLocalState(State* localState) {
 		for (auto& local : localStates) {
 			if (local.second->GetState() == localState->GetState()) {
-				CogLogDebug("StateMachine", "An attempt to add already added local state");
+				CogLogError("StateMachine", "An attempt to add already added local state");
 				return;
 			}
 		}
@@ -73,9 +72,6 @@ namespace Cog {
 		}
 	}
 
-	/**
-	* Changes actual state
-	*/
 	void StateMachine::ChangeState(State* state) {
 		this->previousState = currentState;
 
@@ -90,6 +86,7 @@ namespace Cog {
 
 		state->SetParent(this);
 
+		// check if state was initialized
 		if (this->initialized && !state->IsInitialized()) {
 			state->Init();
 		}
@@ -99,9 +96,6 @@ namespace Cog {
 		}
 	}
 
-	/**
-	* Changes state according to its key
-	*/
 	bool StateMachine::ChangeState(StrId state) {
 		if (localStates.count(state) != 0) {
 			this->ChangeState(localStates.find(state)->second);
@@ -117,10 +111,12 @@ namespace Cog {
 	}
 
 	void StateMachine::Update(const uint64 delta, const uint64 absolute) {
+		// updates all global states
 		for (auto& global : globalStates) {
 			global->Update(delta, absolute);
 		}
 
+		// updates actual state
 		if (currentState != nullptr) currentState->Update(delta, absolute);
 	}
 
