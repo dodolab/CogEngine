@@ -8,6 +8,7 @@
 #include "ResourceCache.h"
 #include "Stage.h"
 #include "Scene.h"
+#include "AsyncProcess.h"
 
 namespace Cog {
 
@@ -27,10 +28,11 @@ namespace Cog {
 			string aspectRatio = set.GetItemVal("aspect_ratio");
 
 			if (!aspectRatio.empty()) {
+				// aspect ratio is defined in form xxx/yyy
 				int dividerIndex = aspectRatio.find("/");
 
 				if (dividerIndex == -1) {
-					throw IllegalArgumentException(string_format("Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str()));
+					CogLogError("Environment","Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str());
 				}
 
 				float firstVal = ofToFloat(aspectRatio.substr(0, dividerIndex));
@@ -45,10 +47,10 @@ namespace Cog {
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
 		Vec2i originalSize = this->GetScreenSize();
 
-		// set original values only once
-		if (originalWidth == 0 && originalHeight == 0) {
-			originalWidth = newWidth;
-			originalHeight = newHeight;
+		// set initial values only once
+		if (initialWidth == 0 && initialHeight == 0) {
+			initialWidth = newWidth;
+			initialHeight = newHeight;
 		}
 
 		screenSizeChanged = true;
@@ -64,6 +66,7 @@ namespace Cog {
 		COGLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
+		// send message that screen has been changed
 		if (CogEngine::GetInstance().stage->GetActualScene() != nullptr) {
 			SendMessage(ACT_SCREEN_CHANGED, spt<ValueChangeEvent<Vec2i>>(new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize())));
 		}
@@ -104,11 +107,11 @@ namespace Cog {
 	}
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
-		// user touches the screen with more fingers		
+		
 		FixTouchPosition(x, y);
 
 		if (pressed) {
-			// sometimes the first button shows twice
+			// sometimes the first touch shows twice
 			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 				if ((*it)->touchId == button) {
 					pressedPoints.erase(it);
@@ -130,8 +133,7 @@ namespace Cog {
 	}
 
 	void Environment::OnMultiTouchMotion(int x, int y, int button) {
-		// user moves fingers
-
+		
 		FixTouchPosition(x, y);
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
@@ -142,7 +144,7 @@ namespace Cog {
 	}
 
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
-		// user touches the screen
+		
 		FixTouchPosition(x, y);
 
 		if (pressed) {
@@ -167,10 +169,15 @@ namespace Cog {
 		}
 	}
 
+	void Environment::OnSingleScroll(int x, int y, int scrollX, int scrollY) {
+		this->scroll = Vec2i(scrollX, scrollY);
+		SendMessage(ACT_MOUSE_SCROLLED);
+	}
+
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
+		
 		FixTouchPosition(x, y);
 
-		// user moves finger
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
 				(*it)->position = Vec2i(x, y);
@@ -178,9 +185,10 @@ namespace Cog {
 		}
 	}
 
-	void Environment::RemoveEndedProcesses() {
+	void Environment::RemoveEndedStuff() {
+		
 		screenSizeChanged = false;
-
+		scroll = Vec2i(0);
 		// remove released keys
 		for (auto it = pressedKeys.begin(); it != pressedKeys.end();) {
 			if ((*it)->ended) {
@@ -192,11 +200,10 @@ namespace Cog {
 			else if ((*it)->started) {
 				(*it)->started = false;
 			}
-			// increment only if item hasn't been erased
 			++it;
 		}
 
-		// remove released touches
+		// remove released gestures
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end();) {
 			if ((*it)->ended) {
 				InputAct* act = (*it);
@@ -207,7 +214,6 @@ namespace Cog {
 			else if ((*it)->started) {
 				(*it)->started = false;
 			}
-			// increment only if item hasn't been erased
 			++it;
 		}
 
@@ -219,24 +225,21 @@ namespace Cog {
 
 				continue;
 			}
-			// increment only if item hasn't been erased
 			++it;
 		}
 
-		// remove ended threads
+		// remove ended processes
 		for (auto it = runningThreads.begin(); it != runningThreads.end();) {
 			if (!(*it)->isThreadRunning()) {
 				delete (*it);
 				it = runningThreads.erase(it);
 				continue;
 			}
-			// increment only if item hasn't been erased
 			++it;
 		}
-
 	}
 
-	void Environment::RunThread(ofThread* thread) {
+	void Environment::RunProcess(AsyncProcess* thread) {
 		runningThreads.push_back(thread);
 		thread->startThread();
 	}
@@ -275,6 +278,7 @@ namespace Cog {
 
 	void Environment::FixTouchPosition(int& x, int& y) {
 		x -= (int)ofGetCurrentViewport().x;
+		// y axis is inverted
 		y -= (screenHeight - (int)ofGetCurrentViewport().getHeight()) / 2;
 	}
 

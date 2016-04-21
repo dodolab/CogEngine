@@ -13,7 +13,7 @@
 namespace Cog {
 
 	void ResourceCache::OnInit() {
-		// set global dpi so font will have the same pixel size on each display
+		// set global dpi and therefore fonts will have the same pixel size on each display
 		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
 	}
 
@@ -112,7 +112,7 @@ namespace Cog {
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
-					COGASSERT(!trans->name.empty(),"ResourceCache","Transform entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!trans->name.empty(),"Resource","Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
@@ -131,7 +131,7 @@ namespace Cog {
 					auto dummySet = Setting();
 					ent->LoadFromXml(xml, dummySet);
 
-					COGASSERT(!ent->name.empty(), "ResourceCache", "Behavior entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!ent->name.empty(), "Resource", "Behavior entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(ent->name, ent);
 					xml->popTag();
@@ -165,14 +165,12 @@ namespace Cog {
 			if (!existing->isUsingTexture()) {
 				// for preloaded images, they need to be copied to the texture
 				existing->setUseTexture(true);
-				//existing->reloadTexture();
 			}
 
 			return existing;
 		}
 
-
-		COGLOGDEBUG("ResourceCache","Loading image %s",path.c_str());
+		COGLOGDEBUG("Resource","Loading image %s",path.c_str());
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -182,18 +180,26 @@ namespace Cog {
 		mesh->addVertex(ofVec3f(-img->getWidth() / 2, img->getHeight() / 2, 1));
 		mesh->addVertex(ofVec3f(img->getWidth() / 2, img->getHeight() / 2, 1));
 
-		// todo: for some devices (android) it has to be normalized
+#ifdef WIN32
 		mesh->addTexCoord(ofVec2f(0, 0));
 		mesh->addTexCoord(ofVec2f(img->getWidth(), 0));
 		mesh->addTexCoord(ofVec2f(0, img->getHeight()));
 		mesh->addTexCoord(ofVec2f(img->getWidth(), img->getHeight()));
 
+#else
+		// for android, texture coordinates are in range 0-1
+		mesh->addTexCoord(ofVec2f(0, 0));
+		mesh->addTexCoord(ofVec2f(1, 0));
+		mesh->addTexCoord(ofVec2f(0, 1));
+		mesh->addTexCoord(ofVec2f(1,1));
+
+#endif
+		
 		auto image = spt<ofImage>(img);
 		auto meshPtr = spt<ofVboMesh>(mesh);
 
 		loadedImages[path] = image;
 		loadedVboMeshes[path] = meshPtr;
-
 
 		return image;
 	}
@@ -204,13 +210,12 @@ namespace Cog {
 			return (found->second);
 		}
 
-		COGLOGDEBUG("ResourceCache", "Preloading image %s", path.c_str());
+		COGLOGDEBUG("Resource", "Preloading image %s", path.c_str());
 		ofImage* img = new ofImage();
 		// don't use texture because images are loaded in separate thread
 		img->setUseTexture(false);
 		bool loaded = img->load(path);
-		if (!loaded) CogLogError("Image couldn't be loaded: %s", path.c_str());
-
+		if (!loaded) CogLogError("Resource", "Image couldn't be loaded: %s", path.c_str());
 
 		auto image = spt<ofImage>(img);
 		loadedImages[path] = image;
@@ -232,7 +237,6 @@ namespace Cog {
 		map<int, spt<ofTrueTypeFont>> fontSet;
 
 		if (fontSetIt == loadedFonts.end()) {
-			fontSet = map<int, spt<ofTrueTypeFont>>();
 			loadedFonts[path] = fontSet;
 		}
 		else {
@@ -240,6 +244,7 @@ namespace Cog {
 		}
 
 		COGLOGDEBUG("ResourceCache", "Loading font %s", path.c_str());
+
 		map<int, spt<ofTrueTypeFont>>& fs = loadedFonts.find(path)->second;
 
 		auto font = (fs).find(size);
@@ -262,7 +267,7 @@ namespace Cog {
 			return (found->second);
 		}
 
-		COGLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
+		COGLOGDEBUG("Resource", "Loading sound %s", path.c_str());
 		return new Soundfx(path);
 	}
 
@@ -293,8 +298,8 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreAnimation(spt<GeneralAnim> anim) {
-		COGASSERT(anim->GetName().compare("") != 0, "ResourceCache", "Attempt to store animation without a name!");
 
+		COGASSERT(anim->GetName().compare("") != 0, "Resource", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());
 		if (found == loadedAnimations.end()) {
@@ -313,16 +318,15 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreEntity(spt<DEntity> entity) {
-
 		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
-			"RESOURCE", "Diferent type of entity %s is already in the cache!", entity->name.c_str());
+			"Resource", "Different type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[entity->name] = entity;
 	}
 
 	void ResourceCache::StoreEntity(string name, spt<DEntity> entity) {
 		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
-			"RESOURCE", "Diferent type of entity %s is already in the cache!", entity->name.c_str());
+			"Resource", "Different type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[name] = entity;
 	}
@@ -334,7 +338,7 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
-		COGASSERT(spriteSheet->GetName().compare("") != 0, "ResourceCache", "Attempt to store spritesheet without a name!");
+		COGASSERT(spriteSheet->GetName().compare("") != 0, "Resource", "Attempt to store spritesheet without a name!");
 
 		auto found = loadedSpriteSheets.find(spriteSheet->GetName());
 		if (found == loadedSpriteSheets.end()) {

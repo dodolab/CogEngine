@@ -265,10 +265,8 @@
     <ClInclude Include="Source\Behaviors\SheetAnimator.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\DelayAction.h" />
-    <ClInclude Include="Source\Behaviors\DelayRemove.h" />
     <ClInclude Include="Source\Behaviors\FloatingScene.h" />
     <ClInclude Include="Source\Behaviors\HitEvent.h" />
-    <ClInclude Include="Source\Behaviors\InputKey.h" />
     <ClInclude Include="Source\Behaviors\Move.h" />
     <ClInclude Include="Source\Behaviors\MultiAnim.h" />
     <ClInclude Include="Source\Behaviors\MultiSelection.h" />
@@ -310,7 +308,7 @@
     <ClInclude Include="Source\Core\Error.h" />
     <ClInclude Include="Source\Core\InputAct.h" />
     <ClInclude Include="Source\Core\Msg.h" />
-    <ClInclude Include="Source\Core\MsgListener.h" />
+    <ClInclude Include="Source\Core\BaseComponent.h" />
     <ClInclude Include="Source\Core\Node.h" />
     <ClInclude Include="Source\Core\NodeBuilder.h" />
     <ClInclude Include="Source\Core\Scene.h" />
@@ -534,11 +532,9 @@
     <ClCompile Include="Source\Behaviors\Button.cpp" />
     <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp" />
     <ClCompile Include="Source\Behaviors\DelayAction.cpp" />
-    <ClCompile Include="Source\Behaviors\DelayRemove.cpp" />
     <ClCompile Include="Source\Behaviors\FloatingScene.cpp" />
     <ClCompile Include="Source\Behaviors\Goal.cpp" />
     <ClCompile Include="Source\Behaviors\HitEvent.cpp" />
-    <ClCompile Include="Source\Behaviors\InputKey.cpp" />
     <ClCompile Include="Source\Behaviors\Move.cpp" />
     <ClCompile Include="Source\Behaviors\MultiAnim.cpp" />
     <ClCompile Include="Source\Behaviors\MultiSelection.cpp" />
@@ -554,8 +550,10 @@
     <ClCompile Include="Source\Communication\NetReader.cpp" />
     <ClCompile Include="Source\Communication\Network.cpp" />
     <ClCompile Include="Source\Communication\NetWriter.cpp" />
+    <ClCompile Include="Source\Components\InputHandler.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
     <ClCompile Include="Source\Components\DeltaUpdate.cpp" />
+    <ClCompile Include="Source\Components\LuaScripting.cpp" />
     <ClCompile Include="Source\Components\NetworkCommunicator.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
@@ -569,7 +567,7 @@
     <ClCompile Include="Source\Core\Component.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
-    <ClCompile Include="Source\Core\MsgListener.cpp" />
+    <ClCompile Include="Source\Core\BaseComponent.cpp" />
     <ClCompile Include="Source\Core\Node.cpp" />
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />
     <ClCompile Include="Source\Core\Scene.cpp" />

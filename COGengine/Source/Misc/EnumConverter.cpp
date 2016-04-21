@@ -3,6 +3,7 @@
 #include "AttrAnimEnt.h"
 #include "TransformEnt.h"
 #include "EasingFunc.h"
+#include "TransformAnim.h"
 
 namespace Cog {
 
@@ -51,10 +52,8 @@ namespace Cog {
 		else if (val.compare("size_x") == 0) return AttributeType::SIZE_X;
 		else if (val.compare("size_y") == 0) return AttributeType::SIZE_Y;
 		else if (val.compare("size") == 0) return AttributeType::SIZE;
-		else if (val.compare("size_center_x") == 0) return AttributeType::SIZE_CENTER_X;
-		else if (val.compare("size_center_y") == 0)return AttributeType::SIZE_CENTER_Y;
-
-		return AttributeType::COMMON;
+		
+		return AttributeType::NONE;
 	}
 
 	CalcType EnumConverter::StrToCalcType(string val) {
@@ -145,6 +144,13 @@ namespace Cog {
 
 		ofColor color = ofColor::fromHex(hexColor, alpha);
 		return color;
+	}
+
+	AnimBlend EnumConverter::StrToAnimBlend(string val) {
+		if (val.compare("additive") == 0) return AnimBlend::ADDITIVE;
+		else if (val.compare("overlay") == 0) return AnimBlend::OVERLAY;
+
+		return AnimBlend::ADDITIVE;
 	}
 
 } // namespace

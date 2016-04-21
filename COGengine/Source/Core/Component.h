@@ -1,24 +1,26 @@
 #pragma once
 
-#include "MsgListener.h"
+#include "BaseComponent.h"
 #include "Definitions.h"
-#include "ofxCogCommon.h"
+#include "ofxXmlSettings.h"
 
 namespace Cog {
 
 	/**
-	* Initialization priority
+	* Initialization priority for components
 	*/
 	enum class InitPriority {
-		LOW = 0,
-		MEDIUM = 1,
+		LOW = 0,	
+		MEDIUM = 1,		
 		HIGH = 2
 	};
 
 	/**
-	* Common class for all components
+	* Base class for global components
+	* Global components are kept in EntityStorage and exist throughout 
+	* the whole application life
 	*/
-	class Component : public MsgListener {
+	class Component : public BaseComponent {
 	protected:
 		InitPriority initPriority = InitPriority::LOW;
 	public:
@@ -28,36 +30,47 @@ namespace Cog {
 		}
 
 		/**
-		* Initializes component
+		* Initialization procedure
+		* Appropriate for attribute initialization and message subscribing
+		* Is called only once
 		*/
 		virtual void OnInit() {
 
 		}
 
 		/**
-		* Initializes component, using xml configuration
+		* Initialization procedure that loads configuration from xml
 		*/
 		virtual void OnInit(spt<ofxXml> config) {
-			// call the common init method 
+			// call the general init method if not overridden
 			OnInit();
 		}
 
+		/**
+		* Gets initialization priority
+		*/
 		InitPriority GetPriority() const {
 			return initPriority;
 		}
 
+		/**
+		* Updates inner state
+		* @param delta delta time since the last loop
+		* @param absolute absolute time since the engine was initialized
+		*/
 		virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
 	protected:
 
-		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
-
-		void SendMessage(StrId action, spt<MsgEvent> data) const;
-
-		void SendMessage(StrId action, Node* contextNode) const;
-
+		/** Sends message to subscribers listening to selected action */
 		void SendMessage(StrId action) const;
-
+		/** Sends message with custom context node to subscribers listening to selected action */
+		void SendMessage(StrId action, Node* contextNode) const;
+		/** Sends message with payload to subscribers listening to selected action */
+		void SendMessage(StrId action, spt<MsgEvent> data) const;
+		/** Sends message with payload and custom context node to subscribers listening to selected action */
+		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
+		/** Sends message with payload and custom context node to recipient with selected id */
 		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
 	};
 

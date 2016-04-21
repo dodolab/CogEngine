@@ -4,16 +4,32 @@
 
 namespace Cog {
 
+	/**
+	* States of the goal
+	*/
 	enum class GoalState {
-		INACTIVE,
-		PROCESSING,
-		COMPLETED,
-		ABORTED,
-		FAILED
+		INACTIVE,		/** not active but still ready to run */
+		PROCESSING,		/** processing/running */
+		COMPLETED,		/** complted/finished */
+		ABORTED,		/** aborted */
+		FAILED			/** failed */
+	};
+
+	/**
+	* Type of composite goal
+	*/
+	enum class GoalCompositeType {
+		SERIALIZER,		/** Finishes when all subgoals are completed */
+		SELECTOR,		/** Finishes when first subgoal completes */
+		SEQUENCER		/** Finishes when first subgoal fails*/
 	};
 	
 	/**
-	* Common class for goal-driven behavior
+	* Base class for goal-driven behavior
+	* Goals are similar to finite state machine but they are more hierarchical;
+	* Each goal can have its subgoals and therefore there may be goals with any level of complexity
+	* While a state is static, goals are dynamic and make sense until they are finished
+	*
 	*/
 	class Goal : public Behavior {
 	protected:
@@ -51,7 +67,7 @@ namespace Cog {
 		
 		inline bool GoalEnded() { return IsCompleted() || IsAborted() || IsFailed(); }
 
-		GoalState GetGoalState() {
+		GoalState GetGoalState() const {
 			return goalState;
 		}
 
@@ -59,13 +75,22 @@ namespace Cog {
 			this->goalState = goalState;
 		}
 
+		/**
+		* Completes the goal
+		*/
 		void Complete();
 
+		/**
+		* Fails the goal
+		*/
 		void Fail();
 
+		/**
+		* Aborts the goal
+		*/
 		void Abort();
 
-		StrId GetStateId() {
+		StrId GetStateId() const {
 			return stateId;
 		}
 	};
@@ -75,23 +100,31 @@ namespace Cog {
 	*/
 	class GoalComposite : public Goal {
 	protected:
+		GoalCompositeType compositeType;
 		vector<Goal*> subgoals;
 		int subgoalIndex = 0;
 		Goal* actualSubgoal = nullptr;
-		bool continueOnFail = false;
 	public:
 
-		GoalComposite(StrId stateId, bool continueOnFail) : Goal(stateId), continueOnFail(continueOnFail){
+		/**
+		* Creates a new composite goal
+		* @param goalId identifier of the goal
+		* @param compositeType type of the composite
+		*/
+		GoalComposite(StrId goalId, GoalCompositeType compositeType) 
+			: Goal(goalId), compositeType(compositeType){
 
 		}
 
 		void OnStart() {
+			// switch to first subgoal
 			if (subgoals.size() > 0) {
 				SwitchToSubgoal(subgoals[subgoalIndex]);
 			}
 		}
 
 		void OnMessage(Msg& msg) {
+			// send message to actual subgoal
 			if (actualSubgoal != nullptr) {
 				actualSubgoal->OnMessage(msg);
 			}
@@ -114,6 +147,9 @@ namespace Cog {
 		virtual void Update(const uint64 delta, const uint64 absolute);
 
 	protected:
+		/**
+		* Switches to another subgoal
+		*/
 		void SwitchToSubgoal(Goal* goal);
 	};
 

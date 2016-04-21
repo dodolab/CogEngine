@@ -544,7 +544,7 @@ namespace Cog {
 			// fill array according to the results, stored in the tree
 			auto children = root->GetChildren();
 
-			for (int j = 0; j < children.size(); j++) {
+			for (auto j = 0; j < children.size(); j++) {
 				auto child = children[j];
 
 				if (child->GetVisits() > 0) {

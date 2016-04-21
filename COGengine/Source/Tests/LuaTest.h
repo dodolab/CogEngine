@@ -362,12 +362,12 @@ mojo5:Register(next) "
 			}
 		}
 
-		auto behavior = scr->behs[0];
+		auto behavior = scr->GetBehaviors()[0];
 		behavior->Update(10, 20);
 		REQUIRE(lastGlobalFuncClsParam == 12345);
-		scr->behs[1]->Update(30, 40);
+		scr->GetBehaviors()[1]->Update(30, 40);
 		REQUIRE(lastGlobalFuncClsParam == 555);
-		scr->behs[2]->Update(30, 40);
+		scr->GetBehaviors()[2]->Update(30, 40);
 		REQUIRE(lastGlobalFuncClsParam == 6);
 	}
 	
@@ -418,14 +418,14 @@ mojo5:Register(next) "
 
 		// submit all changes (Init function will be called)
 		sc->GetSceneNode()->SubmitChanges(true);
-		auto node = scr->nodes[0];
+		auto node = scr->GetNodes()[0];
 		REQUIRE(node->HasAttr(StrId("TEST_ATTR")));
 		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 10);
 		// send message (owner will have MSG_ACCEPTED state set)
-		scr->behs[0]->OnMessage(Msg(StrId("TEST_ACTION"),MsgObjectType::OTHER,-1, MsgObjectType::SUBSCRIBERS,nullptr,spt<MsgEvent>()));
+		scr->GetBehaviors()[0]->OnMessage(Msg(StrId("TEST_ACTION"),MsgObjectType::OTHER,-1, MsgObjectType::SUBSCRIBERS,nullptr,spt<MsgEvent>()));
 		REQUIRE(node->HasState(StrId("MSG_ACCEPTED")));
 		// update node (owner will have TEST_ATTR set to 20)
-		scr->nodes[0]->Update(10, 10);
+		scr->GetNodes()[0]->Update(10, 10);
 		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 20);
 	}
 }

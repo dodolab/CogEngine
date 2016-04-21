@@ -5,7 +5,6 @@
 #include "CogEngine.h"
 #include "AsyncProcess.h"
 #include "Tween.h"
-#include "InputKey.h"
 #include "Environment.h"
 #include "EntityStorage.h"
 #include "SceneSwitchManager.h"
@@ -13,7 +12,8 @@
 namespace Cog {
 
 	Stage::~Stage() {
-
+		// insert all remaining elements so that they
+		// will be erased from proper collection
 		rootObject->InsertElementsForAdding(true, false);
 		rootObject->DeleteElementsForRemoving(true);
 
@@ -25,11 +25,10 @@ namespace Cog {
 	}
 
 	void Stage::OnInit() {
-		// create root object with default behaviors, states and attributes
+		// create root object
 		this->rootObject = new Node(NodeType::ROOT, 0, "root");
 		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
 		CogRegisterGlobalListener(ACT_SCREEN_CHANGED, this);
-		this->rootObject->AddBehavior(new InputKey(map<int,Act>()));
 
 	}
 
@@ -39,23 +38,19 @@ namespace Cog {
 			actualScene = scene->GetScene();
 		}
 		else if (msg.HasAction(ACT_SCREEN_CHANGED)) {
-			// scale root node
+			// when screen size changes, the root node must be scaled
 			if (actualScene != nullptr) {
 				auto environment = GETCOMPONENT(Environment);
 				// set scale according to the new ratio
-				Node* sceneNode = actualScene->GetSceneNode();
 				auto changeEvent = msg.GetData<ValueChangeEvent<Vec2i>>();
 				
-
 				auto virtuals = CogGetVirtualScreenSize();
 				auto scSize = CogGetScreenSize();
 
 				float absoluteRatio = (environment->GetScreenAspectRatio() / environment->GetVirtualAspectRatio());
-
 				float heightRatio = scSize.y / (float)virtuals.y;
 				float widthRatio = scSize.x / (float)virtuals.x;
-				
-				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x/((float)environment->GetOriginalWidth()));
+				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x/((float)environment->GetInitialWidth()));
 			}
 		}
 	}
@@ -70,6 +65,7 @@ namespace Cog {
 			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
 		}
 		else {
+			// disable all scenes that are not visible in the beginning
 			scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
 		}
 
@@ -82,10 +78,9 @@ namespace Cog {
 	}
 
 	void Stage::CopyGlobalListenersToScene(Scene* scene) {
-		// copy global listeners
 		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
 			StrId action = (*it).first;
-			vector <MsgListener*>& listeners = (*it).second;
+			vector <BaseComponent*>& listeners = (*it).second;
 
 			for (auto jt = listeners.begin(); jt != listeners.end(); ++jt) {
 				scene->RegisterListener(action, (*jt));
@@ -93,22 +88,18 @@ namespace Cog {
 		}
 	}
 
-	void Stage::RegisterGlobalListener(StrId action, MsgListener* listener) {
-		if (msgListeners.count(action) == 0) {
-			msgListeners[action] = vector <MsgListener*>();
-		}
-
-		vector<MsgListener*>& listeners = msgListeners[action];
-		listeners.push_back(listener);
+	void Stage::RegisterGlobalListener(StrId action, BaseComponent* listener) {
+		msgListeners[action].push_back(listener);
 		
 		for (Scene* sc : this->scenes) {
 			sc->RegisterListener(action, listener);
 		}
 	}
 
-	bool Stage::UnregisterGlobalListener(StrId action, MsgListener* listener) {
+	bool Stage::UnregisterGlobalListener(StrId action, BaseComponent* listener) {
 		if (msgListeners.count(action) != 0) {
-			vector<MsgListener*>& listeners = msgListeners[action];
+
+			vector<BaseComponent*>& listeners = msgListeners[action];
 
 			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
 				if ((*it)->GetId() == listener->GetId()) {
@@ -117,7 +108,6 @@ namespace Cog {
 					for (Scene* sc : this->scenes) {
 						sc->UnregisterListener(listener);
 					}
-
 					return true;
 				}
 			}
@@ -137,40 +127,41 @@ namespace Cog {
 	void Stage::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
 
 		if (actualScene == nullptr) {
-			// there is no scene running yet -> switch immediately
+			// if there is no running scene yet -> switch immediately
 			this->actualScene = scene;
 			scene->Init();
 			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
 		}
 		else {
-			// switch, using switch manager
+			// use switch manager
 			auto manager = GETCOMPONENT(SceneSwitchManager);
 			
-			// if actual scene is dialog, close the dialog first
+			// if actual scene is a dialog, close the dialog first
 			if (actualScene->GetSceneType() == SceneType::DIALOG) {
 				this->SwitchBackToScene(TweenDirection::NONE);
 			}
 
-			// set parent scene
+			// set parent scene for dialog
 			if (scene->GetSceneType() == SceneType::DIALOG) {
 				scene->SetParentScene(actualScene);
 			}
 
-			Node* from = actualScene->GetSceneNode();
+			Scene* from = actualScene;
 			
-
-			if (scene->IsLazyLoad() && !scene->Loaded()) {
+			if (scene->IsLazyLoad() && !scene->Loaded()) 
+			{
 				// scene is lazy loaded -> run asynchronous loading process
-
+				// note that this makes sense only if the scene is loaded via XML
 				auto async = new AsyncProcess(new SceneLoader(CogEngine::GetInstance().config, scene, tweenDir));
 
 				COGLOGDEBUG("Stage", "Scene is lazy loaded!");
 
 				// lazy load the scene
 				if (this->loadingScene != nullptr) {
-					COGLOGDEBUG("Stage", "Loading progress scene instead");
+					// load loading scene first
+					COGLOGDEBUG("Stage", "Switching to loading scene");
 
-					Node* to = loadingScene->GetSceneNode();
+					Scene* to = loadingScene;
 					sceneStack.push(actualScene);
 					actualScene = loadingScene;
 
@@ -178,33 +169,32 @@ namespace Cog {
 					manager->SwitchToScene(from, to, tweenDir);
 				}
 
-				CogRunThread(async);
+				// run asynchronous process
+				CogRunProcess(async);
 			}
 			else {
 				// switch scene using the switch manager
-				if (actualScene != nullptr &&
-					(loadingScene == nullptr ||
+				if (actualScene != nullptr && (loadingScene == nullptr ||
 						(actualScene->GetName().compare(loadingScene->GetName()) != 0))) {
 					sceneStack.push(actualScene);
 				}
 
 				actualScene = scene;
-
-				Node* to = scene->GetSceneNode();
-				manager->SwitchToScene(from, to, tweenDir);
+				manager->SwitchToScene(from, actualScene, tweenDir);
 			}
 		}
 	}
 
 	bool Stage::SwitchBackToScene(TweenDirection tweenDir) {
 		if (!sceneStack.empty()) {
+
 			auto manager = GETCOMPONENT(SceneSwitchManager);
 			Scene* scene = sceneStack.top();
 
-			Node* from = actualScene->GetSceneNode();
-			Node* to = scene->GetSceneNode();
+			Scene* from = actualScene;
+			Scene* to = scene;
 			
-			if (!actualScene->IsBuffered() && actualScene->IsLazyLoad()) {
+			if (!actualScene->IsCached() && actualScene->IsLazyLoad()) {
 				actualScene->Finish();
 			}
 
@@ -213,7 +203,6 @@ namespace Cog {
 			COGLOGDEBUG("Stage", "Switching to previous scene");
 
 			manager->SwitchToScene(from, to, tweenDir);
-
 			sceneStack.pop();
 
 			return true;
@@ -226,8 +215,11 @@ namespace Cog {
 
 		COGLOGDEBUG("Stage", "Loading scenes from XML");
 
+		// initial scene must be specified
 		string initialScene = xml->getAttributex("initial", "");
 		string loading = xml->getAttributex("loading", "");
+
+		if (initialScene.empty()) CogLogError("Stage", "Initial scene is not specified!");
 
 		int scenesNum = xml->getNumTags("scene");
 
@@ -235,6 +227,9 @@ namespace Cog {
 			xml->pushTag("scene", i);
 			
 			string name = xml->getAttributex("name", "");
+			
+			if (name.empty()) CogLogError("Stage", "Scene has no name!");
+
 			bool isLazy = xml->getBoolAttributex("lazy", false);
 			
 			Scene* sc = new Scene(name, isLazy);

@@ -7,11 +7,12 @@
 namespace Cog {
 
 
-	/**x
+	/**
 	* Behavior for sheet animations
 	*/
 	class SheetAnimator : public Behavior {
 	private:
+		// context holding actual animation
 		AnimContextStack contextStack;
 	public:
 

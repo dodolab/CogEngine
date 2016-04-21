@@ -9,8 +9,8 @@
 namespace Cog {
 
 
-	/**x
-	* Behavior for per-attribute animation
+	/*
+	* Animator for individual transformation attributes
 	*/
 	class AttribAnimator : public Behavior {
 	private:

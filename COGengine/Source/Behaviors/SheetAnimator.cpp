@@ -1,4 +1,3 @@
-
 #include "SheetAnimator.h"
 #include "CogEngine.h"
 #include "Node.h"
@@ -46,8 +45,6 @@ namespace Cog {
 
 				if (owner->HasMeshType(MeshType::SPRITE)) {
 					// render as a SpriteMesh (better performance than Image, because of using the SpriteSheetManager)
-
-					// todo: recalculation always...
 					auto spriteSet = owner->GetMesh<SpriteMesh>()->GetSpriteSet();
 					owner->GetMesh<SpriteMesh>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
@@ -56,27 +53,20 @@ namespace Cog {
 						owner->SetMesh(spt<Image>(new Image(spriteSheet)));
 					}
 
-					// render as a ImageShape
+					// render as an ImageMesh
 					int frameRow = frameIndex / actualNode->GetFrames();
 					int frameColumn = frameIndex % actualNode->GetFrames();
 					int cellWidth = (int)(spriteSheet->getWidth() / actualNode->GetFrames());
 					int cellHeight = (int)(spriteSheet->getHeight() / actualNode->GetLines());
 
+					// set boundaries attribute, because the sprite constitute only a part of the image
 					ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
 					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
 					owner->GetMesh<Image>()->SetImage(spriteSheet);
-
-					if (owner->HasMeshType(MeshType::IMAGE)) {
-						owner->GetMesh<Image>()->SetImage(spriteSheet);
-					}
-					else if (owner->HasMeshType(MeshType::NONE)) {
-						// set the first image
-						owner->SetMesh(spt<Image>(new Image(spriteSheet)));
-					}
 				}
 			}
 			else {
-				// image is a common image (one sprite per image)
+				// the sprite covers the whole image, no need for boundaries
 				if (owner->HasAttr(ATTR_IMGBOUNDS)) owner->RemoveAttr(ATTR_IMGBOUNDS, true);
 
 				string imagePath = actualNode->GetSheet(actualIndex);

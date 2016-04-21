@@ -6,17 +6,39 @@ import android.view.Menu;
 import android.view.MenuItem;
 import cc.openframeworks.*;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import cc.openframeworks.OFAndroid;
+
 
 public class OFActivity extends cc.openframeworks.OFActivity{
+	
+	//-----------------------------------keyboard
+	EditText textBox;
+	int marginX, marginY, margingWidth, marginHeight;
+	String hintLabel;
+	//-----------------------------------keyboard
+	
 
 	@Override
     public void onCreate(Bundle savedInstanceState)
     { 
         super.onCreate(savedInstanceState);
         String packageName = getPackageName();
+
+        setContentView(R.layout.main_layout);
+        
         ofApp = new OFAndroid(packageName,this);
     }
 	
+	@SuppressLint("MissingSuperCall")
 	@Override
 	public void onDetachedFromWindow() {
 	}
@@ -54,7 +76,83 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 
 	OFAndroid ofApp;
     
+
 	
+//-------------------------------------------------------------------- KEYBOARD METHODS  -----------------------------------------------------//
+	
+	
+  	public String recieveKeyboard(){
+  		
+  		textBox = (EditText)findViewById(R.id.edittext1);	
+  		String text = textBox.getText().toString();
+  		
+  		return text;
+  		
+  	}
+  	
+  	public void setHint(String hintString){
+  		
+  		hintLabel = hintString;
+  		
+  		Log.v("OF KEYBOARD", ".........HINT LABEL: " + hintLabel);
+  	}
+  	
+  	
+  	
+  	public void showKeyboard(int x, int y, int width, int height){
+  		
+  		marginX = x;
+  		marginY = y;
+  		margingWidth = width;
+  		marginHeight = height;
+  		
+  		
+  		runOnUiThread(new Runnable() {
+  		     @Override
+  		     public void run() {
+
+  		    	Log.v("OF KEYBOARD", "SHOW TEXTBOX AND KEYBOARD..................... ");
+  		    	
+  		    	textBox = (EditText)findViewById(R.id.edittext1);
+  		    	
+  		    	textBox.setHint(hintLabel);
+  		 		  		 		
+  		 		RelativeLayout.LayoutParams extraLayoutParams = new  RelativeLayout.LayoutParams(margingWidth, marginHeight);
+  		 		
+  		 		extraLayoutParams.setMargins(marginX, marginY, 0, 0);
+  		 		
+  		 		textBox.setLayoutParams(extraLayoutParams);
+  		 		
+  		 		textBox.setVisibility(View.VISIBLE);
+  		 		textBox.bringToFront();
+  		 		textBox.setEnabled(true);
+
+  		    }
+  		});
+  		 		
+  	}
+  	
+  	
+  	public void hideKeyboard(){
+  	
+  		runOnUiThread(new Runnable() {
+  		     @Override
+  		     public void run() {
+
+  		    	Log.v("OF KEYBOARD", "HIDE TEXTBOX AND KEYBOARD..................... ");
+  		 		
+  		    	textBox = (EditText)findViewById(R.id.edittext1);
+  		 		
+  		    	textBox.setVisibility(View.INVISIBLE);
+  		    	textBox.setEnabled(false);
+
+  		    }
+  		});
+
+  	}
+    
+    
+    //----------------------------------------------------------------END KEYBOARD METHODS ----------------------------------------------------//
 	
     // Menus
     // http://developer.android.com/guide/topics/ui/menus.html
@@ -85,6 +183,5 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     }
 	
 }
-
 
 

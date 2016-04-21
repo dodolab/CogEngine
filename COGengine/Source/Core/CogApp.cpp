@@ -99,6 +99,10 @@ namespace Cog {
 		CogEngine::GetInstance().environment->OnSingleTouchButton(x, y, button, false);
 	}
 
+	void CogApp::mouseScrolled(int x, int y, float scrollX, float scrollY) {
+		CogEngine::GetInstance().environment->OnSingleScroll(x, y, scrollX, scrollY);
+	}
+
 	void CogApp::dragEvent(ofDragInfo dragInfo) {
 
 	}

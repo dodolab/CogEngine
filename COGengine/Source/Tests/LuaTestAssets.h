@@ -9,6 +9,8 @@ extern "C" {
 }
 
 #include "LuaScripting.h"
+#include "NodeLua.h"
+#include "BehaviorLua.h"
 
 struct BindObject {
 public:

@@ -5,20 +5,15 @@
 
 namespace Cog {
 
-	/**x
-	* Behavior that sends message with delay to specific behavior
+	/**
+	* Behavior that sends message with delay 
 	*/
 	class DelayAction : public Behavior {
 	private:
-		// number of milliseconds for delay
-		int millis = 0;
-		// actual time
-		int actual = 0;
-		// id of target behavior
-		int targetId = -1;
-		// message payload
-		spt<MsgEvent> data;
-
+		// message to send
+		Msg message;
+		// absolute time the message should be delivered
+		uint64 deliverTime;
 	public:
 
 		DelayAction() {
@@ -26,12 +21,11 @@ namespace Cog {
 		}
 
 		/**
-		* Creates a new behavior that sends message to another behavior with delay
-		* @param millis number of milliseconds for delay
-		* @param targetId id of target whom the message will be sent to
-		* @param data message payload
+		* Creates a new behavior that sends message with delay
+		* @param message message to send
+		* @param deliverTime the absolute time the message should be delivered
 		*/
-		DelayAction(int millis, int targetId, spt<MsgEvent> data) : millis(millis), targetId(targetId), data(data) {
+		DelayAction(Msg message, uint64 deliverTime) : message(message), deliverTime(deliverTime) {
 
 		}
 

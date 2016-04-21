@@ -9,6 +9,9 @@
 
 namespace Cog {
 
+	/**
+	* Type of network message
+	*/
 	enum class NetMsgType {
 		DISCOVER_REQUEST = 1,
 		DISCOVER_RESPONSE = 2,
@@ -19,37 +22,79 @@ namespace Cog {
 		DISCONNECT = 7
 	};
 
+	/**
+	* Abstract base class for entities that are part of network message
+	* as a payload; both NetInputMessage and NetOutputMessage can contain
+	* a payload, consisting of this object
+	*/
 	class NetData {
 	public:
+		/**
+		* Loads object from stream
+		*/
 		virtual void LoadFromStream(NetReader* reader) = 0;
 
+		/**
+		* Saves objects to stream
+		*/
 		virtual void SaveToStream(NetWriter* writer) = 0;
 
+		/**
+		* Gets length of the data, very important for serialization
+		*/
 		virtual int GetDataLength() = 0;
 	};
 
+	/**
+	* Network message that arrived from remote point
+	*/
 	class NetInputMessage {
 	private:
+		// source ip address
 		string sourceIp;
+		// source port
 		int sourcePort;
+		// synchronization id
 		tBYTE syncId = 0;
+		// acceptation id (only for messages sent from clients to host)
 		tBYTE acceptedId = 0;
+		// type of message
 		NetMsgType msgType = NetMsgType::UPDATE;
+		// type of action
 		StrId action = StrId();
+		// the time at which the message was created
 		tDWORD msgTime = 0;
+		// data payload
 		tBYTE* data = nullptr;
+		// length of data payload
 		int dataLength = 0;
 
 	public:
+		/**
+		* Creates a new input message 
+		* @param messageLength length of the data payload
+		*/
 		NetInputMessage(int messageLength){
 			this->dataLength = messageLength - GetHeaderLength();
 		}
 
-		NetInputMessage(int messageLength, int syncId) : NetInputMessage(messageLength) {
+		/**
+		* Creates a new input message
+		* @param messageLength length of the data payload
+		* @param syncId synchronization id
+		*/
+		NetInputMessage(int messageLength, tBYTE syncId) : NetInputMessage(messageLength) {
 			this->syncId = syncId;
 		}
 
-		NetInputMessage(int messageLength, int syncId, NetMsgType msgType) : NetInputMessage(messageLength, syncId) {
+		/**
+		* Creates a new input message
+		* @param messageLength length of the data payload
+		* @param syncId synchronization id
+		* @param msgType type of the message
+		*/
+		NetInputMessage(int messageLength, tBYTE syncId, NetMsgType msgType)
+			: NetInputMessage(messageLength, syncId) {
 			this->msgType = msgType;
 		}
 
@@ -57,78 +102,67 @@ namespace Cog {
 			delete[] data;
 		}
 
-		string GetSourceIp() {
+		/**
+		* Gets source ip address
+		*/
+		string GetSourceIp() const {
 			return sourceIp;
 		}
 
-		void SetSourceIp(string ip) {
-			this->sourceIp = ip;
-		}
-
-		int GetSourcePort() {
+		/**
+		* Gets source port
+		*/
+		int GetSourcePort() const {
 			return sourcePort;
 		}
 
-		void SetSourcePort(int sourcePort) {
-			this->sourcePort = sourcePort;
-		}
-
-		tBYTE GetSyncId() {
+		/**
+		* Gets synchronization id
+		*/
+		tBYTE GetSyncId() const {
 			return syncId;
 		}
 
-		void SetSyncId(tBYTE id) {
-			this->syncId = syncId;
-		}
-
-		tBYTE GetAcceptedId() {
+		/**
+		* Gets acceptation id
+		*/
+		tBYTE GetAcceptedId() const {
 			return acceptedId;
 		}
 
-		void SetAcceptedId(tBYTE id) {
-			this->acceptedId = id;
-		}
-
-		int GetMessageLength() {
-			return GetHeaderLength() + GetDataLength();
-		}
-
-		int GetHeaderLength() {
-			return 	1 // sync id
-				+ 1 // accepted id
-				+ 1 // msgType
-				+ 4 // action
-				+ 4; // msgTime
-		}
-
-		NetMsgType GetMsgType() {
+		/**
+		* Gets type of the message
+		*/
+		NetMsgType GetMsgType() const {
 			return msgType;
 		}
 
-		void SetMsgType(NetMsgType msgType) {
-			this->msgType = msgType;
-		}
-
-		tDWORD GetMsgTime() {
+		/**
+		* Gets message time
+		*/
+		tDWORD GetMsgTime() const {
 			return msgTime;
 		}
 
-		void SetMsgTime(tDWORD time) {
-			this->msgTime = time;
-		}
-
-		StrId GetAction() {
+		/**
+		* Gets type of action
+		*/
+		StrId GetAction() const {
 			return action;
 		}
 
-		void SetAction(StrId action) {
-			this->action = action;
-		}
-
-		tBYTE* GetData() {
+		/**
+		* Gets data payload
+		*/
+		tBYTE* GetData() const {
 			return data;
 		}
 
+		/**
+		* Gets data payload by type, using the LoadFromStream method
+		* The type of the data payload should be determined by the type of the message
+		* together with the type of the action
+		*/
 		template<class T>
 		spt<T> GetData() {
 			auto netReader = new NetReader(data, GetDataLength());
@@ -137,35 +171,77 @@ namespace Cog {
 			return innerMsg;
 		}
 
-		int GetDataLength() {
+		/**
+		* Gets length of the whole message in bytes
+		*/
+		int GetMessageLength() const {
+			return GetHeaderLength() + GetDataLength();
+		}
+
+		/**
+		* Gets length of the header in bytes
+		*/
+		int GetHeaderLength() const {
+			return 	1 // sync id
+				+ 1 // accepted id
+				+ 1 // msgType
+				+ 4 // action
+				+ 4; // msgTime
+		}
+
+		/**
+		* Gets length of the data payload in bytes
+		*/
+		int GetDataLength() const {
 			return dataLength;
 		}
 
-		void SetData(tBYTE* data, int dataLength) {
-			this->data = data;
-			this->dataLength = dataLength;
-		}
 
+		/**
+		* Loads the message from stream
+		*/
 		void LoadFromStream(NetReader* reader);
+
+		friend class Network;
 	};
 
 
-
+	/**
+	* Network message that is serialized into stream of bytes and sent
+	* to the destination point
+	*/
 	class NetOutputMessage {
 	private:
+		// synchronization id
 		tBYTE syncId = 0;
+		// acceptation id
 		tBYTE acceptedId = 0;
+		// type of message
 		NetMsgType msgType = NetMsgType::UPDATE;
+		// type of action
 		StrId action = StrId();
+		// time in which the message was sent
 		tDWORD msgTime = 0;
+		// data payload
 		NetData* data = nullptr;
 
 	public:
-		NetOutputMessage(int syncId) : syncId(syncId) {
+
+		/**
+		* Creates a new output message
+		* @param syncId synchronization id
+		*/
+		NetOutputMessage(tBYTE syncId) : syncId(syncId) {
 
 		}
 
-		NetOutputMessage(int syncId, NetMsgType msgType) : syncId(syncId), msgType(msgType) {
+		/**
+		* Creates a new output message
+		* @param syncId synchronization id
+		* @param msgType type of the message
+		*/
+		NetOutputMessage(tBYTE syncId, NetMsgType msgType) 
+			: syncId(syncId), msgType(msgType) {
 
 		}
 
@@ -173,22 +249,93 @@ namespace Cog {
 			delete data;
 		}
 
-		tBYTE GetSyncId() {
+		/**
+		* Gets synchronization id
+		*/
+		tBYTE GetSyncId() const {
 			return syncId;
 		}
 
+		/**
+		* Sets synchronization id
+		*/
 		void SetSyncId(tBYTE syncId) {
 			this->syncId = syncId;
 		}
 
-		tBYTE GetAcceptedId() {
+		/**
+		* Gets acceptation id
+		*/
+		tBYTE GetAcceptedId() const {
 			return acceptedId;
 		}
 
+		/**
+		* Sets acceptation id
+		*/
 		void SetAcceptedId(tBYTE id) {
 			this->acceptedId = id;
 		}
 
+		/**
+		* Gets type of the message
+		*/
+		NetMsgType GetMsgType() const {
+			return msgType;
+		}
+
+		/**
+		* Sets type of the message
+		*/
+		void SetMsgType(NetMsgType msgType) {
+			this->msgType = msgType;
+		}
+
+		/**
+		* Gets the time in which the message was sent
+		*/
+		tDWORD GetMsgTime() const {
+			return msgTime;
+		}
+
+		/**
+		* Sets the time in which the message will be sent
+		*/
+		void SetMsgTime(tDWORD time) {
+			this->msgTime = time;
+		}
+
+		/**
+		* Gets type of the action
+		*/
+		StrId GetAction() const {
+			return action;
+		}
+
+		/**
+		* Sets type of the action
+		*/
+		void SetAction(StrId action) {
+			this->action = action;
+		}
+
+		/**
+		* Gets data payload
+		*/
+		NetData* GetData() const {
+			return data;
+		}
+
+		/**
+		* Sets data payload
+		*/
+		void SetData(NetData* data) {
+			this->data = data;
+		}
+
+		/**
+		* Gets length of the message, including data payload (if attached)
+		*/
 		int GetMessageLength() {
 			return (data == nullptr ? 0 : data->GetDataLength())
 				+ 1 // sync id
@@ -198,41 +345,11 @@ namespace Cog {
 				+ 4; // msgTime
 
 		}
-
-		NetMsgType GetMsgType() {
-			return msgType;
-		}
-
-		void SetMsgType(NetMsgType msgType) {
-			this->msgType = msgType;
-		}
-
-		tDWORD GetMsgTime() {
-			return msgTime;
-		}
-
-		void SetMsgTime(tDWORD time) {
-			this->msgTime = time;
-		}
-
-		StrId GetAction() {
-			return action;
-		}
-
-		void SetAction(StrId action) {
-			this->action = action;
-		}
-
-		NetData* GetData() {
-			return data;
-		}
-
-		void SetData(NetData* data) {
-			this->data = data;
-		}
 	
+		/**
+		* Saves data into stream
+		*/
 		void SaveToStream(NetWriter* writer);
-
 	};
 
 } // namespace

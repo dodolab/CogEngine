@@ -1,9 +1,9 @@
 
 #include "CogEngine.h"
-#include "ofxCogCommon.h"
 #include "NetworkCommunicator.h"
 #include "Network.h"
 #include "NetMessage.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -13,7 +13,7 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->peerPort = peerPort;
-		CogLogInfo("NETWORK", "Initialized broadcasting for application %d on ports %d and %d", applicationId, myPort, peerPort);
+		CogLogInfo("Network", "Initialized broadcasting for application %d on ports %d and %d", applicationId, myPort, peerPort);
 		network = new Network();
 		network->SetupUDPReceiver(myPort, 10000, true);
 		network->GetUDPSender().SetEnableBroadcast(true);
@@ -25,7 +25,7 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->myPort = port;
-		CogLogInfo("NETWORK", "Initialized listening for application %d on port %d", applicationId, port);
+		CogLogInfo("Network", "Initialized listening for application %d on port %d", applicationId, port);
 		network = new Network();
 		network->SetupUDPReceiver(port, 10000, true);
 		networkState = NetworkComState::LISTENING;
@@ -33,12 +33,13 @@ namespace Cog {
 
 	void NetworkCommunicator::PushMessageForSending(spt<NetOutputMessage> msg) {
 
-		// more messages at once only for communicating state
+		// only when the communicator is in COMMUNICATING state there
+		// could be sent more than one message at a time
 		if (this->networkState != NetworkComState::COMMUNICATING) {
 			messagesToSend.clear();
 		}
 
-		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", msg->GetAction().GetStringValue().c_str());
+		COGLOGDEBUG("Network_sync", "pushing message for sending: %s ", msg->GetAction().GetStringValue().c_str());
 		messagesToSend.push_back(msg);
 	}
 
@@ -62,10 +63,6 @@ namespace Cog {
 		this->peerIp = ip;
 		network->SetupUDPSender(peerIp, peerPort, true);
 		networkState = NetworkComState::CONNECTING;
-	}
-
-	void NetworkCommunicator::OnMessage(Msg& msg) {
-
 	}
 
 
@@ -95,11 +92,12 @@ namespace Cog {
 		if (message) {
 			if (message->GetMsgType() == NetMsgType::DISCOVER_REQUEST) {
 				// received discover request -> send discover response
-				CogLogInfo("NETWORK", "Received discover message from %s:%d", message->GetSourceIp().c_str(), message->GetSourcePort());
+				CogLogInfo("Network", "Received discover message from %s:%d", message->GetSourceIp().c_str(), message->GetSourcePort());
 				network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
 				auto response = spt<NetOutputMessage>();
 				if (!messagesToSend.empty()) {
-					// if there is a message for sending, send is as a payload, but don't delete it, because the discover process is static
+					// if there is a message for sending, send is as a payload, but don't delete it, because during the discovery process 
+					// same messages are being sent repeatedly
 					response = messagesToSend.back();
 					response->SetMsgTime(absolute);
 					response->SetMsgType(NetMsgType::DISCOVER_RESPONSE);
@@ -112,32 +110,33 @@ namespace Cog {
 			}
 			else if (message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
 				// received connect request -> send connect response and switch to communicating state
-				CogLogInfo("NETWORK", "Connected peer %s", message->GetSourceIp().c_str());
+				CogLogInfo("Network", "Connected peer %s", message->GetSourceIp().c_str());
 				network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
 				this->peerIp = message->GetSourceIp();
 				this->peerPort = message->GetSourcePort();
 				lastReceivedMsgTime = absolute;
 				networkState = NetworkComState::COMMUNICATING;
 
+				// notify other components
+				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
+				
 				// send confirmation message
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				messagesToSend.clear();
-
 				network->SendUDPMessage(applicationId, msg);
 			}
 		}
 	}
 
 	void NetworkCommunicator::UpdateDiscovering(const uint64 absolute) {
-
+		// check if it is time to broadcast
 		if (IsProperTime(lastBroadcastTime, absolute, broadcastingFrequency)) {
 			lastBroadcastTime = absolute;
-			// send broadcast every nth frame
+			
 			spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::DISCOVER_REQUEST));
 
-			// send broadcast messsages to 192, 10 and localhost
-			COGLOGDEBUG("NETWORK", "Broadcasting");
+			// send broadcast messsages to subnets 192.168, 10.16 and localhost
+			COGLOGDEBUG("Network", "Broadcasting");
 			network->SetupUDPSender("192.168.0.255", peerPort, true);
 			network->SendUDPMessage(applicationId, msg);
 			network->SetupUDPSender("10.16.0.255", peerPort, true);
@@ -146,14 +145,16 @@ namespace Cog {
 			network->SendUDPMessage(applicationId, msg);
 		}
 		else if (IsProperTime(lastDiscoveringTime, absolute, connectingFrequency)) {
+			
 			lastDiscoveringTime = absolute;
 
 			// check for discover responses
 			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 			if (message && (message->GetMsgType() == NetMsgType::DISCOVER_RESPONSE)) {
-				CogLogInfo("NETWORK", "Found peer %s", message->GetSourceIp().c_str());
+				CogLogInfo("Network", "Found peer %s", message->GetSourceIp().c_str());
 
 				network->SetupUDPSender(message->GetSourceIp(), peerPort, true);
+				// notify other components
 				SendMessage(ACT_NET_MESSAGE_RECEIVED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 
 				// update list of discovered servers
@@ -177,21 +178,22 @@ namespace Cog {
 		// check connection response
 		auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 		if (message && message->GetMsgType() == NetMsgType::CONNECT_RESPONSE) {
-			CogLogInfo("NETWORK", "Connected to peer %s", message->GetSourceIp().c_str());
+			CogLogInfo("Network", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			networkState = NetworkComState::COMMUNICATING;
 		}
 		else if (message &&message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
 			// both peers can connect at the same time
-			CogLogInfo("NETWORK", "Connected to peer %s", message->GetSourceIp().c_str());
+			CogLogInfo("Network", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
+			// notify other components
 			SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::COMMUNICATING;
 		}
 		else if ((absolute - lastReceivedMsgTime) > 20000) {
-			CogLogInfo("NETWORK", "No message received from peer for 20s, disconnecting...");
+			CogLogInfo("Network", "No message received from peer for 20s, disconnecting...");
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::DISCONNECT));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::DISCOVERING;
@@ -200,10 +202,10 @@ namespace Cog {
 
 	void NetworkCommunicator::UpdateCommunicating(const uint64 absolute) {
 
-
+		// process until there are no received messages 
 		while (true) {
+			
 			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
-
 			if (!message) break;
 
 			auto type = message->GetMsgType();
@@ -212,39 +214,47 @@ namespace Cog {
 
 				tBYTE acceptedMsgId = message->GetAcceptedId();
 				if (acceptedMsgId != 0) {
-					COGLOGDEBUG("NETWORK_SYNC", "received acceptation of %d ", (int)acceptedMsgId);
+					// got id of accepted message
+					COGLOGDEBUG("Network_sync", "received acceptation of %d ", (int)acceptedMsgId);
 					unconfirmedMessages.erase(acceptedMsgId);
 				}
 
 				lastReceivedMsgTime = absolute;
 
 				if (type != NetMsgType::ACCEPT) {
-					if (acceptedMessageIds.count(message->GetSyncId()) == 0) {
-						COGLOGDEBUG("NETWORK_SYNC", "received %d ", (int)message->GetSyncId());
-						acceptedMessageIds.insert(message->GetSyncId());
+
+					if (forAcceptationMessageIds.count(message->GetSyncId()) == 0) {
+						// got message with synchronization id that must be accepted -> update 
+						// collection of messages for acceptation
+						COGLOGDEBUG("Network_sync", "received %d ", (int)message->GetSyncId());
+						forAcceptationMessageIds.insert(message->GetSyncId());
 					}
 
-					if (acceptedMessageTimes.count(message->GetMsgTime()) == 0) {
+					if (forAcceptationMessageTimes.count(message->GetMsgTime()) == 0) {
 						
 						if (message->GetSyncId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetSyncId()) > 128
-							|| (message->GetAction() != NET_MSG_DELTA_UPDATE)) { // accept only newest delta messages; but for other messages, we can accept old one
-							
+							|| (message->GetAction() != NET_MSG_DELTA_UPDATE)) { 
+							// old messages can be still processed but no delta update, because old deltas are not important anymore
 
-							if(message->GetSyncId() > this->lastReceivedMsgId || this->lastReceivedMsgId - message->GetSyncId() > 128) lastReceivedMsgId = message->GetSyncId();
+							// synchronization ids may be in range 0-255 so if the difference is greater than 128 it means that
+							// the numbering goes from zero again
+							if(message->GetSyncId() > this->lastReceivedMsgId || this->lastReceivedMsgId - message->GetSyncId() > 128) 
+								lastReceivedMsgId = message->GetSyncId();
 							
-							COGLOGDEBUG("NETWORK_SYNC", "informing listeners");
+							COGLOGDEBUG("Network_sync", "informing listeners");
 							SendMessage(ACT_NET_MESSAGE_RECEIVED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 						}
 
-						acceptedMessageTimes.insert(message->GetMsgTime());
+						forAcceptationMessageTimes.insert(message->GetMsgTime());
 
-						if (acceptedMessageTimes.size() > 128) {
+						if (forAcceptationMessageTimes.size() > 128) {
+							// if there is more than 128 messages in the buffer, remove half of the buffer, 
+							//because it shouldn't be important anymore
 
-							// remove half of collection
-							for (auto it = acceptedMessageTimes.begin(); it != acceptedMessageTimes.end(); ) {
-								if (acceptedMessageTimes.size() < 64) break;
+							for (auto it = forAcceptationMessageTimes.begin(); it != forAcceptationMessageTimes.end(); ) {
+								if (forAcceptationMessageTimes.size() < 64) break;
 								if (*it % 2 == 0) {
-									acceptedMessageTimes.erase(it++);
+									forAcceptationMessageTimes.erase(it++);
 								}
 								else {
 									++it;
@@ -255,13 +265,14 @@ namespace Cog {
 				}
 			}
 			else if (type == NetMsgType::DISCONNECT) {
-				CogLogInfo("NETWORK", "Peer %s has disconnected", message->GetSourceIp().c_str());
+				CogLogInfo("Network", "Peer %s has disconnected", message->GetSourceIp().c_str());
 				Close();
 			}
 			else if (type == NetMsgType::CONNECT_REQUEST) {
-				CogLogInfo("NETWORK", "Peer %s is reconnecting", message->GetSourceIp().c_str());
+				CogLogInfo("Network", "Peer %s is reconnecting", message->GetSourceIp().c_str());
 				lastReceivedMsgTime = absolute;
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
+				// notify other components
 				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				network->SendUDPMessage(applicationId, msg);
 			}
@@ -269,18 +280,18 @@ namespace Cog {
 
 		if (IsProperTime(lastSendingTime, absolute, sendingFrequency)) {
 			lastSendingTime = absolute;
-			// send regular message
-			SendUpdateMessage(absolute);
+			
+			// send all messages
+			SendMessages(absolute);
 		}
 
-		if ((absolute - lastReceivedMsgTime) > 4000) {
-			CogLogInfo("NETWORK", "No message received from peer for 4s, reconnecting...");
+		if ((absolute - lastReceivedMsgTime) > timeout*1000) {
+			CogLogInfo("Network", "No message received from peer for %d s, reconnecting...", timeout);
 			networkState = NetworkComState::CONNECTING;
 		}
-
 	}
 
-	void NetworkCommunicator::SendUpdateMessage(uint64 time) {
+	void NetworkCommunicator::SendMessages(uint64 time) {
 
 		int counter = 0;
 		if (!messagesToSend.empty()) {
@@ -291,11 +302,13 @@ namespace Cog {
 
 				msg->SetSyncId(lastSentMsgId);
 
-				if (!acceptedMessageIds.empty()) {
-					auto lastItem = prev(acceptedMessageIds.end());
+				if (!forAcceptationMessageIds.empty()) {
+					// if there is at least one id that hasn't been accepted
+					// yet, send it with the message
 
+					auto lastItem = prev(forAcceptationMessageIds.end());
 					msg->SetAcceptedId(*lastItem);
-					acceptedMessageIds.erase(lastItem);
+					forAcceptationMessageIds.erase(lastItem);
 				}
 
 				msg->SetMsgType(NetMsgType::UPDATE);
@@ -306,7 +319,7 @@ namespace Cog {
 					unconfirmedMessages[msg->GetSyncId()] = msg;
 				}
 				else {
-					COGLOGDEBUG("NETWORK_SYNC", "sending delta %d ",(int)msg->GetSyncId());
+					COGLOGDEBUG("Network_sync", "sending delta %d ",(int)msg->GetSyncId());
 					network->SendUDPMessage(applicationId, msg);
 				}
 			}
@@ -314,23 +327,23 @@ namespace Cog {
 
 			// send all messages that haven't been confirmed
 			for (auto& key : unconfirmedMessages) {
-				COGLOGDEBUG("NETWORK_SYNC", "sending msg %d ",(int)key.second->GetSyncId());
+				COGLOGDEBUG("Network_sync", "sending msg %d ",(int)key.second->GetSyncId());
 				network->SendUDPMessage(applicationId, key.second);
 			}
 
 			messagesToSend.clear();
 		}
-		else if (!acceptedMessageIds.empty()) {
-			// send all acceptation messages
-			for (auto& acc : acceptedMessageIds) {
+		else if (!forAcceptationMessageIds.empty()) {
+			// send the rest acceptation messages separately
+			for (auto& acc : forAcceptationMessageIds) {
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::ACCEPT));
 				msg->SetMsgTime(time);
 				msg->SetAcceptedId(acc);
-				COGLOGDEBUG("NETWORK_SYNC", "confirmating %d ", (int)msg->GetAcceptedId());
+				COGLOGDEBUG("Network_sync", "confirmating %d ", (int)msg->GetAcceptedId());
 				network->SendUDPMessage(applicationId, msg);
 			}
 
-			acceptedMessageIds.clear();
+			forAcceptationMessageIds.clear();
 		}
 
 	}

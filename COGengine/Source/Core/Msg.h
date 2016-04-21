@@ -64,10 +64,12 @@ namespace Cog {
 		Node* contextNode = nullptr;
 		// data payload
 		spt<MsgEvent> data = spt<MsgEvent>();
-		// the time the message should be delivered (0 for immediate delivering)
-		uint64 deliverTime = 0;
 		
 	public:
+
+		Msg() {
+
+		}
 
 		/**
 		* Creates a new message
@@ -120,18 +122,6 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgEvent> data);
-
-		/**
-		* Creates a new message
-		* @param action type of invoked action
-		* @param senderType type of the sender
-		* @param senderId id of the sender
-		* @param recipientType type of the recipient
-		* @param contextNode node that is connected with this message
-		* @param deliverTime the time the message should be delivered (0 for immediate)
-		* @param data data payload
-		*/
-		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, uint64 deliverTime, spt<MsgEvent> data);
 
 
 		~Msg() {
@@ -260,6 +250,13 @@ namespace Cog {
 		}
 
 		/**
+		* Returns true, if this message has a context node
+		*/
+		bool HasContextNode() {
+			return contextNode != nullptr;
+		}
+
+		/**
 		* Gets the node that is connected with this message
 		*/
 		Node* GetContextNode() {
@@ -273,19 +270,6 @@ namespace Cog {
 			this->contextNode = contextNode;
 		}
 
-		/**
-		* Gets the time the message should be delivered (0 for immediate delivering)
-		*/
-		uint64 GetDeliverTime() const {
-			return deliverTime;
-		}
-
-		/**
-		* Sets the time the message should be delivered (0 for immediate delivering)
-		*/
-		void SetDeliverTime(uint64 deliverTime) {
-			this->deliverTime = deliverTime;
-		}
 
 		/**
 		* Gets data payload

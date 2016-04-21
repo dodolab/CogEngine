@@ -22,18 +22,11 @@ namespace Cog {
 
 
 	void Selection::OnMessage(Msg& msg) {
-		/*			if (msg.GetAction() == ACT_STATE_CHANGED && msg.GetContextNode()->GetId() == owner->GetId()) {
-						if (owner->HasState(selectedState)) {
-							owner->GetMesh<Image>()->SetImage(selectedImg);
-						}
-						else {
-							owner->GetMesh<Image>()->SetImage(defaultImg);
-						}
-					} moved to the update loop */
 	}
 
 
 	void Selection::Update(const uint64 delta, const uint64 absolute) {
+		// check if the object has selected state; if so, update mesh
 		if (!hasSelectedState && owner->HasState(selectedState)) {
 			owner->GetMesh<Image>()->SetImage(selectedImg);
 			hasSelectedState = true;

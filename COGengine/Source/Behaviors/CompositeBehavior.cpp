@@ -56,8 +56,8 @@ namespace Cog {
 				it = behaviors.erase(it);
 				continue;
 			}
-			else if(beh->GetListenerState() == ListenerState::ACTIVE_UPDATES || 
-				beh->GetListenerState() == ListenerState::ACTIVE_ALL) {
+			else if(beh->GetComponentState() == ComponentState::ACTIVE_UPDATES || 
+				beh->GetComponentState() == ComponentState::ACTIVE_ALL) {
 				beh->Update(delta, absolute);
 			}
 			++it;

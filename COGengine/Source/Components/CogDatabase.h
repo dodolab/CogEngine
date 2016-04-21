@@ -6,12 +6,13 @@
 namespace Cog {
 
 	/**
-	* Database manager
+	* Wrapper for SQLite database
 	*/
-	class CogDatabase : public Component{
-	
+	class CogDatabase : public Component {
 	private:
+		// pointer to sqlite
 		ofxSQLite* sql;
+		// path to database
 		string dbPath;
 
 	public:
@@ -24,20 +25,34 @@ namespace Cog {
 
 		}
 
+		/**
+		* Gets pointer to sqlite
+		*/
 		ofxSQLite* GetSQLite() {
 			return sql;
 		}
 
+		/**
+		* Initializes database from file
+		* @param dbPath path to database file; if it doesn't exist, 
+		* an empty database will be created
+		*/
 		void SetupDatabase(string dbPath) {
 			this->dbPath = dbPath;
 			sql = new ofxSQLite();
 			sql->setup(dbPath.c_str());
 		}
 
+		/**
+		* Closes SQLite database
+		*/
 		void CloseDatabase() {
 			sqlite3_close(sql->getSQLitePtr());
 		}
 
+		/**
+		* Removes database file
+		*/
 		void RemoveDBFile() {
 			ofFile file;
 			file.removeFile(dbPath.c_str());

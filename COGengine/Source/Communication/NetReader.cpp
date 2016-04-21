@@ -3,6 +3,22 @@
 
 namespace Cog {
 
+	NetReader::NetReader(unsigned capacity) {
+		this->buffer = new tBYTE[capacity];
+		this->bufferLength = capacity * 8;
+		this->bitOffset = 0;
+		this->current = buffer;
+		this->external = false;
+	}
+
+	NetReader::NetReader(tBYTE* data, unsigned capacity) {
+		this->buffer = data;
+		this->bufferLength = capacity * 8;
+		this->bitOffset = 0;
+		this->current = data;
+		this->external = true;
+	}
+
 	void NetReader::ReadBit(bool& value) {
 		COGASSERT(FreeSpace(1), "NetReader", "Buffer length exceeded");
 
@@ -65,7 +81,7 @@ namespace Cog {
 			current += size;
 		}
 		else {
-			// align each byte...
+			// align each byte
 			for (unsigned i = 0; i < size; i++) {
 				ReadByte(data[i]);
 			}
@@ -86,7 +102,7 @@ namespace Cog {
 
 	string NetReader::ReadString() {
 		tDWORD size = ReadDWord();
-		COGASSERT(size < 100000, "NetReader", "Unexpected string size in byte array");
+		COGASSERT(size < STR_MAX_SIZE, "NetReader", "Unexpected string size in byte array");
 
 		tBYTE* bytes = ReadBytes(size);
 		string output = string((char*)bytes, (int)size);

@@ -1,4 +1,3 @@
-
 #include "TransformAnim.h"
 #include "CogEngine.h"
 #include "Scene.h"
@@ -10,6 +9,7 @@
 #include "TransformEnt.h"
 #include "Stage.h"
 #include "EntityStorage.h"
+#include "EnumConverter.h"
 
 namespace Cog {
 
@@ -21,9 +21,9 @@ namespace Cog {
 		this->repeat = setting.GetItemValBool("repeat");
 
 		auto resCache = GETCOMPONENT(ResourceCache);
-		this->from = resCache->GetEntityC<TransformEnt>(from);
-		this->to = resCache->GetEntityC<TransformEnt>(to);
-		this->blend = StrToAnimBlend(setting.GetItemVal("blend"));
+		this->from = resCache->GetEntity<TransformEnt>(from);
+		this->to = resCache->GetEntity<TransformEnt>(to);
+		this->blend = EnumConverter::StrToAnimBlend(setting.GetItemVal("blend"));
 
 		string easing = setting.GetItemVal("easefunc");
 		if (!easing.empty()) {
@@ -32,8 +32,10 @@ namespace Cog {
 	}
 
 	void TransformAnim::OnStart() {
-		TransformMath math = TransformMath();
 
+		TransformMath math;
+
+		// get scene settings and calculate transformations 
 		Settings& sceneSettings = owner->GetScene()->GetSettings();
 		int gridWidth = sceneSettings.GetSettingValInt("transform", "grid_width");
 		int gridHeight = sceneSettings.GetSettingValInt("transform", "grid_height");
@@ -58,6 +60,7 @@ namespace Cog {
 		float actualCropped = actual;
 
 		if (actual >= duration) {
+			// value exceeded
 			actualCropped = duration;
 		}
 
@@ -68,6 +71,7 @@ namespace Cog {
 		Trans& ownerTrans = owner->GetTransform();
 
 		if (blend == AnimBlend::ADDITIVE) {
+			// add calculated values with the current
 			actualTrans.localPos = (toTrans.localPos - fromTrans.localPos)*(actualPercent - lastPercent);
 			actualTrans.rotation = (toTrans.rotation - fromTrans.rotation)*(actualPercent - lastPercent);
 			actualTrans.scale = (toTrans.scale - fromTrans.scale)*(actualPercent - lastPercent);
@@ -80,6 +84,7 @@ namespace Cog {
 			}
 		}
 		else if (blend == AnimBlend::OVERLAY) {
+			// overlay current values with the calculated
 			ownerTrans.localPos = fromTrans.localPos + (toTrans.localPos - fromTrans.localPos)*(actualPercent);
 			ownerTrans.rotation = fromTrans.rotation + (toTrans.rotation - fromTrans.rotation)*(actualPercent);
 			ownerTrans.scale = fromTrans.scale + (toTrans.scale - fromTrans.scale)*(actualPercent);
@@ -107,11 +112,5 @@ namespace Cog {
 		}
 	}
 
-	AnimBlend TransformAnim::StrToAnimBlend(string val) {
-		if (val.compare("additive") == 0) return AnimBlend::ADDITIVE;
-		else if (val.compare("overlay") == 0) return AnimBlend::OVERLAY;
-
-		return AnimBlend::ADDITIVE;
-	}
 
 }// namespace

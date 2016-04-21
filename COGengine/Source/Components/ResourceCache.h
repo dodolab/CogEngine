@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Component.h"
 #include "Settings.h"
 #include "DEntity.h"
 #include "TransformEnt.h"
+
 namespace Cog {
 
 	class Soundfx;
@@ -12,7 +12,7 @@ namespace Cog {
 	class SpriteSheet;
 
 	/**
-	* Resource controller that holds images, 3D objects and sounds
+	* Resource controller that contains media and configuration files
 	*/
 	class ResourceCache : public Component {
 
@@ -27,11 +27,11 @@ namespace Cog {
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
 		map<string, spt<GeneralAnim>> loadedAnimations;
-		// cached entities
+		// cached description entities
 		map<string, spt<DEntity>> loadedEntities;
-		// cached spritesheets
+		// cached sprite sheets
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
-		// loaded fonts (each DPI must have one font loaded)
+		// cached fonts (one for each dpi)
 		map<string, map<int,spt<ofTrueTypeFont>>> loadedFonts;
 
 		Settings loadedDefaultSettings;
@@ -41,8 +41,7 @@ namespace Cog {
 	public:
 
 		ResourceCache() {
-			// resource cache should be initialized with higher priority because it
-			// loads XML settings
+			// resource cache should be initialized with higher priority
 			this->initPriority = InitPriority::HIGH;
 		}
 
@@ -50,9 +49,6 @@ namespace Cog {
 
 		}
 
-		/**
-		* Initializes controller
-		*/
 		void OnInit();
 
 		void OnInit(spt<ofxXml> xml);
@@ -64,8 +60,10 @@ namespace Cog {
 		spt<ofImage> Get2DImage(string path);
 
 		/**
-		* Preloads 2D image from file; doesn't use texture so before first render,
-		* the image must be copied onto texture; very usefull for ofxThread
+		* Preloads 2D image from file; doesn't use texture so the image 
+		* must be copied before the first render, but this is done
+		* automatically; this method is useful for loading from separate
+		* thread since the access to textures is problematic
 		* @param path path to file
 		*/
 		spt<ofImage> Preload2DImage(string path);
@@ -79,12 +77,12 @@ namespace Cog {
 		/**
 		* Loads font from file
 		* @param path path to file
-		* @size font size
+		* @size font size in dpi
 		*/
 		spt<ofTrueTypeFont> GetFont(string path, int size);
 
 		/**
-		* Loads sound from file
+		* Loads either sound or music from file
 		* @param path path to file
 		*/
 		Soundfx* GetSound(string path);
@@ -96,13 +94,13 @@ namespace Cog {
 		spt<ofxXmlSettings> PreloadXMLFile(string path);
 
 		/**
-		* Loads xml file
+		* Loads xml file without caching
 		* @param path path to file
 		*/
 		spt<ofxXmlSettings> LoadXMLFile(string path);
 
 		/**
-		* Gets animation
+		* Gets animation by name
 		* @param name animation name
 		*/
 		spt<GeneralAnim> GetAnimation(string name);
@@ -118,15 +116,21 @@ namespace Cog {
 		*/
 		spt<DEntity> GetEntity(string name);
 
-		template<class T> spt<T> GetEntityC(string name) {
+		/**
+		* Gets stored entity by name
+		* @param name name of the entity
+		* @tparam entity type
+		*/
+		template<class T> spt<T> GetEntity(string name) {
 			spt<DEntity> entity = GetEntity(name);
 			if (!entity) return spt<T>();
 
 			DEntity* entityPtr = entity.get();
-			COGASSERT(typeid(*entityPtr) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name.c_str());
+			COGASSERT(typeid(*entityPtr) == typeid(T), "Resource", "Entity %s is of the wrong type!", name.c_str());
 
-			// never create another pointer, because it will be destroyed within the original!
-			// always use static_cast of the actual pointer
+			// never create another shared pointer of the same object, because one of them may be destroyed when the
+			// second one still works with the object
+			// always use static_pointer_cast instead
 			return static_pointer_cast<T>(entity);
 		}
 
@@ -155,22 +159,44 @@ namespace Cog {
 		*/
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
 
+		/**
+		* Gets default settings that contains default values
+		* for any component
+		*/
 		Settings& GetDefaultSettings() {
 			return loadedDefaultSettings;
 		}
 
+		/**
+		* Gets global settings that contains initialization
+		* configuration such as logger settings, aspect ratio etc.
+		*/
 		Settings& GetGlobalSettings() {
 			return loadedGlobalSettings;
 		}
 
+		/**
+		* Gets custom project settings that may contain anything
+		*/
 		Settings& GetProjectSettings() {
 			return loadedProjectSettings;
 		}
 
+		/**
+		* Gets default setting by name of the parent group,
+		* for example "transform"
+		*/
 		Setting GetDefaultSettings(string name);
 
+		/**
+		* Gets global setting by name of the parent group,
+		* for example "logger"
+		*/
 		Setting GetGlobalSettings(string name);
 
+		/**
+		* Gets project setting by name of the parent group
+		*/
 		Setting GetProjectSettings(string name);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {

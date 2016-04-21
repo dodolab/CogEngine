@@ -1,70 +1,63 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include "Definitions.h"
 #include "InputAct.h"
 #include "Component.h"
 
 namespace Cog {
 
-	/**
-	** Request for handling the input event
-	*/
-	class InputHandlerRequest {
-	public:
-		Node* owner;
-		InputAct* touch;
-		int handlerBehId;
-		int ownerZIndex;
-
-		InputHandlerRequest() {
-
-		}
-
-		InputHandlerRequest(Node* owner, InputAct* touch, int handlerBehId):
-			owner(owner), touch(touch), handlerBehId(handlerBehId) {
-			ownerZIndex = (int)owner->GetTransform().localPos.z;
-		}
-	};
+	class Node;
 
 	/**
 	* Global input handler
-	* When user touches the button, we have to store all objects that were touched. After that we
-	* select the one with the highest z-index and that object will be handled
+	* When a new touch event is registered by any of HitEvent behaviors, a new request is made,
+	* consisting of the node of which the hit was detected
+	*
+	* When an update is made, the InputHandler will select the node with the highest z-index that will
+	* obtain ACT_OBJECT_HIT_STARTED message
 	*/
 	class InputHandler : public  Component {
 
 	private:
+		
+		/**
+		** Request for handling the input event
+		*/
+		class InputHandlerRequest {
+		public:
+			// node on which the hit was detected
+			Node* owner;
+			InputAct* touch;
+			// identifier of possible behavior handler 
+			int handlerBehId;
+			// z-index of the owner node
+			int ownerZIndex;
+
+			InputHandlerRequest() {
+
+			}
+
+			InputHandlerRequest(Node* owner, InputAct* touch, int handlerBehId);
+		};
+
 		vector<InputHandlerRequest> requests;
 
 	public:
 
-		void RegisterRequest(Node* owner, InputAct* touch, int handlerBehId) {
-			auto req = InputHandlerRequest(owner, touch, handlerBehId);
-			requests.push_back(req);
-		}
+		/**
+		* Registers a new input request
+		* @param owner owner of the hit event (object that was hit)
+		* @param touch touch event 
+		* @param handlerBehId id of the possible handler (or -1, if there is no such handler)
+		* - if it isn't a general ACT_OBJECT_HIT_STARTED message will be sent
+		*/
+		void RegisterRequest(Node* owner, InputAct* touch, int handlerBehId);
 
-		void HandleInputs() {
-			if (requests.size() > 0) {
-				// todo: there could be more input events..
-				InputHandlerRequest reqToHandle;
-				reqToHandle.ownerZIndex = -100000;
-
-				for (auto request : requests) {
-					// there has to be >=, because children with the same z-index will have preference
-					if (request.ownerZIndex >= reqToHandle.ownerZIndex) {
-						reqToHandle = request;
-					}
-				}
-
-				reqToHandle.touch->handlerNodeId = reqToHandle.owner->GetId();
-				reqToHandle.owner->SetState(StrId(STATES_HIT));
-
-				if (reqToHandle.handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(reqToHandle.touch)), reqToHandle.owner);
-				else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(reqToHandle.touch)), reqToHandle.owner, reqToHandle.handlerBehId);
-
-				requests.clear();
-			}
-		}
+		/**
+		* Handles the inputs and select object with the highest z-index to which the 
+		* message will be sent
+		*/
+		void HandleInputs();
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 			HandleInputs();

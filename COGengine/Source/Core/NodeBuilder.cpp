@@ -140,7 +140,7 @@ namespace Cog {
 		}
 		else {
 			// load from reference behavior descriptor
-			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->ref);
+			spt<BehaviorEnt> refent = resourceCache->GetEntity<BehaviorEnt>(entity->ref);
 			
 			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(refent->type);
 			if (!refent->setting.Empty()) behavior->Load(refent->setting);

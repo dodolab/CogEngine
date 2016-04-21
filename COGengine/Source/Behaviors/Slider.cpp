@@ -15,7 +15,7 @@ namespace Cog {
 		this->bodyNodeTag = setting.GetItemVal("body");
 		this->textNodeTag = setting.GetItemVal("text");
 
-		if (this->bodyNodeTag.empty()) throw IllegalArgumentException("Error while loading Slider behavior; expected 'body' attribute in settings");
+		if (this->bodyNodeTag.empty()) CogLogError("Slider","Error while loading Slider behavior; expected 'body' attribute in settings");
 	}
 
 	void Slider::OnInit() {
@@ -53,6 +53,8 @@ namespace Cog {
 
 			if (msg.GetContextNode()->GetId() == owner->GetId()) {
 				if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
+					
+					// set value according to the position of the mouse
 					spt<InputEvent> evt = msg.GetData<InputEvent>();
 					auto image = body->GetMesh<Image>();
 
@@ -76,7 +78,6 @@ namespace Cog {
 					}
 				}
 			}
-
 			msgLocked = false;
 		}
 	}

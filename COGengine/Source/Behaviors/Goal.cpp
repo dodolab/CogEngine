@@ -28,18 +28,30 @@ namespace Cog {
 			do {
 				actualSubgoal->Update(delta, absolute);
 
-				if (actualSubgoal->IsCompleted() || ((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) && continueOnFail)) {
-					if (subgoalIndex < (subgoals.size() - 1)) {
-						SwitchToSubgoal(subgoals[++subgoalIndex]);
+				if (actualSubgoal->GoalEnded()) {
+					if ((actualSubgoal->IsCompleted() && compositeType != GoalCompositeType::SELECTOR) ||
+						((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) 
+							&& compositeType != GoalCompositeType::SEQUENCER)) {
+
+						// go to the next goal
+						if (subgoalIndex < (subgoals.size() - 1)) {
+							SwitchToSubgoal(subgoals[++subgoalIndex]);
+						}
+						else {
+							Complete();
+							break;
+						}
+					}
+					else if ((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) 
+						&& compositeType == GoalCompositeType::SERIALIZER) {
+						Fail();
+						break;
 					}
 					else {
+						// when subgoal fails it is ok for SEQUENCER
 						Complete();
 						break;
 					}
-				}
-				else if (actualSubgoal->IsFailed() && !continueOnFail) {
-					Fail();
-					break;
 				}
 				else {
 					break;
@@ -52,7 +64,7 @@ namespace Cog {
 		this->actualSubgoal = goal;
 		SetOwner(goal, owner);
 		goal->SetGoalState(GoalState::PROCESSING);
-		// goal can fail during initialization, so that the state should be changed before init
+		// goal can fail during initialization and therefore the state should be changed before init
 		goal->Start();
 	}
 

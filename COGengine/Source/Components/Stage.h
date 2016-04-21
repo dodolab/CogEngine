@@ -11,26 +11,27 @@ namespace Cog {
 	enum class TweenDirection;
 
 	/**
-	* Node context
+	* Stage, the parent of all scenes and the complete node-tree at all,
+	* takes care of scene switching and global listeners registration
 	*/
 	class Stage : public Component{
 
 	private:
 
-		// message listeners
-		map<StrId, vector<MsgListener*>> msgListeners;
+		// message listeners, mapped by the action they listens to
+		map<StrId, vector<BaseComponent*>> msgListeners;
 
 		// actual scene
 		Scene* actualScene = nullptr;
-
+		// loading scene, used only when there are some scenes that
+		// need asynchronous loading. Its just a fancy feature
 		Scene* loadingScene = nullptr;
 		// list of all scenes
 		vector<Scene*> scenes;
-
-		// root object, should be created only once
+		// root object, holds reference to all scene nodes
 		Node* rootObject = nullptr;
-
-		stack<Scene*> sceneStack = stack<Scene*>();
+		// stack of switched scenes
+		stack<Scene*> sceneStack;
 
 	public:
 
@@ -43,45 +44,57 @@ namespace Cog {
 		/**
 		* Gets the root object
 		*/
-		Node* GetRootObject() {
+		Node* GetRootObject() const {
 			return rootObject;
 		}
 
 		/**
 		* Gets actual scene
 		*/
-		Scene* GetActualScene() {
+		Scene* GetActualScene() const {
 			return actualScene;
 		}
 
 		/**
 		* Adds a new scene
+		* @param scene scene to add
 		* @param setAsActual if true, scene will be set as the actual scene
 		*/
 		void AddScene(Scene* scene, bool setAsActual);
 
+		/**
+		* Copies all global listeners to selected scene
+		* Copying global listeners to all scenes simplifies their handling because
+		* otherwise the scene had to check both local and global listeners
+		*/
 		void CopyGlobalListenersToScene(Scene* scene);
 
 		/**
-		* Registers global behavior listener for selected action
-		* @param action action to register
-		* @param listener listener that will be called when selected action is invoked
+		* Registers global listener for selected action
 		*/
-		void RegisterGlobalListener(StrId action, MsgListener* listener);
+		void RegisterGlobalListener(StrId action, BaseComponent* listener);
 
 		/**
-		* Unregisters global message listener for selected action
-		* @return true if listener has been found and erased
+		* Unregisters global listener for selected action
 		*/
-		bool UnregisterGlobalListener(StrId action, MsgListener* listener);
+		bool UnregisterGlobalListener(StrId action, BaseComponent* listener);
 
 		/**
 		* Finds scene by its name
 		*/
 		Scene* FindSceneByName(string name) const;
 	
+		/**
+		* Switches to selected scene
+		* @param scene scene to switch
+		* @param tweenDir tween direction; if none, scene will be switched automatically
+		*/
 		void SwitchToScene(Scene* scene, TweenDirection tweenDir);
 
+		/**
+		* Switches actual scene back to previous scene; very similar to 
+		* back-press buttton in Android
+		*/
 		bool SwitchBackToScene(TweenDirection tweenDir);
 
 		/**
@@ -89,6 +102,9 @@ namespace Cog {
 		*/
 		void LoadScenesFromXml(spt<ofxXml> xml);
 
+		/**
+		* Writes info about all scenes and their nodes into the console
+		*/
 		void WriteInfo(int logLevel = 0);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {

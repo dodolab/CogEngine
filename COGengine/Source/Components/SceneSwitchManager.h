@@ -6,58 +6,88 @@
 namespace Cog {
 
 	class Behavior;
-	class Node;
+	class Scene;
 	class Msg;
 	class Tween;
 	enum class TweenDirection;
 
+	/**
+	* Context of the tween action
+	*/
 	class TweenContext {
 	public:
-		Node* to;
+		// scene to tween to
+		Scene* to;
+		// tween direction
 		TweenDirection dir;
-		bool readyToGo; // if true, scene is switched automatically
+		// if true, scene is switched automatically
+		bool readyToGo; 
 	};
 
-	/**x
-	* Scene manager component
+	/**
+	* Manager that switches two scenes with tweening animation
 	*/
 	class SceneSwitchManager : public Component {
 	public:
-		TransformMath math = TransformMath();
+		TransformMath math;
 		// scene to switch from
-		Node* from;
+		Scene* from;
 		// scene to switch to
-		Node* to;
-		// indicator, if this behavior is waiting until tween ends
+		Scene* to;
+		// indicator whether the manager is waiting for a current tween
 		bool waitingForTween = false;
-
-		queue<TweenContext> waitingTweens = queue<TweenContext>();
+		// queue of waiting tweens
+		queue<TweenContext> waitingTweens;
 
 		void OnInit();
 
-
 		void OnMessage(Msg& msg);
 
-		void PushSceneSwitch(Node* from, Node* to, TweenDirection tweenDir, bool autoSwitch);
+		/**
+		* Pushes a scene switch action to the stack
+		* @param from scene to switch from
+		* @param to scene to switch to
+		* @param tweenDir tween direction
+		* @param autoSwitch if true, scenes are switched automatically
+		*/
+		void PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch);
 
+		/**
+		* Pops scene switch action from the stack
+		* @return true if there is a switch to pop
+		*/
 		bool PopSceneSwitch();
 
 		/**
-		* Switches to another scene with tweening
-		* @param scene scene to switch to
+		* Switches between two scenes
+		* @param from scene to switch from
+		* @param to scene to switch to
 		* @param tweenDir tween direction
 		*/
-		void SwitchToScene(Node* from, Node* to, TweenDirection tweenDir);
+		void SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 		}
 
 	private:
 
-		void ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir);
+		/**
+		* Executes scene switching
+		* @param from scene to switch from
+		* @param to scene to switch to
+		* @param tweenDir tween direction
+		*/
+		void ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir);
 
-		void StopSceneAndNotify();
+		/**
+		* Stops the previous scene and notifies behaviors about it
+		*/
+		void StopPreviousSceneAndNotify();
 
+		/**
+		* Checks if there is a scene switch in the stack
+		* If so, a waiting scene is switched
+		*/
 		void CheckWaitingTweens();
 	};
 

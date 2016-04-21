@@ -4,13 +4,18 @@
 
 namespace Cog {
 
-	/**x
-	* Behavior for animation sequence; can store a collection of animations
+	/**
+	* Behavior for sequence of animations but can be used for any behaviors as well
+	* As soon as the actual behavior finishes, the next in line takes its place
 	*/
 	class MultiAnim : public Behavior {
 	private:
+		// actual behavior being updated
 		Behavior* actual = nullptr;
+		// list of all behaviors
 		vector<Behavior*> animations;
+		// indicator whether the collection of behaviors
+		// should be repeated
 		bool repeat = false;
 
 	public:
@@ -25,10 +30,18 @@ namespace Cog {
 
 		void AddAnimation(Behavior* anim);
 
-		bool Repeat() {
+		/**
+		* Returns true, if the collection of behaviors
+		* should be repeated when all of them finish
+		*/
+		bool Repeat() const{
 			return repeat;
 		}
 
+		/**
+		* Sets indicator whether the collection of behaviors
+		* should be repeated when all of them finish
+		*/
 		void SetRepeat(bool repeat) {
 			this->repeat = repeat;
 		}

@@ -4,6 +4,13 @@
 
 namespace Cog {
 
+	/**
+	* Behavior that consists of other behaviors, allowing them
+	* to be updated at once; the behavior is finished when all inner
+	* behaviors are finished
+	* Note that if this behavior is updated once without any behavior attached,
+	* it will finish immediately
+	*/
 	class CompositeBehavior : public Behavior {
 	protected:
 		vector<Behavior*> behaviors;
@@ -53,7 +60,6 @@ namespace Cog {
 		void OnMessage(Msg& msg);
 
 		void Update(const uint64 delta, const uint64 absolute);
-
 	};
 
 

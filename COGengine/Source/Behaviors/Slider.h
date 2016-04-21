@@ -6,12 +6,18 @@ namespace Cog {
 
 	class Node;
 
+	/**
+	* Slider component consisting of a body and text
+	* The value of the slider is set by dragging over the body of the node
+	*/
 	class Slider : public Behavior {
 	protected:
 		Node* body = nullptr;
 		Node* text = nullptr;
 		string bodyNodeTag;
 		string textNodeTag;
+		// indicator that prevents capturing message until
+		// the handler of previous message has finished
 		bool msgLocked = false;
 	public:
 
@@ -27,6 +33,10 @@ namespace Cog {
 
 		void OnStart();
 
+		/**
+		* Sets the slider value
+		* @param percentage percentage value in rage <0,100>
+		*/
 		void SetValue(int percentage);
 
 		void OnMessage(Msg& msg);

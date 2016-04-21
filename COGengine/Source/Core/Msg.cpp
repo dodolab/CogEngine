@@ -35,13 +35,4 @@ namespace Cog {
 	{
 
 	}
-
-	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType,
-		Node* contextNode, uint64 deliverTime, spt<MsgEvent> data) 
-		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType),
-		contextNode(contextNode), deliverTime(deliverTime), data(data)
-	{
-
-	}
-
 }// namespace
