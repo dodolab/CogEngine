@@ -1,7 +1,7 @@
 
 #include "Slider.h"
-#include "Events.h"
-#include "CogEngine.h"
+#include "MsgPayloads.h"
+#include "ofxCogEngine.h"
 #include "Scene.h"
 #include "Node.h"
 

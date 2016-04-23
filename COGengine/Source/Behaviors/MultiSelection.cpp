@@ -1,6 +1,6 @@
 
 #include "MultiSelection.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "EnumConverter.h"
 #include "Node.h"
 

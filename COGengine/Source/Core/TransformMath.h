@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TransformEnt.h"
+#include "Transform.h"
 
 namespace Cog {
 
@@ -69,9 +70,7 @@ namespace Cog {
 		/**
 		* Gets center of the screen
 		*/
-		ofVec2f GetCenter() {
-			return ofVec2f(CogGetScreenWidth() / 2.0f, CogGetScreenHeight() / 2.0f);
-		}
+		ofVec2f GetCenter();
 	};
 
 }// namespace

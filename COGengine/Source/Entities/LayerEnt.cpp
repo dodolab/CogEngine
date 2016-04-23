@@ -1,4 +1,5 @@
 #include "LayerEnt.h"
+#include "Error.h"
 
 namespace Cog {
 

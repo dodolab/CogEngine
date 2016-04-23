@@ -124,7 +124,7 @@ namespace Cog {
 		// set the moved scene as running just for a while because a message has to be sent
 		from->GetSceneNode()->SetRunningMode(RUNNING);
 		// send message to both scenes
-		auto msg = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(), spt<MsgEvent>());
+		auto msg = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(), spt<MsgPayload>());
 		to->SendMessage(msg);
 		from->SendMessage(msg);
 

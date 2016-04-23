@@ -12,7 +12,7 @@ namespace Cog {
 	/**
 	* Storage for registered behavior prototypes and component instances
 	*/
-	class EntityStorage {
+	class ComponentStorage {
 
 	protected:
 		// components, mapped by their types
@@ -22,11 +22,11 @@ namespace Cog {
 
 	public:
 
-		EntityStorage() {
+		ComponentStorage() {
 
 		}
 
-		~EntityStorage() {
+		~ComponentStorage() {
 			// delete content
 			for (auto& key : components) {
 				delete key.second;
@@ -62,7 +62,7 @@ namespace Cog {
 		void RegisterComponent(T* value) {
 			
 			if (ExistsComponent<T>()) {
-				COGLOGDEBUG("EntityStorage", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
+				COGLOGDEBUG("ComponentStorage", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
 				RemoveComponent<T>();
 			}
 
@@ -100,7 +100,7 @@ namespace Cog {
 		template<class T> T* GetComponent() {
 			auto it = components.find(typeid(T));
 
-			COGASSERT(it != components.end(), "EntityStorage", "Component %s doesn't exists", typeid(T).name());
+			COGASSERT(it != components.end(), "ComponentStorage", "Component %s doesn't exists", typeid(T).name());
 
 			T* attr = static_cast<T*>(it->second);
 			return attr;
@@ -157,7 +157,7 @@ namespace Cog {
 		Behavior* CreateBehaviorPrototype(StrId key) {
 			auto it = behaviorBuilders.find(key);
 
-			COGASSERT(it != behaviorBuilders.end(), "EntityStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
+			COGASSERT(it != behaviorBuilders.end(), "ComponentStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
 			auto builder = it->second;
 			return builder->Create();
 		}

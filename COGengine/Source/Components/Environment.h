@@ -3,6 +3,7 @@
 #include "InputAct.h"
 #include "Component.h"
 #include "Vec2i.h"
+#include "Soundfx.h"
 
 namespace Cog {
 

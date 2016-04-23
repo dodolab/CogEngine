@@ -1,6 +1,6 @@
 
 #include "Move.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Movement.h"
 #include "Node.h"
 

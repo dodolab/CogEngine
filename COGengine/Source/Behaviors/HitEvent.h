@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "InputHandler.h"
 
 namespace Cog {

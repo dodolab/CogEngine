@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Environment.h"
 #include "catch.hpp"
 using namespace Cog;
@@ -22,10 +22,10 @@ using namespace Cog;
 
 TEST_CASE("Transformation test")
 {
-	CogEngine::GetInstance().SetFps(20);
-	CogEngine::GetInstance().Init();
-	CogEngine::GetInstance().environment->SetVirtualAspectRatio(1);
-	CogEngine::GetInstance().environment->OnScreenSizeChanged(400, 400);
+	ofxCogEngine::GetInstance().SetFps(20);
+	ofxCogEngine::GetInstance().Init();
+	ofxCogEngine::GetInstance().environment->SetVirtualAspectRatio(1);
+	ofxCogEngine::GetInstance().environment->OnScreenSizeChanged(400, 400);
 	auto math = TransformMath();
 
 	SECTION("Topleft corner")

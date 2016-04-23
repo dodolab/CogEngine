@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "Msg.h"
 #include "InputAct.h"
 #include "Soundfx.h"
@@ -12,22 +11,22 @@ namespace Cog {
 	class Behavior;
 	class Component;
 	class BaseComponent;
-	class EntityStorage;
+	class ComponentStorage;
 	class Scene;
 	class Node;
 	class Msg;
-	class MsgEvent;
+	class MsgPayload;
 	class InputAct;
 	class SheetAnim;
 	class AsyncProcess;
 
-	EntityStorage* CogGetEntityStorage();
+	ComponentStorage* CogGetComponentStorage();
 
 	/**********************************************************************************/
 	/* Facade methods that may be used for centralized access to important components */
 	/**********************************************************************************/
 
-	// =================== CogEngine ====================
+	// =================== ofxCogEngine ====================
 	
 	int CogGetFrameCounter();
 	uint64 CogGetAbsoluteTime();

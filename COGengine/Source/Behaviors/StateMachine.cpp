@@ -1,5 +1,5 @@
 #include "StateMachine.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Facade.h"
 #include "Node.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-
+#include "Definitions.h"
+#include "Vec2i.h"
 
 namespace Cog {
 

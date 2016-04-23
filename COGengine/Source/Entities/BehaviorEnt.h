@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "DEntity.h"
 #include "Settings.h"
 #include "ResourceCache.h"

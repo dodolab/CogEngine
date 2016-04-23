@@ -5,7 +5,8 @@
 #include "Msg.h"
 #include "Facade.h"
 #include "Mesh.h"
-#include "Events.h"
+#include "MsgPayloads.h"
+#include "Flags.h"
 
 namespace Cog {
 
@@ -29,7 +30,7 @@ namespace Cog {
 	};
 
 	/**
-	* Scene object; the most important entity in the whole CogEngine
+	* Scene object; the most important entity in the whole ofxCogEngine
 	*
 	* Each object has set of attributes, behaviors and states. By default it has a
 	* rendering mesh (but there could be non-renderable nodes as well) and 
@@ -586,7 +587,7 @@ namespace Cog {
 		* @param action message action type
 		* @param data payload
 		*/
-		void SendMessage(StrId action, spt<MsgEvent> data);
+		void SendMessage(StrId action, spt<MsgPayload> data);
 
 
 	public:

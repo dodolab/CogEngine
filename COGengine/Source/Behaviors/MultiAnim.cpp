@@ -3,7 +3,7 @@
 #include "BehaviorEnt.h"
 #include "Error.h"
 #include "ResourceCache.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "Facade.h"
 
 namespace Cog {
@@ -20,7 +20,7 @@ namespace Cog {
 
 			if (!ent) CogLogError("MultiAnim","Animation %s not found", anim.c_str());
 
-			Behavior* behavior = CogGetEntityStorage()->CreateBehaviorPrototype(ent->type);
+			Behavior* behavior = CogGetComponentStorage()->CreateBehaviorPrototype(ent->type);
 			if (!ent->setting.Empty()) behavior->Load(ent->setting);
 			
 			AddAnimation(behavior);

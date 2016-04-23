@@ -4,6 +4,7 @@
 #include "TransformEnt.h"
 #include "EasingFunc.h"
 #include "TransformAnim.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -119,6 +120,7 @@ namespace Cog {
 		}
 
 		CogLogError("EnumConverter","No such easing function : %s", name.c_str());
+		return EasingFunc::linear;
 	}
 
 	CalcType EnumConverter::GetUnitValue(string val, float& floatVal) {

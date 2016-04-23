@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
+#include "Transform.h"
 #include "TransformEnt.h"
 #include "EasingFunc.h"
 

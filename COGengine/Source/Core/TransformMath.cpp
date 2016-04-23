@@ -148,4 +148,8 @@ namespace Cog {
 
 	}
 
+	ofVec2f TransformMath::GetCenter() {
+		return ofVec2f(CogGetScreenWidth() / 2.0f, CogGetScreenHeight() / 2.0f);
+	}
+
 } // namespace

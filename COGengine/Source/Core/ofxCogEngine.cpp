@@ -1,4 +1,4 @@
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "ResourceCache.h"
 #include "Logger.h"
 #include "Node.h"
@@ -7,7 +7,7 @@
 #include "SceneSwitchManager.h"
 #include "Renderer.h"
 #include "Environment.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "InputHandler.h"
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
@@ -30,16 +30,16 @@
 
 namespace Cog {
 
-	CogEngine::CogEngine() {
-		entityStorage = new EntityStorage();
+	ofxCogEngine::ofxCogEngine() {
+		compStorage = new ComponentStorage();
 	}
 
-	void CogEngine::Init() {
+	void ofxCogEngine::Init() {
 
 		RegisterComponents();
 
 		vector<Component*> components;
-		entityStorage->GetAllComponents(components);
+		compStorage->GetAllComponents(components);
 	
 		// sort by priority
 		sort(components.begin(), components.end(),
@@ -54,21 +54,21 @@ namespace Cog {
 		}
 	}
 
-	void CogEngine::Init(string xmlPath) {
+	void ofxCogEngine::Init(string xmlPath) {
 		ofxXml* xml = new ofxXml();
 		xml->loadFile(xmlPath.c_str());
 		auto xmlPtr = spt<ofxXml>(xml);
 		Init(xmlPtr);
 	}
 
-	void CogEngine::Init(spt<ofxXml> config) {
+	void ofxCogEngine::Init(spt<ofxXml> config) {
 		
 		this->config = config;
 
 		RegisterComponents();
 
 		vector<Component*> components;  
-		entityStorage->GetAllComponents(components);
+		compStorage->GetAllComponents(components);
 
 		// sort by priority
 		sort(components.begin(), components.end(),
@@ -86,7 +86,7 @@ namespace Cog {
 		}
 	}
 
-	void CogEngine::LoadStageFromXml(spt<ofxXml> config) {
+	void ofxCogEngine::LoadStageFromXml(spt<ofxXml> config) {
 		config->popAll();
 
 		if (config->pushTagIfExists("app_config") && config->pushTagIfExists("scenes")) {
@@ -96,7 +96,7 @@ namespace Cog {
 		}
 	}
 
-	void CogEngine::Update(uint64 delta, uint64 absolute) {
+	void ofxCogEngine::Update(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_UPDATE");
 
 		lastAbsoluteTime = absolute;
@@ -108,7 +108,7 @@ namespace Cog {
 		stage->GetRootObject()->Update(delta, absolute);
 
 		// update components
-		auto& components = entityStorage->GetComponents();
+		auto& components = compStorage->GetComponents();
 
 		for (auto& comp : components) {
 			auto state = comp.second->GetComponentState();
@@ -133,7 +133,7 @@ namespace Cog {
 		COGMEASURE_END("ENGINE_UPDATE");
 	}
 
-	void CogEngine::Draw(uint64 delta, uint64 absolute) {
+	void ofxCogEngine::Draw(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_DRAW");
 
 		Node* root = stage->GetRootObject();
@@ -160,11 +160,11 @@ namespace Cog {
 		COGMEASURE_END("ENGINE_DRAW");
 	}
 
-	void CogEngine::AddPostUpdateAction(function<void()> action) {
+	void ofxCogEngine::AddPostUpdateAction(function<void()> action) {
 		actions.push_back(action);
 	}
 
-	void CogEngine::RegisterComponents() {
+	void ofxCogEngine::RegisterComponents() {
 
 		environment = new Environment();
 		resourceCache = new ResourceCache();
@@ -199,10 +199,10 @@ namespace Cog {
 		REGISTER_BEHAVIOR(Slider);
 	}
 
-	void CogEngine::Clear() {
+	void ofxCogEngine::Clear() {
 		// only entity storage holds all other objects
-		delete entityStorage;
-		entityStorage = new EntityStorage();
+		delete compStorage;
+		compStorage = new ComponentStorage();
 	}
 
 }// namespace

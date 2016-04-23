@@ -1,5 +1,5 @@
 #include "TransformAnim.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Scene.h"
 #include "EnumConverter.h"
 #include "Node.h"
@@ -8,8 +8,9 @@
 #include "Definitions.h"
 #include "TransformEnt.h"
 #include "Stage.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "EnumConverter.h"
+#include "Transform.h"
 
 namespace Cog {
 

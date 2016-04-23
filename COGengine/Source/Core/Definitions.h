@@ -2,20 +2,22 @@
 
 #include <iostream>
 #include <memory>
+#include "TimeMeasure.h"
+#include "Error.h"
 
 // ==========================================================================
 // This section contains definitions of all macros, default constants and
-// aliases, used in CogEngine
+// aliases, used in ofxCogEngine
 
 
 /** Gets component by its type */
-#define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>()
+#define GETCOMPONENT(className) CogGetComponentStorage()->GetComponent<className>()
 
 /** Registers an instance of a component*/
-#define REGISTER_COMPONENT(object) CogEngine::GetInstance().entityStorage->RegisterComponent(object)
+#define REGISTER_COMPONENT(object) ofxCogEngine::GetInstance().compStorage->RegisterComponent(object)
 
 /** Registers beahvior prototype by its type */
-#define REGISTER_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->RegisterBehaviorBuilder<className>(#className)
+#define REGISTER_BEHAVIOR(className) ofxCogEngine::GetInstance().compStorage->RegisterBehaviorBuilder<className>(#className)
 
 /** Registers lua function */
 #define LUA_REGFUNC(className, funcName) addFunction(#funcName, &className::funcName)

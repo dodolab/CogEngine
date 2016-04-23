@@ -1,8 +1,8 @@
 #include "SheetAnimator.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Node.h"
 #include "ResourceCache.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 
 namespace Cog {
 
@@ -25,7 +25,7 @@ namespace Cog {
 	void SheetAnimator::Update(const uint64 delta, const uint64 absolute) {
 
 		// get next frame
-		this->contextStack.MoveToNext(delta, CogEngine::GetInstance().GetFps());
+		this->contextStack.MoveToNext(delta, ofxCogEngine::GetInstance().GetFps());
 
 		if (this->contextStack.Ended()) {
 			Finish();

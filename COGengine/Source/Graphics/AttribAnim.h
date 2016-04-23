@@ -3,6 +3,7 @@
 #include "Definitions.h"
 #include "AttrAnimEnt.h"
 #include "ofxXmlSettings.h"
+#include "GeneralAnim.h"
 
 namespace Cog {
 

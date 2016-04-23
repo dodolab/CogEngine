@@ -4,6 +4,7 @@
 #include "Settings.h"
 #include "DEntity.h"
 #include "TransformEnt.h"
+#include "GeneralAnim.h"
 
 namespace Cog {
 

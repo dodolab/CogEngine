@@ -1,7 +1,7 @@
 
 #include "AttribAnimator.h"
-#include "CogEngine.h"
-#include "EntityStorage.h"
+#include "ofxCogEngine.h"
+#include "ComponentStorage.h"
 #include "TransformMath.h"
 #include "ResourceCache.h"
 
@@ -66,7 +66,7 @@ namespace Cog {
 	void AttribAnimator::Update(const uint64 delta, const uint64 absolute) {
 
 		// move to the next transformation state according to actual FPS
-		contextStack.MoveToNext(delta, CogEngine::GetInstance().GetFps());
+		contextStack.MoveToNext(delta, ofxCogEngine::GetInstance().GetFps());
 
 		if (contextStack.Ended()) {
 			Finish();

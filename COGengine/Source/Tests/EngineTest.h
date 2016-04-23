@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "ofxCogMain.h"
 #include "catch.hpp"
 using namespace Cog;
@@ -13,11 +13,11 @@ TEST_CASE("COG Engine test")
 	SECTION("Engine run")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 		Node* node = new Node("node");
 		CheckBehavior* check = new CheckBehavior();
@@ -25,10 +25,10 @@ TEST_CASE("COG Engine test")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// simulate update
-		CogEngine::GetInstance().Update(16,16);
+		ofxCogEngine::GetInstance().Update(16,16);
 
 		REQUIRE(check->updateCounter == 1);
 	}
@@ -36,11 +36,11 @@ TEST_CASE("COG Engine test")
 	SECTION("Engine message")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 
 		// node 1 sends message to its child
@@ -57,10 +57,10 @@ TEST_CASE("COG Engine test")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node1);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// simulate update
-		CogEngine::GetInstance().Update(16, 16);
+		ofxCogEngine::GetInstance().Update(16, 16);
 
 		// check if recipient has obtained the message
 		REQUIRE(recipient->acceptedMessage == true);
@@ -69,11 +69,11 @@ TEST_CASE("COG Engine test")
 	SECTION("Behavior by its type")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 
 		Node* node = new Node("node");
@@ -84,10 +84,10 @@ TEST_CASE("COG Engine test")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// simulate update
-		CogEngine::GetInstance().Update(16, 16);
+		ofxCogEngine::GetInstance().Update(16, 16);
 
 		// check if it works
 		auto beh =node->GetBehavior<MaxCountBehavior>();
@@ -98,11 +98,11 @@ TEST_CASE("COG Engine test")
 	SECTION("Behavior can't be stored")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 
 		Node* node = new Node("node");
@@ -112,7 +112,7 @@ TEST_CASE("COG Engine test")
 
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// only one behavior stored, because max number 1 is allowed
 		REQUIRE(node->GetBehaviors().size() == 1);

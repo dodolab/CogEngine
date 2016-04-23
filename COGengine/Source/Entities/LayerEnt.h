@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "DEntity.h"
 
 namespace Cog {
@@ -29,7 +28,8 @@ namespace Cog {
 		* @param bufferSize size of the buffer of this layer
 		* @param zindex z-index of the layer 
 		*/
-		LayerEnt(string name, string spriteSheetName, int bufferSize, int zindex) : spriteSheetName(spriteSheetName), bufferSize(bufferSize), zIndex(zIndex){
+		LayerEnt(string name, string spriteSheetName, int bufferSize, int zindex) 
+			: spriteSheetName(spriteSheetName), bufferSize(bufferSize), zIndex(zIndex){
 			this->name = name;
 		}
 

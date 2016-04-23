@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 
 #include "catch.hpp"

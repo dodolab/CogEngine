@@ -16,7 +16,7 @@ namespace Cog {
 	/**
 	* Application ofApp wrapper for both Android and Windows platforms
 	*/
-	class CogApp
+	class ofxCogApp
 #ifdef WIN32
 		:public ofBaseApp
 #elif ANDROID
@@ -42,13 +42,13 @@ namespace Cog {
 		/**
 		* Creates a new application wrapper
 		*/
-		CogApp() : configFile(""), fps(DEFAULT_APP_SPEED){
+		ofxCogApp() : configFile(""), fps(DEFAULT_APP_SPEED){
 		}
 
 		/**
 		* Creates a new application wrapper with configuration file
 		*/
-		CogApp(string configFile) : configFile(configFile), fps(DEFAULT_APP_SPEED) {
+		ofxCogApp(string configFile) : configFile(configFile), fps(DEFAULT_APP_SPEED) {
 			ofxXml* xml = new ofxXml();
 			xml->loadFile(configFile);
 			this->xmlConfig = spt<ofxXml>(xml);

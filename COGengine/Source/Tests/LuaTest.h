@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 
 #include "catch.hpp"
@@ -309,8 +309,8 @@ ghost = { \
 		REQUIRE(testVec.x == 60);
 	}
 	
-	SECTION("Luabind to CogEngine") {
-		CogEngine::GetInstance().Init();
+	SECTION("Luabind to ofxCogEngine") {
+		ofxCogEngine::GetInstance().Init();
 		auto scr = new LuaScripting();
 		REGISTER_COMPONENT(scr);
 		scr->OnInit();
@@ -371,8 +371,8 @@ mojo5:Register(next) "
 		REQUIRE(lastGlobalFuncClsParam == 6);
 	}
 	
-	SECTION("Luabind to CogEngine 2") {
-		CogEngine::GetInstance().Init();
+	SECTION("Luabind to ofxCogEngine 2") {
+		ofxCogEngine::GetInstance().Init();
 		auto scr = new LuaScripting();
 		REGISTER_COMPONENT(scr);
 		scr->OnInit();
@@ -422,7 +422,7 @@ mojo5:Register(next) "
 		REQUIRE(node->HasAttr(StrId("TEST_ATTR")));
 		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 10);
 		// send message (owner will have MSG_ACCEPTED state set)
-		scr->GetBehaviors()[0]->OnMessage(Msg(StrId("TEST_ACTION"),MsgObjectType::OTHER,-1, MsgObjectType::SUBSCRIBERS,nullptr,spt<MsgEvent>()));
+		scr->GetBehaviors()[0]->OnMessage(Msg(StrId("TEST_ACTION"),MsgObjectType::OTHER,-1, MsgObjectType::SUBSCRIBERS,nullptr,spt<MsgPayload>()));
 		REQUIRE(node->HasState(StrId("MSG_ACCEPTED")));
 		// update node (owner will have TEST_ATTR set to 20)
 		scr->GetNodes()[0]->Update(10, 10);

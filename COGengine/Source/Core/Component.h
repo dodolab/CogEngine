@@ -17,7 +17,7 @@ namespace Cog {
 
 	/**
 	* Base class for global components
-	* Global components are kept in EntityStorage and exist throughout 
+	* Global components are kept in ComponentStorage and exist throughout 
 	* the whole application life
 	*/
 	class Component : public BaseComponent {
@@ -67,11 +67,11 @@ namespace Cog {
 		/** Sends message with custom context node to subscribers listening to selected action */
 		void SendMessage(StrId action, Node* contextNode) const;
 		/** Sends message with payload to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgEvent> data) const;
+		void SendMessage(StrId action, spt<MsgPayload> data) const;
 		/** Sends message with payload and custom context node to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
+		void SendMessage(StrId action, spt<MsgPayload> data, Node* contextNode) const;
 		/** Sends message with payload and custom context node to recipient with selected id */
-		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
+		void SendMessageToBehavior(StrId action, spt<MsgPayload> data, Node* contextNode, int recipientId) const;
 	};
 
 }// namespace

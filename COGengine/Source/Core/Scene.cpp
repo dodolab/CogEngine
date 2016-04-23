@@ -1,10 +1,10 @@
 #include "Scene.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "NodeBuilder.h"
 #include "SpriteSheet.h"
 #include "Renderer.h"
 #include "Stage.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 
 namespace Cog {
 
@@ -150,7 +150,7 @@ namespace Cog {
 			if (beh != nullptr) beh->OnMessage(msg);
 		}
 		else if (recType == MsgObjectType::COMPONENT) {
-			auto cmp = CogGetEntityStorage()->GetComponentById(msg.GetRecipientId());
+			auto cmp = CogGetComponentStorage()->GetComponentById(msg.GetRecipientId());
 			if (cmp != nullptr) cmp->OnMessage(msg);
 		}
 		else if (recType == MsgObjectType::NODE_CHILDREN ||

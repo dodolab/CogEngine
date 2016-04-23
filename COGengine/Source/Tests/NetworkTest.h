@@ -294,11 +294,11 @@ TEST_CASE("Network test")
 		auto netCom = new NetworkCommunicator();
 		REGISTER_COMPONENT(netCom);
 		// init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// start server
 		netCom->InitListening(1000, 12345);
@@ -314,8 +314,8 @@ TEST_CASE("Network test")
 
 
 		// update
-		CogEngine::GetInstance().ResetFrameCounter();
-		CogEngine::GetInstance().Update(10, 10);
+		ofxCogEngine::GetInstance().ResetFrameCounter();
+		ofxCogEngine::GetInstance().Update(10, 10);
 		// client should be connected
 		REQUIRE(!netCom->GetPeerIp().empty());
 	}
