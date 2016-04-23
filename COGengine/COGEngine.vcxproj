@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/ofxNetwork;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/ofxSQLite;$(ProjectDir)/3rdParty/tinyxml;$(ProjectDir)/3rdParty/ofxXmlSettings;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/network;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/ofxNetwork;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/ofxSQLite;$(ProjectDir)/3rdParty/tinyxml;$(ProjectDir)/3rdParty/ofxXmlSettings;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -178,22 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdParty\catch\catch.hpp" />
-    <ClInclude Include="3rdParty\cpplinq\cpplinq.hpp" />
-    <ClInclude Include="3rdParty\dukbind\dukbind.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbindconf.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_assert.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_binding_info.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_debug.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_glue.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_helpers.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_identifier.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_private.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_proxy_function.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_rtti.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_std.h" />
-    <ClInclude Include="3rdParty\dukbind\dukbind_validation.h" />
-    <ClInclude Include="3rdParty\duktape\duktape.h" />
-    <ClInclude Include="3rdParty\duktape\duk_config.h" />
     <ClInclude Include="3rdParty\luabridge\CFunctions.h" />
     <ClInclude Include="3rdParty\luabridge\ClassInfo.h" />
     <ClInclude Include="3rdParty\luabridge\Constructor.h" />
@@ -234,17 +218,17 @@
     <ClInclude Include="3rdParty\lua\lundump.h" />
     <ClInclude Include="3rdParty\lua\lvm.h" />
     <ClInclude Include="3rdParty\lua\lzio.h" />
-    <ClInclude Include="3rdParty\network\ofxNetwork.h" />
-    <ClInclude Include="3rdParty\network\ofxNetworkUtils.h" />
-    <ClInclude Include="3rdParty\network\ofxTCPClient.h" />
-    <ClInclude Include="3rdParty\network\ofxTCPManager.h" />
-    <ClInclude Include="3rdParty\network\ofxTCPServer.h" />
-    <ClInclude Include="3rdParty\network\ofxUDPManager.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxNetwork.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxNetworkUtils.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPClient.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPManager.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPServer.h" />
+    <ClInclude Include="3rdParty\ofxNetwork\ofxUDPManager.h" />
+    <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h" />
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h" />
-    <ClInclude Include="3rdParty\sqlite\ofxSQLite.h" />
+    <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
-    <ClInclude Include="3rdParty\xml\ofxXmlSettings.h" />
-    <ClInclude Include="3rdParty\xml\tinyxml.h" />
+    <ClInclude Include="3rdParty\tinyxml\tinyxml.h" />
     <ClInclude Include="Source\AI\AgentsReward.h" />
     <ClInclude Include="Source\AI\AIAgent.h" />
     <ClInclude Include="Source\AI\AIState.h" />
@@ -357,8 +341,6 @@
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\GoalTest.h" />
     <ClInclude Include="Source\Tests\GoalTestAssets.h" />
-    <ClInclude Include="Source\Tests\JavaScriptTest.h" />
-    <ClInclude Include="Source\Tests\JavaScriptTestAssets.h" />
     <ClInclude Include="Source\Tests\LuaTest.h" />
     <ClInclude Include="Source\Tests\LuaTestAssets.h" />
     <ClInclude Include="Source\Tests\MathTest.h" />
@@ -378,152 +360,147 @@
     <ClInclude Include="Source\Tests\TransformTestAssets.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3rdParty\dukbind\dukbind.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_binding_info.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_helpers.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_identifier.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_proxy_function.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_std.cpp" />
-    <ClCompile Include="3rdParty\dukbind\dukbind_validation.cpp" />
-    <ClCompile Include="3rdParty\duktape\duktape.c" />
     <ClCompile Include="3rdParty\lua\lapi.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lauxlib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lbaselib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lcode.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ldblib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ldebug.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ldo.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ldump.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lfunc.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lgc.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\linit.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\liolib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\llex.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lmathlib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lmem.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\loadlib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lobject.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lopcodes.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\loslib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lparser.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lstate.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lstring.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lstrlib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ltable.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ltablib.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\ltm.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lua.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\luac.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lundump.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lvm.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lzio.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\print.c" />
-    <ClCompile Include="3rdParty\network\ofxTCPClient.cpp" />
-    <ClCompile Include="3rdParty\network\ofxTCPManager.cpp" />
-    <ClCompile Include="3rdParty\network\ofxTCPServer.cpp" />
-    <ClCompile Include="3rdParty\network\ofxUDPManager.cpp" />
+    <ClCompile Include="3rdParty\lua\print.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPClient.cpp" />
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPManager.cpp" />
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPServer.cpp" />
+    <ClCompile Include="3rdParty\ofxNetwork\ofxUDPManager.cpp" />
+    <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp" />
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp" />
-    <ClCompile Include="3rdParty\sqlite\ofxSQLite.cpp" />
+    <ClCompile Include="3rdParty\ofxXmlSettings\ofxXmlSettings.cpp" />
     <ClCompile Include="3rdParty\sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\xml\ofxXmlSettings.cpp" />
-    <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
-    <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
+    <ClCompile Include="3rdParty\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="3rdParty\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Flags.cpp" />
     <ClCompile Include="Source\Attributes\Mesh.cpp" />
     <ClCompile Include="Source\Attributes\StrId.cpp" />
