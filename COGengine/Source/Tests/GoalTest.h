@@ -28,7 +28,7 @@ TEST_CASE("GoalTest")
 		Goal* g3 = new DummyGoal(true);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(true);
-		GoalComposite* composite = new GoalComposite(StrId(), true);
+		GoalComposite* composite = new GoalComposite(StrId(), GoalCompositeType::SERIALIZER);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);
@@ -70,7 +70,7 @@ TEST_CASE("GoalTest")
 		Goal* g3 = new DummyGoal(false);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(false);
-		GoalComposite* composite = new GoalComposite(StrId(), false);
+		GoalComposite* composite = new GoalComposite(StrId(), GoalCompositeType::SEQUENCER);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);

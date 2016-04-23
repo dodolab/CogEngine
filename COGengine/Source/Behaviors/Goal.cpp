@@ -43,7 +43,7 @@ namespace Cog {
 						}
 					}
 					else if ((actualSubgoal->IsFailed() || actualSubgoal->IsAborted()) 
-						&& compositeType == GoalCompositeType::SERIALIZER) {
+						&& compositeType != GoalCompositeType::SELECTOR) {
 						Fail();
 						break;
 					}

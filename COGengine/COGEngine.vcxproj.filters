@@ -4,9 +4,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{53145cd3-aa44-4015-b00b-917b812f24b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty">
-      <UniqueIdentifier>{e4415d8f-511b-487f-8673-dc6be6f9fef3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Behaviors">
       <UniqueIdentifier>{f1d24ab6-97a3-4954-92a0-192a005adaf3}</UniqueIdentifier>
     </Filter>
@@ -43,70 +40,40 @@
     <Filter Include="Source\AI">
       <UniqueIdentifier>{4f952ff0-d6f7-4af6-a59c-4a762233773f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdParty">
+      <UniqueIdentifier>{f431bb8e-e4ec-4904-90c4-59e61699e7b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\lua">
+      <UniqueIdentifier>{0b4f15c3-55d7-420e-b3b9-d8a6d53f113e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\catch">
+      <UniqueIdentifier>{573c98a6-ad76-4134-af27-cb4e163e4de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\luabridge">
+      <UniqueIdentifier>{6be49a1a-a8b5-4420-9a2c-fe6a59f46f22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\ofxNetwork">
+      <UniqueIdentifier>{ffb422c1-8842-4076-a3d5-41d67b18b21d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\ofxSQLite">
+      <UniqueIdentifier>{e4b2685b-f239-464e-9895-7672a35a9110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\ofxTextLabel">
+      <UniqueIdentifier>{1c82a6dc-651e-4585-b094-db20e557ad5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\ofxXmlSettings">
+      <UniqueIdentifier>{043069f4-6a8b-4821-aa3e-7c712bc3edc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\sqlite">
+      <UniqueIdentifier>{02282119-d13d-4234-928f-9d8062ecbf44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\tinyxml">
+      <UniqueIdentifier>{e8af1a09-b76b-45f9-bcd1-a0a580f9116e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
       <Filter>Source\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\duktape\duktape.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\duktape\duk_config.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\sqlite\ofxSQLite.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\sqlite\sqlite3.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\xml\ofxXmlSettings.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\xml\tinyxml.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\catch\catch.hpp">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbindconf.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_assert.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_binding_info.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_debug.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_glue.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_helpers.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_identifier.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_private.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_proxy_function.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_rtti.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_std.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\dukbind\dukbind_validation.h">
-      <Filter>3rdParty</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behaviors\Button.h">
       <Filter>Source\Behaviors</Filter>
@@ -177,9 +144,6 @@
     <ClInclude Include="Source\ofxCogMain.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\cpplinq\cpplinq.hpp">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Component.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
@@ -236,24 +200,6 @@
     </ClInclude>
     <ClInclude Include="Source\Components\Stage.h">
       <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxTCPManager.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxTCPServer.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxUDPManager.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxNetwork.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxNetworkUtils.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\network\ofxTCPClient.h">
-      <Filter>3rdParty</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\CogDatabase.h">
       <Filter>Source\Components</Filter>
@@ -330,9 +276,6 @@
     <ClInclude Include="Source\Communication\NetWriter.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\MultiSelection.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -360,131 +303,8 @@
     <ClInclude Include="Source\Communication\DeltaMessage.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\JavaScriptTest.h">
-      <Filter>Source\Tests</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\LuaTest.h">
       <Filter>Source\Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lstring.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltable.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltm.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lua.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\luaconf.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lualib.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lundump.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lvm.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lzio.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lapi.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lauxlib.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lcode.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ldebug.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ldo.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lfunc.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lgc.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\llex.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\llimits.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lmem.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lobject.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lopcodes.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lparser.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lstate.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Iterator.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaBridge.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaException.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaHelpers.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaRef.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Namespace.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\RefCountedObject.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\RefCountedPtr.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Stack.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\TypeList.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\TypeTraits.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Userdata.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\CFunctions.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\ClassInfo.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Constructor.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\dump.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\FuncTraits.h">
-      <Filter>3rdParty</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripting\MsgLua.h">
       <Filter>Source\Scripting</Filter>
@@ -559,9 +379,6 @@
       <Filter>Source\Tests</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tests\GoalTestAssets.h">
-      <Filter>Source\Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Tests\JavaScriptTestAssets.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tests\LuaTestAssets.h">
@@ -642,47 +459,164 @@
     <ClInclude Include="Source\Core\BaseComponent.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\lua\lua.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\luaconf.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lualib.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lundump.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lvm.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lzio.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lapi.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lauxlib.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lcode.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ldebug.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ldo.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lfunc.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lgc.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\llex.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\llimits.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lmem.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lobject.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lopcodes.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lparser.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lstate.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\lstring.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ltable.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ltm.h">
+      <Filter>3rdParty\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\catch\catch.hpp">
+      <Filter>3rdParty\catch</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\FuncTraits.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\Iterator.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\LuaBridge.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\LuaException.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\LuaHelpers.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\LuaRef.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\Namespace.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\RefCountedObject.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\RefCountedPtr.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\Stack.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\TypeList.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\TypeTraits.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\Userdata.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\CFunctions.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\ClassInfo.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\Constructor.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\luabridge\dump.h">
+      <Filter>3rdParty\luabridge</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPClient.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPManager.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPServer.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxUDPManager.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxNetwork.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxNetwork\ofxNetworkUtils.h">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h">
+      <Filter>3rdParty\ofxSQLite</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
+      <Filter>3rdParty\ofxTextLabel</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h">
+      <Filter>3rdParty\ofxXmlSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\sqlite\sqlite3.h">
+      <Filter>3rdParty\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\tinyxml\tinyxml.h">
+      <Filter>3rdParty\tinyxml</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3rdParty\duktape\duktape.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\sqlite\ofxSQLite.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\sqlite\sqlite3.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\xml\ofxXmlSettings.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\xml\tinyxml.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_binding_info.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_helpers.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_identifier.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_proxy_function.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_std.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\dukbind\dukbind_validation.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\Environment.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
@@ -722,18 +656,6 @@
     <ClCompile Include="Source\Components\Stage.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\network\ofxTCPManager.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\network\ofxTCPServer.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\network\ofxUDPManager.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\network\ofxTCPClient.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Misc\TimeMeasure.cpp">
       <Filter>Source\Misc</Filter>
     </ClCompile>
@@ -755,9 +677,6 @@
     <ClCompile Include="Source\Communication\NetReader.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Communication\NetMessage.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
@@ -772,102 +691,6 @@
     </ClCompile>
     <ClCompile Include="Source\Communication\DeltaMessage.cpp">
       <Filter>Source\Communication</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstring.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstrlib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltable.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltablib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltm.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lua.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\luac.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lundump.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lvm.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lzio.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\print.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lapi.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lauxlib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lbaselib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lcode.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldblib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldebug.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldo.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldump.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lfunc.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lgc.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\linit.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\liolib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\llex.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmathlib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmem.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\loadlib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lobject.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lopcodes.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\loslib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lparser.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstate.c">
-      <Filter>3rdParty</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripting\BehaviorLua.cpp">
       <Filter>Source\Scripting</Filter>
@@ -1024,6 +847,132 @@
     </ClCompile>
     <ClCompile Include="Source\Components\LuaScripting.cpp">
       <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\luac.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lundump.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lvm.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lzio.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\print.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lapi.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lauxlib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lbaselib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lcode.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ldblib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ldebug.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ldo.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ldump.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lfunc.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lgc.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\linit.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\liolib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\llex.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lmathlib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lmem.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\loadlib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lobject.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lopcodes.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\loslib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lparser.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lstate.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lstring.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lstrlib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltable.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltablib.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltm.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lua.c">
+      <Filter>3rdParty\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPClient.cpp">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPManager.cpp">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPServer.cpp">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxNetwork\ofxUDPManager.cpp">
+      <Filter>3rdParty\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp">
+      <Filter>3rdParty\ofxSQLite</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
+      <Filter>3rdParty\ofxTextLabel</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\ofxXmlSettings\ofxXmlSettings.cpp">
+      <Filter>3rdParty\ofxXmlSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\sqlite\sqlite3.c">
+      <Filter>3rdParty\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\tinyxml\tinyxmlparser.cpp">
+      <Filter>3rdParty\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\tinyxml\tinyxml.cpp">
+      <Filter>3rdParty\tinyxml</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
