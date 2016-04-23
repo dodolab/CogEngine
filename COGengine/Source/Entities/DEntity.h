@@ -3,6 +3,9 @@
 #include <string>
 using namespace std;
 
+#include "Definitions.h"
+#include "ofxXmlSettings.h"
+
 namespace Cog {
 
 	/**

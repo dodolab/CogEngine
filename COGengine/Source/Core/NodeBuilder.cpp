@@ -5,7 +5,7 @@
 #include "HitEvent.h"
 #include "Button.h"
 #include "TransformMath.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "BehaviorEnt.h"
 #include "Selection.h"
 #include "MultiSelection.h"
@@ -132,7 +132,7 @@ namespace Cog {
 
 		if (!entity->type.empty()) {
 			// create prototype
-			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(entity->type);
+			behavior = CogGetComponentStorage()->CreateBehaviorPrototype(entity->type);
 			if (!entity->setting.Empty()) {
 				// use setting loader
 				behavior->Load(entity->setting);
@@ -142,7 +142,7 @@ namespace Cog {
 			// load from reference behavior descriptor
 			spt<BehaviorEnt> refent = resourceCache->GetEntity<BehaviorEnt>(entity->ref);
 			
-			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(refent->type);
+			behavior = CogGetComponentStorage()->CreateBehaviorPrototype(refent->type);
 			if (!refent->setting.Empty()) behavior->Load(refent->setting);
 		}
 

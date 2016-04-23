@@ -3,7 +3,7 @@
 #include "Definitions.h"
 #include "BaseComponent.h"
 #include "StrId.h"
-#include "Events.h"
+#include "MsgPayloads.h"
 #include "Settings.h"
 
 namespace Cog {
@@ -198,17 +198,17 @@ namespace Cog {
 		/** Sends message with custom context node to subscribers listening to selected action */
 		void SendMessage(StrId action, Node* contextNode) const;
 		/** Sends message with payload to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgEvent> data) const;
+		void SendMessage(StrId action, spt<MsgPayload> data) const;
 		/** Sends message with payload and custom context node to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
+		void SendMessage(StrId action, spt<MsgPayload> data, Node* contextNode) const;
 		/** Sends message to recipient with selected id */
 		void SendMessageToBehavior(StrId action, int recipientId) const;
 		/** Sends message with custom context node to recipient with selected id */
 		void SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const;
 		/** Sends message with payload to recipient with selected id */
-		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, int recipientId) const;
+		void SendMessageToBehavior(StrId action, spt<MsgPayload> data, int recipientId) const;
 		/** Sends message with payload and custom context node to recipient with selected id */
-		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
+		void SendMessageToBehavior(StrId action, spt<MsgPayload> data, Node* contextNode, int recipientId) const;
 	};
 
 }// namespace

@@ -1,7 +1,7 @@
 #include "AsyncProcess.h"
 #include "Scene.h"
 #include "Stage.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 
 namespace Cog {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events.h"
+#include "MsgPayloads.h"
 #include "StrId.h"
 #include "Definitions.h"
 #include "Constants.h"
@@ -63,7 +63,7 @@ namespace Cog {
 		// node that is connected with this message
 		Node* contextNode = nullptr;
 		// data payload
-		spt<MsgEvent> data = spt<MsgEvent>();
+		spt<MsgPayload> data = spt<MsgPayload>();
 		
 	public:
 
@@ -83,7 +83,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			int recipientId, TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data);
+			int recipientId, TunnelingMode tunnelingMode, Node* contextNode, spt<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -96,7 +96,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data);
+			TunnelingMode tunnelingMode, Node* contextNode, spt<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -110,7 +110,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, spt<MsgEvent> data);
+			TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, spt<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -121,7 +121,7 @@ namespace Cog {
 		* @param contextNode node that is connected with this message
 		* @param data data payload
 		*/
-		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgEvent> data);
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgPayload> data);
 
 
 		~Msg() {

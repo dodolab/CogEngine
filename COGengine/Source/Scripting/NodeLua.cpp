@@ -1,10 +1,10 @@
 #include "NodeLua.h"
 #include "Node.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Stage.h"
 #include "LuaScripting.h"
 #include "Scene.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "BehaviorLua.h"
 
 namespace Cog {

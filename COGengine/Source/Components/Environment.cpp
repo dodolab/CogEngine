@@ -1,10 +1,10 @@
 #include "Environment.h"
 #include "InputAct.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Utils.h"
-#include "Events.h"
+#include "MsgPayloads.h"
 #include "Settings.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "ResourceCache.h"
 #include "Stage.h"
 #include "Scene.h"
@@ -67,7 +67,7 @@ namespace Cog {
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
 		// send message that screen has been changed
-		if (CogEngine::GetInstance().stage->GetActualScene() != nullptr) {
+		if (ofxCogEngine::GetInstance().stage->GetActualScene() != nullptr) {
 			SendMessage(ACT_SCREEN_CHANGED, spt<ValueChangeEvent<Vec2i>>(new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize())));
 		}
 	}

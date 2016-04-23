@@ -53,15 +53,15 @@ namespace Cog {
 	}
 
 	void Behavior::SendMessage(StrId action, Node* contextNode) const {
-		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::SUBSCRIBERS, contextNode, spt<MsgEvent>());
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::SUBSCRIBERS, contextNode, spt<MsgPayload>());
 		owner->GetScene()->SendMessage(msg);
 	}
 
-	void Behavior::SendMessage(StrId action, spt<MsgEvent> data) const {
+	void Behavior::SendMessage(StrId action, spt<MsgPayload> data) const {
 		SendMessage(action, data, owner);
 	}
 
-	void Behavior::SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const {
+	void Behavior::SendMessage(StrId action, spt<MsgPayload> data, Node* contextNode) const {
 		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::SUBSCRIBERS, contextNode, data);
 		owner->GetScene()->SendMessage(msg);
 	}
@@ -71,15 +71,15 @@ namespace Cog {
 	}
 
 	void Behavior::SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const {
-		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, spt<MsgEvent>());
+		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, spt<MsgPayload>());
 		owner->GetScene()->SendMessage(msg);
 	}
 
-	void Behavior::SendMessageToBehavior(StrId action, spt<MsgEvent> data, int recipientId) const {
+	void Behavior::SendMessageToBehavior(StrId action, spt<MsgPayload> data, int recipientId) const {
 		SendMessageToBehavior(action, data, owner, recipientId);
 	}
 
-	void Behavior::SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const {
+	void Behavior::SendMessageToBehavior(StrId action, spt<MsgPayload> data, Node* contextNode, int recipientId) const {
 		Msg msg(action, MsgObjectType::BEHAVIOR, this->id, MsgObjectType::BEHAVIOR, recipientId, TunnelingMode::TUNNELING, contextNode, data);
 		owner->GetScene()->SendMessage(msg);
 	}

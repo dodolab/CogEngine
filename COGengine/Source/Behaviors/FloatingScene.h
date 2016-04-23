@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Vec2i.h"
 #include "Behavior.h"
 #include "Msg.h"
+#include "Transform.h"
 #include "TransformMath.h"
 
 namespace Cog {

@@ -1,8 +1,8 @@
 #include "Logger.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Settings.h"
 #include "ResourceCache.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "Facade.h"
 
 namespace Cog {

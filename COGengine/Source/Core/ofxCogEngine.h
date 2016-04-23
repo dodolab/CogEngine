@@ -14,7 +14,7 @@ namespace Cog {
   //  \___/|_| /_/\_\\_____\___/ \__, |______|_| |_|\__, |_|_| |_|\___|
   //                              __/ |              __/ |             
   //                             |___/              |___/              
-	class EntityStorage;
+	class ComponentStorage;
 	class Environment;
 	class Logger;
 	class ResourceCache;
@@ -26,7 +26,7 @@ namespace Cog {
 	* COG engine that holds references to important components and
 	* executes drawing and update loops
 	*/
-	class CogEngine {
+	class ofxCogEngine {
 	private:
 		// frame counter
 		int frameCounter = 0;
@@ -44,7 +44,7 @@ namespace Cog {
 		spt<ofxXml> config;
 
 		// component storage
-		EntityStorage* entityStorage;
+		ComponentStorage* compStorage;
 
 		// important components that are simply accessible from this object
 		Environment* environment = nullptr;
@@ -54,9 +54,9 @@ namespace Cog {
 		Stage* stage = nullptr;
 		InputHandler* inputHandler = nullptr;
 		
-		CogEngine();
+		ofxCogEngine();
 
-		~CogEngine() {
+		~ofxCogEngine() {
 			Clear();
 		}
 
@@ -83,14 +83,14 @@ namespace Cog {
 		void LoadStageFromXml(spt<ofxXml> config);
 
 		/**
-		* Executes one update cycle; this method is called by CogApp
+		* Executes one update cycle; this method is called by ofxCogApp
 		* @param delta time between frames
 		* @param absolute time elapsed since initialization
 		*/
 		void Update(uint64 delta, uint64 absolute);
 
 		/**
-		* Executes one drawing cycle; this method is called by CogApp
+		* Executes one drawing cycle; this method is called by ofxCogApp
 		* @param delta time between frames
 		* @param absolute time elapsed since initialization
 		*/
@@ -142,18 +142,18 @@ namespace Cog {
 
 		// ================================= SINGLETON PART ==========================
 	public:
-		static CogEngine& GetInstance()
+		static ofxCogEngine& GetInstance()
 		{
 			// guaranteed to be destroyed,
 			// instantiated on first use
-			static CogEngine instance;
+			static ofxCogEngine instance;
 			return instance;
 		}
 
 		// deleted functions should be public as it results
 		// int better error messages due compiling
-		CogEngine(CogEngine const&) = delete;
-		void operator=(CogEngine const&) = delete;
+		ofxCogEngine(ofxCogEngine const&) = delete;
+		void operator=(ofxCogEngine const&) = delete;
 	};
 
 

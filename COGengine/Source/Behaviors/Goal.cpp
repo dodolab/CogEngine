@@ -1,6 +1,6 @@
 
 #include "Goal.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 namespace Cog {
 

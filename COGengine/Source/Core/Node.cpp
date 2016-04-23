@@ -1,7 +1,7 @@
 #include "Node.h"
 #include "Behavior.h"
 #include "ResourceCache.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Scene.h"
 
 namespace Cog {
@@ -341,7 +341,7 @@ namespace Cog {
 		childrenToRemove.clear();
 	}
 
-	void Node::SendMessage(StrId action, spt<MsgEvent> data) {
+	void Node::SendMessage(StrId action, spt<MsgPayload> data) {
 		if (scene != nullptr) {
 			auto msg = Msg(action, MsgObjectType::NODE_COMMON, this->id, MsgObjectType::SUBSCRIBERS,this, data);
 			scene->SendMessage(msg);

@@ -1,9 +1,9 @@
 #include "BehaviorLua.h"
 #include "MsgLua.h"
 #include "Node.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "LuaScripting.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "NodeLua.h"
 
 using namespace luabridge;

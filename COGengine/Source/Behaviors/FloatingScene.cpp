@@ -1,5 +1,5 @@
 #include "FloatingScene.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Node.h"
 
 namespace Cog {

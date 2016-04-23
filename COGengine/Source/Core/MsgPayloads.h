@@ -8,13 +8,12 @@ namespace Cog {
 	class InputAct;
 
 	// ========================================================
-	// This section contains all events that make a payload
-	// of a message
+	// This section contains all objects that make a mesage payload
 	
 	/**
-	* Abstract class for all events
+	* Abstract class for all payloads
 	*/
-	class MsgEvent {
+	class MsgPayload {
 
 	};
 
@@ -28,7 +27,7 @@ namespace Cog {
 	/**
 	* Event invoked when a flag of a node is changed 
 	*/
-	class FlagChangeEvent : public MsgEvent {
+	class FlagChangeEvent : public MsgPayload {
 	public:
 		FlagChangeType changeType = FlagChangeType::SET;
 		unsigned state1 = 0;
@@ -48,7 +47,7 @@ namespace Cog {
 	/**
 	* User input event (keyboard click, mouse click or touch)
 	*/
-	class InputEvent : public MsgEvent {
+	class InputEvent : public MsgPayload {
 	public:
 		InputAct* input;
 
@@ -67,7 +66,7 @@ namespace Cog {
 	/**
 	* Event invoked when an attribute was changed
 	*/
-	class AttributeChangeEvent : public MsgEvent {
+	class AttributeChangeEvent : public MsgPayload {
 	public:
 		AttrChangeType changeType;
 		StrId attribute;
@@ -82,7 +81,7 @@ namespace Cog {
 	* Event invoked when a value is changed
 	*/
 	template <class  T>
-	class ValueChangeEvent : public MsgEvent {
+	class ValueChangeEvent : public MsgPayload {
 	public:
 		T before;
 		T after;
@@ -97,7 +96,7 @@ namespace Cog {
 	/**
 	* Event invoked when a network message arrived
 	*/
-	class NetworkMsgEvent : public MsgEvent {
+	class NetworkMsgEvent : public MsgPayload {
 	public:
 		spt<NetInputMessage> msg;
 
@@ -114,7 +113,7 @@ namespace Cog {
 	* A common generic event with a value
 	*/
 	template <class  T>
-	class CommonEvent : public MsgEvent {
+	class CommonEvent : public MsgPayload {
 	public:
 		spt<T> value;
 

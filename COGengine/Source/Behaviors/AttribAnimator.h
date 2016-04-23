@@ -5,6 +5,8 @@
 #include "AttrAnimEnt.h"
 #include "AnimContextStack.h"
 #include "AttribAnim.h"
+#include "SheetAnim.h"
+#include "Transform.h"
 
 namespace Cog {
 

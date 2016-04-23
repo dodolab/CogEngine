@@ -1,5 +1,5 @@
 #include "Tween.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "Scene.h"
 #include "Node.h"
 

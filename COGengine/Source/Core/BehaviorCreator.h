@@ -6,7 +6,7 @@ namespace Cog {
 
 	/**
 	* Class that is used to simple register a behavior prototype by REGISTER_BEHAVIOR macro
-	* EntityStorage creates a new BehaviorCreator for each registered type
+	* ComponentStorage creates a new BehaviorCreator for each registered type
 	*/
 	class BehaviorCreator {
 	public:
@@ -17,7 +17,7 @@ namespace Cog {
 
 	/**
 	* Generic creator for registered behavior
-	* Seer CreateBehaviorPrototype method in EntityStorage class
+	* Seer CreateBehaviorPrototype method in ComponentStorage class
 	*/
 	template<class T>
 	class BehaviorCreatorImpl : public BehaviorCreator {

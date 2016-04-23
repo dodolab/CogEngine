@@ -1,6 +1,6 @@
 
 #include "HitEvent.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 
 namespace Cog {

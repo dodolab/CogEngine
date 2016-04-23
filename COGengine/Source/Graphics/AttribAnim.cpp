@@ -1,4 +1,5 @@
 #include "AttribAnim.h"
+#include "GeneralAnim.h"
 
 namespace Cog {
 

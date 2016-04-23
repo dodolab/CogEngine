@@ -2,11 +2,11 @@
 #include "Scene.h"
 #include "Node.h"
 #include "Behavior.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "AsyncProcess.h"
 #include "Tween.h"
 #include "Environment.h"
-#include "EntityStorage.h"
+#include "ComponentStorage.h"
 #include "SceneSwitchManager.h"
 
 namespace Cog {
@@ -152,7 +152,7 @@ namespace Cog {
 			{
 				// scene is lazy loaded -> run asynchronous loading process
 				// note that this makes sense only if the scene is loaded via XML
-				auto async = new AsyncProcess(new SceneLoader(CogEngine::GetInstance().config, scene, tweenDir));
+				auto async = new AsyncProcess(new SceneLoader(ofxCogEngine::GetInstance().config, scene, tweenDir));
 
 				COGLOGDEBUG("Stage", "Scene is lazy loaded!");
 

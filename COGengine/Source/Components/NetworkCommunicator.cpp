@@ -1,9 +1,10 @@
 
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 #include "NetworkCommunicator.h"
 #include "Network.h"
 #include "NetMessage.h"
 #include "Facade.h"
+#include "Utils.h"
 
 namespace Cog {
 

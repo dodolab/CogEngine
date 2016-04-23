@@ -1,5 +1,6 @@
 #include "Path.h"
-#include "ofxCogCommon.h"
+#include "Definitions.h"
+#include "Facade.h"
 
 namespace Cog {
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 #include "catch.hpp"
 using namespace Cog;
@@ -15,11 +15,11 @@ TEST_CASE("GoalTest")
 	SECTION("All complete test")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 		Node* node = new Node("node");
 		
@@ -40,10 +40,10 @@ TEST_CASE("GoalTest")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 		
 		// update once
-		CogEngine::GetInstance().Update(10, 10);
+		ofxCogEngine::GetInstance().Update(10, 10);
 		
 		// all goals completed
 		REQUIRE(g1->IsCompleted());
@@ -57,11 +57,11 @@ TEST_CASE("GoalTest")
 	SECTION("All fail test")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 		Node* node = new Node("node");
 
@@ -82,10 +82,10 @@ TEST_CASE("GoalTest")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// update once
-		CogEngine::GetInstance().Update(10, 10);
+		ofxCogEngine::GetInstance().Update(10, 10);
 
 		// all goals completed
 		REQUIRE(g1->IsCompleted());

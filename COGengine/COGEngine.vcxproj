@@ -281,12 +281,12 @@
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
     <ClInclude Include="Source\Core\BehaviorCreator.h" />
-    <ClInclude Include="Source\Core\CogApp.h" />
-    <ClInclude Include="Source\Core\CogEngine.h" />
+    <ClInclude Include="Source\Core\ofxCogApp.h" />
+    <ClInclude Include="Source\Core\ofxCogEngine.h" />
     <ClInclude Include="Source\Core\Component.h" />
     <ClInclude Include="Source\Core\Definitions.h" />
-    <ClInclude Include="Source\Core\EntityStorage.h" />
-    <ClInclude Include="Source\Core\Events.h" />
+    <ClInclude Include="Source\Core\ComponentStorage.h" />
+    <ClInclude Include="Source\Core\MsgPayloads.h" />
     <ClInclude Include="Source\Core\Facade.h" />
     <ClInclude Include="Source\Core\Constants.h" />
     <ClInclude Include="Source\Core\Error.h" />
@@ -330,7 +330,6 @@
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\Misc\TimeMeasure.h" />
     <ClInclude Include="Source\Misc\Utils.h" />
-    <ClInclude Include="Source\ofxCogCommon.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
     <ClInclude Include="Source\Scripting\BehaviorLua.h" />
     <ClInclude Include="Source\Scripting\MsgLua.h" />
@@ -539,8 +538,8 @@
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
     <ClCompile Include="Source\Core\AsyncProcess.cpp" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
-    <ClCompile Include="Source\Core\CogApp.cpp" />
-    <ClCompile Include="Source\Core\CogEngine.cpp" />
+    <ClCompile Include="Source\Core\ofxCogApp.cpp" />
+    <ClCompile Include="Source\Core\ofxCogEngine.cpp" />
     <ClCompile Include="Source\Core\Component.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />

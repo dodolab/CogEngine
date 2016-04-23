@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "CogEngine.h"
+#include "ofxCogEngine.h"
 
 #include "catch.hpp"
 using namespace Cog;
@@ -23,11 +23,11 @@ TEST_CASE("StateMachineTest")
 	SECTION("Miner test")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 		Node* node = new Node("node");
 		StateMachine* stMach = new StateMachine();
@@ -44,11 +44,11 @@ TEST_CASE("StateMachineTest")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 		
 		for (int i = 0; i < 10; i++) {
 			// simulate update 10x
-			CogEngine::GetInstance().Update(10, 10);
+			ofxCogEngine::GetInstance().Update(10, 10);
 		}
 		
 		// check if it is in resting state
@@ -59,11 +59,11 @@ TEST_CASE("StateMachineTest")
 	SECTION("Switching test")
 	{
 		// 1. init engine
-		CogEngine::GetInstance().SetFps(20);
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
 		// 2. create scene
 		Scene* scene = new Scene("main", false);
-		CogEngine::GetInstance().stage->AddScene(scene, true);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
 		// 3. define nodes and behaviors
 		Node* node = new Node("node");
 		StateMachine* stMach = new StateMachine();
@@ -79,11 +79,11 @@ TEST_CASE("StateMachineTest")
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
 		// 5. submit changes
-		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		for (int i = 0; i < 10; i++) {
 			// simulate update 10x
-			CogEngine::GetInstance().Update(10, 10);
+			ofxCogEngine::GetInstance().Update(10, 10);
 		}
 
 		// check if it is in 10th state
