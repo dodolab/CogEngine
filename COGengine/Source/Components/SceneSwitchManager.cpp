@@ -132,6 +132,10 @@ namespace Cog {
 			// disable and dispose moved scene
 			from->GetSceneNode()->SetRunningMode(DISABLED);
 			from->Dispose();
+
+			if (!from->IsCached() && from->IsLazyLoad()) {
+				from->Finish();
+			}
 		}
 		else {
 			// for dialogs, just pause the moved scene

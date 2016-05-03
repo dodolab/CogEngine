@@ -1,25 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
+	<settings>
+		<!-- global settings -->
+		<global_settings>
+			<!-- debug logger, output into the console -->
+			<setting name="logger" level="DEBUG">
+				<item key="channel" value="console" />
+				<item key="module_include">
+					<value>Network</value> <!-- Print networking log -->
+				</item>
+			</setting>
+		</global_settings>
+	</settings>
 
+	<attranimations>
+		<!-- attribute animation -> position and rotation -->
+		<anim name="anim" repeat="1">
+			<attranim attr="pos_x" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+			<attranim attr="pos_y" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+			<attranim attr="rotation" from="0" to="360" mtype="direct" duration="5000"  />
 
-<attranimations>
-  <anim name="mojo" repeat="1">
-    <attranim attr="pos_x" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="pos_y" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="rotation" from="0" to="360" mtype="direct" duration="5000"  />
-	<anim name="dojo" ref="mojo" revert="true" />
-  </anim>
-</attranimations>
+			<!-- invert and repeat recursively (little tricky) -->
+			<anim name="recursive" ref="anim" revert="true" /> <!-- ref="anim" means that animation with the name "anim" is referenced -->
+		</anim>
+	</attranimations>
 
-
-
-  <scenes initial="main">
-    <scene name="main">
-      <node img="bgr.jpg" />
-      <node name="anim" img="sheet_squares.png">
-	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" rotation_origin="0.5" />
-		<behavior type="AttribAnimator" animation="mojo" />
-	  </node>
-    </scene>
-  </scenes>
+	<!-- scene definition -->
+	<scenes initial="main">
+		<scene name="main">
+			<!-- background image -->
+			<node img="bgr.jpg" />
+			
+			<!-- server button -->
+			<node name="server_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.0r" pos_y="0.0r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Server</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- client button -->
+			<node name="client_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.1r" pos_y="0.0r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Client</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- ============================================================================ -->
+			<!-- animated square -->
+			<node name="anim" img="sheet_squares.png">
+				<transform pos_x="0.5" pos_y="0.5" z_index="2" anchor="0.5" rotation_origin="0.5" />
+				<behavior type="AttribAnimator" animation="anim" />
+				<behavior type="NetworkBehavior" />
+			</node>
+			<!-- ============================================================================ -->
+			
+			<!-- info -->
+			<node name="info">
+				<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+				<text font="MotionControl-Bold.otf" size="12" color="0xFFFFFF">Use keys 'm' and 'n' to increase/decrease synchronization period and 'r' to stop sending</text>
+			</node>
+		</scene>
+	</scenes>
 </app_config>

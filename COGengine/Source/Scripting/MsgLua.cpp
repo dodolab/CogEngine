@@ -8,6 +8,10 @@ namespace Cog {
 		return msg->GetAction();
 	}
 
+	bool MsgLua::HasAction(StrId action) const {
+		return msg->HasAction(action);
+	}
+
 	int MsgLua::GetParameter() const {
 		return msg->GetParameter();
 	}

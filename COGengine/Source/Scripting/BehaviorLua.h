@@ -2,6 +2,7 @@
 
 #include "Behavior.h"
 #include "MsgLua.h"
+#include "SceneLua.h"
 
 namespace luabridge {
 	struct lua_State;
@@ -18,7 +19,7 @@ namespace Cog {
 		luabridge::lua_State* L;
 	public:
 		
-		NodeLua* ownerLua;
+		NodeLua* ownerLua = nullptr;
 
 		BehaviorLua();
 
@@ -34,11 +35,13 @@ namespace Cog {
 
 		void SetOwnerLua(NodeLua* ownerLua);
 
-		void OnMessage(Msg msg);
+		virtual void OnMessage(Msg& msg);
 
 		virtual void Update(const uint64 delta, const uint64 absolute);
 
-		void SubscribeForMessagesLua(string action);
+		void SubscribeForMessagesLua(StrId action);
+
+		SceneLua GetScene();
 	};
 
 } // namespace

@@ -3,13 +3,8 @@
 // disable third-party warnings
 #pragma warning(push, 0)        
 
-#ifdef ANDROID
-#include "ofxAndroid.h"
-#include "ofxAndroidVibrator.h"
-#endif
+// include STD
 
-#include "ofUtils.h"
-#include "ofBaseTypes.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -21,9 +16,27 @@
 #include <cmath>
 #include <functional>
 #include <stack>
-#include "Constants.h"
-#include "ofMain.h"
+
+using namespace std;
+
+// include openFrameworks
+
+#ifdef ANDROID
+#include "ofxAndroid.h"
+#include "ofxAndroidVibrator.h"
+#endif
+
+#include "ofUtils.h"
+#include "ofBaseTypes.h"
 #include "ofxXmlSettings.h"
+#include "ofGraphics.h"
+#include "ofAppRunner.h"
+
+#pragma warning(pop)
+
+// include CogEngine
+
+#include "Constants.h"
 #include "Error.h"
 #include "TimeMeasure.h"
 #include "Definitions.h"
@@ -33,23 +46,10 @@
 #include "Vec2i.h"
 #include "Transform.h"
 #include "Facade.h"
-#include "ofMain.h"
-
-#pragma warning(pop)
-
-
 #include "ofxCogApp.h"
 #include "Node.h"
 #include "Scene.h"
 #include "HitEvent.h"
-#include "MapLoader.h"
-#include "Settings.h"
-#include "AStarSearch.h"
-#include "TransformAnim.h"
-
-using namespace std;
-using namespace Cog;
-
 #include "ofxCogEngine.h"
 #include "ResourceCache.h"
 #include "Logger.h"
@@ -60,3 +60,7 @@ using namespace Cog;
 #include "Environment.h"
 #include "ComponentStorage.h"
 #include "InputHandler.h"
+
+using namespace Cog;
+
+

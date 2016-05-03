@@ -19,7 +19,7 @@ namespace Cog {
 	* Type of composite goal
 	*/
 	enum class GoalCompositeType {
-		SERIALIZER,		/** Finishes when all subgoals are completed */
+		SERIALIZER,		/** Finishes when all subgoals ended (either failed or completed) */
 		SELECTOR,		/** Finishes when first subgoal completes */
 		SEQUENCER		/** Finishes when first subgoal fails*/
 	};

@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "ofMath.h"
 
 namespace Cog {
 

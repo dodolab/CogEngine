@@ -2,78 +2,117 @@
 #include "BehaviorEnt.h"
 #include "NodeBuilder.h"
 #include "ofxTextLabel.h"
-#include "Network.h"
-#include "Shape.h"
-#include "DeltaUpdate.h"
+#include "NetworkManager.h"
+#include "Mesh.h"
 #include "NetworkCommunicator.h"
 #include "NetMessage.h"
-#include "DeltaMessage.h"
+#include "Interpolator.h"
+#include "AttribAnimator.h"
+#include "UpdateMessage.h"
+
+enum class NetworkType{NONE, CLIENT,SERVER};
 
 class NetworkBehavior : public Behavior {
 private:
-	bool server;
 	NetworkCommunicator* communicator;
-	DeltaUpdate* deltaUpdate;
-
+	Interpolator* deltaUpdate;
+	NetworkType netType = NetworkType::NONE;
 public:
-	NetworkBehavior(bool server) : server(server) {
+	NetworkBehavior()  {
 
 	}
 
-	void Init() {
+	void OnInit() {
+		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_BUTTON_CLICKED);
 		communicator = new NetworkCommunicator();
 		REGISTER_COMPONENT(communicator);
-		if (!server) {
-			deltaUpdate = GETCOMPONENT(DeltaUpdate);
-		}
-		
-		communicator->Init(1234, 11987, server);
+	}
 
-		if (!server) {
-			for (auto& beh : owner->GetBehaviors()) {
-				if (beh->GetClassNameW().compare("AttribAnimator") == 0) {
-					owner->RemoveBehavior(beh, true);
-					break;
-				}
+	void InitNetwork(NetworkType netType) {
+		this->netType = netType;
+
+		if (netType == NetworkType::CLIENT) {
+			deltaUpdate = GETCOMPONENT(Interpolator);
+		}
+
+		if (netType == NetworkType::SERVER) {
+			communicator->InitListening(1234, 11987);
+		}
+		else {
+			communicator->InitBroadcast(1234, 11986, 11987);
+			communicator->SetAutoConnect(true);
+		}
+
+		if (netType == NetworkType::CLIENT) {
+			// remove animator, because animation will be synchronized
+			owner->RemoveBehavior(owner->GetBehavior<AttribAnimator>(), true);
+		}
+	}
+
+	void OnMessage(Msg& msg) {
+		if (msg.HasAction(ACT_BUTTON_CLICKED)) {
+			if (msg.GetContextNode()->GetTag().compare("server_but") == 0) {
+				// click on server button
+				InitNetwork(NetworkType::SERVER);
+			}
+			else {
+				// click on client button
+				InitNetwork(NetworkType::CLIENT);
+			}
+
+			// disable buttons
+			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
+			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+		}
+
+		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {
+			// push received message to Interpolator
+			auto msgEvent = msg.GetData<NetworkMsgEvent>();
+			auto netMsg = msgEvent->msg;
+			if (netMsg->GetAction() == NET_MSG_UPDATE) {
+
+				spt<UpdateMessage> updateMsg = netMsg->GetData<UpdateMessage>();
+				spt<UpdateInfo> deltaInfo = spt<UpdateInfo>(new UpdateInfo(netMsg->GetMsgTime(), updateMsg->GetContinuousValues(), updateMsg->GetDiscreteValues()));
+				deltaUpdate->AcceptUpdateMessage(deltaInfo);
 			}
 		}
 	}
-
 
 	int frame = 0;
 	int period = 3;
 
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (!server) {
-			auto delta = this->deltaUpdate->actual;
-			
-			owner->GetTransform().rotation = delta->GetVal(StringHash("ROTATION"));
-			owner->GetTransform().localPos.x = delta->GetVal(StringHash("POS_X"));
-			owner->GetTransform().localPos.y = delta->GetVal(StringHash("POS_Y"));
+		if (netType == NetworkType::CLIENT) {
+			// set position and rotation according to the message
+			auto delta = this->deltaUpdate->GetActualUpdate();
+			owner->GetTransform().rotation = delta->GetVal(StrId("ROTATION"));
+			owner->GetTransform().localPos.x = delta->GetVal(StrId("POS_X"));
+			owner->GetTransform().localPos.y = delta->GetVal(StrId("POS_Y"));
 		}
-		else {
+		else if(netType == NetworkType::SERVER){
 			if (frame++ % period == 0) {
-				
-				spt<DeltaInfo> delta = spt<DeltaInfo>(new DeltaInfo());
-				delta->deltas[StringHash("ROTATION")] = owner->GetTransform().rotation;
-				delta->deltas[StringHash("POS_X")] = owner->GetTransform().localPos.x;
-				delta->deltas[StringHash("POS_Y")] = owner->GetTransform().localPos.y;
+				// send values to the client
+				auto updateInfo = spt<UpdateInfo>(new UpdateInfo());
+				updateInfo->GetContinuousValues()[StrId("ROTATION")] = owner->GetTransform().rotation;
+				updateInfo->GetContinuousValues()[StrId("POS_X")] = owner->GetTransform().localPos.x;
+				updateInfo->GetContinuousValues()[StrId("POS_Y")] = owner->GetTransform().localPos.y;
 
-				DeltaMessage* msg = new DeltaMessage(delta);
+				UpdateMessage* msg = new UpdateMessage(updateInfo);
 				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1));
 				netMsg->SetData(msg);
-				netMsg->SetAction(StringHash(NET_MSG_DELTA_UPDATE));
+				netMsg->SetAction(StrId(NET_MSG_UPDATE));
 
+				// ===================== HANDLE KEYS ==========================
 				// if R is pressed, sending is stopped
 				auto pressedKeys = CogGetPressedKeys();
 				if (pressedKeys.size() == 0 || pressedKeys[0]->key != 'r') {
-					communicator->SendNetworkMessage(netMsg);
+					netMsg->SetMsgTime(absolute);
+					communicator->PushMessageForSending(netMsg);
 				}
 
 				if (pressedKeys.size() != 0) {
 					if (pressedKeys[0]->key == 'm' && period < 20) period++;
 					else if (pressedKeys[0]->key == 'n' && period > 2) period--;
-
 					cout << "period changed to " << period << endl;
 				}
 			}
@@ -81,32 +120,23 @@ public:
 	}
 };
 
-
-
-
-class ExampleApp : public CogApp {
-
-	bool isServer = false;
+class ExampleApp : public ofxCogApp {
 
 	void RegisterComponents() {
-		if (!isServer) {
-			auto binder = new DeltaUpdate();
-			REGISTER_COMPONENT(binder);
-		}
+		auto binder = new Interpolator();
+		REGISTER_COMPONENT(binder);
+		// this behavior is defined in config.xml
+		REGISTER_BEHAVIOR(NetworkBehavior);
 	}
 
 	void InitEngine() {
-		CogEngine::GetInstance().Init("config.xml");
-		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
-
-		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(isServer));
-
+		ofxCogEngine::GetInstance().Init("config.xml");
+		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 	}
 
 	void InitStage(Stage* stage) {
 	}
 };
-
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

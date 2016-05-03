@@ -116,6 +116,7 @@ namespace Cog {
 		Path* path;
 		float currentPathPoint = 0;
 		float maxAcceleration = 0;
+		float maxRadialAcceleration = 0;
 		// indicates how far from checkpoint may the character go
 		float pointTolerance = 0;
 		// indicates how far from the last checkpoint may the character stop
@@ -129,11 +130,13 @@ namespace Cog {
 		* Creates a new follow behavior
 		* @param path path to follow
 		* @param maxAcceleration maximum acceleration
+		* @param maxRadialAcceleration maximum radial acceleration
 		* @param pointTolerance indicates how far from checkpoint may the character go
 		* @param finalPointTolerance indicates how far from the last checkpoint may the character stop
 		*/
-		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance, float finalPointTolerance)
-			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance){
+		FollowBehavior(Path * path, float maxAcceleration, float maxRadialAcceleration, float pointTolerance, float finalPointTolerance)
+			: path(path), maxAcceleration(maxAcceleration), maxRadialAcceleration(maxRadialAcceleration), 
+			pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance){
 			forceId = StrId(this->GetId());
 		}
 

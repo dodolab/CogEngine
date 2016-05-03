@@ -1,7 +1,7 @@
 
 #include "ofxCogEngine.h"
 #include "NetworkCommunicator.h"
-#include "Network.h"
+#include "NetworkManager.h"
 #include "NetMessage.h"
 #include "Facade.h"
 #include "Utils.h"
@@ -14,8 +14,9 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->peerPort = peerPort;
+		this->isHost = false;
 		CogLogInfo("Network", "Initialized broadcasting for application %d on ports %d and %d", applicationId, myPort, peerPort);
-		network = new Network();
+		network = new NetworkManager();
 		network->SetupUDPReceiver(myPort, 10000, true);
 		network->GetUDPSender().SetEnableBroadcast(true);
 		networkState = NetworkComState::DISCOVERING;
@@ -26,13 +27,18 @@ namespace Cog {
 
 		this->applicationId = applicationId;
 		this->myPort = port;
+		this->isHost = true;
 		CogLogInfo("Network", "Initialized listening for application %d on port %d", applicationId, port);
-		network = new Network();
+		network = new NetworkManager();
 		network->SetupUDPReceiver(port, 10000, true);
 		networkState = NetworkComState::LISTENING;
 	}
 
 	void NetworkCommunicator::PushMessageForSending(spt<NetOutputMessage> msg) {
+
+		if (msg->GetAction() == NET_MSG_UPDATE && msg->GetMsgTime() == 0) {
+			throw IllegalArgumentException("Update messages must have time configured");
+		}
 
 		// only when the communicator is in COMMUNICATING state there
 		// could be sent more than one message at a time
@@ -160,6 +166,8 @@ namespace Cog {
 
 				// update list of discovered servers
 				discoveredPeers[message->GetSourceIp()] = absolute;
+
+				if (autoConnect) ConnectToPeer(message->GetSourceIp());
 			}
 		}
 	}
@@ -204,7 +212,7 @@ namespace Cog {
 	void NetworkCommunicator::UpdateCommunicating(const uint64 absolute) {
 
 		// process until there are no received messages 
-		while (true) {
+		while (network != nullptr) {
 			
 			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 			if (!message) break;
@@ -234,8 +242,8 @@ namespace Cog {
 					if (forAcceptationMessageTimes.count(message->GetMsgTime()) == 0) {
 						
 						if (message->GetSyncId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetSyncId()) > 128
-							|| (message->GetAction() != NET_MSG_DELTA_UPDATE)) { 
-							// old messages can be still processed but no delta update, because old deltas are not important anymore
+							|| (message->GetAction() != NET_MSG_UPDATE)) {
+							// old messages can be still processed but no update messages, because old updates are not important anymore
 
 							// synchronization ids may be in range 0-255 so if the difference is greater than 128 it means that
 							// the numbering goes from zero again
@@ -286,9 +294,13 @@ namespace Cog {
 			SendMessages(absolute);
 		}
 
-		if ((absolute - lastReceivedMsgTime) > timeout*1000) {
-			CogLogInfo("Network", "No message received from peer for %d s, reconnecting...", timeout);
+		if (!isHost && ((absolute - lastReceivedMsgTime) > timeout*1000)) {
+			CogLogInfo("Network", "No message received from host for %d s, reconnecting...", timeout);
 			networkState = NetworkComState::CONNECTING;
+		}
+		else if (isHost && ((absolute - lastReceivedMsgTime) > 20000)) {
+			CogLogInfo("Network", "No message received from peer for %d s, disconnecting...", timeout);
+			networkState = NetworkComState::LISTENING;
 		}
 	}
 
@@ -313,10 +325,11 @@ namespace Cog {
 				}
 
 				msg->SetMsgType(NetMsgType::UPDATE);
-				msg->SetMsgTime(time + (counter++));
 
-				// delta updates don't need to be confirmed
-				if (msg->GetAction() != NET_MSG_DELTA_UPDATE) {
+				// updates don't need to be confirmed
+				if (msg->GetAction() != NET_MSG_UPDATE) {
+					// set time only for action messages
+					msg->SetMsgTime(time + (counter++));
 					unconfirmedMessages[msg->GetSyncId()] = msg;
 				}
 				else {

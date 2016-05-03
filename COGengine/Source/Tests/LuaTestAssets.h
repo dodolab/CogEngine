@@ -11,6 +11,7 @@ extern "C" {
 #include "LuaScripting.h"
 #include "NodeLua.h"
 #include "BehaviorLua.h"
+#include "ComponentStorage.h"
 
 struct BindObject {
 public:

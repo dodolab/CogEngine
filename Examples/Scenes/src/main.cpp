@@ -4,6 +4,7 @@
 #include "NodeBuilder.h"
 #include "MultiAnim.h"
 #include "ofxNetwork.h"
+#include "SpriteSheet.h"
 
 /**
 * Simple behavior that reloads configuration file when user presses PAGE UP/DOWN button
@@ -60,24 +61,21 @@ public:
 						vector<string> configFiles = this->GetConfigFiles();
 						int actualConfig = this->GetActualConfigIndex();
 
-						CogEngine::GetInstance().Init(newConfig);
-						CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
-						CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
+						ofxCogEngine::GetInstance().Init(newConfig);
+						ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
+						ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
 					};
 
-					CogEngine::GetInstance().AddPostUpdateAction(action);
+					ofxCogEngine::GetInstance().AddPostUpdateAction(action);
 				}
 			}
 		}
 	}
 };
 
-class ExampleApp : public CogApp {
+class ExampleApp : public ofxCogApp {
 public:
 
-	ExampleApp() {
-		this->splashScreen = "splash_screen.png";
-	}
 
 	void InitComponents() {
 
@@ -101,15 +99,15 @@ public:
 
 
 		// load first config file
-		CogEngine::GetInstance().Init(configFiles[0]);
-		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
-		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
+		ofxCogEngine::GetInstance().Init(configFiles[0]);
+		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
+		ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
 		return;
 
 
 
 		// this example is an alternative for config1.xml
-		CogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().Init();
 
 		auto resCache = GETCOMPONENT(ResourceCache);
 
@@ -168,13 +166,13 @@ public:
 		// <node>
 		NodeBuilder bld = NodeBuilder();
 		Node* node1 = new Node("bgr");
-		bld.SetSpriteNode(main, node1, "bgr", 0, 0);
+		bld.CreateSpriteNode(main, node1, "bgr", 0, 0);
 		main->GetSceneNode()->AddChild(node1);
 
 		// <node>
 		auto spriteSheet2 = resCache->GetSpriteSheet("squares");
 		Node* node2 = new Node("square_2");
-		bld.SetSpriteNode(main, node2, "squares", 0, 1);
+		bld.CreateSpriteNode(main, node2, "squares", 0, 1);
 
 		TransformEnt node2trans = TransformEnt();
 		node2trans.pos = ofVec2f(0.15f);
@@ -187,7 +185,8 @@ public:
 
 		Setting settingAnim = Setting();
 		settingAnim.AddItem("animations", "transform1|transform2");
-		MultiAnim* multiAnim = new MultiAnim(settingAnim);
+		MultiAnim* multiAnim = new MultiAnim();
+		multiAnim->Load(settingAnim);
 
 		node2->AddBehavior(multiAnim);
 		node2->AddBehavior(bld.CreateBehavior(beh3));

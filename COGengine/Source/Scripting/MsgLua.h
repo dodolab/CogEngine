@@ -18,6 +18,7 @@ namespace Cog {
 		}
 
 		StrId GetAction() const;
+		bool HasAction(StrId action) const;
 		int GetParameter() const;
 		int GetSenderId() const;
 		NodeLua* GetContextNode() const;

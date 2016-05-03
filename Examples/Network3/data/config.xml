@@ -1,25 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
+	<settings>
+		<!-- global settings -->
+		<global_settings>
+			<!-- debug logger, output into the console -->
+			<setting name="logger" level="DEBUG">
+				<item key="channel" value="console" />
+				<item key="module_include">
+					<value>Network</value> <!-- Print networking log -->
+				</item>
+			</setting>
+		</global_settings>
+		<project_settings>
+		    <setting name="scene_settings">
+			    <item key="units" value="100"/> <!-- number of units -->
+			</setting>
+		</project_settings>
+	</settings>
 
+	<!-- spritesheet for unit image (rendering is much bettern than for images) -->
+	<spritesheets>
+      <spritesheet name="pawn" img="pawn.png">
+	    <spriteset frames="1" sprite_width="64" sprite_height="64"  />
+	  </spritesheet>
+	  <spritesheet name="background" img="bgr2.jpg"> <!-- sprite sheet for background -->
+	    <spriteset frames="1" sprite_width="800" sprite_height="450"  />
+	  </spritesheet>
+    </spritesheets>
 
-<attranimations>
-  <anim name="mojo" repeat="1">
-    <attranim attr="pos_x" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="pos_y" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
-	<attranim attr="rotation" from="0" to="360" mtype="direct" duration="5000"  />
-	<anim name="dojo" ref="mojo" revert="true" />
-  </anim>
-</attranimations>
+	<!-- scene definition -->
+	<scenes initial="main">
+		<scene name="main">
+			<scene_layers>
+				<!-- scene layers refers to spritesheets they use -->
+	            <layer name="pawn" spritesheet="pawn" buffer_size="10000" z_index="25" />
+				<layer name="background" spritesheet="background" buffer_size="1" z_index="22" />
+	        </scene_layers>
+	  
+			<!-- background image -->
+		    <node name="bgr" img="bgr2.jpg">
+				<mesh type="sprite" layer="background" />
+				<behavior type="NetworkBehavior" />
+			</node>
 
-
-
-  <scenes initial="main">
-    <scene name="main">
-      <node img="bgr.jpg" />
-      <node name="anim" img="sheet_squares.png">
-	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" rotation_origin="0.5" />
-		<behavior type="AttribAnimator" animation="mojo" />
-	  </node>
-    </scene>
-  </scenes>
+			<!-- server button -->
+			<node name="server_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.0r" pos_y="0.0r" width="0.1r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Server</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- client button -->
+			<node name="client_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.1r" pos_y="0.0r" width="0.1r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Client</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			
+			<!-- info -->
+			<node name="info">
+				<transform pos_x="0r" pos_y="1r" z_index="20" size_x="1r"  anchor_x="0" anchor_y="1" />
+				<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'm' and 'n' to increase/decrease synchronization period and 'r' to stop sending</text>
+			</node>
+		</scene>
+	</scenes>
 </app_config>

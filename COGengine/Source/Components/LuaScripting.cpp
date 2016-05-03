@@ -1,14 +1,20 @@
 #include "LuaScripting.h"
 
+#include "Definitions.h"
 #include "MsgLua.h"
 #include "BehaviorLua.h"
 #include "NodeLua.h"
-
-
+#include "SceneLua.h"
+#include "FacadeLua.h"
+#include "ComponentStorage.h"
+#include "ResourceCache.h"
 
 namespace Cog {
 
 	void LuaScripting::OnInit() {
+
+		COGLOGDEBUG("Lua", "Initializing lua binding");
+
 		L = luaL_newstate();
 		luaL_openlibs(L);
 
@@ -70,6 +76,7 @@ namespace Cog {
 			.addProperty("senderId", &MsgLua::GetSenderId)
 			.addProperty("contextNode", &MsgLua::GetContextNode)
 			.addProperty("parameter", &MsgLua::GetParameter)
+			.addFunction("HasAction", &MsgLua::HasAction)
 			.endClass();
 
 		// Behavior proxy
@@ -79,6 +86,7 @@ namespace Cog {
 			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
 			.addCFunction("Register", &BehaviorLua::RegisterCt)
 			.addFunction("SendMessage", &BehaviorLua::SendMessage)
+			.addFunction("GetScene", &BehaviorLua::GetScene)
 			.addData("owner", &BehaviorLua::ownerLua)
 			.endClass();
 
@@ -134,7 +142,90 @@ namespace Cog {
 			.addFunction("GetAttrVector3f", &NodeLua::GetAttrVector3f)
 			.addFunction("GetAttrVec2i", &NodeLua::GetAttrVec2i)
 			.addFunction("AddToActualScene", &NodeLua::AddToActualScene)
+			.addFunction("GetTextMesh", &NodeLua::GetTextMesh)
+			.addFunction("GetImageMesh", &NodeLua::GetImageMesh)
 			.endClass();
+
+		// Text mesh
+		getGlobalNamespace(L)
+			.beginClass<Text>("Text")
+			.addFunction("AppendLine", &Text::AppendLine)
+			.addFunction("AppendText", &Text::AppendText)
+			.addFunction("GetHeight", &Text::GetHeight)
+			.addFunction("GetText", &Text::GetText)
+			.addFunction("GetTextHeight", &Text::GetTextHeight)
+			.addFunction("GetTextWidth", &Text::GetTextWidth)
+			.addFunction("GetWidth", &Text::GetWidth)
+			.addFunction("SetText", &Text::SetText)
+			.endClass();
+
+		// Image mesh
+		getGlobalNamespace(L)
+			.beginClass<Image>("Image")
+			.addFunction("GetHeight", &Image::GetHeight)
+			.addFunction("GetWidth", &Image::GetWidth)
+			.endClass();
+
+		// Scene proxy
+		getGlobalNamespace(L)
+			.beginClass<SceneLua>("Scene")
+			.addFunction("FindBehaviorById", &SceneLua::FindBehaviorById)
+			.addFunction("FindNodeById", &SceneLua::FindNodeById)
+			.addFunction("FindNodeBySecondaryId", &SceneLua::FindNodeBySecondaryId)
+			.addFunction("FindNodeByTag", &SceneLua::FindNodeByTag)
+			.addProperty("name", &SceneLua::GetName, &SceneLua::SetName)
+			.addFunction("GetSceneNode", &SceneLua::GetSceneNode)
+			.addFunction("Initialized", &SceneLua::Initialized)
+			.addFunction("Loaded", &SceneLua::Loaded)
+			.addFunction("SendMessage", &SceneLua::SendMessage)
+			.endClass();
+
+		// Facade
+		getGlobalNamespace(L)
+			.addFunction("CogGetAbsoluteTime", &FacadeLua::CogGetAbsoluteTime)
+			.addFunction("CogGetFrameCounter", &FacadeLua::CogGetFrameCounter)
+			.addFunction("CogGetMousePosition", &FacadeLua::CogGetMousePosition)
+			.addFunction("CogGetMouseScroll", &FacadeLua::CogGetMouseScroll)
+			.addFunction("CogGetScreenAspectRatio", &FacadeLua::CogGetScreenAspectRatio)
+			.addFunction("CogGetScreenHeight", &FacadeLua::CogGetScreenHeight)
+			.addFunction("CogGetScreenSize", &FacadeLua::CogGetScreenSize)
+			.addFunction("CogGetScreenWidth", &FacadeLua::CogGetScreenWidth)
+			.addFunction("CogGetVirtualAspectRatio", &FacadeLua::CogGetVirtualAspectRatio)
+			.addFunction("CogGetVirtualHeight", &FacadeLua::CogGetVirtualHeight)
+			.addFunction("CogGetVirtualScreenSize", &FacadeLua::CogGetVirtualScreenSize)
+			.addFunction("CogGetVirtualWidth", &FacadeLua::CogGetVirtualWidth)
+			.addFunction("CogIsKeyPressed", &FacadeLua::CogIsKeyPressed)
+			.addFunction("CogLogDebug", &FacadeLua::CogLogDebug)
+			.addFunction("CogLogError", &FacadeLua::CogLogError)
+			.addFunction("CogLogInfo", &FacadeLua::CogLogInfo)
+			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
+			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
+			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds);
+
+
+		LoadAllScripts();
+	}
+
+	void LuaScripting::LoadAllScripts() {
+		auto cache = GETCOMPONENT(ResourceCache);
+		auto& scripts = cache->GetScripts();
+
+
+		for (auto script : scripts) {
+			COGLOGDEBUG("Lua", "Loading script %s",script.second.c_str());
+
+			int status = luaL_loadfile(L, ofToDataPath(script.second).c_str());
+			if (status != 0) {
+				CogLogError("Lua",lua_tostring(L, -1));
+			}
+			else {
+				// run script
+				status = lua_pcall(L, 0, LUA_MULTRET, 0);
+				if (status != 0) {
+					CogLogError("Lua", lua_tostring(L, -1));
+				}
+			}
+		}
 	}
 
 } // namespace

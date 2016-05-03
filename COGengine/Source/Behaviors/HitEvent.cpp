@@ -3,6 +3,10 @@
 #include "ofxCogEngine.h"
 
 
+#ifdef ANDROID
+#include "ofxAndroidVibrator.h"
+#endif
+
 namespace Cog {
 
 	void HitEvent::Update(const uint64 delta, const uint64 absolute) {

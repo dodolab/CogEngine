@@ -1,6 +1,8 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofVec2f.h"
+#include "ofVec3f.h"
+#include "ofMatrix4x4.h"
 
 namespace Cog {
 

@@ -11,7 +11,8 @@ namespace Cog {
 
 	class Node;
 	class BehaviorLua;
-
+	class Text;
+	class Image;
 
 	/**
 	* Node wrapper for Lua script
@@ -112,6 +113,14 @@ namespace Cog {
 		ofVec3f GetAttrVector3f(StrId key);
 		
 		Vec2i GetAttrVec2i(StrId key);
+
+		Text* GetTextMesh();
+
+		Image* GetImageMesh();
+
+		Node* GetRawNode() {
+			return node;
+		}
 	};
 
 } // namespace

@@ -5,6 +5,7 @@
 #include "EasingFunc.h"
 #include "TransformAnim.h"
 #include "Facade.h"
+#include "Tween.h"
 
 namespace Cog {
 
@@ -153,6 +154,16 @@ namespace Cog {
 		else if (val.compare("overlay") == 0) return AnimBlend::OVERLAY;
 
 		return AnimBlend::ADDITIVE;
+	}
+
+	TweenDirection EnumConverter::StrToTweenDirection(string val) {
+		if (val.compare("none") == 0) return TweenDirection::NONE;
+		else if (val.compare("left") == 0) return TweenDirection::LEFT;
+		else if (val.compare("right") == 0) return TweenDirection::RIGHT;
+		else if (val.compare("up") == 0) return TweenDirection::UP;
+		else if (val.compare("down") == 0) return TweenDirection::DOWN;
+
+		return TweenDirection::NONE;
 	}
 
 } // namespace

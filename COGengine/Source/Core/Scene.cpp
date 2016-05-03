@@ -45,6 +45,8 @@ namespace Cog {
 		initialized = false;
 		this->allBehaviors.clear();
 		this->allNodes.clear();
+		this->allNodes_id.clear();
+		this->allNodes_tag.clear();
 
 		// delete listeners but copy global listeners to the stage
 		this->msgListeners.clear();
@@ -154,7 +156,7 @@ namespace Cog {
 			if (cmp != nullptr) cmp->OnMessage(msg);
 		}
 		else if (recType == MsgObjectType::NODE_CHILDREN ||
-			recType == MsgObjectType::NODE_COMMON ||
+			recType == MsgObjectType::NODE_ACTUAL ||
 			recType == MsgObjectType::NODE_ROOT ||
 			recType == MsgObjectType::NODE_SCENE) {
 			if (msg.GetRecipientId() == -1) {
@@ -324,7 +326,7 @@ namespace Cog {
 	void Scene::SendTunnelingMessage(Msg& msg, Node* actualNode) {
 
 		if (msg.GetRecipientType() == MsgObjectType::NODE_ROOT) {
-			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
+			msg.SetRecipientType(MsgObjectType::NODE_ACTUAL);
 			// find root and call recursively
 			Node* root = actualNode->GetRoot();
 			if (root != nullptr) {
@@ -336,7 +338,7 @@ namespace Cog {
 			return;
 		}
 		else if (msg.GetRecipientType() == MsgObjectType::NODE_SCENE) {
-			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
+			msg.SetRecipientType(MsgObjectType::NODE_ACTUAL);
 			// find scene and call recursively
 			Node* scRoot = actualNode->GetSceneRoot();
 			if (scRoot != nullptr) {
@@ -347,14 +349,14 @@ namespace Cog {
 			return;
 		}
 
-		if (msg.GetRecipientType() == MsgObjectType::NODE_COMMON) {
+		if (msg.GetRecipientType() == MsgObjectType::NODE_ACTUAL) {
 			// call children and itself
 			if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::BUBBLING) SendTunnelingMessageToChildren(msg, actualNode);
 			SendMessageToBehaviors(msg, actualNode);
 			if (msg.SendToWholeTree() && msg.GetTunnelingMode() == TunnelingMode::TUNNELING) SendTunnelingMessageToChildren(msg, actualNode);
 		}
 		else if (msg.GetRecipientType() == MsgObjectType::NODE_CHILDREN) {
-			msg.SetRecipientType(MsgObjectType::NODE_COMMON);
+			msg.SetRecipientType(MsgObjectType::NODE_ACTUAL);
 			// call children only
 			SendTunnelingMessageToChildren(msg, actualNode);
 		}

@@ -1,5 +1,7 @@
 #include "Environment.h"
 #include "InputAct.h"
+#include "ofGraphics.h"
+#include "ofAppRunner.h"
 #include "ofxCogEngine.h"
 #include "Utils.h"
 #include "MsgPayloads.h"
@@ -41,6 +43,11 @@ namespace Cog {
 				this->SetVirtualAspectRatio(firstVal / secondVal);
 				CogLogInfo("Environment", "Aspect ratio set as %s",aspectRatio.c_str());
 			}
+		}
+
+		Setting sounds = resCache->GetGlobalSettings("sounds");
+		if (!sounds.name.empty() && sounds.GetItemValBool("mute")) {
+			this->muteSounds = true;
 		}
 	}
 

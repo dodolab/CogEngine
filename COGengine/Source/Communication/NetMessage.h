@@ -4,8 +4,6 @@
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "StrId.h"
-#include "DeltaInfo.h"
-
 
 namespace Cog {
 
@@ -202,7 +200,7 @@ namespace Cog {
 		*/
 		void LoadFromStream(NetReader* reader);
 
-		friend class Network;
+		friend class NetworkManager;
 	};
 
 

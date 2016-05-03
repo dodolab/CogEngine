@@ -38,11 +38,11 @@
 	  </scene_layers>
 
 	  <node name="bgr" img="bgr.jpg">
-	    <shape type="sprite" layer="bgr" />
+	    <mesh type="sprite" layer="bgr" />
 	  </node>
 	  
 	  <node name="square_2">
-        <shape type="sprite" layer="squares" row="0" column="1" />
+        <mesh type="sprite" layer="squares" row="0" column="1" />
 		<transform pos_x="0.15r" pos_y="0.15r"  z_index="10" />
 		
 		<behavior type="MultiAnim" animations="transform1|transform2" />

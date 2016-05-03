@@ -325,7 +325,7 @@ mojo = { \
  end \
  } \
 mojo2 = Behavior() \
-mojo2:Register(mojo) \
+mojo2:Register(mojo,\"mojo\") \
 mojo3 = { \
  attr1 = 12, \
  Update = function(delta, absolute) \
@@ -335,7 +335,7 @@ mojo3 = { \
  end \
  } \
 mojo4 = Behavior() \
-mojo4:Register(mojo3) \
+mojo4:Register(mojo3, \"mojo3\") \
 \
 next = { \
  Update = function(delta, absolute) \
@@ -343,7 +343,7 @@ next = { \
  end \
 } \
 mojo5 = Behavior() \
-mojo5:Register(next) "
+mojo5:Register(next,\"next\") "
 
 		auto L = scr->GetLua();
 
@@ -394,7 +394,7 @@ mojo5:Register(next) "
    end \
   } \
  testBeh = Behavior() \
- testBeh:Register(test) \
+ testBeh:Register(test,\"test\") \
  mNode = Node(\"testNode\") \
  mNode:AddBehavior(testBeh) \
  mNode:AddToActualScene() "
@@ -427,5 +427,109 @@ mojo5:Register(next) "
 		// update node (owner will have TEST_ATTR set to 20)
 		scr->GetNodes()[0]->Update(10, 10);
 		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 20);
+	}
+
+
+	SECTION("Scene switch test") {
+		ofxCogEngine::GetInstance().Init();
+		auto scr = new LuaScripting();
+		REGISTER_COMPONENT(scr);
+		scr->OnInit();
+
+#define lua_sample " \
+ test = { \
+   OnInit = function() \
+     testBeh:SubscribeForMessages(StrId(\"SUBSCRIBE_TEST\")) \
+   end, \
+   OnMessage = function(msg) \
+     if(msg.action:GetValue() == StrId(\"SUBSCRIBE_TEST\"):GetValue()) \
+     then \
+       CogSwitchToScene(\"scene_to_switch\", \"none\") \
+     end \
+   end, \
+   Update = function(delta, absolute) \
+   end \
+  } \
+ testBeh = Behavior() \
+ testBeh:Register(test, \"test\") \
+ mNode = Node(\"testNode\") \
+ mNode:AddBehavior(testBeh) \
+ mNode:AddToActualScene() "
+
+		// create two scenes
+		Scene* sc = new Scene("testScene", false);
+		Scene* sc2 = new Scene("scene_to_switch", false);
+		// add scenes to the stage
+		auto stage = GETCOMPONENT(Stage);
+		stage->AddScene(sc, true);
+		stage->AddScene(sc2, false);
+
+		auto L = scr->GetLua();
+		int status = luaL_loadstring(L, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+			}
+		}
+
+		// submit all changes (Init function will be called)
+		sc->GetSceneNode()->SubmitChanges(true);
+		// send action to the script
+		sc->SendMessage(Msg(StrId("SUBSCRIBE_TEST"), MsgObjectType::OTHER, -1, MsgObjectType::SUBSCRIBERS, nullptr, spt<MsgPayload>()));
+		// script should call SwitchToScene method in FacadeLua 
+		REQUIRE(stage->GetActualScene()->GetName().compare("scene_to_switch") == 0);
+	}
+
+	SECTION("Registration from outside") {
+		ofxCogEngine::GetInstance().Init();
+		auto scr = new LuaScripting();
+		REGISTER_COMPONENT(scr);
+		scr->OnInit();
+
+#define lua_sample " \
+ test = { \
+   OnInit = function() \
+     testBeh.owner:SetState(StrId(\"TEST\")) \
+   end, \
+   OnMessage = function(msg) \
+   end, \
+   Update = function(delta, absolute) \
+   end \
+} \
+ testBeh = Behavior() \
+ testBeh:Register(test, \"test\")"
+
+		Scene* sc = new Scene("testScene", false);
+		auto stage = GETCOMPONENT(Stage);
+		stage->AddScene(sc, true);
+		
+		auto L = scr->GetLua();
+		int status = luaL_loadstring(L, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+			}
+		}
+
+		// get behavior from storage
+		auto luaBeh = CogGetComponentStorage()->FindLuaBehavior("test");
+		Node* node = new Node("testNode");
+		node->AddBehavior(luaBeh);
+		sc->GetSceneNode()->AddChild(node);
+		// submit all changes (Init function will be called)
+		sc->GetSceneNode()->SubmitChanges(true);
+		
+		// script should set TEST state
+		REQUIRE(node->HasState(StrId("TEST")));
 	}
 }

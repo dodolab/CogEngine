@@ -16,7 +16,7 @@ namespace Cog {
 	enum class MsgObjectType {
 		NODE_ROOT = 0,				 /** root node */
 		NODE_SCENE = 1,				 /** scene node */
-		NODE_COMMON = 2,			 /** actual node */
+		NODE_ACTUAL = 2,			 /** actual node */
 		NODE_CHILDREN = 3,			 /** children of actual node */
 		COMPONENT = 4,				 /** component */
 		BEHAVIOR = 5,				 /** behavior */	

@@ -27,8 +27,8 @@ namespace Cog {
 		}
 	}
 
-	spt<GeneralAnim> GeneralAnim::FindChild(string name) {
-		if (this->GetName().compare(name) == 0) return spt<GeneralAnim>(this);
+	spt<GeneralAnim> GeneralAnim::FindChild(string name) { 
+		if (this->GetName().compare(name) == 0) return this->shared_from_this();
 
 		for (auto it = children.begin(); it != children.end(); ++it) {
 			if ((*it)->GetName().compare(name) == 0) return (*it);
@@ -38,7 +38,7 @@ namespace Cog {
 			}
 		}
 
-		return nullptr;
+		return spt<GeneralAnim>();
 	}
 
 	bool GeneralAnim::AddChild(spt<GeneralAnim> child) {

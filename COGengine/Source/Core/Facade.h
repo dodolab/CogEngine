@@ -38,6 +38,7 @@ namespace Cog {
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
 	vector<Soundfx*>& CogGetPlayedSounds();
+	void CogStopAllSounds();
 	bool CogIsKeyPressed(int key);
 	Vec2i CogGetMousePosition();
 	Vec2i CogGetMouseScroll();
