@@ -1,6 +1,5 @@
-
 #include "TimeMeasure.h"
-#include "ofMain.h"
+#include "ofUtils.h"
 
 namespace Cog {
 
@@ -43,6 +42,7 @@ namespace Cog {
 
 	}
 
+
 	void TimeMeasure::Report(bool restart) {
 
 		int total = (this->endTime - this->startTime);
@@ -54,7 +54,7 @@ namespace Cog {
 			CogLogInfo("Measure", "%s:Total[%d %%],Calls[%d],Dur[%d ms],Freq[%.2f]", 
 				scope.name.c_str(), percentage, scope.numCalls, scope.duration/1000, scope.numCalls/(total/1000000.0f));
 		}
-
+		
 		if (restart) this->Restart();
 	}
 

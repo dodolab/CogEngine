@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include "ofxSQLite.h"
 #include "Node.h"
 
 namespace Cog {

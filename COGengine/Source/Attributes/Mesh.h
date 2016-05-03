@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include "ofRectangle.h"
+#include "ofTrueTypeFont.h"
+#include "ofImage.h"
 #include "Definitions.h"
 #include "Sprite.h"
 #include "SpriteInst.h"

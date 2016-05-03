@@ -1,3 +1,5 @@
+#include "ofFbo.h"
+#include "ofGraphics.h"
 #include "MapLoader.h"
 #include "Sprite.h"
 #include "SpriteSheet.h"

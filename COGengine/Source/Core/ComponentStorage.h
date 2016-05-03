@@ -6,6 +6,7 @@
 #include "Component.h"
 #include <typeindex>
 #include <typeinfo>
+#include "BehaviorLua.h"
 
 namespace Cog {
 
@@ -19,6 +20,8 @@ namespace Cog {
 		map<type_index, Component*> components;
 		// behaviors, mapped by their hashed names
 		map<StrId, BehaviorCreator*> behaviorBuilders;
+		// behaviors defined in scripts
+		map<StrId, BehaviorLua*> luaBehaviors;
 
 	public:
 
@@ -131,6 +134,15 @@ namespace Cog {
 		}
 
 		/**
+		* Registeres lua script as a behavior
+		* @param name name identifier
+		* @param behavior registered object
+		*/
+		void RegisterLuaBehavior(StrId name, BehaviorLua* behavior) {
+			luaBehaviors[name] = behavior;
+		}
+
+		/**
 		* Removes existing behavior builder by its name
 		* @param key hashed name of the type of the behavior
 		* @return true, if builder has been removed
@@ -152,12 +164,26 @@ namespace Cog {
 		}
 
 		/**
+		* Finds lua behavior by its identifier
+		*/
+		BehaviorLua* FindLuaBehavior(StrId key) {
+			auto found = luaBehaviors.find(key);
+			if (found != luaBehaviors.end()) return (*found).second;
+			else return nullptr;
+		}
+
+		/**
 		* Creates a new behavior using the prototype builder
 		*/
 		Behavior* CreateBehaviorPrototype(StrId key) {
 			auto it = behaviorBuilders.find(key);
 
-			COGASSERT(it != behaviorBuilders.end(), "ComponentStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
+			if (it == behaviorBuilders.end()) {
+				auto luaBeh = FindLuaBehavior(key);
+				if (luaBeh == nullptr) COGLOGDEBUG("ComponentStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
+				else return luaBeh;
+			}
+
 			auto builder = it->second;
 			return builder->Create();
 		}

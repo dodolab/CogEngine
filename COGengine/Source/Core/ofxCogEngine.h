@@ -120,16 +120,12 @@ namespace Cog {
 		/**
 		* Gets actual framerate
 		*/
-		int GetFps() {
-			return ofGetFrameRate();
-		}
+		int GetFps();
 
 		/**
 		* Sets the framerate
 		*/
-		void SetFps(int fps) {
-			ofSetFrameRate(fps);
-		}
+		void SetFps(int fps);
 
 		/**
 		* Adds a new action that is executed after the update process is finished

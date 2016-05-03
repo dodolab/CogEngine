@@ -47,6 +47,10 @@ namespace Cog {
 		return ofxCogEngine::GetInstance().environment->GetPlayedSounds();
 	}
 
+	void CogStopAllSounds() {
+		ofxCogEngine::GetInstance().environment->StopAllSounds();
+	}
+
 	bool CogIsKeyPressed(int key) {
 		return ofxCogEngine::GetInstance().environment->IsKeyPressed(key);
 	}

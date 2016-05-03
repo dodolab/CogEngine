@@ -194,10 +194,6 @@ namespace Cog {
 			Scene* from = actualScene;
 			Scene* to = scene;
 			
-			if (!actualScene->IsCached() && actualScene->IsLazyLoad()) {
-				actualScene->Finish();
-			}
-
 			actualScene = scene;
 
 			COGLOGDEBUG("Stage", "Switching to previous scene");

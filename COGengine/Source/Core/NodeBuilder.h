@@ -67,6 +67,17 @@ namespace Cog {
 		void CreateTextNode(Node* node, string font, float size, ofColor color, string text);
 
 		/**
+		* Fills given node with label mesh
+		* @param node node to fill
+		* @param font font name
+		* @param width label width
+		* @param size font size
+		* @param color font color
+		* @param text displayed text
+		*/
+		void CreateLabelNode(Node* node, string font, float width, float size, ofColor color, string text);
+
+		/**
 		* Fills given node with sprite mesh
 		* @param scene scene whose layers contain the sprite
 		* @param node node to fill
@@ -131,7 +142,7 @@ namespace Cog {
 		* @param size plane size
 		* @param color plane color
 		*/
-		spt<Plane> CreatePlaneShape(ofVec2f size, ofColor color);
+		spt<Plane> CreatePlaneMesh(ofVec2f size, ofColor color);
 
 		/**
 		* Creates a behavior from given description entity (usually loaded from xml)
@@ -158,6 +169,14 @@ namespace Cog {
 		* @param parent parent of the node
 		*/
 		void LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent);
+
+		/**
+		* Loads label node from XML
+		* @param xml xml object
+		* @param node node to fill
+		* @param parent parent of the node
+		*/
+		void LoadLabelFromXml(spt<ofxXml> xml, Node* node, Node* parent);
 
 		/**
 		* Loads behavior from XML

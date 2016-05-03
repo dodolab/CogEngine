@@ -21,12 +21,13 @@
 #include "FloatingScene.h"
 #include "InputHandler.h"
 #include "MultiSelection.h"
-#include "Network.h"
+#include "NetworkManager.h"
 #include "SheetAnimator.h"
 #include "AttribAnimator.h"
 #include "Selection.h"
 #include "Slider.h"
-
+#include "ofEvents.h"
+#include "ofAppRunner.h"
 
 namespace Cog {
 
@@ -158,6 +159,14 @@ namespace Cog {
 		renderer->EndRender();
 
 		COGMEASURE_END("ENGINE_DRAW");
+	}
+
+	int ofxCogEngine::GetFps() {
+		return ofGetFrameRate();
+	}
+
+	void ofxCogEngine::SetFps(int fps) {
+		ofSetFrameRate(fps);
 	}
 
 	void ofxCogEngine::AddPostUpdateAction(function<void()> action) {

@@ -282,18 +282,6 @@
     <ClInclude Include="Source\Components\NetworkCommunicator.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\Network.h">
-      <Filter>Source\Communication</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\DeltaUpdate.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\DeltaInfo.h">
-      <Filter>Source\Communication</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\DeltaMessage.h">
-      <Filter>Source\Communication</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\LuaTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
@@ -612,6 +600,24 @@
     <ClInclude Include="Source\Core\ofxCogEngine.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Communication\UpdateInfo.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Interpolator.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\UpdateMessage.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\NetworkManager.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\FacadeLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\SceneLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -679,15 +685,6 @@
     </ClCompile>
     <ClCompile Include="Source\Components\NetworkCommunicator.cpp">
       <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Communication\Network.cpp">
-      <Filter>Source\Communication</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\DeltaUpdate.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Communication\DeltaMessage.cpp">
-      <Filter>Source\Communication</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripting\BehaviorLua.cpp">
       <Filter>Source\Scripting</Filter>
@@ -970,6 +967,21 @@
     </ClCompile>
     <ClCompile Include="Source\Core\ofxCogEngine.cpp">
       <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Interpolator.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\UpdateMessage.cpp">
+      <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\NetworkManager.cpp">
+      <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\FacadeLua.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\SceneLua.cpp">
+      <Filter>Source\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

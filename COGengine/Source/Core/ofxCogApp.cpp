@@ -1,4 +1,6 @@
 #include "ofxCogApp.h"
+#include "ofAppRunner.h"
+#include "ofGraphics.h"
 #include "ofxCogEngine.h"
 #include "Stage.h"
 #include "Environment.h"

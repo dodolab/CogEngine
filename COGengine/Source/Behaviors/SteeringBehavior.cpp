@@ -114,7 +114,7 @@ namespace Cog {
 		}
 
 		movement.SetForce(forceId, force);
-		this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), maxAcceleration, delta);
+		this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), maxRadialAcceleration, delta);
 	}
 
 

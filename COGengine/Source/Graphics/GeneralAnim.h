@@ -13,7 +13,7 @@ namespace Cog {
 	/**
 	* General entity for animations
 	*/
-	class GeneralAnim {
+	class GeneralAnim : public enable_shared_from_this<GeneralAnim>{
 	protected:
 		// name of animation
 		string name = "";

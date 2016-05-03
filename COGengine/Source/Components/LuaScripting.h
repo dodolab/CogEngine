@@ -32,8 +32,8 @@ namespace Cog {
 		vector<NodeLua*> nodes;
 	public:
 
-		LuaScripting() {
-
+		LuaScripting()  {
+			this->initPriority = InitPriority::MEDIUM;
 		}
 
 		/**
@@ -58,7 +58,8 @@ namespace Cog {
 		}
 
 		void OnInit();
-		
+	
+
 		/**
 		* Stores created lua behavior proxy into collection
 		*/
@@ -76,6 +77,9 @@ namespace Cog {
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 		}
+
+	protected:
+		void LoadAllScripts();
 	};
 
 }// namespace

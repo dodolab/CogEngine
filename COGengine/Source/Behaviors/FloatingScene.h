@@ -33,7 +33,7 @@ namespace Cog {
 		}
 
 		virtual void Load(Setting& setting) {
-			draggingEnabled = setting.GetItem("scroll_enabled").GetValBool();
+			draggingEnabled = setting.GetItem("drag_enabled").GetValBool();
 		}
 
 		void OnInit();

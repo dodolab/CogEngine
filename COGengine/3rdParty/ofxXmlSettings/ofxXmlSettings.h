@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofBaseTypes.h"
 #include <string.h>
 #if (_MSC_VER)
 #include "tinyxml.h"

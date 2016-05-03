@@ -5,6 +5,8 @@
 #include "LuaScripting.h"
 #include "ComponentStorage.h"
 #include "NodeLua.h"
+#include "LuaBridge.h"
+#include "SceneLua.h"
 
 using namespace luabridge;
 
@@ -21,6 +23,8 @@ namespace Cog {
 	}
 
 	void BehaviorLua::OnInit() {
+		if (this->ownerLua == nullptr) this->ownerLua = new NodeLua(owner);
+
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
@@ -30,6 +34,15 @@ namespace Cog {
 	}
 
 	int BehaviorLua::RegisterCt(luabridge::lua_State* L) {
+		COGASSERT(lua_gettop(L) == 3, "BehaviorLua", "Wrong registration call! Expected two parameters: registered object and its name");
+		
+		// get behavior name and register this object
+		string name = lua_tostring(L, 3);
+		REGISTER_LUABEHAVIOR(name, this);
+		
+		// remove string parameter and save only the object
+		lua_pop(L, 1);
+
 		int r = luaL_ref(L, LUA_REGISTRYINDEX);
 		lua_rawgeti(L, LUA_REGISTRYINDEX, r);
 		this->reference = r;
@@ -50,7 +63,7 @@ namespace Cog {
 		owner.rawset(ownerLua);
 	}
 
-	void BehaviorLua::OnMessage(Msg msg) {
+	void BehaviorLua::OnMessage(Msg& msg) {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
@@ -62,14 +75,19 @@ namespace Cog {
 	void BehaviorLua::Update(const uint64 delta, const uint64 absolute) {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
+		
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto method = ref["Update"];
-		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method OnUpdate");
+		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method Update");
 		method((int)delta, (int)absolute);
 	}
 
-	void BehaviorLua::SubscribeForMessagesLua(string action) {
-		SubscribeForMessages(StrId(action));
+	void BehaviorLua::SubscribeForMessagesLua(StrId action) {
+		SubscribeForMessages(action);
+	}
+
+	SceneLua BehaviorLua::GetScene() {
+		return SceneLua(this->owner->GetScene());
 	}
 
 } // namespace

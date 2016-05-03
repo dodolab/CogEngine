@@ -53,7 +53,8 @@ namespace Cog {
 		// initial width and height
 		int initialWidth = 0;
 		int initialHeight = 0;
-
+		// indicator whether sounds should be muted
+		bool muteSounds = false;
 	public:
 
 		~Environment() {
@@ -83,8 +84,10 @@ namespace Cog {
 		* Plays sound and adds it to the collection
 		*/
 		void PlaySound(Soundfx* sound) {
-			sound->Play();
-			playedSounds.push_back(sound);
+			if (!muteSounds) {
+				sound->Play();
+				playedSounds.push_back(sound);
+			}
 		}
 
 		/**
@@ -113,6 +116,15 @@ namespace Cog {
 		*/
 		vector<Soundfx*>& GetPlayedSounds() {
 			return playedSounds;
+		}
+
+		/**
+		* Stops all sounds
+		*/
+		void StopAllSounds() {
+			for (auto snd : playedSounds) {
+				snd->Stop();
+			}
 		}
 
 		/**
@@ -169,6 +181,20 @@ namespace Cog {
 		*/
 		int GetInitialWidth() const {
 			return initialWidth;
+		}
+
+		/**
+		* Gets indicator whether sounds should be muted
+		*/
+		bool MuteSounds() const {
+			return muteSounds;
+		}
+
+		/**
+		* Sets indicator whether sounds should be muted
+		*/
+		void SetMuteSounds(bool muteSounds) {
+			this->muteSounds = muteSounds;
 		}
 
 		/**

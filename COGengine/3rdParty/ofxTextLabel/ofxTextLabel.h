@@ -8,7 +8,14 @@
 
 #pragma once
 
-#include "ofMain.h"
+#include <vector>
+#include <string>
+
+using namespace std;
+
+#include "ofRectangle.h"
+#include "ofConstants.h"
+#include "ofTrueTypeFont.h"
 
 //--------------------------------------------------------------
 template<typename T>

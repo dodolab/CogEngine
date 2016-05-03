@@ -30,7 +30,7 @@
       <node img="bgr.jpg" />
       <node name="anim" >
 	    <transform pos_x="0.5r" pos_y="0.5r" z_index="2"  anchor="0.5" />
-		<shape type="plane" width="1" height="1" />
+		<mesh type="plane" width="1" height="1" />
 		<behavior type="SheetAnimator">
 		  <setting>
 		    <item key="animation" value="sampleAnim" />
@@ -82,11 +82,11 @@
 	  </scene_layers>
 
 	  <node name="bgr" img="bgr.jpg">
-	    <shape type="sprite" layer="bgr" />
+	    <mesh type="sprite" layer="bgr" />
 	  </node>
 	  
 	  <node name="square_2">
-        <shape type="sprite" layer="squares" row="0" column="1" />
+        <mesh type="sprite" layer="squares" row="0" column="1" />
 		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
 		
 		<behavior type="AttribsAnim" animations="tranim1|tranim2" />

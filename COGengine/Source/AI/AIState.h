@@ -9,7 +9,6 @@
 class AIState{
 protected:
 	int agentOnTurn = 0;
-	int hashCode = 0;
 public:
 	int GetAgentOnTurn() const {
 		return agentOnTurn;
@@ -23,7 +22,4 @@ public:
 		agentOnTurn = (agentOnTurn + 1) % maxAgents;
 	}
 
-	int GetHashCode() {
-		return hashCode;
-	}
 };

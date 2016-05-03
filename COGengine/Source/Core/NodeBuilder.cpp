@@ -50,6 +50,12 @@ namespace Cog {
 		node->SetMesh(spt<Text>(textShape));
 	}
 
+	void NodeBuilder::CreateLabelNode(Node* node, string font, float width, float size, ofColor color, string text) {
+		spt<ofTrueTypeFont> fontVal = CogGetFont(font, (int)size);
+		spt<Label> lab = spt<Label>(new Label(fontVal, text, width));
+		node->SetMesh(lab);
+	}
+
 	void NodeBuilder::CreateSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
 		auto spriteShape = CreateSpriteMesh(scene, layer, spriteSet, row, column);
 		node->SetMesh(spriteShape);
@@ -61,10 +67,11 @@ namespace Cog {
 	}
 
 	void NodeBuilder::CreatePlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
-		auto planeShape = CreatePlaneShape(size, color);
+		auto planeShape = CreatePlaneMesh(size, color);
 		planeShape->SetNoFill(noFill);
 		node->SetMesh(planeShape);
 	}
+
 
 	void NodeBuilder::CreateBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
 		Settings& settings = scene->GetSettings();
@@ -114,11 +121,12 @@ namespace Cog {
 		return CreateSpriteMesh(scene, layer, "", row, column);
 	}
 
-	spt<Plane> NodeBuilder::CreatePlaneShape(ofVec2f size, ofColor color) {
+	spt<Plane> NodeBuilder::CreatePlaneMesh(ofVec2f size, ofColor color) {
 		spt<Plane> plane = spt<Plane>(new Plane(size.x, size.y));
 		plane->SetColor(color);
 		return plane;
 	}
+
 
 	Behavior* NodeBuilder::CreateBehavior(spt<BehaviorEnt> entity) {
 		Behavior* behavior = nullptr;
@@ -206,7 +214,7 @@ namespace Cog {
 			math.SetSizeToScreen(node, parent);
 		}
 
-		if (xml->pushTagIfExists("shape")) {
+		if (xml->pushTagIfExists("mesh")) {
 			// load mesh
 			LoadMeshFromXml(xml, node, scene);
 			xml->popTag();
@@ -215,6 +223,11 @@ namespace Cog {
 		// text must be loaded before transform
 		if (xml->pushTagIfExists("text")) {
 			LoadTextFromXml(xml, node, parent);
+			xml->popTag();
+		}
+
+		if (xml->pushTagIfExists("label")) {
+			LoadLabelFromXml(xml, node, parent);
 			xml->popTag();
 		}
 
@@ -277,6 +290,17 @@ namespace Cog {
 		CreateTextNode(node, font, size, color, value);
 	}
 
+	void NodeBuilder::LoadLabelFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
+		string font = xml->getAttributex("font", "");
+		float width = xml->getAttributex("width", 640);
+		float size = xml->getAttributex("font_size", 1.0);
+		string value = xml->getValuex("");
+		string colorStr = xml->getAttributex("color", "0x000000");
+		ofColor color = EnumConverter::StrToColor(colorStr);
+
+		CreateLabelNode(node, font, width, size, color, value);
+	}
+
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
@@ -297,6 +321,12 @@ namespace Cog {
 		if (renderType == MeshType::IMAGE) {
 			string img = xml->getAttributex("img", "");
 			this->CreateImageNode(node, img);
+		}
+		else if (renderType == MeshType::TEXT) {
+			this->LoadTextFromXml(xml, node, node->GetParent());
+		}
+		else if (renderType == MeshType::LABEL) {
+			this->LoadLabelFromXml(xml, node, node->GetParent());
 		}
 		else if (renderType == MeshType::PLANE) {
 			float width = 0;

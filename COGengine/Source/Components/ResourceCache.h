@@ -34,7 +34,9 @@ namespace Cog {
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
 		// cached fonts (one for each dpi)
 		map<string, map<int,spt<ofTrueTypeFont>>> loadedFonts;
-
+		// names and paths to loaded scripts
+		map<string, string> scripts;
+		
 		Settings loadedDefaultSettings;
 		Settings loadedGlobalSettings;
 		Settings loadedProjectSettings;
@@ -159,6 +161,20 @@ namespace Cog {
 		* @param spriteSheet spritesheet to store
 		*/
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
+
+		/**
+		* Gets paths to scripts, mapped by their names
+		*/
+		map<string, string>& GetScripts() {
+			return scripts;
+		}
+
+		/**
+		* Gets path to script of given name
+		*/
+		string GetScriptPath(string name) {
+			return scripts[name];
+		}
 
 		/**
 		* Gets default settings that contains default values

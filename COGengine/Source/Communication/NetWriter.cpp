@@ -26,7 +26,6 @@ namespace Cog {
 
 	void NetWriter::WriteByte(tBYTE value) {
 		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
-
 		if (bitOffset <= 0) {
 			// no offset
 			*(current) = value;

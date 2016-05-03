@@ -1,6 +1,7 @@
+#include "Renderer.h"
+#include "ofGraphics.h"
 #include "Node.h"
 #include "Behavior.h"
-#include "Renderer.h"
 #include "Scene.h"
 #include "ofxTextLabel.h"
 
@@ -306,6 +307,8 @@ namespace Cog {
 	void Renderer::RenderLabel(Node* owner) {
 		
 		auto& trans = owner->GetTransform();
+
+		// label doesn't depend on transform !
 		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 
 		spt<Label> shape = owner->GetMesh<Label>();

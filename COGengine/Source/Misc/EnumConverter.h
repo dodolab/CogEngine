@@ -13,6 +13,7 @@ namespace Cog {
 	enum class AttributeType;
 	enum class CalcType;
 	enum class AnimBlend;
+	enum class TweenDirection;
 
 	/**
 	* Library class for converting between enumerated types and strings
@@ -59,6 +60,11 @@ namespace Cog {
 		* Converts string into AnimBlend
 		*/
 		static AnimBlend StrToAnimBlend(string val);
+
+		/**
+		* Converts string to TweenDirection
+		*/
+		static TweenDirection StrToTweenDirection(string val);
 
 	};
 

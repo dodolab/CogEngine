@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "ComponentStorage.h"
 #include "BehaviorLua.h"
+#include "Mesh.h"
 
 namespace Cog {
 
@@ -184,5 +185,16 @@ namespace Cog {
 	Vec2i NodeLua::GetAttrVec2i(StrId key) {
 		return node->GetAttr<Vec2i>(key);
 	}
+
+	Text* NodeLua::GetTextMesh() {
+		auto text = node->GetMesh<Text>();
+		return text.get();
+	}
+
+	Image* NodeLua::GetImageMesh() {
+		auto image = node->GetMesh<Image>();
+		return image.get();
+	}
+
 
 } // namespace

@@ -7,7 +7,7 @@
 namespace Cog {
 
 	class NetOutputMessage;
-	class Network;
+	class NetworkManager;
 
 	/**
 	* State of network communicator
@@ -35,7 +35,7 @@ namespace Cog {
 	class NetworkCommunicator : public Component {
 		
 	private:
-		Network* network = nullptr;
+		NetworkManager* network = nullptr;
 		NetworkComState networkState = NetworkComState::NONE;
 		int applicationId;
 		int myPort;
@@ -75,6 +75,10 @@ namespace Cog {
 		// number of seconds after which the connection attempts
 		// will be made again
 		int timeout = 4;
+		// indicator whether the client should connect to the first peer that it founds
+		bool autoConnect = false;
+		// indicator whether this communicator is a host
+		bool isHost = false;
 	public:
 
 		/**
@@ -110,6 +114,20 @@ namespace Cog {
 		*/
 		int GetPeerPort() const {
 			return peerPort;
+		}
+
+		/**
+		* Gets indicator whether the client should connect to the first peer that it founds
+		*/
+		bool AutoConnect() {
+			return autoConnect;
+		}
+
+		/**
+		* Sets indicator whether the client should connect to the first peer that it founds
+		*/
+		void SetAutoConnect(bool autoConnect) {
+			this->autoConnect = autoConnect;
 		}
 
 		/**

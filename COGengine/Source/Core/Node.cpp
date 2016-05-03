@@ -343,7 +343,7 @@ namespace Cog {
 
 	void Node::SendMessage(StrId action, spt<MsgPayload> data) {
 		if (scene != nullptr) {
-			auto msg = Msg(action, MsgObjectType::NODE_COMMON, this->id, MsgObjectType::SUBSCRIBERS,this, data);
+			auto msg = Msg(action, MsgObjectType::NODE_ACTUAL, this->id, MsgObjectType::SUBSCRIBERS,this, data);
 			scene->SendMessage(msg);
 		}
 	}
