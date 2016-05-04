@@ -9,7 +9,7 @@
 namespace Cog {
 
 
-	void NetworkCommunicator::InitBroadcast(int applicationId, int myPort, int peerPort) {
+	void NetworkCommunicator::InitBroadcast(tBYTE applicationId, int myPort, int peerPort) {
 		Close();
 
 		this->applicationId = applicationId;
@@ -22,7 +22,7 @@ namespace Cog {
 		networkState = NetworkComState::DISCOVERING;
 	}
 
-	void NetworkCommunicator::InitListening(int applicationId, int port) {
+	void NetworkCommunicator::InitListening(tBYTE applicationId, int port) {
 		Close();
 
 		this->applicationId = applicationId;

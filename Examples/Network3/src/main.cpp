@@ -40,11 +40,13 @@ public:
 	}
 
 	void LoadUnits() {
+
+		auto backgroundNode = owner->GetScene()->FindNodeByTag("bgr");
 		// load view
 		viewNode = owner->GetScene()->FindNodeByTag("unit_view");
 
 		// load models
-		for (auto child : owner->GetSceneRoot()->GetChildren()) {
+		for (auto child : backgroundNode->GetChildren()) {
 			if (child->GetTag().compare("unit_model") == 0) {
 				unitModels.push_back(child);
 			}
@@ -115,21 +117,21 @@ public:
 			auto delta = this->deltaUpdate->GetActualUpdate();
 			for (int i = 0; i < unitsNum; i++) {
 				auto unit = unitModels[i];
-				
-				unit->GetTransform().rotation = delta->GetVal(StrId(i*3+0));
-				unit->GetTransform().localPos.x = delta->GetVal(StrId(i*3+1));
-				unit->GetTransform().localPos.y = delta->GetVal(StrId(i*3+2));
+
+				unit->GetTransform().rotation = delta->GetVal(StrId(i * 3 + 0));
+				unit->GetTransform().localPos.x = delta->GetVal(StrId(i * 3 + 1));
+				unit->GetTransform().localPos.y = delta->GetVal(StrId(i * 3 + 2));
 			}
 		}
-		else if(netType == NetworkType::SERVER) {
+		else if (netType == NetworkType::SERVER) {
 			if (frame++ % period == 0) {
 				// send values to the client
 				auto updateInfo = spt<UpdateInfo>(new UpdateInfo());
 				auto& deltas = updateInfo->GetContinuousValues();
-				
+
 				for (int i = 0; i < unitsNum; i++) {
 					auto unit = unitModels[i];
-					
+
 					StrId rotId = StrId(i * 3 + 0);
 					StrId posXId = StrId(i * 3 + 1);
 					StrId posYId = StrId(i * 3 + 2);
@@ -209,7 +211,7 @@ class ExampleApp : public ofxCogApp {
 		// get scene that is defined in xml
 		Scene* main = stage->GetActualScene();
 		TransformMath math = TransformMath();
-		
+
 		NodeBuilder bld = NodeBuilder();
 		// get number of units defined in xml
 		int units = GETCOMPONENT(ResourceCache)->GetProjectSettings().GetSettingValInt("scene_settings", "units");
@@ -224,16 +226,18 @@ class ExampleApp : public ofxCogApp {
 		// during the update loop, model nodes are updated and transformations are copied into view sprites
 
 		// define view
-		Node* unitsView= new Node("unit_view");
-		main->GetSceneNode()->AddChild(unitsView);
+		Node* unitsView = new Node("unit_view");
+		// all nodes will be children of background so that scale will be set properly
+		auto background = main->FindNodeByTag("bgr");
+		background->AddChild(unitsView);
 		spt<MultiSpriteMesh> mesh = spt<MultiSpriteMesh>(new MultiSpriteMesh("pawn"));
 		unitsView->SetMesh(mesh);
-		
+
 		// add units into the scene
 		for (int i = 0; i < units; i++) {
 			// each unit will have separate node (and its own movement behavior)
 			Node* unitModel = new Node("unit_model");
-			main->GetSceneNode()->AddChild(unitModel);
+			background->AddChild(unitModel);
 			// rectangles are not rendered (instead of planes) and can be used for size calculations
 			auto rectangle = spt<Cog::Rectangle>(new Cog::Rectangle(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
 			unitModel->SetMesh(rectangle);
@@ -246,21 +250,23 @@ class ExampleApp : public ofxCogApp {
 			node2trans.zIndex = 100;
 			node2trans.sType = CalcType::GRID;
 			node2trans.size = ofVec2f(3);
-			
+
 			// calculate transform with grid 100x50 units
 			Trans trans;
-			math.CalcTransform(trans, unitModel, main->GetSceneNode(), node2trans, 100, 50);
-			
+			math.CalcTransform(trans, unitModel, background, node2trans, 100, 50);
+
 			// add sprite into mesh
-			mesh->AddSprite(spt<SpriteInst>(new SpriteInst(Sprite(spriteSet,0), trans)));
-			
+			auto sprite = Sprite(spriteSet, 0);
+			mesh->AddSprite(spt<SpriteInst>(new SpriteInst(sprite, trans)));
+
 			// set transformation of the model node
 			unitModel->SetTransform(trans);
 		}
 
-		main->GetSceneNode()->SubmitChanges(true);
+		background->SubmitChanges(true);
 	}
 };
+
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

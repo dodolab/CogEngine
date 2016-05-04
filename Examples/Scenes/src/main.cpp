@@ -5,6 +5,7 @@
 #include "MultiAnim.h"
 #include "ofxNetwork.h"
 #include "SpriteSheet.h"
+#include "AttrAnimEnt.h"
 
 /**
 * Simple behavior that reloads configuration file when user presses PAGE UP/DOWN button
@@ -97,16 +98,17 @@ public:
 			throw ConfigErrorException("No configuration file found!");
 		}
 
-
 		// load first config file
 		ofxCogEngine::GetInstance().Init(configFiles[0]);
 		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
 		ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
-		return;
+		
 
 
+		// Following code is the same as in config4.xml but procedural
 
-		// this example is an alternative for config1.xml
+		/*
+		ofxCogEngine::GetInstance().SetFps(50);
 		ofxCogEngine::GetInstance().Init();
 
 		auto resCache = GETCOMPONENT(ResourceCache);
@@ -119,7 +121,7 @@ public:
 		// <spritesheets>
 		spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet("squares", CogGet2DImage("sheet_squares.png"), 4, 128, 128));
 		resCache->StoreSpriteSheet(spriteSheet);
-		spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr.jpg"), 1, 800, 450));
+		spriteSheet = spt<SpriteSheet>(new SpriteSheet("bgr", CogGet2DImage("bgr2.jpg"), 1, 800, 450));
 		resCache->StoreSpriteSheet(spriteSheet);
 
 		// <transforms>
@@ -149,7 +151,7 @@ public:
 		spt<BehaviorEnt> beh2 = spt<BehaviorEnt>(new BehaviorEnt("transform2", "TransformAnim", setting2));
 		Setting setting3 = Setting();
 		setting3.AddItem("animation", "square_anim");
-		spt<BehaviorEnt> beh3 = spt<BehaviorEnt>(new BehaviorEnt("squareanim", "SheetAnim", setting3));
+		spt<BehaviorEnt> beh3 = spt<BehaviorEnt>(new BehaviorEnt("squareanim", "SheetAnimator", setting3));
 		resCache->StoreEntity(beh1);
 		resCache->StoreEntity(beh2);
 		resCache->StoreEntity(beh3);
@@ -175,7 +177,7 @@ public:
 		bld.CreateSpriteNode(main, node2, "squares", 0, 1);
 
 		TransformEnt node2trans = TransformEnt();
-		node2trans.pos = ofVec2f(0.15f);
+		node2trans.pos = ofVec2f(0.5f);
 		node2trans.pType = CalcType::PER;
 		node2trans.sType = CalcType::LOC;
 		node2trans.zIndex = 10;
@@ -188,6 +190,7 @@ public:
 		MultiAnim* multiAnim = new MultiAnim();
 		multiAnim->Load(settingAnim);
 
+		// <behavior ref="squareanim" />
 		node2->AddBehavior(multiAnim);
 		node2->AddBehavior(bld.CreateBehavior(beh3));
 		main->GetSceneNode()->AddChild(node2);
@@ -199,7 +202,7 @@ public:
 		// init logging
 		auto logger = GETCOMPONENT(Logger);
 		logger->SetLogLevel(LogLevel::LDEBUG);
-
+		*/
 	}
 
 	void InitStage(Stage* stage) {

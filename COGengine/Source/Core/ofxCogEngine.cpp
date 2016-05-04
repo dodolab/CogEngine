@@ -162,11 +162,12 @@ namespace Cog {
 	}
 
 	int ofxCogEngine::GetFps() {
-		return ofGetFrameRate();
+		return fps;
 	}
 
 	void ofxCogEngine::SetFps(int fps) {
 		ofSetFrameRate(fps);
+		this->fps = fps;
 	}
 
 	void ofxCogEngine::AddPostUpdateAction(function<void()> action) {

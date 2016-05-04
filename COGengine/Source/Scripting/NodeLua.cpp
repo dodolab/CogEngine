@@ -196,5 +196,15 @@ namespace Cog {
 		return image.get();
 	}
 
+	void NodeLua::SetImageMesh(string image) {
+		auto img = CogGet2DImage(image);
+		if (node->HasMeshType(MeshType::IMAGE)) {
+			node->GetMesh<Image>()->SetImage(img);
+		}
+		else {
+			node->SetMesh(spt<Image>(new Image(img)));
+		}
+	}
+
 
 } // namespace

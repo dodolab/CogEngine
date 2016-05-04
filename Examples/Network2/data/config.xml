@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+	<settings>
+		<!-- global settings -->
+		<global_settings>
+			<!-- debug logger, output into the console -->
+			<setting name="logger" level="DEBUG">
+				<item key="channel" value="console" />
+				<item key="module_include">
+					<value>Network</value> <!-- Print networking log -->
+				</item>
+			</setting>
+		</global_settings>
+	</settings>
+
+	<!-- scene definition -->
+	<scenes initial="main">
+		<scene name="main">
+			<!-- background image -->
+			<node img="bgr.jpg">
+			  <behavior type="NetworkBehavior" />
+			</node>
+			
+			<!-- server button -->
+			<node name="server_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.0r" pos_y="0.0r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Server</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- client button -->
+			<node name="client_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.1r" pos_y="0.0r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Client</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+
+			
+			<node name="incr_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.3r" pos_y="0.3r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >Increase</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"/>
+				</node>
+			</node>
+			<node name="decr_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.3r" pos_y="0.4r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >Decrease</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"/>
+				</node>
+			</node>
+			
+			<node name="value_to_send">
+				<transform pos_x="0.5r" pos_y="0.4r" anchor="0.5" z_index="20"  />
+				<text font="MotionControl-Bold.otf" size="20" >0</text>
+			</node>
+			
+			<node name="send_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.6r" pos_y="0.4r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >SEND</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"/>
+				</node>
+			</node>
+			
+			<node name="value_to_receive">
+				<transform pos_x="0.4r" pos_y="0.7r" anchor="0.0" z_index="20"  />
+				<text font="MotionControl-Bold.otf" size="20" >Received:</text>
+			</node>
+			<node name="value_to_receive">
+				<transform pos_x="0.6r" pos_y="0.7r" anchor="0.0" z_index="20"  />
+				<text font="MotionControl-Bold.otf" size="20" >??</text>
+			</node>
+		</scene>
+	</scenes>
+</app_config>

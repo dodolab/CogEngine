@@ -50,12 +50,13 @@ namespace Cog {
 		* @param attrType type of attribute to animate
 		* @param fromVal starting value
 		* @param toVal final value
+		* @param calcType calculation type
 		* @param begin beginning of the animation in ms (used when more than one animation run simultaneously), by default 0
 		* @param end end of the animation in ms (used when more than one animation run simultaneously), by default 0
 		* @param duration duration of the animation in ms
 		*/
-		AttrAnimEnt(string name, AttributeType attrType, float fromVal, float toVal, int begin, int end, int duration)
-			:attributeType(attrType), fromVal(fromVal), toVal(toVal), begin(begin), end(end), duration(duration)
+		AttrAnimEnt(string name, AttributeType attrType, float fromVal, float toVal, CalcType calcType, int begin, int end, int duration)
+			:attributeType(attrType), fromVal(fromVal), toVal(toVal), calcType(calcType), begin(begin), end(end), duration(duration)
 		{
 			RecalcDuration();
 		}

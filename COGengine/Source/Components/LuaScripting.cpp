@@ -144,6 +144,7 @@ namespace Cog {
 			.addFunction("AddToActualScene", &NodeLua::AddToActualScene)
 			.addFunction("GetTextMesh", &NodeLua::GetTextMesh)
 			.addFunction("GetImageMesh", &NodeLua::GetImageMesh)
+			.addFunction("SetImageMesh", &NodeLua::SetImageMesh)
 			.endClass();
 
 		// Text mesh

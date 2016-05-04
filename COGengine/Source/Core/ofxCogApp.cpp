@@ -25,7 +25,7 @@ namespace Cog {
 	void ofxCogApp::setup() {
 		// never set vertical sync since it may cause flickering
 		ofSetVerticalSync(false);
-		ofSetFrameRate(this->fps);
+		ofxCogEngine::GetInstance().SetFps(this->fps);
 		ofEnableAntiAliasing();
 		setupEngine();
 	}

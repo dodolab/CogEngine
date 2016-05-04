@@ -69,21 +69,21 @@ namespace Cog {
 		* @param applicationId application identifier
 		* @param msg msg to send
 		*/
-		void SendTCPMessage(unsigned int applicationId, spt<NetOutputMessage> msg);
+		void SendTCPMessage(tBYTE applicationId, spt<NetOutputMessage> msg);
 
 		/**
 		* Sends TCP message
 		* @param applicationId application identifier
 		* @param writer data stream containing bytes of the message
 		*/
-		void SendTCPMessage(unsigned int applicationId, NetWriter* writer);
+		void SendTCPMessage(tBYTE applicationId, NetWriter* writer);
 
 		/**
 		* Receives TCP message
 		* @param applicationId application identifier
 		* @param timeoutSec number of seconds the receiver should wait for a new message (set 0 for simple check)
 		*/
-		NetReader* ReceiveTCPMessage(unsigned int applicationId, int timeoutSec);
+		NetReader* ReceiveTCPMessage(tBYTE applicationId, int timeoutSec);
 
 		/**
 		* Receives TCP message
@@ -93,7 +93,7 @@ namespace Cog {
 		* and only the last message will be returned; this is appropriate for the case where this method is called only
 		* several times per second, so it is necessary to keep all buffers empty, otherwise they begin to fulfill the buffer
 		*/
-		spt<NetInputMessage> ReceiveTCPMessage(unsigned int applicationId, int timeoutSec, bool emptyBuffer);
+		spt<NetInputMessage> ReceiveTCPMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer);
 
 		/**
 		* Closes TCP
@@ -139,21 +139,21 @@ namespace Cog {
 		* @param applicationId application identifier
 		* @param msg msg to send
 		*/
-		void SendUDPMessage(unsigned int applicationId, spt<NetOutputMessage> msg);
+		void SendUDPMessage(tBYTE applicationId, spt<NetOutputMessage> msg);
 
 		/**
 		* Sends UDP message
 		* @param applicationId application identifier
 		* @param writer data stream containing bytes of the message
 		*/
-		void SendUDPMessage(unsigned int applicationId, NetWriter* writer);
+		void SendUDPMessage(tBYTE applicationId, NetWriter* writer);
 
 		/**
 		* Receives UDP message
 		* @param applicationId application identifier
 		* @param timeoutSec number of seconds the receiver should wait for a new message (set 0 for simple check)
 		*/
-		NetReader* ReceiveUDPMessage(unsigned int applicationId, int timeoutSec);
+		NetReader* ReceiveUDPMessage(tBYTE applicationId, int timeoutSec);
 
 		/**
 		* Receives UDP message
@@ -163,7 +163,7 @@ namespace Cog {
 		* and only the last message will be returned; this is appropriate for the case where this method is called only
 		* several times per second, so it is necessary to keep all buffers empty, otherwise they begin to fulfill the buffer
 		*/
-		spt<NetInputMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec, bool emptyBuffer);
+		spt<NetInputMessage> ReceiveUDPMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer);
 
 		/**
 		* Closes UDP
@@ -182,12 +182,12 @@ namespace Cog {
 		/**
 		* Prepares message for sending
 		*/
-		NetWriter* PrepareMessage(unsigned int applicationId, spt<NetOutputMessage> msg);
+		NetWriter* PrepareMessage(tBYTE applicationId, spt<NetOutputMessage> msg);
 
 		/**
 		* Prepares message for sending by copying the writer and storing application id
 		*/
-		NetWriter* PrepareMessage(unsigned int applicationId, NetWriter* writer);
+		NetWriter* PrepareMessage(tBYTE applicationId, NetWriter* writer);
 
 #define MANAGER_UDP 0
 #define MANAGER_TCP 1
@@ -195,12 +195,12 @@ namespace Cog {
 		/**
 		* Tries to receive message as a NetReader
 		*/
-		NetReader* ReceiveMessage(unsigned int applicationId, int timeoutSec, int managerType);
+		NetReader* ReceiveMessage(tBYTE applicationId, int timeoutSec, int managerType);
 
 		/**
 		* Tries to receive message
 		*/
-		spt<NetInputMessage> ReceiveMessage(unsigned int applicationId, int timeoutSec, bool emptyBuffer, int managerType);
+		spt<NetInputMessage> ReceiveMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer, int managerType);
 
 	};
 
