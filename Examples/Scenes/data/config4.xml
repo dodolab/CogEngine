@@ -2,39 +2,56 @@
 <app_config>
 
 
-<animations>
-    <anim name="mario_anim_sheet" sheet="mario_all.png" frames="5" lines="1"  start="0" end="4"  repeat="0" increment="1" speed="0.2"></anim>
-	<anim name="mario_anim_frames" sheet="mario_{0}.png"  start="0" end="4"  repeat="0" increment="1" speed="0.2"></anim>
-</animations>
+  <animations>
+    <anim name="square_anim" sheet="sheet_squares.png" frames="4" lines="2"  start="0" end="3"  repeat="0" increment="1" speed="0.05"></anim>
+  </animations>
 
-<transforms>
-  <transform name="mario_from" pos_x="0r" pos_y="0.48r" z_index="2" anchor_x="1"  />
-  <transform name="mario_to" pos_x="1r" pos_y="0.48r" z_index="2" anchor="0"  />
-</transforms>
+  <spritesheets>
+	<spritesheet name="squares" img="sheet_squares.png" frames="4" sprite_width="128" sprite_height="128" />
+	<spritesheet name="bgr" img="bgr2.jpg" frames="1" sprite_width="800" sprite_height="450" />
+  </spritesheets>
 
+   <!-- define transformations -->
+   <transforms>
+    <transform name="rot_begin" rotation="0" />
+    <transform name="rot_end" rotation="360" />
+	<transform name="scale_begin" size="1" />
+	<transform name="scale_end" size="-1" />
+  </transforms>
+  
+  <!-- define behaviors that uses transformations for animation -->
+  <behaviors>
+    <behavior name="transform1" type="TransformAnim" from="rot_begin" to="rot_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="transform2" type="TransformAnim" from="scale_begin" to="scale_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="squareanim" type="SheetAnimator" animation="square_anim" />
+  </behaviors>
+ 
   <scenes initial="main">
     <scene name="main">
-      <node img="bgr.jpg" />
-      <node name="mario" img="mario_0.png">
-	    <transform pos_x="0r" pos_y="0.5r" z_index="2" anchor_x="1" width="0.1r" />
-		
-		<behavior type="SheetAnimator">
-		  <setting>
-		    <item key="animation" value="mario_anim_sheet" />
-		  </setting>
-		</behavior> 
-		
-	    <behavior type="TransformAnim">
-		  <setting>
-		    <item key="from" value="mario_from" />
-			<item key="to" value="mario_to" />
-			<item key="duration" value="4000" />
-			<item key="repeat" value="true" />
-			<item key="blend" value="overlay" />
-		  </setting>
-		</behavior> 
+	  <scene_layers>
+	    <layer name="bgr" spritesheet="bgr" buffer_size="100" z_index="30" />
+		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="30" />
+	  </scene_layers>
 
+	  <node name="bgr" img="bgr.jpg">
+	    <mesh type="sprite" layer="bgr" />
 	  </node>
+	  
+	  <node name="square_2">
+        <mesh type="sprite" layer="squares" row="0" column="1" />
+		<transform pos_x="0.4r" pos_y="0.4r" anchor="0.5" rotation_origin="0.5"  z_index="10" />
+		
+		<!-- multianimation behavior that uses both transformation behaviors  -->
+		<behavior type="MultiAnim" animations="transform1|transform2" />
+		<!-- squareanim switches between frames in the sprite-sheet -->
+		<behavior ref="squareanim" />
+	  </node>
+	  
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	 </node>
     </scene>
   </scenes>
 </app_config>

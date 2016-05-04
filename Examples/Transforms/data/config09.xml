@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+
+<scenes initial="main">
+  <scene name="main">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="plane" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="plane" size="1" color="0x009900" />
+		  <!-- green rectangle will have 50%  size of the size of the parent -->
+	      <transform pos_x="1r" pos_y="0r" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+</scenes>
+</app_config>

@@ -50,7 +50,7 @@ namespace Cog {
 	}
 
 	void BehaviorLua::SendMessage(StrId msg) {
-		this->SendMessage(msg);
+		Behavior::SendMessage(msg);
 	}
 
 	void BehaviorLua::SetOwnerLua(NodeLua* ownerLua) {

@@ -41,6 +41,12 @@
 		    <node name="bgr" img="bgr2.jpg">
 				<mesh type="sprite" layer="background" />
 				<behavior type="NetworkBehavior" />
+				
+				<!-- info -->
+				<node name="info">
+					<transform pos_x="0rp" pos_y="1rp" z_index="20" anchor_x="0" anchor_y="1" />
+					<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'm' and 'n' to increase/decrease synchronization period and 'r' to stop sending</text>
+				</node>
 			</node>
 
 			<!-- server button -->
@@ -60,11 +66,6 @@
 				</node>
 			</node>
 			
-			<!-- info -->
-			<node name="info">
-				<transform pos_x="0r" pos_y="1r" z_index="20" size_x="1r"  anchor_x="0" anchor_y="1" />
-				<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'm' and 'n' to increase/decrease synchronization period and 'r' to stop sending</text>
-			</node>
 		</scene>
 	</scenes>
 </app_config>

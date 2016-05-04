@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+	<settings>
+		<!-- global settings -->
+		<global_settings>
+			<!-- debug logger, output into the console -->
+			<setting name="logger" level="DEBUG">
+				<item key="channel" value="console" />
+				<item key="module_include">
+					<value>Lua</value> <!-- Print scripting log -->
+				</item>
+			</setting>
+		</global_settings>
+	</settings>
+
+	<scripts>
+		<script name="ScriptExample" path="script1.lua" />
+		<script name="ScriptExample2" path="script2.lua" />
+    </scripts>
+	
+	<!-- scene definition -->
+	<scenes initial="main">
+		<scene name="main">
+			<!-- background image -->
+			<node img="bgr.jpg" />
+
+			<!-- ============================================================================ -->
+			<!-- Squares -->
+			<node name="square1" img="square1.png">
+				<transform pos_x="0r" pos_y="0r" z_index="2" anchor="0" rotation_origin="0.5" />
+				<behavior type="ScriptExample" />
+			</node>
+			<node name="square2" img="square2.png">
+				<transform pos_x="1r" pos_y="1r" z_index="2" anchor="1" rotation_origin="0.5" />
+				<behavior type="ScriptExample2" />
+			</node>
+			<!-- ============================================================================ -->
+		</scene>
+	</scenes>
+</app_config>

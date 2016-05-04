@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+
+	<!-- scene definition -->
+	<scenes initial="scene1">
+		<scene name="scene1">
+			<!-- background image -->
+			<node img="scene1.png">
+			  <behavior type="SceneSwitcher" />
+			</node>
+			
+			<!-- previous button -->
+			<node name="previous_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.3r" pos_y="1.0r" anchor_x="0" anchor_y="1" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >PREVIOUS</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- next button -->
+			<node name="next_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.7r" pos_y="1.0r" anchor_x="1" anchor_y="1" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >NEXT</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+		</scene>
+		
+		<scene name="scene2">
+			<!-- background image -->
+			<node img="scene2.png">
+			  <behavior type="SceneSwitcher"/>
+			</node>
+			
+			<!-- previous button -->
+			<node name="previous_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.3r" pos_y="1.0r" anchor_x="0" anchor_y="1" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >PREVIOUS</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- next button -->
+			<node name="next_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.7r" pos_y="1.0r" anchor_x="1" anchor_y="1" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="16" >NEXT</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+		</scene>
+	</scenes>
+</app_config>

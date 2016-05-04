@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+
+<scenes initial="main">
+  <scene name="main">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <transform pos_x="0.6r" pos_y="0.5r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="50" color="0x000000">A</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.6r" pos_y="0.7r" z_index="20"  anchor_x="0" anchor_y="1" rotation="43" />
+		<text font="MotionControl-Bold.otf" size="100" color="0xFF0000">B</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.3r" pos_y="0.7r" z_index="20"  anchor_x="0" anchor_y="1" rotation="80" />
+		<text font="MotionControl-Bold.otf" size="80" color="0x008523">C</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.4r" pos_y="0.3r" z_index="20"  anchor_x="0" anchor_y="1" rotation="164" />
+		<text font="MotionControl-Bold.otf" size="60" color="0x0000FF">D</text>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+</scenes>
+</app_config>

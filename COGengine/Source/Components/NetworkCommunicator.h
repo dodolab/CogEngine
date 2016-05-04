@@ -37,7 +37,7 @@ namespace Cog {
 	private:
 		NetworkManager* network = nullptr;
 		NetworkComState networkState = NetworkComState::NONE;
-		int applicationId;
+		tBYTE applicationId;
 		int myPort;
 		int peerPort;
 		string peerIp = "";
@@ -91,7 +91,7 @@ namespace Cog {
 		/**
 		* Gets id of application that is checked with each incomming message
 		*/
-		int GetApplicationId() const {
+		tBYTE GetApplicationId() const {
 			return applicationId;
 		}
 
@@ -210,7 +210,7 @@ namespace Cog {
 		* @param myPort port this communicator will listen on
 		* @param peerPort port of the peer
 		*/
-		void InitBroadcast(int applicationId, int myPort, int peerPort);
+		void InitBroadcast(tBYTE applicationId, int myPort, int peerPort);
 
 		/**
 		* Initializes listening mode, waiting for other peers to connect
@@ -218,7 +218,7 @@ namespace Cog {
 		* checked in every received message
 		* @param myPort port this communicator will listen on
 		*/
-		void InitListening(int applicationId, int myPort);
+		void InitListening(tBYTE applicationId, int myPort);
 
 		/**
 		* Pushes message that will be sent with the next update

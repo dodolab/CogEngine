@@ -118,6 +118,8 @@ namespace Cog {
 
 		Image* GetImageMesh();
 
+		void SetImageMesh(string image);
+
 		Node* GetRawNode() {
 			return node;
 		}

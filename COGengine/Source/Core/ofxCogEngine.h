@@ -30,6 +30,7 @@ namespace Cog {
 	private:
 		// frame counter
 		int frameCounter = 0;
+		int fps = 0;
 		// actions that should be executed after update loop
 		vector<function<void()>> actions;
 		uint64 lastAbsoluteTime = 0;

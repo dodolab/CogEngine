@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+	<settings>
+		<!-- global settings -->
+		<global_settings>
+			<!-- debug logger, output into the console -->
+			<setting name="logger" level="DEBUG">
+				<item key="channel" value="console" />
+				<item key="module_include">
+					<value>Lua</value> <!-- Print scripting log -->
+				</item>
+			</setting>
+		</global_settings>
+	</settings>
+
+	<scripts>
+		<script name="ScriptExample" path="script.lua" />
+    </scripts>
+	
+	<!-- scene definition -->
+	<scenes initial="main">
+		<scene name="main">
+			<!-- background image -->
+			<node img="bgr.jpg" />
+			
+			<!-- switch button -->
+			<node name="switch_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
+				<transform pos_x="0.0r" pos_y="0.0r" anchor="0.0" z_index="20"  />
+				<node>
+					<text font="MotionControl-Bold.otf" size="20" >Switch</text>
+					<transform pos="0.5r" anchor="0.5r" size="1"   />
+				</node>
+			</node>
+			<!-- ============================================================================ -->
+			<!-- Square -->
+			<node name="square" img="rect_0.png">
+				<transform pos_x="0.5r" pos_y="0.5r" z_index="2" anchor="0.5" rotation_origin="0.5" />
+				<behavior type="ScriptExample" />
+			</node>
+			<!-- ============================================================================ -->
+		</scene>
+	</scenes>
+</app_config>
