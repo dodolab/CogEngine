@@ -1,6 +1,5 @@
 ofxCogEngine
 ===================
-![logo](Docs/cogengine.png)
 
 ## What's the CogEngine?
 
@@ -22,12 +21,8 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 
 
 ## How to use it
-This documentation comprises these three parts:
-
-* [Why do we need yet another C++ Test Framework?](docs/why-catch.md)
 * [Tutorial](docs/tutorial.md) - getting started
-* [Reference section](docs/Readme.md) - all the details
-
+* [Architecture](docs/architecture.md) - brief description of the architecture
 
 ## Compatibility
 
