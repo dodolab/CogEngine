@@ -132,11 +132,13 @@ public:
 
 
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (netType == NetworkType::CLIENT || netType == NetworkType::SERVER) {
-			// send just regular message, otherwise the other station will disconnect
-			auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0));
-			outputMsg->SetAction(StrId(12345));
-			communicator->PushMessageForSending(outputMsg);
+		if (CogGetFrameCounter() % 50 == 0) {
+			if (netType == NetworkType::CLIENT || netType == NetworkType::SERVER) {
+				// send just regular message, otherwise the other station will disconnect
+				auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0));
+				outputMsg->SetAction(StrId(12345));
+				communicator->PushMessageForSending(outputMsg);
+			}
 		}
 	}
 };

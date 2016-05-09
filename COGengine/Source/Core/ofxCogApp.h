@@ -128,7 +128,7 @@ namespace Cog {
 
 		// default behavior for backpress button, can be overridden
 		virtual bool OnBackPress() {
-			return true;
+			return false;
 		}
 
 		// handler for android backpress

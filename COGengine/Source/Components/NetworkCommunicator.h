@@ -74,7 +74,9 @@ namespace Cog {
 		uint64 lastConnectingTime = 0;
 		// number of seconds after which the connection attempts
 		// will be made again
-		int timeout = 4;
+		int reconnectTimeout = 4;
+		// number of seconds the other station will be automatically disconnected
+		int disconnectTimeout = 20;
 		// indicator whether the client should connect to the first peer that it founds
 		bool autoConnect = false;
 		// indicator whether this communicator is a host
@@ -191,16 +193,30 @@ namespace Cog {
 		* Gets number of seconds after which the connection attempts will 
 		* be made again
 		*/
-		int GetTimeout() const {
-			return timeout;
+		int GetReconnectTimeout() const {
+			return reconnectTimeout;
 		}
 
 		/**
 		* Sets number of seconds after which the connection attempts will
 		* be made again
 		*/
-		void SetTimeout(int timeout) {
-			this->timeout = timeout;
+		void SetReconnectTimeout(int reconnectTimeout) {
+			this->reconnectTimeout = reconnectTimeout;
+		}
+
+		/**
+		* Gets number of seconds after which the connection will be closed
+		*/
+		int GetDisconnectTimeout() const {
+			return disconnectTimeout;
+		}
+
+		/**
+		* Sets number of seconds after which the connection will be closed
+		*/
+		void SetDisconnectTimeout(int disconnectTimeout) {
+			this->disconnectTimeout = disconnectTimeout;
 		}
 
 		/**

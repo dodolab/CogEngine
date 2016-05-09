@@ -6,6 +6,7 @@ using namespace std;
 #include "AgentsReward.h"
 #include "Definitions.h"
 #include "StrId.h"
+#include "ActionFilter.h"
 
 namespace Cog {
 
@@ -27,10 +28,12 @@ namespace Cog {
 		int agentsNumber = 0;
 		// indicator, if this simulator was passed to agent's ChooseAction method(used for logging)
 		bool isInsideAnAgent = false;
+		// filter that may be used to limit collection of possible actions
+		spt<ActionFilter<S, A>> actionFilter;
 	public:
 
 		Simulator() {
-
+			actionFilter = spt<ActionFilter<S, A>>();
 		}
 
 		/**
@@ -41,7 +44,16 @@ namespace Cog {
 		/**
 		* Makes a deep copy of the simulator
 		*/
-		virtual spt<Simulator> DeepCopy() = 0;
+		virtual spt<Simulator> DeepCopy() {
+			auto copy = DeepCopyImpl();
+			copy->actualState = this->actualState;
+			copy->agentsNumber = this->agentsNumber;
+			copy->possibleActions = this->possibleActions;
+			copy->rewards = this->rewards;
+			copy->isInsideAnAgent = this->isInsideAnAgent;
+			copy->actionFilter = this->actionFilter;
+			return copy;
+		}
 
 		/**
 		* Gets the actual state
@@ -115,17 +127,47 @@ namespace Cog {
 		}
 
 		/**
+		* Gets action filter
+		*/
+		spt<ActionFilter<S, A>> GetActionFilter() {
+			return actionFilter;
+		}
+
+		/**
+		* Sets action filter
+		*/
+		void SetActionFilter(spt<ActionFilter<S, A>> filter) {
+			this->actionFilter = filter;
+		}
+
+		/**
 		* Makes a transition according to the selected action
 		* @param action action to make
 		*/
-		virtual void MakeAction(A action) = 0;
-
+		void MakeAction(A action) {
+			MakeActionImpl(action);
+			this->actualState.SwapAgentOnTurn(this->agentsNumber);
+			RecalcPossibleActions();
+		}
 
 	protected:
+		
+		virtual spt<Simulator> DeepCopyImpl() = 0;
+
+		virtual void MakeActionImpl(A action) = 0;
+
+
 		/**
 		* Recalculates all possible actions
 		*/
-		virtual void RecalcPossibleActions() = 0;
+		virtual void RecalcPossibleActionsImpl() = 0;
+
+		void RecalcPossibleActions() {
+			this->possibleActions.clear();
+
+			RecalcPossibleActionsImpl();
+			if (actionFilter) actionFilter->ApplyFilter(actualState, possibleActions);
+		}
 	};
 
 } // namespace

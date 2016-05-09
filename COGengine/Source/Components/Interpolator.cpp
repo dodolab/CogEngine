@@ -7,6 +7,15 @@ namespace Cog {
 
 	void Interpolator::OnInit() {
 		GlobalSubscribeForMessages(ACT_UPDATE_MESSAGE_RECEIVED);
+		Restart();
+	}
+
+	void Interpolator::Restart() {
+		messagesReceived = 0;
+		initTime = 0;
+		previous = spt<UpdateInfo>();
+		next = spt<UpdateInfo>();
+		updateSpeed = 1;
 		actual = spt<UpdateInfo>(new UpdateInfo());
 	}
 

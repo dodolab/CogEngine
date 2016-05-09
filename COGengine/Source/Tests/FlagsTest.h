@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxCogEngine.h"
-
+#include "StrId.h"
 
 #include "catch.hpp"
 using namespace Cog;

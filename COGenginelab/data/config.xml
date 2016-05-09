@@ -1,65 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
-	<settings>
-	    <!-- size of cars -->
-		<project_settings>
-		    <setting name="scene_settings">
-			    <item key="cars_size" value="8"/>
-			</setting>
-		</project_settings>
-	</settings>
-
-
-	<spritesheets>
-      <spritesheet name="cars" img="cars.png">
-	    <spriteset frames="16" sprite_width="128" sprite_height="128"  />
-	  </spritesheet>
-	  <spritesheet name="background" img="bgr2.jpg"> <!-- sprite sheet for background -->
-	    <spriteset frames="1" sprite_width="800" sprite_height="450"  />
-	  </spritesheet>
-    </spritesheets>
-
 	<!-- scene definition -->
 	<scenes initial="main">
 		<scene name="main">
-			<scene_layers>
-				<!-- scene layers refers to spritesheets they use -->
-	            <layer name="cars" spritesheet="cars" buffer_size="100000" z_index="25" />
-				<layer name="background" spritesheet="background" buffer_size="1" z_index="22" />
-	        </scene_layers>
-	  
-			<!-- background image -->
-		    <node name="bgr" img="bgr2.jpg">
-				<mesh type="sprite" layer="background" />
-				<behavior type="SpriteBehavior" /> <!-- main logic placed here -->
-				
-				<node name="cars">
-				</node>
-				
-				<!-- info -->
-				<node name="info">
-					<transform pos_x="0rp" pos_y="1rp" z_index="20" anchor_x="0" anchor_y="1" />
-					<text font="MotionControl-Bold.otf" size="30" color="0xFFFFFF">FPS 60</text>
-				</node>
-			</node>
 
-			<!-- increase button -->
-			<node name="increase_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
-				<transform pos_x="0.0r" pos_y="0.0r" width="0.1r" anchor="0.0" z_index="20"  />
-				<node>
-					<text font="MotionControl-Bold.otf" size="16" >+30 cars</text>
-					<transform pos="0.5r" anchor="0.5r" size="1"   />
-				</node>
-			</node>
-			<!-- decrease button -->
-			<node name="decrease_but" img="but_def.png" img_click="but_press.png" img_disabled="but_disable.png">
-				<transform pos_x="0.1r" pos_y="0.0r" width="0.1r" anchor="0.0" z_index="20"  />
-				<node>
-					<text font="MotionControl-Bold.otf" size="16" >-30 cars</text>
-					<transform pos="0.5r" anchor="0.5r" size="1"   />
-				</node>
-			</node>
-			
 		</scene>
 	</scenes>
 </app_config>

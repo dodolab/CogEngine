@@ -5,6 +5,7 @@
 #include "Soundfx.h"
 #include "SheetAnim.h"
 #include "Definitions.h"
+#include "Settings.h"
 
 namespace Cog {
 
@@ -86,6 +87,9 @@ namespace Cog {
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
 	spt<SheetAnim> CogGetAnimation(string name);
 	void CogStoreAnimation(spt<SheetAnim> anim);
+	Settings& CogGetGlobalSettings();
+	Settings& CogGetDefaultSettings();
+	Settings& CogGetProjectSettings();
 
 
 }// namespace

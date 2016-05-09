@@ -33,7 +33,7 @@ public:
 	}
 
 	void OnInit() {
-		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_BUTTON_CLICKED);
+		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_NET_DISCONNECTED, ACT_BUTTON_CLICKED);
 		communicator = new NetworkCommunicator();
 		REGISTER_COMPONENT(communicator);
 		unitsNum = GETCOMPONENT(ResourceCache)->GetProjectSettings().GetSettingValInt("scene_settings", "units");
@@ -94,6 +94,10 @@ public:
 			// disable buttons
 			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
 			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+		}
+
+		if (msg.HasAction(ACT_NET_DISCONNECTED)) {
+			if(netType == NetworkType::CLIENT) this->deltaUpdate->Restart(); // restart interpolator
 		}
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {

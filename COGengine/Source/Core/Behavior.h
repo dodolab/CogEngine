@@ -28,7 +28,7 @@ namespace Cog {
 
 	protected:
 		// owner node
-		Node* owner;
+		Node* owner = nullptr;
 		// indicator whether the behavior has ended
 		bool finished = false;
 		// indicator whether the behavior was initialized

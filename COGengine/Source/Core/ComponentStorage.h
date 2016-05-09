@@ -34,10 +34,6 @@ namespace Cog {
 			for (auto& key : components) {
 				delete key.second;
 			}
-
-			for (auto& key : behaviorBuilders) {
-				delete key.second;
-			}
 		}
 
 		/**
@@ -139,6 +135,7 @@ namespace Cog {
 		* @param behavior registered object
 		*/
 		void RegisterLuaBehavior(StrId name, BehaviorLua* behavior) {
+			behavior->SetIsExternal(true);
 			luaBehaviors[name] = behavior;
 		}
 

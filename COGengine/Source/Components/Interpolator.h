@@ -36,6 +36,8 @@ namespace Cog {
 		
 		void OnInit();
 
+		void Restart();
+
 		void OnMessage(Msg& msg);
 
 		/**

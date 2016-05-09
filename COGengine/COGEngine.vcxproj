@@ -229,10 +229,12 @@
     <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\tinyxml\tinyxml.h" />
+    <ClInclude Include="Source\AI\ActionFilter.h" />
     <ClInclude Include="Source\AI\AgentsReward.h" />
     <ClInclude Include="Source\AI\AIAgent.h" />
     <ClInclude Include="Source\AI\AIState.h" />
     <ClInclude Include="Source\AI\GameSimulator.h" />
+    <ClInclude Include="Source\AI\BestOnlyAgent.h" />
     <ClInclude Include="Source\AI\RandomAgent.h" />
     <ClInclude Include="Source\AI\Simulator.h" />
     <ClInclude Include="Source\AI\UCTAgent.h" />
