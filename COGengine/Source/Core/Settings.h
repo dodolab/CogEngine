@@ -233,6 +233,15 @@ namespace Cog {
 			else return GetSetting(setName).GetItem(itemKey).GetValFloat();
 		}
 
+		/**
+		* Gets value of a setting with given name and given key as a boolean.
+		* If there is no such Setting or key-value pair, it returns false
+		*/
+		bool GetSettingValBool(string setName, string itemKey) {
+			if (settings.count(setName) == 0) return 0;
+			else return GetSetting(setName).GetItem(itemKey).GetValBool();
+		}
+
 		Setting& GetSetting(string name) {
 			return settings[name];
 		}

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Network.h"
+#include "NetworkManager.h"
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "NetMessage.h"
-#include "DeltaUpdate.h"
+#include "UpdateMessage.h"
+#include "Interpolator.h"
 #include "NetworkCommunicator.h"
 
 

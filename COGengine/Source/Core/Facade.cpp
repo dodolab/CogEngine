@@ -208,5 +208,16 @@ namespace Cog {
 		ofxCogEngine::GetInstance().resourceCache->StoreAnimation(anim);
 	}
 
+	Settings& CogGetGlobalSettings() {
+		return ofxCogEngine::GetInstance().resourceCache->GetGlobalSettings();
+	}
+
+	Settings& CogGetDefaultSettings() {
+		return ofxCogEngine::GetInstance().resourceCache->GetGlobalSettings();
+	}
+
+	Settings& CogGetProjectSettings() {
+		return ofxCogEngine::GetInstance().resourceCache->GetProjectSettings();
+	}
 
 }// namespace

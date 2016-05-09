@@ -119,8 +119,6 @@ namespace Cog {
 			for (int i = 0; i < attempts; i++) {
 				RunSimulation(initState);
 			}
-
-			COGLOGDEBUG("AI", this->WriteInfo().c_str());
 		}
 
 	protected:

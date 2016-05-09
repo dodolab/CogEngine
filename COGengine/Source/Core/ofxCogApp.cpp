@@ -106,7 +106,6 @@ namespace Cog {
 	}
 
 	void ofxCogApp::dragEvent(ofDragInfo dragInfo) {
-
 	}
 
 
@@ -134,7 +133,7 @@ namespace Cog {
 	}
 
 	bool ofxCogApp::backPressed() {
-		if (OnBackPress()) {
+		if (!OnBackPress()) {
 			ofxCogEngine::GetInstance().stage->SwitchBackToScene(TweenDirection::NONE);
 		}
 		return true;

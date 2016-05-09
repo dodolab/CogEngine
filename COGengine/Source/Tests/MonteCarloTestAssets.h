@@ -5,6 +5,8 @@
 #include "GameSimulator.h"
 #include "RandomAgent.h"
 #include "UCTAgent.h"
+#include "BestOnlyAgent.h"
+#include "ActionFilter.h"
 
 // =========================================== TIC TAC TOE =============================================
 
@@ -39,10 +41,10 @@ public:
 	TicTacToeState(const TicTacToeState& copy) {
 		this->agentOnTurn = copy.agentOnTurn;
 		this->marks = copy.marks;
-		this->hashCode = copy.hashCode;
 	}
 
 	TTMark GetMark(Vec2i point) const {
+		if (point.x < 0 || point.x >= 8 || point.y < 0 || point.y >= 8) return TTMark::EMPTY;
 		return (*marks.find(point)).second;
 	}
 
@@ -79,20 +81,13 @@ public:
 		RecalcPossibleActions();
 	}
 
-	spt<Simulator> DeepCopy() {
-		auto copy = spt<TicTacToeSimulator>(new TicTacToeSimulator());
-		copy->actualState = this->actualState;
-		copy->agentsNumber = this->agentsNumber;
-		copy->possibleActions = this->possibleActions;
-		copy->rewards = this->rewards;
-		copy->isInsideAnAgent = this->isInsideAnAgent;
-
-		return copy;
+	spt<Simulator> DeepCopyImpl() {
+		return spt<TicTacToeSimulator>(new TicTacToeSimulator());
 	}
 
 	bool gameOver = false;
 
-	void MakeAction(TicTacToeAction act) {
+	void MakeActionImpl(TicTacToeAction act) {
 		if (find(this->possibleActions.begin(), this->possibleActions.end(), act) == this->possibleActions.end()) {
 			throw IllegalOperationException("Wrong action to take!");
 		}
@@ -108,7 +103,8 @@ public:
 		int startY = act.positionMark.y;
 		auto& marks = actualState.marks;
 
-		int totalReward = 0;
+		int maxReward = 0;
+		int partialReward = 0;
 
 		// ============================ check row ========================
 		int pivot = startX - 1;
@@ -132,9 +128,11 @@ public:
 		}
 
 		if (counter >= 5) gameOver = true;
-		totalReward += (counter - 1);
+		partialReward += (counter - 1);
+		if (partialReward > maxReward) maxReward = partialReward;
 
 		// ============================ check column ========================
+		partialReward = 0;
 		counter = 1;
 		pivot = startY - 1;
 
@@ -156,9 +154,11 @@ public:
 		}
 
 		if (counter >= 5) gameOver = true;
-		totalReward += (counter - 1);
+		partialReward += (counter - 1);
+		if (partialReward > maxReward) maxReward = partialReward;
 
 		// ============================ check first diag ========================
+		partialReward = 0;
 		counter = 1;
 		int pivotX = startX - 1;
 		int pivotY = startY - 1;
@@ -185,9 +185,11 @@ public:
 		}
 
 		if (counter >= 5) gameOver = true;
-		totalReward += (counter - 1);
+		partialReward += (counter - 1);
+		if (partialReward > maxReward) maxReward = partialReward;
 
 		// ============================ check second diag ========================
+		partialReward = 0;
 		counter = 1;
 		pivotX = startX + 1;
 		pivotY = startY - 1;
@@ -213,27 +215,26 @@ public:
 		}
 
 		if (counter >= 5) gameOver = true;
-		totalReward += (counter - 1);
+		partialReward += (counter - 1);
+		if (partialReward > maxReward) maxReward = partialReward;
 
-		if (gameOver) totalReward = 10000;
+		if (gameOver) maxReward = 10000;
 
 		if (!this->isInsideAnAgent) {
 			cout << WriteInfo().c_str() << endl;
 
 		}
-		if (actualState.GetAgentOnTurn() == 0) rewards = AgentsReward(totalReward, gameOver ? -1000 : 0);
-		else rewards = AgentsReward(gameOver ? -1000 : 0, totalReward);
+		if (actualState.GetAgentOnTurn() == 0) rewards = AgentsReward(maxReward, gameOver ? -1000 : 0);
+		else rewards = AgentsReward(gameOver ? -1000 : 0, maxReward);
 
-		this->actualState.SwapAgentOnTurn(this->agentsNumber);
-		RecalcPossibleActions();
 	}
 
 protected:
-
+	int move = 1;
 	string WriteInfo() {
 		auto& markMap = actualState.marks;
 		ostringstream ss;
-		ss << "Tic tac toe result (UCT is x)" << endl;
+		ss << "Tic tac toe result (UCT is x), move " << ((++move)/2) << endl;
 		for (int i = 0; i < 8; i++) {
 			ss << "|";
 			for (int j = 0; j < 8; j++) {
@@ -249,8 +250,7 @@ protected:
 		return ss.str();
 	}
 
-	virtual void RecalcPossibleActions() {
-		this->possibleActions.clear();
+	virtual void RecalcPossibleActionsImpl() {
 
 		if (gameOver) return;
 		auto& marks = actualState.marks;
@@ -268,26 +268,37 @@ protected:
 
 };
 
-class TicTacToeHumanAgent : public RandomAgent<TicTacToeState, TicTacToeAction> {
-protected:
+class TicTacToeActionFilter : public ActionFilter<TicTacToeState, TicTacToeAction> {
 public:
+	void ApplyFilter(TicTacToeState& actualState, vector<TicTacToeAction>& possibleActions) {
 
-	TicTacToeHumanAgent() {
+		if (possibleActions.empty()) return;
 
+		auto firstAction = *possibleActions.begin();
+
+		for (auto it = possibleActions.begin(); it != possibleActions.end();){
+			auto action = (*it);
+			Vec2i mark = action.positionMark;
+			if (
+				actualState.GetMark(Vec2i(mark.x-1, mark.y-1)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x-1, mark.y)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x-1, mark.y+1)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x, mark.y-1)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x, mark.y+1)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x+1, mark.y-1)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x+1, mark.y)) == TTMark::EMPTY &&
+				actualState.GetMark(Vec2i(mark.x+1, mark.y+1)) == TTMark::EMPTY
+				) {
+				it = possibleActions.erase(it);
+				continue;
+			}
+			else {
+				++it;
+			}
+		}
+
+		if (possibleActions.empty()) possibleActions.push_back(firstAction);
 	}
-
-	TicTacToeHumanAgent(string name) : RandomAgent(name) {
-
-	}
-
-	virtual TicTacToeAction ChooseAction(spt<Simulator<TicTacToeState, TicTacToeAction>> simulator) {
-		TicTacToeAction action;
-		int mojo = 12;
-		int dojo = 13;
-		action.positionMark = Vec2i(mojo, dojo);
-		return action;
-	}
-
 };
 
 

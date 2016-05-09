@@ -15,7 +15,6 @@ namespace Cog {
 		ofVec2f acceleration = ofVec2f(0);
 		ofVec2f velocity = ofVec2f(0);
 		float angularSpeed = 0;
-
 	public:
 
 		~Movement() {

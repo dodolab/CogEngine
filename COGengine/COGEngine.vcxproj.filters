@@ -618,6 +618,12 @@
     <ClInclude Include="Source\Scripting\SceneLua.h">
       <Filter>Source\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AI\BestOnlyAgent.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\ActionFilter.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">

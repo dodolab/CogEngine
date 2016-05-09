@@ -8,7 +8,6 @@
 
 namespace Cog {
 
-
 	void NetworkCommunicator::InitBroadcast(tBYTE applicationId, int myPort, int peerPort) {
 		Close();
 
@@ -125,7 +124,7 @@ namespace Cog {
 				networkState = NetworkComState::COMMUNICATING;
 
 				// notify other components
-				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
+				SendMessage(ACT_NET_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				
 				// send confirmation message
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
@@ -156,7 +155,7 @@ namespace Cog {
 			lastDiscoveringTime = absolute;
 
 			// check for discover responses
-			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
+			auto message = network->ReceiveUDPMessage(applicationId, 0, true);
 			if (message && (message->GetMsgType() == NetMsgType::DISCOVER_RESPONSE)) {
 				CogLogInfo("Network", "Found peer %s", message->GetSourceIp().c_str());
 
@@ -166,7 +165,7 @@ namespace Cog {
 
 				// update list of discovered servers
 				discoveredPeers[message->GetSourceIp()] = absolute;
-
+				lastReceivedMsgTime = absolute;
 				if (autoConnect) ConnectToPeer(message->GetSourceIp());
 			}
 		}
@@ -190,19 +189,21 @@ namespace Cog {
 			CogLogInfo("Network", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			networkState = NetworkComState::COMMUNICATING;
+			// notify other components
+			SendMessage(ACT_NET_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 		}
 		else if (message &&message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
 			// both peers can connect at the same time
 			CogLogInfo("Network", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-			// notify other components
-			SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::COMMUNICATING;
+			// notify other components
+			SendMessage(ACT_NET_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 		}
-		else if ((absolute - lastReceivedMsgTime) > 20000) {
-			CogLogInfo("Network", "No message received from peer for 20s, disconnecting...");
+		else if ((absolute - lastReceivedMsgTime) > disconnectTimeout * 1000) {
+			CogLogInfo("Network", "No message received from peer for %d s, disconnecting...",disconnectTimeout);
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::DISCONNECT));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::DISCOVERING;
@@ -229,10 +230,11 @@ namespace Cog {
 				}
 
 				lastReceivedMsgTime = absolute;
+				bool isUpdateMsg = message->GetAction() == NET_MSG_UPDATE;
 
 				if (type != NetMsgType::ACCEPT) {
 
-					if (forAcceptationMessageIds.count(message->GetSyncId()) == 0) {
+					if (!isUpdateMsg && forAcceptationMessageIds.count(message->GetSyncId()) == 0) {
 						// got message with synchronization id that must be accepted -> update 
 						// collection of messages for acceptation
 						COGLOGDEBUG("Network_sync", "received %d ", (int)message->GetSyncId());
@@ -254,19 +256,21 @@ namespace Cog {
 							SendMessage(ACT_NET_MESSAGE_RECEIVED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 						}
 
-						forAcceptationMessageTimes.insert(message->GetMsgTime());
+						if (!isUpdateMsg) {
+							forAcceptationMessageTimes.insert(message->GetMsgTime());
 
-						if (forAcceptationMessageTimes.size() > 128) {
-							// if there is more than 128 messages in the buffer, remove half of the buffer, 
-							//because it shouldn't be important anymore
+							if (forAcceptationMessageTimes.size() > 128) {
+								// if there is more than 128 messages in the buffer, remove half of the buffer, 
+								//because it shouldn't be important anymore
 
-							for (auto it = forAcceptationMessageTimes.begin(); it != forAcceptationMessageTimes.end(); ) {
-								if (forAcceptationMessageTimes.size() < 64) break;
-								if (*it % 2 == 0) {
-									forAcceptationMessageTimes.erase(it++);
-								}
-								else {
-									++it;
+								for (auto it = forAcceptationMessageTimes.begin(); it != forAcceptationMessageTimes.end(); ) {
+									if (forAcceptationMessageTimes.size() < 64) break;
+									if (*it % 2 == 0) {
+										forAcceptationMessageTimes.erase(it++);
+									}
+									else {
+										++it;
+									}
 								}
 							}
 						}
@@ -275,14 +279,15 @@ namespace Cog {
 			}
 			else if (type == NetMsgType::DISCONNECT) {
 				CogLogInfo("Network", "Peer %s has disconnected", message->GetSourceIp().c_str());
-				Close();
+				networkState = NetworkComState::LISTENING;
+				SendMessage(ACT_NET_DISCONNECTED);
 			}
 			else if (type == NetMsgType::CONNECT_REQUEST) {
 				CogLogInfo("Network", "Peer %s is reconnecting", message->GetSourceIp().c_str());
 				lastReceivedMsgTime = absolute;
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
 				// notify other components
-				SendMessage(ACT_NET_CLIENT_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
+				SendMessage(ACT_NET_CONNECTED, spt<NetworkMsgEvent>(new NetworkMsgEvent(message)));
 				network->SendUDPMessage(applicationId, msg);
 			}
 		}
@@ -294,13 +299,17 @@ namespace Cog {
 			SendMessages(absolute);
 		}
 
-		if (!isHost && ((absolute - lastReceivedMsgTime) > timeout*1000)) {
-			CogLogInfo("Network", "No message received from host for %d s, reconnecting...", timeout);
-			networkState = NetworkComState::CONNECTING;
-		}
-		else if (isHost && ((absolute - lastReceivedMsgTime) > 20000)) {
-			CogLogInfo("Network", "No message received from peer for %d s, disconnecting...", timeout);
-			networkState = NetworkComState::LISTENING;
+		if (((absolute - lastReceivedMsgTime) > reconnectTimeout * 1000)) {
+			if (!isHost) {
+				CogLogInfo("Network", "No message received from host for %d s, reconnecting...", reconnectTimeout);
+				networkState = NetworkComState::CONNECTING;
+				SendMessage(ACT_NET_CONNECTION_LOST);
+			}
+			else {
+				CogLogInfo("Network", "No message received from peer for %d s, disconnecting...", disconnectTimeout);
+				networkState = NetworkComState::LISTENING;
+				SendMessage(ACT_NET_DISCONNECTED);
+			}
 		}
 	}
 
@@ -359,7 +368,6 @@ namespace Cog {
 
 			forAcceptationMessageIds.clear();
 		}
-
 	}
 
 } // namespace

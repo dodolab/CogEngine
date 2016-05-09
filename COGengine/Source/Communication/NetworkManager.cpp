@@ -104,7 +104,6 @@ namespace Cog {
 		while (true) {
 			bufferStream->Reset();
 			int bytesBuff = 0;
-			
 			if (managerType == MANAGER_TCP) {
 				bytesBuff = tcpManager.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
 			}

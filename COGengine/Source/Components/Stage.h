@@ -56,6 +56,13 @@ namespace Cog {
 		}
 
 		/**
+		* Gets stack of switched scenes
+		*/
+		stack<Scene*>& GetSceneStack() {
+			return sceneStack;
+		}
+
+		/**
 		* Adds a new scene
 		* @param scene scene to add
 		* @param setAsActual if true, scene will be set as the actual scene

@@ -20,7 +20,7 @@ TEST_CASE("Network test")
 	
 	SECTION("TcpClient test message")
 	{
-		auto network = new Network();
+		auto network = new NetworkManager();
 
 		// setup server and client (server must go first)
 		network->SetupTCPReceiver(11999, 1000, true);
@@ -56,7 +56,7 @@ TEST_CASE("Network test")
 	
 	SECTION("Udp test message")
 	{
-		auto network = new Network();
+		auto network = new NetworkManager();
 
 		// setup server and client (server must go first)
 		network->SetupUDPReceiver(11999, 1000,true);
@@ -169,7 +169,7 @@ TEST_CASE("Network test")
 
 	SECTION("Custom message sending")
 	{
-		auto network = new Network();
+		auto network = new NetworkManager();
 		// setup server and client (server must go first)
 		network->SetupUDPReceiver(11999, 10000, false);
 		network->SetupUDPSender("127.0.0.1", 11999, false);
@@ -207,7 +207,7 @@ TEST_CASE("Network test")
 
 	SECTION("Net message sending")
 	{
-		auto network = new Network();
+		auto network = new NetworkManager();
 		// setup server and client (server must go first)
 		network->SetupUDPReceiver(11999, 10000, false);
 		network->SetupUDPSender("127.0.0.1", 11999, false);
@@ -247,46 +247,46 @@ TEST_CASE("Network test")
 
 	SECTION("DeltaUpdate test without networking")
 	{
-		DeltaUpdate* delta = new DeltaUpdate();
+		Interpolator* delta = new Interpolator();
 		delta->OnInit();
 
 		// time[10] = 10
 		auto deltam = map<int, float>();
 		deltam[StrId("MOJO")] = 10;
-		spt<DeltaInfo> deltaInf = spt<DeltaInfo>(new DeltaInfo(10, deltam));
-		delta->AcceptDeltaUpdate(deltaInf);
+		spt<UpdateInfo> deltaInf = spt<UpdateInfo>(new UpdateInfo(10, deltam));
+		delta->AcceptUpdateMessage(deltaInf);
 		
 		// time[20] = 20
 		deltam = map<int, float>();
 		deltam[StrId("MOJO")] = 20;
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(20, deltam));
-		delta->AcceptDeltaUpdate(deltaInf);
+		deltaInf = spt<UpdateInfo>(new UpdateInfo(20, deltam));
+		delta->AcceptUpdateMessage(deltaInf);
 
 		// check that time[15] = 15
 		delta->Update(5, 0);
-		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) == 15);
+		REQUIRE(((int)delta->GetActualUpdate()->GetContinuousValues()[StrId("MOJO")]) == 15);
 
 		// time[30] = 20
 		deltam = map<int, float>();
 		deltam[StrId("MOJO")] = 20;
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(30, deltam));
-		delta->AcceptDeltaUpdate(deltaInf);
+		deltaInf = spt<UpdateInfo>(new UpdateInfo(30, deltam));
+		delta->AcceptUpdateMessage(deltaInf);
 
 		// check that time[30] = 20
 		delta->Update(15, 0);
-		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) == 20);
+		REQUIRE(((int)delta->GetActualUpdate()->GetContinuousValues()[StrId("MOJO")]) == 20);
 
 		// time[60] = 70
 		deltam = map<int, float>();
 		deltam[StrId("MOJO")] = 70;
-		deltaInf = spt<DeltaInfo>(new DeltaInfo(60, deltam));
+		deltaInf = spt<UpdateInfo>(new UpdateInfo(60, deltam));
 		deltaInf->SetTime(60);
-		delta->AcceptDeltaUpdate(deltaInf);
+		delta->AcceptUpdateMessage(deltaInf);
 
 		// check that time[40] >= 36 && time[40] <= 37
 		delta->Update(10, 0);
-		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) >= 36);
-		REQUIRE(((int)delta->GetActualDelta()->GetDeltas()[StrId("MOJO")]) <= 37);
+		REQUIRE(((int)delta->GetActualUpdate()->GetContinuousValues()[StrId("MOJO")]) >= 36);
+		REQUIRE(((int)delta->GetActualUpdate()->GetContinuousValues()[StrId("MOJO")]) <= 37);
 	}
 
 	SECTION("Client connect test")

@@ -140,6 +140,8 @@ namespace Cog {
 		spt<AIAgent<S, A>> baseAgent;
 		// index of this agent, calculated before the simulation
 		int agentIndex;
+		// filter that may be used to limit collection of possible actions
+		spt<ActionFilter<S, A>> actionFilter;
 	public:
 
 		/**
@@ -206,6 +208,20 @@ namespace Cog {
 		*/
 		int GetAgentIndex() const {
 			return agentIndex;
+		}
+
+		/**
+		* Gets action filter
+		*/
+		spt<ActionFilter<S, A>> GetActionFilter() {
+			return actionFilter;
+		}
+
+		/**
+		* Sets action filter
+		*/
+		void SetActionFilter(spt<ActionFilter<S, A>> filter) {
+			this->actionFilter = filter;
 		}
 
 		/**
@@ -388,6 +404,7 @@ namespace Cog {
 		{
 			this->name = name;
 			this->baseAgent = spt<AIAgent<S,A>>(new RandomAgent<S, A>());
+			this->actionFilter = spt<ActionFilter<S, A>>();
 		}
 
 
@@ -409,6 +426,11 @@ namespace Cog {
 		*/
 		virtual A ChooseAction(spt<Simulator<S, A>> simulator) {
 
+			if (actionFilter) {
+				simulator->SetActionFilter(actionFilter);
+				actionFilter->ApplyFilter(simulator->GetActualState(), simulator->GetPossibleActions());
+			}
+			
 			// get possible actions
 			auto& actions = simulator->GetPossibleActions();
 
@@ -501,6 +523,9 @@ namespace Cog {
 		* Returns sum of all rewards; simulation can be limited with the maximum number of iterations
 		*/
 		AgentsReward SimulateRandomGame(spt<Simulator<S, A>> simulator, int thisAgentIndex) {
+
+			// apply action filter
+			if (actionFilter) simulator->SetActionFilter(actionFilter);
 
 			int iteration = 0;
 			AgentsReward partialRewards = AgentsReward(2);
