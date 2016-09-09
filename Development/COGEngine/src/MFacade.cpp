@@ -4,30 +4,7 @@
 #include "MLogger.h"
 #include "MGameStorage.h"
 
-void COGLogError(const char* format, ...){
-	va_list args;
-	va_start(args, format);
-	MEngine.logger->LogError(0,format, args);
-	va_end(args);
-}
-
-void COGLogInfo(const char* format, ...){
-	va_list args;
-	va_start(args, format);
-	MEngine.logger->LogInfo(0,format, args);
-	va_end(args);
-}
-
-void COGLogDebug(const char* format, ...){
-	va_list args;
-	va_start(args, format);
-	MEngine.logger->LogDebug(0,format, args);
-	va_end(args);
-}
-
-void COGLoggerFlush(){
-	MEngine.logger->Flush();
-}
+// =================== MENVIRONMENT ====================
 
 vector<EnInputAct>& COGGetPressedKeys(){
 	return MEngine.environmentCtrl->GetPressedKeys();
@@ -37,29 +14,25 @@ vector<EnInputAct>& COGGetPressedPoints(){
 	return MEngine.environmentCtrl->GetPressedPoints();
 }
 
-int COGGetWidth(){
+int COGGetScreenWidth(){
 	return MEngine.environmentCtrl->GetWidth();
 }
 
-int COGGetHeight(){
+int COGGetScreenHeight(){
 	return MEngine.environmentCtrl->GetHeight();
 }
 
-ofVec2f COGGetSize(){
+ofVec2f COGGetScreenSize(){
 	return MEngine.environmentCtrl->GetSize();
 }
 
-spt<ofImage> COGGet2DImage(string name){
-	return MEngine.resourceCtrl->Get2DImage(name);
+// =================== MFACTORY ========================
+
+float COGTranslateSpeed(float speed){
+	return MEngine.factory->TranslateSpeed(speed);
 }
 
-spt<ofVboMesh> COGGetMesh(string name){
-	return MEngine.resourceCtrl->GetMesh(name);
-}
-
-spt<ofTrueTypeFont> COGGetFont(string name, int size){
-	return MEngine.resourceCtrl->GetFont(name, size);
-}
+// =================== MSTORAGE ========================
 
 void COGRegisterListener(int action, GBehavior* beh){
 	MEngine.storage->RegisterListener(action, beh);
@@ -108,23 +81,64 @@ vector<GNode*> COGFindGameObjectsBySubType(int subtype) {
 }
 
 bool COGAddGameObject(GNode* gameObject){
-	COGLogDebug("Adding gameobject %s", gameObject->GetTag().c_str());
+	MLOGDEBUG("Adding gameobject %s", gameObject->GetTag().c_str());
 	return MEngine.storage->AddGameObject(gameObject);
 }
 
 void COGRemoveGameObject(GNode* gameObject){
-	COGLogDebug("Removing gameobject %s", gameObject->GetTag().c_str());
+	MLOGDEBUG("Removing gameobject %s", gameObject->GetTag().c_str());
 	MEngine.storage->RemoveGameObject(gameObject);
 }
 
 bool COGAddBehavior(GBehavior* beh){
+	MASSERT(beh->GetOwner() != nullptr, "Behavior %s hasn't game object assigned", typeid(*beh).name());
+	MLOGDEBUG("Adding behavior %s to gameobject %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	return MEngine.storage->AddBehavior(beh);
 }
 
 void COGRemoveBehavior(GBehavior* beh){
+	MASSERT(beh->GetOwner() != nullptr, "Behavior %s hasn't game object assigned", typeid(*beh).name());
+	MLOGDEBUG("Removing behavior %s from gameobject %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
 	MEngine.storage->RemoveBehavior(beh);
 }
 
-float COGTranslateSpeed(float speed){
-	return MEngine.factory->TranslateSpeed(speed);
+// =================== MLOGGER =========================
+
+void COGLogError(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogError(0, format, args);
+	va_end(args);
+}
+
+void COGLogInfo(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogInfo(0, format, args);
+	va_end(args);
+}
+
+void COGLogDebug(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogDebug(0, format, args);
+	va_end(args);
+}
+
+void COGLoggerFlush(){
+	MEngine.logger->Flush();
+}
+
+// =================== MRESOURCE =======================
+
+spt<ofImage> COGGet2DImage(string name){
+	return MEngine.resourceCtrl->Get2DImage(name);
+}
+
+spt<ofVboMesh> COGGetMesh(string name){
+	return MEngine.resourceCtrl->GetMesh(name);
+}
+
+spt<ofTrueTypeFont> COGGetFont(string name, int size){
+	return MEngine.resourceCtrl->GetFont(name, size);
 }

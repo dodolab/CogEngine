@@ -11,32 +11,24 @@
 class GBehavior;
 using namespace std;
 
-// facade methods for M objects
 
-// =================== MLOGGER =========================
-
-void COGLogError(const char* format, ...);
-void COGLogInfo(const char* format, ...);
-void COGLogDebug(const char* format, ...);
-void COGLoggerFlush();
+/*************************************************************************/
+/* Facade methods that are used for centralized access to all components */
+/*************************************************************************/
 
 // =================== MENVIRONMENT ====================
 
 vector<EnInputAct>& COGGetPressedKeys();
 vector<EnInputAct>& COGGetPressedPoints();
-int COGGetWidth();
-int COGGetHeight();
-ofVec2f COGGetSize();
+int COGGetScreenWidth();
+int COGGetScreenHeight();
+ofVec2f COGGetScreenSize();
 
-// =================== MRESOURCE =======================
+// =================== MFACTORY ========================
 
-spt<ofImage> COGGet2DImage(string name);
-spt<ofVboMesh> COGGetMesh(string name);
-spt<ofTrueTypeFont> COGGetFont(string name, int size);
+float COGTranslateSpeed(float speed);
 
 // =================== MSTORAGE ========================
-
-
 
 void COGRegisterListener(int action, GBehavior* beh);
 void COGUnregisterListener(int action, GBehavior* beh);
@@ -54,6 +46,15 @@ void COGRemoveGameObject(GNode* gameObject);
 bool COGAddBehavior(GBehavior* beh);
 void COGRemoveBehavior(GBehavior* beh);
 
-// =================== MFACTORY ========================
+// =================== MLOGGER =========================
 
-float COGTranslateSpeed(float speed);
+void COGLogError(const char* format, ...);
+void COGLogInfo(const char* format, ...);
+void COGLogDebug(const char* format, ...);
+void COGLoggerFlush();
+
+// =================== MRESOURCE =======================
+
+spt<ofImage> COGGet2DImage(string name);
+spt<ofVboMesh> COGGetMesh(string name);
+spt<ofTrueTypeFont> COGGetFont(string name, int size);

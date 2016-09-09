@@ -58,8 +58,8 @@ public:
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
 
-			int width = COGGetWidth();
-			int height = COGGetHeight();
+			int width = COGGetScreenWidth();
+			int height = COGGetScreenHeight();
 
 			// calculate actual position
 			actual += 1.0f / width * COGTranslateSpeed(speed)*delta;

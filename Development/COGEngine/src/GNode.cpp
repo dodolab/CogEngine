@@ -33,9 +33,6 @@ GNode::GNode(const GNode& copy) : type(copy.type), subType(copy.subType), id(idC
 
 GNode::~GNode(){
 	
-	delete tag;
-	delete groups;
-	delete states;
 
 	// move elements from collection to insert so they can be removed from classic collections
 	InsertElementsForAdding();
@@ -60,6 +57,10 @@ GNode::~GNode(){
 		delete (*it);
 	}
 	children.clear();
+
+	delete tag;
+	delete groups;
+	delete states;
 }
 
 void GNode::InsertElementsForAdding(){
@@ -83,9 +84,9 @@ void GNode::DeleteElementsForRemoving(){
 	for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it){
 		std::pair<GBehavior*, bool> item = (*it);
 		GBehavior* beh = item.first;
-		beh->owner = nullptr;
 		behaviors.remove(beh);
 		COGRemoveBehavior(beh);
+		beh->owner = nullptr;
 		// item.second holds ERASE indicator
 		if (item.second) delete item.first;
 	}
