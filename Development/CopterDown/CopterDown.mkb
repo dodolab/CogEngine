@@ -1,7 +1,7 @@
 assets
 {
     [default]
-	(data-ram)
+	(data)
 	.
 }
 
@@ -11,15 +11,11 @@ assets
 files
 {
     CopterDown.cpp
-
-    [Data]
-    (data)
-    resources.group
 }
 
 subprojects
 {
-    iwnui
+    
     iwutil
     iwgx
 	iw2dscenegraph

@@ -5,18 +5,22 @@
 #include "MGameEngine.h"
 #include "BeRender.h"
 #include "BeRotateAnim.h"
+#include "EnHitImage.h"
+#include "BeHitEvent.h"
 
 void MGameCtrl::Init(){
 
 	_root = new GNode(ObjType::ROOT, 0, "root");
 
-	_root->AddAttr(Attrs::USERACTION, MEngine.environmentCtrl->GetUserActions());
-
-
 	// Load images
-	spt<CIw2DImage> image = MEngine.resourceCtrl->GetImage("blue");
-	spt<CIw2DImage> rytmus = MEngine.resourceCtrl->GetImage("rytmus");
+	spt<CIw2DImage> image = MEngine.resourceCtrl->Get2DImage("images/blue.png");
+	spt<CIw2DImage> rytmus = MEngine.resourceCtrl->Get2DImage("images/rytmus.png");
 
+	spt<CIwImage> imageB = MEngine.resourceCtrl->GetImage("images/blue.png");
+	spt<CIwImage> imageRytmus = MEngine.resourceCtrl->GetImage("images/rytmus.png");
+
+	spt<EnHitImage> hitImage = spt<EnHitImage>(new EnHitImage(imageB));
+	spt<EnHitImage> hitRytmus = spt<EnHitImage>(new EnHitImage(imageRytmus));
 
 	int pixels = MEngine.environmentCtrl->GetWidth();
 	int normPixels = 400;
@@ -26,16 +30,25 @@ void MGameCtrl::Init(){
 	CIwColour color;
 	CIwFVec2 actualSize = CIwFVec2(300, 300);
 
-	for (int i = 0; i < 5; i++){
+	for (int i = 0; i < 1; i++){
 		color.Set(10+i*4, 100+i*20, 0);
-		GNode* child = new GNode(ObjType::OBJECT, 0, "other");
+		GNode* child = new GNode(ObjType::OBJECT, 0, "fofka");
 		child->GetTransform().LocalPos = actualSize;
-		if (i == 0) child->GetTransform().LocalPos = CIwFVec2(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
-		if(i==0) child->GetTransform().Scale = scale * 30;
-		child->AddAttr(Attrs::COLOR, color);
+		if (i == 0){
+			child->GetTransform().LocalPos = CIwFVec2(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
+			child->GetTransform().Scale = scale * 30;
+			child->AddAttr(Attrs::HIT_IMAGE, hitRytmus);
+			child->AddAttr(Attrs::IMGSOURCE, rytmus);
+			child->SetState(States::HITTABLE);
+			child->AddBehavior(new BeHitEvent());
+			child->AddBehavior(new BeRender(RenderType::IMAGE));
+			child->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		}
+
+	/*	child->AddAttr(Attrs::COLOR, color);
 		child->AddAttr(Attrs::SIZE, actualSize);
 		child->AddBehavior(new BeRender(RenderType::RECTANGLE));
-		child->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		child->AddBehavior(new BeRotateAnim(0, 0, 2, false));*/
 		actual->AddChild(child);
 
 		color.Set(100+i*20, 10+i*4, 0);
@@ -43,32 +56,52 @@ void MGameCtrl::Init(){
 		sChild->GetTransform().LocalPos = CIwFVec2(actualSize.x/2, actualSize.y/2);
 		sChild->AddAttr(Attrs::COLOR, color);
 		sChild->AddAttr(Attrs::SIZE, actualSize/4);
-		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
+		sChild->AddBehavior(new BeRender(RenderType::IMAGE));
+		sChild->AddAttr(Attrs::HIT_IMAGE, hitImage);
+		sChild->AddAttr(Attrs::IMGSOURCE, image);
+		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		sChild->AddBehavior(new BeHitEvent());
+		sChild->GetTransform().Scale = 0.4f;
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
 		sChild->GetTransform().LocalPos = CIwFVec2(-actualSize.x / 2, actualSize.y / 2);
 		sChild->AddAttr(Attrs::COLOR, color);
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
-		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
+		sChild->AddBehavior(new BeRender(RenderType::IMAGE));
+		sChild->AddAttr(Attrs::HIT_IMAGE, hitImage);
+		sChild->AddAttr(Attrs::IMGSOURCE, image);
+		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		sChild->AddBehavior(new BeHitEvent());
+		sChild->GetTransform().Scale = 0.4f;
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
 		sChild->GetTransform().LocalPos = CIwFVec2(actualSize.x / 2, -actualSize.y / 2);
 		sChild->AddAttr(Attrs::COLOR, color);
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
-		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
+		sChild->AddBehavior(new BeRender(RenderType::IMAGE));
+		sChild->AddAttr(Attrs::HIT_IMAGE, hitImage);
+		sChild->AddAttr(Attrs::IMGSOURCE, image);
+		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		sChild->AddBehavior(new BeHitEvent());
+		sChild->GetTransform().Scale = 0.4f;
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
 		sChild->GetTransform().LocalPos = CIwFVec2(-actualSize.x / 2, -actualSize.y / 2);
 		sChild->AddAttr(Attrs::COLOR, color);
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
-		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
+		sChild->AddBehavior(new BeRender(RenderType::IMAGE));
+		sChild->AddAttr(Attrs::HIT_IMAGE, hitImage);
+		sChild->AddAttr(Attrs::IMGSOURCE, image);
+		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
+		sChild->AddBehavior(new BeHitEvent());
+		sChild->GetTransform().Scale = 0.4f;
 		child->AddChild(sChild);
 
 		actual = child;

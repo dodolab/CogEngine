@@ -107,6 +107,11 @@ public:
 	}
 
 	/**
+	* Switches values of two states
+	*/
+	void SwitchState(int state1, int state2);
+
+	/**
 	* Resets the state
 	*/
 	void ResetState(int state){

@@ -21,11 +21,18 @@ namespace Actions{
 
 /*! Attribute keys */
 namespace Attrs{
-	int VELOCITY = 17;
-	int USERACTION = 16;
-	int IMGSOURCE = 24;
-	int BOUNDS = 26;
-	int SIZE = 25;
-	int POLYGON = 27;
-	int COLOR = 28;
+	int VELOCITY = 1;
+	int ACTIONS = 2;
+	int ALLOWED_ACTIONS = 3;
+	int IMGSOURCE = 4;
+	int BOUNDS = 5;
+	int SIZE = 6;
+	int POLYGON = 7;
+	int COLOR = 8;
+	int HIT_IMAGE = 9;
+}
+
+/*! States*/
+namespace States{
+	extern int HITTABLE = 1;
 }

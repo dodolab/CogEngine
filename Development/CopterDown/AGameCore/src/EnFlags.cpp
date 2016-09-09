@@ -135,6 +135,16 @@ bool EnFlags::HasState(int state) const{
 	else return false;
 }
 
+void EnFlags::SwitchState(int state1, int state2){
+	bool hasState2 = HasState(state2);
+
+	if (HasState(state1)) SetState(state2);
+	else ResetState(state2);
+
+	if (hasState2) SetState(state1);
+	else ResetState(state1);
+}
+
 EnFlags& EnFlags::operator=(const int& st1){
 	delete otherFlags;
 	flags1 = flags2 = flags3 = flags4 = 0;
