@@ -3,11 +3,28 @@ includepath src
 
 files
 {
+	[Header]
     (header)
-    Dummy.h
+	ABehavior.h
+	Attr.h
+	BeCollider.h
+	BeMove.h
+	BeRender.h
+	BeRotateAnim.h
+	BeTranslateAnim.h
+	EnBounds.h
+	EnCollision.h
+	EnInputAct.h
+	EnPair.h
+	EnState.h
+	Enums.h
+	EnUserAct.h
+	GNode.h
+	GNodePool.h
+	Msg.h
 
+	[Src]
     (src)
-    Dummy.cpp
 
     [Docs]
     (docs)
