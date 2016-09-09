@@ -12,7 +12,6 @@ using namespace std;
 
 class MEnvironmentCtrl{
 private:
-	static MEnvironmentCtrl* _instance;
 
 	// flag for screen size change
 	bool _screenSizeChanged = true;
@@ -28,13 +27,7 @@ private:
 
 
 public:
-
-	static MEnvironmentCtrl* Get(){
-		if (_instance == nullptr) _instance = new MEnvironmentCtrl();
-		return _instance;
-	}
-
-	void Initialize();
+	void Init();
 	void UpdateInputs();
 	void CheckInputs();
 

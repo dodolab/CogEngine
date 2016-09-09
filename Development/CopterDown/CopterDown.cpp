@@ -1,34 +1,16 @@
-#include "s3e.h"
-#include "IwDebug.h"
-#include "unistd.h"
-#include <iostream>
 #include "MGameEngine.h"
-
-
-MGameEngine engine;
-
-// ============================== VARIABLES
-
-
-
-
-// ============================== LOOPS
-
-
 
 
 
 int main()
 {
 	
-
-	// initialize	
-	engine.Init();
+	MEngine.Init();
 	// register input events
 	// start drawing loop
-	engine.StartLoop();
+	MEngine.StartLoop();
 	// finish
-	engine.Terminate();
+	MEngine.Terminate();
 
 	return 0;
 }
