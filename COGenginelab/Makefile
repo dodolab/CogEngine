@@ -6,7 +6,7 @@ endif
 
 # make sure the the OF_ROOT location is defined
 ifndef OF_ROOT
-    OF_ROOT=D:/OF_DEPLOY/openframeworks
+    OF_ROOT=F:/OF/openframeworks/Android
 endif
 
 # call the project makefile!

@@ -1,40 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{39FCA39B-98AF-4433-B991-64C458677571}</ProjectGuid>
+    <ProjectGuid>{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>COGEngine</RootNamespace>
+    <RootNamespace>COGengine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -43,11 +71,20 @@
     <TargetName>$(ProjectName)_debug</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
-    <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
-    <IncludePath>C:\Program Files %28x86%29\Visual Leak Detector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
@@ -55,13 +92,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);TARGET_WINDOWS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.\src;.\src\Attributes;.\src\Behaviors;.\src\Components;.\src\Engine;.\src\Libraries;.\src\Misc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -71,14 +106,57 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);TARGET_WINDOWS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>.\src;.\src\Attributes;.\src\Behaviors;.\src\Components;.\src\Engine;.\src\Libraries;.\src\Misc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -91,103 +169,102 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+    <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="icon.rc">
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
-    </ResourceCompile>
+    <ClInclude Include="3rdParty\duktape.h" />
+    <ClInclude Include="3rdParty\duk_config.h" />
+    <ClInclude Include="3rdParty\ofxSmartPointer.h" />
+    <ClInclude Include="3rdParty\ofxSQLite.h" />
+    <ClInclude Include="3rdParty\ofxXmlSettings.h" />
+    <ClInclude Include="3rdParty\sqlite3.h" />
+    <ClInclude Include="3rdParty\tinyxml.h" />
+    <ClInclude Include="Source\Attributes\Anim.h" />
+    <ClInclude Include="Source\Attributes\Bounds.h" />
+    <ClInclude Include="Source\Attributes\Collision.h" />
+    <ClInclude Include="Source\Attributes\Flags.h" />
+    <ClInclude Include="Source\Attributes\InputAct.h" />
+    <ClInclude Include="Source\Attributes\Pair.h" />
+    <ClInclude Include="Source\Attributes\Shape.h" />
+    <ClInclude Include="Source\Attributes\SoundFile.h" />
+    <ClInclude Include="Source\Attributes\Sprite.h" />
+    <ClInclude Include="Source\Attributes\SpriteSet.h" />
+    <ClInclude Include="Source\Attributes\SpriteSheet.h" />
+    <ClInclude Include="Source\Attributes\Transform.h" />
+    <ClInclude Include="Source\Behaviors\Animator.h" />
+    <ClInclude Include="Source\Behaviors\Button.h" />
+    <ClInclude Include="Source\Behaviors\Collider.h" />
+    <ClInclude Include="Source\Behaviors\DelayAction.h" />
+    <ClInclude Include="Source\Behaviors\DelayRemove.h" />
+    <ClInclude Include="Source\Behaviors\HitEvent.h" />
+    <ClInclude Include="Source\Behaviors\InputKey.h" />
+    <ClInclude Include="Source\Behaviors\Move.h" />
+    <ClInclude Include="Source\Behaviors\MultiAnim.h" />
+    <ClInclude Include="Source\Behaviors\RotateAnim.h" />
+    <ClInclude Include="Source\Behaviors\SceneManager.h" />
+    <ClInclude Include="Source\Behaviors\TransformAnim.h" />
+    <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
+    <ClInclude Include="Source\Behaviors\Tween.h" />
+    <ClInclude Include="Source\Components\Cache.h" />
+    <ClInclude Include="Source\Components\Environment.h" />
+    <ClInclude Include="Source\Components\Factory.h" />
+    <ClInclude Include="Source\Components\Renderer.h" />
+    <ClInclude Include="Source\Components\Storage.h" />
+    <ClInclude Include="Source\Core\Attr.h" />
+    <ClInclude Include="Source\Core\Behavior.h" />
+    <ClInclude Include="Source\Core\CogApp.h" />
+    <ClInclude Include="Source\Core\CogEngine.h" />
+    <ClInclude Include="Source\Core\CogFacade.h" />
+    <ClInclude Include="Source\Core\Enums.h" />
+    <ClInclude Include="Source\Core\Error.h" />
+    <ClInclude Include="Source\Core\Logger.h" />
+    <ClInclude Include="Source\Core\Msg.h" />
+    <ClInclude Include="Source\Core\Node.h" />
+    <ClInclude Include="Source\Core\Tests.h" />
+    <ClInclude Include="Source\Core\Utils.h" />
+    <ClInclude Include="Source\Misc\CollageTexture.h" />
+    <ClInclude Include="Source\Misc\SpriteSheetRenderer.h" />
+    <ClInclude Include="Source\Misc\SpriteTexture.h" />
+    <ClInclude Include="Source\Misc\SQLiteEntity.h" />
+    <ClInclude Include="Source\ofxCogMain.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Attributes\ofxAraAnim.h" />
-    <ClInclude Include="src\Attributes\ofxAraBounds.h" />
-    <ClInclude Include="src\Attributes\ofxAraCollision.h" />
-    <ClInclude Include="src\Attributes\ofxAraFlags.h" />
-    <ClInclude Include="src\Attributes\ofxAraInputAct.h" />
-    <ClInclude Include="src\Attributes\ofxAraPair.h" />
-    <ClInclude Include="src\Attributes\ofxAraShape.h" />
-    <ClInclude Include="src\Attributes\ofxAraSound.h" />
-    <ClInclude Include="src\Attributes\ofxAraSprite.h" />
-    <ClInclude Include="src\Attributes\ofxAraSpriteSet.h" />
-    <ClInclude Include="src\Attributes\ofxAraSpriteSheet.h" />
-    <ClInclude Include="src\Attributes\ofxAraTransform.h" />
-    <ClInclude Include="src\Behaviors\ofxArbAnim.h" />
-    <ClInclude Include="src\Behaviors\ofxArbButton.h" />
-    <ClInclude Include="src\Behaviors\ofxArbCollider.h" />
-    <ClInclude Include="src\Behaviors\ofxArbDelayAction.h" />
-    <ClInclude Include="src\Behaviors\ofxArbDelayRemove.h" />
-    <ClInclude Include="src\Behaviors\ofxArbHitEvent.h" />
-    <ClInclude Include="src\Behaviors\ofxArbInputKey.h" />
-    <ClInclude Include="src\Behaviors\ofxArbMove.h" />
-    <ClInclude Include="src\Behaviors\ofxArbMultiAnim.h" />
-    <ClInclude Include="src\Behaviors\ofxArbRotateAnim.h" />
-    <ClInclude Include="src\Behaviors\ofxArbSceneManager.h" />
-    <ClInclude Include="src\Behaviors\ofxArbTransformAnim.h" />
-    <ClInclude Include="src\Behaviors\ofxArbTranslateAnim.h" />
-    <ClInclude Include="src\Behaviors\ofxArbTween.h" />
-    <ClInclude Include="src\Components\ofxArcEnvironmentCtrl.h" />
-    <ClInclude Include="src\Components\ofxArcFactory.h" />
-    <ClInclude Include="src\Components\ofxArcRenderer.h" />
-    <ClInclude Include="src\Components\ofxArcRepository.h" />
-    <ClInclude Include="src\Components\ofxArcStorage.h" />
-    <ClInclude Include="src\Engine\ofxAreApp.h" />
-    <ClInclude Include="src\Engine\ofxAreAttr.h" />
-    <ClInclude Include="src\Engine\ofxAreBehavior.h" />
-    <ClInclude Include="src\Engine\ofxAreEngine.h" />
-    <ClInclude Include="src\Engine\ofxAreEnums.h" />
-    <ClInclude Include="src\Engine\ofxAreError.h" />
-    <ClInclude Include="src\Engine\ofxAreFacade.h" />
-    <ClInclude Include="src\Engine\ofxAreLogger.h" />
-    <ClInclude Include="src\Engine\ofxAreMsg.h" />
-    <ClInclude Include="src\Engine\ofxAreNode.h" />
-    <ClInclude Include="src\Engine\ofxAreTests.h" />
-    <ClInclude Include="src\Engine\ofxAreUtils.h" />
-    <ClInclude Include="src\Libraries\duktape.h" />
-    <ClInclude Include="src\Libraries\duk_config.h" />
-    <ClInclude Include="src\Libraries\ofxSmartPointer.h" />
-    <ClInclude Include="src\Libraries\ofxSQLite.h" />
-    <ClInclude Include="src\Libraries\ofxXmlSettings.h" />
-    <ClInclude Include="src\Libraries\sqlite3.h" />
-    <ClInclude Include="src\Libraries\tinyxml.h" />
-    <ClInclude Include="src\Misc\ofxCollageTexture.h" />
-    <ClInclude Include="src\Misc\ofxSpriteSheetRenderer.h" />
-    <ClInclude Include="src\Misc\ofxSpriteTexture.h" />
-    <ClInclude Include="src\Misc\ofxSQLiteEntity.h" />
-    <ClInclude Include="src\ofxAreMain.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Attributes\ofxAraBounds.cpp" />
-    <ClCompile Include="src\Attributes\ofxAraFlags.cpp" />
-    <ClCompile Include="src\Components\ofxArcEnvironmentCtrl.cpp" />
-    <ClCompile Include="src\Components\ofxArcFactory.cpp" />
-    <ClCompile Include="src\Components\ofxArcRepository.cpp" />
-    <ClCompile Include="src\Components\ofxArcStorage.cpp" />
-    <ClCompile Include="src\Engine\ofxAreApp.cpp" />
-    <ClCompile Include="src\Engine\ofxAreBehavior.cpp" />
-    <ClCompile Include="src\Engine\ofxAreEngine.cpp" />
-    <ClCompile Include="src\Engine\ofxAreEnums.cpp" />
-    <ClCompile Include="src\Engine\ofxAreFacade.cpp" />
-    <ClCompile Include="src\Engine\ofxAreMsg.cpp" />
-    <ClCompile Include="src\Engine\ofxAreNode.cpp" />
-    <ClCompile Include="src\Engine\ofxAreUtils.cpp" />
-    <ClCompile Include="src\Libraries\duktape.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
-    </ClCompile>
-    <ClCompile Include="src\Libraries\ofxSQLite.cpp" />
-    <ClCompile Include="src\Libraries\ofxXmlSettings.cpp" />
-    <ClCompile Include="src\Libraries\sqlite3.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+    <ClCompile Include="3rdParty\duktape.c" />
+    <ClCompile Include="3rdParty\ofxSQLite.cpp" />
+    <ClCompile Include="3rdParty\ofxXmlSettings.cpp" />
+    <ClCompile Include="3rdParty\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="src\Libraries\tinyxml.cpp" />
-    <ClCompile Include="src\Libraries\tinyxmlparser.cpp" />
-    <ClCompile Include="src\Misc\ofxCollageTexture.cpp" />
-    <ClCompile Include="src\Misc\ofxSpriteSheetRenderer.cpp" />
-    <ClCompile Include="src\Misc\ofxSpriteTexture.cpp" />
+    <ClCompile Include="3rdParty\tinyxml.cpp" />
+    <ClCompile Include="3rdParty\tinyxmlparser.cpp" />
+    <ClCompile Include="Source\Attributes\Bounds.cpp" />
+    <ClCompile Include="Source\Attributes\Flags.cpp" />
+    <ClCompile Include="Source\Components\Cache.cpp" />
+    <ClCompile Include="Source\Components\Environment.cpp" />
+    <ClCompile Include="Source\Components\Factory.cpp" />
+    <ClCompile Include="Source\Components\Storage.cpp" />
+    <ClCompile Include="Source\Core\Behavior.cpp" />
+    <ClCompile Include="Source\Core\CogApp.cpp" />
+    <ClCompile Include="Source\Core\CogEngine.cpp" />
+    <ClCompile Include="Source\Core\CogFacade.cpp" />
+    <ClCompile Include="Source\Core\Enums.cpp" />
+    <ClCompile Include="Source\Core\Msg.cpp" />
+    <ClCompile Include="Source\Core\Node.cpp" />
+    <ClCompile Include="Source\Core\Utils.cpp" />
+    <ClCompile Include="Source\Misc\CollageTexture.cpp" />
+    <ClCompile Include="Source\Misc\SpriteSheetRenderer.cpp" />
+    <ClCompile Include="Source\Misc\SpriteTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="icon.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -39,7 +39,7 @@
 ################################################################################
 # PROJECT_EXTERNAL_SOURCE_PATHS = 
 
-PROJECT_EXTERNAL_SOURCE_PATHS = ../COGEngine/src
+PROJECT_EXTERNAL_SOURCE_PATHS = ../COGengine/src
 
 ################################################################################
 # PROJECT EXCLUSIONS
@@ -142,4 +142,4 @@ PROJECT_EXTERNAL_SOURCE_PATHS = ../COGEngine/src
 # PROJECT_CXX = 
 # PROJECT_CC = 
 
-PROJECT_CFLAGS += -std=c++11
+SUPER_CFLAGS=-DANDROID_MINIFY

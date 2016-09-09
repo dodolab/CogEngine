@@ -1,11 +1,11 @@
 #include "ofMain.h"
 #include "ofApp.h"
-#include "ofxArcFactory.h"
-#include "ofxAreNode.h"
-#include "ofxArbRotateAnim.h"
-#include "ofxArbTranslateAnim.h"
-#include "ofxArbHitEvent.h"
-#include "ofxArbCollider.h"
+#include "Factory.h"
+#include "Node.h"
+#include "RotateAnim.h"
+#include "TranslateAnim.h"
+#include "HitEvent.h"
+#include "Collider.h"
 
 #include "duk_config.h"
 #include "duktape.h"
@@ -16,21 +16,21 @@ long temp;
 using namespace std;
 int rotateAnimId;
 
-void WriteTime(const char* msg){
+void WriteTime(const char* msg) {
 	cout << msg << " " << (ofGetElapsedTimeMillis() - temp) << " ms" << endl;
 	temp = ofGetElapsedTimeMillis();
 }
 
-class JavaScriptBehavior : public ofxAreBehavior{
+class JavaScriptBehavior : public Behavior {
 	duk_context* ctx;
 
-	string GetBehaviorJsName(){
-		return "Behavior_"+ofToString(this->GetId());
+	string GetBehaviorJsName() {
+		return "Behavior_" + ofToString(this->GetId());
 	}
 
 public:
 
-	JavaScriptBehavior(duk_context* context){
+	JavaScriptBehavior(duk_context* context) {
 		this->ctx = context;
 		/*
 		string path = ofToDataPath("scriptTest.js");
@@ -54,12 +54,12 @@ public:
 		}
 		duk_pop(ctx);  /* ignore result */
 
-		
+
 		duk_push_global_object(ctx);
 		duk_get_global_string(ctx, "TestingBehavior");
 		duk_push_int(ctx, rotateAnimId);
-		
-		if (duk_pnew(ctx, 1) != 0){
+
+		if (duk_pnew(ctx, 1) != 0) {
 			printf("%s\n", duk_safe_to_string(ctx, -1));
 		}
 
@@ -70,14 +70,14 @@ public:
 		//int isOK = duk_peval_string(ctx, newObj.c_str());
 	}
 
-	void Init(){
+	void Init() {
 		RegisterListening(Actions::BEHAVIOR_FINISHED);
 	}
 
 
-	
-	void OnMessage(ofxAreMsg& msg){
-		
+
+	void OnMessage(Msg& msg) {
+
 		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
 		duk_get_prop_string(ctx, -1, "OnMessage");
 		duk_dup(ctx, -2);
@@ -85,7 +85,7 @@ public:
 		duk_push_number(ctx, msg.GetBehaviorId());
 		int isOK = duk_pcall_method(ctx, 2);
 
-		if (isOK != 0){
+		if (isOK != 0) {
 			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
 		}
 
@@ -101,7 +101,7 @@ public:
 	}
 
 
-	void Update(const uint64 delta, const uint64 absolute){
+	void Update(const uint64 delta, const uint64 absolute) {
 
 		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
 		duk_get_prop_string(ctx, -1, "Update");
@@ -111,7 +111,7 @@ public:
 		int isOK = duk_pcall_method(ctx, 2);
 
 
-		if (isOK != 0){
+		if (isOK != 0) {
 			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
 		}
 
@@ -127,15 +127,15 @@ public:
 	}
 };
 
-class TestingBehavior : public ofxAreBehavior{
+class TestingBehavior : public Behavior {
 
 public:
 
-	TestingBehavior()  {
+	TestingBehavior() {
 
 	}
 
-	void Init(){
+	void Init() {
 		othersEnded = false;
 		fpsCounter = 0;
 		RegisterListening(Actions::BEHAVIOR_FINISHED);
@@ -144,9 +144,9 @@ public:
 	int fpsCounter;
 	bool othersEnded;
 
-	void OnMessage(ofxAreMsg& msg){
-		if (!othersEnded){
-			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId){
+	void OnMessage(Msg& msg) {
+		if (!othersEnded) {
+			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
 				long mojo = temp;
 				mend = ofGetElapsedTimeMillis();
 
@@ -160,12 +160,12 @@ public:
 	}
 
 
-	void Update(const uint64 delta, const uint64 absolute){
+	void Update(const uint64 delta, const uint64 absolute) {
 		fpsCounter++;
 	}
 };
 
-int OnTestAnimFinished(duk_context *ctx){
+int OnTestAnimFinished(duk_context *ctx) {
 	int fpsCounter = duk_to_number(ctx, 0);
 
 	long mojo = temp;
@@ -179,57 +179,57 @@ int OnTestAnimFinished(duk_context *ctx){
 	return 1;
 }
 
-class TestingFactory : public ofxArcFactory{
-	
+class TestingFactory : public Factory {
+
 public:
-	ofxAreNode* CreateRoot(){
+	Node* CreateRoot() {
 
 		mstart = temp = ofGetElapsedTimeMillis();
 
-		ofxAreNode* root = new ofxAreNode(ObjType::ROOT, 12, "root");
+		Node* root = new Node(ObjType::ROOT, 12, "root");
 
-		for (int i = 0; i < 2000; i++){
+		for (int i = 0; i < 2000; i++) {
 			spt<ofImage> img = COGGet2DImage("images/blue.png");
 			spt<ofImage> img2 = COGGet2DImage("images/red.png");
 
-			ofxAreNode* child = new ofxAreNode("item");
+			Node* child = new Node("item");
 
-			float rand1 = ofRandomf()/2 + 0.5f;
-			float rand2 = ofRandomf()/2 + 0.5f;
+			float rand1 = ofRandomf() / 2 + 0.5f;
+			float rand2 = ofRandomf() / 2 + 0.5f;
 
 			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
-			
 
-			if (i % 2 == 0 || true){
-				child->SetShape(spt<ofxAraSpriteShape>(new ofxAraSpriteShape(spt<ofxAraSprite>(new ofxAraSprite(spt<ofxAraSpriteSet>(new ofxAraSpriteSet(
-					new ofxAraSpriteSheet("mojo",img),0,0,1,256,256,256,256,256,256)),0)))));
+
+			if (i % 2 == 0 || true) {
+				child->SetShape(spt<SpriteShape>(new SpriteShape(spt<Sprite>(new Sprite(spt<SpriteSet>(new SpriteSet(
+					new SpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
 			}
-			else{
+			else {
 				child->SetShape(spt<EnImageShape>(new EnImageShape(img2)));
 			}
 
 
 			float scale = child->GetTransform().scale.x;
-			child->GetTransform().rotationOrigin = ofVec2f((COGGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale, 
+			child->GetTransform().rotationOrigin = ofVec2f((COGGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale,
 				(COGGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
 
-			ofxArbRotateAnim* anim = new ofxArbRotateAnim(0, 360, 0.8f, false);
+			RotateAnim* anim = new RotateAnim(0, 360, 0.8f, false);
 			rotateAnimId = anim->GetId();
 			child->AddBehavior(anim);
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
-			child->AddBehavior(new ofxArbTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
-			if(i%2 == 0) child->AddBehavior(new ofxArbHitEvent(0, false));
-			if(i%50 == 0) child->SetGroup(12345);
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
+			if (i % 2 == 0) child->AddBehavior(new HitEvent(0, false));
+			if (i % 50 == 0) child->SetGroup(12345);
 			root->AddChild(child);
 		}
-		
+
 		WriteTime("INIT");
 
-		root->AddBehavior(new ofxArbCollider(12345));
+		root->AddBehavior(new Collider(12345));
 		//root->AddBehavior(new TestingBehavior());
 		duk_context *ctx = duk_create_heap_default();
 		duk_push_global_object(ctx);
@@ -241,7 +241,7 @@ public:
 		JavaScriptBehavior* jsbeh = new JavaScriptBehavior(ctx);
 		root->AddBehavior(jsbeh);
 
-		
+
 		root->SubmitChanges(true);
 
 		WriteTime("SUBMIT CHANGES");
@@ -250,14 +250,14 @@ public:
 	}
 };
 
-int mojo(duk_context *ctx){
+int mojo(duk_context *ctx) {
 	int argument = duk_to_number(ctx, 0);
 	ofLog(OF_LOG_NOTICE, "mojo " + ofToString(argument));
 	cout << "MOJO :: " << argument << endl;
 	return 1;
 }
 
-int dojo(duk_context *ctx){
+int dojo(duk_context *ctx) {
 	int argument = duk_to_number(ctx, 0);
 	cout << "DOJO :: " << argument << endl;
 	ofLog(OF_LOG_NOTICE, "DOJO " + ofToString(argument));
@@ -265,15 +265,15 @@ int dojo(duk_context *ctx){
 }
 
 
-#ifdef TARGET_WINDOWS
-int main(){
+#ifdef WIN32
+int main() {
 
 	duk_context *ctx = duk_create_heap_default();
-	
+
 	duk_push_global_object(ctx);
 	duk_push_c_function(ctx, mojo, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2 /*idx:global*/, "mojo");
-	
+
 	duk_push_c_function(ctx, dojo, DUK_VARARGS);
 	duk_put_prop_string(ctx, -2 /*idx:global*/, "dojo");
 	duk_pop(ctx);
@@ -281,11 +281,11 @@ int main(){
 	int output = 0;
 
 	output = duk_peval_string(ctx, "var bobo = 25; var blbost = 'ahoj nazdar';  bobo = Math.min(0,5);");
-	
-	if (output != 0){
+
+	if (output != 0) {
 		string err = duk_safe_to_string(ctx, -1);
 	}
-	
+
 	output = duk_peval_string(ctx, "mojo(bobo);");
 
 	//duk_eval_string(ctx, "(dojo(12));");
@@ -304,15 +304,15 @@ int main(){
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
 	//ofRunApp(new MTestApp());
-	ofRunApp(new ofxAreApp(new TestingFactory()));
-	
+	ofRunApp(new CogApp(new TestingFactory()));
+
 	return 0;
 }
 
 #else
 #include <jni.h>
 
-int main(){
+int main() {
 
 	duk_context *ctx = duk_create_heap_default();
 
@@ -341,8 +341,8 @@ int main(){
 
 
 //========================================================================
-extern "C"{
-	void Java_cc_openframeworks_OFAndroid_init(JNIEnv*  env, jobject  thiz){
+extern "C" {
+	void Java_cc_openframeworks_OFAndroid_init(JNIEnv*  env, jobject  thiz) {
 		main();
 	}
 }

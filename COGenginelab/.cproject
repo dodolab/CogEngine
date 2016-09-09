@@ -17,7 +17,7 @@
 					<folderInfo id="com.android.toolchain.gcc.898517443.1887315853" name="/" resourcePath="">
 						<toolChain id="com.android.toolchain.gcc.1485392764" name="com.android.toolchain.gcc" superClass="com.android.toolchain.gcc">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.607397687" isAbstract="false" superClass="com.android.targetPlatform"/>
-							<builder cleanBuildTarget="CleanRelease PLATFORM_OS=Android" id="cdt.managedbuild.builder.gnu.cross.546783769" incrementalBuildTarget="PLATFORM_OS=Android Debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder cleanBuildTarget="CleanRelease PLATFORM_OS=Android" command="make" enableAutoBuild="false" enableCleanBuild="false" enabledIncrementalBuild="true" id="cdt.managedbuild.builder.gnu.cross.546783769" incrementalBuildTarget="PLATFORM_OS=Android Release" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="com.android.gcc.compiler.1716371911" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.1467923143" superClass="com.android.gcc.option.includePath"/>
 								<inputType id="com.android.gcc.inputType.1288876143" superClass="com.android.gcc.inputType"/>
@@ -59,18 +59,18 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="COGEngine.null.859352690" name="COGEngine"/>
+		<project id="COGengine.null.859352690" name="COGengine"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Default">
-			<resource resourceType="PROJECT" workspacePath="/COGEngine"/>
+			<resource resourceType="PROJECT" workspacePath="/COGengine"/>
 		</configuration>
 		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/COGEngine"/>
+			<resource resourceType="PROJECT" workspacePath="/COGengine"/>
 		</configuration>
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/COGEngine"/>
+			<resource resourceType="PROJECT" workspacePath="/COGengine"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
