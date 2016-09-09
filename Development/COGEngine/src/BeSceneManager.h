@@ -38,7 +38,7 @@ public:
 			switchedScene->SetRunningMode(DISABLED);
 			waitingForTween = false;
 			
-			SendMessageNoBubbling(Actions::SCENE_SWITCHED, nullptr, actualScene);
+			SendMessageNoBubbling(Actions::SCENE_SWITCHED, 0, nullptr, actualScene);
 		}
 	}
 	
@@ -59,7 +59,7 @@ public:
 		scene->GetTransform().localPos.x = COGGetScreenWidth() / 2;
 		scene->GetTransform().localPos.y = COGGetScreenHeight() / 2;
 
-		SendMessageNoBubbling(Actions::SCENE_SWITCHED, nullptr, actualScene);
+		SendMessageNoBubbling(Actions::SCENE_SWITCHED, 0, nullptr, actualScene);
 	}
 
 	/**
@@ -68,12 +68,16 @@ public:
 	* @param tweenDir tween direction
 	*/
 	void SwitchToScene(GNode* scene, TweenDirection tweenDir){
+
+		// don't switch between the same scene
+		if (actualScene == scene) return;
+
 		actualScene->SetRunningMode(RUNNING);
 		scene->SetRunningMode(RUNNING);
 		owner->AddBehavior(new BeSlideTween(tweenDir, scene, actualScene,2), false);
 		
 		// add new scene to the front
-		scene->GetTransform().localPos.z = 0;
+ 		scene->GetTransform().localPos.z = 0;
 		// move the scene away; tween behavior will set its position itself
 		scene->GetTransform().localPos.x = COGGetScreenWidth()*10;
 		// update absolute positions because of drawing thread

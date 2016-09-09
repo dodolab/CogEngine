@@ -2,12 +2,16 @@
 #include "MFacade.h"
 #include "MGameEngine.h"
 #include "MLogger.h"
-#include "MGameStorage.h"
+#include "MRepository.h"
 
 // =================== MENVIRONMENT ====================
 
-void COGAddSound(EnSound* sound){
+void COGAddSound(spt<EnSound> sound){
 	MEngine.environmentCtrl->AddSound(sound);
+}
+
+void COGPlaySound(spt<EnSound> sound){
+	MEngine.environmentCtrl->PlaySound(sound);
 }
 
 vector<EnInputAct>& COGGetPressedKeys(){
@@ -18,7 +22,7 @@ vector<EnInputAct>& COGGetPressedPoints(){
 	return MEngine.environmentCtrl->GetPressedPoints();
 }
 
-vector<EnSound*>& COGGetPlayedSounds(){
+vector<spt<EnSound>>& COGGetPlayedSounds(){
 	return MEngine.environmentCtrl->GetPlayedSounds();
 }
 
@@ -32,6 +36,10 @@ int COGGetScreenHeight(){
 
 ofVec2f COGGetScreenSize(){
 	return MEngine.environmentCtrl->GetSize();
+}
+
+void COGRunThread(ofThread* thread){
+	MEngine.environmentCtrl->RunThread(thread);
 }
 
 // =================== MFACTORY ========================
@@ -139,14 +147,38 @@ void COGLoggerFlush(){
 
 // =================== MRESOURCE =======================
 
-spt<ofImage> COGGet2DImage(string name){
-	return MEngine.resourceCtrl->Get2DImage(name);
+spt<ofImage> COGGet2DImage(string path){
+	return MEngine.resourceCtrl->Get2DImage(path);
 }
 
-spt<ofVboMesh> COGGetMesh(string name){
-	return MEngine.resourceCtrl->GetMesh(name);
+spt<ofImage> COGPreload2DImage(string path){
+	return MEngine.resourceCtrl->Preload2DImage(path);
 }
 
-spt<ofTrueTypeFont> COGGetFont(string name, int size){
-	return MEngine.resourceCtrl->GetFont(name, size);
+spt<ofVboMesh> COGGetMesh(string path){
+	return MEngine.resourceCtrl->GetMesh(path);
+}
+
+spt<ofTrueTypeFont> COGGetFont(string path, int size){
+	return MEngine.resourceCtrl->GetFont(path, size);
+}
+
+spt<EnSound> COGGetSound(string path){
+	return MEngine.resourceCtrl->GetSound(path);
+}
+
+spt<ofxXmlSettings> COGPreloadXMLFile(string path){
+	return MEngine.resourceCtrl->PreloadXMLFile(path);
+}
+
+spt<ofxXmlSettings> COGLoadXMLFile(string path){
+	return MEngine.resourceCtrl->LoadXMLFile(path);
+}
+
+spt<EnAnim> COGGetAnimation(string name){
+	return MEngine.resourceCtrl->GetAnimation(name);
+}
+
+void COGStoreAnimation(spt<EnAnim> anim){
+	MEngine.resourceCtrl->StoreAnimation(anim);
 }

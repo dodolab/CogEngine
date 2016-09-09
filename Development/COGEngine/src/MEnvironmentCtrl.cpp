@@ -111,7 +111,7 @@ void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
 	}
 }
 
-void MEnvironmentCtrl::RemoveEndedInputs(){
+void MEnvironmentCtrl::RemoveEndedProcesses(){
 	screenSizeChanged = false;
 
 	// remove released keys
@@ -148,4 +148,21 @@ void MEnvironmentCtrl::RemoveEndedInputs(){
 		// increment only if item hasn't been erased
 		++it;
 	}
+
+	// remove ended threads
+	for (auto it = runningThreads.begin(); it != runningThreads.end();){
+		if (!(*it)->isThreadRunning()){
+			delete (*it);
+			it = runningThreads.erase(it);
+			continue;
+		}
+		// increment only if item hasn't been erased
+		++it;
+	}
+
+}
+
+void MEnvironmentCtrl::RunThread(ofThread* thread){
+	runningThreads.push_back(thread);
+	thread->startThread();
 }

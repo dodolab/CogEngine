@@ -25,11 +25,15 @@ namespace Actions{
 	int PLAYER_LOOSE = 17;
 	int GAME_FINISHED = 18;
 	int TWEEN_ENDED = 19;
-	int SLIDE_ENDED = 20;
+	int FLIP_ENDED = 20;
 	int DELAY_ACTION = 21;
 	int SCENE_SWITCHED = 22;
 	int MATCH_FOUND = 23;
 	int MATCH_FAILED = 24;
+	int PROCESS_ENDED = 25;
+	int NOAH_STATE_CHANGED = 26;
+	int BEHAVIOR_FINISHED = 27;
+	int TAKEOUTANIM_ENDED = 28;
 
 	const char* ToString(int act){
 		const char * vals[] = { 
@@ -56,7 +60,11 @@ namespace Actions{
 			"DELAY_ACTION",
 			"SCENE_SWITCHED",
 			"MATCH_FOUND",
-			"MATCH_FAILED"
+			"MATCH_FAILED",
+			"PROCESS_ENDED",
+			"NOAH_STATE_CHANGED",
+			"BEHAVIOR_FINISHED",
+			"TAKEOUTANIM_ENDED"
 		};
 		return vals[act];
 	}

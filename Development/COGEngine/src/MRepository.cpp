@@ -1,8 +1,8 @@
 
-#include "MGameStorage.h"
+#include "MRepository.h"
 
 
-void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
+void MRepository::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it){
 		GBehavior* beh = (*it);
 		if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
@@ -15,14 +15,14 @@ void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	}
 }
 
-void MGameStorage::SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode){
+void MRepository::SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it){
 		SendMessage(msg, (*it));
 	}
 }
 
 
-void MGameStorage::SendMessage(GMsg& msg, GNode* actualNode){
+void MRepository::SendMessage(GMsg& msg, GNode* actualNode){
 	// there is no such callback or behavior that listens to that type of message
 	if (!IsRegisteredListener(msg.GetAction())) return;
 
@@ -35,7 +35,7 @@ void MGameStorage::SendMessage(GMsg& msg, GNode* actualNode){
 	}else SendBubblingMessage(msg, actualNode);
 }
 
-void MGameStorage::SendBubblingMessage(GMsg& msg, GNode* actualNode){
+void MRepository::SendBubblingMessage(GMsg& msg, GNode* actualNode){
 
 	BubblingType& trav = msg.GetBubblingType();
 
@@ -77,7 +77,7 @@ void MGameStorage::SendBubblingMessage(GMsg& msg, GNode* actualNode){
 	}
 }
 
-void MGameStorage::SendDirectMessage(GMsg& msg){
+void MRepository::SendDirectMessage(GMsg& msg){
 	auto behaviors = behListeners.find(msg.GetAction());
 
 	if (behaviors != behListeners.end()){
@@ -91,7 +91,7 @@ void MGameStorage::SendDirectMessage(GMsg& msg){
 	}
 }
 
-void MGameStorage::SendDirectMessageToBehavior(GMsg& msg, int targetId){
+void MRepository::SendDirectMessageToBehavior(GMsg& msg, int targetId){
 	GBehavior* beh = FindBehaviorById(targetId);
 
 	if (beh != nullptr){
@@ -99,7 +99,7 @@ void MGameStorage::SendDirectMessageToBehavior(GMsg& msg, int targetId){
 	}
 }
 
-void MGameStorage::SendDirectMessageToGameObject(GMsg& msg, int targetId){
+void MRepository::SendDirectMessageToGameObject(GMsg& msg, int targetId){
 	GNode* node = FindGameObjectById(targetId);
 
 	if (node != nullptr){
@@ -108,21 +108,21 @@ void MGameStorage::SendDirectMessageToGameObject(GMsg& msg, int targetId){
 }
 
 
-GNode* MGameStorage::FindGameObjectById(int id) const{
+GNode* MRepository::FindGameObjectById(int id) const{
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
 		if ((*it)->GetId() == id) return (*it);
 	}
 	return nullptr;
 }
 
-GBehavior* MGameStorage::FindBehaviorById(int id) const{
+GBehavior* MRepository::FindBehaviorById(int id) const{
 	for (auto it = allBehaviors.begin(); it != allBehaviors.end(); ++it){
 		if ((*it)->GetId() == id) return (*it);
 	}
 	return nullptr;
 }
 
-int MGameStorage::GetGameObjectsCountByTag(string tag) const{
+int MRepository::GetGameObjectsCountByTag(string tag) const{
 	int counter = 0;
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
 		if ((*it)->GetTag().compare(tag) == 0) counter++;
@@ -130,14 +130,14 @@ int MGameStorage::GetGameObjectsCountByTag(string tag) const{
 	return counter;
 }
 
-GNode* MGameStorage::FindGameObjectByTag(string tag) const{
+GNode* MRepository::FindGameObjectByTag(string tag) const{
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
 		if ((*it)->GetTag().compare(tag) == 0) return (*it);
 	}
 	return nullptr;
 }
 
-vector<GNode*> MGameStorage::FindGameObjectsByTag(char* tag) const{
+vector<GNode*> MRepository::FindGameObjectsByTag(char* tag) const{
 	vector<GNode*> output;
 
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
@@ -146,7 +146,7 @@ vector<GNode*> MGameStorage::FindGameObjectsByTag(char* tag) const{
 	return output;
 }
 
-int MGameStorage::GetGameObjectsCountBySubType(int subtype) const{
+int MRepository::GetGameObjectsCountBySubType(int subtype) const{
 	int counter = 0;
 
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
@@ -155,14 +155,14 @@ int MGameStorage::GetGameObjectsCountBySubType(int subtype) const{
 	return counter;
 }
 
-GNode* MGameStorage::FindGameObjectBySubType(int subtype) const{
+GNode* MRepository::FindGameObjectBySubType(int subtype) const{
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
 		if ((*it)->GetSubType() == subtype) return (*it);
 	}
 	return nullptr;
 }
 
-vector<GNode*> MGameStorage::FindGameObjectsBySubType(int subtype) const{
+vector<GNode*> MRepository::FindGameObjectsBySubType(int subtype) const{
 	vector<GNode*> output;
 
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){

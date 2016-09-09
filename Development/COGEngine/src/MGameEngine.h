@@ -4,12 +4,12 @@
 extern MGameEngine MEngine;
 
 #include "MEnvironmentCtrl.h"
-#include "MResourceCtrl.h"
+#include "MStorage.h"
 #include "MLogger.h"
 #include "MUtils.h"
 #include "GNode.h"
 #include "MGameFactory.h"
-#include "MGameStorage.h"
+#include "MRepository.h"
 #include "BeTween.h"
 #include "BeSceneManager.h"
 
@@ -25,9 +25,9 @@ private:
 	int frameCounter;
 public:
 	MEnvironmentCtrl* environmentCtrl;
-	MResourceCtrl* resourceCtrl;
+	MStorage* resourceCtrl;
 	MGameFactory* factory;
-	MGameStorage* storage;
+	MRepository* storage;
 	MLogger* logger;
 
 	MGameEngine(){
@@ -41,7 +41,7 @@ public:
 	}
 
 	~MGameEngine(){
-		delete _root;
+		//delete _root;
 		delete environmentCtrl;
 		delete resourceCtrl;
 		delete factory;

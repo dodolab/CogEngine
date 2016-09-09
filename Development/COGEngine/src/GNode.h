@@ -499,5 +499,5 @@ public:
 	void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
 	// game storage can access private members
-	friend class MGameStorage;
+	friend class MRepository;
 };

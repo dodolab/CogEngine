@@ -44,11 +44,15 @@ namespace Actions{
 	extern int PLAYER_LOOSE;
 	extern int GAME_FINISHED;
 	extern int TWEEN_ENDED;
-	extern int SLIDE_ENDED;
+	extern int FLIP_ENDED;
 	extern int DELAY_ACTION;
 	extern int SCENE_SWITCHED;
 	extern int MATCH_FOUND;
 	extern int MATCH_FAILED;
+	extern int PROCESS_ENDED;
+	extern int NOAH_STATE_CHANGED;
+	extern int BEHAVIOR_FINISHED;
+	extern int TAKEOUTANIM_ENDED;
 
 	extern const char* ToString(int act);
 }

@@ -70,10 +70,12 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 		// or the tag you are currently at using pushTag
 		void	clear();
 
+		bool	getBoolValue(const string& tag, bool			defaultValue, int which = 0);
 		int 	getValue(const string&  tag, int            defaultValue, int which = 0);
 		double 	getValue(const string&  tag, double         defaultValue, int which = 0);
 		string 	getValue(const string&  tag, const string& 	defaultValue, int which = 0);
 
+		int		setValue(const string&	tag, bool			value, int which = 0);
 		int 	setValue(const string&  tag, int            value, int which = 0);
 		int 	setValue(const string&  tag, double         value, int which = 0);
 		int 	setValue(const string&  tag, const string& 	value, int which = 0);

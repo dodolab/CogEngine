@@ -4,6 +4,8 @@
 #include "GNode.h"
 #include "MEnums.h"
 
+typedef float(*FadeFunction)(float);
+
 /**x
 * Behavior for translation animation
 */
@@ -28,6 +30,8 @@ private:
 	// actual position
 	ofVec3f actual;
 
+	FadeFunction fadeFunction;
+
 
 public:
 
@@ -47,7 +51,29 @@ public:
 		float distance = (float)sqrt(distX*distX+distY*distY);
 		speedX = speed*distX / distance;
 		speedY = speed*distY / distance;
+		fadeFunction = nullptr;
 
+	}
+
+	/**
+	* Creates a new behavior for translation animation with fade function
+	* @param from starting position
+	* @param to ending position
+	* @param speed in display width per second
+	* @param fadeFunction fading function that accepts float <0..1> and returns fading parameter <0..1>
+	*/
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, FadeFunction fadeFunction) : GBehavior(ElemType::MODEL),
+		additive(additive), to(to), from(from){
+		this->actual = ofVec3f(from);
+		this->distX = to.x - from.x;
+		this->distY = to.y - from.y;
+
+		float distance = (float)sqrt(distX*distX + distY*distY);
+		speedX = speed*distX / distance;
+		speedY = speed*distY / distance;
+
+		this->fadeFunction = fadeFunction;
+		this->additive = false;
 	}
 
 
@@ -56,15 +82,16 @@ public:
 		// calculate differencial
 		float diffX = (float)(COGTranslateSpeed(speedX)*delta);
 		float diffY = (float)(COGTranslateSpeed(speedY)*delta);
-
-		if (ofVec3f(from - to).lengthSquared() < ofVec3f(from - actual).lengthSquared())
-		{
-			actual = ofVec3f(to);
-			Finish();
-		}
-
+		bool finished = false;
+		
 		actual.x += diffX;
 		actual.y += diffY;
+
+		if (ofVec3f(from-to).lengthSquared() < ofVec3f(from - actual).lengthSquared())
+		{
+			actual = ofVec3f(to);
+			finished = true;
+		}
 
 		EnTransform& transform = owner->GetTransform();
 		
@@ -76,8 +103,17 @@ public:
 		}
 		else
 		{
-			transform.localPos = (actual);
+			float lengthFromTo = ofVec3f(from - to).length();
+			float lengthFromActual = ofVec3f(from - actual).length();
+			float percent = lengthFromActual / lengthFromTo;
+
+			if (fadeFunction != nullptr) percent = fadeFunction(percent);
+			
+			ofVec3f actualAmount = (to - from)*(percent);
+			transform.localPos = from + actualAmount;
 		}
+
+		if (finished) Finish();
 	}
 
 };

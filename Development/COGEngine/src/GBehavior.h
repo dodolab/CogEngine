@@ -35,11 +35,6 @@ protected:
 	*/
 	GBehavior(ElemType elemType);
 
-	virtual ~GBehavior()
-	{
-
-	}
-
 	/**
 	* Registers itself as a action listener
 	* @param action1 action to listen to
@@ -74,29 +69,46 @@ protected:
 	* Sends a message to any set of behaviors
 	* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
 	* @param action id of action; see Actions namespace for common action ids
+	* @param subaction id of subaction; see Actions namespace for common action ids
 	* @param data payload
 	* @param source source game object that is a part of message
 	*/
-	void SendMessage(BubblingType bubblingType, int action, void* data, GNode* source) const;
+	void SendMessage(BubblingType bubblingType, int action, int subaction, void* data, GNode* source) const;
 
 	/**
 	* Sends a message to any set of behaviors without tree-bubbling
 	* @param action id of action; see Actions namespace for common action ids
+	* @param subaction id of subaction; see Actions namespace for common action ids
 	* @param data payload
 	* @param source source game object that is a part of message
 	*/
-	void SendMessageNoBubbling(int action, void* data, GNode* source) const;
+	void SendMessageNoBubbling(int action, int subaction, void* data, GNode* source) const;
 
 	/**
 	* Sends a message to one behavior with specific id
 	* @param action id of action; see Actions namespace for common action ids
+	* @param subaction id of subaction; see Actions namespace for common action ids
 	* @param data payload
 	* @param source source game object that is a part of message
 	* @param behaviorId id of behavior that should get this message
 	*/
-	void SendDirectMessage(int action, void* data, GNode* source, int behaviorId) const;
+	void SendDirectMessage(int action, int subaction, void* data, GNode* source, int behaviorId) const;
+
+	/**
+	* Sets owner to behavior
+	* @param beh behavior
+	* @param owner node to set as an owner
+	*/
+	static void SetOwner(GBehavior* beh, GNode* owner){
+		beh->owner = owner;
+	}
 
 public:
+
+	virtual ~GBehavior()
+	{
+
+	}
 
 	/**
 	* Initialization procedure;
@@ -158,6 +170,7 @@ public:
 	*/
 	void Finish(){
 		ended = true;
+		SendMessageNoBubbling(Actions::BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
 	}
 
 	/**

@@ -82,7 +82,7 @@ public:
 		if (collisions.size() != 0){
 			// send info about collision
 			owner->ChangeAttr(Attrs::COLLISIONS, collisions);
-			SendMessage(BubblingType(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, nullptr, owner);
+			SendMessage(BubblingType(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, 0, nullptr, owner);
 		}
 	}
 };

@@ -55,7 +55,7 @@ public:
 	*/
 	void CalcAbsTransform(EnTransform& parent){
 		// calc absolute angle
-		float angle = parent.absRotation / 180.0f*PI + (atan2(localPos.y, localPos.x));
+		float angle = ofDegToRad(parent.absRotation) + (atan2(localPos.y, localPos.x));
 		// calc local vector length
 		float length = sqrt(localPos.x*localPos.x + localPos.y*localPos.y);
 		// calc unscaled absolute position

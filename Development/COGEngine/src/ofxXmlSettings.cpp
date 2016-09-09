@@ -153,6 +153,19 @@ void ofxXmlSettings::removeTag(const string& tag, int which){
 }
 
 //---------------------------------------------------------
+bool ofxXmlSettings::getBoolValue(const string& tag, bool defaultValue, int which){
+	TiXmlHandle valHandle(NULL);
+	if (readTag(tag, valHandle, which)){
+		const char* val = valHandle.ToText()->Value();
+		string lower = ofToLower(val);
+		// bool value could be "true" or "1"
+		return lower.compare("true") == 0 || lower.compare("1") == 0;
+	}
+	return defaultValue;
+}
+
+
+//---------------------------------------------------------
 int ofxXmlSettings::getValue(const string& tag, int defaultValue, int which){
     TiXmlHandle valHandle(NULL);
 	if (readTag(tag, valHandle, which)){
@@ -371,6 +384,12 @@ int ofxXmlSettings::writeTag(const string&  tag, const string& valueStr, int whi
 	}
 
 	return numSameTags;
+}
+
+//---------------------------------------------------------
+int ofxXmlSettings::setValue(const string& tag, bool value, int which){
+	int tagID = writeTag(tag, ofToString(value).c_str(), which) - 1;
+	return tagID;
 }
 
 //---------------------------------------------------------
