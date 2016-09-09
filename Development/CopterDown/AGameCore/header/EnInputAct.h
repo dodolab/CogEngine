@@ -23,4 +23,5 @@ public:
 	void SetCycleNumber(int val);
 };
 
+
 #endif

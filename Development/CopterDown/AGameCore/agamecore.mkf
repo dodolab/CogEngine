@@ -16,7 +16,7 @@ files
 	EnCollision.h
 	EnInputAct.h
 	EnPair.h
-	EnState.h
+	EnFlags.h
 	Enums.h
 	EnUserAct.h
 	GNode.h

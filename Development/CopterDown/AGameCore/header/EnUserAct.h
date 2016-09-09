@@ -22,4 +22,25 @@ public:
 
 };
 
+
+EnUserAct::EnUserAct(){
+
+}
+
+vector<EnInputAct<Act>*> EnUserAct::GetKeyActions(){
+	return vector<EnInputAct<Act>*>();
+}
+
+void EnUserAct::SetKeyActiosn(vector<EnInputAct<Act>*> val){
+
+}
+
+vector<EnInputAct<CIwFVec2>*> EnUserAct::GetPointActions(){
+	return vector<EnInputAct<CIwFVec2>*>();
+}
+
+void EnUserAct::SetPointActions(vector<EnInputAct<CIwFVec2>*> val){
+
+}
+
 #endif
