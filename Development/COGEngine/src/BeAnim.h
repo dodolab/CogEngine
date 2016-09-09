@@ -1,49 +1,256 @@
 #pragma once
 
 #include "GBehavior.h"
-#include "GNode.h"
 
+
+/**
+* XML animation loader
+*/
+class AnimationLoader{
+private:
+
+	/**
+	* Creates animation from XML
+	* @param xml xml to load from
+	* @param referencedAnims array that will be filled with animations that couldn't be load yet becase
+	* they reference to another animation
+	*/
+	EnAnim* CreateAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims){
+
+		int innerAnimations = xml->getNumTags("anim");
+
+		EnAnim* anim = new EnAnim();
+
+		// fill ref and name attribute
+		FillBaseAttributes(xml, anim);
+
+		if (anim->GetRef().length() != 0){
+			// animation is referenced -> push it to the referencedAnims and return
+			referencedAnims[anim->GetName()] = anim;
+			return anim;
+		}
+		else{
+			// children will be taken from referenced animation
+			for (int i = 0; i < innerAnimations; i++){
+				xml->pushTag("anim", i);
+				spt<EnAnim> newAnim = spt<EnAnim>(CreateAnimationFromXml(xml, referencedAnims));
+				anim->GetChildren().push_back(newAnim);
+				xml->popTag();
+			}
+		}
+
+		// set other attributes
+		FillOtherAttributes(xml, anim);
+
+		return anim;
+	}
+
+	/**
+	* Fills base attributes (ref and name)
+	*/
+	void FillBaseAttributes(spt<ofxXmlSettings> xml, EnAnim* anim){
+		anim->SetRef(xml->getAttribute(":", "ref", anim->GetRef()));
+		anim->SetName(xml->getAttribute(":", "name", anim->GetName()));
+	}
+
+	/**
+	* Fills other attributes
+	*/
+	void FillOtherAttributes(spt<ofxXmlSettings> xml, EnAnim* anim){
+		anim->SetSheetPath(xml->getAttribute(":", "sheet", anim->GetSheetPath()));
+		anim->SetFrames(xml->getAttribute(":", "frames", anim->GetFrames()));
+		anim->SetLines(xml->getAttribute(":", "lines", anim->GetLines()));
+		anim->SetStart(xml->getAttribute(":", "start", anim->GetStart()));
+		anim->SetEnd(xml->getAttribute(":", "end", anim->GetEnd()));
+		anim->SetIncrement(xml->getAttribute(":", "increment", anim->GetIncrement()));
+		anim->SetSpeed(xml->getAttribute(":", "speed", anim->GetSpeed()));
+		anim->SetRepeat(xml->getAttribute(":", "repeat", anim->GetRepeat()));
+		anim->SetIsRevert(xml->getBoolAttribute(":", "revert", anim->GetIsRevert()));
+
+	}
+
+	/**
+	* Finds animation by name, in selected collection
+	*/
+	spt<EnAnim> FindAnimByName(string name, vector<spt<EnAnim>> anims){
+		for (auto it = anims.begin(); it != anims.end(); ++it){
+			spt<EnAnim> anim = (*it);
+			if (anim->GetName() == name) return anim;
+		}
+
+		return spt<EnAnim>();
+	}
+
+	/**
+	* Processes referenced animations from XML
+	* @xml xml to load from
+	* @referencedAnims list of all referenced animations
+	* @rootAnimIndex index of root for actual XML scope
+	* @rootAnims list of all root animations
+	*/
+	void ProcessRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims, 
+		int rootAnimIndex, vector<spt<EnAnim>>& rootAnims){
+
+		int innerAnimations = xml->getNumTags("anim");
+
+		string ref = (xml->getAttribute(":", "ref", ""));
+		string name = (xml->getAttribute(":", "name", ""));
+
+		if (ref.length() != 0){
+			// got referenced animation
+
+			EnAnim* refAnim = referencedAnims[name];
+
+			if (ref.find(".") == -1){
+				// reference doesn't contain dot - it means that we can find its reference in THIS scope
+				spt<EnAnim> reference = rootAnims[rootAnimIndex]->FindChild(ref);
+
+				if (reference != spt<EnAnim>()){
+					// found reference
+					refAnim->GetParametersFromReference(reference);
+				}
+				else{
+					// reference anim doesn't contain dot, but it isn't in this scope... that means it must refer to some other root animation
+					spt<EnAnim> rootReference = FindAnimByName(ref, rootAnims);
+					refAnim->GetParametersFromReference(rootReference);
+				}
+			}
+			else{
+				// reference contains dot -> referenced animation should be in another scope
+				string rootAnimName = ref.substr(0, ref.find("."));
+				string subAnim = ref.substr(ref.find(".") + 1);
+				spt<EnAnim> root = FindAnimByName(rootAnimName, rootAnims);
+				spt<EnAnim> scopeAnim = root->FindChild(subAnim);
+				refAnim->GetParametersFromReference(scopeAnim);
+			}
+
+			// fill remaining attributes from XML
+			FillOtherAttributes(xml, refAnim);
+
+		}
+		else{
+			// this animation doesn't have ref attribute -> keep searching over its children
+
+			for (int i = 0; i < innerAnimations; i++){
+				// use recursion
+				xml->pushTag("anim", i);
+				ProcessRefAnimationFromXml(xml, referencedAnims, rootAnimIndex, rootAnims);
+				xml->popTag();
+			}
+		}
+	}
+
+public:
+
+	/**
+	* Loads animation from xml
+	*/
+	vector<spt<EnAnim>> LoadAnimations(spt<ofxXmlSettings> xml){
+
+		vector<spt<EnAnim>> rootAnims;
+
+		if (xml->tagExists("animations")){
+			xml->pushTag("animations");
+
+			int numberOfAnims = xml->getNumTags("anim");
+			// referenced anims will be processed at second phase
+			map<string, EnAnim*> referencedAnims;
+
+			// phase 1: load not-referenced animations
+			for (int i = 0; i < numberOfAnims; i++){
+
+				xml->pushTag("anim", i);
+				// load
+				spt<EnAnim> anim = spt<EnAnim>(CreateAnimationFromXml(xml, referencedAnims));
+				rootAnims.push_back(anim);
+				xml->popTag();
+			}
+
+			// phase 2: load referenced animations
+			for (int i = 0; i < numberOfAnims; i++){
+
+				xml->pushTag("anim", i);
+				ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims);
+				xml->popTag();
+			}
+
+			xml->popTag();
+		}
+
+		return rootAnims;
+	}
+};
+
+
+
+/**
+* Context entity used in animation behavior as
+* it goes through the animation tree
+*/
 class AnimNodeContext{
 public:
+	// index of actual loop
+	int actualLoop;
+	// must be floating point, because of variable speed
+	double actualFrameIndex;
+	// actual node whose children are just processing
+	spt<EnAnim> node;
+	// index of actual child being processed
+	int actualChildIndex;
+	// indicator, if scope of actual node is reverted
+	// two reverted scopes give uninverted scope !!
+	bool isScopeReverted;
+
 	AnimNodeContext(){
 
 	}
 
-	AnimNodeContext(vector<spt<EnAnim>> nodes, bool isInRevertedScope){
+	AnimNodeContext(spt<EnAnim> node, bool isScopeReverted){
 		
-		this->actualRepeat = 0;
-		this->nodes = nodes;
-		this->isInRevertedScope = isInRevertedScope;
+		this->actualLoop = 0;
+		this->node = node;
+		this->isScopeReverted = isScopeReverted;
 
-		if (isInRevertedScope){
-			this->actualNodeIndex = nodes.size() - 1;
+		if (isScopeReverted){
+			// start at end
+			this->actualChildIndex = node->GetChildren().size() - 1;
 		}
 		else{
-			this->actualNodeIndex = 0;
+			// start at the beginning
+			this->actualChildIndex = 0;
 		}
 
-		RefreshFrame();
+		
+		RefreshFrameIndex();
 	}
 
-	void RefreshFrame(){
-		if (IsReverted()){
-			this->actualFrame = nodes[actualNodeIndex]->GetTotalFrames() - nodes[actualNodeIndex]->GetSpeed();
+	/**
+	* Refreshes actual frame index
+	*/
+	void RefreshFrameIndex(){
+		if (IsChildReverted()){
+			this->actualFrameIndex = GetActualChild()->GetTotalFrames() 
+				- GetActualChild()->GetSpeed();
 		}
 		else{
-			this->actualFrame = 0;
+			this->actualFrameIndex = 0;
 		}
 	}
 
-	bool IsReverted(){
-		return isInRevertedScope ^ nodes[actualNodeIndex]->GetIsRevert();
+	/**
+	* Gets true, if this child is reverted; depends on actual scope
+	* and settings of actual child
+	*/
+	bool IsChildReverted(){
+		return isScopeReverted ^ GetActualChild()->GetIsRevert();
 	}
 	
-	int actualRepeat;
-	// must be floating point, because of variable speed
-	double actualFrame;
-	vector<spt<EnAnim>> nodes;
-	int actualNodeIndex;
-	bool isInRevertedScope;
+	/*
+	* Gets actual child being processed
+	*/
+	spt<EnAnim> GetActualChild(){
+		return node->GetChildren()[actualChildIndex];
+	}
 };
 
 
@@ -52,12 +259,135 @@ public:
 */
 class BeAnim : public GBehavior{
 private:
+	// animation root
 	spt<EnAnim> root;
-
-	AnimNodeContext actualContext;
-	vector<string> actualContextImages;
+	// actual tree context
+	AnimNodeContext context;
+	// stack of processing tree
 	stack<AnimNodeContext> nodeStack;
 	
+
+	/**
+	* Tries to go to the next frame
+	* @return true, if there is a frame to go to
+	*/
+	bool TryNextFrame(spt<EnAnim> actualNode){
+
+		// must by cast to int, because of rounding
+		if (!context.IsChildReverted() && ((int)(context.actualFrameIndex + actualNode->GetSpeed())) < actualNode->GetTotalFrames()){
+			context.actualFrameIndex += actualNode->GetSpeed();
+			return true;
+		}// no cast to int, because we need exactly value higher than 0
+		else if (context.IsChildReverted() && (context.actualFrameIndex - actualNode->GetSpeed()) >= 0){
+			context.actualFrameIndex -= actualNode->GetSpeed();
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to go to the nearest child
+	* @return true, if there is a child to go to
+	*/
+	bool TryChildren(spt<EnAnim> actualNode){
+		
+		if (actualNode->GetChildren().size() != 0){
+			// node has children -> process them
+			nodeStack.push(context);
+			// XOR function -> two inverted parents give non-inverted animation for children
+			bool invertedScope = context.IsChildReverted();
+			context = AnimNodeContext(actualNode, invertedScope);
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to start next loop
+	* @return true if there is a loop to go to
+ 	*/
+	bool TryNextLoop(spt<EnAnim> actualNode){
+		context.actualLoop++;
+		if (context.actualLoop < actualNode->GetRepeat() || actualNode->GetRepeat() == 0){
+			// repeat animation of this node
+			if (!context.IsChildReverted()){
+				context.actualFrameIndex = 0;
+			}
+			else{
+				context.actualFrameIndex = actualNode->GetTotalFrames() - actualNode->GetSpeed();
+			}
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to go to the next sibling
+	* @return true if there is a sibling to go to
+	*/
+	bool TrySibling(){
+		
+		if (!context.isScopeReverted && context.actualChildIndex < (context.node->GetChildren().size() - 1)){
+			// go to the next element
+			context.actualChildIndex++;
+			context.RefreshFrameIndex();
+			context.actualLoop = 0;
+
+			return true;
+		}
+		else if (context.isScopeReverted && context.actualChildIndex > 0){
+			// go to the previous element (animation is inverted)
+			context.actualChildIndex--;
+			context.RefreshFrameIndex();
+			context.actualLoop = 0;
+		}
+		else return false;
+	}
+
+	/**
+	* Goes to the next animation frame or traverses through animation tree until 
+	* an available frame is found
+	*/
+	void MoveToNext(){
+
+		spt<EnAnim> actualNode;
+
+		do{
+
+			// get actual node
+			actualNode = context.GetActualChild();
+
+			// 1) loop through frames of actual node
+			// 2) loop through children of actual node
+			// 3) loop through all loops of actual node
+			// 4) go to the next node (sibling)
+			if (!TryNextFrame(actualNode) && !TryChildren(actualNode) && !TryNextLoop(actualNode) && !TrySibling()){
+
+				bool foundNode = false;
+
+				// can't go further -> pop until we find next node
+				while (!nodeStack.empty()){
+					// pop context
+					context = nodeStack.top();
+					nodeStack.pop();
+					// get actual node of the popped context
+					actualNode = context.GetActualChild();
+					
+					// try to start next loop or go to the next sibling
+					if (TryNextLoop(actualNode) || TrySibling()){
+						foundNode = true;
+						break;
+					}
+				}
+
+				if (!foundNode && nodeStack.empty()){
+					ended = true;
+					return;
+				}
+			}
+		// do it until a node with animation is found
+		} while (!context.GetActualChild()->HasSheets());
+	}
 
 public:
 
@@ -66,144 +396,11 @@ public:
 	}
 
 	void Init(){
-		cout << "ANIM: initialization" << endl;
-		vector<spt<EnAnim>> nodes;
-		nodes.push_back(root);
-
-		// the very root is never inverted, because method IsReverted() can handle parentnes
-		actualContext = AnimNodeContext(nodes, false);
-		// start with -1 so the first update will get the proper frame
-		actualContext.actualFrame = root->GetIsRevert() ? (root->GetTotalFrames()-root->GetSpeed()) : -root->GetSpeed();
-		actualContextImages = root->GetSheetPaths();
+		// the root is not in inverted scope (but it can be inverted itself)
+		context = AnimNodeContext(root, false);
+		// start with -SPEED so the first update will get the proper frame
+		context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames()-root->GetSpeed()) : -root->GetSpeed();
 	}
-
-	// tries to go to the next frame
-	bool TryNextFrame(spt<EnAnim> actualNode){
-		//cout << "ANIM: Trying next frame" << endl;
-		// must by cast to int, because of rounding
-		if (!actualContext.IsReverted() && ((int)(actualContext.actualFrame+actualNode->GetSpeed())) < actualNode->GetTotalFrames()){
-			actualContext.actualFrame+=actualNode->GetSpeed();
-			//	cout << "ANIM: success" << endl;
-			return true;
-		}// no cast to int, because we need exactly value higher than 0
-		else if (actualContext.IsReverted() && (actualContext.actualFrame-actualNode->GetSpeed()) >= 0){
-			actualContext.actualFrame-=actualNode->GetSpeed();
-		//	cout << "ANIM: success" << endl;
-			return true;
-		}
-		else return false;
-	}
-
-	// tries to go to the first child
-	bool TryChildren(spt<EnAnim> actualNode){
-		vector<spt<EnAnim>> children = actualNode->GetChildren();
-		//cout << "ANIM: Trying children" << endl;
-		if (children.size() != 0){
-			// node has children -> process them
-			nodeStack.push(actualContext);
-			// XOR function -> two inverted parents give non-inverted animation for children
-			bool invertedScope = actualContext.IsReverted();
-			cout << "GOING TO THE " << actualNode->GetName() << " CHILDREN; INVERTED: " << (invertedScope ? "true" : "false") << endl;
-
-			actualContext = AnimNodeContext(children, invertedScope);
-		//	cout << "ANIM: success" << endl;
-			return true;
-		}
-		else return false;
-	}
-
-	// tries to repeat the inner animation
-	bool TryNextLoop(spt<EnAnim> actualNode){
-	//	cout << "ANIM: Trying next loop" << endl;
-		actualContext.actualRepeat++;
-		if (actualContext.actualRepeat < actualNode->GetRepeat() || actualNode->GetRepeat() == 0){
-			// repeat animation of this node
-			if (!actualContext.IsReverted()) actualContext.actualFrame = 0;
-			else{
-				actualContext.actualFrame = actualNode->GetTotalFrames() - actualNode->GetSpeed();
-			}
-			
-			//cout << "ANIM: success" << endl;
-			return true;
-		}
-		else return false;
-	}
-
-	// tries to go to the next sibling
-	bool TrySibling(){
-		//cout << "ANIM: Trying sibling" << endl;
-		// repetition has ended (if there was some) -> try to get to the sibling
-		if (!actualContext.isInRevertedScope && actualContext.actualNodeIndex < (actualContext.nodes.size() - 1)){
-			// go to the next element
-			actualContext.actualNodeIndex++;
-			actualContext.RefreshFrame();
-			actualContext.actualRepeat = 0;
-
-			//cout << "ANIM: success" << endl;
-			return true;
-		}
-		else if (actualContext.isInRevertedScope && actualContext.actualNodeIndex > 0){
-			// go to the previous element
-			actualContext.actualNodeIndex--;
-			actualContext.RefreshFrame();
-			actualContext.actualRepeat = 0;
-		}
-		else return false;
-	}
-
-	spt<EnAnim> GetActualNode(){
-		return actualContext.nodes[actualContext.actualNodeIndex];
-	}
-
-	void MoveToNext(){
-		spt<EnAnim> tempNode = GetActualNode();
-
-		spt<EnAnim> actualNode;
-
-		do{
-
-			// get actual node
-			actualNode = GetActualNode();
-
-			// try to go further
-			if (!TryNextFrame(actualNode) && !TryChildren(actualNode) && !TryNextLoop(actualNode) && !TrySibling()){
-
-				// can't go further -> pop until we find next node
-				while (true){
-					if (!nodeStack.empty()){
-						//cout << "ANIM: popping context" << endl;
-
-						actualContext = nodeStack.top();
-						nodeStack.pop();
-						
-						actualNode = GetActualNode();
-						cout << "---POP , scope inverted: " << (actualContext.isInRevertedScope ? "true" : "false") << endl;
-
-						if (TryNextLoop(actualNode) || TrySibling()){
-							break;
-						}
-					}
-					else{
-						//cout << "ANIM: stack empty -> ending" << endl;
-						// stack is empty -> animation has ended
-						ended = true;
-						return;
-					}
-				}
-			}
-			else{
-
-			}
-
-		} while (!GetActualNode()->HasSheets());
-
-		if (GetActualNode() != tempNode){
-			//cout << "ANIM: opening node " << GetActualNode()->GetName().c_str() << endl;
-			// node has been changed -> refresh image array
-			actualContextImages = GetActualNode()->GetSheetPaths();
-		}
-	}
-	
 
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
@@ -211,14 +408,19 @@ public:
 		MoveToNext();
 
 		if (!Ended()){
-			int actualIndex = (int)actualContext.actualFrame;
-			spt<EnAnim> actualNode = GetActualNode();
+			int actualIndex = (int)context.actualFrameIndex;
+			spt<EnAnim> actualNode = context.GetActualChild();
 
-			if (actualNode->GetFrames() > 1){
+			if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1){
 				// image is a spritesheet
-				spt<ofImage> spriteSheet = COGGet2DImage(actualContextImages[0]);
-				int frameRow = actualIndex / actualNode->GetFrames();
-				int frameColumn = actualIndex % actualNode->GetFrames();
+				string imagePath = actualNode->GetSheet(0);
+				spt<ofImage> spriteSheet = COGGet2DImage(imagePath);
+
+				// calculate image offset
+				int frameIndex = actualIndex + actualNode->GetStart() - 1;
+
+				int frameRow = frameIndex / actualNode->GetFrames();
+				int frameColumn = frameIndex % actualNode->GetFrames();
 				int cellWidth = spriteSheet->getWidth()/actualNode->GetFrames();
 				int cellHeight = spriteSheet->getHeight()/actualNode->GetLines();
 
@@ -227,7 +429,11 @@ public:
 				owner->ChangeAttr(Attrs::IMGSOURCE, spriteSheet);
 			}
 			else{
-				spt<ofImage> image = COGGet2DImage(actualContextImages[actualIndex]);
+				// image is only a common image
+				if(owner->HasAttr(Attrs::IMGBOUNDS)) owner->RemoveAttr(Attrs::IMGBOUNDS, true);
+				
+				string imagePath = actualNode->GetSheet(actualIndex);
+				spt<ofImage> image = COGGet2DImage(imagePath);
 				owner->ChangeAttr(Attrs::IMGSOURCE, image);
 			}			
 		}

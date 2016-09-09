@@ -30,6 +30,11 @@ protected:
 	// list of children
 	vector<spt<EnAnim>> children;
 
+	// list of paths to sheets this animation holds
+	vector<string> sheets;
+	// indicator, if sheet array has been initialized
+	bool sheetInit;
+
 
 public:
 		
@@ -37,11 +42,14 @@ public:
 	EnAnim(string name, string sheetPath, string ref, int frames, int lines, int start,
 		int end, int increment, double speed, int repeat, bool isRevert) : name(name), sheetPath(sheetPath), ref(ref),
 		frames(frames), lines(lines), start(start), end(end), increment(increment), speed(speed), repeat(repeat), isRevert(isRevert){
-	//	this->rootAnim = spt<EnAnim>();
+	
+		sheetInit = false;
+		//	this->rootAnim = spt<EnAnim>();
 	}
 
-	EnAnim() : name(""), sheetPath(""), ref(""), frames(1), lines(1), start(0), end(0), increment(1), speed(1), repeat(1), isRevert(false){
+	EnAnim() : name(""), sheetPath(""), ref(""), frames(1), lines(1), start(1), end(1), increment(1), speed(1), repeat(1), isRevert(false){
 		//this->rootAnim = spt<EnAnim>();
+		sheetInit = false;
 	}
 
 	~EnAnim(){
@@ -106,12 +114,16 @@ public:
 	}
 
 	/**
-	* Gets list of paths to all sheets this animation holds
+	* Initializes list of paths to all sheets this animation holds
 	*/
-	vector<string> GetSheetPaths(){
-		
-		vector<string> output;
-		if (!HasSheets()) return output;
+	void InitSheets(){
+
+		sheets.clear();
+
+		if (!HasSheets()){
+			sheetInit = true;
+			return;
+		}
 
 		int firstBracket = sheetPath.find("{");
 		int secondBracket = sheetPath.find("}");
@@ -120,22 +132,32 @@ public:
 		if (firstBracket != string::npos && secondBracket != string::npos){
 			string sequencePrefix = sheetPath.substr(0, firstBracket);
 			string sequenceSuffix = sheetPath.substr(secondBracket + 1, sheetPath.length() - (secondBracket + 1));
-			
+
 			// string is in form {XXX}, it means that this is a file sequence
 			int numberOfDigits = secondBracket - firstBracket - 1;
 
 			for (int i = start; i <= end; i += increment){
 				// todo: danger increment value !!
 				string file = sequencePrefix + ofToString(i, 1, numberOfDigits, '0') + sequenceSuffix;
-				output.push_back(file);
+				sheets.push_back(file);
 			}
 		}
 		else{
-			output.push_back(sheetPath);
+			sheets.push_back(sheetPath);
 		}
 
-		return output;
+		sheetInit = true;
 	}
+
+	/**
+	* Get sheets at selected index
+	*/
+	string GetSheet(int frameIndex){
+		if (!sheetInit) InitSheets();
+
+		return sheets[frameIndex];
+	}
+
 
 	/**
 	* Adds a new animation child
@@ -343,6 +365,13 @@ public:
 		return children;
 	}
 
+	/**
+	* Gets collection of paths to all sheets
+	*/
+	vector<string>& GetSheetPaths(){
+		if (!sheetInit) InitSheets();
+		return sheets;
+	}
 };
 
 
