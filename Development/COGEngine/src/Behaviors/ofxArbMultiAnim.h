@@ -29,7 +29,7 @@ public:
 	void Init(){
 		RegisterListening(Actions::BEHAVIOR_FINISHED);
 		if (actual != nullptr)actual->Init();
-		//SetOwner(actual, owner);
+		SetOwner(actual, owner);
 	}
 
 	void OnMessage(ofxAreMsg& msg){
@@ -43,7 +43,7 @@ public:
 			if ((it+1) != animations.end()){
 				actual = *(++it); 
 				actual->Init();
-				//SetOwner(actual, owner);
+				SetOwner(actual, owner);
 			}
 			else Finish();
 		}

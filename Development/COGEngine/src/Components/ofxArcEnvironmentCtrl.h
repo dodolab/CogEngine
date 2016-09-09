@@ -216,7 +216,7 @@ protected:
 	void ReinitAspectRatio(){
 		if (abs(GetAspectRatio() - GetRealAspectRatio()) > 0.1f){
 
-			if (realWidth < realHeight){
+			if (realWidth <= realHeight){
 				width = GetRatioScale()*realWidth;
 				height = realHeight;
 			}

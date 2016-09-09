@@ -7,6 +7,9 @@
 #include "ofxArbHitEvent.h"
 #include "ofxArbCollider.h"
 
+#include "duk_config.h"
+#include "duktape.h"
+
 long mstart;
 long mend;
 long temp;
@@ -17,6 +20,112 @@ void WriteTime(const char* msg){
 	cout << msg << " " << (ofGetElapsedTimeMillis() - temp) << " ms" << endl;
 	temp = ofGetElapsedTimeMillis();
 }
+
+class JavaScriptBehavior : public ofxAreBehavior{
+	duk_context* ctx;
+
+	string GetBehaviorJsName(){
+		return "Behavior_"+ofToString(this->GetId());
+	}
+
+public:
+
+	JavaScriptBehavior(duk_context* context){
+		this->ctx = context;
+		/*
+		string path = ofToDataPath("scriptTest.js");
+
+		string str, strTotal;
+		ifstream in;
+		in.open(path);
+		getline(in, str);
+		while (in) {
+		strTotal += str+"\n";
+		getline(in, str);
+		}
+
+		//	duk_peval_string(ctx, strTotal.c_str());
+		if (duk_peval_string(ctx, strTotal.c_str()) != 0) {
+		printf("compile failed: %s\n", duk_safe_to_string(ctx, -1));
+		*/
+
+		if (duk_peval_file(ctx, ofToDataPath("scriptTest.js").c_str()) != 0) {
+			printf("Error: %s\n", duk_safe_to_string(ctx, -1));
+		}
+		duk_pop(ctx);  /* ignore result */
+
+		
+		duk_push_global_object(ctx);
+		duk_get_global_string(ctx, "TestingBehavior");
+		duk_push_int(ctx, rotateAnimId);
+		
+		if (duk_pnew(ctx, 1) != 0){
+			printf("%s\n", duk_safe_to_string(ctx, -1));
+		}
+
+		duk_put_prop_string(ctx, -2, GetBehaviorJsName().c_str());
+
+
+		//string newObj = "var "+GetBehaviorJsName() + " = new " + "TestingBehavior" + "(" + ofToString(rotateAnimId)+");";
+		//int isOK = duk_peval_string(ctx, newObj.c_str());
+	}
+
+	void Init(){
+		RegisterListening(Actions::BEHAVIOR_FINISHED);
+	}
+
+
+	
+	void OnMessage(ofxAreMsg& msg){
+		
+		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
+		duk_get_prop_string(ctx, -1, "OnMessage");
+		duk_dup(ctx, -2);
+		duk_push_number(ctx, msg.GetAction());
+		duk_push_number(ctx, msg.GetBehaviorId());
+		int isOK = duk_pcall_method(ctx, 2);
+
+		if (isOK != 0){
+			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
+		}
+
+		// pop function
+		duk_pop(ctx);
+		// pop instance
+		duk_pop(ctx);
+
+
+
+		//string onmsg = GetBehaviorJsName() + ".OnMessage(" + ofToString(msg.GetAction()) + "," + ofToString(msg.GetBehaviorId()) + ");";
+		//int isOK = duk_peval_string(ctx, onmsg.c_str());
+	}
+
+
+	void Update(const uint64 delta, const uint64 absolute){
+
+		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
+		duk_get_prop_string(ctx, -1, "Update");
+		duk_dup(ctx, -2);
+		duk_push_number(ctx, delta);
+		duk_push_number(ctx, absolute);
+		int isOK = duk_pcall_method(ctx, 2);
+
+
+		if (isOK != 0){
+			printf("eval failed: %s\n", duk_safe_to_string(ctx, -1));
+		}
+
+		// pop function
+		duk_pop(ctx);
+		// pop instance
+		duk_pop(ctx);
+
+
+		//string updateObj = GetBehaviorJsName() + ".Update(" + ofToString(delta) + "," + ofToString(absolute) + ");";
+		//int isOK = duk_peval_string(ctx, updateObj.c_str());
+
+	}
+};
 
 class TestingBehavior : public ofxAreBehavior{
 
@@ -56,6 +165,19 @@ public:
 	}
 };
 
+int OnTestAnimFinished(duk_context *ctx){
+	int fpsCounter = duk_to_number(ctx, 0);
+
+	long mojo = temp;
+	mend = ofGetElapsedTimeMillis();
+
+	WriteTime("ANIM");
+	cout << "FPS: " << ofToString(fpsCounter / ((ofGetElapsedTimeMillis() - mojo) / 1000)) << endl;
+	cout << "TOTAL: " << ofToString(mend - mstart) << " ms" << endl;
+
+
+	return 1;
+}
 
 class TestingFactory : public ofxArcFactory{
 	
@@ -108,7 +230,18 @@ public:
 		WriteTime("INIT");
 
 		root->AddBehavior(new ofxArbCollider(12345));
-		root->AddBehavior(new TestingBehavior());
+		//root->AddBehavior(new TestingBehavior());
+		duk_context *ctx = duk_create_heap_default();
+		duk_push_global_object(ctx);
+		duk_push_c_function(ctx, OnTestAnimFinished, DUK_VARARGS);
+		duk_put_prop_string(ctx, -2 /*idx:global*/, "OnTestAnimFinished");
+		duk_pop(ctx);
+
+
+		JavaScriptBehavior* jsbeh = new JavaScriptBehavior(ctx);
+		root->AddBehavior(jsbeh);
+
+		
 		root->SubmitChanges(true);
 
 		WriteTime("SUBMIT CHANGES");
@@ -117,10 +250,51 @@ public:
 	}
 };
 
+int mojo(duk_context *ctx){
+	int argument = duk_to_number(ctx, 0);
+	ofLog(OF_LOG_NOTICE, "mojo " + ofToString(argument));
+	cout << "MOJO :: " << argument << endl;
+	return 1;
+}
+
+int dojo(duk_context *ctx){
+	int argument = duk_to_number(ctx, 0);
+	cout << "DOJO :: " << argument << endl;
+	ofLog(OF_LOG_NOTICE, "DOJO " + ofToString(argument));
+	return 0;
+}
 
 
 #ifdef TARGET_WINDOWS
 int main(){
+
+	duk_context *ctx = duk_create_heap_default();
+	
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, mojo, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2 /*idx:global*/, "mojo");
+	
+	duk_push_c_function(ctx, dojo, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2 /*idx:global*/, "dojo");
+	duk_pop(ctx);
+
+	int output = 0;
+
+	output = duk_peval_string(ctx, "var bobo = 25; var blbost = 'ahoj nazdar';  bobo = Math.min(0,5);");
+	
+	if (output != 0){
+		string err = duk_safe_to_string(ctx, -1);
+	}
+	
+	output = duk_peval_string(ctx, "mojo(bobo);");
+
+	//duk_eval_string(ctx, "(dojo(12));");
+
+	//duk_pop(ctx);  /* pop global */
+
+
+	//duk_destroy_heap(ctx);
+
 	//ofAppGLFWWindow window;
 	//ofSetupOpenGL(&window, 225,400,OF_WINDOW);
 	ofSetupOpenGL(450, 800, OF_WINDOW);
@@ -129,8 +303,8 @@ int main(){
 
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
-	ofRunApp(new MTestApp());
-	//ofRunApp(new MApp(new TestingFactory()));
+	//ofRunApp(new MTestApp());
+	ofRunApp(new ofxAreApp(new TestingFactory()));
 	
 	return 0;
 }
@@ -139,6 +313,25 @@ int main(){
 #include <jni.h>
 
 int main(){
+
+	duk_context *ctx = duk_create_heap_default();
+
+	duk_push_global_object(ctx);
+	duk_push_c_function(ctx, mojo, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2 /*idx:global*/, "mojo");
+
+	duk_push_c_function(ctx, dojo, DUK_VARARGS);
+	duk_put_prop_string(ctx, -2 /*idx:global*/, "dojo");
+	duk_pop(ctx);
+
+	duk_eval_string(ctx, "dojo(mojo(12));");
+	//duk_eval_string(ctx, "(dojo(12));");
+
+	//duk_pop(ctx);  /* pop global */
+
+
+	duk_destroy_heap(ctx);
+
 	ofSetupOpenGL(720, 1280, OF_WINDOW);			// <-------- setup the GL context
 	cout << "Android app loaded" << endl;
 	//ofRunApp(new MTestApp());
