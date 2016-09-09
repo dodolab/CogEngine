@@ -46,4 +46,8 @@ files
     [Docs]
     (docs)
     gamecore.config.txt
+
+	[Data]
+    (data)
+    resources.group
 }

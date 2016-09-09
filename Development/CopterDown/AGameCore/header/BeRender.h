@@ -10,8 +10,8 @@
 class BeRender : public ABehavior{
 public:
 	BeRender();
-	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
+	virtual void OnMessage(Msg& msg);
+	virtual void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
 };
 
 

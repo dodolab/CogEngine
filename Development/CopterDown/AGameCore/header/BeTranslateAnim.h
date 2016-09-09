@@ -21,7 +21,7 @@ private:
 
 	CIwFVec2 _actual;
 
-	bool _stopped;
+	bool _stopped = false;
 
 public:
 	BeTranslateAnim(CIwFVec2 from, CIwFVec2 to, float speed, bool additive, bool repeat);
