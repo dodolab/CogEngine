@@ -1,4 +1,5 @@
 #include "EnFlags.h"
+#include <vector>
 
 
 
@@ -43,7 +44,7 @@ EnFlags::EnFlags(){
 	otherFlags = nullptr;
 }
 
-EnFlags::EnFlags(CIwArray<int> states){
+EnFlags::EnFlags(vector<int> states){
 	otherFlags = nullptr;
 	for (int i = 0; i < states.size(); i++) SetState(states[i]);
 }
@@ -90,8 +91,8 @@ EnFlags::~EnFlags(){
 	delete otherFlags;
 }
 
-CIwArray<int> EnFlags::GetAllStates() const{
-	CIwArray<int> output;
+vector<int> EnFlags::GetAllStates() const{
+	vector<int> output;
 
 	for (int i = 0; i < sizeof(int)*4; i++){
 		if (HasState(i)) output.push_back(i);
@@ -208,7 +209,7 @@ EnFlags& EnFlags::operator-=(int st1){
 }
 
 bool EnFlags::Contains(EnFlags& other) const{
-	CIwArray<int> allStates = other.GetAllStates();
+	vector<int> allStates = other.GetAllStates();
 	for (int i = 0; i < allStates.size(); i++){
 		if (!HasState(allStates[i])) return false;
 	}
@@ -216,7 +217,7 @@ bool EnFlags::Contains(EnFlags& other) const{
 }
 
 bool EnFlags::ContainsAtLeastOne(EnFlags& other) const{
-	CIwArray<int> allStates = other.GetAllStates();
+	vector<int> allStates = other.GetAllStates();
 	for (int i = 0; i < allStates.size(); i++){
 		if (HasState(allStates[i])) return true;
 	}

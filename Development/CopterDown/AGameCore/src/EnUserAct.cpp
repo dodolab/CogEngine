@@ -1,22 +1,23 @@
 #include "EnUserAct.h"
+#include <vector>
 
 EnUserAct::EnUserAct(){
 
 }
 
-CIwArray<EnInputAct<Act>>& EnUserAct::GetKeyActions() const{
-	return CIwArray<EnInputAct<Act>>();
+vector<EnInputAct<Act>>& EnUserAct::GetKeyActions() const{
+	return vector<EnInputAct<Act>>();
 }
 
-void EnUserAct::SetKeyActions(CIwArray<EnInputAct<Act>>& val){
+void EnUserAct::SetKeyActions(vector<EnInputAct<Act>>& val){
 
 }
 
-CIwArray<EnInputAct<CIwFVec2>>& EnUserAct::GetPointActions() const{
-	return CIwArray<EnInputAct<CIwFVec2>>();
+vector<EnInputAct<CIwFVec2>>& EnUserAct::GetPointActions() const{
+	return vector<EnInputAct<CIwFVec2>>();
 }
 
-void EnUserAct::SetPointActions(CIwArray<EnInputAct<CIwFVec2>>& val){
+void EnUserAct::SetPointActions(vector<EnInputAct<CIwFVec2>>& val){
 
 }
 
