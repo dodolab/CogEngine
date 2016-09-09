@@ -23,6 +23,7 @@ GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _i
 	_groups = copy._groups;
 	_states = copy._states;
 	_transform = copy._transform;
+	_runMode = copy._runMode;
 }
 
 GNode::~GNode(){
@@ -34,13 +35,23 @@ GNode::~GNode(){
 	// delete all behaviors
 	for (list<GBehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
 	{
+		MEngine.storage->RemoveBehavior((*it));
 		delete (*it);
 	}
 	_behaviors.clear();
 
+	// delete attributes
 	for (map<int, GAttr*>::iterator it = _attributes.begin(); it != _attributes.end(); ++it){
 		delete (it->second);
 	}
+
+	// delete all game objects
+	for (auto it = _children.begin(); it != _children.end(); ++it)
+	{
+		MEngine.storage->RemoveGameObject((*it));
+		delete (*it);
+	}
+	_children.clear();
 }
 
 void GNode::UpdateTransforms(){
@@ -59,6 +70,8 @@ void GNode::UpdateTransforms(){
 
 void GNode::Update(const uint64 delta, const uint64 absolute){	
 
+	if (_runMode == RunningMode::PAUSED_ALL) return;
+
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		GBehavior* beh = *it;
 		if (beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
@@ -66,19 +79,27 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 		}
 	}
 
-	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Update(delta, absolute);
+	if (_runMode != RunningMode::PAUSED_CHILDREN){
+		for (auto it = _children.begin(); it != _children.end(); ++it){
+			(*it)->Update(delta, absolute);
+		}
 	}
 
 	for (auto it = _behaviorToRemove.begin(); it != _behaviorToRemove.end(); ++it){
-		GBehavior* beh = *it;
+		std::pair<GBehavior*, bool> item = (*it);
+		GBehavior* beh = item.first;
 		_behaviors.remove(beh);
+		MEngine.storage->RemoveBehavior(beh);
+		if (item.second) delete item.first;
 	}
 
 
 	for (auto it = _childrenToRemove.begin(); it != _childrenToRemove.end(); ++it){
-		GNode* child = (*it);
+		std::pair<GNode*, bool> item = (*it);
+		GNode* child = item.first;
 		_children.remove(child);
+		MEngine.storage->RemoveGameObject(child);
+		if (item.second) delete item.first;
 	}
 
 	_childrenToRemove.clear();
@@ -102,27 +123,40 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 bool GNode::AddBehavior(GBehavior* beh){
 	_behaviors.push_back(beh);
+	MEngine.storage->AddBehavior(beh);
 	return true;
 }
 
-bool GNode::RemoveBehavior(GBehavior* beh){  
+bool GNode::RemoveBehavior(GBehavior* beh, bool immediately, bool erase){  
 	auto found = find(_behaviors.begin(), _behaviors.end(),beh);
 	
 	bool result = _behaviors.end() != found;
 	if (result){
-		_behaviorToRemove.push_back(*found);
+		if (immediately){
+			_behaviors.remove(beh);
+			MEngine.storage->RemoveBehavior(beh);
+			if (erase) delete beh;
+		}
+		else{
+			// check if there isn't already such behavior
+			for (auto it = _behaviorToRemove.begin(); it != _behaviorToRemove.end(); ++it){
+				if ((*it).first->GetId() == beh->GetId()) return true;
+			}
+
+			_behaviorToRemove.push_back(std::make_pair(*found, erase));
+		}
 	}
 	return result;
 }
 
-bool GNode::RemoveAttr(int key){
+bool GNode::RemoveAttr(int key, bool erase){
 	
 	map<int, GAttr*>::iterator it = _attributes.find(key);
 
 	if (it != _attributes.end()){
 		GAttr* attr = it->second;
 		_attributes.erase(it);
-		delete attr;
+		if(erase) delete attr;
 		return true;
 	}
 	return false;
@@ -151,16 +185,28 @@ const list<GNode*>& GNode::GetChildren() const{
 bool GNode::AddChild(GNode* child){
 	_children.push_back(child);
 	child->_parent = this;
+	MEngine.storage->AddGameObject(child);
 	return true;
 }
 
-bool GNode::RemoveChild(GNode* child, bool immediately){
+bool GNode::RemoveChild(GNode* child, bool immediately, bool erase){
 	auto found = find(_children.begin(), _children.end(), child);
 
 	bool result = _children.end() != found;
 	if (result){
-		if (immediately) _children.remove(child);
-		else _childrenToRemove.push_back(child);
+		if (immediately){
+			_children.remove(child);
+			MEngine.storage->RemoveGameObject(child);
+			if(erase) delete (child);
+		}
+		else{
+			// check if there isn't already such behavior
+			for (auto it = _childrenToRemove.begin(); it != _childrenToRemove.end(); ++it){
+				if ((*it).first->GetId() == child->GetId()) return true;
+			}
+		
+			_childrenToRemove.push_back(std::make_pair(child, erase));
+		}
 	}
 	return result;
 }

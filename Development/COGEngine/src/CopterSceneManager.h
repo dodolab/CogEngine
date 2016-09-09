@@ -12,11 +12,14 @@ class CopterSceneManager : public GBehavior{
 private: 
 	CopterFactory* factory;
 	int actualScene;
+	int finishingDelay;
+	bool finishingMode;
 
 public:
 	CopterSceneManager(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::OBJECT_HIT, Actions::PLAYER_LOOSE)), factory(factory){
-		_behState = BehState::ACTIVE_MESSAGES;
+		_behState = BehState::ACTIVE_ALL;
 		actualScene = 1;
+		finishingMode = false;
 	}
 
 	void OnMessage(GMsg& msg){
@@ -25,13 +28,31 @@ public:
 			actualScene = 0;
 		}
 		else if (msg.GetAction() == Actions::PLAYER_LOOSE){
+			finishingMode = true;
+			finishingDelay = 0;
+			GNode* scene = msg.GetSourceObject()->GetSceneRoot();
+			GNode* skull = factory->CreateSkull(scene);
+			scene->AddChild(skull);
+			scene->SetRunningMode(RunningMode::PAUSED_CHILDREN);
+			
+		}
+		else if (msg.GetAction() == Actions::GAME_FINISHED){
+			finishingMode = false;
 			factory->SwitchToScene(1);
 			actualScene = 1;
 		}
 	}
 
 	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+		if (finishingMode){
+			finishingDelay += delta;
 
+			if (finishingDelay > 2000){
+				finishingMode = false;
+				factory->SwitchToScene(1);
+				actualScene = 1;
+			}
+		}
 	}
 };
 

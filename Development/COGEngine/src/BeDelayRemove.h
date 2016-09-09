@@ -31,7 +31,7 @@ public:
 		actual += delta;
 
 		if (actual > millis){
-			owner->GetParent()->RemoveChild(owner);
+			owner->GetParent()->RemoveChild(owner,false,true);
 		}
 	}
 };

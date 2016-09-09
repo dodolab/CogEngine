@@ -23,6 +23,7 @@ namespace Actions{
 	int PARA_KILLED = 12;
 	int COPTER_KILLED = 13;
 	int PLAYER_LOOSE = 14;
+	int GAME_FINISHED = 15;
 }
 
 
@@ -41,6 +42,7 @@ namespace Attrs{
 	int HEALTH = 11;
 	int FONT = 12;
 	int TEXT = 13;
+	int SCORE = 14;
 }
 
 /*! States*/

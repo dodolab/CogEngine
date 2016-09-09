@@ -46,6 +46,7 @@ public:
 			if (owner->GetTransform().AbsPos.y > 0.8f*MEngine.environmentCtrl->GetHeight()){
 				// change picture and do nothing....
 				grounded = true;
+				owner->SetTag("para_grounded");
 				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/soldier.png"));
 				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::PARA_GROUNDED, nullptr, owner);
 			}
