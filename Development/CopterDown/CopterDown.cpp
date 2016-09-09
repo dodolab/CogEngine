@@ -13,53 +13,16 @@
 using namespace Iw2DSceneGraphCore;
 
 
-/*! Types of traversation */
-namespace Traverses{
-	int CHILD_FIRST = 0;	/*!< child is updated first */
-	int BEH_FIRST = 1;		/*!< behaviors are updated first */
-	int ROOT = 2;			/*!< root is updated first */
-	int SCENEROOT = 3;		/*!< scene root is updated first */
-}
-
-/*! Action events */
-namespace Actions{
-	int BEHAVIOR_ADDED = 0;
-	int BEHAVIOR_REMOVED = 1;
-	int OBJECT_CREATED = 2;
-	int OBJECT_REMOVED = 3;
-	int USER_INPUT = 4;
-	int COLLISION_OCURRED = 5;
-	int GAMEOBJECT_DESTROYED = 6;
-	int ATTRIBUTE_CHANGED = 7;
-}
-
-
-/*! Attribute keys */
-namespace Attrs{
-	int VELOCITY = 17;
-	int USERACTION = 16;
-	int IMGSOURCE = 24;
-	int BOUNDS = 26;
-}
-
-#define MS_PER_SECOND 1000
-#define MS_PER_MINUTE (MS_PER_SECOND * 60)
-#define MS_PER_HOUR (MS_PER_MINUTE * 60)
-#define MS_PER_DAY (MS_PER_HOUR * 24)
-#define UPDATE_FREQUENCY 35
 
 // ============================== VARIABLES
 
 // flag for screen size change
 bool screenSizeChanged = true;
 
-s3eThread* updateThread;
 
 int width;
 int height;
 // ============================== LOOPS
-// FRAME_TIME is the amount of time that a single frame should last in seconds
-#define FRAME_TIME  (30.0f / 1000.0f)
 GNode* root;
 uint64 absolute;
 spt<EnUserAct> userActions;
@@ -96,7 +59,22 @@ void CheckInputs(){
 	}
 }
 
-void DrawingLoop(){
+void Update(uint64 delta, uint64 absolute){
+	root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(width / 2, height)));
+}
+
+void Draw(uint64 delta, uint64 absolute){
+	// Clear the drawing surface
+	Iw2DSurfaceClear(0xff000000);
+
+	// draw the root node
+	root->Draw(delta, absolute, CIwFMat2D::g_Identity);
+
+	// Show the drawing surface
+	Iw2DSurfaceShow();
+}
+
+void StartLoop(){
 
 	uint64 deltaTime = s3eTimerGetMs();
 	double angle = 0;
@@ -111,46 +89,14 @@ void DrawingLoop(){
 		s3ePointerUpdate();		
 		UpdateInputs();
 
-		// Clear the drawing surface
-		Iw2DSurfaceClear(0xff000000);
-
-		// draw the root node
-		root->Draw(delta, absolute, CIwFMat2D::g_Identity);
-
-		// Show the drawing surface
-		Iw2DSurfaceShow();
-
-		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(width/2, height)));
+		Update(delta, absolute);
+		Draw(delta, absolute);
 
 		CheckInputs();
 
 		// sleep 0ms (for input events update)
 		s3eDeviceYield(0);
 	}
-}
-
-// update loop runs on separate thread
-void* UpdateLoop(void* arg){
-
-	uint64 deltaTime = s3eTimerGetMs();
-	/*
-	while (!s3eDeviceCheckQuitRequest())
-	{
-		uint64 delta = s3eTimerGetMs() - deltaTime;
-		deltaTime = s3eTimerGetMs();
-
-		// do logic here
-
-		root->Update(delta, absolute, CIwFMat2D::g_Identity.SetTrans(CIwFVec2(200,200)));
-
-		CheckInputs();
-
-		// sleep max 35 ms
-		uint64 updateTime = s3eTimerGetMs() - deltaTime;
-		long diff = (UPDATE_FREQUENCY - (updateTime)) * 1000;
-		if (diff > 0) usleep(diff);
-	}*/
-	return NULL;
 }
 
 // ============================== HANDLERS
@@ -281,24 +227,6 @@ void Init(){
 	}
 }
 
-bool Check(){
-	if (!s3eThreadAvailable())
-	{
-		s3eDebugErrorPrintf("s3eThread extension not present");
-		return false;
-	}
-	return true;
-}
-
-bool StartUpdateThread(){
-	updateThread = s3eThreadCreate(UpdateLoop, NULL, NULL);
-	if (!updateThread)
-	{
-		s3eDebugErrorPrintf("s3eThreadCreate failed: %s", s3eThreadGetErrorString());
-		return false;
-	}
-	return true;
-}
 
 void Terminate(){
 	// terminate all used modules
@@ -392,20 +320,13 @@ int main()
 	absolute = s3eTimerGetMs();
 	test();
 
-	int gnodeSize = sizeof(GNode);
-
+	
 	// initialize
 	Init();
 	// register input events
 	RegisterEvents();
-	// check for failures
-	if (!Check()) return 1;
-	// start update thread
-	if (!StartUpdateThread()) return 1;
 	// start drawing loop
-	DrawingLoop();
-	// wait for update thread on quit callback
-	s3eThreadJoin(updateThread, NULL);
+	StartLoop();
 	// finish
 	Terminate();
 
