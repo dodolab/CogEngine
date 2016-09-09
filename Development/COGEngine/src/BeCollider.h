@@ -37,8 +37,11 @@ public:
 
 	void Init(){
 		vector<spt<EnCollision>> collisions = vector<spt<EnCollision>>();
-		owner->AddAttr(Attrs::COLLISIONS, collisions);
+		if (!owner->HasAttr(Attrs::COLLISIONS)){
+			owner->AddAttr(Attrs::COLLISIONS, collisions);
+		}
 	}
+
 
 	void Update(const uint64 delta, const uint64 absolute){
 
@@ -66,7 +69,6 @@ public:
 					if ((firstInGroupA && secondInGroupB) || (firstInGroupB && secondInGroupA)){
 
 						// found collidable pair, check collision
-
 						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds*>(Attrs::BOUNDS)->Collides(*first, *second)){
 							// create collision
 							spt<EnCollision> col = spt<EnCollision>(new EnCollision(first, second));
@@ -80,7 +82,7 @@ public:
 		if (collisions.size() != 0){
 			// send info about collision
 			owner->ChangeAttr(Attrs::COLLISIONS, collisions);
-			SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, nullptr, owner);
+			SendMessage(BubblingType(ScopeType::SCENE, true, true), Actions::COLLISION_OCURRED, nullptr, owner);
 		}
 	}
 };

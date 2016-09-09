@@ -1,62 +1,92 @@
 #pragma once
 
-#include "Enums.h"
+#include "MEnums.h"
 #include "ofVec3f.h"
 
+/**
+* Transformation entity that holds local and absolute position
+* For now 2D transformation is supported with the possibility of setting Z position and scale
+*/
 class EnTransform{
-	
+	 
 public:
-	EnTransform(float posX, float posY) : LocalPos(ofVec3f(posX, posY)), Scale(1), RotationOrigin(ofVec3f(0.0f, 0.0f)), Rotation(0){
+	
+	/**
+	* Creates a new transformation entity
+	* @param posX position in X axis
+	* @param posY position in Y axis
+	*/
+	EnTransform(float posX, float posY) : localPos(ofVec3f(posX, posY)), scale(1), rotationOrigin(ofVec3f(0.0f, 0.0f)), rotation(0){
 		SetAbsAsLocal();
 	}
 
-	ofVec3f LocalPos;
-	ofVec3f Scale;
-	float Rotation;
-	ofVec3f RotationOrigin;
+	// local position
+	ofVec3f localPos;
+	// local scale
+	ofVec3f scale;
+	// local rotation
+	float rotation;
+	// local rotation origin
+	ofVec3f rotationOrigin;
 
-	ofVec3f AbsPos;
-	ofVec3f AbsScale;
-	float AbsRotation;
-	ofVec3f AbsRotationOrigin;
+	// absolute position - recalculated due to parent's transform
+	ofVec3f absPos;
+	// absolute scale    - recalculated due to parent's transform
+	ofVec3f absScale;
+	// absolute rotation - recalculated due to parent's transform
+	float absRotation;
+	// absolute rotation origin - recalculated due to parent's transform
+	ofVec3f absRotationOrigin;
 
+	/**
+	* Sets absolute coordinates to be the same as local
+	* Mostly used for root objects that haven't any parent
+	*/
 	void SetAbsAsLocal(){
-		AbsPos = LocalPos;
-		AbsScale = Scale;
-		AbsRotation = Rotation;
-		AbsRotationOrigin = RotationOrigin;
+		absPos = localPos;
+		absScale = scale;
+		absRotation = rotation;
+		absRotationOrigin = rotationOrigin;
 	}
 
+	/**
+	* Calculates absolute coordinates
+	* @param parent parent whose transform will be calculated according to
+	*/
 	void CalcAbsTransform(EnTransform& parent){
-		float angle = parent.AbsRotation / 180.0f*PI + (atan2(LocalPos.y, LocalPos.x));
-		float length = sqrt(LocalPos.x*LocalPos.x + LocalPos.y*LocalPos.y);
-		ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), LocalPos.z);
-		AbsPos = rotPos*parent.AbsScale + parent.AbsPos;
-		AbsScale = parent.AbsScale*Scale;
-		AbsRotation = Rotation + parent.AbsRotation;
-		AbsRotationOrigin = RotationOrigin + parent.AbsRotationOrigin;
+		// calc absolute angle
+		float angle = parent.absRotation / 180.0f*PI + (atan2(localPos.y, localPos.x));
+		// calc local vector length
+		float length = sqrt(localPos.x*localPos.x + localPos.y*localPos.y);
+		// calc unscaled absolute position
+		ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), localPos.z);
+		// calc absolute position
+		absPos = rotPos*parent.absScale + parent.absPos;
+		absScale = parent.absScale*scale;
+		absRotation = rotation + parent.absRotation;
+		absRotationOrigin = rotationOrigin + parent.absRotationOrigin;
 	}
 
 	
 	ofMatrix4x4 GetAbsMatrix(){
 		ofMatrix4x4 matrix;
 
-		matrix.translate(AbsRotationOrigin);
-		matrix.rotate(AbsRotation, 0, 0, 1);
+		matrix.translate(absRotationOrigin);
+		matrix.rotate(absRotation, 0, 0, 1);
 
-		matrix.scale(AbsScale);
-		matrix.translate(AbsPos);
+		matrix.scale(absScale);
+		matrix.translate(absPos);
 
 		return matrix;
 	}
 
 	ofMatrix4x4 GetMatrix(){
 		ofMatrix4x4 matrix;
-		matrix.translate(RotationOrigin);
-		matrix.rotate(Rotation, 0,0,1);
+		matrix.translate(rotationOrigin);
+		matrix.rotate(rotation, 0,0,1);
 	
-		matrix.scale(Scale);	
-		matrix.translate(LocalPos);	
+		matrix.scale(scale);	
+		matrix.translate(localPos);	
 
 		return matrix;
 	}

@@ -8,6 +8,7 @@ void EnFlags::DoStateOperation(bool set, int state){
 	int offset = GetStateOffset(state);
 	int binary = 1 << offset;
 
+	// set integer flags
 	if (index <= 3)
 	{
 		switch (index){
@@ -22,7 +23,7 @@ void EnFlags::DoStateOperation(bool set, int state){
 		}
 	}
 
-	// index >3
+	// index >3 - set map
 	if (otherFlags == nullptr) otherFlags = new map<int, int>();
 
 	if (set){
@@ -41,34 +42,34 @@ void EnFlags::DoStateOperation(bool set, int state){
 }
 
 EnFlags::EnFlags(){
-	Construct();
+	Init();
 }
 
 EnFlags::EnFlags(vector<int> states){
-	Construct();
+	Init();
 	for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 }
 
 EnFlags::EnFlags(int state){
-	Construct();
+	Init();
 	if (state != -1) SetState(state);
 }
 
 EnFlags::EnFlags(int state1, int state2) {
-	Construct();
+	Init();
 	if (state1 != -1) SetState(state1);
 	if (state2 != -1) SetState(state2);
 }
 
 EnFlags::EnFlags(int state1, int state2, int state3) {
-	Construct();
+	Init();
 	if (state1 != -1) SetState(state1);
 	if (state2 != -1) SetState(state2);
 	if (state3 != -1) SetState(state3);
 }
 
 EnFlags::EnFlags(int state1, int state2, int state3, int state4) {
-	Construct();
+	Init();
 	if (state1 != -1) SetState(state1);
 	if (state2 != -1) SetState(state2);
 	if (state3 != -1) SetState(state3);
@@ -76,7 +77,7 @@ EnFlags::EnFlags(int state1, int state2, int state3, int state4) {
 }
 
 EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
-	Construct();
+	Init();
 	if (state1 != -1) SetState(state1);
 	if (state2 != -1) SetState(state2);
 	if (state3 != -1) SetState(state3);
@@ -85,7 +86,7 @@ EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
 }
 
 EnFlags::EnFlags(const EnFlags& obj){
-	Construct();
+	Init();
 
 	flags1 = obj.flags1;
 	flags2 = obj.flags2;
@@ -108,10 +109,12 @@ EnFlags::~EnFlags(){
 vector<int> EnFlags::GetAllStates() const{
 	vector<int> output;
 
+	// iterate over integer flags
 	for (int i = 0; i < sizeof(int)*4; i++){
 		if (HasState(i)) output.push_back(i);
 	}
 
+	// oterate over map
 	if (otherFlags != nullptr){
 		for (map<int, int>::iterator it = otherFlags->begin(); it != otherFlags->end(); ++it) {
 			// get value
@@ -133,6 +136,7 @@ bool EnFlags::HasState(int state) const{
 	int offset = GetStateOffset(state);
 	int binary = 1 << offset;
 
+	// check integer flags
 	if (index <= 3)
 	{
 		switch (index){
@@ -143,7 +147,7 @@ bool EnFlags::HasState(int state) const{
 		}
 	}
 
-	// index > 3
+	// index > 3 - check map
 	if (otherFlags != nullptr){
 		return otherFlags->count(index) && (((*otherFlags)[index] & binary) == binary);
 	}
@@ -189,6 +193,7 @@ bool EnFlags::operator==(int st2){
 
 bool EnFlags::operator==(const EnFlags& st2){
 	if (otherFlags != nullptr){
+		// compare map
 		if (st2.otherFlags == nullptr || otherFlags->size() != st2.otherFlags->size()) return false;
 
 		for (map<int, int>::iterator iter = otherFlags->begin(); iter != otherFlags->end(); ++iter)
@@ -199,6 +204,7 @@ bool EnFlags::operator==(const EnFlags& st2){
 		}
 	}
 
+	// compare integer flags
 	return flags1 == st2.flags1 && flags2 == st2.flags2 && flags3 == st2.flags3 && flags4 == st2.flags4;
 }
 
@@ -233,6 +239,7 @@ EnFlags& EnFlags::operator-=(int st1){
 }
 
 bool EnFlags::Contains(EnFlags& other) const{
+	// return first false
 	vector<int> allStates = other.GetAllStates();
 	for (size_t i = 0; i < allStates.size(); i++){
 		if (!HasState(allStates[i])) return false;
@@ -241,6 +248,7 @@ bool EnFlags::Contains(EnFlags& other) const{
 }
 
 bool EnFlags::ContainsAtLeastOne(EnFlags& other) const{
+	// return first true
 	vector<int> allStates = other.GetAllStates();
 	for (size_t i = 0; i < allStates.size(); i++){
 		if (HasState(allStates[i])) return true;

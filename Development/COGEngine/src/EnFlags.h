@@ -5,8 +5,7 @@
 using namespace std;
 
 /**
-* EnFlags - state machine class that can combined
-* any number of states
+* State machine class that holds collection of states
 *
 */
 class EnFlags{
@@ -45,7 +44,10 @@ private:
 	*/
 	void DoStateOperation(bool set, int state);
 
-	void Construct(){
+	/**
+	* Initializes state machine
+	*/
+	void Init(){
 		 flags1 = 0;
 		 flags2 = 0;
 		 flags3 = 0;
@@ -56,37 +58,37 @@ private:
 
 public:
 	/**
-	* Creates a new flag object
+	* Creates a new state machine
 	*/
 	EnFlags();
 
 	/**
-	* Creates a new flag object, initialized with list of state
+	* Creates a new state machine, initialized with list of state
 	*/
 	EnFlags(vector<int> states);
 
 	/**
-	* Creates a new flag object, initialized with one state
+	* Creates a new state machine, initialized with one state
 	*/
 	EnFlags(int state);
 
 	/**
-	* Creates a new flag object, initialized with two states
+	* Creates a new state machine, initialized with two states
 	*/
 	EnFlags(int state1, int state2);
 
 	/**
-	* Creates a new flag object, initialized with three states
+	* Creates a new state machine, initialized with three states
 	*/
 	EnFlags(int state1, int state2, int state3);
 
 	/**
-	* Creates a new flag object, initialized with four states
+	* Creates a new state machine, initialized with four states
 	*/
 	EnFlags(int state1, int state2, int state3, int state4);
 
 	/**
-	* Creates a new flag object, initialized with five states
+	* Creates a new state machine, initialized with five states
 	*/
 	EnFlags(int state1, int state2, int state3, int state4, int state5);
 
@@ -106,6 +108,7 @@ public:
 
 	/**
 	* Sets the state
+	* @param state state to set
 	*/
 	void SetState(int state){
 		return DoStateOperation(true, state);
@@ -118,6 +121,7 @@ public:
 
 	/**
 	* Resets the state
+	* @param state state to reset
 	*/
 	void ResetState(int state){
 		return DoStateOperation(false, state);
@@ -140,10 +144,19 @@ public:
 	*/
 	bool operator==(int st1);
 
+	/**
+	* Compares state machine with another
+	*/
 	bool operator==(const EnFlags& st1);
 
+	/**
+	* Compares state machine with one state
+	*/
 	bool operator!=(int st1);
 
+	/**
+	* Compares state machine with another
+	*/
 	bool operator!=(const EnFlags& st1);
 
 	/**
@@ -162,21 +175,21 @@ public:
 	* Adds a state to the state machine
 	* @param st1 state to set
 	*/
-	EnFlags& operator+=(int st2);
+	EnFlags& operator+=(int st1);
 
 	/**
 	* Renoves a state from the state machine
 	* @param st1 state to reset
 	*/
-	EnFlags& operator-=(int st2);
+	EnFlags& operator-=(int st1);
 
 	/**
-	* Returns true, if all states from the given object are set in this object
+	* Returns true, if all states from the given state machine are set in this state machine
 	*/
 	bool Contains(EnFlags& other) const;
 
 	/**
-	* Returns true, if at least one state from the given object is set in this object
+	* Returns true, if at least one state from the given state machine is set in this state machine
 	*/
 	bool ContainsAtLeastOne(EnFlags& other) const;
 

@@ -1,11 +1,24 @@
 #include "MEnvironmentCtrl.h"
-#include "Enums.h"
+#include "MEnums.h"
 #include "EnInputAct.h"
 #include "MGameEngine.h"
-#include "SmartPointer.h"
+#include "ofxSmartPointer.h"
 #include <vector>
+#include "MUtils.h"
 
 using namespace std;
+
+void MEnvironmentCtrl::Init(){
+	screenSizeChanged = false;
+	width = ofGetWindowSize().x;
+	height = ofGetWindowSize().y;
+}
+
+void MEnvironmentCtrl::OnScreenSizeChanged(int newWidth, int newHeight){
+	screenSizeChanged = true;
+	height = newHeight;
+	width = newWidth;
+}
 
 
 void MEnvironmentCtrl::OnKeyAction(int key, bool pressed){
@@ -14,35 +27,34 @@ void MEnvironmentCtrl::OnKeyAction(int key, bool pressed){
 		// key down
 
 		// if pressed keys contains this key, remove it
-		for (auto pKey : COGGetPressedKeys()){
-			// todo: shouldn't occur, create assertion
+		for (auto pKey : pressedKeys){
+			// key is already in the collection of pressed keys
 			if (pKey.key == key) return;
 		}
 
-		COGGetPressedKeys().push_back(EnInputAct(key));
+		pressedKeys.push_back(EnInputAct(key));
 	}
 	else{
 		// key up
-		for (auto it = COGGetPressedKeys().begin(); it != COGGetPressedKeys().end(); ++it){
+		for (auto it = pressedKeys.begin(); it != pressedKeys.end(); ++it){
 			if ((*it).key == key){
 				(*it).ended = true;
 				break;
 			}
 		}
 	}
-
-	return;
 }
 
-// user touches the screen with more fingers
 void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed){
+	// user touches the screen with more fingers
+
 	if (pressed){
-		COGGetPressedPoints().push_back(EnInputAct(button, ofVec3f(x, y)));
+		pressedPoints.push_back(EnInputAct(button, ofVec3f(x, y)));
 	}
 	else{
-		for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
-			if ((*it).inputType == InputType::TOUCH && (*it).buttonId == button){
-				// change position as well
+		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
+			if ((*it).inputType == InputType::TOUCH && (*it).touchId == button){
+				// change position
 				(*it).position = ofVec3f(x, y);
 				(*it).ended = true;
 				return;
@@ -51,25 +63,25 @@ void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed
 	}
 }
 
-// user moves fingers
 void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y, int button){
-	for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
-		// todo: shouldn't occur, create assertion
-		if ((*it).buttonId == button && (*it).inputType == InputType::TOUCH){
+	// user moves fingers
+	for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
+		if ((*it).touchId == button && (*it).inputType == InputType::TOUCH){
 			(*it).position = ofVec3f(x, y);
 		}
 	}
 }
 
-// user touches the screen
 void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool pressed){
+	// user touches the screen
+
 	if (pressed){
-		COGGetPressedPoints().push_back(EnInputAct(button, ofVec3f(x,y)));
+		pressedPoints.push_back(EnInputAct(button, ofVec3f(x, y)));
 	}
 	else{
-		for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
+		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
 			if ((*it).inputType == InputType::TOUCH){
-				// change position as well
+				// change position
 				(*it).position = ofVec3f(x,y);
 				(*it).ended = true;
 				return;
@@ -78,82 +90,42 @@ void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool presse
 	}
 }
 
-// user moves finger
 void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
-	for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
-		// todo: shouldn't occur, create assertion
-		if ((*it).buttonId == button && (*it).inputType == InputType::TOUCH){
+	// user moves finger
+	for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
+		if ((*it).touchId == button && (*it).inputType == InputType::TOUCH){
 			(*it).position = ofVec3f(x,y);
 		}
 	}
 }
 
 
-void MEnvironmentCtrl::OnScreenSizeChanged(int newWidth, int newHeight){
-	_screenSizeChanged = true;
-	_height = newHeight;
-	_width = newWidth;
-}
 
-void MEnvironmentCtrl::Init(){
-	_screenSizeChanged = false;
-
-	_height = ofGetWindowSize().y;
-	_width = ofGetWindowSize().x;
-
-	/*s3eSurfaceRegister(S3E_SURFACE_SCREENSIZE, &MEnvironmentCtrl::ScreenSizeChangeCallback, NULL);
-
-	// Determine if the device supports multi-touch
-	bool isMultiTouch = s3ePointerGetInt(S3E_POINTER_MULTI_TOUCH_AVAILABLE);
-
-	s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, (s3eCallback)&MEnvironmentCtrl::KeyEventCallback, NULL);
-
-	// For multi-touch devices we handle touch and motion events using different callbacks
-	if (isMultiTouch)
-	{
-		s3ePointerRegister(S3E_POINTER_TOUCH_EVENT, (s3eCallback)&MEnvironmentCtrl::MultiTouchButtonCallback, NULL);
-		s3ePointerRegister(S3E_POINTER_TOUCH_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::MultiTouchMotionCallback, NULL);
-	}
-	else
-	{
-		s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchButtonCallback, NULL);
-		s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchMotionCallback, NULL);
-	}*/
-}
-
-void MEnvironmentCtrl::Terminate(){
-
-}
-
-void MEnvironmentCtrl::UpdateInputs(){
-	//Update the input systems
-	//s3eKeyboardUpdate();
-	//s3ePointerUpdate();
-}
 
 void MEnvironmentCtrl::RemoveEndedInputs(){
+	screenSizeChanged = false;
 
-	// remove unpressed keys
-	for (auto it = GetPressedKeys().begin(); it != GetPressedKeys().end(); ++it){
+	// remove released keys
+	for (auto it = pressedKeys.begin(); it != pressedKeys.end();){
 		if ((*it).ended){
-			GetPressedKeys().erase(it);
-			break;
-		}
-
-		if ((*it).started){
+			it = pressedKeys.erase(it);
+			continue;
+		}else if ((*it).started){
 			(*it).started = false;
 		}
+		// increment only if item hasn't been erased
+		++it;
 	}
 
-	// remove ended touches
-	for (auto it = GetPressedPoints().begin(); it != GetPressedPoints().end(); ++it){
+	// remove released touches
+	for (auto it = pressedPoints.begin(); it != pressedPoints.end();){
 		if ((*it).ended){
-			GetPressedPoints().erase(it);
-			break;
-		}
-
-		if ((*it).started){
+			it = pressedPoints.erase(it);
+			continue;
+		} else if ((*it).started){
 			(*it).started = false;
 		}
+		// increment only if item hasn't been erased
+		++it;
 	}
 }

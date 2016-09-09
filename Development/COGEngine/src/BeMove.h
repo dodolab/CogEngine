@@ -4,23 +4,35 @@
 #include "GMsg.h"
 #include "GNode.h"
 
-/**
-* Behavior for translation
+/**x
+* Behavior for simple movement
 */
 class BeMove : public GBehavior{
+protected:
+	float speed;
 public:
-	BeMove() : GBehavior(ElemType::MODEL){
+
+	/**
+	* Creates a new behavior for simple movement
+	* @param speed movement speed
+	*/
+	BeMove(float speed) : GBehavior(ElemType::MODEL), speed(speed){
 
 	}
 
+	void Init(){
+		if (!owner->HasAttr(Attrs::VELOCITY)){
+			owner->AddAttr(Attrs::VELOCITY, ofVec3f());
+		}
+	}
 
 	void Update(const uint64 delta, const uint64 absolute){
 		EnTransform& transform = owner->GetTransform();
 
 		ofVec3f velocity = owner->GetAttr<ofVec3f>(Attrs::VELOCITY);
 
-		transform.LocalPos.x += velocity.x * delta;
-		transform.LocalPos.y += velocity.y * delta;
+		transform.localPos.x += COGTranslateSpeed(speed)*velocity.x * delta;
+		transform.localPos.y += COGTranslateSpeed(speed)*velocity.y * delta;
 	}
 
 };

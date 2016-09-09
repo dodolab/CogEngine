@@ -9,7 +9,7 @@ void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 		GBehavior* beh = (*it);
 		if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
 			(beh->GetId() != msg.GetBehaviorId()) &&
-			(msg.GetCategory() == ElemType::ALL || beh->GetElemType() == msg.GetCategory())){
+			(beh->GetElemType() == msg.GetElemType())){
 			if (IsRegisteredListener(msg.GetAction(), beh)){
 				beh->OnMessage(msg);
 			}
@@ -17,54 +17,39 @@ void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	}
 }
 
-void MGameStorage::SendTraversationMessageToChildren(GMsg& msg, GNode* actualNode){
+void MGameStorage::SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it){
-		SendTraversationMessage(msg, (*it));
+		SendMessage(msg, (*it));
 	}
 }
 
-void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 
+void MGameStorage::SendMessage(GMsg& msg, GNode* actualNode){
 	// there is no such callback or behavior that listens to that type of message
 	if (!IsRegisteredCallBack(msg.GetAction()) && !IsRegisteredListener(msg.GetAction())) return;
-	
-	Traversation& trav = msg.GetTraverse();
+
+	BubblingType& trav = msg.GetBubblingType();
 
 	if (trav.scope == ScopeType::DIRECT_NO_TRAVERSE){
-		// no traversation - just iterate over the proper collection of behaviors and callbacks
-		auto behaviors = behListeners.find(msg.GetAction());
+		// no BubblingType - just iterate over the proper collection of behaviors and callbacks
+		SendDirectMessage(msg);
 
-		if (behaviors != behListeners.end()){
-			vector<GBehavior*>& behs = behaviors->second;
+	}else SendBubblingMessage(msg, actualNode);
+}
 
-			for (auto it = behs.begin(); it != behs.end(); ++it){
-				(*it)->OnMessage(msg);
-			}
-		}
-		
-		auto callBacks = callBackListeners.find(msg.GetAction());
+void MGameStorage::SendBubblingMessage(GMsg& msg, GNode* actualNode){
 
-		if (callBacks != callBackListeners.end()){
-			vector<std::pair<int, MsgCallback>>& cbck = callBacks->second;
-
-			for (auto it = cbck.begin(); it != cbck.end(); ++it){
-				std::pair<int, MsgCallback>& pair = (*it);
-				pair.second(msg);
-			}
-		}
-
-		return;
-	}
-
+	BubblingType& trav = msg.GetBubblingType();
 
 	if (trav.scope == ScopeType::ROOT){
 		trav.scope = ScopeType::OBJECT;
 		// find root and call recursion
 		GNode* root = actualNode->GetRoot();
 		if (root != nullptr){
-			if (trav.deep && !trav.bubbleDown) SendTraversationMessageToChildren(msg, root);
+			// call this method again from the root
+			if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, root);
 			SendMessageToBehaviors(msg, root);
-			if (trav.deep && trav.bubbleDown) SendTraversationMessageToChildren(msg, root);
+			if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, root);
 		}
 		return;
 	}
@@ -73,50 +58,78 @@ void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 		// find scene and call recursion
 		GNode* scRoot = actualNode->GetSceneRoot();
 		if (scRoot != nullptr){
-			if (trav.deep && !trav.bubbleDown) SendTraversationMessageToChildren(msg, scRoot);
+			if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, scRoot);
 			SendMessageToBehaviors(msg, scRoot);
-			if (trav.deep && trav.bubbleDown) SendTraversationMessageToChildren(msg, scRoot);
+			if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, scRoot);
 		}
 		return;
 	}
 
 	if (trav.scope == ScopeType::OBJECT){
 		trav.scope = ScopeType::OBJECT;
-		if (trav.deep && !trav.bubbleDown) SendTraversationMessageToChildren(msg, actualNode);
+		// call children and itself
+		if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, actualNode);
 		SendMessageToBehaviors(msg, actualNode);
-		if (trav.deep && trav.bubbleDown) SendTraversationMessageToChildren(msg, actualNode);
+		if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, actualNode);
 	}
 	else if (trav.scope == ScopeType::CHILDREN){
 		trav.scope = ScopeType::OBJECT;
-		SendTraversationMessageToChildren(msg, actualNode);
+		// call children only
+		SendBubblingMessageToChildren(msg, actualNode);
 	}
 }
 
-void MGameStorage::SendMessage(GMsg& msg){
-	auto callBack = callBackListeners.find(msg.GetAction());
+void MGameStorage::SendDirectMessage(GMsg& msg){
+	auto behaviors = behListeners.find(msg.GetAction());
 
-	if (callBack != callBackListeners.end()){
-		vector<std::pair<int,MsgCallback>>& callBacks = callBack->second;
+	if (behaviors != behListeners.end()){
+		vector<GBehavior*>& behs = behaviors->second;
 
-		for (auto it = callBacks.begin(); it != callBacks.end(); ++it){
-			MsgCallback cb = (*it).second;
-			cb(msg);
+		for (auto it = behs.begin(); it != behs.end(); ++it){
+			if (((*it)->GetBehState() == BehState::ACTIVE_MESSAGES || (*it)->GetBehState() == BehState::ACTIVE_ALL)){
+				(*it)->OnMessage(msg);
+			}
 		}
 	}
 
-	auto behCol = behListeners.find(msg.GetAction());
+	auto callBacks = callBackListeners.find(msg.GetAction());
 
-	if (behCol != behListeners.end()){
-		vector<GBehavior*>& behaviors = behCol->second;
+	if (callBacks != callBackListeners.end()){
+		vector<std::pair<int, MsgCallback>>& cbck = callBacks->second;
 
-		for (auto it = behaviors.begin(); it != behaviors.end(); ++it){
-			(*it)->OnMessage(msg);
+		for (auto it = cbck.begin(); it != cbck.end(); ++it){
+			std::pair<int, MsgCallback>& pair = (*it);
+			pair.second(msg);
 		}
 	}
 }
+
+void MGameStorage::SendDirectMessageToBehavior(GMsg& msg, int targetId){
+	GBehavior* beh = FindBehaviorById(targetId);
+
+	if (beh != nullptr){
+		beh->OnMessage(msg);
+	}
+}
+
+void MGameStorage::SendDirectMessageToGameObject(GMsg& msg, int targetId){
+	GNode* node = FindGameObjectById(targetId);
+
+	if (node != nullptr){
+		SendBubblingMessage(msg, node);
+	}
+}
+
 
 GNode* MGameStorage::FindGameObjectById(int id) const{
 	for (auto it = allGameObjects.begin(); it != allGameObjects.end(); ++it){
+		if ((*it)->GetId() == id) return (*it);
+	}
+	return nullptr;
+}
+
+GBehavior* MGameStorage::FindBehaviorById(int id) const{
+	for (auto it = allBehaviors.begin(); it != allBehaviors.end(); ++it){
 		if ((*it)->GetId() == id) return (*it);
 	}
 	return nullptr;

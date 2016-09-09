@@ -2,14 +2,17 @@
 #include "GNode.h"
 #include "BeSceneManager.h"
 
-
+/**
+* Game factory with methods for calculating positions
+* All game object construction methods should be implemented
+* in classes derived from this one
+*/
 class MGameFactory{
 
-protected:
+public:
 
 	ofVec2f GetCenter();
 
-	
 	void SetRenderImage(GNode* node, string imgPath, bool isHittable);
 
 	void SetRenderImage(GNode* node, string imgPath, float pScaleX, ofVec2f pPos, ofVec2f anchor);
@@ -26,14 +29,11 @@ protected:
 
 	void SetTransformAbs(GNode* node, ofVec2f pos, bool absolutePos, float scaleX, bool absoluteScale, ofVec2f anchor, int width, int height, GNode* parent);
 
+	float TranslateSpeed(float speed);
 
-public:
 	BeSceneManager* sceneManager;
 
-	void Init(){
-
-	}
-	void Terminate(){
+	virtual void Init(){
 
 	}
 

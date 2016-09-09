@@ -1,16 +1,16 @@
 #pragma once
 
 #include "EnFlags.h"
-#include "Enums.h"
+#include "MEnums.h"
 #include "GMsg.h"
 #include <list>
-#include "Utils.h"
+#include "MUtils.h"
 #include "MFacade.h"
 
 class GNode;
 
 /**
-* GBehavior - common abstract class for all behaviors
+* Abstract class for all behaviors
 *
 */
 class GBehavior{
@@ -18,72 +18,101 @@ class GBehavior{
 protected:
 	// identifier incremental counter
 	static int idCounter;
-	// element type {ALL, VIEW, MODEL}
-	const ElemType _elemType;
+	// element type {VIEW, MODEL}
+	const ElemType elemType;
 	// identifier
-	const int _id;
+	const int id;
 	// behavior running state
-	BehState _behState;
-
-	// will set GNode object itself
+	BehState behState;
+	// owner node
 	GNode* owner;
+	// indicator if this behavior has ended
+	bool ended;
+
+	/**
+	* Creates a new behavior
+	* @param elemType element type {VIEW, MODEL}
+	*/
+	GBehavior(ElemType elemType);
 
 	virtual ~GBehavior()
 	{
 
 	}
 
-	void RegisterListening(int action1){
-		RegisterListening(action1, -1, -1, -1);
-	}
-
-	void RegisterListening(int action1, int action2){
-		RegisterListening(action1, action2, -1, -1);
-	}
-
-	void RegisterListening(int action1, int action2, int action3){
-		RegisterListening(action1, action2, action3, -1);
-	}
-
-	void RegisterListening(int action1, int action2, int action3, int action4){
-		if (action1 != -1) COGRegisterListener(action1, this);
-		if (action2 != -1) COGRegisterListener(action2, this);
-		if (action3 != -1) COGRegisterListener(action3, this);
-		if (action4 != -1) COGRegisterListener(action4, this);
-	}
-
 	/**
-	* Creates a new behavior
-	* @param elemType element type {ALL, VIEW, MODEL}
-	* @param msgFlags message acceptation mask
+	* Registers itself as a action listener
+	* @param action1 action to listen to
 	*/
-	GBehavior(ElemType elemType);
+	void RegisterListening(int action1);
 
 	/**
-	* Sends a message
-	* @param traverse state machine that indicates who should process this message
+	* Registers itself as a action listener
+	* @param action1 action to listen to
+	* @param action2 action to listen to
+	*/
+	void RegisterListening(int action1, int action2);
+
+	/**
+	* Registers itself as a action listener
+	* @param action1 action to listen to
+	* @param action2 action to listen to
+	* @param action3 action to listen to
+	*/
+	void RegisterListening(int action1, int action2, int action3);
+
+	/**
+	* Registers itself as a action listener
+	* @param action1 action to listen to
+	* @param action2 action to listen to
+	* @param action3 action to listen to
+	* @param action4 action to listen to
+	*/
+	void RegisterListening(int action1, int action2, int action3, int action4);
+
+	/**
+	* Sends a message to any set of behaviors
+	* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
 	* @param action id of action; see Actions namespace for common action ids
 	* @param data payload
-	* @param target target game object
+	* @param source source game object that is a part of message
 	*/
-	void SendMessage(Traversation traverse, int action, void* data, GNode* target) const;
+	void SendMessage(BubblingType bubblingType, int action, void* data, GNode* source) const;
+
+	/**
+	* Sends a message to one behavior with specific id
+	* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
+	* @param action id of action; see Actions namespace for common action ids
+	* @param data payload
+	* @param source source game object that is a part of message
+	* @param behaviorId id of behavior that should get this message
+	*/
+	void SendDirectMessage(BubblingType bubblingType, int action, void* data, GNode* source, int behaviorId) const;
 
 public:
 
+	/**
+	* Initialization procedure;
+	* Any attribute that is owned only by specific behavior should
+	* be created here
+	*/
 	virtual void Init(){
 
 	}
 
+	/**
+	* Gets the owner node
+	*/
 	const GNode* GetOwner() const{
 		return owner;
 	}
 
 	/**
 	* Gets element type
-	* @return {ALL, VIEW, MODEL}
+	* @return {VIEW, MODEL}
 	*/
 	const ElemType GetElemType() const{
-		return _elemType;
+		return elemType;
 	}
 
 	/**
@@ -91,7 +120,7 @@ public:
 	* @return incremental value
 	*/
 	const int GetId() const{
-		return _id;
+		return id;
 	}
 
 	/**
@@ -99,19 +128,41 @@ public:
 	* @return running state
 	*/
 	const BehState GetBehState() const{
-		return _behState;
+		return behState;
 	}
 
 	/**
-	* Sets behavior state
+	* Sets behavior running state
 	* @param val value
 	*/
 	void SetBehState(BehState val){
-		_behState = val;
+		behState = val;
 	}
 
 	/**
-	* Receives a message
+	* Returns true, if the behavior has ended
+	*/
+	bool Ended(){
+		return ended;
+	}
+
+	/**
+	* Finishes the behavior
+	*/
+	void Finish(){
+		ended = true;
+	}
+
+	/**
+	* Restarts the behavior
+	*/
+	void Restart(){
+		ended = false;
+		Init();
+	}
+
+	/**
+	* Handler for accepting the message
 	* @param GMsg received message
 	*/
 	virtual void OnMessage(GMsg& msg){
@@ -119,28 +170,28 @@ public:
 	}
 
 	/**
-	* Updates behavior inner state
+	* Updates behavior and owning object inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun 
 	*/
 	virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
 	bool operator==(int id){
-		return this->_id == id;
+		return this->id == id;
 	}
 
 	bool operator==(const GBehavior& other){
-		return _id == other._id;
+		return id == other.id;
 	}
 
 	bool operator!=(int id){
-		return this->_id != id;
+		return this->id != id;
 	}
 
 	bool operator!=(const GBehavior& other){
-		return _id != other._id;
+		return id != other.id;
 	}
 
-	// only game objects can access private members (especially the owner property)
+	// allow to access GNode private members
 	friend class GNode;
 };

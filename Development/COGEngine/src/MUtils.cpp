@@ -25,7 +25,7 @@ string string_format(const std::string fmt_str, ...){
 	return string(formatted.get());
 }
 
-void spaces(int howMany, ostringstream& ss){
+void spaces(int howMany, ostream& ss){
 	for (int i = 0; i < howMany; i++){
 		ss << " ";
 	}

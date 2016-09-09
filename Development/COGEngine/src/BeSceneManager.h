@@ -5,12 +5,21 @@
 #include "GNode.h"
 #include "BeTween.h"
 
+/**x
+* Behavior scene manager
+*/
 class BeSceneManager : public GBehavior{
 public:
+	// scene to switch to
 	GNode* switchedScene;
+	// actually displayed scene
 	GNode* actualScene;
+	// indicator, if this behavior is waiting until tween ends
 	bool waitingForTween;
 
+	/**
+	* Creates a new behavior for scene managing
+	*/
 	BeSceneManager() : GBehavior(ElemType::MODEL){
 		actualScene = nullptr;
 		waitingForTween = false;
@@ -25,35 +34,51 @@ public:
 		if (msg.GetAction() == Actions::TWEEN_ENDED && waitingForTween){
 
 			// change zindex back to original value
-			actualScene->GetTransform().LocalPos.z = 1;
+			actualScene->GetTransform().localPos.z = 1;
 			switchedScene->SetRunningMode(INVISIBLE);
 			waitingForTween = false;
 		}
 	}
 	
+	/**
+	* Switches to another scene without tweening
+	* @param scene scene to switch to
+	*/
 	void SwitchToScene(GNode* scene){
+
 		if (actualScene != nullptr){
+			// hide scene immediately
 			actualScene->SetRunningMode(INVISIBLE);
 		}
+
+		// translate new scene
 		actualScene = scene;
 		scene->SetRunningMode(RUNNING);
-		scene->GetTransform().LocalPos.x = COGGetWidth() / 2;
-		scene->GetTransform().LocalPos.y = COGGetHeight() / 2;
+		scene->GetTransform().localPos.x = COGGetWidth() / 2;
+		scene->GetTransform().localPos.y = COGGetHeight() / 2;
 	}
 
+	/**
+	* Switches to another scene with tweening
+	* @param scene scene to switch to
+	* @param tweenDir tween direction
+	*/
 	void SwitchToScene(GNode* scene, TweenDirection tweenDir){
 		actualScene->SetRunningMode(RUNNING);
 		scene->SetRunningMode(RUNNING);
-		owner->AddBehavior(new BeSlideTween(tweenDir, scene, actualScene,2));
-		scene->GetTransform().LocalPos.z = 0;
-		// throw it away
-		scene->GetTransform().LocalPos.x = COGGetWidth()*10;
+		owner->AddBehavior(new BeSlideTween(tweenDir, scene, actualScene,2), false);
+		
+		// add new scene to the front
+		scene->GetTransform().localPos.z = 0;
+		// move the scene away; tween behavior will set its position itself
+		scene->GetTransform().localPos.x = COGGetWidth()*10;
 
-		actualScene->GetTransform().LocalPos.z = 1;
+		actualScene->GetTransform().localPos.z = 1;
 		
 		switchedScene = actualScene;
 		actualScene = scene;
 
+		// wait for tween
 		waitingForTween = true;
 	}
 

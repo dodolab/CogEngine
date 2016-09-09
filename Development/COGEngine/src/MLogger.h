@@ -3,23 +3,45 @@
 #include <sstream>
 #include <iostream>
 #include "ofUtils.h"
+#include "MUtils.h"
 
 using namespace std;
 
+/*! Logging level */
 enum class LogLevel{
-	LERROR, LINFO, LDEBUG
+	LERROR,		/*!< log only errors */
+	LINFO,		/*!< log errors and info */
+	LDEBUG		/*!< log errors, info and debug messages */
 };
 
 
+/**
+* Common class for all logger channels
+*/
 class LoggerChannel{
 public:
 	virtual ~LoggerChannel(){}
-	virtual void Log(LogLevel level, int depth, string message) = 0;
-	virtual void Flush(){
 
+	/**
+	* Logs the message for selected level
+	* @param level logging level
+	* @param depth log depth (padding from left in text output)
+	* @param message message to log
+	*/
+	virtual void Log(LogLevel level, int depth, string message) = 0;
+
+	/**
+	* Flushes logged messages
+	* e.g. for file channel it saves messages into output file
+	*/
+	virtual void Flush(){
 	}
 
 protected:
+
+	/**
+	* Gets log level in string
+	*/
 	string GetLogLevel(LogLevel level){
 		switch (level){
 		case LogLevel::LERROR:
@@ -33,19 +55,18 @@ protected:
 		}
 	}
 
-	void AppendSpaces(int howMany, ostream& ss){
-		for (int i = 0; i < howMany; i++){
-			ss << " ";
-		}
-	}
 };
 
+/**
+* Channel that logs to the console
+*/
 class ConsoleLoggerChannel : public LoggerChannel{
 public:
 	virtual ~ConsoleLoggerChannel(){};
+
 	virtual void Log(LogLevel level, int depth, string message){
 
-		AppendSpaces(depth * 2, cout);
+		spaces(depth * 2, cout);
 
 		cout << GetLogLevel(level);
 		cout << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
@@ -53,6 +74,9 @@ public:
 	}
 };
 
+/**
+* Channel that logs to the file
+*/
 class FileLoggerChannel : public LoggerChannel{
 public:
 	FileLoggerChannel(const string & path, bool append) : path(path), append(append), anyLog(false){
@@ -64,7 +88,7 @@ public:
 	}
 
 	virtual void Log(LogLevel level, int depth, string message){
-		AppendSpaces(depth * 2, st);
+		spaces(depth * 2, st);
 
 		st << GetLogLevel(level);
 		st << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
@@ -86,28 +110,32 @@ public:
 		}
 	}
 
-private:
+protected:
+	// indicator if some message has been appended
 	bool anyLog;
 	ostringstream st;
+	// path to log file
 	string path;
+	// if true, new messages will be appended to already existing file
 	bool append;
 };
 
 
-
-
+/**
+* Log controller
+*/
 class MLogger{
 
 protected:
-	ostringstream st;
 	LoggerChannel* channel;
 
-	void Log(LogLevel level, int depth, const char* format, va_list args){
-		st << "ERROR: " << ofVAArgsToString(format, args) << endl;
-	}
 
 public:
 
+	/**
+	* Creates a new logger
+	* @param channel default logging channel
+	*/
 	MLogger(LoggerChannel* channel) : channel(channel){
 	
 	}
@@ -116,18 +144,34 @@ public:
 		delete channel;
 	}
 
+	/**
+	* Logs error message
+	* @param depth log depth (padding from left)
+	*/
 	void LogError(int depth, const char* format, va_list args){
 		channel->Log(LogLevel::LERROR, depth, ofVAArgsToString(format,args));
 	}
 
+	/**
+	* Logs info message
+	* @param depth log depth (padding from left)
+	*/
 	void LogInfo(int depth, const char* format, va_list args){
 		channel->Log(LogLevel::LINFO, depth, ofVAArgsToString(format, args));
 	}
 
+	/**
+	* Logs debug message
+	* @param depth log depth (padding from left)
+	*/
 	void LogDebug(int depth, const char* format, va_list args){
 		channel->Log(LogLevel::LDEBUG, depth, ofVAArgsToString(format, args));
 	}
 
+	/**
+	* Flushes logged messages
+	* e.g. for file channel it saves messages into output file
+	*/
 	void Flush(){
 		channel->Flush();
 	}

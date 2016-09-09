@@ -1,53 +1,57 @@
 #pragma once
 
 #include "GBehavior.h"
+#include "MEnums.h"
 
-
-/**
+/**x
 * Behavior for mapping key inputs to ACTIONS
 */
 class BeInputKey : public GBehavior{
 private:
+	map<int, Act> keyMapping;
+
+	// Gets action by key
 	Act GetAction(int key){
-		if (key == OF_KEY_LEFT) return Act::LEFT;
-		if (key == OF_KEY_RIGHT) return Act::RIGHT;
-		if (key == OF_KEY_SHIFT) return Act::FIRE;
-		if (key == OF_KEY_TAB) return Act::SWITCH;
+		auto find = keyMapping.find(key);
+		if (find != keyMapping.end()) return (*find).second;
+
 		return Act::NONE;
 	}
 
 
 public:
-	BeInputKey() : GBehavior(ElemType::MODEL){
+	/**
+	* Creates a new behavior that maps keys to actions
+	* @param keyMapping key-to-action map
+	*/
+	BeInputKey(map<int, Act> keyMapping) : GBehavior(ElemType::MODEL), keyMapping(keyMapping){
 
 	}
 
+	void Init(){
+		if (!owner->HasAttr(Attrs::ACTIONS)){
+			owner->AddAttr(Attrs::ACTIONS, EnFlags());
+		}
+	}
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
 
-	//	if (owner->HasAttr(Attrs::ALLOWED_ACTIONS)){
+		EnFlags& actions = owner->GetAttr<EnFlags>(Attrs::ACTIONS);
 
-			if (!owner->HasAttr(Attrs::ACTIONS)){
-				owner->AddAttr(Attrs::ACTIONS, EnFlags());
-			}
+		for (auto key : COGGetPressedKeys()){
 
-			EnFlags& actions = owner->GetAttr<EnFlags>(Attrs::ACTIONS);
-			//EnFlags& allowedActions = owner->GetAttr<EnFlags>(Attrs::ALLOWED_ACTIONS);
+			if (!key.IsHandled() || key.handlerId == owner->GetId()){
+				// handle key press
+				key.handlerId = owner->GetId();
 
-			for (auto key : COGGetPressedKeys()){
-
-				if (!key.IsHandled() || key.handlerId == owner->GetId()){
-					key.handlerId = owner->GetId();
-
-					Act inAct = GetAction(key.key);
-					if (inAct != Act::NONE)
-					{//&& allowedActions.HasState((int)inAct)){
-						if (!key.ended) actions.SetState((int)inAct);
-						else actions.ResetState((int)inAct);
-					}
+				Act inAct = GetAction(key.key);
+				if (inAct != Act::NONE)
+				{
+					if (!key.ended) actions.SetState((int)inAct);
+					else actions.ResetState((int)inAct);
 				}
 			}
 		}
-	//}
+	}
 };
 

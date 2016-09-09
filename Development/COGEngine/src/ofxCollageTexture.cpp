@@ -1,28 +1,5 @@
-/***********************************************************************
- 
- Copyright (C) 2011 by Zach Gage
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- 
- ************************************************************************/ 
 
-#include "CollageTexture.h"
+#include "ofxCollageTexture.h"
 
 CollageTexture::~CollageTexture()
 {
@@ -77,8 +54,6 @@ void CollageTexture::allocate(int w, int h, int internalGlDataType, int internal
 	
 	texData.glTypeInternal = internalGlDataType;
 	
-	
-	// MEMO: todo, add more types
 	switch(texData.glTypeInternal) {
 #ifndef TARGET_OPENGLES	
 		case GL_RGBA32F_ARB:
@@ -106,7 +81,8 @@ void CollageTexture::allocate(int w, int h, int internalGlDataType, int internal
 	// attempt to free the previous bound texture, if we can:
 	clear();
 	
-	glGenTextures(1, (GLuint *)&texData.textureID);   // could be more then one, but for now, just one
+	// could be more then one, but for now, just one
+	glGenTextures(1, (GLuint *)&texData.textureID);   
 	
 	glEnable(texData.textureTarget);
 	
@@ -121,14 +97,11 @@ void CollageTexture::allocate(int w, int h, int internalGlDataType, int internal
 	// can't do this on OpenGL ES: on full-blown OpenGL, 
 	// internalGlDataType and glDataType (GL_LUMINANCE below)
 	// can be different; on ES they must be exactly the same.
-	//		glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, GL_LUMINANCE, PIXEL_TYPE, 0);  // init to black...
-	glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, (GLint) texData.tex_w, (GLint) texData.tex_h, 0, internal.glType, internal.pixelType, 0);  // init to black...
+	// init to black
+	glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, (GLint) texData.tex_w, (GLint) texData.tex_h, 0, internal.glType, internal.pixelType, 0); 
 #else
 	glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, texData.tex_w, texData.tex_h, 0, texData.glTypeInternal, GL_UNSIGNED_BYTE, 0);
 #endif
-	
-	
-	
 	
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	
@@ -140,11 +113,11 @@ void CollageTexture::allocate(int w, int h, int internalGlDataType, int internal
 	texData.bAllocated = true;
 }
 
-void CollageTexture::pasteImage(int x, int y, string textureName, int glType)
+void CollageTexture::pasteImage(int x, int y, string texturePath, int glType)
 {
 	ofImage loader;
 	loader.setUseTexture(false);
-	loader.loadImage(textureName);
+	loader.loadImage(texturePath);
 	pasteImage(x, y, loader.getWidth(), loader.getHeight(), loader.getPixels(), glType);
 	
 	loader.clear();
@@ -171,8 +144,8 @@ void CollageTexture::pasteImage(int x, int y, int w, int h, unsigned char * pxls
 		
 	while(1)
 	{
-		
-		if(x >= c_width || x-startX >= w) // if we're passed the edge of the collage or done with a row of the image, go to the next row
+		// if we're passed the edge of the collage or done with a row of the image, go to the next row
+		if(x >= c_width || x-startX >= w) 
 		{
 			x = startX;
 			y++;
@@ -180,11 +153,13 @@ void CollageTexture::pasteImage(int x, int y, int w, int h, unsigned char * pxls
 			sourceIndex = (sourceRow * w)*bpp;
 			collageIndex = getIndex(x,y);
 			
-			if(collageIndex >= collageMax) //if we're passed the edge of the collage, break!
+			//if we're passed the edge of the collage, break!
+			if(collageIndex >= collageMax) 
 				break;
 		}
 		
-		if(sourceIndex >= sourceMax) // have we managed to go past the end of any files?
+		// have we managed to go past the end of any files?
+		if(sourceIndex >= sourceMax) 
 			break;
 		
 		//if we're still good, copy in the pixels
@@ -239,8 +214,8 @@ int CollageTexture::getIndex(int x, int y)
 void CollageTexture::finish()
 {
 	loadData(collage, c_width, c_height, c_type);
-	//delete[] collage;
-	//clear collage
+
+	// reset collage data
 	for(int i=0;i<c_width*c_height*c_bpp;i++)
 		collage[i]=0;
 }

@@ -5,7 +5,7 @@
 #include <vector>
 #include "EnInputAct.h"
 #include "ofBaseTypes.h"
-#include "SmartPointer.h"
+#include "ofxSmartPointer.h"
 #include <functional>
 
 class GBehavior;
@@ -23,12 +23,10 @@ void COGLoggerFlush();
 // =================== MENVIRONMENT ====================
 
 vector<EnInputAct>& COGGetPressedKeys();
-
 vector<EnInputAct>& COGGetPressedPoints();
-
 int COGGetWidth();
-
 int COGGetHeight();
+ofVec2f COGGetSize();
 
 // =================== MRESOURCE =======================
 
@@ -43,8 +41,8 @@ int COGRegisterCallback(int action, MsgCallback callback);
 bool COGUnregisterCallback(int action, int id);
 void COGRegisterListener(int action, GBehavior* beh);
 void COGUnregisterListener(int action, GBehavior* beh);
-void COGSendTraversationMessage(GMsg& msg, GNode* actualNode);
-void COGSendMessage(GMsg& msg);
+void COGSendMessage(GMsg& msg, GNode* actualNode);
+void COGSendDirectMessageToBehavior(GMsg& msg, int targetId);
 GNode* COGFindGameObjectById(int id);
 int COGGetGameObjectsCountByTag(string tag);
 GNode* COGFindGameObjectByTag(string tag);
@@ -57,6 +55,6 @@ void COGRemoveGameObject(GNode* gameObject);
 bool COGAddBehavior(GBehavior* beh);
 void COGRemoveBehavior(GBehavior* beh);
 
-// =================== MENGINE ========================
+// =================== MFACTORY ========================
 
 float COGTranslateSpeed(float speed);
