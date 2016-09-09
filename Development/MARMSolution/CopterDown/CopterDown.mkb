@@ -1,0 +1,19 @@
+#!/usr/bin/env mkb
+files
+{
+    CopterDown.cpp
+}
+
+subprojects
+{
+    iwutil
+    iw2dscenegraphcore
+    iw2dscenegraph
+    iwgx
+    iwresmanager
+    iwtween
+}
+
+deployment
+{
+}
