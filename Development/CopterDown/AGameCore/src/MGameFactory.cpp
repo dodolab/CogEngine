@@ -206,7 +206,7 @@ GNode* CreateThird(){
 
 	output->AddChild(child);
 
-	for (int i = 0; i < 1000; i++){
+	for (int i = 0; i < 8000; i++){
 		GNode* particle = new GNode(ObjType::OBJECT, 0, "other");
 
 		Vectorf2 randomTransform(IwRandMinMax(1, MEngine.environmentCtrl->GetWidth()), IwRandMinMax(MEngine.environmentCtrl->GetHeight() / 2 - MEngine.environmentCtrl->GetWidth() / 2,
@@ -290,22 +290,22 @@ Vectorf2 MGameFactory::GetPercentageVec(float xPerc, float yPerc){
 GNode* MGameFactory::CreateRoot(){
 
 	GNode* _root = new GNode(ObjType::ROOT, 0, "root");
-	GNode* first = CreateFirst();
-	GNode* second = CreateSecond();
+	/*GNode* first = CreateFirst();
+	GNode* second = CreateSecond();*/
 	GNode* third = CreateThird();
 
-	GNode* maskLeft = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf2(-MEngine.environmentCtrl->GetWidth(), 0));
+	/*GNode* maskLeft = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf2(-MEngine.environmentCtrl->GetWidth(), 0));
 	GNode* maskRight = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf2(0, 0));
 	GNode* maskCenter = CreateMask(MEngine.environmentCtrl->GetWidth(), MEngine.environmentCtrl->GetHeight(), Vectorf2(MEngine.environmentCtrl->GetWidth(), 0));
 
 	second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth();
 	third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
 
-	_root->AddChild(second);
+	_root->AddChild(second);*/
 	_root->AddChild(third);
 
 	//_root->AddChild(maskCenter);
-	_root->AddChild(first);
+	//_root->AddChild(first);
 	
 	
 	//_root->AddChild(maskLeft);

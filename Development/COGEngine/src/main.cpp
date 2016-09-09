@@ -1,10 +1,10 @@
 #include "ofMain.h"
 #include "MGameEngine.h"
 #include "CopterFactory.h"
-
 //========================================================================
 
-#ifndef TARGET_ANDROID
+#ifdef TARGET_WINDOWS
+
 #include "ofApp.h"
 
 int main( ){
@@ -18,8 +18,8 @@ int main( ){
 
 
 #ifdef TARGET_ANDROID
-#include <jni.h>
 #include "ofAndroidApp.h"
+#include <jni.h>
 
 int main(){
 	ofSetupOpenGL(1280,720, OF_WINDOW);			// <-------- setup the GL context
