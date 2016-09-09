@@ -42,7 +42,7 @@ public:
 	}
 
 	~Msg(){
-		delete _data;
+		//delete _data;
 	}
 
 	/**

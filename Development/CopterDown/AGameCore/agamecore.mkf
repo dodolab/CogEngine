@@ -46,7 +46,6 @@ files
     (docs)
     gamecore.config.txt
 
-	[Data]
-    (data)
+
 
 }
