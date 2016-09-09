@@ -1,39 +1,39 @@
 #pragma once
 
- class Engine;
-extern Engine COGEngine;
+ class CogEngine;
+extern CogEngine COGEngine;
 
-#include "Cache.h"
-#include "Storage.h"
-#include "Logger.h"
-#include "Utils.h"
-#include "Node.h"
-#include "Factory.h"
-#include "Storage.h"
-#include "Tween.h"
-#include "SceneManager.h"
-#include "Renderer.h"
-#include "Environment.h"
+#include "CogCache.h"
+#include "CogStorage.h"
+#include "CogLogger.h"
+#include "CogUtils.h"
+#include "CogNode.h"
+#include "CogFactory.h"
+#include "CogStorage.h"
+#include "CogTween.h"
+#include "CogSceneManager.h"
+#include "CogRenderer.h"
+#include "CogEnvironment.h"
 
 /**
 * COG engine that holds references to all other components and
 * executes drawing and update loops
 */
-class Engine{
+class CogEngine{
 private:
 	// root node, created by factory
-	Node* _root;
+	CogNode* _root;
 	// frame counter
 	int frameCounter;
 public:
-	MEnvironmentCtrl* environmentCtrl;
-	Storage* resourceCtrl;
-	Factory* factory;
-	Repository* storage;
-	Logger* logger;
-	Renderer* renderer;
+	CogEnvironment* environmentCtrl;
+	CogCache* resourceCtrl;
+	CogFactory* factory;
+	CogRepository* storage;
+	CogLogger* logger;
+	CogRenderer* renderer;
 
-	Engine(){
+	CogEngine(){
 		_root = nullptr;
 		environmentCtrl = nullptr;
 		resourceCtrl = nullptr;
@@ -44,7 +44,7 @@ public:
 		frameCounter = 0;
 	}
 
-	~Engine(){
+	~CogEngine(){
 		//delete _root;
 		delete environmentCtrl;
 		delete resourceCtrl;
@@ -59,7 +59,7 @@ public:
 	* @param factory default COG factory
 	* @param config configuration xml
 	*/
-	void Init(Factory* factory, spt<ofxXmlSettings> config);
+	void Init(CogFactory* factory, spt<ofxXmlSettings> config);
 	
 	/**
 	* Executes one update cycle; this method is called by App

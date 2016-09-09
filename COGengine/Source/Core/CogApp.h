@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxCogMain.h"
-#include "Factory.h"
+#include "CogFactory.h"
 
 #ifdef ANDROID
 #include "ofxAndroid.h"
@@ -24,7 +24,7 @@ protected:
 	// time elapsed Tween frames
 	uint64 delta;
 	// link to default factory
-	Factory* factory;
+	CogFactory* factory;
 
 	spt<ofxXmlSettings> config;
 
@@ -34,7 +34,7 @@ public:
 	* Creates a new application wrapper
 	* @param factory default factory
 	*/
-	CogApp(Factory* factory) : factory(factory){
+	CogApp(CogFactory* factory) : factory(factory){
 	}
 
 	/**
@@ -42,7 +42,7 @@ public:
 	* @param factory default factory
 	* @param config configuration XML
 	*/
-	CogApp(Factory* factory, spt<ofxXmlSettings> config) : factory(factory), config(config){
+	CogApp(CogFactory* factory, spt<ofxXmlSettings> config) : factory(factory), config(config){
 	}
 
 	// setup function, called before first draw and update

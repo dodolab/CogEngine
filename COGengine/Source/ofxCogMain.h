@@ -15,13 +15,13 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "Enums.h"
+#include "CogEnums.h"
 #include "ofxSmartPointer.h"
 #include "ofSoundPlayer.h"
 #include "ofMain.h"
 #include "ofxSQLite.h"
 #include "ofxXmlSettings.h"
-#include "Error.h"
+#include "CogError.h"
 #include <functional>
 #include <list>
 #include <stdexcept>

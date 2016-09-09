@@ -1,22 +1,22 @@
 #include "CogEngine.h"
-#include "TranslateAnim.h"
-#include "Node.h"
-#include "RotateAnim.h"
-#include "Factory.h"
-#include "Cache.h"
+#include "CogTranslateAnim.h"
+#include "CogNode.h"
+#include "CogRotateAnim.h"
+#include "CogFactory.h"
+#include "CogCache.h"
 #include "ofSoundPlayer.h"
 
-Engine COGEngine;
+CogEngine COGEngine;
 
 
-void Engine::Init(Factory* factory, spt<ofxXmlSettings> config){
+void CogEngine::Init(CogFactory* factory, spt<ofxXmlSettings> config){
 
 	// create components
-	environmentCtrl = new MEnvironmentCtrl();
-	resourceCtrl = new Storage();
-	logger = new Logger(config);
-	storage = new Repository();
-	renderer = new Renderer();
+	environmentCtrl = new CogEnvironment();
+	resourceCtrl = new CogCache();
+	logger = new CogLogger(config);
+	storage = new CogRepository();
+	renderer = new CogRenderer();
 	this->factory = factory;
 	
 	// initialize components 
@@ -30,7 +30,7 @@ void Engine::Init(Factory* factory, spt<ofxXmlSettings> config){
 }
 
 
-void Engine::Update(uint64 delta, uint64 absolute){
+void CogEngine::Update(uint64 delta, uint64 absolute){
 	frameCounter++;
 
 	// update transforms
@@ -48,7 +48,7 @@ void Engine::Update(uint64 delta, uint64 absolute){
 	ofSoundUpdate();
 }
 
-void Engine::Draw(uint64 delta, uint64 absolute){
+void CogEngine::Draw(uint64 delta, uint64 absolute){
 	renderer->ClearCounters();
 	// clear the drawing surface
 	ofBackground(50,50,50);
