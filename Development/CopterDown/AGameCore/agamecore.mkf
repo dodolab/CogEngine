@@ -1,0 +1,15 @@
+includepath header
+includepath src
+
+files
+{
+    (header)
+    Dummy.h
+
+    (src)
+    Dummy.cpp
+
+    [Docs]
+    (docs)
+    gamecore.config.txt
+}
