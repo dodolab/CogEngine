@@ -5,9 +5,15 @@
 #include "MGameCtrl.h"
 #include "MResourceCtrl.h"
 #include "s3eTypes.h"
+#include "GNode.h"
+#include "IwResGroup.h"
 
 class MGameEngine{
 private:
+	GNode* root;
+	uint64 absolute;
+	CIwResGroup* resourceGroup;
+
 	MEnvironmentCtrl environmentCtrl;
 	MGameCtrl gameCtrl;
 	MResourceCtrl resourceCtrl;
