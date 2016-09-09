@@ -100,7 +100,7 @@ void GNode::SendMessageNoResp(Msg& msg){
 
 void GNode::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
 
-	CIwFMat2D absoluteMatrix = _transform*absMatrix;
+	CIwFMat2D absoluteMatrix = _transform.GetMatrix()*absMatrix;
 	
 
 	for (auto it = _children.begin(); it != _children.end(); ++it){
@@ -117,7 +117,7 @@ void GNode::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& a
 
 void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix){
 
-	CIwFMat2D absoluteMatrix = _transform*absMatrix;
+	CIwFMat2D absoluteMatrix = _transform.GetMatrix()*absMatrix;
 
 	for (auto it = _children.begin(); it != _children.end(); ++it){
 		(*it)->Draw(delta, absolute, absoluteMatrix);
@@ -247,11 +247,11 @@ void GNode::SetSubType(int val){
 	this->_subType = val;
 }
 
-CIwFMat2D& GNode::GetTransform(){
+EnTransform& GNode::GetTransform(){
 	return _transform;
 }
 
-void GNode::SetTransform(CIwFMat2D val){
+void GNode::SetTransform(EnTransform val){
 	this->_transform = val;
 }
 

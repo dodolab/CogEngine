@@ -15,11 +15,11 @@ void BeMove::OnMessage(Msg& msg){
 }
 
 void BeMove::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner){
-	CIwFMat2D transform = owner->GetTransform();
+	EnTransform& transform = owner->GetTransform();
 
 	CIwVec2 velocity = owner->GetAttr<CIwVec2>(Attrs::VELOCITY);
 
-	transform.t.x += velocity.x * delta;
-	transform.t.y += velocity.y * delta;
+	transform.LocalPos.x += velocity.x * delta;
+	transform.LocalPos.y += velocity.y * delta;
 }
 
