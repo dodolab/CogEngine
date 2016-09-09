@@ -257,6 +257,9 @@
     <ClInclude Include="src\tinyxml.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BeSceneManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

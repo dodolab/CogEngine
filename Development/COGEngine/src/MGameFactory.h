@@ -1,10 +1,12 @@
 #pragma once
 #include "GNode.h"
+#include "BeSceneManager.h"
 
 
 class MGameFactory{
 
 protected:
+
 	ofVec3f CalcScale(spt<ofImage> img, float width, GNode* scene);
 
 	float RelPosX(float posX, GNode* scene);
@@ -28,6 +30,8 @@ protected:
 
 
 public:
+	BeSceneManager* sceneManager;
+
 	void Init(){
 
 	}

@@ -46,8 +46,8 @@ void MGameEngine::Init(MGameFactory* factory){
 
 	environmentCtrl->Init();
 	resourceCtrl->Init();
-	factory->Init();
 	storage->Init();
+	factory->Init();
 	_root = factory->CreateRoot();
 }
 

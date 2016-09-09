@@ -75,10 +75,14 @@ void GNode::UpdateTransforms(){
 
 void GNode::Update(const uint64 delta, const uint64 absolute){	
 
-	if (_runMode == RunningMode::PAUSED_ALL) return;
+	if (_runMode == RunningMode::PAUSED_ALL || _runMode == RunningMode::INVISIBLE) return;
 
 	if (_runMode != RunningMode::PAUSED_ITSELF){
+		int behCount = _behaviors.size();
+		int behCounter = 0;
 		for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+			// prevention from executing just added behaviors
+			if (behCounter++ == behCount) break;
 			GBehavior* beh = *it;
 			if (beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
 				beh->Update(delta, absolute);
@@ -120,7 +124,13 @@ void GNode::ClearElementsForRemoving(){
 
 void GNode::Draw(const uint64 delta, const uint64 absolute){
 
+	if (_runMode == RunningMode::INVISIBLE) return;
+
+	int behCount = _behaviors.size();
+	int behCounter = 0;
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
+		// prevention from executing just added behaviors
+		if (behCounter++ == behCount) break;
 		GBehavior* beh = (*it);
 
 		if (beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
