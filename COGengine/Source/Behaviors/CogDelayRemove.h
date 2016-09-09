@@ -4,37 +4,41 @@
 #include "CogTranslateAnim.h"
 #include "CogMsg.h"
 
-/**x
-* Behavior that removes object with delay
-*/
-class CogDelayRemove : public CogBehavior{
-protected:
-	// number of milliseconds for delay
-	int millis;
-	// actual time
-	int actual;
-	// if true, object will be erased
-	bool erase;
+namespace Cog {
 
-public:
-
-	/**
-	* Creates a new behavior that removes object with delay
-	* @param millis number of milliseconds for delay
-	* @param erase if true, object will be erased
+	/**x
+	* Behavior that removes object with delay
 	*/
-	CogDelayRemove(int millis, bool erase) :  millis(millis), actual(0), erase(erase){
+	class CogDelayRemove : public CogBehavior {
+	protected:
+		// number of milliseconds for delay
+		int millis;
+		// actual time
+		int actual;
+		// if true, object will be erased
+		bool erase;
 
-	}
+	public:
 
-	virtual void Update(const uint64 delta, const uint64 absolute){
-		actual += delta;
+		/**
+		* Creates a new behavior that removes object with delay
+		* @param millis number of milliseconds for delay
+		* @param erase if true, object will be erased
+		*/
+		CogDelayRemove(int millis, bool erase) : millis(millis), actual(0), erase(erase) {
 
-		if (actual > millis){
-			owner->GetParent()->RemoveChild(owner,erase);
-			Finish();
 		}
-	}
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+			actual += delta;
+
+			if (actual > millis) {
+				owner->GetParent()->RemoveChild(owner, erase);
+				Finish();
+			}
+		}
 
 
-};
+	};
+
+}

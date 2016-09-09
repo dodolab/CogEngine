@@ -3,51 +3,55 @@
 #include "CogBehavior.h"
 #include "CogNode.h"
 
-/**x
-* Behavior for rotation animation
-*/
-class CogRotateAnim : public CogBehavior{
+namespace Cog {
 
-private:
-	// starting rotation
-	float from;
-	// ending rotation
-	float to;
-	// rotation speed in angles per second
-	float speed;
-	// if true, rotation will be additive (doesn't override actual rotation)
-	bool additive;
-	// actual rotation value
-	float actual;
-
-public:
-	/**
-	* Creates a new behavior for rotation animation
-	* @param from starting rotation
-	* @param to ending rotation (if from == to, it is infinite rotation)
-	* @param speed rotation speed in angles per second
-	* @param additive if true, rotation will be additive
+	/**x
+	* Behavior for rotation animation
 	*/
-	CogRotateAnim(float from, float to, float speed, bool additive) : 
-		 from(from), to(to), speed(speed), additive(additive), actual(0){
-	}
+	class CogRotateAnim : public CogBehavior {
 
+	private:
+		// starting rotation
+		float from;
+		// ending rotation
+		float to;
+		// rotation speed in angles per second
+		float speed;
+		// if true, rotation will be additive (doesn't override actual rotation)
+		bool additive;
+		// actual rotation value
+		float actual;
 
-	void Update(const uint64 delta, const uint64 absolute){
-
-		// calculate differencial
-		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta);
-		actual += diff;
-
-		// if to == from, it is infinite rotation
-		if (to != from && (actual-from > to-from)){
-			actual = to;
-			Finish();
+	public:
+		/**
+		* Creates a new behavior for rotation animation
+		* @param from starting rotation
+		* @param to ending rotation (if from == to, it is infinite rotation)
+		* @param speed rotation speed in angles per second
+		* @param additive if true, rotation will be additive
+		*/
+		CogRotateAnim(float from, float to, float speed, bool additive) :
+			from(from), to(to), speed(speed), additive(additive), actual(0) {
 		}
 
-		CogTrans& transform = owner->GetTransform();
 
-		if (additive) transform.rotation += (diff);
-		else transform.rotation = (actual);
-	}
-};
+		void Update(const uint64 delta, const uint64 absolute) {
+
+			// calculate differencial
+			float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta);
+			actual += diff;
+
+			// if to == from, it is infinite rotation
+			if (to != from && (actual - from > to - from)) {
+				actual = to;
+				Finish();
+			}
+
+			CogTrans& transform = owner->GetTransform();
+
+			if (additive) transform.rotation += (diff);
+			else transform.rotation = (actual);
+		}
+	};
+
+}

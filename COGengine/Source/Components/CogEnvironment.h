@@ -4,226 +4,229 @@
 #include "CogInputAct.h"
 #include "CogSoundFile.h"
 
-
-/**
-* Environment controller for device events (especially inputs)
-*/
-class CogEnvironment{
-private:
-
-	// flag for screen size change
-	bool screenSizeChanged;
-	// collection of actually pressed keys
-	vector<CogInputAct> pressedKeys;
-	// collection of actually pressed buttons
-	vector<CogInputAct> pressedPoints;
-	// collection of played sounds
-	vector<spt<CogSound>> playedSounds;
-
-	// scaled screen width
-	int width;
-	// scaled screen height
-	int height;
-	// real screen width
-	int realWidth;
-	// real screen height
-	int realHeight;
-	// virtual aspect ratio
-	float aspectRatio;
-	// collection of running threads
-	vector<ofThread*> runningThreads;
-public:
-
+namespace Cog {
 
 	/**
-	* Initializes environment controller
+	* Environment controller for device events (especially inputs)
 	*/
-	void Init();
+	class CogEnvironment {
+	private:
 
-	/**
-	* Adds a new sound
-	*/
-	void AddSound(spt<CogSound> sound){
-		playedSounds.push_back(sound);
-	}
+		// flag for screen size change
+		bool screenSizeChanged;
+		// collection of actually pressed keys
+		vector<CogInputAct> pressedKeys;
+		// collection of actually pressed buttons
+		vector<CogInputAct> pressedPoints;
+		// collection of played sounds
+		vector<spt<CogSound>> playedSounds;
 
-	/**
-	* Plays sound and adds it to the collection
-	*/
-	void PlaySound(spt<CogSound> sound){
-		sound->Play();
-		playedSounds.push_back(sound);
-	}
+		// scaled screen width
+		int width;
+		// scaled screen height
+		int height;
+		// real screen width
+		int realWidth;
+		// real screen height
+		int realHeight;
+		// virtual aspect ratio
+		float aspectRatio;
+		// collection of running threads
+		vector<ofThread*> runningThreads;
+	public:
 
-	/**
-	* Returns true, if screen size has changed
-	*/
-	bool ScreenSizeChanged(){
-		return screenSizeChanged;
-	}
 
-	/**
-	* Gets collection of currently pressed keys
-	*/
-	vector<CogInputAct>& GetPressedKeys(){
-		return pressedKeys;
-	}
+		/**
+		* Initializes environment controller
+		*/
+		void Init();
 
-	/**
-	* Gets collection of currently pressed points
-	*/
-	vector<CogInputAct>& GetPressedPoints(){
-		return pressedPoints;
-	}
+		/**
+		* Adds a new sound
+		*/
+		void AddSound(spt<CogSound> sound) {
+			playedSounds.push_back(sound);
+		}
 
-	/**
-	* Gets collection of currently played sounds
-	*/
-	vector<spt<CogSound>>& GetPlayedSounds(){
-		return playedSounds;
-	}
+		/**
+		* Plays sound and adds it to the collection
+		*/
+		void PlaySound(spt<CogSound> sound) {
+			sound->Play();
+			playedSounds.push_back(sound);
+		}
 
-	/**
-	* Gets ratio of virtual size / real size
-	*/
-	float GetRatioScale(){
-		return (aspectRatio) / (((float)realWidth) / realHeight);
-	}
+		/**
+		* Returns true, if screen size has changed
+		*/
+		bool ScreenSizeChanged() {
+			return screenSizeChanged;
+		}
 
-	/**
-	* Gets real device width
-	*/
-	int GetRealWidth(){
-		return realWidth;
-	}
+		/**
+		* Gets collection of currently pressed keys
+		*/
+		vector<CogInputAct>& GetPressedKeys() {
+			return pressedKeys;
+		}
 
-	/**
-	* Gets real device height
-	*/
-	int GetRealHeight(){
-		return realHeight;
-	}
+		/**
+		* Gets collection of currently pressed points
+		*/
+		vector<CogInputAct>& GetPressedPoints() {
+			return pressedPoints;
+		}
 
-	/**
-	* Gets real aspect ratio, calculated from real devide width and height
-	*/
-	float GetRealAspectRatio(){
-		return ((float)realWidth / realHeight);
-	}
+		/**
+		* Gets collection of currently played sounds
+		*/
+		vector<spt<CogSound>>& GetPlayedSounds() {
+			return playedSounds;
+		}
 
-	/**
-	* Gets virtual aspect ratio
-	*/
-	float GetAspectRatio(){
-		return aspectRatio;
-	}
+		/**
+		* Gets ratio of virtual size / real size
+		*/
+		float GetRatioScale() {
+			return (aspectRatio) / (((float)realWidth) / realHeight);
+		}
 
-	/**
-	* Sets aspect ratio
-	*/
-	void SetAspectRatio(float ratio){
-		this->aspectRatio = ratio;
+		/**
+		* Gets real device width
+		*/
+		int GetRealWidth() {
+			return realWidth;
+		}
 
-		ReinitAspectRatio();
-	}
+		/**
+		* Gets real device height
+		*/
+		int GetRealHeight() {
+			return realHeight;
+		}
 
-	/**
-	* Gets screen virtual width
-	*/
-	int GetWidth(){
-		return width;
-	}
+		/**
+		* Gets real aspect ratio, calculated from real devide width and height
+		*/
+		float GetRealAspectRatio() {
+			return ((float)realWidth / realHeight);
+		}
 
-	/**
-	* Gets screen virtual height
-	*/
-	int GetHeight(){
-		return height;
-	}
+		/**
+		* Gets virtual aspect ratio
+		*/
+		float GetAspectRatio() {
+			return aspectRatio;
+		}
 
-	/**
-	* Gets width and height in 2D vector
-	*/
-	ofVec2f GetSize(){
-		return ofVec2f(GetWidth(), GetHeight());
-	}
+		/**
+		* Sets aspect ratio
+		*/
+		void SetAspectRatio(float ratio) {
+			this->aspectRatio = ratio;
 
-	/**
-	* Handler for key action
-	* @param key id of key
-	* @param pressed indicates, if the key is pressed or released
-	*/
-	void OnKeyAction(int key, bool pressed);
+			ReinitAspectRatio();
+		}
 
-	/**
-	* Handler for screen size change
-	* @param newWidth new screen width
-	* @param newHeight new screen height
-	*/
-	void OnScreenSizeChanged(int newWidth, int newHeight);
+		/**
+		* Gets screen virtual width
+		*/
+		int GetWidth() {
+			return width;
+		}
 
-	/**
-	* Handler for multitouch press
-	* @param x coordinate in x axis
-	* @param y coordinate in y axis
-	* @param button id of pressed button
-	* @param pressed indicates, if the button is pressed or released
-	*/
-	void OnMultiTouchButton(int x, int y, int button, bool pressed);
+		/**
+		* Gets screen virtual height
+		*/
+		int GetHeight() {
+			return height;
+		}
 
-	/**
-	* Handler for multitouch motion
-	* @param x coordinate in x axis
-	* @param y coordinate in y axis
-	* @param button id of button
-	*/
-	void OnMultiTouchMotion(int x, int y, int button);
+		/**
+		* Gets width and height in 2D vector
+		*/
+		ofVec2f GetSize() {
+			return ofVec2f(GetWidth(), GetHeight());
+		}
 
-	/**
-	* Handler for single touch press
-	* @param x coordinate in x axis
-	* @param y coordinate in y axis
-	* @param button id of pressed button
-	* @param pressed indicates, if the button is pressed or released
-	*/
-	void OnSingleTouchButton(int x, int y, int button, bool pressed);
+		/**
+		* Handler for key action
+		* @param key id of key
+		* @param pressed indicates, if the key is pressed or released
+		*/
+		void OnKeyAction(int key, bool pressed);
 
-	/**
-	* Handler for single touch motion
-	* @param x coordinate in x axis
-	* @param y coordinate in y axis
-	* @param button id of pressed button
-	*/
-	void OnSingleTouchMotion(int x, int y, int button);
+		/**
+		* Handler for screen size change
+		* @param newWidth new screen width
+		* @param newHeight new screen height
+		*/
+		void OnScreenSizeChanged(int newWidth, int newHeight);
 
-	/**
-	* Removes processes that already ended from collection
-	*/
-	void RemoveEndedProcesses();
+		/**
+		* Handler for multitouch press
+		* @param x coordinate in x axis
+		* @param y coordinate in y axis
+		* @param button id of pressed button
+		* @param pressed indicates, if the button is pressed or released
+		*/
+		void OnMultiTouchButton(int x, int y, int button, bool pressed);
 
-	/**
-	* Runs a new thread
-	* @param thread thread to run
-	*/
-	void RunThread(ofThread* thread);
+		/**
+		* Handler for multitouch motion
+		* @param x coordinate in x axis
+		* @param y coordinate in y axis
+		* @param button id of button
+		*/
+		void OnMultiTouchMotion(int x, int y, int button);
 
-protected:
+		/**
+		* Handler for single touch press
+		* @param x coordinate in x axis
+		* @param y coordinate in y axis
+		* @param button id of pressed button
+		* @param pressed indicates, if the button is pressed or released
+		*/
+		void OnSingleTouchButton(int x, int y, int button, bool pressed);
 
-	/**
-	* Reinitializes virtual width and height
-	* according to the actual aspect ratio
-	*/
-	void ReinitAspectRatio(){
-		if (abs(GetAspectRatio() - GetRealAspectRatio()) > 0.1f){
+		/**
+		* Handler for single touch motion
+		* @param x coordinate in x axis
+		* @param y coordinate in y axis
+		* @param button id of pressed button
+		*/
+		void OnSingleTouchMotion(int x, int y, int button);
 
-			if (realWidth <= realHeight){
-				width = GetRatioScale()*realWidth;
-				height = realHeight;
-			}
-			else {
-				width = realWidth;
-				height = GetRatioScale()*realHeight;
+		/**
+		* Removes processes that already ended from collection
+		*/
+		void RemoveEndedProcesses();
+
+		/**
+		* Runs a new thread
+		* @param thread thread to run
+		*/
+		void RunThread(ofThread* thread);
+
+	protected:
+
+		/**
+		* Reinitializes virtual width and height
+		* according to the actual aspect ratio
+		*/
+		void ReinitAspectRatio() {
+			if (abs(GetAspectRatio() - GetRealAspectRatio()) > 0.1f) {
+
+				if (realWidth <= realHeight) {
+					width = GetRatioScale()*realWidth;
+					height = realHeight;
+				}
+				else {
+					width = realWidth;
+					height = GetRatioScale()*realHeight;
+				}
 			}
 		}
-	}
-};
+	};
+
+}

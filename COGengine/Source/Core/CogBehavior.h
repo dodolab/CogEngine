@@ -7,135 +7,137 @@
 #include "CogFacade.h"
 
 
-class CogNode;
+namespace Cog {
 
-/**
-* Abstract class for all behaviors
-*
-*/
-class CogBehavior{
-
-protected:
-	// identifier incremental counter
-	static int idCounter;
-	// identifier
-	const int id;
-	// behavior running state
-	CogBehState behState;
-	// owner node
-	CogNode* owner;
-	// indicator if this behavior has ended
-	bool ended;
+	class CogNode;
 
 	/**
-	* Creates a new behavior
+	* Abstract class for all behaviors
+	*
 	*/
-	CogBehavior();
+	class CogBehavior {
+
+	protected:
+		// identifier incremental counter
+		static int idCounter;
+		// identifier
+		const int id;
+		// behavior running state
+		CogBehState behState;
+		// owner node
+		CogNode* owner;
+		// indicator if this behavior has ended
+		bool ended;
+
+		/**
+		* Creates a new behavior
+		*/
+		CogBehavior();
 
 
-public:
+	public:
 
-	virtual ~CogBehavior()
-	{
+		virtual ~CogBehavior()
+		{
 
-	}
+		}
 
-	/**
-	* Initialization procedure;
-	* Any attribute that is owned only by specific behavior should
-	* be created here
-	*/
-	virtual void Init(){
+		/**
+		* Initialization procedure;
+		* Any attribute that is owned only by specific behavior should
+		* be created here
+		*/
+		virtual void Init() {
 
-	}
+		}
 
-	/**
-	* Gets the owner node
-	*/
-	const CogNode* GetOwner() const{
-		return owner;
-	}
+		/**
+		* Gets the owner node
+		*/
+		const CogNode* GetOwner() const {
+			return owner;
+		}
 
-	/**
-	* Gets element identifier
-	* @return incremental value
-	*/
-	const int GetId() const{
-		return id;
-	}
+		/**
+		* Gets element identifier
+		* @return incremental value
+		*/
+		const int GetId() const {
+			return id;
+		}
 
-	/**
-	* Gets behavior running state
-	* @return running state
-	*/
-	const CogBehState GetBehState() const{
-		return behState;
-	}
+		/**
+		* Gets behavior running state
+		* @return running state
+		*/
+		const CogBehState GetBehState() const {
+			return behState;
+		}
 
-	/**
-	* Sets behavior running state
-	* @param val value
-	*/
-	void SetBehState(CogBehState val){
-		behState = val;
-	}
+		/**
+		* Sets behavior running state
+		* @param val value
+		*/
+		void SetBehState(CogBehState val) {
+			behState = val;
+		}
 
-	/**
-	* Returns true, if the behavior has ended
-	*/
-	bool Ended(){
-		return ended;
-	}
+		/**
+		* Returns true, if the behavior has ended
+		*/
+		bool Ended() {
+			return ended;
+		}
 
-	/**
-	* Finishes the behavior
-	*/
-	void Finish(){
-		ended = true;
-		SendMessageNoBubbling(Actions::BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
-	}
+		/**
+		* Finishes the behavior
+		*/
+		void Finish() {
+			ended = true;
+			SendMessageNoBubbling(Actions::BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
+		}
 
-	/**
-	* Restarts the behavior
-	*/
-	void Restart(){
-		ended = false;
-		Init();
-	}
+		/**
+		* Restarts the behavior
+		*/
+		void Restart() {
+			ended = false;
+			Init();
+		}
 
-	/**
-	* Handler for accepting the message
-	* @param Msg received message
-	*/
-	virtual void OnMessage(CogMsg& msg){
+		/**
+		* Handler for accepting the message
+		* @param Msg received message
+		*/
+		virtual void OnMessage(CogMsg& msg) {
 
-	}
+		}
 
-	/**
-	* Updates behavior and owning object inner state
-	* @param delta delta time from the last loop
-	* @param absolute absolute time since the application begun 
-	*/
-	virtual void Update(const uint64 delta, const uint64 absolute) = 0;
+		/**
+		* Updates behavior and owning object inner state
+		* @param delta delta time from the last loop
+		* @param absolute absolute time since the application begun
+		*/
+		virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
-	bool operator==(int id){
-		return this->id == id;
-	}
+		bool operator==(int id) {
+			return this->id == id;
+		}
 
-	bool operator==(const CogBehavior& other){
-		return id == other.id;
-	}
+		bool operator==(const CogBehavior& other) {
+			return id == other.id;
+		}
 
-	bool operator!=(int id){
-		return this->id != id;
-	}
+		bool operator!=(int id) {
+			return this->id != id;
+		}
 
-	bool operator!=(const CogBehavior& other){
-		return id != other.id;
-	}
+		bool operator!=(const CogBehavior& other) {
+			return id != other.id;
+		}
 
-	// allow to access Node private members
-	friend class CogNode;
+		// allow to access Node private members
+		friend class CogNode;
 
 	protected:
 		/**
@@ -202,7 +204,9 @@ public:
 		* @param beh behavior
 		* @param owner node to set as an owner
 		*/
-		static void SetOwner(CogBehavior* beh, CogNode* owner){
+		static void SetOwner(CogBehavior* beh, CogNode* owner) {
 			beh->owner = owner;
 		}
-};
+	};
+
+}

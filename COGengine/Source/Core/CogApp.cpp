@@ -5,6 +5,8 @@
 
 #define APP_SPEED 60
 
+namespace Cog {
+
 void CogApp::setup(){
 	// never set vertical sync
 	ofSetVerticalSync(false);
@@ -126,3 +128,5 @@ void CogApp::touchCancelled(int x, int y, int id){
 }
 
 #endif
+
+}

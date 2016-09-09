@@ -1,7 +1,10 @@
 #pragma once
 
- class CogEngine;
-extern CogEngine COGEngine;
+namespace Cog {
+	class CogEngine;
+	extern CogEngine COGEngine;
+}
+
 
 #include "CogCache.h"
 #include "CogStorage.h"
@@ -15,71 +18,78 @@ extern CogEngine COGEngine;
 #include "CogRenderer.h"
 #include "CogEnvironment.h"
 
-/**
-* COG engine that holds references to all other components and
-* executes drawing and update loops
-*/
-class CogEngine{
-private:
-	// root node, created by factory
-	CogNode* _root;
-	// frame counter
-	int frameCounter;
-public:
-	CogEnvironment* environmentCtrl;
-	CogCache* resourceCtrl;
-	CogFactory* factory;
-	CogRepository* storage;
-	CogLogger* logger;
-	CogRenderer* renderer;
 
-	CogEngine(){
-		_root = nullptr;
-		environmentCtrl = nullptr;
-		resourceCtrl = nullptr;
-		factory = nullptr;
-		storage = nullptr;
-		logger = nullptr;
-		renderer = nullptr;
-		frameCounter = 0;
-	}
+namespace Cog {
 
-	~CogEngine(){
-		//delete _root;
-		delete environmentCtrl;
-		delete resourceCtrl;
-		delete factory;
-		delete storage;
-		delete logger;
-		delete renderer;
-	}
+	class CogEngine;
+	extern CogEngine COGEngine;
 
 	/**
-	* Initializes engine
-	* @param factory default COG factory
-	* @param config configuration xml
+	* COG engine that holds references to all other components and
+	* executes drawing and update loops
 	*/
-	void Init(CogFactory* factory, spt<ofxXmlSettings> config);
-	
-	/**
-	* Executes one update cycle; this method is called by App
-	* @param delta time Tween frames
-	* @param absolute time elapsed after initialization
-	*/
-	void Update(uint64 delta, uint64 absolute);
+	class CogEngine {
+	private:
+		// root node, created by factory
+		CogNode* _root;
+		// frame counter
+		int frameCounter;
+	public:
+		CogEnvironment* environmentCtrl;
+		CogCache* resourceCtrl;
+		CogFactory* factory;
+		CogRepository* storage;
+		CogLogger* logger;
+		CogRenderer* renderer;
 
-	/**
-	* Executes one drawing cycle; this method is called by App
-	* @param delta time Tween frames
-	* @param absolute time elapsed after initialization
-	*/
-	void Draw(uint64 delta, uint64 absolute);
+		CogEngine() {
+			_root = nullptr;
+			environmentCtrl = nullptr;
+			resourceCtrl = nullptr;
+			factory = nullptr;
+			storage = nullptr;
+			logger = nullptr;
+			renderer = nullptr;
+			frameCounter = 0;
+		}
 
-	/**
-	* Gets actual frame number
-	*/
-	int GetFrameCounter(){
-		return frameCounter;
-	}
-};
+		~CogEngine() {
+			//delete _root;
+			delete environmentCtrl;
+			delete resourceCtrl;
+			delete factory;
+			delete storage;
+			delete logger;
+			delete renderer;
+		}
 
+		/**
+		* Initializes engine
+		* @param factory default COG factory
+		* @param config configuration xml
+		*/
+		void Init(CogFactory* factory, spt<ofxXmlSettings> config);
+
+		/**
+		* Executes one update cycle; this method is called by App
+		* @param delta time Tween frames
+		* @param absolute time elapsed after initialization
+		*/
+		void Update(uint64 delta, uint64 absolute);
+
+		/**
+		* Executes one drawing cycle; this method is called by App
+		* @param delta time Tween frames
+		* @param absolute time elapsed after initialization
+		*/
+		void Draw(uint64 delta, uint64 absolute);
+
+		/**
+		* Gets actual frame number
+		*/
+		int GetFrameCounter() {
+			return frameCounter;
+		}
+	};
+
+}

@@ -3,77 +3,80 @@
 #include "ofxCogMain.h"
 #include "CogSprite.h"
 
-/**
-* Entity for rendering
-*/
-class CogShape{
-protected:
-	CogRenderType renderType;
-public:
+namespace Cog {
 
-	CogShape(){
-		renderType = CogRenderType::NONE;
-	}
+	/**
+	* Entity for rendering
+	*/
+	class CogShape {
+	protected:
+		CogRenderType renderType;
+	public:
 
-	CogShape(CogRenderType renderType) : renderType(renderType){
+		CogShape() {
+			renderType = CogRenderType::NONE;
+		}
 
-	}
+		CogShape(CogRenderType renderType) : renderType(renderType) {
 
-	CogRenderType GetRenderType(){
-		return renderType;
-	}
-};
+		}
 
-class CogImage : public CogShape{
-private:
-	spt<ofImage> image;
-public:
+		CogRenderType GetRenderType() {
+			return renderType;
+		}
+	};
 
-	CogImage(spt<ofImage> img) : CogShape(CogRenderType::IMAGE){
-		this->image = img;
-	}
+	class CogImage : public CogShape {
+	private:
+		spt<ofImage> image;
+	public:
 
-	spt<ofImage> GetImage(){
-		return image;
-	}
+		CogImage(spt<ofImage> img) : CogShape(CogRenderType::IMAGE) {
+			this->image = img;
+		}
 
-	void SetImage(spt<ofImage> img){
-		this->image = img;
-	}
-};
+		spt<ofImage> GetImage() {
+			return image;
+		}
 
-class CogFont : public CogShape{
-private:
-	spt<ofTrueTypeFont> font;
+		void SetImage(spt<ofImage> img) {
+			this->image = img;
+		}
+	};
 
-public:
+	class CogFont : public CogShape {
+	private:
+		spt<ofTrueTypeFont> font;
 
-	CogFont(spt<ofTrueTypeFont> font) : CogShape(CogRenderType::TEXT){
-		this->font = font;
-	}
+	public:
 
-	spt<ofTrueTypeFont> GetFont(){
-		return font;
-	}
+		CogFont(spt<ofTrueTypeFont> font) : CogShape(CogRenderType::TEXT) {
+			this->font = font;
+		}
 
-	void SetFont(spt<ofTrueTypeFont> font){
-		this->font = font;
-	}
-};
+		spt<ofTrueTypeFont> GetFont() {
+			return font;
+		}
 
-class CogSpriteShape : public CogShape{
-private:
-	spt<CogSprite> sprite;
+		void SetFont(spt<ofTrueTypeFont> font) {
+			this->font = font;
+		}
+	};
 
-public:
+	class CogSpriteShape : public CogShape {
+	private:
+		spt<CogSprite> sprite;
 
-	CogSpriteShape(spt<CogSprite> sprite) : CogShape(CogRenderType::SPRITE){
-		this->sprite = sprite;
-	}
+	public:
 
-	spt<CogSprite>& GetSprite(){
-		return sprite;
-	}
-};
+		CogSpriteShape(spt<CogSprite> sprite) : CogShape(CogRenderType::SPRITE) {
+			this->sprite = sprite;
+		}
+
+		spt<CogSprite>& GetSprite() {
+			return sprite;
+		}
+	};
 
 
+}

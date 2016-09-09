@@ -4,6 +4,8 @@
 #include "SpriteSheetRenderer.h"
 #include "CogApp.h"
 
+using namespace Cog;
+
 //a quick and dirty sprite implementation
 struct basicSprite {
 	ofPoint pos;			// the position on the screen this sprite will be drawn at

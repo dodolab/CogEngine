@@ -3,27 +3,30 @@
 #include "ofxCogMain.h"
 #include "CogNode.h"
 
-/**
-* Entity for object physical bounds; can be overriden to implement
-* custom boundary check
-*/
-class CogBounds{
-
-public:
-
-	CogBounds(){
-
-	}
-
+namespace Cog {
 
 	/**
-	* Returns true, if object collides with another
-	* @param first first object to check
-	* @param second second object to check
+	* Entity for object physical bounds; can be overriden to implement
+	* custom boundary check
 	*/
-	bool Collides(CogNode& first, CogNode& second) const;
+	class CogBounds {
 
-};
+	public:
+
+		CogBounds() {
+
+		}
+
+
+		/**
+		* Returns true, if object collides with another
+		* @param first first object to check
+		* @param second second object to check
+		*/
+		bool Collides(CogNode& first, CogNode& second) const;
+
+	};
 
 
 
+}
