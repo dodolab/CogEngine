@@ -5,6 +5,11 @@
 typedef float(*FadeFunction)(float);
 
 /*! User input action enumerator */
+enum class RenderType{
+	NONE, IMAGE, RECTANGLE, POLYGON, ARC, TEXT
+};
+
+/*! User input action enumerator */
 enum class Act{
 	NONE=0,		/*!< none */
 	LEFT=1,		/*!< move left */
@@ -64,7 +69,6 @@ namespace Attrs{
 	extern int VELOCITY;
 	extern int ACTIONS;
 	extern int ALLOWED_ACTIONS;
-	extern int IMGSOURCE;
 	extern int BOUNDS;
 	extern int SIZE;
 	extern int POLYGON;
@@ -72,10 +76,9 @@ namespace Attrs{
 	extern int FRAME;
 	extern int COLLISIONS;
 	extern int HEALTH;
-	extern int FONT;
-	extern int TEXT;
 	extern int SCORE;
 	extern int IMGBOUNDS;
+	extern int TEXT;
 
 	extern const char* ToString(int act);
 }
@@ -101,11 +104,6 @@ enum class BehState {
 	DISABLED			/*!< disabled completely */
 };	
 
-/*! Element type enumerator */
-enum class ElemType {
-	VIEW,				/*!< view element - used in DRAW loop */
-	MODEL				/*!< model element - used in UPDATE loop */
-};
 
 /*! Node type enumerator */
 enum class ObjType{

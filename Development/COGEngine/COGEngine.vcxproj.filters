@@ -92,9 +92,6 @@
     <ClInclude Include="src\BeMove.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\BeRender.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\BeRotateAnim.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -204,6 +201,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\BeTransformAnim.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EnShape.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

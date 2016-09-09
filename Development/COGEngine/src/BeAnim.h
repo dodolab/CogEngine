@@ -283,7 +283,7 @@ private:
 	stack<AnimNodeContext> nodeStack;
 public:
 
-	BeAnim(spt<EnAnim> anim) : GBehavior(ElemType::MODEL), root(anim){
+	BeAnim(spt<EnAnim> anim) : root(anim){
 
 	}
 
@@ -331,7 +331,15 @@ public:
 
 				ofRectangle imageBound(frameColumn*cellWidth, frameRow*cellHeight, cellWidth,cellHeight);
 				owner->ChangeAttr(Attrs::IMGBOUNDS, imageBound);
-				owner->ChangeAttr(Attrs::IMGSOURCE, spriteSheet);
+				owner->GetShape<spt<EnImageShape>>()->SetImage(spriteSheet);
+				
+				if (owner->HasRenderType(RenderType::IMAGE)){
+					owner->GetShape<spt<EnImageShape>>()->SetImage(spriteSheet);
+				}
+				else{
+					owner->SetShape(spt<EnImageShape>(new EnImageShape(spriteSheet)));
+				}
+
 			}
 			else{
 				// image is only a common image
@@ -339,7 +347,14 @@ public:
 				
 				string imagePath = actualNode->GetSheet(actualIndex);
 				spt<ofImage> image = COGGet2DImage(imagePath);
-				owner->ChangeAttr(Attrs::IMGSOURCE, image);
+				if (owner->HasRenderType(RenderType::IMAGE)){
+					owner->GetShape<spt<EnImageShape>>()->SetImage(image);
+				}
+				else{
+					owner->SetShape(spt<EnImageShape>(new EnImageShape(image)));
+				}
+
+				
 			}			
 		}
 	}

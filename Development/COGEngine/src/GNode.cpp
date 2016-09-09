@@ -87,7 +87,7 @@ void GNode::Update(const uint64 delta, const uint64 absolute){
 		// update behaviors
 		for (auto it = behaviors.begin(); it != behaviors.end(); ++it){
 			GBehavior* beh = *it;
-			if (!beh->ended &&  beh->GetElemType() == ElemType::MODEL && (beh->GetBehState() == BehState::ACTIVE_ALL
+			if (!beh->ended &&  (beh->GetBehState() == BehState::ACTIVE_ALL
 				|| beh->GetBehState() == BehState::ACTIVE_UPDATES)){
 				beh->Update(delta, absolute);
 			}
@@ -115,23 +115,9 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 	if (runMode == RunningMode::INVISIBLE || runMode == RunningMode::DISABLED) return;
 
-	for (auto it = behaviors.begin(); it != behaviors.end(); ++it){
-		// draw behaviors
-		GBehavior* beh = (*it);
-		if (!beh->ended && beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL
-			|| beh->GetBehState() == BehState::ACTIVE_UPDATES)){
-			beh->Update(delta, absolute);
-		}
+	if (this->IsRenderable()){
+		COGPushNodeForRendering(this);
 	}
-
-	// TODO !!! solve another way
-	// sort by z-index
-	auto comp = [](GNode* lhs, GNode* rhs) -> bool
-	{
-		return lhs->GetTransform().localPos.z < rhs->GetTransform().localPos.z;
-	};
-
-	children.sort(comp);
 
 	for (auto it = children.begin(); it != children.end(); ++it){
 		// draw children

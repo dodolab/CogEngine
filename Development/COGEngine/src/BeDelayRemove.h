@@ -24,7 +24,7 @@ public:
 	* @param millis number of milliseconds for delay
 	* @param erase if true, object will be erased
 	*/
-	BeDelayRemove(int millis, bool erase) : GBehavior(ElemType::MODEL), millis(millis), actual(0), erase(erase){
+	BeDelayRemove(int millis, bool erase) :  millis(millis), actual(0), erase(erase){
 
 	}
 
@@ -32,7 +32,7 @@ public:
 		actual += delta;
 
 		if (actual > millis){
-			owner->GetParent()->RemoveChild(owner,false,erase);
+			owner->GetParent()->RemoveChild(owner,erase);
 			Finish();
 		}
 	}

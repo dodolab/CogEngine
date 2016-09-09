@@ -103,9 +103,33 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\ofxSQLite.cpp" />
+    <ClCompile Include="src\ofxsqlite3.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\ofxSQLiteAbstract.cpp" />
+    <ClCompile Include="src\ofxSQLiteDelete.cpp" />
+    <ClCompile Include="src\ofxSQLiteFieldValues.cpp" />
+    <ClCompile Include="src\ofxSQLiteInsert.cpp" />
+    <ClCompile Include="src\ofxSQLiteSelect.cpp" />
+    <ClCompile Include="src\ofxSQLiteUpdate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\ofxSQLite.h" />
+    <ClInclude Include="src\ofxsqlite3.h" />
+    <ClInclude Include="src\ofxsqlite3ext.h" />
+    <ClInclude Include="src\ofxSQLiteAbstract.h" />
+    <ClInclude Include="src\ofxSQLiteDelete.h" />
+    <ClInclude Include="src\ofxSQLiteFieldValues.h" />
+    <ClInclude Include="src\ofxSQLiteHeaders.h" />
+    <ClInclude Include="src\ofxSQLiteInsert.h" />
+    <ClInclude Include="src\ofxSQLiteSelect.h" />
+    <ClInclude Include="src\ofxSQLiteType.h" />
+    <ClInclude Include="src\ofxSQLiteTypeNow.h" />
+    <ClInclude Include="src\ofxSQLiteUpdate.h" />
+    <ClInclude Include="src\ofxSQLiteWhere.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

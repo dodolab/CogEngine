@@ -18,7 +18,7 @@ public:
 	/**
 	* Creates a new behavior for animation sequence
 	*/
-	BeMultiAnim() : GBehavior(ElemType::MODEL){
+	BeMultiAnim(){
 		actual = nullptr;
 	}
 

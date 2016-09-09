@@ -102,8 +102,7 @@ void MRepository::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it){
 		GBehavior* beh = (*it);
 		if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
-			(beh->GetId() != msg.GetBehaviorId()) &&
-			(beh->GetElemType() == msg.GetElemType())){
+			(beh->GetId() != msg.GetBehaviorId())){
 			if (IsRegisteredListener(msg.GetAction(), beh)){
 				beh->OnMessage(msg);
 			}

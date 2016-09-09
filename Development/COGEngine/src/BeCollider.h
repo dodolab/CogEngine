@@ -21,7 +21,7 @@ public:
 	* @param groupA id of group of collidable objects
 	* @param groupB id of group of hittable objects
 	*/
-	BeCollider(int groupA, int groupB) : GBehavior(ElemType::MODEL),
+	BeCollider(int groupA, int groupB) :
 		groupA(groupA), groupB(groupB){
 
 	}
@@ -30,8 +30,7 @@ public:
 	* Creates a new collision behavior
 	* @param group id of group of collidable and hittable objects
 	*/
-	BeCollider(int group) : GBehavior(ElemType::MODEL),
-		groupA(group), groupB(group){
+	BeCollider(int group) : groupA(group), groupB(group){
 
 	}
 

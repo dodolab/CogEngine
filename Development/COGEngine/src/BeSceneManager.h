@@ -20,7 +20,7 @@ public:
 	/**
 	* Creates a new behavior for scene managing
 	*/
-	BeSceneManager() : GBehavior(ElemType::MODEL){
+	BeSceneManager() {
 		actualScene = nullptr;
 		waitingForTween = false;
 	}

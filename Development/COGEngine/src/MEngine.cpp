@@ -1,7 +1,6 @@
 #include "MEngine.h"
 #include "BeTranslateAnim.h"
 #include "GNode.h"
-#include "BeRender.h"
 #include "BeRotateAnim.h"
 #include "MFactory.h"
 #include "MRepository.h"
@@ -17,13 +16,14 @@ void MEngine::Init(MFactory* factory, spt<ofxXmlSettings> config){
 	resourceCtrl = new MStorage();
 	logger = new MLogger(config);
 	storage = new MRepository();
-
+	renderer = new MRenderer();
 	this->factory = factory;
 	
 	// initialize components 
 	environmentCtrl->Init();
 	factory->Init();
 	logger->Init();
+	renderer->Init();
 	resourceCtrl->Init();
 	// create root node
 	_root = factory->CreateRoot();
@@ -49,10 +49,14 @@ void MEngine::Update(uint64 delta, uint64 absolute){
 }
 
 void MEngine::Draw(uint64 delta, uint64 absolute){
+	
+	renderer->Init();
 	// clear the drawing surface
 	ofBackground(50,50,50);
 	// setup ortographic camera
 	ofSetupScreenOrtho(environmentCtrl->GetWidth(),environmentCtrl->GetHeight(),-1000,1000);
 	// draw the root node
 	this->_root->GetRoot()->Draw(delta, absolute);
+
+	renderer->Render();
 }

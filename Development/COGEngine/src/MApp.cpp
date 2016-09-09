@@ -27,7 +27,9 @@ void MApp::update(){
 	delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
 
-	COGEngine.Update(1000/APP_SPEED, absolute);
+	uint64 semiFixedDelta = (delta < 16) ? 16 : (delta < 32) ? delta : 32;
+
+	COGEngine.Update(semiFixedDelta, absolute);
 }
 
 void MApp::keyPressed(int key){

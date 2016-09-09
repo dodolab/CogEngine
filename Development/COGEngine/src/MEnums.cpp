@@ -76,25 +76,22 @@ namespace Attrs{
 	int VELOCITY = 0;
 	int ACTIONS = 1;
 	int ALLOWED_ACTIONS = 2;
-	int IMGSOURCE = 3;
-	int BOUNDS = 4;
-	int SIZE = 5;
-	int POLYGON = 6;
-	int COLOR = 7;
-	int FRAME = 8;
-	int COLLISIONS = 9;
-	int HEALTH = 10;
-	int FONT = 11;
+	int BOUNDS = 3;
+	int SIZE = 4;
+	int POLYGON = 5;
+	int COLOR = 6;
+	int FRAME = 7;
+	int COLLISIONS = 8;
+	int HEALTH = 9;
+	int SCORE = 10;
+	int IMGBOUNDS = 11;
 	int TEXT = 12;
-	int SCORE = 13;
-	int IMGBOUNDS = 14;
 
 	const char* ToString(int act){
 		const char * vals[] = {
 			"VELOCITY",
 			"ACTIONS",
 			"ALLOWED_ACTIONS",
-			"IMGSOURCE",
 			"BOUNDS",
 			"SIZE",
 			"POLYGON",
@@ -102,9 +99,8 @@ namespace Attrs{
 			"FRAME",
 			"COLLISIONS",
 			"HEALTH",
-			"FONT",
-			"TEXT",
-			"SCORE"
+			"SCORE",
+			"TEXT"
 		};
 		return vals[act];
 	}

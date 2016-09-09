@@ -13,6 +13,7 @@
 #include <assert.h>
 #include "MUtils.h"
 #include "MFacade.h"
+#include "EnShape.h"
 
 using namespace std;
 
@@ -65,6 +66,8 @@ protected:
 	EnFlags* states;
 	// transformation matrix
 	EnTransform  transform;
+	// mash object
+	spt<EnShape> shape;
 	// running mode
 	RunningMode runMode;
 
@@ -76,6 +79,7 @@ protected:
 		states = nullptr;
 		tag = nullptr;
 		runMode = RunningMode::RUNNING;
+		shape = spt<EnShape>(new EnShape(RenderType::NONE));
 	}
 
 	
@@ -297,6 +301,42 @@ public:
 	*/
 	void SetTransform(EnTransform val){
 		this->transform = val;
+	}
+
+	/**
+	* Gets indicator, if this entity is renderable
+	*/
+	bool IsRenderable(){
+		return shape->GetRenderType() != RenderType::NONE;
+	}
+
+	/**
+	* Gets shaping object
+	*/
+	spt<EnShape> GetShape(){
+		return shape;
+	}
+
+	/**
+	* Get shape of selected template; must inherit from EnShape entity
+	*/
+	template<class T> T GetShape(){
+		auto specialShape = static_cast<T>(shape);
+		return specialShape;
+	}
+
+	/**
+	*  Sets shaping object
+	*/
+	void SetShape(spt<EnShape> shape){
+		this->shape = shape;
+	}
+
+	/**
+	* Returns true, if the shape is of the selected type
+	*/
+	bool HasRenderType(RenderType type){
+		return shape->GetRenderType() == type;
 	}
 
 	/**

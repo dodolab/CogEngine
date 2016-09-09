@@ -29,18 +29,18 @@ public:
 	* @param additive if true, rotation will be additive
 	*/
 	BeRotateAnim(float from, float to, float speed, bool additive) : 
-		GBehavior(ElemType::MODEL), from(from), to(to), speed(speed), additive(additive), actual(0){
+		 from(from), to(to), speed(speed), additive(additive), actual(0){
 	}
 
 
 	void Update(const uint64 delta, const uint64 absolute){
 
 		// calculate differencial
-		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta*360);
+		float diff = (float)((to == from ? 1 : (to - from)) * 0.001f * speed * delta);
 		actual += diff;
 
 		// if to == from, it is infinite rotation
-		if (to != from && ((to >= from && actual >= to) || (to < from && actual < to))){
+		if (to != from && (actual-from > to-from)){
 			actual = to;
 			Finish();
 		}

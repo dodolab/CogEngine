@@ -29,7 +29,7 @@ public:
 	* @param tweenOut scene that will be tweened out
 	* @param speed tweening speed
 	*/
-	BeTween(GNode* tweenIn, GNode* tweenOut, float speed) : GBehavior(ElemType::MODEL), tweenIn(tweenIn), tweenOut(tweenOut), speed(speed), actual(0){
+	BeTween(GNode* tweenIn, GNode* tweenOut, float speed) : tweenIn(tweenIn), tweenOut(tweenOut), speed(speed), actual(0){
 
 	}
 };

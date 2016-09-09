@@ -41,7 +41,7 @@ public:
 	* @param speed in display width per second
 	* @param additive if true, position will be additive (not overriden)
 	*/
-	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive) : GBehavior(ElemType::MODEL),
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive) :
 		additive(additive), to(to), from(from){
 		this->actual = ofVec3f(from);
 		this->distX = to.x - from.x;
@@ -61,7 +61,7 @@ public:
 	* @param speed in display width per second
 	* @param fadeFunction fading function that accepts float <0..1> and returns fading parameter <0..1>
 	*/
-	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, FadeFunction fadeFunction) : GBehavior(ElemType::MODEL),
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, FadeFunction fadeFunction) : 
 		additive(additive), to(to), from(from){
 		this->actual = ofVec3f(from);
 		this->distX = to.x - from.x;
