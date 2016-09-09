@@ -23,7 +23,7 @@ namespace CopterDown
         public MainWindow()
         {
             InitializeComponent();
-            new GameLoop(Dispatcher,MyCanvas,50, 20).Start();
+            new GameLoop(Dispatcher,MyCanvas,20, 20).Start();
         }
     }
 }

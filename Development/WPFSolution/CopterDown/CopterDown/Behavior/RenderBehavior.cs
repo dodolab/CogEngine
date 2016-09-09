@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using CopterDown.Core;
+using CopterDown.Core.CoreAttribs;
 
 namespace CopterDown.Behavior
 {
@@ -21,18 +22,18 @@ namespace CopterDown.Behavior
 
         public override void OnMessage(Core.Message msg)
         {
-            switch (msg.MessageType)
-            {
-                case MessageType.RENDER:
-                    Canvas cnv = msg.Data as Canvas;
-                    cnv.Children.Add(_rect);
-                    break;
-            }
+            
         }
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            
+            var position =
+                    this.GameObject.FindModelAttributeById(AttributeList.ATTR_POSITION) as SimpleValAttribute<Vector2d>;
+
+            Canvas cnv = GameLoop._canvas;
+            Canvas.SetLeft(_rect, position.Value.X);
+            Canvas.SetTop(_rect,position.Value.Y);
+            cnv.Children.Add(_rect);
         }
     }
 }

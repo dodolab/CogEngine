@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace CopterDown.Core
 {
-    public class Attribute<T>
+    public class Attribute
     {
         public int Key { get; set; }
-        public T Value { get; set; }
     }
 
-    public class Attribute : Attribute<object>
+    public class SimpleValAttribute<T> : Attribute
     {
+        public SimpleValAttribute(T val)
+    {
+        this.Value = val;
+    } 
+
+        public T Value { get; set; }
     }
 }

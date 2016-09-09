@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core;
-using Attribute = System.Attribute;
 
-namespace CopterDown.Behavior
+namespace CopterDown.Core
 {
     public abstract class ABehavior
     {
-        public ABehavior()
+        protected ABehavior()
         {
-            Attributes = new List<Attribute>();
+            this.Active = true;
         }
 
-        public List<Attribute> Attributes { get; set; }
+        public bool Active { get; set; }
+
+        public GameObject GameObject { get; set; }
 
         public abstract void OnMessage(Message msg);
 

@@ -10,6 +10,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using CopterDown.Behavior;
 using CopterDown.Core;
+using CopterDown.Core.CoreAttribs;
+using CopterDown.Core.CoreBehavs;
 
 namespace CopterDown
 {
@@ -19,27 +21,36 @@ namespace CopterDown
         private int _updateInterval;
         private Timer _drawTimer;
         private Timer _updateTimer;
-        private Canvas _canvas;
         private GameObject root;
         private Dispatcher _disp;
+
+        public static Canvas _canvas;
 
         public GameLoop(Dispatcher disp, Canvas canvas, int drawInterval, int updateInterval)
         {
             this._drawInterval = drawInterval;
             this._updateInterval = updateInterval;
-            this._canvas = canvas;
-            this.root = new GameObject(null);
+            _canvas = canvas;
+            this.root = new GameObject(null,1);
             this._disp = disp;
 
             Rectangle rect = new Rectangle();
             rect.Fill = Brushes.Black;
             rect.Width = 100;
             rect.Height = 200;
-            root.Behaviors.Add(new RenderBehavior(rect));
+            root.AddViewBehavior(new RenderBehavior(rect));
+            root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(100,0),1));
+
+            root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d(0,0)),AttributeList.ATTR_POSITION);
         }
+
+        private DateTime start;
+        private DateTime lastDraw;
+        private DateTime lastUpdate;
 
         public void Start()
         {
+            start = lastDraw = lastUpdate = DateTime.Now;
             _drawTimer = new Timer(Draw);
             _drawTimer.Change(0, _drawInterval);
             _updateTimer = new Timer(Update);
@@ -48,17 +59,21 @@ namespace CopterDown
 
         private void Draw(object state)
         {
+            
             _disp.Invoke(() =>
             {
-
+                var now = DateTime.Now;
                 _canvas.Children.Clear();
-                root.OnMessage(new Message(MessageType.RENDER, _canvas));
+                root.Draw(now - lastDraw, now - start);
+                lastDraw = DateTime.Now;
             });
         }
 
         private void Update(object state)
         {
-            
+            var now = DateTime.Now;
+            root.Update(now - lastUpdate, now - start);
+            lastUpdate = DateTime.Now;
         }
        
     }

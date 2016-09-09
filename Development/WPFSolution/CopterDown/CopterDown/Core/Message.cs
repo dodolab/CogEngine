@@ -8,18 +8,25 @@ namespace CopterDown.Core
 {
     public class Message
     {
-        public Message(MessageType type, object data)
+        public Message(MessageCat cat, TraverseMode traverse, object data)
         {
-            this.MessageType = type;
+            this.Category = cat;
             this.Data = data;
+            this.Traverse = traverse;
         }
 
-        public MessageType MessageType { get; set; }
+        public MessageCat Category { get; set; }
+        public TraverseMode Traverse { get; set; }
         public object Data { get; set; }
     }
 
-    public enum MessageType
+    public enum MessageCat
     {
-        RENDER
+        VIEW,MODEL
+    }
+
+    public enum TraverseMode
+    {
+        NOTRAV, TRAV_CHILDFIRST, TRAV_BEHFIRST
     }
 }
