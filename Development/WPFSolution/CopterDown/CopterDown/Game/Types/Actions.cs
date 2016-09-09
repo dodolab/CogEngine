@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core.Types
+namespace CopterDown.Game.Types
 {
     public class Actions
     {
@@ -17,6 +17,5 @@ namespace CopterDown.Core.Types
         public const int GAMEOBJECT_DESTROYED = 6;
         public const int ATTRIBUTE_CHANGED = 7;
         public const int GAMEOBJECT_KILLED = 8;
-        public const int PARA_GROUNDED = 9;
     }
 }

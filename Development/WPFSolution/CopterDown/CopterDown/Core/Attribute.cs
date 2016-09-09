@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using CopterDown.Core.Enums;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Core
 {

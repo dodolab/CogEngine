@@ -4,7 +4,7 @@ using System.Linq;
 using CopterDown.Core.Entities;
 using CopterDown.Enums;
 using CopterDown.Game;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 using CopterDown.Utils;
 
 namespace CopterDown.Core.CoreBehavs

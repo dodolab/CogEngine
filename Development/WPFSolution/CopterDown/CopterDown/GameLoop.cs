@@ -7,10 +7,9 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
-using CopterDown.Core.Types;
 using CopterDown.Enums;
 using CopterDown.Game;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown
 {
@@ -40,43 +39,8 @@ namespace CopterDown
 
             this._disp = disp;
 
-      /*      Rectangle rect = new Rectangle();
-            rect.Fill = Brushes.Black;
-            rect.Width = 100;
-            rect.Height = 200;
-            root.AddViewBehavior(new RenderBehavior(rect));
-            root.AddModelBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(200,0),0.1f,true));
-            root.AddModelBehavior(new RotateAnim(0,180f,0.1f,true));
 
-            root.AddAttribute(ElementType.MODELnew Attribute<Vector2d>(new Vector2d(0,0)),AttributeList.AT_COM_POSITION);
-            root.AddAttribute(ElementType.MODELnew Attribute<float>(0), AttributeList.AT_COM_ROTATION);
-            root.AddAttribute(ElementType.MODELnew Attribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.AT_COM_ORIGIN);
-        
-            root.AddModelBehavior(new MovementBehavior());
-
-            var innerRect = new GameObject();
-            rect = new Rectangle();
-            rect.Fill = Brushes.Red;
-            rect.Width = 50;
-            rect.Height = 80;
-            innerRect.AddViewBehavior(new RenderBehavior(rect));
-            innerRect.AddModelBehavior(new TranslateAnim(new Vector2d(0, 0), new Vector2d(200, 0), 0.1f, true));
-            innerRect.AddAttribute(ElementType.MODELnew Attribute<int>(1000),AttributeList.AT_COM_ZINDEX);
-
-            root.AddChild(innerRect);
-            */
             root.AddChild(new GameBuilder().CreateIntroScene());
-
-        /*    var innerInnerRect = new GameObject();
-            rect = new Rectangle();
-            rect.Fill = Brushes.Green;
-            rect.Width = 25;
-            rect.Height = 40;
-            innerInnerRect.AddViewBehavior(new RenderBehavior(rect));
-
-            innerInnerRect.AddAttribute(ElementType.MODELnew Attribute<int>(2000), AttributeList.AT_COM_ZINDEX);
-
-            innerRect.AddChild(innerInnerRect);*/
         }
 
         private DateTime start;

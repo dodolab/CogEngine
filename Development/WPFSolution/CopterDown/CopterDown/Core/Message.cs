@@ -20,7 +20,7 @@ namespace CopterDown
             this.Traverse = traverse;
             this.Action = action;
             this.OwnerId = ownerId;
-            this.senderType = senderType;
+            this.SenderType = senderType;
         }
 
         public Message(ElementType cat, int traverse, int action, SenderType senderType, int ownerId, object data)
@@ -39,7 +39,7 @@ namespace CopterDown
         public int Action { get; set; }
         public ElementType Category { get; set; }
         public State Traverse { get; set; }
-        public SenderType senderType { get; set; }
+        public SenderType SenderType { get; set; }
         public object Data { get; set; }
         // message response
         public object Response { get; set; }

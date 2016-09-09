@@ -3,7 +3,7 @@ using System.Linq;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
 using CopterDown.Enums;
-using CopterDown.Types;
+using CopterDown.Game.Types;
 
 namespace CopterDown.Game
 {
@@ -20,7 +20,7 @@ namespace CopterDown.Game
         {
             var keys = GameObject.Root.FindAtt<UserAction>(Attr.USERACTION);
 
-            if (keys.Value.KeyActions.Any())
+            if (keys.Value.KeyActions.Any(key => key.Ended))
             {
                 var root = GameObject.Root;
                 GameObject.Destroy();
