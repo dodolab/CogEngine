@@ -20,11 +20,24 @@ public:
 
 	static GNodePool* Get();
 
-	void AddGameObject(GNode* node);
 	int GetGameObjCountBySubType(int type) const;
-	void RemoveGameObject(GNode* node);
-	void AddBehavior(ABehavior* beh);
-	void RemoveBehavior(ABehavior* beh);
+
+	void AllocateNode(GNode* node){
+
+	}
+
+	void FreeNode(GNode* node){
+
+	}
+
+	void AllocateBehavior(ABehavior* beh){
+
+	}
+
+	void FreeBehavior(ABehavior* beh){
+
+	}
+
 	bool IsRegisteredListener(int listenerType) const;
 	GNode* FindGameObjectById(int id) const;
 	GNode* FindGameObjectByTag(char* tag) const;

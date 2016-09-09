@@ -7,16 +7,20 @@
 
 class GNode;
 
+/**
+* Attr - common class for generic attributes
+*
+*/
 class Attr{
 protected:
 	GNode* _owner;
 	const ElemType _elemType;
 	const int _key;
+	const bool _isManaged;
 
 public:
-	Attr();
 
-	Attr(int key, ElemType type, GNode* owner);
+	Attr(int key, ElemType type, GNode* owner, bool isManaged);
 
 	const GNode* GetOwner() const;
 
@@ -26,8 +30,12 @@ public:
 };
 
 
+/**
+* Attrt - attribute generic wrapper
+*
+*/
 template <class  T>
-class AttrRef : public Attr{
+class Attrt : public Attr{
 protected:
 	T _value;
 	
@@ -39,16 +47,15 @@ protected:
 
 public:
 
-	AttrRef(){
 
-	}
-
-	AttrRef(int key, ElemType type, T& val, GNode* owner) : Attr(type, owner, key), _value(val){
+	Attrt(int key, ElemType type, T& val, GNode* owner, bool isManaged) : Attr(type, owner, key, isManaged), _value(val){
 		
 	}
 
-	~AttrRef(){ 
-		//delete _value;
+	~Attrt(){
+		if (_isManaged){
+			delete &_value;
+		}
 	}
 
 	T& GetValue(){
@@ -60,38 +67,6 @@ public:
 		this->_value = val;
 	}
 
-};
-
-template <class T>
-class AttrPtr : public Attr{
-protected:
-	T* _value;
-
-	void OnAttrChanged(T& old, T& newAt){
-	  
-	}
-
-public:
-
-	AttrPtr(){
-	}
-
-	AttrPtr(int key, ElemType type, T* val, GNode* owner) : Attr(type, owner, key), _value(val){
-	
-	}
-
-	~AttrPtr(){
-		delete _value;
-	}
-
-	T* GetValue(){
-		return (_value);
-	}
-
-	void SetValue(T* val){
-		delete _value;
-		this->_value = val;
-	}
 };
 
 

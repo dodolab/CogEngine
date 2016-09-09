@@ -6,6 +6,7 @@ files
 
 subprojects
 {
+    iwnui
     iwutil
     iw2dscenegraphcore
     iw2dscenegraph

@@ -22,7 +22,7 @@ GNode::~GNode(){
 	delete _tag;
 
 	// delete all behaviors
-	for (CIwArray<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
+	for (CIwList<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
 	{
 		delete (*it);
 	}
@@ -59,44 +59,46 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 }
 
-void GNode::AddBehavior(ABehavior* beh){
+bool GNode::AddBehavior(ABehavior* beh){
 	beh->_owner = this;
 	_behaviors.push_back(beh);
+	return true;
 }
 
-void GNode::RemoveBehavior(ABehavior* beh){
+bool GNode::RemoveBehavior(ABehavior* beh){
+	return true;
 }
 
-void GNode::RemoveAttr(int key){
-
+bool GNode::RemoveAttr(int key){
+	return true;
 }
 
 bool GNode::HasAttr(int key) const{
 	return false;
 }
 
-CIwArray<ABehavior*> GNode::GetBehaviorsCopy() const{
+CIwList<ABehavior*> GNode::GetBehaviorsCopy() const{
 	return _behaviors;
 }
 
-const CIwArray<ABehavior*> GNode::GetBehaviors() const{
+const CIwList<ABehavior*>& GNode::GetBehaviors() const{
 	return _behaviors;
 }
 
-CIwArray<GNode*> GNode::GetChildrenCopy() const{
+CIwList<GNode*> GNode::GetChildrenCopy() const{
 	return _children;
 }
 
-const CIwArray<GNode*> GNode::GetChildren() const{
+const CIwList<GNode*>& GNode::GetChildren() const{
 	return _children;
 }
 
-void GNode::AddChild(GNode* child){
-
+bool GNode::AddChild(GNode* child){
+	return true;
 }
 
-void GNode::RemoveChild(GNode* child){
-
+bool GNode::RemoveChild(GNode* child){
+	return true;
 }
 
 GNode* GNode::GetParent() const{
@@ -143,31 +145,31 @@ void GNode::SetSubType(int val){
 
 }
 
-CIwFMat2D GNode::GetTransform() const{
+CIwFMat2D& GNode::GetTransform() const{
 	return CIwFMat2D();
 }
 
-CIwFMat2D GNode::SetTransform(CIwFMat2D val){
-	return CIwFMat2D();
+void GNode::SetTransform(CIwFMat2D& val){
+	
 }
 
 void GNode::UpdateTransform(CIwFMat2D& parent){
 
 }
 
-EnFlags GNode::GetGroups() const{
+EnFlags& GNode::GetGroups() const{
 	return EnFlags();
 }
 
-void GNode::SetGroups(EnFlags val){
+void GNode::SetGroups(EnFlags& val){
 
 }
 
-EnFlags GNode::GetStates() const{
+EnFlags& GNode::GetStates() const{
 	return EnFlags();
 }
 
-void GNode::SetStates(EnFlags val){
+void GNode::SetStates(EnFlags& val){
 
 }
 

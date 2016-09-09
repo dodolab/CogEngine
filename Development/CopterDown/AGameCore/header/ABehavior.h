@@ -8,11 +8,18 @@
 
 class GNode;
 
+
+/**
+* ABehavior - common abstract class for all behaviors
+*
+*/
 class ABehavior{
 
 protected:
 	// identifier incremental counter
 	static int idCounter;
+	// dummy response message
+	static Msg _dummyMsg;
 	// element type {ALL, VIEW, MODEL}
 	const ElemType _elemType;
 	// identifier
@@ -23,8 +30,6 @@ protected:
 	EnFlags _msgFlags;
 	// owner of this behavior
 	GNode* _owner;
-	// dummy response message
-	static Msg _dummyMsg;
 
 	/**
 	* Creates a new behavior
@@ -56,37 +61,49 @@ public:
 	* Gets element type
 	* @return {ALL, VIEW, MODEL}
 	*/
-	const ElemType GetElemType() const;
+	const ElemType GetElemType() const{
+		return _elemType;
+	}
 
 	/**
 	* Gets element identifier
 	* @return incremental value
 	*/
-	const int GetId() const;
+	const int GetId() const{
+		return _id;
+	}
 
 	/**
 	* Gets behavior running state
 	* @return running state
 	*/
-	const BehState GetBehState() const;
+	const BehState GetBehState() const{
+		return _behState;
+	}
 
 	/**
 	* Gets owner of this behavior
 	* @return pointer to game object
 	*/
-	const GNode* GetOwnerNode() const;
+	const GNode* GetOwnerNode() const{
+		return _owner;
+	}
 
 	/**
 	* Gets message flags
 	* @return reference to flag object
 	*/
-	const EnFlags& GetMessageFlags() const;
+	const EnFlags& GetMessageFlags() const{
+		return _msgFlags;
+	}
 
 	/**
 	* Sets behavior state
 	* @param val value
 	*/
-	void SetBehState(BehState val);
+	void SetBehState(BehState val){
+		_behState = val;
+	}
 
 	/**
 	* Receives a message
@@ -100,6 +117,22 @@ public:
 	* @param absolute absolute time since the game begun
 	*/
 	virtual void Update(const uint64 delta, const uint64 absolute) const = 0;
+
+	bool operator==(int id){
+		return this->_id == id;
+	}
+
+	bool operator==(const ABehavior& other){
+		return _id == other._id;
+	}
+
+	bool operator!=(int id){
+		return this->_id != id;
+	}
+
+	bool operator!=(const ABehavior& other){
+		return _id != other._id;
+	}
 
 	// only game objects can access private members (especially the owner property)
 	friend class GNode;
