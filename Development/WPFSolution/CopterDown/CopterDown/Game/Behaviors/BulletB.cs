@@ -2,6 +2,7 @@
 using System.Linq;
 using CopterDown.Core;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
 using CopterDown.Enums;
 using CopterDown.Game.Types;
 
@@ -24,10 +25,10 @@ namespace CopterDown.Game
                             : collision.FirstId);
 
                     var actualWeapon =
-                        GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAttValue<Weapon>(Attr.WEAPON);
+                        GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAttValue<Weapon>(GameAttr.WEAPON);
 
-                    var targetArmor = second.FindAttValue<int>(Attr.PPARMOR);
-                    var targetLives = second.FindAtt<int>(Attr.PPLIVES);
+                    var targetArmor = second.FindAttValue<int>(GameAttr.PPARMOR);
+                    var targetLives = second.FindAtt<int>(GameAttr.PPLIVES);
 
                     var destruction = actualWeapon.Penetration/ ((float)targetArmor) * 100;
                     targetLives.Value = (int)Math.Max(0, targetLives.Value-destruction);

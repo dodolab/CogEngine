@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.CoreBehavs;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
 using CopterDown.Enums;
 using CopterDown.Game.Types;
 
@@ -23,7 +24,7 @@ namespace CopterDown.Game
             GameObject info = CreateInfoObject();
             player.AddChild(info);
 
-            var weapons = info.FindAttValue<List<Weapon>>(Attr.WEAPONINFO);
+            var weapons = info.FindAttValue<List<Weapon>>(GameAttr.WEAPONINFO);
 
             GameObject canon = CreateCanon(new Transform(318, 263, 0, 2, 2, 37), weapons.FirstOrDefault());
             player.AddChild(canon);
@@ -33,11 +34,9 @@ namespace CopterDown.Game
         public GameObject CreatePlayer()
         {
             GameObject player = new GameObject(ObjectType.SCENE, Subtypes.PLAYER, "player");
-            player.AddAttribute(ElementType.MODEL, Attr.LIVES, 12);
-            player.AddAttribute(ElementType.MODEL, Attr.SCORE, 0);
-            player.AddAttribute(ElementType.MODEL, Attr.SPAWNINTERVAL, 0.3f);
-            player.AddAttribute(ElementType.MODEL, Attr.ACTUALSPAWN, DateTime.Now);
-            player.AddAttribute(ElementType.MODEL, Attr.COPTERSPEED, 6f);
+            player.AddAttribute(ElementType.MODEL, GameAttr.LIVES, 12);
+            player.AddAttribute(ElementType.MODEL, GameAttr.SCORE, 0);
+            player.AddAttribute(ElementType.MODEL, GameAttr.ACTUALSPAWN, DateTime.Now);
             player.AddBehavior(new ScoreB());
             player.AddBehavior(new HudB());
             player.AddBehavior(new PlayerB());
@@ -73,13 +72,13 @@ namespace CopterDown.Game
         {
             GameObject canon = new GameObject(ObjectType.OBJECT, Subtypes.CANON, "canon");
             canon.Transform = transform;
-            canon.AddAttribute(ElementType.MODEL, Attr.WEAPON, weapon);
+            canon.AddAttribute(ElementType.MODEL, GameAttr.WEAPON, weapon);
             canon.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/canon.png");
             canon.AddBehavior(new ImageRenderB());
             canon.AddBehavior(new CanonB());
-            canon.AddAttribute(ElementType.MODEL, Attr.CANON_LASTSHOT, DateTime.Now);
-            canon.AddAttribute(ElementType.MODEL, Attr.CANON_LASTSHOT, DateTime.Now);
-            canon.AddAttribute(ElementType.MODEL, Attr.CANON_MINMAXANGLE, new Pair<float>(-75, 75));
+            canon.AddAttribute(ElementType.MODEL, GameAttr.CANON_LASTSHOT, DateTime.Now);
+            canon.AddAttribute(ElementType.MODEL, GameAttr.CANON_LASTSHOT, DateTime.Now);
+            canon.AddAttribute(ElementType.MODEL, GameAttr.CANON_MINMAXANGLE, new Pair<float>(-75, 75));
             return canon;
         }
 
@@ -98,7 +97,7 @@ namespace CopterDown.Game
             var bullet = new GameObject(ObjectType.OBJECT, Subtypes.BULLET, "bullet");
             bullet.Transform = transform;
 
-                bullet.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, imgSource);
+            bullet.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, imgSource);
 
             if(isImmortal) bullet.States.SetState(States.IS_IMMORTAL);
             bullet.AddAttribute(ElementType.MODEL, Attr.VELOCITY, velocity);
@@ -116,12 +115,12 @@ namespace CopterDown.Game
             GameObject para = new GameObject(ObjectType.OBJECT, Subtypes.PARA, "para");
             para.Transform = transform;
 
-            para.AddAttribute(ElementType.VIEW, Attr.HITFRAME, 0);
+            para.AddAttribute(ElementType.VIEW, GameAttr.HITFRAME, 0);
             para.AddBehavior(new ParaB());
             para.AddBehavior(new ParaDrawB());
             para.AddAttribute(ElementType.MODEL, Attr.BOUNDS, new Bounds(20, 20));
-            para.AddAttribute(ElementType.MODEL, Attr.PPLIVES, 10);
-            para.AddAttribute(ElementType.MODEL, Attr.PPARMOR, 5);
+            para.AddAttribute(ElementType.MODEL, GameAttr.PPLIVES, 10);
+            para.AddAttribute(ElementType.MODEL, GameAttr.PPARMOR, 5);
             para.Groups.SetState(Groups.PARA);
             return para;
         }
@@ -131,12 +130,12 @@ namespace CopterDown.Game
             GameObject copter = new GameObject(ObjectType.OBJECT, Subtypes.COPTER, "copter");
             copter.Transform = transform;
             if(leftDirection) copter.States.SetState(States.LEFT_DIR);
-            copter.AddAttribute(ElementType.VIEW, Attr.FRAME, 0);
-            copter.AddAttribute(ElementType.VIEW, Attr.HITFRAME, 0);
+            copter.AddAttribute(ElementType.VIEW, GameAttr.FRAME, 0);
+            copter.AddAttribute(ElementType.VIEW, GameAttr.HITFRAME, 0);
             copter.AddBehavior(new CopterDrawB());
             copter.AddAttribute(ElementType.MODEL, Attr.BOUNDS, new Bounds(115, 51));
-            copter.AddAttribute(ElementType.MODEL, Attr.PPLIVES, 100);
-            copter.AddAttribute(ElementType.MODEL, Attr.PPARMOR, 100);
+            copter.AddAttribute(ElementType.MODEL, GameAttr.PPLIVES, 100);
+            copter.AddAttribute(ElementType.MODEL, GameAttr.PPARMOR, 100);
             copter.Groups.SetState(Groups.COPTER);
             copter.AddBehavior(new CopterB());
             return copter;
@@ -144,7 +143,7 @@ namespace CopterDown.Game
 
         public GameObject CreateInfoObject()
         {
-            GameObject root = new GameObject(ObjectType.INFO, Subtypes.INFO, "info");
+            GameObject info = new GameObject(ObjectType.INFO, Subtypes.INFO, "info");
 
             var canon = new Weapon("canon", 3, 155, 1, "pack://application:,,,/Images/bullet.png", false, 0);
             var machineGun = new Weapon("machinegun", 15, 3, 3, "pack://application:,,,/Images/bullet2.png", false, 0);
@@ -157,10 +156,12 @@ namespace CopterDown.Game
             weaponList.Add(mortar);
             weaponList.Add(bobo);
 
-            root.AddAttribute(ElementType.ALL, Attr.WEAPONINFO, weaponList);
+            info.AddAttribute(ElementType.ALL, GameAttr.WEAPONINFO, weaponList);
+            info.AddAttribute(ElementType.ALL, GameAttr.SPAWNINTERVAL, 0.3f);
+            info.AddAttribute(ElementType.ALL, GameAttr.COPTERSPEED, 6f);
 
-        
-            return root;
+
+            return info;
         }
     }
 }

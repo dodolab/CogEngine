@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
 using CopterDown.Enums;
 using CopterDown.Game.Types;
 
