@@ -26,10 +26,17 @@ namespace CopterDown.Core
         private int _id;
         private string _tag;
 
-        public GameObject(GameObject parent, int id)
+        public GameObject(int id)
         {
             _id = id;
-            _parent = parent;
+        }
+
+        /// <summary>
+        /// Destroys this object
+        /// </summary>
+        public void Destroy()
+        {
+           // todo: destroy logic here
         }
 
         public void SendMessage(Message msg)
@@ -74,7 +81,7 @@ namespace CopterDown.Core
 
         public void Draw(TimeSpan delta, TimeSpan absolute)
         {
-            if(_children != null) foreach (var child in _children) child.Update(delta, absolute);
+            if (_children != null) foreach (var child in _children) child.Draw(delta, absolute);
 
             if(_viewBehaviors != null) foreach (var beh in _viewBehaviors) beh.Update(delta, absolute);
         }
@@ -133,12 +140,12 @@ namespace CopterDown.Core
 
         public Attribute FindModelAttributeById(int id)
         {
-            return (_modelAttributes == null || _modelAttributes.ContainsKey(id)) ? _modelAttributes[id] : null;
+            return (_modelAttributes != null && _modelAttributes.ContainsKey(id)) ? _modelAttributes[id] : null;
         }
 
         public Attribute FindViewAttributeById(int id)
         {
-            return (_viewAttributes == null || _viewAttributes.ContainsKey(id)) ? _viewAttributes[id] : null;
+            return (_viewAttributes != null && _viewAttributes.ContainsKey(id)) ? _viewAttributes[id] : null;
         }
 
         public IReadOnlyCollection<Attribute> GetModelAttributes()
@@ -164,6 +171,20 @@ namespace CopterDown.Core
         public IReadOnlyCollection<GameObject> GetChildren()
         {
             return _children;
+        }
+
+        public void AddChild(GameObject child)
+        {
+            if (_children == null) _children = new List<GameObject>();
+            child._parent = this;
+            _children.Add(child);
+        }
+
+        public void RemoveChild(GameObject child)
+        {
+            child.SetParent(null);
+            child.Destroy();
+            _children.Remove(child);
         }
 
         public GameObject GetParent()

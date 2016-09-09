@@ -27,7 +27,7 @@ namespace CopterDown
             this._drawInterval = drawInterval;
             this._updateInterval = updateInterval;
             _canvas = canvas;
-            this.root = new GameObject(null,1);
+            this.root = new GameObject(1);
             this._disp = disp;
 
             Rectangle rect = new Rectangle();
@@ -40,8 +40,33 @@ namespace CopterDown
 
             root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d(0,0)),AttributeList.ATTR_POSITION);
             root.AddModelAttribute(new SimpleValAttribute<float>(0), AttributeList.ATTR_ROTATION);
+            root.AddModelAttribute(new SimpleValAttribute<Vector2d>(new Vector2d((float)rect.Width/2,(float)rect.Height/2)), AttributeList.ATTR_ORIGIN);
         
             root.AddModelBehavior(new MovementBehavior());
+
+            var innerRect = new GameObject(2);
+            rect = new Rectangle();
+            rect.Fill = Brushes.Red;
+            rect.Width = 50;
+            rect.Height = 80;
+            innerRect.AddViewBehavior(new RenderBehavior(rect));
+            innerRect.AddModelBehavior(new TranslateAnim(new Vector2d(0, 0), new Vector2d(200, 0), 0.1f, true));
+            innerRect.AddModelAttribute(new SimpleValAttribute<int>(1000),AttributeList.ATTR_ZINDEX);
+
+            root.AddChild(innerRect);
+
+
+
+            var innerInnerRect = new GameObject(3);
+            rect = new Rectangle();
+            rect.Fill = Brushes.Green;
+            rect.Width = 25;
+            rect.Height = 40;
+            innerInnerRect.AddViewBehavior(new RenderBehavior(rect));
+
+            innerInnerRect.AddModelAttribute(new SimpleValAttribute<int>(2000), AttributeList.ATTR_ZINDEX);
+
+            innerRect.AddChild(innerInnerRect);
         }
 
         private DateTime start;
