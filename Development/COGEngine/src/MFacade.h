@@ -15,10 +15,10 @@ using namespace std;
 
 // =================== MLOGGER =========================
 
-void COGLogError(string message);
-void COGLogInfo(string message);
-void COGLogDebug(string message);
-void COGLoggerSave();
+void COGLogError(const char* format, ...);
+void COGLogInfo(const char* format, ...);
+void COGLogDebug(const char* format, ...);
+void COGLoggerFlush();
 
 // =================== MENVIRONMENT ====================
 

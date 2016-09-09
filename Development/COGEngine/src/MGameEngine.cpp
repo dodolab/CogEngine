@@ -19,6 +19,7 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	// fixed delta -> no glitches
 	this->_root->GetRoot()->Update(delta, absolute);
 	environmentCtrl->RemoveEndedInputs();
+ 	logger->Flush();
 }
 
 void MGameEngine::Draw(uint64 delta, uint64 absolute){
@@ -38,7 +39,7 @@ void MGameEngine::Init(MGameFactory* factory){
 	
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MResourceCtrl();
-	logger = new MLogger();
+	logger = new MLogger(new FileLoggerChannel("logfile.log", true));
 
 	this->factory = factory;
 	this->storage = storage = new MGameStorage();

@@ -4,20 +4,29 @@
 #include "MLogger.h"
 #include "MGameStorage.h"
 
-void COGLogError(string message){
-	MEngine.logger->LogError(message);
+void COGLogError(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogError(0,format, args);
+	va_end(args);
 }
 
-void COGLogInfo(string message){
-	MEngine.logger->LogInfo(message);
+void COGLogInfo(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogInfo(0,format, args);
+	va_end(args);
 }
 
-void COGLogDebug(string message){
-	MEngine.logger->LogDebug(message);
+void COGLogDebug(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	MEngine.logger->LogDebug(0,format, args);
+	va_end(args);
 }
 
-void COGLoggerSave(){
-	MEngine.logger->Save();
+void COGLoggerFlush(){
+	MEngine.logger->Flush();
 }
 
 vector<EnInputAct>& COGGetPressedKeys(){

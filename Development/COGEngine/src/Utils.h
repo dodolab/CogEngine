@@ -5,20 +5,20 @@
 #include <memory>    // For std::unique_ptr
 #include <string>
 
-void COGLogError(string message);
-void COGLogInfo(string message);
-void COGLogDebug(string message);
-void COGLoggerSave();
+void COGLogError(const char* format, ...);
+void COGLogInfo(const char* format, ...);
+void COGLogDebug(const char* format, ...);
+void COGLoggerFlush();
 
 
 #ifndef DEBUG
-#   define MASSERT(condition, message) \
+#   define MASSERT(condition, message, ...) \
     do { \
         if (! (condition)) { \
             std::cerr << "Assertion " #condition " failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
-             COGLogError(message); \
-			 COGLoggerSave(); \
+                      << " line " << __LINE__ << ": " << printf(message, ##__VA_ARGS__) << std::endl; \
+             COGLogError(message, ##__VA_ARGS__); \
+			 COGLoggerFlush(); \
 				        } \
 		    } while (false)
 #else

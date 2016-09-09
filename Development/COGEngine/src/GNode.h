@@ -349,8 +349,8 @@ public:
 	template<class T> T& GetAttr(int key){
 		auto it = _attributes.find(key);
 
-		MASSERT(it != _attributes.end(), string_format("%s: Attribute %d doesn't exists", _tag->c_str(), key));
-		MASSERT(typeid(*it->second) == typeid(GAttrR<T>), string_format("%s: Attribute %d is of the wrong type!", _tag->c_str(), key));
+		MASSERT(it != _attributes.end(), "%s: Attribute %d doesn't exists", _tag->c_str(), key);
+		MASSERT(typeid(*it->second) == typeid(GAttrR<T>), "%s: Attribute %d is of the wrong type!", _tag->c_str(), key);
 
 		GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
 		return attr->GetValue();
