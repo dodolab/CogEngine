@@ -30,135 +30,6 @@
     <ClInclude Include="Source\ofxCogMain.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\CogApp.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogEngine.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogFacade.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogAnim.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogBounds.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogCollision.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogFlags.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogInputAct.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogPair.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogShape.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogSoundFile.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogSprite.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogSpriteSet.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogSpriteSheet.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\CogTransform.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogAnimator.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogButton.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogCollider.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogDelayAction.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogDelayRemove.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogHitEvent.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogInputKey.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogMove.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogMultiAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogRotateAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogSceneManager.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogTransformAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogTranslateAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\CogTween.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\CogCache.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\CogEnvironment.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\CogFactory.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\CogRenderer.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\CogStorage.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogAttr.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogBehavior.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogEnums.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogError.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogLogger.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogMsg.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogNode.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogTests.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\CogUtils.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Misc\CollageTexture.h">
       <Filter>Source\Misc</Filter>
     </ClInclude>
@@ -231,50 +102,137 @@
     <ClInclude Include="3rdParty\dukbind\dukbind_validation.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Attributes\Anim.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Bounds.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Collision.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Flags.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\InputAct.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Pair.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Shape.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\SoundFile.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Sprite.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\SpriteSet.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\SpriteSheet.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Transform.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Animator.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Button.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Collider.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\DelayAction.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\DelayRemove.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\HitEvent.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\InputKey.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Move.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\MultiAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\RotateAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\SceneManager.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\TransformAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\TranslateAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\Tween.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Cache.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Environment.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Factory.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Renderer.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Storage.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Attr.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Behavior.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Engine.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Enums.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Error.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Facade.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Logger.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Msg.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Node.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Tests.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Utils.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\CogApp.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Core\CogApp.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogEngine.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogFacade.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Attributes\CogBounds.cpp">
-      <Filter>Source\Attributes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Attributes\CogFlags.cpp">
-      <Filter>Source\Attributes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\CogCache.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\CogEnvironment.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\CogFactory.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\CogStorage.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogBehavior.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogEnums.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogMsg.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogNode.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\CogUtils.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">
       <Filter>Source\Misc</Filter>
     </ClCompile>
@@ -322,6 +280,48 @@
     </ClCompile>
     <ClCompile Include="3rdParty\dukbind\dukbind_validation.cpp">
       <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Bounds.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Flags.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Cache.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Environment.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Factory.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Storage.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Behavior.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Engine.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Enums.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Facade.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Msg.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Node.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Utils.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\CogApp.cpp">
+      <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
 #include "ofMain.h"
 #include "ofApp.h"
-#include "CogFactory.h"
-#include "CogNode.h"
-#include "CogRotateAnim.h"
-#include "CogTranslateAnim.h"
-#include "CogHitEvent.h"
-#include "CogCollider.h"
+#include "Factory.h"
+#include "Node.h"
+#include "RotateAnim.h"
+#include "TranslateAnim.h"
+#include "HitEvent.h"
+#include "Collider.h"
 
 #include "duk_config.h"
 #include "duktape.h"
@@ -22,7 +22,7 @@ void WriteTime(const char* msg) {
 	temp = ofGetElapsedTimeMillis();
 }
 
-class JavaScriptBehavior : public CogBehavior {
+class JavaScriptBehavior : public Behavior {
 	duk_context* ctx;
 	
 	string GetBehaviorJsName() {
@@ -77,7 +77,7 @@ public:
 
 
 
-	void OnMessage(CogMsg& msg) {
+	void OnMessage(Msg& msg) {
 
 		duk_get_prop_string(ctx, -1, GetBehaviorJsName().c_str());
 		duk_get_prop_string(ctx, -1, "OnMessage");
@@ -128,7 +128,7 @@ public:
 	}
 };
 
-class TestingBehavior : public CogBehavior {
+class TestingBehavior : public Behavior {
 
 public:
 
@@ -145,7 +145,7 @@ public:
 	int fpsCounter;
 	bool othersEnded;
 
-	void OnMessage(CogMsg& msg) {
+	void OnMessage(Msg& msg) {
 		if (!othersEnded) {
 			if (msg.GetAction() == Actions::BEHAVIOR_FINISHED && msg.GetBehaviorId() == rotateAnimId) {
 				long mojo = temp;
@@ -180,35 +180,35 @@ int OnTestAnimFinished(duk_context *ctx) {
 	return 1;
 }
 
-class TestingFactory : public CogFactory {
+class TestingFactory : public Factory {
 
 public:
-	CogNode* CreateRoot() {
+	Node* CreateRoot() {
 
 		ofLogNotice("test") << "vytvarim hlavni uzel";
 		mstart = temp = ofGetElapsedTimeMillis();
 
-		CogNode* root = new CogNode(CogObjType::ROOT, 12, "root");
+		Node* root = new Node(ObjType::ROOT, 12, "root");
 
 		ofLogNotice("test") << "nacitam barvicky";
 		for (int i = 0; i < 2000; i++) {
 			spt<ofImage> img = CogGet2DImage("images/blue.png");
 			spt<ofImage> img2 = CogGet2DImage("images/red.png");
 
-			CogNode* child = new CogNode("item");
+			Node* child = new Node("item");
 
 			float rand1 = ofRandomf() / 2 + 0.5f;
 			float rand2 = ofRandomf() / 2 + 0.5f;
 
-			SetTransform(child, ofVec2f(rand1, rand2), CogCalcType::PER, 0.01f, CogCalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
+			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
 
 
 			if (i % 2 == 0 || true) {
-				child->SetShape(spt<CogSpriteShape>(new CogSpriteShape(spt<CogSprite>(new CogSprite(spt<CogSpriteSet>(new CogSpriteSet(
-					new CogSpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
+				child->SetShape(spt<SpriteShape>(new SpriteShape(spt<Sprite>(new Sprite(spt<SpriteSet>(new SpriteSet(
+					new SpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
 			}
 			else {
-				child->SetShape(spt<CogImage>(new CogImage(img2)));
+				child->SetShape(spt<Image>(new Image(img2)));
 			}
 
 
@@ -216,16 +216,16 @@ public:
 			child->GetTransform().rotationOrigin = ofVec2f((CogGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale,
 				(CogGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
 
-			CogRotateAnim* anim = new CogRotateAnim(0, 360, 0.8f, false);
+			RotateAnim* anim = new RotateAnim(0, 360, 0.8f, false);
 			rotateAnimId = anim->GetId();
 			child->AddBehavior(anim);
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
-			child->AddBehavior(new CogTranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
-			if (i % 2 == 0) child->AddBehavior(new CogHitEvent(0, false));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
+			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
+			if (i % 2 == 0) child->AddBehavior(new HitEvent(0, false));
 			if (i % 50 == 0) child->SetGroup(12345);
 			root->AddChild(child);
 		}
@@ -234,7 +234,7 @@ public:
 
 		ofLogNotice("test") << "zapisuju ze je vsechno OK";
 
-		root->AddBehavior(new CogCollider(12345));
+		root->AddBehavior(new Collider(12345));
 		//root->AddBehavior(new TestingBehavior());
 		duk_context *ctx = duk_create_heap_default();
 		duk_push_global_object(ctx);
@@ -469,7 +469,7 @@ int main() {
 	cout << "Android app loaded" << endl;
 	//ofRunApp(new MTestApp());
 	ofLogNotice("test") << "spoustim appku s testingFactory";
-	ofRunApp(new CogApp(new TestingFactory()));
+	ofRunApp(new App(new TestingFactory()));
 	return 0;
 }
 
