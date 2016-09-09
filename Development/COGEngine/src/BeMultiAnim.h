@@ -13,13 +13,6 @@ private:
 	GBehavior* actual;
 	vector<GBehavior*> animations;
 
-protected:
-	~BeMultiAnim(){
-		// delete all behaviors
-		for (auto it = animations.begin(); it != animations.end(); ++it){
-			delete (*it);
-		}
-	}
 public:
 
 	/**
@@ -62,5 +55,12 @@ public:
 		if (actual != nullptr) actual->Update(delta, absolute);
 	}
 
+protected:
+	~BeMultiAnim(){
+		// delete all behaviors
+		for (auto it = animations.begin(); it != animations.end(); ++it){
+			delete (*it);
+		}
+	}
 };
 

@@ -35,73 +35,6 @@ protected:
 	*/
 	GBehavior(ElemType elemType);
 
-	/**
-	* Registers itself as a action listener
-	* @param action1 action to listen to
-	*/
-	void RegisterListening(int action1);
-
-	/**
-	* Registers itself as a action listener
-	* @param action1 action to listen to
-	* @param action2 action to listen to
-	*/
-	void RegisterListening(int action1, int action2);
-
-	/**
-	* Registers itself as a action listener
-	* @param action1 action to listen to
-	* @param action2 action to listen to
-	* @param action3 action to listen to
-	*/
-	void RegisterListening(int action1, int action2, int action3);
-
-	/**
-	* Registers itself as a action listener
-	* @param action1 action to listen to
-	* @param action2 action to listen to
-	* @param action3 action to listen to
-	* @param action4 action to listen to
-	*/
-	void RegisterListening(int action1, int action2, int action3, int action4);
-
-	/**
-	* Sends a message to any set of behaviors
-	* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
-	* @param action id of action; see Actions namespace for common action ids
-	* @param subaction id of subaction; see Actions namespace for common action ids
-	* @param data payload
-	* @param source source game object that is a part of message
-	*/
-	void SendMessage(BubblingType bubblingType, int action, int subaction, void* data, GNode* source) const;
-
-	/**
-	* Sends a message to any set of behaviors without tree-bubbling
-	* @param action id of action; see Actions namespace for common action ids
-	* @param subaction id of subaction; see Actions namespace for common action ids
-	* @param data payload
-	* @param source source game object that is a part of message
-	*/
-	void SendMessageNoBubbling(int action, int subaction, void* data, GNode* source) const;
-
-	/**
-	* Sends a message to one behavior with specific id
-	* @param action id of action; see Actions namespace for common action ids
-	* @param subaction id of subaction; see Actions namespace for common action ids
-	* @param data payload
-	* @param source source game object that is a part of message
-	* @param behaviorId id of behavior that should get this message
-	*/
-	void SendDirectMessage(int action, int subaction, void* data, GNode* source, int behaviorId) const;
-
-	/**
-	* Sets owner to behavior
-	* @param beh behavior
-	* @param owner node to set as an owner
-	*/
-	static void SetOwner(GBehavior* beh, GNode* owner){
-		beh->owner = owner;
-	}
 
 public:
 
@@ -192,7 +125,7 @@ public:
 	/**
 	* Updates behavior and owning object inner state
 	* @param delta delta time from the last loop
-	* @param absolute absolute time since the game begun 
+	* @param absolute absolute time since the application begun 
 	*/
 	virtual void Update(const uint64 delta, const uint64 absolute) = 0;
 
@@ -214,4 +147,73 @@ public:
 
 	// allow to access GNode private members
 	friend class GNode;
+
+	protected:
+		/**
+		* Registers itself as a action listener
+		* @param action1 action to listen to
+		*/
+		void RegisterListening(int action1);
+
+		/**
+		* Registers itself as a action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		*/
+		void RegisterListening(int action1, int action2);
+
+		/**
+		* Registers itself as a action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		* @param action3 action to listen to
+		*/
+		void RegisterListening(int action1, int action2, int action3);
+
+		/**
+		* Registers itself as a action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		* @param action3 action to listen to
+		* @param action4 action to listen to
+		*/
+		void RegisterListening(int action1, int action2, int action3, int action4);
+
+		/**
+		* Sends a message to any set of behaviors
+		* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
+		* @param action id of action; see Actions namespace for common action ids
+		* @param subaction id of subaction; see Actions namespace for common action ids
+		* @param data payload
+		* @param source source node that is a part of message
+		*/
+		void SendMessage(BubblingType bubblingType, int action, int subaction, void* data, GNode* source) const;
+
+		/**
+		* Sends a message to any set of behaviors without tree-bubbling
+		* @param action id of action; see Actions namespace for common action ids
+		* @param subaction id of subaction; see Actions namespace for common action ids
+		* @param data payload
+		* @param source source node that is a part of message
+		*/
+		void SendMessageNoBubbling(int action, int subaction, void* data, GNode* source) const;
+
+		/**
+		* Sends a message to one behavior with specific id
+		* @param action id of action; see Actions namespace for common action ids
+		* @param subaction id of subaction; see Actions namespace for common action ids
+		* @param data payload
+		* @param source source node that is a part of message
+		* @param behaviorId id of behavior that should get this message
+		*/
+		void SendDirectMessage(int action, int subaction, void* data, GNode* source, int behaviorId) const;
+
+		/**
+		* Sets owner to behavior
+		* @param beh behavior
+		* @param owner node to set as an owner
+		*/
+		static void SetOwner(GBehavior* beh, GNode* owner){
+			beh->owner = owner;
+		}
 };

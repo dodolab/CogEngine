@@ -54,7 +54,7 @@ private:
 	void* data;
 	// id of behavior that sent this message
 	int behaviorId;
-	// source game object that is connected with this message
+	// source node that is connected with this message
 	GNode* sourceObj;
 
 public:

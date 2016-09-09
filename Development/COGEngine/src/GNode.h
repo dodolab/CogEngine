@@ -78,17 +78,6 @@ protected:
 		runMode = RunningMode::RUNNING;
 	}
 
-	/*
-	* Inserts children and behaviors that should be inserted
-	* at the end of update loop
-	*/
-	void InsertElementsForAdding();
-
-	/*
-	* Deletes children and behaviors that should be removed
-	* at the end of update loop
-	*/
-	void DeleteElementsForRemoving();
 	
 public:
 
@@ -126,7 +115,7 @@ public:
 	/**
 	* Draws all objects, calling VIEW behaviors
 	* @param delta delta time from the last loop
-	* @param absolute absolute time since the game begun
+	* @param absolute absolute time since the app begun
 	*/
 	void Draw(const uint64 delta, const uint64 absolute);
 
@@ -498,6 +487,19 @@ public:
 	*/
 	void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
-	// game storage can access private members
+	// app storage can access private members
 	friend class MRepository;
+
+	protected:
+		/*
+		* Inserts children and behaviors that should be inserted
+		* at the end of update loop
+		*/
+		void InsertElementsForAdding();
+
+		/*
+		* Deletes children and behaviors that should be removed
+		* at the end of update loop
+		*/
+		void DeleteElementsForRemoving();
 };

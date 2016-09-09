@@ -2,45 +2,6 @@
 #include <vector>
 
 
-
-void EnFlags::DoStateOperation(bool set, int state){
-	int index = GetStateIndex(state);
-	int offset = GetStateOffset(state);
-	int binary = 1 << offset;
-
-	// set integer flags
-	if (index <= 3)
-	{
-		switch (index){
-		case 0:  if (set)  (flags1 |= binary); else (flags1 ^= binary);
-			return;
-		case 1:  if (set) (flags2 |= binary); else (flags2 ^= binary);
-			return;
-		case 2:  if (set) (flags3 |= binary); else (flags3 ^= binary);
-			return;
-		case 3:  if (set) (flags4 |= binary); else (flags4 ^= binary);
-			return;
-		}
-	}
-
-	// index >3 - set map
-	if (otherFlags == nullptr) otherFlags = new map<int, int>();
-
-	if (set){
-		if (!otherFlags->count(index)){
-			(*otherFlags)[index] = binary;
-		}
-		else (*otherFlags)[index] |= binary;
-	}
-	else{
-		if (otherFlags->count(index)){
-			(*otherFlags)[index] ^= binary;
-			// must be, because there can't be any null value
-			if (((*otherFlags)[index]) == 0) otherFlags->erase(index);
-		}
-	}
-}
-
 EnFlags::EnFlags(){
 	Init();
 }
@@ -254,4 +215,42 @@ bool EnFlags::ContainsAtLeastOne(EnFlags& other) const{
 		if (HasState(allStates[i])) return true;
 	}
 	return false;
+}
+
+void EnFlags::DoStateOperation(bool set, int state){
+	int index = GetStateIndex(state);
+	int offset = GetStateOffset(state);
+	int binary = 1 << offset;
+
+	// set integer flags
+	if (index <= 3)
+	{
+		switch (index){
+		case 0:  if (set)  (flags1 |= binary); else (flags1 ^= binary);
+			return;
+		case 1:  if (set) (flags2 |= binary); else (flags2 ^= binary);
+			return;
+		case 2:  if (set) (flags3 |= binary); else (flags3 ^= binary);
+			return;
+		case 3:  if (set) (flags4 |= binary); else (flags4 ^= binary);
+			return;
+		}
+	}
+
+	// index >3 - set map
+	if (otherFlags == nullptr) otherFlags = new map<int, int>();
+
+	if (set){
+		if (!otherFlags->count(index)){
+			(*otherFlags)[index] = binary;
+		}
+		else (*otherFlags)[index] |= binary;
+	}
+	else{
+		if (otherFlags->count(index)){
+			(*otherFlags)[index] ^= binary;
+			// must be, because there can't be any null value
+			if (((*otherFlags)[index]) == 0) otherFlags->erase(index);
+		}
+	}
 }

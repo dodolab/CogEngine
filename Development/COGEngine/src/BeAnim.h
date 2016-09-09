@@ -8,6 +8,44 @@
 * XML animation loader
 */
 class AnimationLoader{
+public:
+
+	/**
+	* Loads animation from xml
+	*/
+	void LoadAnimations(spt<ofxXmlSettings> xml, vector<spt<EnAnim>>& rootAnims){
+
+		if (xml->tagExists("animations")){
+			xml->pushTag("animations");
+
+			int numberOfAnims = xml->getNumTags("anim");
+			// referenced anims will be processed at second phase
+			map<string, EnAnim*> referencedAnims;
+
+			// phase 1: load not-referenced animations
+			for (int i = 0; i < numberOfAnims; i++){
+
+				xml->pushTag("anim", i);
+				// load
+				spt<EnAnim> anim = spt<EnAnim>(CreateAnimationFromXml(xml, referencedAnims));
+				if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
+
+				rootAnims.push_back(anim);
+				xml->popTag();
+			}
+
+			// phase 2: load referenced animations
+			for (int i = 0; i < numberOfAnims; i++){
+
+				xml->pushTag("anim", i);
+				ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims);
+				xml->popTag();
+			}
+
+			xml->popTag();
+		}
+	}
+
 private:
 
 	/**
@@ -62,7 +100,7 @@ private:
 	void FillOtherAttributes(spt<ofxXmlSettings> xml, EnAnim* anim){
 		anim->SetSheetPath(xml->getAttribute(":", "sheet", anim->GetSheetPath()));
 		anim->SetFrames(xml->getAttribute(":", "frames", anim->GetFrames()));
-		if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0",anim->GetName()));
+		if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", anim->GetName()));
 		anim->SetLines(xml->getAttribute(":", "lines", anim->GetLines()));
 		if (anim->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", anim->GetName()));
 		anim->SetStart(xml->getAttribute(":", "start", anim->GetStart()));
@@ -99,7 +137,7 @@ private:
 	* @rootAnimIndex index of root for actual XML scope
 	* @rootAnims list of all root animations
 	*/
-	void ProcessRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims, 
+	void ProcessRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, EnAnim*>& referencedAnims,
 		int rootAnimIndex, vector<spt<EnAnim>>& rootAnims){
 
 		int innerAnimations = xml->getNumTags("anim");
@@ -154,47 +192,6 @@ private:
 		}
 	}
 
-public:
-
-	/**
-	* Loads animation from xml
-	*/
-	vector<spt<EnAnim>> LoadAnimations(spt<ofxXmlSettings> xml){
-
-		vector<spt<EnAnim>> rootAnims;
-
-		if (xml->tagExists("animations")){
-			xml->pushTag("animations");
-
-			int numberOfAnims = xml->getNumTags("anim");
-			// referenced anims will be processed at second phase
-			map<string, EnAnim*> referencedAnims;
-
-			// phase 1: load not-referenced animations
-			for (int i = 0; i < numberOfAnims; i++){
-
-				xml->pushTag("anim", i);
-				// load
-				spt<EnAnim> anim = spt<EnAnim>(CreateAnimationFromXml(xml, referencedAnims));
-				if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
-
-				rootAnims.push_back(anim);
-				xml->popTag();
-			}
-
-			// phase 2: load referenced animations
-			for (int i = 0; i < numberOfAnims; i++){
-
-				xml->pushTag("anim", i);
-				ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims);
-				xml->popTag();
-			}
-
-			xml->popTag();
-		}
-
-		return rootAnims;
-	}
 };
 
 
@@ -284,130 +281,6 @@ private:
 	AnimNodeContext context;
 	// stack of processing tree
 	stack<AnimNodeContext> nodeStack;
-	
-
-	/**
-	* Tries to go to the next frame
-	* @return true, if there is a frame to go to
-	*/
-	bool TryNextFrame(spt<EnAnim> actualNode){
-
-		// must by cast to int, because of rounding
-		if (!context.IsChildReverted() && ((int)(context.actualFrameIndex + actualNode->GetSpeed())) < actualNode->GetTotalFrames()){
-			context.actualFrameIndex += actualNode->GetSpeed();
-			return true;
-		}// no cast to int, because we need exactly value higher than 0
-		else if (context.IsChildReverted() && (context.actualFrameIndex - actualNode->GetSpeed()) >= 0){
-			context.actualFrameIndex -= actualNode->GetSpeed();
-			return true;
-		}
-		else return false;
-	}
-
-	/**
-	* Tries to go to the nearest child
-	* @return true, if there is a child to go to
-	*/
-	bool TryChildren(spt<EnAnim> actualNode){
-		
-		if (actualNode->GetChildren().size() != 0){
-			// node has children -> process them
-			nodeStack.push(context);
-			// XOR function -> two inverted parents give non-inverted animation for children
-			bool invertedScope = context.IsChildReverted();
-			context = AnimNodeContext(actualNode, invertedScope, false);
-			return true;
-		}
-		else return false;
-	}
-
-	/**
-	* Tries to start next loop
-	* @return true if there is a loop to go to
- 	*/
-	bool TryNextLoop(spt<EnAnim> actualNode){
-		context.actualLoop++;
-		if (context.actualLoop < actualNode->GetRepeat() || actualNode->GetRepeat() == 0){
-			// repeat animation of this node
-			if (!context.IsChildReverted()){
-				context.actualFrameIndex = 0;
-			}
-			else{
-				context.actualFrameIndex = actualNode->GetTotalFrames() - actualNode->GetSpeed();
-			}
-			return true;
-		}
-		else return false;
-	}
-
-	/**
-	* Tries to go to the next sibling
-	* @return true if there is a sibling to go to
-	*/
-	bool TrySibling(){
-		
-		if (!context.isScopeReverted && context.actualChildIndex < (context.node->GetChildren().size() - 1)){
-			// go to the next element
-			context.actualChildIndex++;
-			context.RefreshFrameIndex();
-			context.actualLoop = 0;
-
-			return true;
-		}
-		else if (context.isScopeReverted && context.actualChildIndex > 0){
-			// go to the previous element (animation is inverted)
-			context.actualChildIndex--;
-			context.RefreshFrameIndex();
-			context.actualLoop = 0;
-		}
-		else return false;
-	}
-
-	/**
-	* Goes to the next animation frame or traverses through animation tree until 
-	* an available frame is found
-	*/
-	void MoveToNext(){
-
-		spt<EnAnim> actualNode;
-
-		do{
-
-			// get actual node
-			actualNode = context.GetActualChild();
-
-			// 1) loop through frames of actual node
-			// 2) loop through children of actual node
-			// 3) loop through all loops of actual node
-			// 4) go to the next node (sibling)
-			if (!TryNextFrame(actualNode) && !TryChildren(actualNode) && !TryNextLoop(actualNode) && !TrySibling()){
-
-				bool foundNode = false;
-
-				// can't go further -> pop until we find next node
-				while (!nodeStack.empty()){
-					// pop context
-					context = nodeStack.top();
-					nodeStack.pop();
-					// get actual node of the popped context
-					actualNode = context.GetActualChild();
-					
-					// try to start next loop or go to the next sibling
-					if (TryNextLoop(actualNode) || TrySibling()){
-						foundNode = true;
-						break;
-					}
-				}
-
-				if (!foundNode && nodeStack.empty()){
-					ended = true;
-					return;
-				}
-			}
-		// do it until a node with animation is found
-		} while (!context.GetActualChild()->HasSheets());
-	}
-
 public:
 
 	BeAnim(spt<EnAnim> anim) : GBehavior(ElemType::MODEL), root(anim){
@@ -470,4 +343,129 @@ public:
 			}			
 		}
 	}
+
+private:
+
+	/**
+	* Tries to go to the next frame
+	* @return true, if there is a frame to go to
+	*/
+	bool TryNextFrame(spt<EnAnim> actualNode){
+
+		// must by cast to int, because of rounding
+		if (!context.IsChildReverted() && ((int)(context.actualFrameIndex + actualNode->GetSpeed())) < actualNode->GetTotalFrames()){
+			context.actualFrameIndex += actualNode->GetSpeed();
+			return true;
+		}// no cast to int, because we need exactly value higher than 0
+		else if (context.IsChildReverted() && (context.actualFrameIndex - actualNode->GetSpeed()) >= 0){
+			context.actualFrameIndex -= actualNode->GetSpeed();
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to go to the nearest child
+	* @return true, if there is a child to go to
+	*/
+	bool TryChildren(spt<EnAnim> actualNode){
+
+		if (actualNode->GetChildren().size() != 0){
+			// node has children -> process them
+			nodeStack.push(context);
+			// XOR function -> two inverted parents give non-inverted animation for children
+			bool invertedScope = context.IsChildReverted();
+			context = AnimNodeContext(actualNode, invertedScope, false);
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to start next loop
+	* @return true if there is a loop to go to
+	*/
+	bool TryNextLoop(spt<EnAnim> actualNode){
+		context.actualLoop++;
+		if (context.actualLoop < actualNode->GetRepeat() || actualNode->GetRepeat() == 0){
+			// repeat animation of this node
+			if (!context.IsChildReverted()){
+				context.actualFrameIndex = 0;
+			}
+			else{
+				context.actualFrameIndex = actualNode->GetTotalFrames() - actualNode->GetSpeed();
+			}
+			return true;
+		}
+		else return false;
+	}
+
+	/**
+	* Tries to go to the next sibling
+	* @return true if there is a sibling to go to
+	*/
+	bool TrySibling(){
+
+		if (!context.isScopeReverted && context.actualChildIndex < (context.node->GetChildren().size() - 1)){
+			// go to the next element
+			context.actualChildIndex++;
+			context.RefreshFrameIndex();
+			context.actualLoop = 0;
+
+			return true;
+		}
+		else if (context.isScopeReverted && context.actualChildIndex > 0){
+			// go to the previous element (animation is inverted)
+			context.actualChildIndex--;
+			context.RefreshFrameIndex();
+			context.actualLoop = 0;
+		}
+		else return false;
+	}
+
+	/**
+	* Goes to the next animation frame or traverses through animation tree until
+	* an available frame is found
+	*/
+	void MoveToNext(){
+
+		spt<EnAnim> actualNode;
+
+		do{
+
+			// get actual node
+			actualNode = context.GetActualChild();
+
+			// 1) loop through frames of actual node
+			// 2) loop through children of actual node
+			// 3) loop through all loops of actual node
+			// 4) go to the next node (sibling)
+			if (!TryNextFrame(actualNode) && !TryChildren(actualNode) && !TryNextLoop(actualNode) && !TrySibling()){
+
+				bool foundNode = false;
+
+				// can't go further -> pop until we find next node
+				while (!nodeStack.empty()){
+					// pop context
+					context = nodeStack.top();
+					nodeStack.pop();
+					// get actual node of the popped context
+					actualNode = context.GetActualChild();
+
+					// try to start next loop or go to the next sibling
+					if (TryNextLoop(actualNode) || TrySibling()){
+						foundNode = true;
+						break;
+					}
+				}
+
+				if (!foundNode && nodeStack.empty()){
+					ended = true;
+					return;
+				}
+			}
+			// do it until a node with animation is found
+		} while (!context.GetActualChild()->HasSheets());
+	}
+
 };

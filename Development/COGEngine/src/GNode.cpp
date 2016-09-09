@@ -4,7 +4,7 @@
 #include <vector>
 #include <list>
 #include <string>
-#include "MGameEngine.h"
+#include "MEngine.h"
 
 // first id is always 1
 int GNode::idCounter = 1;
@@ -33,7 +33,7 @@ GNode::GNode(const GNode& copy) : type(copy.type), subType(copy.subType), id(idC
 
 GNode::~GNode(){
 
-	MLOGDEBUG("Destructing gameobject %s", tag->c_str());
+	MLOGDEBUG("Destructing node %s", tag->c_str());
 	// move elements from collection to insert so they can be removed from classic collections
 	InsertElementsForAdding();
 
@@ -54,7 +54,7 @@ GNode::~GNode(){
 	// delete all children
 	for (auto it = children.begin(); it != children.end(); ++it)
 	{
-		COGRemoveGameObject((*it));
+		COGRemoveNode((*it));
 		delete (*it);
 	}
 	children.clear();
@@ -62,49 +62,6 @@ GNode::~GNode(){
 	delete tag;
 	delete groups;
 	delete states;
-}
-
-void GNode::InsertElementsForAdding(){
-
-	// insert behaviors
-	for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it){
-		AddBehavior((*it), true);
-	}
-	behaviorsToAdd.clear();
-
-	// insert children
-	for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it){
-		AddChild((*it), true);
-	}
-	childrenToAdd.clear();
-}
-
-void GNode::DeleteElementsForRemoving(){
-
-	// delete behaviors
-	for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it){
-		std::pair<GBehavior*, bool> item = (*it);
-		GBehavior* beh = item.first;
-		behaviors.remove(beh);
-		COGRemoveBehavior(beh);
-		beh->owner = nullptr;
-		// item.second holds ERASE indicator
-		if (item.second) delete item.first;
-	}
-
-	behaviorToRemove.clear();
-
-	// delete children
-	for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it){
-		std::pair<GNode*, bool> item = (*it);
-		GNode* child = item.first;
-		children.remove(child);
-		COGRemoveGameObject(child);
-		// item.second holds ERASE indicator
-		if (item.second) delete item.first;
-	}
-
-	childrenToRemove.clear();
 }
 
 void GNode::UpdateTransform(bool deep){
@@ -249,7 +206,7 @@ bool GNode::AddChild(GNode* child, bool immediately){
 	if (immediately){
 		children.push_back(child);
 		child->parent = this;
-		COGAddGameObject(child);
+		COGAddNode(child);
 	}
 	else{
 		childrenToAdd.push_back(child);
@@ -264,7 +221,7 @@ bool GNode::RemoveChild(GNode* child, bool immediately, bool erase){
 	if (result){
 		if (immediately){
 			children.remove(child);
-			COGRemoveGameObject(child);
+			COGRemoveNode(child);
 			if(erase) delete (child);
 		}
 		else{
@@ -340,4 +297,47 @@ void GNode::GetInfo(bool includeChildren, bool includeAttributes, std::ostringst
 			(*it)->GetInfo(includeChildren, includeAttributes, ss, level + 1);
 		}
 	}
+}
+
+void GNode::InsertElementsForAdding(){
+
+	// insert behaviors
+	for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it){
+		AddBehavior((*it), true);
+	}
+	behaviorsToAdd.clear();
+
+	// insert children
+	for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it){
+		AddChild((*it), true);
+	}
+	childrenToAdd.clear();
+}
+
+void GNode::DeleteElementsForRemoving(){
+
+	// delete behaviors
+	for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it){
+		std::pair<GBehavior*, bool> item = (*it);
+		GBehavior* beh = item.first;
+		behaviors.remove(beh);
+		COGRemoveBehavior(beh);
+		beh->owner = nullptr;
+		// item.second holds ERASE indicator
+		if (item.second) delete item.first;
+	}
+
+	behaviorToRemove.clear();
+
+	// delete children
+	for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it){
+		std::pair<GNode*, bool> item = (*it);
+		GNode* child = item.first;
+		children.remove(child);
+		COGRemoveNode(child);
+		// item.second holds ERASE indicator
+		if (item.second) delete item.first;
+	}
+
+	childrenToRemove.clear();
 }

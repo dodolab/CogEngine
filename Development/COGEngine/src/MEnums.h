@@ -31,7 +31,7 @@ namespace Actions{
 	extern int OBJECT_REMOVED;
 	extern int USER_INPUT;
 	extern int COLLISION_OCURRED;
-	extern int GAMEOBJECT_DESTROYED;
+	extern int NODE_DESTROYED;
 	extern int ATTRIBUTE_CHANGED;
 	extern int OBJECT_HIT_STARTED;
 	extern int OBJECT_HIT_OVER;
@@ -42,7 +42,7 @@ namespace Actions{
 	extern int PARA_KILLED;
 	extern int COPTER_KILLED;
 	extern int PLAYER_LOOSE;
-	extern int GAME_FINISHED;
+	extern int APP_FINISHED;
 	extern int TWEEN_ENDED;
 	extern int FLIP_ENDED;
 	extern int DELAY_ACTION;
@@ -106,11 +106,11 @@ enum class ElemType {
 	MODEL				/*!< model element - used in UPDATE loop */
 };
 
-/*! Game object type enumerator */
+/*! Node type enumerator */
 enum class ObjType{
 	ROOT,				/*!< root object, usually the topmost parent */
 	SCENE,				/*!< scene root object, topmost parent in the scene */
-	OBJECT,				/*!< simple game object */
+	OBJECT,				/*!< common node  */
 	HUD,				/*!< human interface object */
 	INFO				/*!< info object */
 };

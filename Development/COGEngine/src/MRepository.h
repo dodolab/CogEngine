@@ -6,7 +6,7 @@
 #include <functional>
 
 /**
-* Game object repository
+* Node repository
 */
 class MRepository{
 private:
@@ -14,38 +14,10 @@ private:
 	map<int, vector<GBehavior*>> behListeners;
 	// behavior ids and their registered actions
 	map<int, vector<int>> behListenerActions;
-	// list of all game objects
-	vector<GNode*> allGameObjects;
+	// list of all nodes
+	vector<GNode*> allNodes;
 	// list of all behaviors
 	vector<GBehavior*> allBehaviors;
-
-	/**
-	* Sends message to behaviors
-	* @param msg message to send
-	* @param actualNode actual node in bubbling algorithm
-	*/
-	void SendMessageToBehaviors(GMsg& msg, GNode* actualNode);
-
-	/**MM
-	* Sends message to children of actual node
-	* @param msg message to send
-	* @param actualNode actual node in bubbling algorithm
-	*/
-	void SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode);
-
-	/**
-	* Sends message that will be bubbled from actualNode
-	* @param msg message to send
-	* @param actualNode actual node in bubbling algorithm
-	*/
-	void SendBubblingMessage(GMsg& msg, GNode* actualNode);
-
-	/**
-	* Sends direct message - takes all behaviors and callbacks that have
-	* registered selected action
-	* @param msg message  to send
-	*/
-	void SendDirectMessage(GMsg& msg);
 
 public:
 
@@ -124,11 +96,11 @@ public:
 	void SendDirectMessageToBehavior(GMsg& msg, int targetId);
 
 	/**
-	* Sends message to specific game object
+	* Sends message to specific node
 	* @param msg message  to send
-	* @param targetId id of target game object
+	* @param targetId id of target node
 	*/
-	void SendDirectMessageToGameObject(GMsg& msg, int targetId);
+	void SendDirectMessageToNode(GMsg& msg, int targetId);
 
 	/**
 	* Returns true, if there is at least one behavior listener for selected action
@@ -149,9 +121,9 @@ public:
 	}
 
 	/**
-	* Finds game object by id
+	* Finds node by id
 	*/
-	GNode* FindGameObjectById(int id) const;
+	GNode* FindNodeById(int id) const;
 
 	/**
 	* Finds behavior by id
@@ -159,54 +131,54 @@ public:
 	GBehavior* FindBehaviorById(int id) const;
 
 	/**
-	* Gets number of game objects with specific tag
+	* Gets number of nodes with specific tag
 	*/
-	int GetGameObjectsCountByTag(string tag) const;
+	int GetNodesCountByTag(string tag) const;
 
 	/**
-	* Finds game object by tag
+	* Finds node by tag
 	*/
-	GNode* FindGameObjectByTag(string tag) const;
+	GNode* FindNodeByTag(string tag) const;
 
 	/**
-	* Finds all game objects by tag
+	* Finds all nodes by tag
 	*/
-	vector<GNode*> FindGameObjectsByTag(char* tag) const;
+	vector<GNode*> FindNodesByTag(char* tag) const;
 
 	/**
-	* Gets number of game objects with specific subtype
+	* Gets number of nodes with specific subtype
 	*/
-	int GetGameObjectsCountBySubType(int subtype) const;
+	int GetNodesCountBySubType(int subtype) const;
 
 	/**
-	* Finds game object by subtype
+	* Finds node by subtype
 	*/
-	GNode* FindGameObjectBySubType(int subtype) const;
+	GNode* FindNodeBySubType(int subtype) const;
 
 	/**
-	* Finds all game objects by subtype
+	* Finds all nodes by subtype
 	*/
-	vector<GNode*> FindGameObjectsBySubType(int subtype) const;
+	vector<GNode*> FindNodesBySubType(int subtype) const;
 
 	/**
-	* Adds a new game object to the collection
-	* @return true, if game object has been added
+	* Adds a new node to the collection
+	* @return true, if node has been added
 	*/
-	bool AddGameObject(GNode* gameObject){
-		auto found = find(allGameObjects.begin(), allGameObjects.end(), gameObject);
-		if (found == allGameObjects.end()){
-			allGameObjects.push_back(gameObject);
+	bool AddNode(GNode* node){
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found == allNodes.end()){
+			allNodes.push_back(node);
 			return true;
 		}
 		else return false;
 	}
 
 	/**
-	* Removes game object from collection
+	* Removes node from collection
 	*/
-	void RemoveGameObject(GNode* gameObject){
-		auto found = find(allGameObjects.begin(), allGameObjects.end(), gameObject);
-		if (found != allGameObjects.end()) allGameObjects.erase(found);
+	void RemoveNode(GNode* node){
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found != allNodes.end()) allNodes.erase(found);
 	}
 
 	/**
@@ -232,5 +204,35 @@ public:
 
 		UnregisterListener(beh);
 	}
+
+	private:
+
+		/**
+		* Sends message to behaviors
+		* @param msg message to send
+		* @param actualNode actual node in bubbling algorithm
+		*/
+		void SendMessageToBehaviors(GMsg& msg, GNode* actualNode);
+
+		/**MM
+		* Sends message to children of actual node
+		* @param msg message to send
+		* @param actualNode actual node in bubbling algorithm
+		*/
+		void SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode);
+
+		/**
+		* Sends message that will be bubbled from actualNode
+		* @param msg message to send
+		* @param actualNode actual node in bubbling algorithm
+		*/
+		void SendBubblingMessage(GMsg& msg, GNode* actualNode);
+
+		/**
+		* Sends direct message - takes all behaviors and callbacks that have
+		* registered selected action
+		* @param msg message  to send
+		*/
+		void SendDirectMessage(GMsg& msg);
 
 };

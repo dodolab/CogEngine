@@ -12,7 +12,7 @@ namespace Actions{
 	int OBJECT_REMOVED = 3;
 	int USER_INPUT = 4;
 	int COLLISION_OCURRED = 5;
-	int GAMEOBJECT_DESTROYED = 6;
+	int NODE_DESTROYED = 6;
 	int ATTRIBUTE_CHANGED = 7;
 	int OBJECT_HIT_STARTED = 8;
 	int OBJECT_HIT_OVER = 9;
@@ -23,7 +23,7 @@ namespace Actions{
 	int PARA_KILLED = 15;
 	int COPTER_KILLED = 16;
 	int PLAYER_LOOSE = 17;
-	int GAME_FINISHED = 18;
+	int APP_FINISHED = 18;
 	int TWEEN_ENDED = 19;
 	int FLIP_ENDED = 20;
 	int DELAY_ACTION = 21;
@@ -43,7 +43,7 @@ namespace Actions{
 			"OBJECT_REMOVED",
 			"USER_INPUT",
 			"COLLISION_OCURRED",
-			"GAMEOBJECT_DESTROYED",
+			"NODE_DESTROYED",
 			"ATTRIBUTE_CHANGED",
 			"OBJECT_HIT_STARTED",
 			"OBJECT_HIT_OVER",
@@ -54,7 +54,7 @@ namespace Actions{
 			"PARA_KILLED",
 			"COPTER_KILLED",
 			"PLAYER_LOOSE",
-			"GAME_FINISHED",
+			"APP_FINISHED",
 			"TWEEN_ENDED",
 			"SLIDE_ENDED",
 			"DELAY_ACTION",

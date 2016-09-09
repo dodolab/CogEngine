@@ -1,16 +1,16 @@
-#include "MGameEngine.h"
+#include "MEngine.h"
 #include "BeTranslateAnim.h"
 #include "GNode.h"
 #include "BeRender.h"
 #include "BeRotateAnim.h"
-#include "MGameFactory.h"
+#include "MFactory.h"
 #include "MRepository.h"
 #include "ofSoundPlayer.h"
 
-MGameEngine MEngine;
+MEngine COGEngine;
 
 
-void MGameEngine::Init(MGameFactory* factory){
+void MEngine::Init(MFactory* factory){
 
 	// create components
 	environmentCtrl = new MEnvironmentCtrl();
@@ -24,18 +24,18 @@ void MGameEngine::Init(MGameFactory* factory){
 	environmentCtrl->Init();
 	factory->Init();
 	resourceCtrl->Init();
-	// create game root
+	// create root node
 	_root = factory->CreateRoot();
 }
 
 
-void MGameEngine::Update(uint64 delta, uint64 absolute){
+void MEngine::Update(uint64 delta, uint64 absolute){
 	frameCounter++;
 
 	// update transforms
 	this->_root->GetRoot()->UpdateTransform(true);
 	// update scene
-	this->_root->GetRoot()->Update(16, absolute);
+	this->_root->GetRoot()->Update(delta, absolute);
 	// remove ended inputs
 	environmentCtrl->RemoveEndedProcesses();
  	
@@ -47,7 +47,7 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	ofSoundUpdate();
 }
 
-void MGameEngine::Draw(uint64 delta, uint64 absolute){
+void MEngine::Draw(uint64 delta, uint64 absolute){
 	// clear the drawing surface
 	ofBackground(50,50,50);
 	// setup ortographic camera

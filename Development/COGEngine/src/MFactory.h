@@ -10,11 +10,11 @@ enum class CalcType{
 };
 
 /**
-* Game factory with methods for calculating positions
-* All game object construction methods should be implemented
+* Factory with methods for calculating positions
+* All node construction methods should be implemented
 * in classes derived from this one
 */
-class MGameFactory{
+class MFactory{
 
 public:
 
@@ -41,7 +41,7 @@ public:
 	void SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent);
 
 	/**
-	* Loads render image and loads it to the game object with calculated transformation
+	* Loads render image and loads it to the node with calculated transformation
 	* @param node node to set
 	* @param imgPath path to the image
 	* @param pos position, calculated due to posCalc parameter
@@ -76,7 +76,7 @@ public:
 	void SetFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text);
 
 	/**
-	* Loads render font and loads it to the game object with calculated transformation
+	* Loads render font and loads it to the node with calculated transformation
 	* @param node node to set
 	* @param font font to set
 	* @param color font color
@@ -141,14 +141,14 @@ public:
 	float TranslateSpeed(float speed);
 
 	/**
-	* Initializes game factory
+	* Initializes factory
 	*/
 	virtual void Init(){
 
 	}
 
 	/**
-	* Creates game root with first scene
+	* Creates root node with initial scene
 	*/
 	virtual GNode* CreateRoot();
 
