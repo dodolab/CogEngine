@@ -14,7 +14,7 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 
 	this->_root->GetRoot()->UpdateTransforms();
 
-	this->_root->GetRoot()->Update(delta, absolute, identity);
+	this->_root->GetRoot()->Update(delta, absolute);
 
 	environmentCtrl->RemoveEndedInputs();
 }
@@ -27,7 +27,7 @@ void MGameEngine::Draw(uint64 delta, uint64 absolute){
 	ofMatrix4x4 identity = ofMatrix4x4::newIdentityMatrix();
 	identity.translate(0,0,-690);
 	
-	this->_root->GetRoot()->Draw(delta, absolute, identity);
+	this->_root->GetRoot()->Draw(delta, absolute);
 }
 
 

@@ -45,7 +45,7 @@ public:
 
 	}
 
-	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 		if (!tweenEnded){
 			if (!tweenStarted) Init();
 

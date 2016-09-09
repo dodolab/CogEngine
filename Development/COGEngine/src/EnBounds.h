@@ -8,8 +8,6 @@
 */
 class EnBounds{
 private:
-	float _width;
-	float _height;
 
 public:
 
@@ -17,15 +15,6 @@ public:
 
 	}
 
-	EnBounds(float width, float height);
-
-	float GetWidth() const;
-
-	void SetWidth(float val);
-
-	float GetHeight() const;
-
-	void SetHeight(float val);
 
 	bool Collides(GNode& first, GNode& second) const;
 

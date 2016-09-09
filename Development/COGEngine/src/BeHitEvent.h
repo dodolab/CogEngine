@@ -7,22 +7,21 @@
 #include "Enums.h"
 #include "GMsg.h"
 
+#ifdef TARGET_ANDROID
+#include "ofxAndroidVibrator.h"
+#endif
+
 /**
 * Behavior for hit testing
 */
 class BeHitEvent : public GBehavior{
-private:
-	int handlerId;
 
 
 public:
 	BeHitEvent() : GBehavior(ElemType::MODEL, EnFlags()){
-		handlerId = -1;
-	}
-
-	BeHitEvent(int handlerId) : GBehavior(ElemType::MODEL, EnFlags()), handlerId(handlerId){
 
 	}
+
 
 	virtual void OnMessage(GMsg& msg){
 
@@ -43,26 +42,51 @@ public:
 		return col.a > 0x80;
 	}
 
-	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
 		if (owner->HasState(States::HITTABLE)){
+
+			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
+
 
 			if (owner->HasAttr(Attrs::IMGSOURCE)){
 				spt<ofImage> hitImage = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
 
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 
-					if (touch.started){
-						ofVec3f touchVector = touch.position;
-						ofVec3f touchTrans = touchVector*absMatrix.getInverse();
+					ofVec3f touchVector = touch.position;
+					ofVec3f touchTrans = touchVector*inverse;
 
-						if (ImageHitTest(hitImage, touchTrans)){ 
-							// is hit
-							//if (handlerId != -1){
-							SendMessage(Traversation(ScopeType::ROOT, true, true), Actions::OBJECT_HIT, nullptr, owner);
-							//}
+					if (ImageHitTest(hitImage, touchTrans)){
+						if (touch.started){
+#ifdef TARGET_ANDROID
+							    ofxAndroidVibrator::vibrate(50);
+#endif
+							    owner->SetState(States::HIT);
+								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
+						}
+						else if (touch.ended){
+							// todo: multitouch problem!!
+								owner->ResetState(States::HIT);
+								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+						}
+						else{
+							if (!owner->HasState(States::HIT)){
+#ifdef TARGET_ANDROID
+							    ofxAndroidVibrator::vibrate(50);
+#endif
+								owner->SetState(States::HIT);
+								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
+							}
 						}
 					}
+					else{
+						if (owner->HasState(States::HIT)){
+							owner->ResetState(States::HIT);
+							SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+						}
+					}
+
 				}
 			}
 			else{
@@ -70,7 +94,7 @@ public:
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 					if (touch.started){
 						ofVec3f touchVector = touch.position;
-						ofVec3f touchTrans = absMatrix.getInverse()*(touchVector);
+						ofVec3f touchTrans = inverse*(touchVector);
 						ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
 						ofVec3f sizeTrans = owner->GetTransform().Scale*size;
 

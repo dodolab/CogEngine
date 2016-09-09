@@ -108,7 +108,7 @@ GNode* CreateSecond(){
 	ofColor color;
 	ofVec3f actualSize = ofVec3f(300, 300);
 
-	for (int i = 0; i < 2; i++){
+	for (int i = 0; i < 5; i++){
 		color.set(10 + i * 4, 100 + i * 20, 0);
 		GNode* child = new GNode(ObjType::OBJECT, 0, "fofka");
 		child->GetTransform().LocalPos = actualSize;
@@ -250,8 +250,8 @@ ofVec3f MGameFactory::CalcScale(spt<ofImage> img, float width, GNode* scene){
 
 	float absoluteWidth = rel*screenWidth;
 
-	float otp= ((absoluteWidth/img->width))/scene->GetTransform().Scale.x;
-	return ofVec3f(otp,otp,otp);
+	float otp = ((absoluteWidth / img->width)) / scene->GetTransform().AbsScale.x;
+	return ofVec3f(otp,otp,1);
 }
 
 float MGameFactory::RelPosX(float posX, GNode* scene){
@@ -260,7 +260,7 @@ float MGameFactory::RelPosX(float posX, GNode* scene){
 	// width is always 100 units !
 	float rel = posX/100.0f;
 
-	return (rel*screenWidth-screenWidth/2)/scene->GetTransform().Scale.x;
+	return (rel*screenWidth-screenWidth/2)/scene->GetTransform().AbsScale.x;
 }
 
 float MGameFactory::RelPosY(float posY, GNode* scene){
@@ -269,7 +269,7 @@ float MGameFactory::RelPosY(float posY, GNode* scene){
 	// width is always 60 units !
 	float rel = posY/60.0f;
 
-	return (rel*screenHeight-screenHeight/2)/scene->GetTransform().Scale.x;
+	return (rel*screenHeight - screenHeight / 2) / scene->GetTransform().AbsScale.x;
 }
 
 ofVec2f MGameFactory::GetCenter(){

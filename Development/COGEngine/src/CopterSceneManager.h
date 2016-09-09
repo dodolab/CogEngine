@@ -19,12 +19,12 @@ public:
 	}
 
 	void OnMessage(GMsg& msg){
-		if (msg.GetAction() == Actions::OBJECT_HIT){
+		if (msg.GetAction() == Actions::OBJECT_HIT && msg.GetSourceObject()->GetSubType() == 222){
 			factory->SwitchToScene(0);
 		}
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
 	}
 };

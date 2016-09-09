@@ -29,7 +29,7 @@ public:
 	}
 
 	void CalcAbsTransform(EnTransform& parent){
-		float angle = LocalPos.x == 0 ? 0 : parent.AbsRotation / 180.0f*PI+(atan2(LocalPos.y, LocalPos.x));
+		float angle = parent.AbsRotation / 180.0f*PI+(atan2(LocalPos.y, LocalPos.x));
 		float length = sqrt(LocalPos.x*LocalPos.x + LocalPos.y*LocalPos.y);
 		ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), LocalPos.z);
 		AbsPos = rotPos*parent.AbsScale + parent.AbsPos;
@@ -37,6 +37,7 @@ public:
 		AbsRotation = Rotation + parent.AbsRotation;
 		AbsRotationOrigin = RotationOrigin + parent.AbsRotationOrigin;
 	}
+
 	
 	ofMatrix4x4 GetAbsMatrix(){
 		ofMatrix4x4 matrix;
@@ -52,7 +53,6 @@ public:
 
 	ofMatrix4x4 GetMatrix(){
 		ofMatrix4x4 matrix;
-
 		matrix.translate(RotationOrigin);
 		matrix.rotate(Rotation, 0,0,1);
 	

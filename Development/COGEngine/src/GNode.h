@@ -33,6 +33,9 @@ protected:
 	// list of childrens
 	list<GNode*> _children;
 
+	list<GNode*> _childrenToRemove;
+	list<GBehavior*> _behaviorToRemove;
+
 	// id of this node
 	const int _id;
 	// tag or name
@@ -79,17 +82,15 @@ public:
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun
-	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix);
+	void Update(const uint64 delta, const uint64 absolute);
 
 	/**
 	* Draws all objects
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun
-	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	void Draw(const uint64 delta, const uint64 absolute, ofMatrix4x4& absMatrix);
+	void Draw(const uint64 delta, const uint64 absolute);
 
 	/**
 	* Adds a new behavior
@@ -247,6 +248,7 @@ public:
 	* Sets selected group
 	*/
 	void SetGroup(int groupId){
+		if (_groups == nullptr) _groups = new EnFlags();
 		_groups->SetState(groupId);
 	}
 
@@ -254,6 +256,7 @@ public:
 	* Resets selected group
 	*/
 	void UnsetGroup(int groupId){
+		if (_groups == nullptr) _groups = new EnFlags();
 		_groups->ResetState(groupId);
 	}
 

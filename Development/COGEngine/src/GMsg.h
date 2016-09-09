@@ -3,11 +3,16 @@
 
 #include "Enums.h"
 #include "EnFlags.h"
+
+#ifdef TARGET_ANDROID
+#include <tr1/functional>
+#else
 #include <functional>
+#endif
 
 class GMsg;
 
-typedef std::tr1::function<void(GMsg const &)> MsgCallback;
+typedef std::tr1::function<void(GMsg&)> MsgCallback;
 
 class GNode;
 

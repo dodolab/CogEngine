@@ -27,6 +27,33 @@ void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 
 	Traversation& trav = msg.GetTraverse();
 
+	if (trav.scope == ScopeType::DIRECT_NO_TRAVERSE){
+		// no traversation - just iterate over the proper collection of behaviors and callbacks
+		auto behaviors = behListeners.find(msg.GetAction());
+
+		if (behaviors != behListeners.end()){
+			vector<GBehavior*>& behs = behaviors->second;
+
+			for (auto it = behs.begin(); it != behs.end(); ++it){
+				(*it)->OnMessage(msg);
+			}
+		}
+		
+		auto callBacks = callBackListeners.find(msg.GetAction());
+
+		if (callBacks != callBackListeners.end()){
+			vector<std::pair<int, MsgCallback>>& cbck = callBacks->second;
+
+			for (auto it = cbck.begin(); it != cbck.end(); ++it){
+				std::pair<int, MsgCallback>& pair = (*it);
+				pair.second(msg);
+			}
+		}
+
+		return;
+	}
+
+
 	if (trav.scope == ScopeType::ROOT){
 		trav.scope = ScopeType::OBJECT;
 		// find root and call recursion
@@ -36,7 +63,7 @@ void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 			SendMessageToBehaviors(msg, root);
 			if (trav.deep && trav.bubbleDown) SendTraversationMessageToChildren(msg, root);
 		}
-		else return;
+		return;
 	}
 	else if (trav.scope == ScopeType::SCENE){
 		trav.scope = ScopeType::OBJECT;
@@ -47,7 +74,7 @@ void MGameStorage::SendTraversationMessage(GMsg& msg, GNode* actualNode){
 			SendMessageToBehaviors(msg, scRoot);
 			if (trav.deep && trav.bubbleDown) SendTraversationMessageToChildren(msg, scRoot);
 		}
-		else return;
+		return;
 	}
 
 	if (trav.scope == ScopeType::OBJECT){

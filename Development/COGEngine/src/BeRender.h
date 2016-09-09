@@ -27,9 +27,10 @@ public:
 	}
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
-		ofLoadMatrix(absMatrix);
+		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofLoadMatrix(absM);
 		int mojo = owner->GetSubType();
 		switch (_type){
 		case RenderType::ARC:

@@ -89,12 +89,12 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x,y);
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+	MEngine.environmentCtrl->OnSingleTouchMotion(x, y);
 }
 
 //--------------------------------------------------------------

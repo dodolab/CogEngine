@@ -45,16 +45,7 @@ GNode::~GNode(){
 
 void GNode::UpdateTransforms(){
 
-	
-
 	if (_parent != nullptr){
-		if (_subType == 123){
-			bool mojo = true;
-		}
-		else if (_subType == 111){
-			bool mojo = false;
-		}
-
 		this->_transform.CalcAbsTransform(_parent->_transform);
 	}
 	else this->_transform.SetAbsAsLocal();
@@ -66,37 +57,46 @@ void GNode::UpdateTransforms(){
 }
 
 
-void GNode::Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix){
-
-	ofMatrix4x4 absoluteMatrix = _transform.GetMatrix()*absMatrix;
-	
+void GNode::Update(const uint64 delta, const uint64 absolute){	
 
 	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Update(delta, absolute, absoluteMatrix);
+		(*it)->Update(delta, absolute);
 	}
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		GBehavior* beh = *it;
 	    if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) && beh->GetElemType() == ElemType::MODEL){
-			beh->Update(delta, absolute, absoluteMatrix, this);
+			beh->Update(delta, absolute, this);
 		}
 	}
+
+	for (auto it = _behaviorToRemove.begin(); it != _behaviorToRemove.end(); ++it){
+		GBehavior* beh = *it;
+		_behaviors.remove(beh);
+	}
+
+
+	for (auto it = _childrenToRemove.begin(); it != _childrenToRemove.end(); ++it){
+		GNode* child = (*it);
+		_children.remove(child);
+	}
+
+	_childrenToRemove.clear();
+	_behaviorToRemove.clear();
 }
 
-void GNode::Draw(const uint64 delta, const uint64 absolute, ofMatrix4x4& absMatrix){
-
-	ofMatrix4x4 absoluteMatrix = _transform.GetMatrix()*absMatrix;
+void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		GBehavior* beh = (*it);
 
 		if (beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
-			beh->Update(delta, absolute, absoluteMatrix, this);
+			beh->Update(delta, absolute, this);
 		}
 	}
 
 	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Draw(delta, absolute, absoluteMatrix);
+		(*it)->Draw(delta, absolute);
 	}
 }
 
@@ -110,7 +110,7 @@ bool GNode::RemoveBehavior(GBehavior* beh){
 	
 	bool result = _behaviors.end() != found;
 	if (result){
-		_behaviors.remove(*found);
+		_behaviorToRemove.push_back(*found);
 	}
 	return result;
 }
@@ -158,7 +158,7 @@ bool GNode::RemoveChild(GNode* child){
 	auto found = find(_children.begin(), _children.end(), child);
 
 	bool result = _children.end() != found;
-	if (result) _children.remove(*found);
+	if (result) _childrenToRemove.push_back(child);
 
 	return result;
 }

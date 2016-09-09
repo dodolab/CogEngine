@@ -27,11 +27,11 @@ public:
 
 	}
 
-	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
 
 		if (owner->HasAttr(Attrs::ALLOWED_ACTIONS)){
 
-			if (owner->HasAttr(Attrs::ACTIONS)){
+			if (!owner->HasAttr(Attrs::ACTIONS)){
 				owner->AddAttr(Attrs::ACTIONS, EnFlags());
 			}
 
