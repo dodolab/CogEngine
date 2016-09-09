@@ -122,19 +122,22 @@ void ofxSpriteSheetRenderer::loadTexture(ofTexture * _texture, bool isExternal)
 	clearTexture();
 	textureIsExternal = isExternal;
 	texture = _texture;
+	spriteSheetWidth = _texture->getWidth() / tileSize;
+	tileSize_f = tileSize;
+#ifdef TARGET_OPENGLES	// if we don't have arb, it's crazy important that things are power of 2 so that this float is set properly
+	tileSize_f /= widthHeight;
+#endif
+
 }
 
 void ofxSpriteSheetRenderer::loadTexture(CollageTexture * _texture){
 	loadTexture((ofTexture *)_texture);
 }
 
-void ofxSpriteSheetRenderer::loadTexture(PixelTexture * _texture){
+void ofxSpriteSheetRenderer::loadTexture(SpriteTexture * _texture){
 	loadTexture((ofTexture *)_texture);
 }
 
-void ofxSpriteSheetRenderer::loadTexture(LinearTexture * _texture){
-	loadTexture((ofTexture *)_texture);
-}
 
 void ofxSpriteSheetRenderer::clearCounters(int layer)
 {

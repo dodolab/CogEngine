@@ -10,32 +10,47 @@ bool sortByZIndex(basicSprite * a, basicSprite * b) {
 //--------------------------------------------------------------
 void ofApp::setup(){
 	// NEVER SET VERTICAL SYNC !!!! OTHERWISE IT WILL WORK STRANGE!!!
-	ofSetVerticalSync(false);
+/*	ofSetVerticalSync(false);
 	ofSetFrameRate(60);  
-	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
 	//MEngine.Init(new CopterFactory());
 	MEngine.Init(new NoahFactory());
 	
 	absolute = ofGetSystemTime();
-	delta = ofGetSystemTime();
+	delta = ofGetSystemTime();*/
 
-	/*ofSetFrameRate(50);
+
+
+
+	ofSetFrameRate(50);
 	spriteRenderer = new ofxSpriteSheetRenderer(1, 10000, 0, 256); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
-	spriteRenderer->loadTexture("images/blue.png", 256, GL_LINEAR); // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
+	//spriteRenderer->allocate(512, GL_LINEAR);
+	CollageTexture* text = new CollageTexture();
+	text->allocate(512, 256, GL_RGBA, GL_LINEAR);
+	text->pasteImage(0, 0, "images/blue.png", GL_RGBA);
+	text->pasteImage(256, 0, "images/butFire.png", GL_RGBA);
+	text->finish();
+	ofImage img;
+	ofPixels pixels;
+
+	text->readToPixels(pixels);
+	img.setFromPixels(pixels);
+	img.saveImage("ffs.png");
+	//spriteRenderer->loadTexture("ffs.png", 512, GL_LINEAR);
+	spriteRenderer->loadTexture(text); // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
 
 	ofEnableAlphaBlending(); // turn on alpha blending. important!
-	*/
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	delta = ofGetSystemTime() - absolute;
+	/*delta = ofGetSystemTime() - absolute;
 	absolute = ofGetSystemTime();
-	MEngine.Update(delta, absolute);
+	MEngine.Update(delta, absolute);*/
 	
-	/*
+	
 	spriteRenderer->clearCounters(); // clear the sheet
 
 	sort(sprites.begin(), sprites.end(), sortByZIndex); // sorts the sprites vertically so the ones that are lower are drawn later and there for in front of the ones that are higher up
@@ -52,7 +67,8 @@ void ofApp::update(){
 				sprites.erase(sprites.begin() + i); // remove them from the vector
 			}
 			else{ //otherwise 
-			   spriteRenderer->addTile(sprites[i]->index, sprites[i]->frame, sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, -1, sprites[i]->w, sprites[i]->h, F_NONE, 0.1f, sprites[i]->rotation); // add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
+			    // add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
+			   spriteRenderer->addTile(sprites[i]->index, sprites[i]->frame, sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, -1, sprites[i]->w, sprites[i]->h, F_NONE, 0.1f, sprites[i]->rotation); 
 		
 			   //spriteRenderer->setBrushIndex(0, 1);
 			   //spriteRenderer->addRect(sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, 20, 20, 1, sprites[i]->rotation, 255, 0, 0, 255, 0);
@@ -72,23 +88,23 @@ void ofApp::update(){
 		newSprite->w = 1;
 		newSprite->h = 1;
 		sprites.push_back(newSprite); //add our sprite to the vector
-	}*/
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	MEngine.Draw(delta, absolute);
-	//spriteRenderer->draw(); //draw the sprites!
+	//MEngine.Draw(delta, absolute);
+	spriteRenderer->draw(); //draw the sprites!
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	MEngine.environmentCtrl->OnKeyAction(key,true);
+	//MEngine.environmentCtrl->OnKeyAction(key,true);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-	MEngine.environmentCtrl->OnKeyAction(key,false);
+	//MEngine.environmentCtrl->OnKeyAction(key,false);
 }
 
 //--------------------------------------------------------------
@@ -98,22 +114,22 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
+	//MEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
+	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
+	//MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
+	//MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
 }
 
 //--------------------------------------------------------------

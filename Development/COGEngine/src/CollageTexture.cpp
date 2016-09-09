@@ -145,7 +145,6 @@ void CollageTexture::pasteImage(int x, int y, string textureName, int glType)
 	ofImage loader;
 	loader.setUseTexture(false);
 	loader.loadImage(textureName);
-	
 	pasteImage(x, y, loader.getWidth(), loader.getHeight(), loader.getPixels(), glType);
 	
 	loader.clear();

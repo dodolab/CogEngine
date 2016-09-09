@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 #include "CollageTexture.h"
-#include "PixelTexture.h"
-#include "LinearTexture.h"
+#include "SpriteTexture.h"
 
 
 enum flipDirection { F_NONE = 0, F_HORIZ, F_VERT, F_HORIZ_VERT };
@@ -42,8 +41,7 @@ public:
 	void loadTexture(string fileName, int widthHeight, int internalGLScaleMode);
 	void loadTexture(ofTexture * _texture, bool isExternal = true);
 	void loadTexture(CollageTexture * _texture);
-	void loadTexture(PixelTexture * _texture);
-	void loadTexture(LinearTexture * _texture);
+	void loadTexture(SpriteTexture * _texture);
 
 	// -----------------------------------------
 	void setBrushIndex(int index, int wh = 1);

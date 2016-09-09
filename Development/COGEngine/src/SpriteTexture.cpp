@@ -7,9 +7,9 @@
  *
  */
 
-#include "LinearTexture.h"
+#include "SpriteTexture.h"
 
-void LinearTexture::loadImage(string textureName)
+void SpriteTexture::loadImage(string textureName)
 {
 	ofImage loader;
 	loader.setUseTexture(false);
@@ -28,7 +28,7 @@ void LinearTexture::loadImage(string textureName)
 	loader.clear();
 }
 
-void LinearTexture::loadTexture(string textureName, int glType)
+void SpriteTexture::loadTexture(string textureName, int glType)
 {
 	ofImage loader;
 	loader.setUseTexture(false);
@@ -39,11 +39,11 @@ void LinearTexture::loadTexture(string textureName, int glType)
 	loader.clear();
 }
 
-void LinearTexture::allocate(int w, int h, int internalGlDataType){
+void SpriteTexture::allocate(int w, int h, int internalGlDataType){
 	allocate(w, h, internalGlDataType, ofGetUsingArbTex());
 }
 
-void LinearTexture::allocate(int w, int h, int internalGlDataType, bool bUseARBExtention){
+void SpriteTexture::allocate(int w, int h, int internalGlDataType, bool bUseARBExtention){
 	
 	//our graphics card might not support arb so we have to see if it is supported.
 #ifndef TARGET_OPENGLES
@@ -102,10 +102,18 @@ void LinearTexture::allocate(int w, int h, int internalGlDataType, bool bUseARBE
 	
 	glBindTexture(texData.textureTarget, (GLuint)texData.textureID);
 	
-	glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	if (isPixel){
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, GL_NEAREST);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_T, GL_NEAREST);
+	}
+	else{
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	}
 	
 #ifndef TARGET_OPENGLES
 	// can't do this on OpenGL ES: on full-blown OpenGL, 
