@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core
+namespace CopterDown.Messages
 {
     public class Message
     {
@@ -39,7 +39,9 @@ namespace CopterDown.Core
         BEHAVIOR_REMOVED,
         OBJECT_CREATED,
         OBJECT_REMOVED,
-        USER_INPUT
+        USER_INPUT,
+        COLISION_OCURRED,
+        GAMEOBJECT_DESTROYED
     }
 
     public enum MessageCat

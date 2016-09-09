@@ -7,10 +7,11 @@ using System.Windows.Input;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
 using CopterDown.Core.CoreBehavs;
+using CopterDown.Messages;
 
 namespace CopterDown.Game
 {
-    public class CanonBehaviour : ABehavior
+    public class CanonB : ABehavior
     {
         public override void OnMessage(Message msg)
         {
@@ -58,10 +59,15 @@ namespace CopterDown.Game
             bullet.AddViewAttribute(AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/bullet.png");
             bullet.AddModelAttribute(AT.AT_COM_VELOCITY,new Vector2d(velX, velY));
             bullet.AddModelAttribute(AT.AT_COPTER_BULLETSPEED, 5f);
-            bullet.AddViewBehavior(new BulletBehavior());
-            bullet.AddViewBehavior(new ImageRenderBehavior());
-
-            GameObject.AddChild(bullet);
+            bullet.AddModelBehavior(new BulletB());
+            bullet.AddViewBehavior(new ImageRenderB());
+            bullet.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+            {
+                Width = 5,
+                Height = 5
+            });
+            bullet.SetGroup(Group.COLLIDABLE);
+            GameObject.GetSceneRoot().AddChild(bullet);
         }
     }
 }

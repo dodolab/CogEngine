@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
+using CopterDown.Messages;
 
 namespace CopterDown.Game
 {
-    public class CopterBehavior : ABehavior
+    public class CopterB : ABehavior
     {
         public override void OnMessage(Message msg)
         {
@@ -65,8 +66,13 @@ namespace CopterDown.Game
             para.AddModelAttribute(AT.AT_COPTER_PARA_ISGROUNDED,false);
             para.AddModelAttribute(AT.AT_COPTER_PARA_ISHIT, false);
             para.AddViewAttribute(AT.AT_COPTER_HITFRAME, 0);
-            para.AddViewBehavior(new ParaBehavior());
-
+            para.AddViewBehavior(new ParaB());
+            para.AddModelAttribute(AT.AT_COM_BOUNDS, new Bounds()
+            {
+                Width=20,
+                Height = 20
+            });
+            para.SetGroup(Group.COLLIDABLE);
             GameObject.GetParent().AddChild(para);
         }
     }
