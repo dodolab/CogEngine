@@ -55,4 +55,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace

@@ -1,6 +1,6 @@
 #include "Node.h"
 #include "Behavior.h"
-#include "Cache.h"
+#include "ResourceCache.h"
 #include "Engine.h"
 
 namespace Cog {
@@ -147,9 +147,9 @@ namespace Cog {
 		return result;
 	}
 
-	bool Node::RemoveAttr(int key, bool erase) {
+	bool Node::RemoveAttr(StringHash key, bool erase) {
 
-		map<int, Attr*>::iterator it = attributes.find(key);
+		map<StringHash, Attr*>::iterator it = attributes.find(key);
 
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
@@ -160,7 +160,7 @@ namespace Cog {
 		return false;
 	}
 
-	bool Node::HasAttr(int key) const {
+	bool Node::HasAttr(StringHash key) const {
 		return attributes.find(key) != attributes.end();
 	}
 
@@ -252,7 +252,7 @@ namespace Cog {
 		}
 
 		if (states != nullptr) {
-			vector<int> states = this->states->GetAllStates();
+			vector<unsigned> states = this->states->GetAllStates();
 			for (auto it = states.begin(); it != states.end(); ++it) {
 				spaces(level * 4 + 2, ss);
 				int state = (*it);
@@ -321,4 +321,4 @@ namespace Cog {
 		childrenToRemove.clear();
 	}
 
-}
+}// namespace

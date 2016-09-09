@@ -378,4 +378,4 @@ namespace Cog {
 
 
 
-}
+}// namespace

@@ -422,4 +422,4 @@ namespace Cog {
 		halfBrushSize = brushSize / 2;
 	}
 
-}
+}// namespace

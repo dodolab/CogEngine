@@ -37,7 +37,7 @@ public:
 	}
 
 	void Init(){
-		owner->SetState(States::HITTABLE);
+		owner->SetState(StringHash(STATES_HITTABLE));
 	}
 
 	/**
@@ -62,7 +62,7 @@ public:
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
 
-		if (owner->HasState(States::HITTABLE)){
+		if (owner->HasState(StringHash(STATES_HITTABLE))){
 
 			// get inverse matrix
 			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
@@ -88,23 +88,23 @@ public:
 							hitStarted = true;
 							hitStartedTouchId = touch.touchId;
 
-							owner->SetState(States::HIT);
-							if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner);
-							else SendDirectMessage(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
+							owner->SetState(StringHash(STATES_HIT));
+							if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner);
+							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
 						}
 						else if (touch.ended){
 							
 
-							owner->ResetState(States::HIT);
+							owner->ResetState(StringHash(STATES_HIT));
 							if (hitStarted){
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_ENDED, 0, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_ENDED, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_ENDED, 0, nullptr, owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_ENDED, 0, nullptr, owner, handlerBehId);
 							}
 							else{
 								// hit has been lost
 								hitLost = true;
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, 0, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 							}
 
 							if (hitStartedTouchId == touch.touchId && hitStarted){
@@ -113,24 +113,24 @@ public:
 						}
 						else{
 							atLeastOneTouch = true;
-							if (!owner->HasState(States::HIT)){
+							if (!owner->HasState(StringHash(STATES_HIT))){
 #ifdef ANDROID
 								if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 								// touch hasn't started but this object hasn't been hit
-								owner->SetState(States::HIT);
+								owner->SetState(StringHash(STATES_HIT));
 							}
 							// hit started and continues
 							if (hitLost){
 								hitLost = false;
 								// hit started, lost and started again
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, nullptr, owner, handlerBehId);
 							}
 							else{
 								// hit started but not on first touch
-								if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_OVER, 0, nullptr, owner);
-								else SendDirectMessage(Actions::OBJECT_HIT_OVER, 0, nullptr, owner, handlerBehId);
+								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_OVER, 0, nullptr, owner);
+								else SendDirectMessage(ACT_OBJECT_HIT_OVER, 0, nullptr, owner, handlerBehId);
 							}
 						}
 					}
@@ -144,11 +144,11 @@ public:
 
 				if (!atLeastOneTouch){
 					// object could lost its hit
-					if (owner->HasState(States::HIT)){
-						owner->ResetState(States::HIT);
+					if (owner->HasState(StringHash(STATES_HIT))){
+						owner->ResetState(StringHash(STATES_HIT));
 						hitLost = true;
-						if (handlerBehId == -1) SendMessageNoBubbling(Actions::OBJECT_HIT_LOST, 0, nullptr, owner);
-						else SendDirectMessage(Actions::OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
+						if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
+						else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 					}
 				}
 
@@ -159,7 +159,7 @@ public:
 					if (touch.started){
 						ofVec3f touchVector = touch.position;
 						ofVec3f touchTrans = inverse*(touchVector);
-						ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
+						ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
 						ofVec3f sizeTrans = owner->GetTransform().Scale*size;
 
 						if (touchTrans.x+sizeTrans.x/2 <= sizeTrans.x && touchTrans.y+sizeTrans.y/2 <= sizeTrans.y &&
@@ -174,4 +174,4 @@ public:
 	}
 
 };
-}
+}// namespace

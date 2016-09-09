@@ -21,14 +21,14 @@ namespace Cog {
 		}
 
 		void Init() {
-			if (!owner->HasAttr(Attrs::ACTIONS)) {
-				owner->AddAttr(Attrs::ACTIONS, Flags());
+			if (!owner->HasAttr(ATTR_ACTIONS)) {
+				owner->AddAttr(ATTR_ACTIONS, Flags());
 			}
 		}
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
-			Flags& actions = owner->GetAttr<Flags>(Attrs::ACTIONS);
+			Flags& actions = owner->GetAttr<Flags>(ATTR_ACTIONS);
 
 			for (auto key : GetPressedKeys()) {
 
@@ -57,4 +57,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace

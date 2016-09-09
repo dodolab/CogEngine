@@ -27,4 +27,4 @@ namespace Cog {
 		return collidesInX && collidesInY;
 	}
 
-}
+}// namespace

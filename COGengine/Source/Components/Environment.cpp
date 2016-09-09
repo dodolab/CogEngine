@@ -169,4 +169,4 @@ namespace Cog {
 		thread->startThread();
 	}
 
-}
+}// namespace

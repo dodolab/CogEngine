@@ -10,7 +10,7 @@ namespace Cog {
 	/**
 	* Resource controller that holds images, 3D objects and sounds
 	*/
-	class Cache {
+	class ResourceCache {
 	private:
 		// cached images
 		map<string, spt<ofImage>> loadedImages;
@@ -101,4 +101,4 @@ namespace Cog {
 		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
 	};
 
-}
+}// namespace

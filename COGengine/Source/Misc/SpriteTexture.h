@@ -32,4 +32,4 @@ namespace Cog {
 		} internal;
 	};
 
-}
+}// namespace

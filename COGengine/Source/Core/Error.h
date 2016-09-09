@@ -21,4 +21,4 @@ namespace Cog {
 		IllegalArgumentException(string msg) : runtime_error(msg.c_str()) {}
 	};
 
-}
+}// namespace

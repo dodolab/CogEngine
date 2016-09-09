@@ -38,8 +38,8 @@ namespace Cog {
 
 		void Init() {
 			vector<spt<Collision>> collisions = vector<spt<Collision>>();
-			if (!owner->HasAttr(Attrs::COLLISIONS)) {
-				owner->AddAttr(Attrs::COLLISIONS, collisions);
+			if (!owner->HasAttr(ATTR_COLLISIONS)) {
+				owner->AddAttr(ATTR_COLLISIONS, collisions);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace Cog {
 		void Update(const uint64 delta, const uint64 absolute) {
 
 			const list<Node*>& childrens = owner->GetChildren();
-			vector<spt<Collision>> collisions = owner->GetAttr<vector<spt<Collision>>>(Attrs::COLLISIONS);
+			vector<spt<Collision>> collisions = owner->GetAttr<vector<spt<Collision>>>(ATTR_COLLISIONS);
 			collisions.clear();
 
 			for (list<Node*>::const_iterator it = childrens.begin(); it != childrens.end(); ++it) {
@@ -70,7 +70,7 @@ namespace Cog {
 						if ((firstInGroupA && secondInGroupB) || (firstInGroupB && secondInGroupA)) {
 
 							// found collidable pair, check collision
-							if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<Bounds*>(Attrs::BOUNDS)->Collides(*first, *second)) {
+							if (first->HasAttr(ATTR_BOUNDS) && first->GetAttr<Bounds*>(ATTR_BOUNDS)->Collides(*first, *second)) {
 								// create collision
 								spt<Collision> col = spt<Collision>(new Collision(first, second));
 								collisions.push_back(col);
@@ -82,12 +82,12 @@ namespace Cog {
 
 			if (collisions.size() != 0) {
 				// send info about collision
-				owner->ChangeAttr(Attrs::COLLISIONS, collisions);
-				SendMessage(BubblingType(Scope::SCENE, true, true), Actions::COLLISION_OCURRED, 0, nullptr, owner);
+				owner->ChangeAttr(ATTR_COLLISIONS, collisions);
+				SendMessage(BubblingType(Scope::SCENE, true, true), ACT_COLLISION_OCURRED, 0, nullptr, owner);
 			}
 		}
 
 	};
 
 
-}
+}// namespace

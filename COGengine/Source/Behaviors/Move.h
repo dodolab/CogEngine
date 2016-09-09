@@ -23,15 +23,15 @@ namespace Cog {
 		}
 
 		void Init() {
-			if (!owner->HasAttr(Attrs::VELOCITY)) {
-				owner->AddAttr(Attrs::VELOCITY, ofVec3f());
+			if (!owner->HasAttr(ATTR_VELOCITY)) {
+				owner->AddAttr(ATTR_VELOCITY, ofVec3f());
 			}
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
 			Trans& transform = owner->GetTransform();
 
-			ofVec3f velocity = owner->GetAttr<ofVec3f>(Attrs::VELOCITY);
+			ofVec3f velocity = owner->GetAttr<ofVec3f>(ATTR_VELOCITY);
 
 			transform.localPos.x += TranslateSpeed(speed)*velocity.x * delta;
 			transform.localPos.y += TranslateSpeed(speed)*velocity.y * delta;
@@ -39,4 +39,4 @@ namespace Cog {
 
 	};
 
-}
+}// namespace

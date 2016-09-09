@@ -1,8 +1,8 @@
-#include "Storage.h"
+#include "NodeStorage.h"
 
 namespace Cog {
 
-	void Repository::SendMessage(Msg& msg, Node* actualNode) {
+	void NodeStorage::SendMessage(Msg& msg, Node* actualNode) {
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
 
@@ -17,7 +17,7 @@ namespace Cog {
 	}
 
 
-	void Repository::SendDirectMessageToBehavior(Msg& msg, int targetId) {
+	void NodeStorage::SendDirectMessageToBehavior(Msg& msg, int targetId) {
 		Behavior* beh = FindBehaviorById(targetId);
 
 		if (beh != nullptr) {
@@ -25,7 +25,7 @@ namespace Cog {
 		}
 	}
 
-	void Repository::SendDirectMessageToNode(Msg& msg, int targetId) {
+	void NodeStorage::SendDirectMessageToNode(Msg& msg, int targetId) {
 		Node* node = FindNodeById(targetId);
 
 		if (node != nullptr) {
@@ -34,21 +34,21 @@ namespace Cog {
 	}
 
 
-	Node* Repository::FindNodeById(int id) const {
+	Node* NodeStorage::FindNodeById(int id) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	Behavior* Repository::FindBehaviorById(int id) const {
+	Behavior* NodeStorage::FindBehaviorById(int id) const {
 		for (auto it = allBehaviors.begin(); it != allBehaviors.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	int Repository::GetNodesCountByTag(string tag) const {
+	int NodeStorage::GetNodesCountByTag(string tag) const {
 		int counter = 0;
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) counter++;
@@ -56,14 +56,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* Repository::FindNodeByTag(string tag) const {
+	Node* NodeStorage::FindNodeByTag(string tag) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> Repository::FindNodesByTag(char* tag) const {
+	vector<Node*> NodeStorage::FindNodesByTag(char* tag) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -72,7 +72,7 @@ namespace Cog {
 		return output;
 	}
 
-	int Repository::GetNodesCountBySubType(int subtype) const {
+	int NodeStorage::GetNodesCountBySubType(int subtype) const {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -81,14 +81,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* Repository::FindNodeBySubType(int subtype) const {
+	Node* NodeStorage::FindNodeBySubType(int subtype) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetSubType() == subtype) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> Repository::FindNodesBySubType(int subtype) const {
+	vector<Node*> NodeStorage::FindNodesBySubType(int subtype) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -98,7 +98,7 @@ namespace Cog {
 	}
 
 
-	void Repository::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
+	void NodeStorage::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
 			if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
@@ -110,14 +110,14 @@ namespace Cog {
 		}
 	}
 
-	void Repository::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
+	void NodeStorage::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
-			SendMessage(msg, (*it));
+			CogSendMessage(msg, (*it));
 		}
 	}
 
 
-	void Repository::SendBubblingMessage(Msg& msg, Node* actualNode) {
+	void NodeStorage::SendBubblingMessage(Msg& msg, Node* actualNode) {
 
 		BubblingType& trav = msg.GetBubblingType();
 
@@ -159,7 +159,7 @@ namespace Cog {
 		}
 	}
 
-	void Repository::SendDirectMessage(Msg& msg) {
+	void NodeStorage::SendDirectMessage(Msg& msg) {
 		auto behaviors = behListeners.find(msg.GetAction());
 
 		if (behaviors != behListeners.end()) {
@@ -173,4 +173,4 @@ namespace Cog {
 		}
 	}
 
-}
+}// namespace

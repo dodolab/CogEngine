@@ -2,7 +2,7 @@
 #include "Facade.h"
 #include "Engine.h"
 #include "Logger.h"
-#include "Cache.h"
+#include "ResourceCache.h"
 
 namespace Cog {
 
@@ -74,11 +74,11 @@ namespace Cog {
 
 	// =================== MSTORAGE ========================
 
-	void CogRegisterListener(int action, Behavior* beh) {
+	void CogRegisterListener(StringHash action, Behavior* beh) {
 		COGEngine.storage->RegisterListener(action, beh);
 	}
 
-	void CogUnregisterListener(int action, Behavior* beh) {
+	void CogUnregisterListener(StringHash action, Behavior* beh) {
 		COGEngine.storage->UnregisterListener(action, beh);
 	}
 
@@ -217,4 +217,4 @@ namespace Cog {
 		COGEngine.resourceCtrl->StoreAnimation(anim);
 	}
 
-}
+}// namespace

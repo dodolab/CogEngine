@@ -18,8 +18,8 @@ namespace Cog {
 
 		Node* CreateRoot() {
 			root = new Node(ObjType::ROOT, 12, "root");
-			root->AddAttr(Attrs::COLOR, ofColor(222, 222, 111));
-			root->AddAttr(Attrs::SIZE, ofVec3f(100));
+			root->AddAttr(ATTR_COLOR, ofColor(222, 222, 111));
+			root->AddAttr(ATTR_SIZE, ofVec3f(100));
 			root->AddBehavior(new RotateAnim(0, 0, 2, false));
 			root->GetTransform().scale = ofVec3f(0.4f);
 			return root;
@@ -73,4 +73,4 @@ namespace Cog {
 		}
 	};
 
-}
+}// namespace

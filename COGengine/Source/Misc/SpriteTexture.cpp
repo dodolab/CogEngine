@@ -136,4 +136,4 @@ namespace Cog {
 		height = h;
 	}
 
-}
+}// namespace

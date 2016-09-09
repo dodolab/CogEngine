@@ -31,7 +31,7 @@ namespace Cog {
 		// identifier incremental counter
 		static int idCounter;
 		// attributes, mapped by their keys
-		map<int, Attr*> attributes;
+		map<StringHash, Attr*> attributes;
 		// list of childrens
 		list<Node*> children;
 		// list of behaviors
@@ -139,12 +139,12 @@ namespace Cog {
 		* @param erase if true, memory will be released
 		* @return true, if attribute has been removed
 		*/
-		bool RemoveAttr(int key, bool erase);
+		bool RemoveAttr(StringHash key, bool erase);
 
 		/**
 		* Returns true, if this node has an attribute with given key
 		*/
-		bool HasAttr(int key) const;
+		bool HasAttr(StringHash key) const;
 
 		/**
 		* Updates collections of behaviors and children nodes
@@ -410,7 +410,7 @@ namespace Cog {
 		/**
 		* Returns true, if this object has selected state
 		*/
-		bool HasState(int state) {
+		bool HasState(unsigned state) {
 			if (!HasStates()) return false;
 			return states->HasState(state);
 		}
@@ -418,21 +418,21 @@ namespace Cog {
 		/**
 		* Sets new state
 		*/
-		void SetState(int state) {
+		void SetState(unsigned state) {
 			GetStates().SetState(state);
 		}
 
 		/**
 		* Resets selected state
 		*/
-		void ResetState(int state) {
+		void ResetState(unsigned state) {
 			GetStates().ResetState(state);
 		}
 
 		/**
 		* Switches values of two states
 		*/
-		void SwitchState(int state1, int state2) {
+		void SwitchState(unsigned state1, unsigned state2) {
 			GetStates().SwitchState(state1, state2);
 		}
 
@@ -455,7 +455,7 @@ namespace Cog {
 		* @param key key of the attribute
 		* @param value reference
 		*/
-		template<class T> void AddAttr(int key, T value) {
+		template<class T> void AddAttr(StringHash key, T value) {
 			if (HasAttr(key)) {
 				RemoveAttr(key, true);
 			}
@@ -467,7 +467,7 @@ namespace Cog {
 		* Gets an attribute by key; call this method only if you are sure that the attribute exists
 		* @param key attribute key
 		*/
-		template<class T> T& GetAttr(int key) {
+		template<class T> T& GetAttr(StringHash key) {
 			auto it = attributes.find(key);
 
 			MASSERT(it != attributes.end(), "GNODE", "%s: Attribute %d doesn't exists", tag->c_str(), key);
@@ -482,7 +482,7 @@ namespace Cog {
 		* @param key attribute key
 		* @param value new value
 		*/
-		template<class T> void ChangeAttr(int key, T value) {
+		template<class T> void ChangeAttr(StringHash key, T value) {
 			auto it = attributes.find(key);
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
@@ -526,7 +526,7 @@ namespace Cog {
 		void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
 		// app storage can access private members
-		friend class Repository;
+		friend class NodeStorage;
 
 	protected:
 		/*
@@ -542,4 +542,4 @@ namespace Cog {
 		void DeleteElementsForRemoving();
 	};
 
-}
+}// namespace
