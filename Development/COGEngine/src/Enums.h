@@ -1,27 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include <stdarg.h>  // For va_start, etc.
-#include <memory>    // For std::unique_ptr
-
-
-#ifndef DEBUG
-#   define MASSERT(condition, message) \
-    do { \
-        if (! (condition)) { \
-            std::cerr << "Assertion `" #condition " failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
-				        } \
-		    } while (false)
-#else
-#   define MASSERT(condition, message) do { } while (false)
-#endif
-
-
-std::string string_format(const std::string fmt_str, ...);
-
-
-typedef unsigned int uint64;
 
 
 /*! User input action enumerator */

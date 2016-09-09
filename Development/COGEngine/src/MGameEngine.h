@@ -3,14 +3,12 @@
  class MGameEngine;
 extern MGameEngine MEngine;
 
-
 #include "MEnvironmentCtrl.h"
 #include "MResourceCtrl.h"
+#include "MLogger.h"
+#include "Utils.h"
 #include "GNode.h"
 #include "MGameFactory.h"
-#include "MGameStorage.h"
-
-
 
 class MGameEngine{
 private:
@@ -22,6 +20,7 @@ public:
 		resourceCtrl = nullptr;
 		factory = nullptr;
 		storage = nullptr;
+		logger = nullptr;
 	}
 
 	void Update(uint64 delta, uint64 absolute);
@@ -31,6 +30,7 @@ public:
 	MResourceCtrl* resourceCtrl;
 	MGameFactory* factory;
 	MGameStorage* storage;
+	MLogger* logger;
 
 	~MGameEngine(){
 		delete _root;
@@ -38,6 +38,7 @@ public:
 		delete resourceCtrl;
 		delete factory;
 		delete storage;
+		delete logger;
 	}
 
 	void Init(MGameFactory* factory, MGameStorage* storage);

@@ -3,7 +3,7 @@
 #include "GNode.h"
 #include "BeRender.h"
 #include "BeRotateAnim.h"
-
+#include "MGameFactory.h"
 
 MGameEngine MEngine;
 
@@ -37,6 +37,8 @@ void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
 	
 	environmentCtrl = new MEnvironmentCtrl();
 	resourceCtrl = new MResourceCtrl();
+	logger = new MLogger();
+
 	this->factory = factory;
 	this->storage = storage;
 
