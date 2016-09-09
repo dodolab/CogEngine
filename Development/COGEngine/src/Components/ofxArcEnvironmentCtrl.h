@@ -20,10 +20,16 @@ private:
 	// collection of played sounds
 	vector<spt<ofxAraSound>> playedSounds;
 
-	// screen width
+	// scaled screen width
 	int width;
-	// screen height
+	// scaled screen height
 	int height;
+	// real screen width
+	int realWidth;
+	// real screen height
+	int realHeight;
+	// virtual aspect ratio
+	float aspectRatio;
 	// collection of running threads
 	vector<ofThread*> runningThreads;
 public:
@@ -33,7 +39,7 @@ public:
 	* Initializes environment controller
 	*/
 	void Init();
-	
+
 	/**
 	* Adds a new sound
 	*/
@@ -78,17 +84,58 @@ public:
 	}
 
 	/**
-	* Gets screen width
+	* Gets ratio of virtual size / real size
 	*/
-	int GetWidth(){
-		//return width;
-		// always returns 16:9 (TODO)
-		if (width > height) return height / 9.0f*16.0f;
-		else return height / 16.0f*9.0f;
+	float GetRatioScale(){
+		return (aspectRatio) / (((float)realWidth) / realHeight);
 	}
 
 	/**
-	* Gets screen height
+	* Gets real device width
+	*/
+	int GetRealWidth(){
+		return realWidth;
+	}
+
+	/**
+	* Gets real device height
+	*/
+	int GetRealHeight(){
+		return realHeight;
+	}
+
+	/**
+	* Gets real aspect ratio, calculated from real devide width and height
+	*/
+	float GetRealAspectRatio(){
+		return ((float)realWidth / realHeight);
+	}
+
+	/**
+	* Gets virtual aspect ratio
+	*/
+	float GetAspectRatio(){
+		return aspectRatio;
+	}
+
+	/**
+	* Sets aspect ratio
+	*/
+	void SetAspectRatio(float ratio){
+		this->aspectRatio = ratio;
+
+		ReinitAspectRatio();
+	}
+
+	/**
+	* Gets screen virtual width
+	*/
+	int GetWidth(){
+		return width;
+	}
+
+	/**
+	* Gets screen virtual height
 	*/
 	int GetHeight(){
 		return height;
@@ -123,7 +170,7 @@ public:
 	* @param pressed indicates, if the button is pressed or released
 	*/
 	void OnMultiTouchButton(int x, int y, int button, bool pressed);
-	
+
 	/**
 	* Handler for multitouch motion
 	* @param x coordinate in x axis
@@ -131,7 +178,7 @@ public:
 	* @param button id of button
 	*/
 	void OnMultiTouchMotion(int x, int y, int button);
-	
+
 	/**
 	* Handler for single touch press
 	* @param x coordinate in x axis
@@ -140,7 +187,7 @@ public:
 	* @param pressed indicates, if the button is pressed or released
 	*/
 	void OnSingleTouchButton(int x, int y, int button, bool pressed);
-	
+
 	/**
 	* Handler for single touch motion
 	* @param x coordinate in x axis
@@ -159,4 +206,24 @@ public:
 	* @param thread thread to run
 	*/
 	void RunThread(ofThread* thread);
+
+protected:
+
+	/**
+	* Reinitializes virtual width and height
+	* according to the actual aspect ratio
+	*/
+	void ReinitAspectRatio(){
+		if (abs(GetAspectRatio() - GetRealAspectRatio()) > 0.1f){
+
+			if (realWidth < realHeight){
+				width = GetRatioScale()*realWidth;
+				height = realHeight;
+			}
+			else {
+				width = realWidth;
+				height = GetRatioScale()*realHeight;
+			}
+		}
+	}
 };

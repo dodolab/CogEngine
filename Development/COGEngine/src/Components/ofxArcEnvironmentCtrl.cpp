@@ -6,14 +6,17 @@
 
 void MofxArcEnvironmentCtrl::Init(){
 	screenSizeChanged = false;
-	width = ofGetWindowSize().x;
-	height = ofGetWindowSize().y;
+	realWidth = width = ofGetWindowSize().x;
+	realHeight = height = ofGetWindowSize().y;
+	aspectRatio = ((float)realWidth) / realHeight;
+	ReinitAspectRatio();
 }
 
 void MofxArcEnvironmentCtrl::OnScreenSizeChanged(int newWidth, int newHeight){
 	screenSizeChanged = true;
-	height = newHeight;
-	width = newWidth;
+	realHeight = newHeight;
+	realWidth = newWidth;
+	ReinitAspectRatio();
 }
 
 

@@ -1,4 +1,4 @@
-#include "ofUtils.h"
+#include "ofxAreMain.h"
 
 
 string string_format(const char* fmt_str, ...){

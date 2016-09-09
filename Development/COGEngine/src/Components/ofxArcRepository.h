@@ -1,9 +1,7 @@
 #pragma once
 
-#include <map>
 #include "ofxAreNode.h"
 #include "ofxAreBehavior.h"
-#include <functional>
 
 /**
 * Node repository

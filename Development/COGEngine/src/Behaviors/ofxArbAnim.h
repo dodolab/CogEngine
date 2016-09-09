@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofxAreBehavior.h"
-#include "ofxAreError.h"
 
 
 /**
@@ -434,6 +433,7 @@ private:
 			context.actualChildIndex--;
 			context.RefreshFrameIndex();
 			context.actualLoop = 0;
+			return true;
 		}
 		else return false;
 	}

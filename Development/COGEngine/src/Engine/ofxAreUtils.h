@@ -1,8 +1,6 @@
 #pragma once
 
 #include "ofxAreMain.h"
-#include "ofMain.h"
-#include "ofxAreFacade.h"
 
 
 // assertion with formatted message

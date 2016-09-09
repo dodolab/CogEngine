@@ -2,7 +2,7 @@
 
 #include "ofxAreBehavior.h"
 #include "ofxAreNode.h"
-#include "ofxSpriteSheetRenderer.h"
+
 
 
 

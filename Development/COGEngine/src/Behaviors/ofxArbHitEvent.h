@@ -2,11 +2,6 @@
 
 #include "ofxAreBehavior.h"
 
-#ifdef TARGET_ANDROID
-#include "ofxAndroidVibrator.h"
-#endif
-
-
 /**
 * Behavior for hit testing
 */

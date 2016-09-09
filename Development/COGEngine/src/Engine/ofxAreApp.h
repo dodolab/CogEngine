@@ -1,11 +1,8 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofxAreMain.h"
 #include "ofxArcFactory.h"
 
-#ifndef TARGET_WINDOWS
-#include "ofxAndroid.h"
-#endif
 
 /**
 * Application wrapper for all platforms

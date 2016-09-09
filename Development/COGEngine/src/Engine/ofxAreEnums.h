@@ -1,5 +1,7 @@
 #pragma once
 
+#define PIF 3.141592653f
+
 
 typedef float(*FadeFunction)(float);
 
