@@ -11,9 +11,9 @@
 #include <stdexcept>
 #include <string>
 #include "EnTransform.h"
-#include "MGameStorage.h"
 #include <assert.h>
 #include "Utils.h"
+#include "MFacade.h"
 
 using namespace std;
 

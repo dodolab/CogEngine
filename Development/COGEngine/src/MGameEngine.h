@@ -9,6 +9,7 @@ extern MGameEngine MEngine;
 #include "Utils.h"
 #include "GNode.h"
 #include "MGameFactory.h"
+#include "MGameStorage.h"
 
 class MGameEngine{
 private:
@@ -41,7 +42,7 @@ public:
 		delete logger;
 	}
 
-	void Init(MGameFactory* factory, MGameStorage* storage);
+	void Init(MGameFactory* factory);
 	void StartLoop();
 	void Terminate();
 

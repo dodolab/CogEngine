@@ -41,8 +41,8 @@ public:
 	void Update(const uint64 delta, const uint64 absolute){
 		if (_stopped) return;
 
-		float diffX = (float)(MEngine.TranslateSpeed(_speedX)*delta);
-		float diffY = (float)(MEngine.TranslateSpeed(_speedY)*delta);
+		float diffX = (float)(COGTranslateSpeed(_speedX)*delta);
+		float diffY = (float)(COGTranslateSpeed(_speedY)*delta);
 
 		if (ofVec3f(_from - _to).lengthSquared() < ofVec3f(_from - _actual).lengthSquared())
 		{

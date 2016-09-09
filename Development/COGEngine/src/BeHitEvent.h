@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GBehavior.h"
-#include "MGameEngine.h"
 #include "BeTranslateAnim.h"
 #include "Enums.h"
 #include "GMsg.h"
@@ -49,7 +48,7 @@ public:
 
 				bool atLeastOneTouch = false;
 
-				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
+				for (auto touch : COGGetPressedPoints()){
 
 					ofVec3f touchVector = touch.position;
 					ofVec3f touchTrans = touchVector*inverse;
@@ -101,7 +100,7 @@ public:
 			}
 			else{
 
-				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
+				for (auto touch : COGGetPressedPoints()){
 					if (touch.started){
 						ofVec3f touchVector = touch.position;
 						ofVec3f touchTrans = inverse*(touchVector);

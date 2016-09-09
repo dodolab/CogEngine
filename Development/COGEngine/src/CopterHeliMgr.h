@@ -1,8 +1,6 @@
 #pragma once
 
 #include "GNode.h"
-#include "MGameFactory.h"
-#include "MGameEngine.h"
 #include "Enums.h"
 #include "ofBaseTypes.h"
 #include "BeTempRender.h"
@@ -24,12 +22,12 @@ public:
 
 	void Update(const uint64 delta, const uint64 absolute){
 
-		GNode* scoreInfo = MEngine.storage->FindGameObjectByTag("score");
+		GNode* scoreInfo = COGFindGameObjectByTag("score");
 		int score = scoreInfo->HasAttr(Attrs::SCORE) ? scoreInfo->GetAttr<int>(Attrs::SCORE) : 0;
 		
 		int maximumCopters = score == 0 ? 1 : (1+log10(score)*log10(score/10));
 
-		if ((absolute - lastSpawn) > 10 && ((int)ofRandom(0,200)) == 10 && MEngine.storage->GetGameObjectsCountByTag("copter") <= maximumCopters){
+		if ((absolute - lastSpawn) > 10 && ((int)ofRandom(0,200)) == 10 && COGGetGameObjectsCountByTag("copter") <= maximumCopters){
 			lastSpawn = absolute; 
 			// spawn each 5 seconds
 			GNode* scene = owner->GetSceneRoot();

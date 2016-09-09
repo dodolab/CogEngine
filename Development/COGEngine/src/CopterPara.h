@@ -27,7 +27,7 @@ public:
 			int health = msg.GetSourceObject()->GetAttr<int>(Attrs::HEALTH);
 
 			// add collision effect
-			msg.GetSourceObject()->AddBehavior(new BeTempRender(MEngine.resourceCtrl->Get2DImage("images/explosion2.png"), 3));
+			msg.GetSourceObject()->AddBehavior(new BeTempRender(COGGet2DImage("images/explosion2.png"), 3));
 
 			// remove copter with delay
 			if (health <= 0){
@@ -42,11 +42,11 @@ public:
 
 		if (!grounded){
 
-			if (owner->GetTransform().AbsPos.y > 0.8f*MEngine.environmentCtrl->GetHeight()){
+			if (owner->GetTransform().AbsPos.y > 0.8f*COGGetHeight()){
 				// change picture and do nothing....
 				grounded = true;
 				owner->SetTag("para_grounded");
-				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, MEngine.resourceCtrl->Get2DImage("images/soldier.png"));
+				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, COGGet2DImage("images/soldier.png"));
 				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::PARA_GROUNDED, nullptr, owner);
 			}
 			else{

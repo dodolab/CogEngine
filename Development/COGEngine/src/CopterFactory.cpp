@@ -17,10 +17,8 @@
 #include "CopterLives.h"
 #include "CopterScore.h"
 #include "BeInputKey.h"
-
-void CopterFactory::OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
-MEngine.factory->SwitchToScene(0);
-}
+#include "MGameEngine.h"
+#include "MGameStorage.h"
 
 
 GNode* CopterFactory::CreateRoot(){
@@ -34,7 +32,7 @@ GNode* CopterFactory::CreateRoot(){
 	splash->AddBehavior(new BeHitEvent());
 	
 	CopterSceneManager* sceneMgr = new CopterSceneManager(this);
-	MEngine.storage->RegisterListener(Actions::OBJECT_HIT, sceneMgr);
+	COGRegisterListener(Actions::OBJECT_HIT, sceneMgr);
 	
 	splash->AddBehavior(sceneMgr);
 
@@ -61,12 +59,12 @@ void CopterFactory::SwitchToScene(int sc){
 	scene->AddBehavior(new BeInputKey());
 
 
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/background.png");
+	spt<ofImage> img = COGGet2DImage("images/background.png");
 	scene->AddAttr(Attrs::IMGSOURCE, img);
-	float sceneScale = MEngine.environmentCtrl->GetWidth() / img->getWidth();
+	float sceneScale = COGGetWidth() / img->getWidth();
 
-	int width = MEngine.environmentCtrl->GetWidth();
-	int height = MEngine.environmentCtrl->GetHeight();
+	int width = COGGetWidth();
+	int height = COGGetHeight();
 
 	scene->GetTransform().LocalPos = ofVec3f(width/2+width, height/2);
 	scene->GetTransform().Scale = ofVec3f(sceneScale, sceneScale, sceneScale);
@@ -88,7 +86,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	GNode* sun = new GNode(ObjType::OBJECT, 10, "sun");
 	sun->AddBehavior(new BeRender(RenderType::IMAGE));
-	img = MEngine.resourceCtrl->Get2DImage("images/sun.png");
+	img = COGGet2DImage("images/sun.png");
 	sun->AddAttr(Attrs::IMGSOURCE, img);
 	sun->GetTransform().LocalPos = ofVec3f(RelPosX(70, scene), RelPosY(10, scene), 2);
 	sun->GetTransform().Scale = CalcScale(img, 10, scene);
@@ -97,7 +95,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	GNode* leftBut = new GNode(ObjType::OBJECT, 50, "but_left");
 	leftBut->AddBehavior(new BeRender(RenderType::IMAGE));
-	img = MEngine.resourceCtrl->Get2DImage("images/butLeft.png");
+	img = COGGet2DImage("images/butLeft.png");
 	leftBut->AddAttr(Attrs::IMGSOURCE, img);
 	leftBut->SetState(States::HITTABLE);
 	leftBut->AddBehavior(new BeHitEvent());
@@ -108,7 +106,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	GNode* rightBut = new GNode(ObjType::OBJECT, 50, "but_right");
 	rightBut->AddBehavior(new BeRender(RenderType::IMAGE));
-	img = MEngine.resourceCtrl->Get2DImage("images/butRight.png");
+	img = COGGet2DImage("images/butRight.png");
 	rightBut->AddAttr(Attrs::IMGSOURCE, img);
 	rightBut->SetState(States::HITTABLE);
 	rightBut->AddBehavior(new BeHitEvent());
@@ -118,7 +116,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	GNode* fireBut = new GNode(ObjType::OBJECT, 50, "but_fire");
 	fireBut->AddBehavior(new BeRender(RenderType::IMAGE));
-	img = MEngine.resourceCtrl->Get2DImage("images/butFire.png");
+	img = COGGet2DImage("images/butFire.png");
 	fireBut->AddAttr(Attrs::IMGSOURCE, img);
 	fireBut->SetState(States::HITTABLE);
 	fireBut->AddBehavior(new BeHitEvent());
@@ -128,7 +126,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	GNode* canon = new GNode(ObjType::OBJECT, 23, "canon");
 	canon->AddBehavior(new BeRender(RenderType::IMAGE));
-	img = MEngine.resourceCtrl->Get2DImage("images/canon.png");
+	img = COGGet2DImage("images/canon.png");
 	canon->AddAttr(Attrs::IMGSOURCE, img);
 	canon->GetTransform().RotationOrigin = ofVec3f(0, -img->height / 2, 0);
 	canon->GetTransform().LocalPos = ofVec3f(RelPosX(50, scene), RelPosY(44, scene) + (img->height / 2), 2);
@@ -142,7 +140,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	// player lives
 	GNode* lives = new GNode(ObjType::OBJECT, 24, "lives");
-	lives->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf",14));
+	lives->AddAttr(Attrs::FONT, COGGetFont("fonts/verdana.ttf",14));
 	lives->AddAttr(Attrs::TEXT, string("LIVES: 10"));
 	lives->AddBehavior(new BeRender(RenderType::TEXT));
 	lives->AddBehavior(new CopterLives(10));
@@ -151,7 +149,7 @@ void CopterFactory::SwitchToScene(int sc){
 
 	// player score
 	GNode* score = new GNode(ObjType::OBJECT, 24, "score");
-	score->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf", 14));
+	score->AddAttr(Attrs::FONT, COGGetFont("fonts/verdana.ttf", 14));
 	score->AddAttr(Attrs::TEXT, string("SCORE: 0"));
 	score->AddBehavior(new BeRender(RenderType::TEXT));
 	score->AddBehavior(new CopterScore());
@@ -161,15 +159,15 @@ void CopterFactory::SwitchToScene(int sc){
 	root->GetInfo(true);
 	
 
-   // int id = MEngine.storage->RegisterCallback(12, &CopterFactory::Test);
-//	MEngine.storage->UnregisterCallback(12, id);
+   // int id = COGRegisterCallback(12, &CopterFactory::Test);
+//	COGUnregisterCallback(12, id);
 }
 
 GNode* CopterFactory::CreateBullet(GNode* canon){
 	GNode* scene = canon->GetSceneRoot();
 	GNode* bullet = new GNode(ObjType::OBJECT, 23, "bullet");
 	bullet->AddBehavior(new BeRender(RenderType::IMAGE));
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/bullet.png");
+	spt<ofImage> img = COGGet2DImage("images/bullet.png");
 	bullet->AddAttr(Attrs::IMGSOURCE, img);
 	bullet->SetGroup(States::COLLID_SOURCE);
 	bullet->AddAttr(Attrs::BOUNDS, new EnBounds());
@@ -188,7 +186,7 @@ GNode* CopterFactory::CreateHelicopter(GNode* scene){
 
 	GNode* copter = new GNode(ObjType::OBJECT, 23, "copter");
 	copter->AddBehavior(new BeRender(RenderType::IMAGE));
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/copter1.png");
+	spt<ofImage> img = COGGet2DImage("images/copter1.png");
 	copter->AddAttr(Attrs::IMGSOURCE, img);
 	copter->AddBehavior(new CopterHelicopter(this));
 	copter->AddAttr(Attrs::FRAME, 1);
@@ -218,7 +216,7 @@ GNode* CopterFactory::CreatePara(GNode* copter){
 	GNode* scene = copter->GetSceneRoot();
 	GNode* para = new GNode(ObjType::OBJECT, 23, "para");
 	para->AddBehavior(new BeRender(RenderType::IMAGE));
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/para.png");
+	spt<ofImage> img = COGGet2DImage("images/para.png");
 	para->AddAttr(Attrs::IMGSOURCE, img);
 	para->SetGroup(States::COLLID_TARGET);
 	para->AddAttr(Attrs::BOUNDS, new EnBounds());
@@ -234,7 +232,7 @@ GNode* CopterFactory::CreatePara(GNode* copter){
 GNode* CopterFactory::CreateSkull(GNode* scene){
 	GNode* skull = new GNode(ObjType::OBJECT, 24, "skull");
 	skull->AddBehavior(new BeRender(RenderType::IMAGE));
-	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/skull.png");
+	spt<ofImage> img = COGGet2DImage("images/skull.png");
 	skull->AddAttr(Attrs::IMGSOURCE, img);
 	skull->GetTransform().LocalPos = ofVec3f(RelPosX(50, scene), RelPosY(30, scene), 2);
 	skull->GetTransform().Scale = CalcScale(img, 30.0f, scene);

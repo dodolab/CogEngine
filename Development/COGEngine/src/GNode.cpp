@@ -35,7 +35,7 @@ GNode::~GNode(){
 	// delete all behaviors
 	for (list<GBehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
 	{
-		MEngine.storage->RemoveBehavior((*it));
+		COGRemoveBehavior((*it));
 		delete (*it);
 	}
 	_behaviors.clear();
@@ -48,7 +48,7 @@ GNode::~GNode(){
 	// delete all game objects
 	for (auto it = _children.begin(); it != _children.end(); ++it)
 	{
-		MEngine.storage->RemoveGameObject((*it));
+		COGRemoveGameObject((*it));
 		delete (*it);
 	}
 	_children.clear();
@@ -96,7 +96,7 @@ void GNode::ClearElementsForRemoving(){
 		GBehavior* beh = item.first;
 		beh->owner = nullptr;
 		_behaviors.remove(beh);
-		MEngine.storage->RemoveBehavior(beh);
+		COGRemoveBehavior(beh);
 		if (item.second) delete item.first;
 	}
 
@@ -105,7 +105,7 @@ void GNode::ClearElementsForRemoving(){
 		std::pair<GNode*, bool> item = (*it);
 		GNode* child = item.first;
 		_children.remove(child);
-		MEngine.storage->RemoveGameObject(child);
+		COGRemoveGameObject(child);
 		if (item.second) delete item.first;
 	}
 
@@ -131,7 +131,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 bool GNode::AddBehavior(GBehavior* beh){
 	beh->owner = this;
 	_behaviors.push_back(beh);
-	MEngine.storage->AddBehavior(beh);
+	COGAddBehavior(beh);
 	return true;
 }
 
@@ -143,7 +143,7 @@ bool GNode::RemoveBehavior(GBehavior* beh, bool immediately, bool erase){
 		if (immediately){
 			beh->owner = nullptr;
 			_behaviors.remove(beh);
-			MEngine.storage->RemoveBehavior(beh);
+			COGRemoveBehavior(beh);
 			if (erase) delete beh;
 		}
 		else{
@@ -194,7 +194,7 @@ const list<GNode*>& GNode::GetChildren() const{
 bool GNode::AddChild(GNode* child){
 	_children.push_back(child);
 	child->_parent = this;
-	MEngine.storage->AddGameObject(child);
+	COGAddGameObject(child);
 	return true;
 }
 
@@ -205,7 +205,7 @@ bool GNode::RemoveChild(GNode* child, bool immediately, bool erase){
 	if (result){
 		if (immediately){
 			_children.remove(child);
-			MEngine.storage->RemoveGameObject(child);
+			COGRemoveGameObject(child);
 			if(erase) delete (child);
 		}
 		else{

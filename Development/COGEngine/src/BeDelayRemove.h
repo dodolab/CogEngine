@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GBehavior.h"
-#include "MGameEngine.h"
 #include "BeTranslateAnim.h"
 #include "Enums.h"
 #include "GMsg.h"

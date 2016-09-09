@@ -200,23 +200,23 @@ void ofAndroidApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofAndroidApp::windowResized(int w, int h){
-	MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
+	COGOnScreenSizeChanged(w,h);
 }
 
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchDown(int x, int y, int button){
-	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,true);
+	COGOnMultiTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchMoved(int x, int y, int id){
-	MEngine.environmentCtrl->OnMultiTouchMotion(x,y,id);
+	COGOnMultiTouchMotion(x,y,id);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchUp(int x, int y, int button){
-	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,false);
+	COGOnMultiTouchButton(x,y,button,false);
 }
 
 //--------------------------------------------------------------

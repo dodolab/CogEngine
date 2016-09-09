@@ -1,8 +1,6 @@
 #pragma once
 
 #include "GNode.h"
-#include "MGameFactory.h"
-#include "MGameEngine.h"
 #include "Enums.h"
 #include "ofBaseTypes.h"
 #include "BeTempRender.h"
@@ -29,7 +27,7 @@ public:
 			int health = msg.GetSourceObject()->GetAttr<int>(Attrs::HEALTH);
 
 			// add collision effect
-			msg.GetSourceObject()->AddBehavior(new BeTempRender(MEngine.resourceCtrl->Get2DImage("images/explosion.png"), 3));
+			msg.GetSourceObject()->AddBehavior(new BeTempRender(COGGet2DImage("images/explosion.png"), 3));
 
 			// remove copter with delay
 			if (health < 0){
@@ -49,7 +47,7 @@ public:
 		trans.LocalPos.x += velocity.x;
 		trans.LocalPos.y += velocity.y;
 
-		if (owner->HasState(States::TO_RIGHT) && velocity.x > 0 && owner->GetTransform().AbsPos.x > MEngine.environmentCtrl->GetWidth() + 400){
+		if (owner->HasState(States::TO_RIGHT) && velocity.x > 0 && owner->GetTransform().AbsPos.x > COGGetWidth() + 400){
 			// go from right to left
 			owner->SetState(States::TO_LEFT);
 			owner->GetTransform().Scale.x = abs(owner->GetTransform().Scale.x);
@@ -69,25 +67,25 @@ public:
 			int frame = owner->GetAttr<int>(Attrs::FRAME);
 			if (frame == 0){
 				owner->ChangeAttr<int>(Attrs::FRAME, 1);
-				spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/copter1.png");
+				spt<ofImage> img = COGGet2DImage("images/copter1.png");
 				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, img);
 			}
 			else{
 				owner->ChangeAttr<int>(Attrs::FRAME, 0);
-				spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/copter2.png");
+				spt<ofImage> img = COGGet2DImage("images/copter2.png");
 				owner->ChangeAttr<spt<ofImage>>(Attrs::IMGSOURCE, img);
 			}
 		}
 
 		// spawn per 8 sec
-		GNode* scoreInfo = MEngine.storage->FindGameObjectByTag("score");
+		GNode* scoreInfo = COGFindGameObjectByTag("score");
 		int score = scoreInfo->HasAttr(Attrs::SCORE) ? scoreInfo->GetAttr<int>(Attrs::SCORE) : 0;
 
 		int maximumPara = score == 0 ? 3 : 3*(1 + log10(score)*log10(score / 10));
 
 
-		if (MEngine.storage->GetGameObjectsCountByTag("para") <= maximumPara && (absolute - lastParaSpawn) > (8000) && ((int)ofRandom(0,20)) == 10){
-			float width = MEngine.environmentCtrl->GetWidth();
+		if (COGGetGameObjectsCountByTag("para") <= maximumPara && (absolute - lastParaSpawn) > (8000) && ((int)ofRandom(0,20)) == 10){
+			float width = COGGetWidth();
 
 			if (ofRandom(0, 2) == 1){
 				// some randomness

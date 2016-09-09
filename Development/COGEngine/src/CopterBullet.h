@@ -26,8 +26,8 @@ public:
 		owner->GetTransform().LocalPos.x += velocity.x;
 		owner->GetTransform().LocalPos.y += velocity.y;
 
-		if (owner->GetTransform().AbsPos.x < -20 || owner->GetTransform().AbsPos.x > MEngine.environmentCtrl->GetWidth() + 20 ||
-			owner->GetTransform().AbsPos.y < -20 || owner->GetTransform().AbsPos.y > MEngine.environmentCtrl->GetHeight() + 20){
+		if (owner->GetTransform().AbsPos.x < -20 || owner->GetTransform().AbsPos.x > COGGetWidth() + 20 ||
+			owner->GetTransform().AbsPos.y < -20 || owner->GetTransform().AbsPos.y > COGGetHeight() + 20){
 			// delete
 			owner->GetParent()->RemoveChild(owner,false,true);
 		}

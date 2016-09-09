@@ -14,16 +14,16 @@ void MEnvironmentCtrl::OnKeyAction(int key, bool pressed){
 		// key down
 
 		// if pressed keys contains this key, remove it
-		for (auto pKey : MEngine.environmentCtrl->GetPressedKeys()){
+		for (auto pKey : COGGetPressedKeys()){
 			// todo: shouldn't occur, create assertion
 			if (pKey.key == key) return;
 		}
 
-		MEngine.environmentCtrl->GetPressedKeys().push_back(EnInputAct(key));
+		COGGetPressedKeys().push_back(EnInputAct(key));
 	}
 	else{
 		// key up
-		for (auto it = MEngine.environmentCtrl->GetPressedKeys().begin(); it != MEngine.environmentCtrl->GetPressedKeys().end(); ++it){
+		for (auto it = COGGetPressedKeys().begin(); it != COGGetPressedKeys().end(); ++it){
 			if ((*it).key == key){
 				(*it).ended = true;
 				break;
@@ -37,10 +37,10 @@ void MEnvironmentCtrl::OnKeyAction(int key, bool pressed){
 // user touches the screen with more fingers
 void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed){
 	if (pressed){
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(button, ofVec3f(x, y)));
+		COGGetPressedPoints().push_back(EnInputAct(button, ofVec3f(x, y)));
 	}
 	else{
-		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
+		for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::TOUCH && (*it).buttonId == button){
 				// change position as well
 				(*it).position = ofVec3f(x, y);
@@ -53,7 +53,7 @@ void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed
 
 // user moves fingers
 void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y, int button){
-	for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
+	for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).buttonId == button && (*it).inputType == InputType::TOUCH){
 			(*it).position = ofVec3f(x, y);
@@ -64,10 +64,10 @@ void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y, int button){
 // user touches the screen
 void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool pressed){
 	if (pressed){
-		MEngine.environmentCtrl->GetPressedPoints().push_back(EnInputAct(button, ofVec3f(x,y)));
+		COGGetPressedPoints().push_back(EnInputAct(button, ofVec3f(x,y)));
 	}
 	else{
-		for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
+		for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
 			if ((*it).inputType == InputType::TOUCH){
 				// change position as well
 				(*it).position = ofVec3f(x,y);
@@ -80,7 +80,7 @@ void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool presse
 
 // user moves finger
 void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
-	for (auto it = MEngine.environmentCtrl->GetPressedPoints().begin(); it != MEngine.environmentCtrl->GetPressedPoints().end(); ++it){
+	for (auto it = COGGetPressedPoints().begin(); it != COGGetPressedPoints().end(); ++it){
 		// todo: shouldn't occur, create assertion
 		if ((*it).buttonId == button && (*it).inputType == InputType::TOUCH){
 			(*it).position = ofVec3f(x,y);
@@ -90,9 +90,9 @@ void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
 
 
 void MEnvironmentCtrl::OnScreenSizeChanged(int newWidth, int newHeight){
-	MEngine.environmentCtrl->_screenSizeChanged = true;
-	MEngine.environmentCtrl->_height = newHeight;
-	MEngine.environmentCtrl->_width = newWidth;
+	_screenSizeChanged = true;
+	_height = newHeight;
+	_width = newWidth;
 }
 
 void MEnvironmentCtrl::Init(){

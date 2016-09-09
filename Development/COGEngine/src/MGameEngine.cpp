@@ -4,6 +4,7 @@
 #include "BeRender.h"
 #include "BeRotateAnim.h"
 #include "MGameFactory.h"
+#include "MGameStorage.h"
 
 MGameEngine MEngine;
 
@@ -32,7 +33,7 @@ void MGameEngine::Draw(uint64 delta, uint64 absolute){
 }
 
 
-void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
+void MGameEngine::Init(MGameFactory* factory){
 
 	
 	environmentCtrl = new MEnvironmentCtrl();
@@ -40,7 +41,7 @@ void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
 	logger = new MLogger();
 
 	this->factory = factory;
-	this->storage = storage;
+	this->storage = storage = new MGameStorage();
 
 	environmentCtrl->Init();
 	resourceCtrl->Init();
