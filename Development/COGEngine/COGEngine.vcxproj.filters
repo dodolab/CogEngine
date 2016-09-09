@@ -194,6 +194,9 @@
     <ClInclude Include="src\EnAnim.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BeAnim.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

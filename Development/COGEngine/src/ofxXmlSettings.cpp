@@ -618,6 +618,18 @@ bool ofxXmlSettings::getAttributeNames(const string& tag, vector<string>& outNam
 }
 
 //---------------------------------------------------------
+bool ofxXmlSettings::getBoolAttribute(const string& tag, const string& attribute, bool defaultValue, int which){
+	bool value = defaultValue;
+	string strValue = "";
+	readStringAttribute(tag, attribute, strValue, which);
+	string lower = ofToLower(strValue);
+	// bool value could be "true" or "1"
+	if (lower.length() != 0){
+		return lower.compare("true") == 0 || lower.compare("1") == 0;
+	}
+	return value;
+}
+
 int ofxXmlSettings::getAttribute(const string& tag, const string& attribute, int defaultValue, int which){
     int value = defaultValue;
 	readIntAttribute(tag, attribute, value, which);
@@ -674,6 +686,7 @@ TiXmlElement* ofxXmlSettings::getElementForAttribute(const string& tag, int whic
 }
 
 //---------------------------------------------------------
+
 bool ofxXmlSettings::readIntAttribute(const string& tag, const string& attribute, int& outValue, int which){
 
     TiXmlElement* elem = getElementForAttribute(tag, which);

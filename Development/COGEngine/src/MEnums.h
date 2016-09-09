@@ -73,7 +73,8 @@ namespace Attrs{
 	extern int HEALTH;
 	extern int FONT;
 	extern int TEXT;
-	extern int SCORE;	
+	extern int SCORE;
+	extern int IMGBOUNDS;
 
 	extern const char* ToString(int act);
 }
