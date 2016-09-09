@@ -8,7 +8,6 @@
 MGameEngine MEngine;
 
 void MGameEngine::Update(uint64 delta, uint64 absolute){
-
 	ofMatrix4x4 identity = ofMatrix4x4::newIdentityMatrix();
 	identity.translate(0,0,-690);
 
@@ -17,7 +16,7 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 	//this->_root->GetRoot()->Update(delta, absolute);
 
 	// fixed delta -> no glitches
-	this->_root->GetRoot()->Update(16, absolute);
+	this->_root->GetRoot()->Update(delta, absolute);
 	environmentCtrl->RemoveEndedInputs();
 }
 

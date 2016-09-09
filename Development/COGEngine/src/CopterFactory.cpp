@@ -16,6 +16,7 @@
 #include "CopterPara.h"
 #include "CopterLives.h"
 #include "CopterScore.h"
+#include "BeInputKey.h"
 
 void CopterFactory::OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 MEngine.factory->SwitchToScene(0);
@@ -59,6 +60,8 @@ void CopterFactory::SwitchToScene(int sc){
 	scene->AddBehavior(new BeCollider(States::COLLID_SOURCE, States::COLLID_TARGET));
 	scene->AddBehavior(new CopterCollisionMgr(this));
 	scene->AddBehavior(new CopterHeliManager(this));
+	scene->AddBehavior(new BeInputKey());
+
 
 	spt<ofImage> img = MEngine.resourceCtrl->Get2DImage("images/background.png");
 	scene->AddAttr(Attrs::IMGSOURCE, img);
@@ -74,6 +77,16 @@ void CopterFactory::SwitchToScene(int sc){
 	root->UpdateTransforms();
 
 	scene->AddBehavior(new BeSlideTween(TweenDirection::LEFT, scene, splash,1));
+
+
+	// performance info, must be at the top!!
+	GNode* perf = new GNode(ObjType::OBJECT, 24, "info");
+	perf->AddAttr(Attrs::FONT, MEngine.resourceCtrl->GetFont("fonts/verdana.ttf", 14));
+	perf->AddAttr(Attrs::TEXT, string(""));
+	perf->AddBehavior(new BeRender(RenderType::TEXT));
+	perf->AddBehavior(new Performance());
+	perf->GetTransform().LocalPos = ofVec3f(RelPosX(80, scene), RelPosY(14, scene), 2);
+	scene->AddChild(perf);
 
 	GNode* sun = new GNode(ObjType::OBJECT, 10, "sun");
 	sun->AddBehavior(new BeRender(RenderType::IMAGE));
@@ -146,6 +159,7 @@ void CopterFactory::SwitchToScene(int sc){
 	score->AddBehavior(new CopterScore());
 	score->GetTransform().LocalPos = ofVec3f(RelPosX(5, scene), RelPosY(7, scene), 2);
 	scene->AddChild(score);
+
 	
 
    // int id = MEngine.storage->RegisterCallback(12, &CopterFactory::Test);

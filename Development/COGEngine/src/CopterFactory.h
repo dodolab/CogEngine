@@ -6,6 +6,30 @@
 #include "MGameEngine.h"
 #include "Enums.h"
 
+
+class Performance : public GBehavior{
+private:
+	uint64 lastdiff;
+
+public:
+	Performance() : GBehavior(ElemType::MODEL, EnFlags()){
+		this->lastdiff = 0;
+	}
+
+	virtual void OnMessage(GMsg& msg){
+
+	}
+
+
+	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+
+		owner->ChangeAttr(Attrs::TEXT, string("PERF: " + ofToString(ofGetSystemTime() - lastdiff)));
+		lastdiff = ofGetSystemTime();
+	}
+
+};
+
+
 class CopterFactory : public MGameFactory{
 private:
 	GNode* root;
