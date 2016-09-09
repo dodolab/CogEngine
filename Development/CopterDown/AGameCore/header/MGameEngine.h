@@ -1,14 +1,26 @@
-
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-void Update(uint64 delta, uint64 absolute);
-void Draw(uint64 delta, uint64 absolute);
+#include "MEnvironmentCtrl.h"
+#include "MGameCtrl.h"
+#include "MResourceCtrl.h"
+#include "s3eTypes.h"
 
-void StartLoop();
+class MGameEngine{
+private:
+	MEnvironmentCtrl environmentCtrl;
+	MGameCtrl gameCtrl;
+	MResourceCtrl resourceCtrl;
 
-void Init();
-void Terminate();
+	void Update(uint64 delta, uint64 absolute);
+	void Draw(uint64 delta, uint64 absolute);
+
+public:
+	void Init();
+	void StartLoop();
+	void Terminate();
+};
+
 
 
 

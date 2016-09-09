@@ -9,6 +9,7 @@
 #include "SmartPointer.h"
 #include "BeRender.h"
 #include "BeTranslateAnim.h"
+#include "MGameEngine.h"
 
 using namespace Iw2DSceneGraphCore;
 
@@ -321,7 +322,7 @@ int main()
 	test();
 
 	
-	// initialize
+	// initialize	
 	Init();
 	// register input events
 	RegisterEvents();
