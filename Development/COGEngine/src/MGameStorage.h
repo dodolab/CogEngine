@@ -4,15 +4,19 @@
 #include <map>
 #include "GNode.h"
 #include "GBehavior.h"
+#include <functional>
+
+
 
 /**
 * MGameStorage - game object manager
 */
 class MGameStorage{
 private:
-	map<int, vector<MsgCallback>> callBackListeners;
+	map<int, vector<std::pair<int,MsgCallback>>> callBackListeners;
 	map<int, vector<GBehavior*>> behListeners;
 
+	static int callBackIdCounter;
 	// list of all game objects
 	vector<GNode*> allGameObjects;
 	// list of all behaviors
@@ -35,26 +39,37 @@ public:
 
 	}
 
-	void RegisterCallback(int action, MsgCallback callback){
-		if (callBackListeners.find(action) == callBackListeners.end()){
-			callBackListeners[action] = vector < MsgCallback >();
-		}
-
-		vector<MsgCallback> callBacks = callBackListeners.find(action)->second;
-		callBacks.push_back(callback);
+	template<class T>
+	int RegisterCallback(int action, void (T::*f)(GMsg const &)) {
+		return RegisterCallback(action, std::tr1::bind(f, (T*)(this), std::placeholders::_1));
 	}
 
-	void UnregisterCallback(int action, MsgCallback callback){
+	int RegisterCallback(int action, MsgCallback callback){
+		if (callBackListeners.find(action) == callBackListeners.end()){
+			callBackListeners[action] = vector <std::pair<int, MsgCallback >>();
+		}
+
+		vector<std::pair<int,MsgCallback>>& callBacks = callBackListeners.find(action)->second;
+		callBacks.push_back(std::make_pair(callBackIdCounter++, callback));
+
+		// return id of this callback
+		return callBackIdCounter-1;
+	}
+
+	bool UnregisterCallback(int action, int id){
 		if (callBackListeners.find(action) != callBackListeners.end()){
-			vector<MsgCallback> callBacks = callBackListeners.find(action)->second;
+			vector<std::pair<int,MsgCallback>>& callBacks = callBackListeners.find(action)->second;
+			
 			for (auto it = callBacks.begin(); it != callBacks.end(); ++it){
-				MsgCallback cb = (*it);
-				if (&cb == &callback){
+
+				if ((*it).first == id){
 					callBacks.erase(it);
-					return;
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 	void SendTraversationMessage(GMsg& msg, GNode* actualNode);

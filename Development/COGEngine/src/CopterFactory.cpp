@@ -15,8 +15,8 @@ MEngine.factory->SwitchToScene(0);
 
 
 GNode* CopterFactory::CreateRoot(){
-	//return MGameFactory::CreateRoot();
-	 root = new GNode(ObjType::ROOT, 12, "fofík");
+	return MGameFactory::CreateRoot();
+	/* root = new GNode(ObjType::ROOT, 12, "fofík");
 	 splash = new GNode(ObjType::SCENE, 13, "scéna");
 
     this->SetRenderImage(splash, "images/intro.png", 1, ofVec2f(0.5f, 0.5f), ofVec2f(0.5f, 0.5f));
@@ -25,7 +25,7 @@ GNode* CopterFactory::CreateRoot(){
 	splash->AddBehavior(new CopterSceneManager(this));
 
 	root->AddChild(splash);
-	return root;
+	return root;*/
 }
 
 void CopterFactory::SwitchToScene(int sc){
@@ -94,6 +94,6 @@ void CopterFactory::SwitchToScene(int sc){
 		scene->AddChild(copter);
 	}
 
-	//MEngine.storage->RegisterCallback(12, CopterFactory::Test);
-	//MEngine.storage->UnregisterCallback(12, CopterFactory::Test);
+    int id = MEngine.storage->RegisterCallback(12, &CopterFactory::Test);
+	MEngine.storage->UnregisterCallback(12, id);
 }

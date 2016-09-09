@@ -3,10 +3,11 @@
 
 #include "Enums.h"
 #include "EnFlags.h"
+#include <functional>
 
 class GMsg;
 
-typedef std::tr1::function<void(GMsg& mojo)> MsgCallback;
+typedef std::tr1::function<void(GMsg const &)> MsgCallback;
 
 class GNode;
 
