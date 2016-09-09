@@ -19,8 +19,8 @@ void BeCollider::OnMessage(Msg& msg){
 
 }
 
-void BeCollider::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
-	list<GNode*> childrens = _owner->GetChildren();
+void BeCollider::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner){
+	list<GNode*> childrens = owner->GetChildren();
 
 	for (list<GNode*>::iterator it = childrens.begin(); it != childrens.end(); ++it){
 		GNode* first = *it;
@@ -39,7 +39,7 @@ void BeCollider::Update(const uint64 delta, const uint64 absolute, const CIwFMat
 					if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
 						EnCollision* col = new EnCollision(first->GetId(), second->GetId());
 
-						SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr);
+						SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr, owner);
 					}
 				}
 			}

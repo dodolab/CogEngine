@@ -4,7 +4,9 @@
 
 #include "GNode.h"
 
-
+/**
+* EnBounds - Entity for object physical bounds
+*/
 class EnBounds{
 private:
 	float _width;

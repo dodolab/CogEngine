@@ -9,9 +9,14 @@
 #include <vector>
 using namespace std;
 
+/**
+* EnUserAct - storage of user inputs
+*/
 class EnUserAct{
 private:
+	// keyboard actions
 	vector<EnInputAct<Act>> _keyActions;
+	// touchpad actions
 	vector<EnInputAct<CIwFVec2>> _pointActions;
 
 public:

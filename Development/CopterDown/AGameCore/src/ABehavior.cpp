@@ -10,11 +10,11 @@ _elemType(elemType), _msgFlags(msgFlags), _id(idCounter++) {
 
 }
 
-void ABehavior::SendMessage(EnFlags traverse, int action, void* data, Msg& resp) const{
+void ABehavior::SendMessage(EnFlags traverse, int action, void* data, Msg& resp, GNode* target) const{
 	Msg msg(_elemType,traverse, action,SenderType::BEHAVIOR,_id,data);
-	_owner->SendMessage(msg, resp);
+	target->SendMessage(msg, resp);
 }
 
-void ABehavior::SendMessageNoResp(EnFlags traverse, int action, void* data) const{
-	SendMessage(traverse, action, data, _dummyMsg);
+void ABehavior::SendMessageNoResp(EnFlags traverse, int action, void* data, GNode* target) const{
+	SendMessage(traverse, action, data, _dummyMsg, target);
 }

@@ -2,6 +2,9 @@
 #ifndef ENCOLLISION_H
 #define ENCOLLISION_H
 
+/**
+* EnCollision - Entity for collisions
+*/
 class EnCollision{
 private:
 	int _firstId;

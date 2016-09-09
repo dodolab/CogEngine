@@ -7,12 +7,15 @@
 #include "IwGeomVec2.h"
 #include "IwGeomFMat2D.h"
 
+/**
+* Behavior for translation
+*/
 class BeMove : public ABehavior{
 public:
 	BeMove();
 
 	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
 };
 
 

@@ -15,7 +15,7 @@ void BeTranslateAnim::OnMessage(Msg& msg){
 
 }
 
-void BeTranslateAnim::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
+void BeTranslateAnim::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner){
 
 }
 

@@ -2,16 +2,19 @@
 #ifndef ENINPUT_ACT_H
 #define ENINPUT_ACT_H
 
+/**
+* EnInputAct - entity for input activity
+*/
 template<class T>
 class EnInputAct{
 public:
 	T value;
 	// indicates, if input has been handled
-	bool Handled = false;
+	bool handled = false;
 	// indicates, if input has ended (e.g. key release)
-	bool Ended = false;
+	bool ended = false;
 	// indicates, how many cycle has been this input detected before it ended
-	int CycleNumber = 0;
+	int cycleNumber = 0;
 
 
 	EnInputAct(){

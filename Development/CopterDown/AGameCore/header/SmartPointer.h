@@ -515,32 +515,4 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// define macros
-
-#ifndef EMPTY_NAME_SPACE
-#define EMPTY_NAME_SPACE
-#endif  // EMPTY_NAME_SPACE
-
-// defining COM smart pointer type
-#ifndef DEFINE_COM_spt
-#define DEFINE_COM_spt(NAME_SPACE_T, TYPE) \
-    typedef smart_ptr::spt<NAME_SPACE_T::TYPE, smart_ptr::com_mem_mgr<NAME_SPACE_T::TYPE> > TYPE##ComPtr;
-#endif  // DEFINE_COM_spt
-
-// defining standard smart pointer type
-#ifndef DEFINE_STD_spt
-#define DEFINE_STD_spt(NAME_SPACE_T, TYPE) \
-    typedef smart_ptr::spt<NAME_SPACE_T::TYPE, smart_ptr::std_mem_mgr<NAME_SPACE_T::TYPE> > TYPE##StdPtr;
-#endif  // DEFINE_STD_spt
-
-// defining array style smart pointer type
-#ifndef DEFINE_ARR_spt
-#define DEFINE_ARR_spt(NAME_SPACE_T, TYPE) \
-    typedef smart_ptr::spt<NAME_SPACE_T::TYPE, smart_ptr::array_mem_mgr<NAME_SPACE_T::TYPE> > TYPE##ArrPtr;
-#endif  // DEFINE_ARR_spt
-
-
-
-
 #endif // __SMART_PTR_H__

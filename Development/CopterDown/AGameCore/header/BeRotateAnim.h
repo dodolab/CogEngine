@@ -4,6 +4,9 @@
 
 #include "ABehavior.h"
 
+/**
+* Behavior for rotation animation
+*/
 class BeRotateAnim : public ABehavior{
 
 private:
@@ -18,7 +21,7 @@ public:
 	BeRotateAnim(float from, float to, float speed, bool additive);
 
 	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
 };
 
 

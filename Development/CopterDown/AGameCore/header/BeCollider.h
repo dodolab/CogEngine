@@ -7,6 +7,9 @@
 #include "EnBounds.h"
 #include "EnCollision.h"
 
+/**
+* Behavior for colliding two objects
+*/
 class BeCollider : public ABehavior{
 protected:
 	EnFlags _firstColGroups;
@@ -20,7 +23,7 @@ public:
 	BeCollider(int firstColGroup, int secondColGroup);
 
 	void OnMessage(Msg& msg);
-	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix, GNode* owner);
 };
 
 
