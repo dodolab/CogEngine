@@ -136,6 +136,7 @@
     <ClInclude Include="src\CopterPara.h" />
     <ClInclude Include="src\CopterSceneManager.h" />
     <ClInclude Include="src\CopterScore.h" />
+    <ClInclude Include="src\DebugLog.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
     <ClInclude Include="src\EnFlags.h" />

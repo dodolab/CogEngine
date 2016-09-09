@@ -1,6 +1,6 @@
+#pragma once
+
 #include "GNode.h"
-#ifndef ENCOLLISION_H
-#define ENCOLLISION_H
 
 /**
 * EnCollision - Entity for collisions
@@ -17,7 +17,4 @@ public:
 	}
 	
 };
-
-
-#endif
 

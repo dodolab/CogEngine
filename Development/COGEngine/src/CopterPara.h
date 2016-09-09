@@ -1,5 +1,4 @@
-#ifndef COPTER_PARA_H
-#define COPTER_PARA_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -16,7 +15,7 @@ class CopterPara : public GBehavior{
 private:
 	CopterFactory* factory;
 	bool grounded;
-	GNode* lastOwner;
+
 public:
 	CopterPara(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::HEALTH_CHANGED)){
 		this->factory = factory;
@@ -24,7 +23,7 @@ public:
 	}
 
 	void OnMessage(GMsg& msg){
-		if (msg.GetSourceObject()->GetId() == lastOwner->GetId() && msg.GetAction() == Actions::HEALTH_CHANGED){
+		if (msg.GetSourceObject()->GetId() == owner->GetId() && msg.GetAction() == Actions::HEALTH_CHANGED){
 			int health = msg.GetSourceObject()->GetAttr<int>(Attrs::HEALTH);
 
 			// add collision effect
@@ -39,8 +38,8 @@ public:
 	}
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
-		lastOwner = owner;
+	virtual void Update(const uint64 delta, const uint64 absolute){
+
 		if (!grounded){
 
 			if (owner->GetTransform().AbsPos.y > 0.8f*MEngine.environmentCtrl->GetHeight()){
@@ -60,5 +59,3 @@ public:
 	
 };
 
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GAMESTORAGE_H
-#define GAMESTORAGE_H
+#pragma once
 
 #include <map>
 #include "GNode.h"
@@ -167,5 +166,3 @@ public:
 
 	}
 };
-
-#endif

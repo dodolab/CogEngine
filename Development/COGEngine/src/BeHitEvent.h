@@ -1,5 +1,4 @@
-#ifndef BE_HITEVENT_H
-#define BE_HITEVENT_H
+#pragma once
 
 #include "GBehavior.h"
 #include "MGameEngine.h"
@@ -23,10 +22,6 @@ public:
 	}
 
 
-	virtual void OnMessage(GMsg& msg){
-
-	}
-
 	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos){
 		//Move the test position into "local" coordinate space
 		ofVec3f localPos = testPos + ofVec3f(image->width / 2, image->height / 2);
@@ -42,7 +37,7 @@ public:
 		return col.a > 0x80;
 	}
 
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		if (owner->HasState(States::HITTABLE)){
 
@@ -124,6 +119,3 @@ public:
 		}
 	}
 };
-
-
-#endif

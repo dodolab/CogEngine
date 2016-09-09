@@ -1,5 +1,4 @@
-#ifndef ENINPUT_ACT_H
-#define ENINPUT_ACT_H
+#pragma once
 
 #include "Enums.h"
 
@@ -58,5 +57,3 @@ public:
 
 };
 
-
-#endif

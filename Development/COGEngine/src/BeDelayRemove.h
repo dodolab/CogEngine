@@ -1,5 +1,4 @@
-#ifndef BE_DELAY_REM_H
-#define BE_DELAY_REM_H
+#pragma once
 
 #include "GBehavior.h"
 #include "MGameEngine.h"
@@ -22,12 +21,8 @@ public:
 	}
 
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 		actual += delta;
 
 		if (actual > millis){
@@ -35,6 +30,3 @@ public:
 		}
 	}
 };
-
-
-#endif

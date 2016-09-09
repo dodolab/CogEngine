@@ -1,5 +1,4 @@
-#ifndef COPTER_SCENE_MANAGER_H
-#define COPTER_SCENE_MANAGER_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -43,7 +42,7 @@ public:
 		}
 	}
 
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 		if (finishingMode){
 			finishingDelay += delta;
 
@@ -55,6 +54,3 @@ public:
 		}
 	}
 };
-
-
-#endif

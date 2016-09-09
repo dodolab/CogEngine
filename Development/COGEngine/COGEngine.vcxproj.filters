@@ -206,6 +206,9 @@
     <ClInclude Include="src\CopterScore.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\DebugLog.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

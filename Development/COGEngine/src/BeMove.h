@@ -1,5 +1,4 @@
-#ifndef BEMOVE_H
-#define BEMOVE_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GMsg.h"
@@ -14,11 +13,8 @@ public:
 
 	}
 
-	void OnMessage(GMsg& msg){
 
-	}
-
-	void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	void Update(const uint64 delta, const uint64 absolute){
 		EnTransform& transform = owner->GetTransform();
 
 		ofVec3f velocity = owner->GetAttr<ofVec3f>(Attrs::VELOCITY);
@@ -28,7 +24,3 @@ public:
 	}
 
 };
-
-
-
-#endif

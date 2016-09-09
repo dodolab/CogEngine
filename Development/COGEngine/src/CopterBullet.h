@@ -1,5 +1,4 @@
-#ifndef COPTER_BULLET_H
-#define COPTER_BULLET_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -19,12 +18,8 @@ public:
 		this->factory = factory;
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 		
 		ofVec2f velocity = owner->GetAttr<ofVec2f>(Attrs::VELOCITY);
 
@@ -43,5 +38,3 @@ public:
 	
 };
 
-
-#endif

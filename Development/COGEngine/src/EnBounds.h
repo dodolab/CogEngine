@@ -1,5 +1,4 @@
-#ifndef ENBOUNDS_H
-#define ENBOUNDS_H
+#pragma once
 
 #include "GNode.h"
 
@@ -22,5 +21,3 @@ public:
 
 
 
-
-#endif

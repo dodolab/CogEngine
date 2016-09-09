@@ -1,5 +1,4 @@
-#ifndef BERENDER_H
-#define BERENDER_H
+#pragma once
 
 #include "GBehavior.h"
 #include "GNode.h"
@@ -22,12 +21,8 @@ public:
 		this->_type = type;
 	}
 
-	virtual void OnMessage(GMsg& msg){
 
-	}
-
-
-	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
 		ofLoadMatrix(absM);
@@ -95,6 +90,3 @@ public:
 		font->drawString(text, 0, 0);
 	}
 };
-
-
-#endif

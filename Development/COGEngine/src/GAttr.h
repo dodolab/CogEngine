@@ -1,6 +1,4 @@
-#ifndef ATTR_H
-#define ATTR_H
-
+#pragma once
 
 #include "EnPair.h"
 #include "GMsg.h"
@@ -95,7 +93,3 @@ public:
 
 };
 
-
-
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef ENPAIR_H
-#define ENPAIR_H
+#pragma once
 
 /**
 * EnPair - generic class for pairs
@@ -47,5 +46,3 @@ public:
 	}
 };
 
-
-#endif

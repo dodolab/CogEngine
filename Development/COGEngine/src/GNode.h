@@ -1,5 +1,4 @@
-#ifndef GNODE_H
-#define GNODE_H
+#pragma once
 
 #include <map>
 #include "GAttr.h"
@@ -13,11 +12,12 @@
 #include <string>
 #include "EnTransform.h"
 #include "MGameStorage.h"
+#include <assert.h>
 
 using namespace std;
 
 enum RunningMode{
-	RUNNING, PAUSED_ALL, PAUSED_CHILDREN
+	RUNNING, PAUSED_ALL, PAUSED_CHILDREN, PAUSED_ITSELF
 };
 
 /**
@@ -99,9 +99,7 @@ public:
 	*/
 	void Draw(const uint64 delta, const uint64 absolute);
 
-	void SetRunningMode(RunningMode runMode){
-		this->_runMode = runMode;
-	}
+	void ClearElementsForRemoving();
 
 	/**
 	* Adds a new behavior
@@ -320,6 +318,15 @@ public:
 		GetStates().SwitchState(state1, state2);
 	}
 
+
+	RunningMode GetRunningMode(){
+		return this->_runMode;
+	}
+
+	void SetRunningMode(RunningMode runMode){
+		this->_runMode = runMode;
+	}
+
 	/**
 	* Adds a new attribute of value type
 	* @param key key of the attribute
@@ -340,17 +347,12 @@ public:
 	*/
 	template<class T> T& GetAttr(int key){
 		auto it = _attributes.find(key);
-		if (it != _attributes.end()){
-			GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
-			return attr->GetValue();
-		}
-		else{
-			// todo: this won't work
-			T newObj;
-			GAttrR<T>* newAttr = new GAttrR<T>(key, newObj, this);
-			_attributes[key] = newAttr;
-			return newAttr->GetValue();
-		}
+
+		MASSERT(it != _attributes.end(), string_format("%s: Attribute %d doesn't exists", _tag->c_str(), key));
+		MASSERT(typeid(*it->second) == typeid(GAttrR<T>), string_format("%s: Attribute %d is of the wrong type!", _tag->c_str(), key));
+
+		GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
+		return attr->GetValue();
 	}
 
 	/**
@@ -365,9 +367,7 @@ public:
 			attr->SetValue(value);
 		}
 		else{
-			T newObj;
-			GAttrR<T>* newAttr = new GAttrR<T>(key, newObj, this);
-			_attributes[key] = newAttr;
+			AddAttr(key, value);
 		}
 	}
 
@@ -387,9 +387,9 @@ public:
 		return _id != other._id;
 	}
 
+	string GetInfo(bool complete);
+
+	void GetInfo(bool complete, std::ostringstream& ss, int level);
 
 	friend class MGameStorage;
 };
-
-
-#endif

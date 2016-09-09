@@ -1,5 +1,4 @@
-#ifndef MSG_H
-#define MSG_H
+#pragma once
 
 #include "Enums.h"
 #include "EnFlags.h"
@@ -117,5 +116,3 @@ public:
 
 };
 
-
-#endif
