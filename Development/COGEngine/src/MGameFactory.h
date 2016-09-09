@@ -156,7 +156,8 @@ public:
 	/**
 	* Loads all animations into storage
 	* @param xml entity with animations
+	* @return true, if no error has occured
 	*/
-	void LoadAnimations(spt<ofxXmlSettings> xml);
+	bool LoadAnimations(spt<ofxXmlSettings> xml);
 
 };

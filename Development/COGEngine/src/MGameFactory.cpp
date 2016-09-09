@@ -6,6 +6,7 @@
 #include "BeRotateAnim.h"
 #include "BeHitEvent.h"
 #include "BeAnim.h"
+#include "MError.h"
 
 ofVec2f MGameFactory::GetCenter(){
 	return ofVec2f(COGGetScreenWidth() / 2, COGGetScreenHeight() / 2);
@@ -144,13 +145,26 @@ GNode* MGameFactory::CreateRoot(){
 
 
 
-void MGameFactory::LoadAnimations(spt<ofxXmlSettings> xml){
+bool MGameFactory::LoadAnimations(spt<ofxXmlSettings> xml){
 
 	AnimationLoader loader;
+	vector<spt<EnAnim>> rootAnims;
 
-	// load root animations
-	vector<spt<EnAnim>> rootAnims = loader.LoadAnimations(xml);
-	
+	try{
+		// load root animations
+		rootAnims = loader.LoadAnimations(xml);
+	}
+	catch (IllegalArgumentException& err){
+		COGLogError(err.what());
+		COGLogError("Animations couldn't be loaded");
+		return false;
+	}
+	catch (ConfigErrorException& err){
+		COGLogError(err.what());
+		COGLogError("Animations couldn't be loaded");
+		return false;
+	}
+
 	vector<EnAnim*> animArray;
 
 	// for each root animation:
@@ -179,4 +193,6 @@ void MGameFactory::LoadAnimations(spt<ofxXmlSettings> xml){
 			}
 		}
 	}
+
+	return true;
 }

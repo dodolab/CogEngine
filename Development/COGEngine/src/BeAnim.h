@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GBehavior.h"
+#include "MError.h"
 
 
 /**
@@ -27,6 +28,8 @@ private:
 		if (anim->GetRef().length() != 0){
 			// animation is referenced -> push it to the referencedAnims and return
 			referencedAnims[anim->GetName()] = anim;
+			if (innerAnimations != 0) throw ConfigErrorException("Referenced animations mustn't have inner animations!");
+
 			return anim;
 		}
 		else{
@@ -59,12 +62,20 @@ private:
 	void FillOtherAttributes(spt<ofxXmlSettings> xml, EnAnim* anim){
 		anim->SetSheetPath(xml->getAttribute(":", "sheet", anim->GetSheetPath()));
 		anim->SetFrames(xml->getAttribute(":", "frames", anim->GetFrames()));
+		if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0",anim->GetName()));
 		anim->SetLines(xml->getAttribute(":", "lines", anim->GetLines()));
+		if (anim->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", anim->GetName()));
 		anim->SetStart(xml->getAttribute(":", "start", anim->GetStart()));
+		if (anim->GetStart() < 0) throw IllegalArgumentException(string_format("Error in animation %s; start bust be greater or equal to 0", anim->GetName()));
 		anim->SetEnd(xml->getAttribute(":", "end", anim->GetEnd()));
+		if (anim->GetEnd() < 0) throw IllegalArgumentException(string_format("Error in animation %s; end bust be greater or equal to 0", anim->GetName()));
+		if (anim->GetStart() > anim->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", anim->GetName()));
 		anim->SetIncrement(xml->getAttribute(":", "increment", anim->GetIncrement()));
+		if (anim->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", anim->GetName()));
 		anim->SetSpeed(xml->getAttribute(":", "speed", anim->GetSpeed()));
+		if (anim->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", anim->GetName()));
 		anim->SetRepeat(xml->getAttribute(":", "repeat", anim->GetRepeat()));
+		if (anim->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", anim->GetName()));
 		anim->SetIsRevert(xml->getBoolAttribute(":", "revert", anim->GetIsRevert()));
 
 	}
@@ -112,6 +123,7 @@ private:
 				else{
 					// reference anim doesn't contain dot, but it isn't in this scope... that means it must refer to some other root animation
 					spt<EnAnim> rootReference = FindAnimByName(ref, rootAnims);
+					if (rootReference == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref));
 					refAnim->GetParametersFromReference(rootReference);
 				}
 			}
@@ -121,6 +133,8 @@ private:
 				string subAnim = ref.substr(ref.find(".") + 1);
 				spt<EnAnim> root = FindAnimByName(rootAnimName, rootAnims);
 				spt<EnAnim> scopeAnim = root->FindChild(subAnim);
+				if (root == spt<EnAnim>() || scopeAnim == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref));
+
 				refAnim->GetParametersFromReference(scopeAnim);
 			}
 
@@ -162,6 +176,8 @@ public:
 				xml->pushTag("anim", i);
 				// load
 				spt<EnAnim> anim = spt<EnAnim>(CreateAnimationFromXml(xml, referencedAnims));
+				if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
+
 				rootAnims.push_back(anim);
 				xml->popTag();
 			}
@@ -200,26 +216,28 @@ public:
 	// indicator, if scope of actual node is reverted
 	// two reverted scopes give uninverted scope !!
 	bool isScopeReverted;
+	// indicator, if the node entity is a root node
+	bool isRootNode;
 
 	AnimNodeContext(){
 
 	}
 
-	AnimNodeContext(spt<EnAnim> node, bool isScopeReverted){
+	AnimNodeContext(spt<EnAnim> node, bool isScopeReverted, bool isRootNode){
 		
+		this->isRootNode = isRootNode;
 		this->actualLoop = 0;
 		this->node = node;
 		this->isScopeReverted = isScopeReverted;
 
 		if (isScopeReverted){
-			// start at end
-			this->actualChildIndex = node->GetChildren().size() - 1;
-		}
+				// start at end
+				this->actualChildIndex = node->GetChildren().size() - 1;
+			}
 		else{
 			// start at the beginning
 			this->actualChildIndex = 0;
 		}
-
 		
 		RefreshFrameIndex();
 	}
@@ -249,7 +267,8 @@ public:
 	* Gets actual child being processed
 	*/
 	spt<EnAnim> GetActualChild(){
-		return node->GetChildren()[actualChildIndex];
+		if (isRootNode) return node;
+		else return node->GetChildren()[actualChildIndex];
 	}
 };
 
@@ -296,7 +315,7 @@ private:
 			nodeStack.push(context);
 			// XOR function -> two inverted parents give non-inverted animation for children
 			bool invertedScope = context.IsChildReverted();
-			context = AnimNodeContext(actualNode, invertedScope);
+			context = AnimNodeContext(actualNode, invertedScope, false);
 			return true;
 		}
 		else return false;
@@ -396,12 +415,20 @@ public:
 	}
 
 	void Init(){
+		if (root == spt<EnAnim>()){
+			COGLogError("Animation cant' run, entity is null");
+			ended = true;
+			return;
+		}
+
 		// the root is not in inverted scope (but it can be inverted itself)
-		context = AnimNodeContext(root, false);
+		context = AnimNodeContext(root, false, true);
 		// start with -SPEED so the first update will get the proper frame
 		context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames()-root->GetSpeed()) : -root->GetSpeed();
 	}
 
+	// debug only, will be deleted
+	string actualNodeName;
 
 	virtual void Update(const uint64 delta, const uint64 absolute){
 	
@@ -410,6 +437,11 @@ public:
 		if (!Ended()){
 			int actualIndex = (int)context.actualFrameIndex;
 			spt<EnAnim> actualNode = context.GetActualChild();
+
+			if (actualNodeName != actualNode->GetName()){
+				actualNodeName = actualNode->GetName();
+				cout << "OPENING " << actualNodeName << endl;
+			}
 
 			if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1){
 				// image is a spritesheet
