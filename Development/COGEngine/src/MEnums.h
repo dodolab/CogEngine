@@ -6,7 +6,7 @@ typedef float(*FadeFunction)(float);
 
 /*! User input action enumerator */
 enum class RenderType{
-	NONE, IMAGE, RECTANGLE, POLYGON, ARC, TEXT
+	NONE, IMAGE, RECTANGLE, POLYGON, ARC, TEXT, SPRITE
 };
 
 /*! User input action enumerator */

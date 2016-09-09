@@ -18,4 +18,10 @@ INIT| SUBMIT| ANIM  | TOTAL	| FPS	| ITER
 for now, 1000 balls has BeHitEvent and 40 balls has collisions
 47  | 58    | 1239  | 1346  | 75    | RELEASE MODE
 187 | 609   | 10683 | 11481 | 4     | original
-163 | 494   | 6513  | 6513  | 6     | !! refactored BeRender into Renderer 
+209 | 500   | 6913  | 7626  | 6     | !! refactored BeRender into Renderer 
+156 | 531   | 6813  | 7500  | 6     | !! introduced ofxSpriteSheetAnim
+156 | 515   | 6750  | 7421  | 6     | ++ Tile is provided with reference
+186 | 497   | 6426  | 7111  | 6     | ++ used loadTexture(ofTexture*) instead of loadTexture(file)
+199 | 496   | 6397  | 7094  | 6     | ++ improved makeQuad function
+184 | 493   | 6373  | 7052  | 6     | ++ improved addTexCoord function
+185 | 498   | 6308  | 6994  | 6     | ++ added more textures into spritesheet manager

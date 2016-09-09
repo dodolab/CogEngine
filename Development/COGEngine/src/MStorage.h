@@ -8,6 +8,7 @@
 #include "EnSound.h"
 #include "ofxXmlSettings.h"
 #include "EnAnim.h"
+#include "EnSpriteSheet.h"
 
 
 using namespace std;
@@ -27,6 +28,8 @@ private:
 	map<string, spt<ofxXmlSettings>> loadedXMLs;
 	// cached animation
 	map<string, spt<EnAnim>> loadedAnimations;
+	// cached spritesheets
+	map<string, spt<EnSpriteSheet>> loadedSpriteSheets;
 
 public:
 
@@ -90,5 +93,17 @@ public:
 	* @param anim animation to store
 	*/
 	void StoreAnimation(spt<EnAnim> anim);
+
+	/**
+	* Gets spritesheet by name
+	* @param name name of spritesheet
+	*/
+	spt<EnSpriteSheet> GetSpriteSheet(string name);
+
+	/**
+	* Stores spritesheet
+	* @param spriteSheet spritesheet to store
+	*/
+	void StoreSpriteSheet(spt<EnSpriteSheet> spriteSheet);
 };
 

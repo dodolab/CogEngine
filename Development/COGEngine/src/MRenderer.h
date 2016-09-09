@@ -3,6 +3,7 @@
 #include "GBehavior.h"
 #include "GNode.h"
 #include "ofxSmartPointer.h"
+#include "ofxSpriteSheetRenderer.h"
 
 
 
@@ -13,16 +14,38 @@ class MRenderer {
 
 protected:
 	map<int, vector<GNode*>> zIndexes;
+	ofxSpriteSheetRenderer* renderer;
 
 public:
+	MRenderer(){
+
+	}
 
 	void Init(){
 		zIndexes = map<int, vector<GNode*>>();
+		
+
+		// BEGIN UPGRADE
+		renderer = new ofxSpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
+		auto img = COGGet2DImage("images/blue.png");
+		
+	//	renderer->loadTexture("images/blue.png", 256, 256, GL_LINEAR);
+		renderer->loadTexture(&img->getTextureReference(), "blue", 10000, true);
+
+		// END UPGRADE
+	}
+
+	void ClearCounters(){
+		zIndexes = map<int, vector<GNode*>>();
+	}
+
+	ofxSpriteSheetRenderer* GetSpriteSheetRenderer(){
+		return renderer;
 	}
 
 	void PushNode(GNode* node){
 		EnTransform& tr = node->GetTransform();
-		int zIndex = (int)(tr.localPos.z*tr.absScale.z + tr.absPos.z);
+		int zIndex = (int)(tr.absPos.z);
 
 	
 		auto it = zIndexes.find(zIndex);
@@ -36,22 +59,19 @@ public:
 		}
 	}
 
+
+
 	void Render(){
+		renderer->clearCounters("blue");
+		renderer->setActualBuffer("blue");
 
 		for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it){
+			
 			vector<GNode*>& arr = (*it).second;
-			int index = (*it).first;
-			cout << index << endl;
-
+			
 			for (auto it2 = arr.begin(); it2 != arr.end(); ++it2){
 				GNode* node = (*it2);
 
-				// load absolute matrix
-				ofMatrix4x4 absM = node->GetTransform().GetAbsMatrix();
-				ofLoadMatrix(absM);
-
-
-				// render
 				switch (node->GetShape()->GetRenderType()){
 				case RenderType::ARC:
 					RenderArc(node);
@@ -67,9 +87,14 @@ public:
 					break;
 				case RenderType::TEXT:
 					RenderText(node);
+					break;
+				case RenderType::SPRITE:
+					RenderSprite(node);
 				}
 			}
 		}
+
+		renderer->draw();
 	}
 	
 protected:
@@ -79,6 +104,10 @@ protected:
 	* @param owner owner node
 	*/
 	void RenderImage(GNode* owner){
+		// load absolute matrix
+		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofLoadMatrix(absM);
+
 		ofSetColor(0x000000ff);
 		spt<EnImageShape> imgShp = static_cast<spt<EnImageShape>>(owner->GetShape());
 		spt<ofImage> image = imgShp->GetImage();
@@ -105,6 +134,11 @@ protected:
 	* @param owner owner node
 	*/
 	void RenderRectangle(GNode* owner){
+		// load absolute matrix
+		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofLoadMatrix(absM);
+
+
 		ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
 		ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
 		ofSetColor(color);
@@ -131,6 +165,11 @@ protected:
 	* @param owner owner node
 	*/
 	void RenderText(GNode* owner){
+		// load absolute matrix
+		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofLoadMatrix(absM);
+
+
 		if (owner->HasAttr(Attrs::COLOR)){
 			ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
 			ofSetColor(color);
@@ -139,5 +178,27 @@ protected:
 		spt<ofTrueTypeFont> font = mojo->GetFont();
 		string text = owner->GetAttr<string>(Attrs::TEXT);
 		font->drawString(text, -font->stringWidth(text)/2, -font->stringHeight(text)/2);
+	}
+
+	void RenderSprite(GNode* owner){
+		// todo - dont use this method very often
+		//renderer->setActualBuffer("blue");
+
+		// BEGIN UPGRADE
+		EnTransform& trans = owner->GetTransform();
+		ofMatrix4x4 abs = owner->GetTransform().GetAbsMatrix();
+		Tile tile = Tile();
+		tile.height = 256;
+		tile.offsetX = 0;
+		tile.offsetY = 0;
+		tile.posX = abs.getTranslation().x;
+		tile.posY = abs.getTranslation().y;
+		tile.posZ = trans.absPos.z;
+		tile.rotation = trans.rotation / 360;
+		tile.scaleX = trans.scale.x;
+		tile.scaleY = trans.scale.y;
+		tile.width = 256;
+
+		renderer->addTile(tile);
 	}
 };

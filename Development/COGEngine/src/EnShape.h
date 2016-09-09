@@ -1,6 +1,7 @@
 #pragma once
 #include "MEnums.h"
 #include "ofxSmartPointer.h"
+#include "EnSprite.h"
 
 /**
 * Entity for rendering
@@ -26,18 +27,17 @@ public:
 class EnImageShape : public EnShape{
 private:
 	spt<ofImage> image;
-
 public:
 
 	EnImageShape(spt<ofImage> img) : EnShape(RenderType::IMAGE){
 		this->image = img;
 	}
 
-	virtual spt<ofImage> GetImage(){
+	spt<ofImage> GetImage(){
 		return image;
 	}
 
-	virtual void SetImage(spt<ofImage> img){
+	void SetImage(spt<ofImage> img){
 		this->image = img;
 	}
 };
@@ -52,14 +52,24 @@ public:
 		this->font = font;
 	}
 
-	virtual spt<ofTrueTypeFont> GetFont(){
+	spt<ofTrueTypeFont> GetFont(){
 		return font;
 	}
 
-	virtual void SetFont(spt<ofTrueTypeFont> font){
+	void SetFont(spt<ofTrueTypeFont> font){
 		this->font = font;
 	}
 };
 
+class EnSpriteShape : public EnShape{
+private:
+	spt<EnSprite> sprite;
+
+public:
+
+	EnSpriteShape(spt<EnSprite> sprite) : EnShape(RenderType::SPRITE){
+		this->sprite = sprite;
+	}
+};
 
 

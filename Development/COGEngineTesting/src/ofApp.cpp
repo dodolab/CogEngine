@@ -14,7 +14,9 @@ void MTestApp::setup(){
 
 	auto mojo = ofToDataPath("test.db");
 
-	ofxSQLite* sqlite = new ofxSQLite("/sdcard/Android/data/test.db");
+	ofxSQLite* sqlite = new ofxSQLite();
+	sqlite->setup("test.db");
+
 		sqlite->simpleQuery(""\
 			"CREATE TABLE IF NOT EXISTS scores (" \
 			" id INTEGER PRIMARY KEY AUTOINCREMENT" \
@@ -210,17 +212,8 @@ void MTestApp::setup(){
 
 
 
-
-
-
-
-
-
-
-
-
 	ofSetFrameRate(50);
-	spriteRenderer = new ofxSpriteSheetRenderer(1, 10000, 0, 256,256); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
+	spriteRenderer = new ofxSpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
 	//spriteRenderer->allocate(512, GL_LINEAR);
 	CollageTexture* text = new CollageTexture();
 	text->allocate(512, 256, GL_RGBA, GL_LINEAR);
@@ -233,8 +226,10 @@ void MTestApp::setup(){
 	text->readToPixels(pixels);
 	img.setFromPixels(pixels);
 	img.saveImage("ffs.png");
-	//spriteRenderer->loadTexture("images/blue.png", 512, GL_LINEAR);
-	spriteRenderer->loadTexture(text); // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
+	//spriteRenderer->loadTexture(text); // load the spriteSheetExample.png texture of size 256x256 into the sprite sheet. set it's scale mode to nearest since it's pixel art
+
+	spriteRenderer->loadTexture("images/combined.png", "combined", 10000, 512, 512, GL_LINEAR);
+
 
 	ofEnableAlphaBlending(); // turn on alpha blending. important!
 }
@@ -244,9 +239,11 @@ void MTestApp::draw(){
 }
 
 void MTestApp::update(){
-	spriteRenderer->clearCounters(); // clear the sheet
+	spriteRenderer->clearCounters("combined"); // clear the sheet
+	spriteRenderer->setActualBuffer("combined");
 
 	sort(sprites.begin(), sprites.end(), sortByZIndex); // sorts the sprites vertically so the ones that are lower are drawn later and there for in front of the ones that are higher up
+
 
 	if (sprites.size() > 0) // if we have sprites
 	{
@@ -259,9 +256,21 @@ void MTestApp::update(){
 				delete sprites[i]; //delete them
 				sprites.erase(sprites.begin() + i); // remove them from the vector
 			}
-			else{ //otherwise 
+			else{ 
+				
+				Tile til = Tile();
+				til.offsetX = 256;
+				til.posX = sprites[i]->pos.x;
+				til.posY = sprites[i]->pos.y;
+				til.posZ = sprites[i]->pos.z;
+				til.width = 256;
+				til.height = 512;
+				til.scaleX = til.scaleY = sprites[i]->scale;
+				til.rotation = sprites[i]->rotation;
+				
+				//otherwise 
 				// add them to the sprite renderer (add their animation at their position, there are a lot more options for what could happen here, scale, tint, rotation, etc, but the animation, x and y are the only variables that are required)
-				spriteRenderer->addTile(sprites[i]->index, sprites[i]->frame, sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, -1, sprites[i]->w, sprites[i]->h, F_NONE, 1.0f, sprites[i]->rotation);
+				spriteRenderer->addTile(til);
 
 				//spriteRenderer->setBrushIndex(0, 1);
 				//spriteRenderer->addRect(sprites[i]->pos.x, sprites[i]->pos.y, sprites[i]->pos.z, 20, 20, 1, sprites[i]->rotation, 255, 0, 0, 255, 0);
@@ -276,10 +285,12 @@ void MTestApp::update(){
 		newSprite->speed = ofRandom(1, 5); //set its speed
 		newSprite->rotation = ofRandom(0, PI);
 		newSprite->index = 0;
-		newSprite->frame = 0;
-		newSprite->total_frames = 1;
+		newSprite->frame = 1;
+		//newSprite->scale = ofRandom(0.1f, 1.0f);
+		newSprite->scale = 2;
+		//newSprite->w = 2;
 		newSprite->w = 1;
-		newSprite->h = 1;
+		newSprite->h = 2;
 		sprites.push_back(newSprite); //add our sprite to the vector
 	}
 }

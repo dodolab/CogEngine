@@ -68,13 +68,24 @@ public:
 
 		for (int i = 0; i < 2000; i++){
 			spt<ofImage> img = COGGet2DImage("images/blue.png");
+			spt<ofImage> img2 = COGGet2DImage("images/red.png");
+
 			GNode* child = new GNode("item");
 
 			float rand1 = ofRandomf()/2 + 0.5f;
 			float rand2 = ofRandomf()/2 + 0.5f;
 
 			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
-			child->SetShape(spt<EnImageShape>(new EnImageShape(img)));
+			
+
+			if (i % 2 == 0){
+				child->SetShape(spt<EnImageShape>(new EnImageShape(img)));
+			}
+			else{
+				child->SetShape(spt<EnImageShape>(new EnImageShape(img2)));
+			}
+
+
 			float scale = child->GetTransform().scale.x;
 			child->GetTransform().rotationOrigin = ofVec2f((COGGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale, 
 				(COGGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
@@ -129,7 +140,8 @@ int main(){
 int main(){
 	ofSetupOpenGL(720, 1280, OF_WINDOW);			// <-------- setup the GL context
 	cout << "Android app loaded" << endl;
-	ofRunApp(new MTestApp());
+	//ofRunApp(new MTestApp());
+	ofRunApp(new MApp(new TestingFactory()));
 	return 0;
 }
 
