@@ -35,8 +35,10 @@ public:
 
 			// change zindex back to original value
 			actualScene->GetTransform().localPos.z = 1;
-			switchedScene->SetRunningMode(INVISIBLE);
+			switchedScene->SetRunningMode(DISABLED);
 			waitingForTween = false;
+			
+			SendMessageNoBubbling(Actions::SCENE_SWITCHED, nullptr, actualScene);
 		}
 	}
 	
@@ -48,7 +50,7 @@ public:
 
 		if (actualScene != nullptr){
 			// hide scene immediately
-			actualScene->SetRunningMode(INVISIBLE);
+			actualScene->SetRunningMode(DISABLED);
 		}
 
 		// translate new scene
@@ -56,6 +58,8 @@ public:
 		scene->SetRunningMode(RUNNING);
 		scene->GetTransform().localPos.x = COGGetScreenWidth() / 2;
 		scene->GetTransform().localPos.y = COGGetScreenHeight() / 2;
+
+		SendMessageNoBubbling(Actions::SCENE_SWITCHED, nullptr, actualScene);
 	}
 
 	/**
@@ -72,6 +76,8 @@ public:
 		scene->GetTransform().localPos.z = 0;
 		// move the scene away; tween behavior will set its position itself
 		scene->GetTransform().localPos.x = COGGetScreenWidth()*10;
+		// update absolute positions because of drawing thread
+		scene->UpdateTransform(true);
 
 		actualScene->GetTransform().localPos.z = 1;
 		

@@ -102,7 +102,10 @@ public:
 	* @param owner owner node
 	*/
 	void RenderText(GNode* owner){
-		ofSetColor(0,0,0);
+		if (owner->HasAttr(Attrs::COLOR)){
+			ofColor color = owner->GetAttr<ofColor>(Attrs::COLOR);
+			ofSetColor(color);
+		}else ofSetColor(0,0,0);
 		spt<ofTrueTypeFont> font = owner->GetAttr<spt<ofTrueTypeFont>>(Attrs::FONT);
 		string text = owner->GetAttr<string>(Attrs::TEXT);
 		font->drawString(text, 0, 0);

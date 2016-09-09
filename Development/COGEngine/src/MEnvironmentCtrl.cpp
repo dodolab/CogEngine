@@ -48,6 +48,9 @@ void MEnvironmentCtrl::OnKeyAction(int key, bool pressed){
 void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed){
 	// user touches the screen with more fingers
 
+	// todo: scale to format
+	if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+
 	if (pressed){
 		pressedPoints.push_back(EnInputAct(button, ofVec3f(x, y)));
 	}
@@ -65,6 +68,9 @@ void MEnvironmentCtrl::OnMultiTouchButton(int x, int y, int button, bool pressed
 
 void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y, int button){
 	// user moves fingers
+	// todo: scale to format
+	if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+
 	for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
 		if ((*it).touchId == button && (*it).inputType == InputType::TOUCH){
 			(*it).position = ofVec3f(x, y);
@@ -74,6 +80,9 @@ void MEnvironmentCtrl::OnMultiTouchMotion(int x, int y, int button){
 
 void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool pressed){
 	// user touches the screen
+
+	// todo: scale to format
+	if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
 
 	if (pressed){
 		pressedPoints.push_back(EnInputAct(button, ofVec3f(x, y)));
@@ -91,6 +100,9 @@ void MEnvironmentCtrl::OnSingleTouchButton(int x, int y, int button, bool presse
 }
 
 void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
+	// todo: scale to format
+	if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+
 	// user moves finger
 	for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it){
 		if ((*it).touchId == button && (*it).inputType == InputType::TOUCH){
@@ -98,9 +110,6 @@ void MEnvironmentCtrl::OnSingleTouchMotion(int x, int y, int button){
 		}
 	}
 }
-
-
-
 
 void MEnvironmentCtrl::RemoveEndedInputs(){
 	screenSizeChanged = false;
@@ -124,6 +133,17 @@ void MEnvironmentCtrl::RemoveEndedInputs(){
 			continue;
 		} else if ((*it).started){
 			(*it).started = false;
+		}
+		// increment only if item hasn't been erased
+		++it;
+	}
+	
+	// remove ended sounds
+	for (auto it = playedSounds.begin(); it != playedSounds.end();){
+		if ((*it)->Ended()){
+			it = playedSounds.erase(it);
+			
+			continue;
 		}
 		// increment only if item hasn't been erased
 		++it;

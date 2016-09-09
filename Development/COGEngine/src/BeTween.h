@@ -93,7 +93,7 @@ public:
 
 			if (actual >= 1.0f){
 				Finish();
-				SendMessage(BubblingType(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::TWEEN_ENDED, nullptr, tweenIn);
+				SendMessageNoBubbling(Actions::TWEEN_ENDED, nullptr, tweenIn);
 			}
 	}
 };

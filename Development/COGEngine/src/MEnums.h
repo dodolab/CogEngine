@@ -33,8 +33,10 @@ namespace Actions{
 	extern int COLLISION_OCURRED;
 	extern int GAMEOBJECT_DESTROYED;
 	extern int ATTRIBUTE_CHANGED;
-	extern int OBJECT_HIT;
-	extern int OBJECT_RELEASED;
+	extern int OBJECT_HIT_STARTED;
+	extern int OBJECT_HIT_OVER;
+	extern int OBJECT_HIT_LOST;
+	extern int OBJECT_HIT_ENDED;
 	extern int HEALTH_CHANGED;
 	extern int PARA_GROUNDED;
 	extern int PARA_KILLED;
@@ -44,6 +46,9 @@ namespace Actions{
 	extern int TWEEN_ENDED;
 	extern int SLIDE_ENDED;
 	extern int DELAY_ACTION;
+	extern int SCENE_SWITCHED;
+	extern int MATCH_FOUND;
+	extern int MATCH_FAILED;
 
 	extern const char* ToString(int act);
 }

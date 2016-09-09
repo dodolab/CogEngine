@@ -1,8 +1,12 @@
 #include "MResourceCtrl.h"
 #include <string>
 #include "ofImage.h"
-#include "MEnums.h"
+#include "MFacade.h"
 
+void MResourceCtrl::Init(){
+	// set global dpi so font will have the same pixel size on each display
+	ofTrueTypeFont::setGlobalDpi(COGGetScreenWidth()*72*0.001f);
+}
 
 spt<ofImage> MResourceCtrl::Get2DImage(string path){
 
@@ -44,13 +48,7 @@ spt<ofVboMesh> MResourceCtrl::GetMesh(string path){
 }
 
 spt<ofTrueTypeFont> MResourceCtrl::GetFont(string path, int size){
-	ofTrueTypeFont::setGlobalDpi(72);
-
 	ofTrueTypeFont* font = new ofTrueTypeFont();
-
 	font->loadFont(path, size, true, true);
-	font->setLineHeight(18.0f);
-	font->setLetterSpacing(1.037);
-
 	return spt<ofTrueTypeFont>(font);
 }

@@ -6,12 +6,20 @@
 
 // =================== MENVIRONMENT ====================
 
+void COGAddSound(EnSound* sound){
+	MEngine.environmentCtrl->AddSound(sound);
+}
+
 vector<EnInputAct>& COGGetPressedKeys(){
 	return MEngine.environmentCtrl->GetPressedKeys();
 }
 
 vector<EnInputAct>& COGGetPressedPoints(){
 	return MEngine.environmentCtrl->GetPressedPoints();
+}
+
+vector<EnSound*>& COGGetPlayedSounds(){
+	return MEngine.environmentCtrl->GetPlayedSounds();
 }
 
 int COGGetScreenWidth(){

@@ -130,6 +130,7 @@
     <ClInclude Include="src\EnFlags.h" />
     <ClInclude Include="src\EnInputAct.h" />
     <ClInclude Include="src\EnPair.h" />
+    <ClInclude Include="src\EnSound.h" />
     <ClInclude Include="src\EnTransform.h" />
     <ClInclude Include="src\GAttr.h" />
     <ClInclude Include="src\GBehavior.h" />
