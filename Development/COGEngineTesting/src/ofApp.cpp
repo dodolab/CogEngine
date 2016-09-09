@@ -1,8 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include "ofApp.h"
 #include "ofxSQLiteSelect.h"
 #include "ofxSQLite.h"
+#include "ofxSQLiteEntity.h"
 
 
 bool sortByZIndex(basicSprite * a, basicSprite * b) {
@@ -12,25 +13,44 @@ bool sortByZIndex(basicSprite * a, basicSprite * b) {
 
 void MTestApp::setup(){
 
-	auto mojo = ofToDataPath("test.db");
-
+	
 	ofxSQLite* sqlite = new ofxSQLite();
 	sqlite->setup("test.db");
+	
 
-		sqlite->simpleQuery(""\
-			"CREATE TABLE IF NOT EXISTS scores (" \
-			" id INTEGER PRIMARY KEY AUTOINCREMENT" \
-			" ,time TEXT" \
-			", score INTEGER" \
-			");"
-			);
+	sqlite->simpleQuery(""\
+		"CREATE TABLE IF NOT EXISTS Krabicka (" \
+		" id INTEGER PRIMARY KEY AUTOINCREMENT" \
+		" ,neco TEXT" \
+		", tlacitko INTEGER" \
+		", jeSpatne BOOLEAN" \
+		");"
+		);
 
-		sqlite->simpleQuery(""\
-			"CREATE TABLE IF NOT EXISTS stats ("\
-			"id INTEGER PRIMARY KEY AUTOINCREMENT" \
-			", time TEXT" \
-			");"
-			);
+
+
+	ofxSQLKrabicka krabicka(sqlite);
+	krabicka.jeSpatne = true;
+	krabicka.neco = "deza";
+	krabicka.tlacitko = 11137;
+	krabicka.Save();
+
+	int id = krabicka.GetId();
+
+	krabicka = ofxSQLKrabicka(sqlite);
+	krabicka.GetById(id);
+	krabicka.Remove();
+
+	sqlite->createTableIfNotExists("scores")
+		.add("id", SQLITE_COLUMN_INTEGER, true, true)
+		.add("time", SQLITE_COLUMN_TEXT)
+		.execute();
+
+	sqlite->createTableIfNotExists("stats")
+		.add("id", SQLITE_COLUMN_INTEGER, true, true)
+		.add("time", SQLITE_COLUMN_TEXT)
+		.execute();
+
 
 		sqlite->simpleQuery(""\
 			"CREATE TABLE IF NOT EXISTS game_runs( " \
@@ -125,20 +145,26 @@ void MTestApp::setup(){
 		// auto increment field and auto-timestamp field. on each insert
 		// the value for date_created is added automatically.
 		// -------------------------------------------------------------------------
-		if (SQLITE_OK != sqlite->simpleQuery(""\
-			"CREATE TABLE IF NOT EXISTS  photos( " \
-			" id INTEGER PRIMARY KEY AUTOINCREMENT" \
-			",old_name VARCHAR(255)" \
-			",new_name VARCHAR(255)" \
-			",dir_name VARCHAR(255)" \
-			",file_path VARCHAR(255)" \
-			",synchronized BOOLEAN" \
-			",date_synchronized DATETIME" \
-			",date_created DATETIME DEFAULT CURRENT_TIMESTAMP" \
-			");"
-			)) {
-			cout << "ERROR CREATE TABLE\n";
-		}
+
+		sqlite->createTableIfNotExists("photos")
+			.add("id", SQLITE_COLUMN_INTEGER, true, true)
+			.add("old_name", SQLITE_COLUMN_VARCHAR, 255)
+			.add("new_name", SQLITE_COLUMN_VARCHAR, 255)
+			.add("dir_name", SQLITE_COLUMN_VARCHAR, 255)
+			.add("file_path", SQLITE_COLUMN_VARCHAR, 255)
+			.add("synchronized", SQLITE_COLUMN_BOOLEAN)
+			.add("date_synchronized", SQLITE_COLUMN_DATETIME)
+			.add("date_created", SQLITE_COLUMN_DATETIME, "CURRENT_TIMESTAMP")
+			.execute();
+
+		/*
+		*    sqlite->createTableIfNotExists("Krabicka")
+		*    .add("id", MOJO.INTEGER, MOJO.PRIMARY_KEY, MOJO.AUTOINCREMENT)
+		*    .add("old_name", MOJO:VARCHAR, 255)
+		*    .add("date_created", MOJO_DATETIME, MOJO.CURRENT_TIMESTAMP)
+		*    .execute();
+		*/
+
 
 		// just pasted this example here from a project I did.. (did no test it,
 		// but shows you some things you can do with sqlite tables
@@ -208,10 +234,6 @@ void MTestApp::setup(){
 
 
 
-
-
-
-
 	ofSetFrameRate(50);
 	spriteRenderer = new ofxSpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
 	//spriteRenderer->allocate(512, GL_LINEAR);
@@ -240,7 +262,7 @@ void MTestApp::draw(){
 
 void MTestApp::update(){
 	spriteRenderer->clearCounters("combined"); // clear the sheet
-	spriteRenderer->setActualBuffer("combined");
+
 
 	sort(sprites.begin(), sprites.end(), sortByZIndex); // sorts the sprites vertically so the ones that are lower are drawn later and there for in front of the ones that are higher up
 

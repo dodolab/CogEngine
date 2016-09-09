@@ -11,6 +11,14 @@ enum {
 	,OFX_SQLITE_TYPE_NULL
 };
 
+enum {
+	SQLITE_COLUMN_INTEGER,
+	SQLITE_COLUMN_VARCHAR,
+	SQLITE_COLUMN_BOOLEAN,
+	SQLITE_COLUMN_DATETIME,
+	SQLITE_COLUMN_TEXT
+};
+
 class ofxSQLiteType {
 public:
 	virtual std::string getString()		{	return	"";		}

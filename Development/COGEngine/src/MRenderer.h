@@ -15,10 +15,11 @@ class MRenderer {
 protected:
 	map<int, vector<GNode*>> zIndexes;
 	ofxSpriteSheetRenderer* renderer;
+	Tile tempTile;
 
 public:
 	MRenderer(){
-
+		tempTile = Tile();
 	}
 
 	void Init(){
@@ -63,8 +64,7 @@ public:
 
 	void Render(){
 		renderer->clearCounters("blue");
-		renderer->setActualBuffer("blue");
-
+	
 		for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it){
 			
 			vector<GNode*>& arr = (*it).second;
@@ -94,6 +94,7 @@ public:
 			}
 		}
 
+		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 		renderer->draw();
 	}
 	
@@ -187,18 +188,22 @@ protected:
 		// BEGIN UPGRADE
 		EnTransform& trans = owner->GetTransform();
 		ofMatrix4x4 abs = owner->GetTransform().GetAbsMatrix();
-		Tile tile = Tile();
-		tile.height = 256;
-		tile.offsetX = 0;
-		tile.offsetY = 0;
-		tile.posX = abs.getTranslation().x;
-		tile.posY = abs.getTranslation().y;
-		tile.posZ = trans.absPos.z;
-		tile.rotation = trans.rotation / 360;
-		tile.scaleX = trans.scale.x;
-		tile.scaleY = trans.scale.y;
-		tile.width = 256;
+		spt<EnSpriteShape> shape = static_cast<spt<EnSpriteShape>>(owner->GetShape());
+		
+		spt<EnSprite>& sprite = shape->GetSprite();
 
-		renderer->addTile(tile);
+		tempTile.height = sprite->GetHeight();
+		tempTile.offsetX = sprite->GetPosX();
+		tempTile.offsetY = sprite->GetPosY();
+		tempTile.posX = abs.getTranslation().x;
+		tempTile.posY = abs.getTranslation().y;
+		tempTile.posZ = trans.absPos.z;
+		tempTile.rotation = trans.rotation / 360;
+		tempTile.scaleX = trans.scale.x;
+		tempTile.scaleY = trans.scale.y;
+		tempTile.width = sprite->GetWidth();
+
+
+		renderer->addTile(tempTile);
 	}
 };

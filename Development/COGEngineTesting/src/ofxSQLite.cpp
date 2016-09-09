@@ -20,7 +20,7 @@ void ofxSQLite::setup(std::string sDB) {
 		exit(1);
 	}
 	cout << "opened:" << db_file << endl;
-}
+}	
 
 int ofxSQLite::simpleQuery(const char* pSQL) {
 	sqlite3_stmt* statement;
@@ -29,6 +29,11 @@ int ofxSQLite::simpleQuery(const char* pSQL) {
 	}
 	while(SQLITE_ROW == sqlite3_step(statement));
 	return sqlite3_finalize(statement);
+}
+
+ofxSQLiteTable ofxSQLite::createTableIfNotExists(std::string sTable){
+	ofxSQLiteTable table = ofxSQLiteTable(db, sTable);
+	return table;
 }
 
 ofxSQLiteInsert ofxSQLite::insert(std::string sTable) {
