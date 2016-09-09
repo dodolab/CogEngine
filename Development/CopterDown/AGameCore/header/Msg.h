@@ -18,9 +18,9 @@ private:
 	// identifier counter
 	static int idCounter;
 	// id of this message
-	int _id;
+	int _id = 0;
 	// type of action
-	int _action;
+	int _action = 0;
 	// category
 	ElemType _category;
 	// for who is message intended
@@ -30,7 +30,7 @@ private:
 	// data payload (not mandatory)
 	void* _data;
 	// id of game object or behavior that sends this message
-	int _ownerId;
+	int _ownerId = 0;
 
 public:
 

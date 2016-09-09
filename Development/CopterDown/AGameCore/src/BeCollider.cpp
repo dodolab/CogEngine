@@ -36,7 +36,7 @@ void BeCollider::Update(const uint64 delta, const uint64 absolute){
 
 				if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 					 
-					if (first->HasAttr(Attrs::BOUNDS) && first->FindAttrR<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
+					if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
 						EnCollision* col = new EnCollision(first->GetId(), second->GetId());
 
 						SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr);

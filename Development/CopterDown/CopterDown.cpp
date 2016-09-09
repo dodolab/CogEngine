@@ -4,6 +4,7 @@
 #include "IwGx.h"
 #include "Gnode.h"
 #include "unistd.h"
+#include <iostream>
 
 using namespace Iw2DSceneGraphCore;
 using namespace Iw2DSceneGraph;
@@ -143,6 +144,36 @@ void Terminate(){
 
 GNode* node;
 
+
+using namespace std;
+class TestM{
+
+public:
+	int mojo;
+
+	TestM(){
+		s3eDebugOutputString("Constructor");
+	}
+
+	TestM(int mojo){
+		s3eDebugOutputString("Constructor");
+		this->mojo = mojo;
+	}
+
+	~TestM(){
+		s3eDebugOutputString("Destructor");
+	}
+
+	TestM(const TestM& copy){
+		mojo = copy.mojo;
+		s3eDebugOutputString("Copy");
+	}
+};
+
+
+
+
+
 void test(){
 	// enflags test
 	EnFlags flags;
@@ -157,15 +188,35 @@ void test(){
 
 	flags = 12;
 	flags = 13;
-
+	
 	node = new GNode(ObjType::OBJECT, 12, "fofka");
-	node->AddAttrV(12, ElemType::ALL, 12);
+	node->AddAttr(12, 12);
 
 	int* pointer = new int(4);
-	node->AddAttrP(13, ElemType::ALL, pointer);
+	node->AddAttr(13, pointer);
 
 	int mojo = 5;
-	node->AddAttrR(6, ElemType::ALL, mojo);
+	node->AddAttr(6, mojo);
+
+//	TestM testik(12);
+//	node->AddAttr(10, ElemType::ALL, testik);
+
+	spt<TestM> testik2 = spt<TestM>(new TestM(555));
+	TestM* testik3 = new TestM(123);
+
+	//TestM& testikPuvodni = node->FindAttr<TestM>(10);
+
+//	spt<TestM> testikPointer = node->FindAttr<spt<TestM>>(11);
+//	node->RemoveAttr(11);
+
+	auto actual = s3eTimerGetMs();
+	for (int i = 0; i < 100000; i++){
+		node->AddAttr(11, testik3);
+		//TestM* testf = node->GetAttr<TestM*>(11);
+		node->RemoveAttr(11);
+	}
+
+	auto diff = s3eTimerGetMs() - actual;
 }
 
 int main()

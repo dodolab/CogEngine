@@ -5,6 +5,7 @@
 #include "EnFlags.h"
 #include "Enums.h"
 #include "Msg.h"
+#include <list>
 
 class GNode;
 
@@ -29,7 +30,7 @@ protected:
 	// message acceptation mask
 	EnFlags _msgFlags;
 	// owner of this behavior
-	GNode* _owner;
+	GNode* _owner = nullptr;
 
 	/**
 	* Creates a new behavior

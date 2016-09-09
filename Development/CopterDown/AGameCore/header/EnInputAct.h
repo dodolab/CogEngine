@@ -6,9 +6,9 @@ template<class T>
 class EnInputAct{
 private:
 	T _actValue;
-	bool _handled;
-	bool _ended;
-	int _cycleNumber;
+	bool _handled = false;
+	bool _ended = false;
+	int _cycleNumber = 0;
 
 public:
 	EnInputAct(){
