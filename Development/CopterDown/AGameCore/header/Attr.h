@@ -16,22 +16,21 @@ protected:
 public:
 	Attr();
 
-	Attr(ElemType type, GNode* owner, int key);
+	Attr(int key, ElemType type, GNode* owner);
 
 	const GNode* GetOwner() const;
 
-	ElemType GetElemType() const;
+	const ElemType GetElemType() const;
 
-	int GetKey() const;
+	const int GetKey() const;
 };
 
 
 template <class  T>
-class Attrx : public Attr{
+class AttrRef : public Attr{
 protected:
-	T* _value;
-	bool isEmpty;
-
+	T _value;
+	
 	void OnAttrChanged(T& old, T& newAt){
 		auto value = std::make_pair<T, T>(old, newAt);
 		Msg msg(this->_elemType, Actions::ATTRIBUTE_CHANGED, SenderType::ATTR, this->GetKey(), &value);
@@ -40,31 +39,61 @@ protected:
 
 public:
 
-	Attrx(){
+	AttrRef(){
 
 	}
 
-	Attrx(ElemType type, GNode* owner, int key, T& val) : Attr(type, owner, key), _value(val){
+	AttrRef(int key, ElemType type, T& val, GNode* owner) : Attr(type, owner, key), _value(val){
 		
 	}
 
-	~Attrx(){
-		delete _value;
+	~AttrRef(){ 
+		//delete _value;
 	}
 
 	T& GetValue(){
 		// pointer musn't be null!
-		return (*_value);
+		return (_value);
 	}
 
 	void SetValue(T& val){
 		this->_value = val;
 	}
 
-	bool HasValue() const{
-		return !isEmpty;
+};
+
+template <class T>
+class AttrPtr : public Attr{
+protected:
+	T* _value;
+
+	void OnAttrChanged(T& old, T& newAt){
+	  
+	}
+
+public:
+
+	AttrPtr(){
+	}
+
+	AttrPtr(int key, ElemType type, T* val, GNode* owner) : Attr(type, owner, key), _value(val){
+	
+	}
+
+	~AttrPtr(){
+		delete _value;
+	}
+
+	T* GetValue(){
+		return (_value);
+	}
+
+	void SetValue(T* val){
+		delete _value;
+		this->_value = val;
 	}
 };
+
 
 
 #endif

@@ -46,7 +46,7 @@ public:
 	}
 
 	/**
-	* Crates a new message
+	* Creates a new message
 	* @param cat type of message (view, model)
 	* @param traverse state machine that indicates who should process this message
 	* @param action id of action; see Actions namespace for common action ids
@@ -58,7 +58,7 @@ public:
 	Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
 
 	/**
-	* Crates a new message that will be traversed from the scene root
+	* Creates a new message that will be traversed from the scene root
 	* @param cat type of message (view, model)
 	* @param action id of action; see Actions namespace for common action ids
 	* @param senderType type of sender (attribute, behavior, game object)

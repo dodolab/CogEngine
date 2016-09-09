@@ -1,13 +1,14 @@
 #include "GNode.h"
 #include "ABehavior.h"
 
-int GNode::ids = 0;
+int GNode::idCounter = 0;
+Msg GNode::_dummyMsg = Msg();
 
-GNode::GNode(ObjType type, int subType, char* tag):_type(type), _subType(subType), _tag(tag), _id(ids++){
+GNode::GNode(ObjType type, int subType, char* tag):_type(type), _subType(subType), _tag(tag), _id(idCounter++){
 
 }
 
-GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _id(ids++){
+GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _id(idCounter++){
 	memcpy(copy._tag, _tag, sizeof(copy._tag));
 	_attributes = copy._attributes;
 	_behaviors = copy._behaviors;
@@ -33,8 +34,7 @@ void GNode::SendMessage(Msg& msg, Msg& resp) const{
 }
 
 void GNode::SendMessageNoResp(Msg& msg) const{
-	Msg resp;
-	SendMessage(msg, resp);
+	SendMessage(msg, _dummyMsg);
 }
 
 void GNode::Update(const uint64 delta, const uint64 absolute){
@@ -60,6 +60,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 }
 
 void GNode::AddBehavior(ABehavior* beh){
+	beh->_owner = this;
 	_behaviors.push_back(beh);
 }
 
@@ -70,8 +71,20 @@ void GNode::RemoveAttr(int key){
 
 }
 
+bool GNode::HasAttr(int key) const{
+	return false;
+}
+
+CIwArray<ABehavior*> GNode::GetBehaviorsCopy() const{
+	return _behaviors;
+}
+
 const CIwArray<ABehavior*> GNode::GetBehaviors() const{
 	return _behaviors;
+}
+
+CIwArray<GNode*> GNode::GetChildrenCopy() const{
+	return _children;
 }
 
 const CIwArray<GNode*> GNode::GetChildren() const{
@@ -94,14 +107,22 @@ void GNode::SetParent(GNode* val){
 
 }
 
+GNode* GNode::FindPredecessor(ObjType type) const{
+	return nullptr;
+}
+
+GNode* GNode::GetSceneRoot() const{
+	return nullptr;
+}
+
+GNode* GNode::GetRoot() const{
+	return nullptr;
+}
+
 int GNode::GetId() const{
 	return 0;
 }
-
-void GNode::SetId(int val){
-
-}
-
+	
 char* GNode::GetTag() const{
 	return new char[5];
 }
@@ -114,28 +135,12 @@ ObjType GNode::GetType() const{
 	return ObjType::HUD;
 }
 
-void GNode::SetType(ObjType val){
-
-}
-
 int GNode::GetSubType() const{
 	return 0;
 }
 
 void GNode::SetSubType(int val){
 
-}
-
-GNode* GNode::FindParent(ObjType type) const{
-	return nullptr;
-}
-
-GNode* GNode::GetSceneRoot() const{
-	return nullptr;
-}
-
-GNode* GNode::GetRoot() const{
-	return nullptr;
 }
 
 CIwFMat2D GNode::GetTransform() const{
@@ -147,10 +152,6 @@ CIwFMat2D GNode::SetTransform(CIwFMat2D val){
 }
 
 void GNode::UpdateTransform(CIwFMat2D& parent){
-
-}
-
-template<class T> void GNode::AddAttribute(ElemType elemType, int key, T& value){
 
 }
 
