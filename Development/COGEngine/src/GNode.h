@@ -54,7 +54,6 @@ protected:
 		_tag = nullptr;
 		_groups = nullptr;
 		_states = nullptr;
-		_subType = 0;
 		_tag = nullptr;
 	}
 	

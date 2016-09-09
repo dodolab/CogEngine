@@ -18,7 +18,6 @@ class MGameEngine{
 private:
 
 	GNode* _root;
-
 public:
 	MGameEngine(){
 		_root = nullptr;
