@@ -16,7 +16,7 @@ public:
 
 	}
 
-	void OnMessage(Msg& msg){
+	void OnMessage(GMsg& msg){
 
 	}
 

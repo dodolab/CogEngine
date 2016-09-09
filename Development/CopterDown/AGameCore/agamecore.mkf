@@ -12,6 +12,7 @@ files
 	BeRender.h
 	BeRotateAnim.h
 	BeTranslateAnim.h
+	BeTween.h
 	EnBounds.h
 	EnCollision.h
 	EnInputAct.h
