@@ -61,12 +61,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behavior\MovementBehavior.cs" />
     <Compile Include="Core\ABehavior.cs" />
     <Compile Include="Behavior\RenderBehavior.cs" />
     <Compile Include="Core\Attribute.cs" />
     <Compile Include="Core\AttributeList.cs" />
     <Compile Include="Core\CoreAttribs\State.cs" />
     <Compile Include="Core\CoreAttribs\Vector2d.cs" />
+    <Compile Include="Core\CoreBehavs\RotateAnim.cs" />
     <Compile Include="Core\CoreBehavs\TranslateAnim.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\Message.cs" />

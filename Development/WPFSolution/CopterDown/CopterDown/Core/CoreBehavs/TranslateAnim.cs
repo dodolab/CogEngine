@@ -15,11 +15,12 @@ namespace CopterDown.Core.CoreBehavs
         private float speed;
         private float distX;
         private float distY;
+        private bool removeAfterFinish;
 
         // 0 to 1
         private Vector2d actual;
 
-        public TranslateAnim(Vector2d from, Vector2d to, float speed)
+        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish)
         {
             this.from = from;
             this.to = to;
@@ -27,14 +28,12 @@ namespace CopterDown.Core.CoreBehavs
             this.actual = new Vector2d(from);
             this.distX = to.X - from.X;
             this.distY = to.Y - from.Y;
+            this.removeAfterFinish = removeAfterFinish;
         }
 
         public override void OnMessage(Message msg)
         {
-            if (Active)
-            {
-                
-            }
+            
         }
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
@@ -43,7 +42,14 @@ namespace CopterDown.Core.CoreBehavs
             {
                 // toto je diskutabilni
                 if (VectorUt.DistSquare(from, to) < VectorUt.DistSquare(from, actual))
-                    GameObject.RemoveModelBehavior(this);
+                {
+                    if (removeAfterFinish)
+                    {
+                        GameObject.RemoveModelBehavior(this);
+                    }
+                    Active = false;
+                    return;
+                }
 
                 float diffX = (float) (distX/1000*speed*delta.TotalMilliseconds);
                 float diffY = (float) (distY/1000*speed*delta.TotalMilliseconds);

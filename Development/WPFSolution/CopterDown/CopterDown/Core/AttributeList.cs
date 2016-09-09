@@ -9,5 +9,6 @@ namespace CopterDown.Core
     public class AttributeList
     {
         public const int ATTR_POSITION = 1;
+        public const int ATTR_ROTATION = 2;
     }
 }

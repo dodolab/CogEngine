@@ -84,11 +84,13 @@ namespace CopterDown.Core
             if (_modelBehaviors == null) _modelBehaviors = new List<ABehavior>();
             beh.GameObject = this;
             _modelBehaviors.Add(beh);
+            SendMessage(new Message(MessageCat.MODEL, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_CREATED, beh));
         }
 
         public void RemoveModelBehavior(ABehavior beh)
         {
             _modelBehavToRemove.Add(beh);
+            SendMessage(new Message(MessageCat.MODEL, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_REMOVED, beh));
         }
 
         public void AddViewBehavior(ABehavior beh)
