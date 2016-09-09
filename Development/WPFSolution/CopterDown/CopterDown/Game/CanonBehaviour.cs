@@ -18,32 +18,28 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var keys = ((Attribute<List<Key>>)GameObject.GetParent().FindModelAtt(AT.AT_COPTER_KEYINPUT)).Value;
+            var keys = GameObject.GetRoot().FindModelAtt<List<Key>>(AT.AT_COPTER_KEYINPUT).Value;
 
-            var lastShot = (Attribute<DateTime>) GameObject.FindModelAtt(AT.AT_COPTER_CANON_LASTSHOT);
-            var actualCadency = (Attribute<float>)GameObject.FindModelAtt(AT.AT_COPTER_CANON_CADENCY);
-            var rotation =
-                (Attribute<float>) GameObject.FindModelAtt(AT.AT_COPTER_CANON_ROTATION);
+            var lastShot = GameObject.FindModelAtt <DateTime>(AT.AT_COPTER_CANON_LASTSHOT);
+            var actualCadency = GameObject.FindModelAtt<float>(AT.AT_COPTER_CANON_CADENCY);
+            var transform = GameObject.GetTransform();
 
             if (keys.Contains(Key.Left))
             {
-                if (rotation.Value > -75) rotation.Value -= (float)delta.TotalSeconds * 60;
+                if (transform.Rotation > -75) transform.Rotation -= (float)delta.TotalSeconds * 60;
             }
             if (keys.Contains(Key.Right))
             {
-                if (rotation.Value < 75) rotation.Value += (float)delta.TotalSeconds * 60;
+                if (transform.Rotation < 75) transform.Rotation += (float)delta.TotalSeconds * 60;
             }
             if (keys.Contains(Key.Space))
             {
                 if ((DateTime.Now - lastShot.Value).TotalSeconds > 1.0 / actualCadency.Value)
                 {
-                    Shoot(rotation.Value);
+                    Shoot(transform.Rotation);
                     lastShot.Value = DateTime.Now;
                 }
             }
-
-
-            Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/canon.png", 318, 223, rotation.Value, 0.5f, 1,2);
         }
 
         private void Shoot(float rotation)
@@ -56,8 +52,11 @@ namespace CopterDown.Game
             float velY = -(float)Math.Cos(rotation / 180 * Math.PI);
 
             var bullet = new GameObject(ObjectType.BULLET, "bullet");
-            bullet.SetTransform(new Transform(posX, posY, rotation));
-            bullet.AddModelAttribute(new Attribute<Vector2d>(new Vector2d(velX, velY)), AT.AT_COM_VELOCITY);
+            bullet.SetTransform(new Transform(posX, posY, rotation, 6));
+
+            bullet.AddViewAttribute(AT.AT_COM_IMGSOURCE, "pack://application:,,,/Images/bullet.png");
+            bullet.AddModelAttribute(AT.AT_COM_VELOCITY,new Vector2d(velX, velY));
+            bullet.AddModelAttribute(AT.AT_COPTER_BULLETSPEED, 5f);
             bullet.AddViewBehavior(new BulletBehavior());
 
             GameObject.AddChild(bullet);

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CopterDown.Core;
 using CopterDown.Core.CoreAttribs;
 
@@ -19,28 +16,27 @@ namespace CopterDown.Game
         {
 
             var transform = GameObject.GetTransform();
-            var velocity = ((Attribute<Vector2d>)GameObject.FindModelAtt(AT.AT_COM_VELOCITY));
+            var velocity = GameObject.FindModelAtt<Vector2d>(AT.AT_COM_VELOCITY);
 
-            var bulletSpeed = ((Attribute<float>)GameObject.GetParent().FindModelAtt(AT.AT_COPTER_BULLETSPEED));
+            var bulletSpeed = GameObject.FindModelAtt<float>(AT.AT_COPTER_BULLETSPEED);
 
             Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/bullet.png", transform.LocalPos.X, transform.LocalPos.Y, transform.Rotation,
-    0.5f, 0.5f,6);
+    0.5f, 0.5f,6,1,1);
 
             transform.LocalPos.X += velocity.Value.X * bulletSpeed.Value;
             transform.LocalPos.Y += velocity.Value.Y * bulletSpeed.Value;
 
             if (transform.LocalPos.X < 0 || transform.LocalPos.X > 640 || transform.LocalPos.Y < 0 || transform.LocalPos.Y > 340)
             {
-                GameObject.GetParent().RemoveChild(GameObject);
+                GameObject.Destroy();
             }
             else
             {
                 foreach (
                     var copter in
-                        GameObject.GetParent().GetChildren().Where(chl => chl.GetObjectType() == ObjectType.COPTER))
+                        GameObject.GetSceneRoot().GetChildren().Where(chl => chl.GetObjectType() == ObjectType.COPTER))
                 {
-                    var isHit =
-                        ((Attribute<bool>) copter.FindModelAtt(AT.AT_COPTER_PARA_ISHIT));
+                    var isHit = copter.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
 
                     if (!isHit.Value)
                     {
@@ -51,23 +47,17 @@ namespace CopterDown.Game
                             transform.LocalPos.Y >= copterPos.LocalPos.Y &&
                             transform.LocalPos.Y <= (copterPos.LocalPos.Y + 51))
                         {
-                            ((Attribute<bool>)
-                                copter.FindModelAtt(AT.AT_COPTER_PARA_ISHIT))
-                                .Value = true;
-                            ((Attribute<int>)
-                                GameObject.GetParent().FindModelAtt(AT.AT_COPTER_PLAYER_SCORE))
-                                .Value
-                                += 100;
-                            GameObject.GetParent().RemoveChild(GameObject);
+                            copter.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT).Value = true;
+                            GameObject.GetSceneRoot().FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 100;
+                            GameObject.Destroy();
                             return;
                         }
                     }
                 }
 
-                foreach (var shooter in GameObject.GetParent().GetChildren().Where(chl => chl.GetObjectType() == ObjectType.PARA))
+                foreach (var shooter in GameObject.GetSceneRoot().GetChildren().Where(chl => chl.GetObjectType() == ObjectType.PARA))
                 {
-                    var isHit =
-                        ((Attribute<bool>) shooter.FindModelAtt(AT.AT_COPTER_PARA_ISHIT));
+                    var isHit = shooter.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT);
 
                     if (!isHit.Value)
                     {
@@ -78,14 +68,9 @@ namespace CopterDown.Game
                             transform.LocalPos.Y >= shooterPos.LocalPos.Y &&
                             transform.LocalPos.Y <= (shooterPos.LocalPos.Y + 20))
                         {
-                            ((Attribute<bool>)
-                                shooter.FindModelAtt(AT.AT_COPTER_PARA_ISHIT))
-                                .Value = true;
-                            ((Attribute<int>)
-                                GameObject.GetParent().FindModelAtt(AT.AT_COPTER_PLAYER_SCORE))
-                                .Value
-                                += 20;
-                            GameObject.GetParent().RemoveChild(GameObject);
+                            shooter.FindModelAtt<bool>(AT.AT_COPTER_PARA_ISHIT).Value = true;
+                            GameObject.GetSceneRoot().FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 20;
+                            GameObject.Destroy();
                             return;
                         }
                     }

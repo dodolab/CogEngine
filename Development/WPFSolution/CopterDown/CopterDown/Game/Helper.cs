@@ -13,7 +13,7 @@ namespace CopterDown.Game
     public static class Helper
     {
         public static void DrawImage(Canvas canvas, string path, float x, float y, float rotation, float rotOriginX,
-    float rotOriginY, int zIndex, bool scaleInvert = false)
+    float rotOriginY, int zIndex, float scaleX, float scaleY)
         {
             var finalImage = new Image();
             var logo = new BitmapImage();
@@ -37,9 +37,9 @@ namespace CopterDown.Game
                 finalImage.RenderTransformOrigin = new Point(rotOriginX, rotOriginY);
             }
 
-            if (scaleInvert)
+            if (scaleX != 1 || scaleY != 1)
             {
-                finalImage.RenderTransform = new ScaleTransform(-1, 1);
+                finalImage.RenderTransform = new ScaleTransform(scaleX, scaleY);
             }
         }
     }

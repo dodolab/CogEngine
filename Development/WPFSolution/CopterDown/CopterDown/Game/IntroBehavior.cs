@@ -17,17 +17,17 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var keys = (Attribute<List<Key>>)GameObject.GetParent().FindModelAtt(AT.AT_COPTER_KEYINPUT);
+            var keys = GameObject.GetRoot().FindModelAtt<List<Key>>(AT.AT_COPTER_KEYINPUT);
 
             if (keys.Value.Any())
             {
-                var root = GameObject.GetParent();
-                root.RemoveChild(GameObject);
+                var root = GameObject.GetRoot();
+                GameObject.Destroy();
                 root.AddChild(new GameBuilder().CreateGameScene());
             }
             else
             {
-                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/intro.png", 0, 0, 0, 0, 0,1);
+                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/intro.png", 0, 0, 0, 0, 0,1,1,1);
             }
 
         }
