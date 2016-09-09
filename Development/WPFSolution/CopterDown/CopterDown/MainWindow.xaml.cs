@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using CopterDown.Core;
+using CopterDown.Core.Entities;
 using CopterDown.Core.Enums;
 
 namespace CopterDown
@@ -21,10 +25,14 @@ namespace CopterDown
             loop.Start();
         }
 
+        private List<Key> keysDown = new List<Key>();
+
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            var userAct = loop.KeysPressed;
+            if (keysDown.Contains(e.Key)) return;
 
+            keysDown.Add(e.Key);
+            var userAct = loop.UserActions;
             Act act = Act.FIRE;
 
             switch (e.Key)
@@ -38,15 +46,20 @@ namespace CopterDown
                 case Key.Space:
                     act = Act.FIRE;
                     break;
+                case Key.Tab:
+                    act = Act.SWITCH;
+                    break;
             }
 
-            if(!userAct.ActionsStarted.Contains(act)) userAct.ActionsStarted.Add(act);
+            if(!userAct.KeyActions.Any(ac => ac.ActValue == act)) userAct.KeyActions.Add(new InputAct<Act>(act));
         }
 
 
         private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
         {
-            var userAct = loop.KeysPressed;
+            keysDown.Remove(e.Key);
+
+            var userAct = loop.UserActions;
 
             Act act;
 
@@ -58,14 +71,17 @@ namespace CopterDown
                 case Key.Right:
                     act = Act.RIGHT;
                     break;
+                case Key.Tab:
+                    act = Act.SWITCH;
+                    break;
                 case Key.Space:
                 default:
                     act = Act.FIRE;
                     break;
             }
 
-            if (userAct.ActionsStarted.Contains(act)) userAct.ActionsStarted.Remove(act);
-            if(!userAct.ActionsEnded.Contains(act)) userAct.ActionsEnded.Add(act);
+            var keyAction = userAct.KeyActions.FirstOrDefault(key => key.ActValue == act);
+            if (keyAction != null) keyAction.Ended = true;
         }
 
     }

@@ -21,8 +21,6 @@ namespace CopterDown.Game
             
         }
 
-        private Random rnd = new Random();
-
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             var transform = GameObject.Transform;
@@ -39,8 +37,15 @@ namespace CopterDown.Game
 
             if (isHit && hitFrame.Value++ > 10)
             {
-                SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.GAMEOBJECT_KILLED, GameObject);
-                GameObject.Destroy();
+                GameObject.States.ResetState(States.IS_HIT);
+                hitFrame.Value = 0;
+
+                var targetLives = GameObject.FindAtt<int>(Attr.PPLIVES);
+                if (targetLives.Value == 0)
+                {
+                    SendMessage(new State(Traverses.SCENEROOT, Traverses.CHILD_FIRST), Actions.GAMEOBJECT_KILLED, GameObject);
+                    GameObject.Destroy();
+                }
             }
 
             if (transform.LocalPos.X < -111 || transform.LocalPos.X > 640)

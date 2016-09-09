@@ -13,5 +13,7 @@ namespace CopterDown.Core.Types
         public const int PARA = 3;
         public const int PLAYER = 4;
         public const int OTHER = 5;
+        public const int CANON = 6;
+        public const int INFO = 7;
     }
 }

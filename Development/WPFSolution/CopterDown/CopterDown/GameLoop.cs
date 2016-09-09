@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,14 +18,14 @@ namespace CopterDown
     {
         private int _drawInterval;
         private int _updateInterval;
-        private Timer _drawTimer;
-        private Timer _updateTimer;
+        private Thread _drawTimer;
+        private Thread _updateTimer;
         public GameObject root;
         private Dispatcher _disp;
 
         public static Canvas _canvas;
 
-        public UserAction KeysPressed
+        public UserAction UserActions
         {
             get { return root.FindAtt<UserAction>(Attr.USERACTION).Value; }
         } 
@@ -85,37 +86,57 @@ namespace CopterDown
         public void Start()
         {
             start = lastDraw = lastUpdate = DateTime.Now;
-            _drawTimer = new Timer(Draw);
-            _drawTimer.Change(0, _drawInterval);
-            _updateTimer = new Timer(Update);
-            _updateTimer.Change(0, _updateInterval);
+            _drawTimer = new Thread(Draw);   
+            _updateTimer = new Thread(Update);
+            _drawTimer.Start();
+            _updateTimer.Start();
+
         }
 
         private void Draw(object state)
         {
-            try
+            while (true)
             {
-                _disp.Invoke(() =>
+                try
                 {
-                    var now = DateTime.Now;
-                    _canvas.Children.Clear();
-                    root.Draw(now - lastDraw, now - start);
-                    lastDraw = DateTime.Now;
-                });
-            }
-            catch
-            {
-                
+                    _disp.Invoke(() =>
+                    {
+                        var now = DateTime.Now;
+                        _canvas.Children.Clear();
+                        root.Draw(now - lastDraw, now - start);
+                        lastDraw = DateTime.Now;
+                    });
+                    Thread.Sleep(_drawInterval);
+                }
+                catch
+                {
+
+                }
             }
         }
 
         private void Update(object state)
         {
-            lock (this)
+            while (true)
             {
-                var now = DateTime.Now;
-                root.Update(now - lastUpdate, now - start);
-                lastUpdate = DateTime.Now;
+                lock (this)
+                {
+                    var now = DateTime.Now;
+                    root.Update(now - lastUpdate, now - start);
+                    lastUpdate = DateTime.Now;
+
+                    foreach (var act in UserActions.KeyActions.ToList())
+                    {
+                        if (act.Ended || act.Handled)
+                        {
+                            UserActions.KeyActions.Remove(act);
+                        }
+                        else act.CycleNumber++;
+
+                    }
+
+                    Thread.Sleep(_updateInterval);
+                }
             }
         }
 

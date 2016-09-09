@@ -4,6 +4,7 @@ using CopterDown.Core;
 using CopterDown.Core.Entities;
 using CopterDown.Core.Types;
 using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Game
 {
@@ -23,12 +24,21 @@ namespace CopterDown.Game
                             ? collision.SecondId
                             : collision.FirstId);
 
+                    var actualWeapon =
+                        GameObjectManager.Get.FindGameObjectBySubType(Subtypes.CANON).FindAttValue<Weapon>(Attr.WEAPON);
+
+                    var targetArmor = second.FindAttValue<int>(Attr.PPARMOR);
+                    var targetLives = second.FindAtt<int>(Attr.PPLIVES);
+
+                    var destruction = actualWeapon.Penetration/ ((float)targetArmor) * 100;
+                    targetLives.Value = (int)Math.Max(0, targetLives.Value-destruction);
+
                     var isHit = second.States.HasState(States.IS_HIT);
 
                     if (!isHit)
                     {
                         second.States.SetState(States.IS_HIT);
-                        GameObject.Destroy();
+                        if(!GameObject.States.HasState(States.IS_IMMORTAL)) GameObject.Destroy();
                     }
                 }
             }

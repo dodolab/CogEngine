@@ -8,6 +8,6 @@ namespace CopterDown.Enums
 {
     public enum ObjectType
     {
-        ROOT, SCENE, OBJECT, HUD
+        ROOT, SCENE, OBJECT, HUD, INFO
     }
 }

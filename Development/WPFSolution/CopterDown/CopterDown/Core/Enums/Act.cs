@@ -8,6 +8,6 @@ namespace CopterDown.Core.Enums
 {
     public enum Act
     {
-        LEFT, RIGHT, UP, DOWN, FIRE
+        LEFT, RIGHT, UP, DOWN, FIRE, SWITCH
     }
 }
