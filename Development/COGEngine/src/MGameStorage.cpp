@@ -1,8 +1,6 @@
 
 #include "MGameStorage.h"
 
-// first id is always 1
-int MGameStorage::callBackIdCounter = 1;
 
 void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 	for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it){
@@ -26,7 +24,7 @@ void MGameStorage::SendBubblingMessageToChildren(GMsg& msg, GNode* actualNode){
 
 void MGameStorage::SendMessage(GMsg& msg, GNode* actualNode){
 	// there is no such callback or behavior that listens to that type of message
-	if (!IsRegisteredCallBack(msg.GetAction()) && !IsRegisteredListener(msg.GetAction())) return;
+	if (!IsRegisteredListener(msg.GetAction())) return;
 
 	BubblingType& trav = msg.GetBubblingType();
 
@@ -89,17 +87,6 @@ void MGameStorage::SendDirectMessage(GMsg& msg){
 			if (((*it)->GetBehState() == BehState::ACTIVE_MESSAGES || (*it)->GetBehState() == BehState::ACTIVE_ALL)){
 				(*it)->OnMessage(msg);
 			}
-		}
-	}
-
-	auto callBacks = callBackListeners.find(msg.GetAction());
-
-	if (callBacks != callBackListeners.end()){
-		vector<std::pair<int, MsgCallback>>& cbck = callBacks->second;
-
-		for (auto it = cbck.begin(); it != cbck.end(); ++it){
-			std::pair<int, MsgCallback>& pair = (*it);
-			pair.second(msg);
 		}
 	}
 }

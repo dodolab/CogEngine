@@ -37,8 +37,7 @@ spt<ofTrueTypeFont> COGGetFont(string name, int size);
 // =================== MSTORAGE ========================
 
 
-int COGRegisterCallback(int action, MsgCallback callback);
-bool COGUnregisterCallback(int action, int id);
+
 void COGRegisterListener(int action, GBehavior* beh);
 void COGUnregisterListener(int action, GBehavior* beh);
 void COGSendMessage(GMsg& msg, GNode* actualNode);

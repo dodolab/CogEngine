@@ -61,15 +61,6 @@ spt<ofTrueTypeFont> COGGetFont(string name, int size){
 	return MEngine.resourceCtrl->GetFont(name, size);
 }
 
-
-int COGRegisterCallback(int action, MsgCallback callback){
-	return MEngine.storage->RegisterCallback(action, callback);
-}
-
-bool COGUnregisterCallback(int action, int id){
-	return MEngine.storage->UnregisterCallback(action, id);
-}
-
 void COGRegisterListener(int action, GBehavior* beh){
 	MEngine.storage->RegisterListener(action, beh);
 }

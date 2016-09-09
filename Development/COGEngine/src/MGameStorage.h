@@ -10,11 +10,6 @@
 */
 class MGameStorage{
 private:
-
-	// id counter
-	static int callBackIdCounter;
-	// callback listeners
-	map<int, vector<std::pair<int,MsgCallback>>> callBackListeners;
 	// behavior listeners
 	map<int, vector<GBehavior*>> behListeners;
 	// behavior ids and their registered actions
@@ -54,51 +49,6 @@ private:
 
 public:
 
-	/**
-	* Registers callback for selected action
-	* @param action action to register
-	*/
-	template<class T>
-	int RegisterCallback(int action, void (T::*f)(GMsg &)) {
-		return RegisterCallback(action, std::tr1::bind(f, (T*)(this), std::placeholders::_1));
-	}
-
-	/**
-	* Registers callback for selected action
-	* @param action action to register
-	* @param callback pointer to method that will be called when selected action is invoked
-	*/
-	int RegisterCallback(int action, MsgCallback callback){
-		if (callBackListeners.find(action) == callBackListeners.end()){
-			callBackListeners[action] = vector <std::pair<int, MsgCallback >>();
-		}
-
-		vector<std::pair<int,MsgCallback>>& callBacks = callBackListeners.find(action)->second;
-		callBacks.push_back(std::make_pair(callBackIdCounter++, callback));
-
-		// return id of this callback
-		return callBackIdCounter-1;
-	}
-
-	/**
-	* Unregisters callback for selected action
-	* @return true if callback has been found and erased
-	*/
-	bool UnregisterCallback(int action, int id){
-		if (callBackListeners.find(action) != callBackListeners.end()){
-			vector<std::pair<int,MsgCallback>>& callBacks = callBackListeners.find(action)->second;
-			
-			for (auto it = callBacks.begin(); it != callBacks.end(); ++it){
-
-				if ((*it).first == id){
-					callBacks.erase(it);
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
 
 	/**
 	* Registers behavior listener for selected action
@@ -196,13 +146,6 @@ public:
 		vector<int>& actions = behListenerActions[beh->GetId()];
 
 		return (std::find(actions.begin(), actions.end(), action) != actions.end());
-	}
-
-	/**
-	* Returns true, if there is at least one callback listener for selected action
-	*/
-	bool IsRegisteredCallBack(int key) const{
-		return callBackListeners.find(key) != callBackListeners.end();
 	}
 
 	/**

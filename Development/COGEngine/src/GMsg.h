@@ -3,17 +3,9 @@
 #include "MEnums.h"
 #include "EnFlags.h"
 
-#ifdef TARGET_ANDROID
-#include <tr1/functional>
-#else
-#include <functional>
-#endif
+
 
 class GMsg;
-
-// pointer to OnMessage function that can be used to create simple one-function logic
-typedef std::tr1::function<void(GMsg&)> MsgCallback;
-
 class GNode;
 
 /**
