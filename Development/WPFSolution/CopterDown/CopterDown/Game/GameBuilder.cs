@@ -25,7 +25,7 @@ namespace CopterDown.Game
 
             var weapons = info.FindAttValue<List<Weapon>>(Attr.WEAPONINFO);
 
-            GameObject canon = CreateCanon(new Transform(318, 223, 0, 2, 0.5f, 1), weapons.FirstOrDefault());
+            GameObject canon = CreateCanon(new Transform(318, 263, 0, 2, 2, 37), weapons.FirstOrDefault());
             player.AddChild(canon);
             return player;
         }
@@ -53,14 +53,14 @@ namespace CopterDown.Game
             background.AddBehavior(new ImageRenderB());
 
             GameObject cloud = new GameObject(ObjectType.ROOT, Subtypes.OTHER, "cloud");
-            cloud.Transform = new Transform(0, 0, 0, 2);
+            cloud.Transform = new Transform(0, 0, 0, 2,74,20);
             cloud.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/cloud.png");
             cloud.AddBehavior(new ImageRenderB());
             cloud.AddBehavior(new TranslateAnim(new Vector2d(0,0),new Vector2d(500,0), 0.03f, true, true));
             background.AddChild(cloud);
 
             GameObject sun = new GameObject(ObjectType.ROOT, Subtypes.OTHER, "sun");
-            sun.Transform = new Transform(350, 6, 0, 1);
+            sun.Transform = new Transform(450, 60, 0, 1,45,45);
             sun.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/sun.png");
             sun.AddBehavior(new ImageRenderB());
             sun.AddBehavior(new RotateAnim(0,0,5,true));
@@ -89,6 +89,7 @@ namespace CopterDown.Game
             intro.AddBehavior(new ImageRenderB());
             intro.AddAttribute(ElementType.VIEW, Attr.IMGSOURCE, "pack://application:,,,/Images/intro.png");
             intro.AddBehavior(new IntroB());
+
             return intro;
         }
 

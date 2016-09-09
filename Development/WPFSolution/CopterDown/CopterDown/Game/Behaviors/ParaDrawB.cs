@@ -22,20 +22,20 @@ namespace CopterDown.Game
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
             var isGrounded = GameObject.States.HasState(States.IS_GROUNDED);
-            var transform = GameObject.Transform;
+            var transform = GameObject.Transform.GetAbsoluteMatrix();
             var isHit = GameObject.States.HasState(States.IS_HIT);
 
             if (isGrounded)
             {
-                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/soldier.png", transform.LocalPos.X, transform.LocalPos.Y, 0, 0.0f, 0.0f, 5, 1, 1);
+                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/soldier.png", transform,1);
 
             }
             else
             {
-                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/para.png", transform.LocalPos.X, transform.LocalPos.Y, 0, 0.0f, 0.0f, 5, 1, 1);
+                Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/para.png", transform, 1);
             }
 
-            if (isHit) Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/explosion2.png", transform.LocalPos.X, transform.LocalPos.Y, 0, 0.5f, 0.0f, 5, 1, 1);
+            if (isHit) Helper.DrawImage(GameLoop._canvas, "pack://application:,,,/Images/explosion2.png", transform, 1);
         }
     }
 }
