@@ -100,20 +100,20 @@ private:
 	void FillOtherAttributes(spt<ofxXmlSettings> xml, EnAnim* anim){
 		anim->SetSheetPath(xml->getAttribute(":", "sheet", anim->GetSheetPath()));
 		anim->SetFrames(xml->getAttribute(":", "frames", anim->GetFrames()));
-		if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", anim->GetName()));
+		if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", anim->GetName().c_str()));
 		anim->SetLines(xml->getAttribute(":", "lines", anim->GetLines()));
-		if (anim->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", anim->GetName()));
+		if (anim->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", anim->GetName().c_str()));
 		anim->SetStart(xml->getAttribute(":", "start", anim->GetStart()));
-		if (anim->GetStart() < 0) throw IllegalArgumentException(string_format("Error in animation %s; start bust be greater or equal to 0", anim->GetName()));
+		if (anim->GetStart() < 0) throw IllegalArgumentException(string_format("Error in animation %s; start bust be greater or equal to 0", anim->GetName().c_str()));
 		anim->SetEnd(xml->getAttribute(":", "end", anim->GetEnd()));
-		if (anim->GetEnd() < 0) throw IllegalArgumentException(string_format("Error in animation %s; end bust be greater or equal to 0", anim->GetName()));
-		if (anim->GetStart() > anim->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", anim->GetName()));
+		if (anim->GetEnd() < 0) throw IllegalArgumentException(string_format("Error in animation %s; end bust be greater or equal to 0", anim->GetName().c_str()));
+		if (anim->GetStart() > anim->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", anim->GetName().c_str()));
 		anim->SetIncrement(xml->getAttribute(":", "increment", anim->GetIncrement()));
-		if (anim->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", anim->GetName()));
+		if (anim->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", anim->GetName().c_str()));
 		anim->SetSpeed(xml->getAttribute(":", "speed", anim->GetSpeed()));
-		if (anim->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", anim->GetName()));
+		if (anim->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", anim->GetName().c_str()));
 		anim->SetRepeat(xml->getAttribute(":", "repeat", anim->GetRepeat()));
-		if (anim->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", anim->GetName()));
+		if (anim->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", anim->GetName().c_str()));
 		anim->SetIsRevert(xml->getBoolAttribute(":", "revert", anim->GetIsRevert()));
 
 	}
@@ -161,7 +161,7 @@ private:
 				else{
 					// reference anim doesn't contain dot, but it isn't in this scope... that means it must refer to some other root animation
 					spt<EnAnim> rootReference = FindAnimByName(ref, rootAnims);
-					if (rootReference == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref));
+					if (rootReference == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 					refAnim->GetParametersFromReference(rootReference);
 				}
 			}
@@ -171,7 +171,7 @@ private:
 				string subAnim = ref.substr(ref.find(".") + 1);
 				spt<EnAnim> root = FindAnimByName(rootAnimName, rootAnims);
 				spt<EnAnim> scopeAnim = root->FindChild(subAnim);
-				if (root == spt<EnAnim>() || scopeAnim == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref));
+				if (root == spt<EnAnim>() || scopeAnim == spt<EnAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 
 				refAnim->GetParametersFromReference(scopeAnim);
 			}
@@ -289,7 +289,7 @@ public:
 
 	void Init(){
 		if (root == spt<EnAnim>()){
-			COGLogError("Animation cant' run, entity is null");
+			COGLogError("BeAnim", "Animation cant' run, entity is null");
 			ended = true;
 			return;
 		}

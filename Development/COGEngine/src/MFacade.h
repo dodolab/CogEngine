@@ -54,9 +54,9 @@ void COGRemoveBehavior(GBehavior* beh);
 
 // =================== MLOGGER =========================
 
-void COGLogError(const char* format, ...);
-void COGLogInfo(const char* format, ...);
-void COGLogDebug(const char* format, ...);
+void COGLogError(const char* module, const char* format, ...);
+void COGLogInfo(const char* module, const char* format, ...);
+void COGLogDebug(const char* module, const char* format, ...);
 void COGLoggerFlush();
 
 // =================== MSTORAGE =======================

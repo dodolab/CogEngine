@@ -27,6 +27,20 @@ public:
 	ofVec2f GetCenter();
 
 	/**
+	* Calculates transform of selected node
+	* @param node node to calculate
+	* @param pos position, calculated due to posCalc parameter
+	* @param posCalc position calculation type (absolute, percentage or local)
+	* @param scaleX scale in x axis
+	* @param scaleCalc scale calculation type (absolute, percentage or local)
+	* @param anchor percentage object anchor
+	* @param width object width
+	* @param height object height
+	* @param parent link to the object parent
+	*/
+	EnTransform CalcTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent);
+
+	/**
 	* Sets absolute transform to node
 	* @param node node to set
 	* @param pos position, calculated due to posCalc parameter

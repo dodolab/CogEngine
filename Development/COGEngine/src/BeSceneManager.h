@@ -74,7 +74,7 @@ public:
 
 		actualScene->SetRunningMode(RUNNING);
 		scene->SetRunningMode(RUNNING);
-		owner->AddBehavior(new BeSlideTween(tweenDir, scene, actualScene,2), false);
+		owner->AddBehavior(new BeSlideTween(tweenDir, scene, actualScene,2));
 		
 		// add new scene to the front
  		scene->GetTransform().localPos.z = 0;

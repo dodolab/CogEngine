@@ -122,19 +122,17 @@ public:
 	/**
 	* Adds a new behavior
 	* @param beh behavior to add
-	* @param immediately if true, behavior will be added immediately
 	* @return true, if behavior has been successfully added
 	*/
-	bool AddBehavior(GBehavior* beh, bool immediately);
+	bool AddBehavior(GBehavior* beh);
 
 	/**
 	* Removes existing behavior (by its id)
 	* @param beh behavior to remove
-	* @param immediately if true, behavior will be removed immediately
 	* @param erase if true, memory will be released
 	* @return true, if behavior has been removed
 	*/
-	bool RemoveBehavior(GBehavior* beh, bool immediately, bool erase);
+	bool RemoveBehavior(GBehavior* beh, bool erase);
 
 	/**
 	* Removes existing attribute (by its key)
@@ -148,6 +146,14 @@ public:
 	* Returns true, if this node has an attribute with given key
 	*/
 	bool HasAttr(int key) const;
+
+	/**
+	* Updates collections of behaviors and children nodes
+	* Adds elements that are supposed to be added and removes
+	* elements that are supposed to be removed
+	* @param applyToChildren if true, children will be updated as well
+	*/
+	void SubmitChanges(bool applyToChildren);
 
 	/**
 	* Gets copy of list of all behaviors
@@ -180,27 +186,24 @@ public:
 	/**
 	* Adds a new child
 	* @param child child to add
-	* @param immediately if true, child will be added immediately
 	* @return true, if child has been successfully added
 	*/
-	bool AddChild(GNode* child, bool immediately);
+	bool AddChild(GNode* child);
 
 	/**
 	* Removes an existing child
 	* @param child child to remove
-	* @param immediately if true, behavior will be removed immediately
 	* @param erase if true, memory will be released
 	* @return true, if child has been removed
 	*/
-	bool RemoveChild(GNode* child, bool immediately, bool erase);
+	bool RemoveChild(GNode* child, bool erase);
 
 	/**
 	* Removes this node from its parent (if it exists)
-	* @param immediately if true, behavior will be removed immediately
 	* @param erase if true, memory will be released
 	* @return true, if this object has been removed
 	*/
-	bool RemoveFromParent(bool immediately, bool erase);
+	bool RemoveFromParent(bool erase);
 
 	/**
 	* Gets pointer to the parent of this node
@@ -432,8 +435,8 @@ public:
 	template<class T> T& GetAttr(int key){
 		auto it = attributes.find(key);
 
-		MASSERT(it != attributes.end(), "%s: Attribute %d doesn't exists", tag->c_str(), key);
-		MASSERT(typeid(*it->second) == typeid(GAttrR<T>), "%s: Attribute %d is of the wrong type!", tag->c_str(), key);
+		MASSERT(it != attributes.end(), "GNODE", "%s: Attribute %d doesn't exists", tag->c_str(), key);
+		MASSERT(typeid(*it->second) == typeid(GAttrR<T>), "GNODE", "%s: Attribute %d is of the wrong type!", tag->c_str(), key);
 
 		GAttrR<T>* attr = static_cast<GAttrR<T>*>(it->second);
 		return attr->GetValue();

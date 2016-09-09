@@ -25,10 +25,21 @@ public:
 	/**
 	* Logs the message for selected level
 	* @param level logging level
-	* @param depth log depth (padding from left in text output)
+	* @param module source module
 	* @param message message to log
 	*/
-	virtual void Log(LogLevel level, int depth, string message) = 0;
+	void Log(LogLevel level, const char* module, string message){
+		this->Log(level, module, message, 0);
+	}
+
+	/**
+	* Logs the message for selected level
+	* @param level logging level
+	* @param module source module
+	* @param message message to log
+	* @param depth logging depth (provided by text padding)
+	*/
+	virtual void Log(LogLevel level, const char* module, string message, int depth) = 0;
 
 	/**
 	* Flushes logged messages
@@ -64,12 +75,13 @@ class ConsoleLoggerChannel : public LoggerChannel{
 public:
 	virtual ~ConsoleLoggerChannel(){};
 
-	virtual void Log(LogLevel level, int depth, string message){
+	virtual void Log(LogLevel level, const char* module, string message, int depth){
 
 		spaces(depth * 2, cout);
 
 		cout << GetLogLevel(level);
 		cout << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
+		cout << "[" << module << "]";
 		cout << message << endl;
 	}
 };
@@ -87,11 +99,12 @@ public:
 		st.clear();
 	}
 
-	virtual void Log(LogLevel level, int depth, string message){
+	virtual void Log(LogLevel level, const char* module, string message, int depth){
 		spaces(depth * 2, st);
 
 		st << GetLogLevel(level);
 		st << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]";
+		st << "[" << module << "]";
 		st << message << endl;
 
 		anyLog = true;
@@ -129,16 +142,15 @@ class MLogger{
 protected:
 	LoggerChannel* channel;
 	LogLevel logLevel;
+	spt<ofxXmlSettings> config;
 
 public:
 
 	/**
 	* Creates a new logger
-	* @param channel default logging channel
-	* @param logLevel lowest level that should bel logged
+	* @param config configuration xml
 	*/
-	MLogger(LoggerChannel* channel, LogLevel logLevel) : channel(channel), logLevel(logLevel){
-	
+	MLogger(spt<ofxXmlSettings> config) : config(config){
 	}
 
 	~MLogger(){
@@ -146,12 +158,51 @@ public:
 	}
 
 	/**
+	* Initializes component, using xml settings or default one
+	*/
+	void Init(){
+		if (config != spt<ofxXmlSettings>()){
+			if (config->tagExists("logger")){
+				config->pushTag("logger");
+
+				string level = ofToLower(config->getValue("level", "info"));
+
+				if (level.compare("error") == 0) logLevel = LogLevel::LERROR;
+				else if (level.compare("info") == 0) logLevel = LogLevel::LINFO;
+				else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
+				
+				if (config->tagExists("channel")){
+					string type = config->getAttribute("channel", "type", "console");
+
+					if (type.compare("console") == 0) channel = new ConsoleLoggerChannel();
+					else if (type.compare("file") == 0){
+						bool append = config->getBoolAttribute("channel", "append", true);
+						string path = config->getAttribute("channel", "path", "");
+						string fullPath = ofToDataPath(path);
+						channel = new FileLoggerChannel(fullPath, append);
+					}
+
+				}
+				else channel = new ConsoleLoggerChannel();
+
+
+				config->popTag();
+			}
+		}
+		else{
+			// no config available, use default settings
+			channel = new ConsoleLoggerChannel();
+			logLevel = LogLevel::LERROR;
+		}
+	}
+
+	/**
 	* Logs error message
 	* @param depth log depth (padding from left)
 	*/
-	void LogError(int depth, const char* format, va_list args){
+	void LogError(const char* module, int depth, const char* format, va_list args){
 		if (((int)logLevel) >= ((int)LogLevel::LERROR)){
-			channel->Log(LogLevel::LERROR, depth, ofVAArgsToString(format, args));
+			channel->Log(LogLevel::LERROR, module, ofVAArgsToString(format, args), depth);
 		}
 	}
 
@@ -159,9 +210,9 @@ public:
 	* Logs info message
 	* @param depth log depth (padding from left)
 	*/
-	void LogInfo(int depth, const char* format, va_list args){
+	void LogInfo(const char* module, int depth, const char* format, va_list args){
 		if (((int)logLevel) >= ((int)LogLevel::LINFO)){
-			channel->Log(LogLevel::LINFO, depth, ofVAArgsToString(format, args));
+			channel->Log(LogLevel::LINFO, module, ofVAArgsToString(format, args), depth);
 		}
 	}
 
@@ -169,9 +220,9 @@ public:
 	* Logs debug message
 	* @param depth log depth (padding from left)
 	*/
-	void LogDebug(int depth, const char* format, va_list args){
+	void LogDebug(const char* module, int depth, const char* format, va_list args){
 		if (((int)logLevel) >= ((int)LogLevel::LDEBUG)){
-			channel->Log(LogLevel::LDEBUG, depth, ofVAArgsToString(format, args));
+			channel->Log(LogLevel::LDEBUG, module, ofVAArgsToString(format, args), depth);
 		}
 	}
 

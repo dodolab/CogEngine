@@ -57,7 +57,7 @@ spt<ofImage> MStorage::Preload2DImage(string path){
 	// don't use texture because images are loaded in separate thread
 	img->setUseTexture(false);
 	bool loaded = img->loadImage(path);
-	if (!loaded) COGLogError("Image couldn't be loaded: %s",path);
+	if (!loaded) COGLogError("Image couldn't be loaded: %s",path.c_str());
 
 
 	auto image = spt<ofImage>(img);
@@ -117,7 +117,7 @@ spt<EnAnim> MStorage::GetAnimation(string name){
 }
 
 void MStorage::StoreAnimation(spt<EnAnim> anim){
-	MASSERT(anim->GetName().compare("") != 0, "Attempt to store animation without a name!");
+	MASSERT(anim->GetName().compare("") != 0, "MStorage", "Attempt to store animation without a name!");
 	
 	auto found = loadedAnimations.find(anim->GetName());
 	if (found == loadedAnimations.end()){

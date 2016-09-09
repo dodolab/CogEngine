@@ -12,11 +12,11 @@ ofVec2f MFactory::GetCenter(){
 	return ofVec2f(COGGetScreenWidth() / 2, COGGetScreenHeight() / 2);
 }
 
-void MFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent){
+EnTransform MFactory::CalcTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent){
 	ofVec2f scrSize = COGGetScreenSize();
 
 	EnTransform& parentTrans = parent->GetTransform();
-	EnTransform& nodeTransform = node->GetTransform();
+	EnTransform nodeTransform = EnTransform(0, 0);
 
 	ofVec2f scale = CalcScale(node, scaleX, width, scaleCalc, parent);
 	ofVec2f absPos = CalcPosition(node, pos, posCalc, parent);
@@ -29,11 +29,17 @@ void MFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float sc
 
 	// refresh transform
 	nodeTransform.CalcAbsTransform(parent->GetTransform());
+
+	return nodeTransform;
+}
+
+void MFactory::SetTransform(GNode* node, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, int width, int height, GNode* parent){
+	node->SetTransform(CalcTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, width, height, parent));
 }
 
 spt<ofImage> MFactory::SetRenderImage(GNode* node, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 
-	node->AddBehavior(new BeRender(RenderType::IMAGE), true);
+	node->AddBehavior(new BeRender(RenderType::IMAGE));
 	spt<ofImage> img = COGEngine.resourceCtrl->Get2DImage(imgPath);
 	node->AddAttr(Attrs::IMGSOURCE, img);
 
@@ -44,20 +50,20 @@ spt<ofImage> MFactory::SetRenderImage(GNode* node, string imgPath, ofVec2f pos, 
 GNode* MFactory::CreateImageNode(string tag, string imgPath, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	GNode* node = new GNode(tag);
 	SetRenderImage(node, imgPath, pos, posCalc, scaleX, scaleCalc, anchor, parent);
-	parent->AddChild(node, true);
+	parent->AddChild(node);
 	return node;
 }
 
 void MFactory::SetFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text){
 	node->AddAttr(Attrs::FONT, font);
-	node->AddBehavior(new BeRender(RenderType::TEXT), true);
+	node->AddBehavior(new BeRender(RenderType::TEXT));
 	node->AddAttr(Attrs::COLOR, color);
 	node->AddAttr(Attrs::TEXT, text);
 }
 
 void MFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	node->AddAttr(Attrs::FONT, font);
-	node->AddBehavior(new BeRender(RenderType::TEXT), true);
+	node->AddBehavior(new BeRender(RenderType::TEXT));
 	node->AddAttr(Attrs::COLOR, color);
 	node->AddAttr(Attrs::TEXT, text);
 	SetTransform(node, pos, posCalc, scaleX, scaleCalc, anchor, font->stringWidth(text), font->stringHeight(text), parent);
@@ -68,7 +74,7 @@ void MFactory::SetRenderFont(GNode* node, spt<ofTrueTypeFont> font, ofColor colo
 GNode* MFactory::CreateFontNode(string tag, spt<ofTrueTypeFont> font, ofColor color, string text, ofVec2f pos, CalcType posCalc, float scaleX, CalcType scaleCalc, ofVec2f anchor, GNode* parent){
 	GNode* node = new GNode(tag);
 	SetRenderFont(node, font, color, text, pos, posCalc, scaleX, scaleCalc, anchor, parent);
-	parent->AddChild(node, true);
+	parent->AddChild(node);
 	return node;
 }
 
@@ -138,8 +144,8 @@ GNode* MFactory::CreateRoot(){
 
 	GNode* root = new GNode(ObjType::ROOT, 1, "root");
 	sceneManager = new BeSceneManager();
-	root->AddBehavior(sceneManager, true);
-
+	root->AddBehavior(sceneManager);
+	root->SubmitChanges(true);
 	return root;
 }
 
@@ -155,13 +161,13 @@ bool MFactory::LoadAnimations(spt<ofxXmlSettings> xml){
 		loader.LoadAnimations(xml, rootAnims);
 	}
 	catch (IllegalArgumentException& err){
-		COGLogError(err.what());
-		COGLogError("Animations couldn't be loaded");
+		COGLogError("Factory",err.what());
+		COGLogError("Factory", "Animations couldn't be loaded");
 		return false;
 	}
 	catch (ConfigErrorException& err){
-		COGLogError(err.what());
-		COGLogError("Animations couldn't be loaded");
+		COGLogError("Factory",err.what());
+		COGLogError("Factory","Animations couldn't be loaded");
 		return false;
 	}
 

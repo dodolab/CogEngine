@@ -9,12 +9,12 @@
 
 // assertion with formatted message
 #ifdef DEBUG
-#   define MASSERT(condition, message, ...) \
+#   define MASSERT(condition, module, message, ...) \
     do { \
         if (! (condition)) { \
             std::cerr << "Assertion " #condition " failed in " << __FILE__ \
                       << " line " << __LINE__ << ": " << printf(message, ##__VA_ARGS__) << std::endl; \
-             COGLogError(message, ##__VA_ARGS__); \
+             COGLogError(module,message, ##__VA_ARGS__); \
 			 COGLoggerFlush(); \
 				        } \
 		    } while (false)
@@ -24,9 +24,9 @@
 
 // macro for debug-only logging
 #ifdef DEBUG
-#   define MLOGDEBUG(message, ...) \
+#   define MLOGDEBUG(module, message, ...) \
     do { \
-             COGLogDebug(message, ##__VA_ARGS__); \
+             COGLogDebug(module, message, ##__VA_ARGS__); \
 				    } while (false)
 #else
 #   define MLOGDEBUG(message, ...) do { } while (false)
@@ -37,7 +37,7 @@
 /**
 * Creates formatted string
 */
-std::string string_format(const std::string fmt_str, ...);
+std::string string_format(const char* fmt_str, ...);
 
 /**
 * Adds spaces into string stream

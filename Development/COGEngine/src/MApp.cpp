@@ -11,7 +11,7 @@ void MApp::setup(){
 	ofSetFrameRate(APP_SPEED);
 	ofEnableAntiAliasing();
 	// initialize COG engine
-	COGEngine.Init(factory);
+	COGEngine.Init(factory, config);
 	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
@@ -104,15 +104,15 @@ void MApp::cancelPressed(){
 }
 
 void MApp::touchDown(int x, int y, int id){
-	MEngine.environmentCtrl->OnMultiTouchButton(x, y, id, true);
+	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, true);
 }
 
 void MApp::touchMoved(int x, int y, int id){
-	MEngine.environmentCtrl->OnMultiTouchMotion(x, y, id);
+	COGEngine.environmentCtrl->OnMultiTouchMotion(x, y, id);
 }
 
 void MApp::touchUp(int x, int y, int id){
-	MEngine.environmentCtrl->OnMultiTouchButton(x, y, id, false);
+	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, false);
 }
 
 void MApp::touchDoubleTap(int x, int y, int id){

@@ -4,7 +4,6 @@
 #include "GNode.h"
 #include "MEnums.h"
 
-typedef float(*FadeFunction)(float);
 
 /**x
 * Behavior for translation animation
