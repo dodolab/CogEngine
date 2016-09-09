@@ -262,6 +262,9 @@ void MTestApp::draw() {
 void MTestApp::update() {
 	spriteRenderer->clearCounters("combined"); // clear the sheet
 
+	ofLog(OF_LOG_WARNING, "mojo");
+	ofLog(OF_LOG_NOTICE, "dojo");
+	ofLog(OF_LOG_SILENT, "bojo");
 
 	sort(sprites.begin(), sprites.end(), sortByZIndex); // sorts the sprites vertically so the ones that are lower are drawn later and there for in front of the ones that are higher up
 

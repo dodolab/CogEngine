@@ -2,7 +2,7 @@
 
 #include "Behavior.h"
 
-#ifdef TARGET_ANDROID
+#ifdef ANDROID
 #include "ofxAndroidVibrator.h"
 #endif
 
@@ -80,7 +80,7 @@ public:
 					if (ImageHitTest(hitImage, touchTrans)){
 						// image has been hit
 						if (touch.started){
-#ifdef TARGET_ANDROID
+#ifdef ANDROID
 							if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 							atLeastOneTouch = true;
@@ -113,7 +113,7 @@ public:
 						else{
 							atLeastOneTouch = true;
 							if (!owner->HasState(States::HIT)){
-#ifdef TARGET_ANDROID
+#ifdef ANDROID
 								if(vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 								// touch hasn't started but this object hasn't been hit

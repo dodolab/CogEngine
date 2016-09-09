@@ -23,7 +23,7 @@ void WriteTime(const char* msg) {
 
 class JavaScriptBehavior : public Behavior {
 	duk_context* ctx;
-
+	
 	string GetBehaviorJsName() {
 		return "Behavior_" + ofToString(this->GetId());
 	}
@@ -184,10 +184,12 @@ class TestingFactory : public Factory {
 public:
 	Node* CreateRoot() {
 
+		ofLogNotice("test") << "vytvarim hlavni uzel";
 		mstart = temp = ofGetElapsedTimeMillis();
 
 		Node* root = new Node(ObjType::ROOT, 12, "root");
 
+		ofLogNotice("test") << "nacitam barvicky";
 		for (int i = 0; i < 2000; i++) {
 			spt<ofImage> img = COGGet2DImage("images/blue.png");
 			spt<ofImage> img2 = COGGet2DImage("images/red.png");
@@ -229,6 +231,8 @@ public:
 
 		WriteTime("INIT");
 
+		ofLogNotice("test") << "zapisuju ze je vsechno OK";
+
 		root->AddBehavior(new Collider(12345));
 		//root->AddBehavior(new TestingBehavior());
 		duk_context *ctx = duk_create_heap_default();
@@ -246,6 +250,7 @@ public:
 
 		WriteTime("SUBMIT CHANGES");
 
+		ofLogNotice("test") << "spoustim barvicky";
 		return root;
 	}
 };
@@ -314,6 +319,7 @@ int main() {
 
 int main() {
 
+	ofLogNotice("test") << "spustil jsem aplikaci";
 	duk_context *ctx = duk_create_heap_default();
 
 	duk_push_global_object(ctx);
@@ -329,13 +335,15 @@ int main() {
 
 	//duk_pop(ctx);  /* pop global */
 
+	ofLogNotice("test") << "nacitam ruzne atributy";
 
 	duk_destroy_heap(ctx);
 
 	ofSetupOpenGL(720, 1280, OF_WINDOW);			// <-------- setup the GL context
 	cout << "Android app loaded" << endl;
 	//ofRunApp(new MTestApp());
-	ofRunApp(new ofxAreApp(new TestingFactory()));
+	ofLogNotice("test") << "spoustim appku s testingFactory";
+	ofRunApp(new CogApp(new TestingFactory()));
 	return 0;
 }
 

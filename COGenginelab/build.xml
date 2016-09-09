@@ -26,6 +26,37 @@
          application and should be checked into Version Control Systems.
 
          -->
+
+     
+	 <target name="custom-set-release-mode" >
+	 <property
+            name="out.packaged.file"
+            location="${out.absolute.dir}/${ant.project.name}.apk" />
+
+        <property
+            name="out.final.file"
+            location="${out.absolute.dir}/${ant.project.name}.apk" />
+    </target>
+
+    <target name="custom-set-debug-files" >
+        <property
+            name="out.packaged.file"
+            location="${out.absolute.dir}/${ant.project.name}.apk" />
+
+        <property
+            name="out.final.file"
+            location="${out.absolute.dir}/${ant.project.name}.apk" />
+    </target>
+
+    <target
+        name="debug"
+        depends="custom-set-debug-files, android_rules.debug" />
+
+    <target
+        name="release"
+        depends="custom-set-release-mode, android_rules.release" />
+	
+		 
     <property file="ant.properties" />
 
     <!-- if sdk.dir was not set from one of the property file, then
@@ -66,6 +97,7 @@
             -post-build
             -pre-clean
     -->
+	
     <import file="custom_rules.xml" optional="true" />
 
     <!-- Import the actual build file.
