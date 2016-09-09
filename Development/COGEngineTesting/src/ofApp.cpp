@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "ofApp.h"
-#include "ofxSQLiteSelect.h"
 #include "ofxSQLite.h"
 #include "ofxSQLiteEntity.h"
 
@@ -42,13 +41,13 @@ void MTestApp::setup(){
 	krabicka.Remove();
 
 	sqlite->createTableIfNotExists("scores")
-		.add("id", SQLITE_COLUMN_INTEGER, true, true)
-		.add("time", SQLITE_COLUMN_TEXT)
+		.add("id", SQLColumnType::SQLITE_COLUMN_INTEGER, true, true)
+		.add("time", SQLColumnType::SQLITE_COLUMN_TEXT)
 		.execute();
 
 	sqlite->createTableIfNotExists("stats")
-		.add("id", SQLITE_COLUMN_INTEGER, true, true)
-		.add("time", SQLITE_COLUMN_TEXT)
+		.add("id", SQLColumnType::SQLITE_COLUMN_INTEGER, true, true)
+		.add("time", SQLColumnType::SQLITE_COLUMN_TEXT)
 		.execute();
 
 
@@ -147,14 +146,14 @@ void MTestApp::setup(){
 		// -------------------------------------------------------------------------
 
 		sqlite->createTableIfNotExists("photos")
-			.add("id", SQLITE_COLUMN_INTEGER, true, true)
-			.add("old_name", SQLITE_COLUMN_VARCHAR, 255)
-			.add("new_name", SQLITE_COLUMN_VARCHAR, 255)
-			.add("dir_name", SQLITE_COLUMN_VARCHAR, 255)
-			.add("file_path", SQLITE_COLUMN_VARCHAR, 255)
-			.add("synchronized", SQLITE_COLUMN_BOOLEAN)
-			.add("date_synchronized", SQLITE_COLUMN_DATETIME)
-			.add("date_created", SQLITE_COLUMN_DATETIME, "CURRENT_TIMESTAMP")
+			.add("id", SQLColumnType::SQLITE_COLUMN_INTEGER, true, true)
+			.add("old_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+			.add("new_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+			.add("dir_name", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+			.add("file_path", SQLColumnType::SQLITE_COLUMN_VARCHAR, 255)
+			.add("synchronized", SQLColumnType::SQLITE_COLUMN_BOOLEAN)
+			.add("date_synchronized", SQLColumnType::SQLITE_COLUMN_DATETIME)
+			.add("date_created", SQLColumnType::SQLITE_COLUMN_DATETIME, "CURRENT_TIMESTAMP")
 			.execute();
 
 		/*

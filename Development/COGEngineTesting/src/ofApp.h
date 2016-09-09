@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxSpriteSheetRenderer.h"
-#include "MApp.h"
+#include "ofxAreApp.h"
 
 //a quick and dirty sprite implementation
 struct basicSprite {
@@ -24,7 +24,7 @@ struct basicSprite {
 #include "ofxAndroid.h"
 #endif
 
-class MTestApp : public MApp
+class MTestApp : public ofxAreApp
 {
 protected:
 	ofxSpriteSheetRenderer * spriteRenderer;	// our spriteRenderer
@@ -32,7 +32,7 @@ protected:
 
 public:
 
-	MTestApp() : MApp(nullptr){
+	MTestApp() : ofxAreApp(nullptr){
 
 	}
 
