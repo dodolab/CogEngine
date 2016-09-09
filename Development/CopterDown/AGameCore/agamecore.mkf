@@ -8,6 +8,7 @@ files
 	ABehavior.h
 	Attr.h
 	BeCollider.h
+	BeHitEvent.h
 	BeMove.h
 	BeRender.h
 	BeRotateAnim.h
@@ -15,6 +16,7 @@ files
 	EnBounds.h
 	EnCollision.h
 	EnInputAct.h
+	EnHitImage.h
 	EnPair.h
 	EnFlags.h
 	EnPolygon.h
@@ -35,6 +37,7 @@ files
 	ABehavior.cpp
 	Attr.cpp
 	BeCollider.cpp
+	BeHitEvent.cpp
 	BeMove.cpp
 	BeRender.cpp
 	BeRotateAnim.cpp

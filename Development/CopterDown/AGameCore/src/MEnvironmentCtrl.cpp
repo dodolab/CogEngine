@@ -12,14 +12,6 @@
 
 using namespace std;
 
-int32 MEnvironmentCtrl::PointerButtonEventCallback(s3ePointerEvent* event, void* userData){
-	return 0;
-}
-
-int32 MEnvironmentCtrl::PointerMotionEventCallback(s3ePointerMotionEvent* event, void* userData){
-	return 0;
-}
-
 
 Act GetAction(s3eKey key){
 	if (key == s3eKeyLeft) return Act::LEFT;
@@ -75,8 +67,32 @@ int32 MEnvironmentCtrl::KeyEventCallback(s3eKeyboardEvent* event, void* userData
 	return 0;
 }
 
+// user touches the screen with more fingers
+void MEnvironmentCtrl::MultiTouchButtonCallback(s3ePointerTouchEvent* event){
+
+
+}
+
+// user moves fingers
+void MEnvironmentCtrl::MultiTouchMotionCallback(s3ePointerTouchMotionEvent* event){
+
+}
+
+// user touches the screen
+void MEnvironmentCtrl::SingleTouchButtonCallback(s3ePointerEvent* event){
+
+}
+
+// user moves finger
+void MEnvironmentCtrl::SingleTouchMotionCallback(s3ePointerMotionEvent* event){
+
+}
+
+
 int32 MEnvironmentCtrl::ScreenSizeChangeCallback(void* systemData, void* userData){
 	MEngine.environmentCtrl->_screenSizeChanged = true;
+	MEngine.environmentCtrl->_height = s3eSurfaceGetInt(S3E_SURFACE_HEIGHT);
+	MEngine.environmentCtrl->_width = s3eSurfaceGetInt(S3E_SURFACE_WIDTH);
 	return 0;
 }
 
@@ -86,9 +102,23 @@ void MEnvironmentCtrl::Init(){
 	_userActions = spt<EnUserAct>(new EnUserAct());
 
 	s3eSurfaceRegister(S3E_SURFACE_SCREENSIZE, &MEnvironmentCtrl::ScreenSizeChangeCallback, NULL);
-	s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, (s3eCallback) &MEnvironmentCtrl::KeyEventCallback, NULL);
-	s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)&MEnvironmentCtrl::PointerButtonEventCallback, NULL);
-	s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::PointerMotionEventCallback, NULL);
+
+	// Determine if the device supports multi-touch
+	bool isMultiTouch = s3ePointerGetInt(S3E_POINTER_MULTI_TOUCH_AVAILABLE);
+
+	s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, (s3eCallback)&MEnvironmentCtrl::KeyEventCallback, NULL);
+
+	// For multi-touch devices we handle touch and motion events using different callbacks
+	if (isMultiTouch)
+	{
+		s3ePointerRegister(S3E_POINTER_TOUCH_EVENT, (s3eCallback)&MEnvironmentCtrl::MultiTouchButtonCallback, NULL);
+		s3ePointerRegister(S3E_POINTER_TOUCH_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::MultiTouchMotionCallback, NULL);
+	}
+	else
+	{
+		s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchButtonCallback, NULL);
+		s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)&MEnvironmentCtrl::SingleTouchMotionCallback, NULL);
+	}
 }
 
 void MEnvironmentCtrl::UpdateInputs(){
