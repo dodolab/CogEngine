@@ -1,4 +1,5 @@
 #include "MGameEngine.h"
+#include "CopterFactory.h"
 
 
 
@@ -11,7 +12,7 @@ int main()
 	Iw2DSetUseMipMapping(false);
 
 	// initialize game engine
-	MEngine.Init(new MGameFactory(), new MGameStorage());
+	MEngine.Init(new CopterFactory(), new MGameStorage());
 	// start game loop
 	MEngine.StartLoop();
 	// finish

@@ -241,6 +241,54 @@ GNode* CreateMask(int width, int height, Vectorf2 position){
 }
 
 
+
+
+
+
+
+
+
+void MGameFactory::SetTransform(GNode* node, float posX, float posY, float scale){
+	node->GetTransform().LocalPos = Vectorf2(posX, posY);
+	node->GetTransform().Scale = scale;
+}
+
+// TODO !!!!! create Renderable entity with ANCHORS
+
+void MGameFactory::SetRenderImage(GNode* node, string imgPath){
+	node->AddBehavior(new BeRender(RenderType::IMAGE));
+	spt<CIw2DImage> img = MEngine.resourceCtrl->Get2DImage(imgPath);
+	node->AddAttr(Attrs::IMGSOURCE, img);
+}
+
+void MGameFactory::SetRenderHitImage(GNode* node, string imgPath){
+	SetRenderImage(node, imgPath);
+
+	spt<CIwImage> img = MEngine.resourceCtrl->GetImage(imgPath);
+	spt<EnHitImage> hitImg = spt<EnHitImage>(new EnHitImage(img));
+	node->AddAttr(Attrs::HIT_IMAGE, hitImg);
+	node->SetState(States::HITTABLE);
+}
+
+void MGameFactory::SetSingleBackground(GNode* node, string imgPath){
+	SetRenderImage(node, imgPath);
+	spt<CIw2DImage> img = node->GetAttr<spt<CIw2DImage>>(Attrs::IMGSOURCE);
+	float scale = MEngine.environmentCtrl->GetWidth() / img->GetWidth();
+
+
+	SetTransform(node, img->GetWidth()/2*scale, img->GetHeight()/2*scale, scale);
+	
+}
+
+Vectorf2 MGameFactory::GetPercentageVec(float xPerc, float yPerc){
+	float width = MEngine.environmentCtrl->GetWidth();
+	float height = MEngine.environmentCtrl->GetHeight();
+
+	return Vectorf2(width*xPerc, height*yPerc);
+}
+
+
+
 GNode* MGameFactory::CreateRoot(){
 
 	GNode* _root = new GNode(ObjType::ROOT, 0, "root");
