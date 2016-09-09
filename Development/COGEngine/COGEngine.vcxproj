@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollageTexture.cpp" />
     <ClCompile Include="src\CopterFactory.cpp" />
     <ClCompile Include="src\EnBounds.cpp" />
     <ClCompile Include="src\EnCollision.cpp" />
@@ -101,6 +102,7 @@
     <ClCompile Include="src\GBehavior.cpp" />
     <ClCompile Include="src\GMsg.cpp" />
     <ClCompile Include="src\GNode.cpp" />
+    <ClCompile Include="src\LinearTexture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MEnvironmentCtrl.cpp" />
     <ClCompile Include="src\MGameEngine.cpp" />
@@ -108,6 +110,8 @@
     <ClCompile Include="src\MGameStorage.cpp" />
     <ClCompile Include="src\MResourceCtrl.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
+    <ClCompile Include="src\PixelTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BeCollider.h" />
@@ -118,6 +122,7 @@
     <ClInclude Include="src\BeRotateAnim.h" />
     <ClInclude Include="src\BeTranslateAnim.h" />
     <ClInclude Include="src\BeTween.h" />
+    <ClInclude Include="src\CollageTexture.h" />
     <ClInclude Include="src\CopterFactory.h" />
     <ClInclude Include="src\EnBounds.h" />
     <ClInclude Include="src\EnCollision.h" />
@@ -131,12 +136,15 @@
     <ClInclude Include="src\GBehavior.h" />
     <ClInclude Include="src\GMsg.h" />
     <ClInclude Include="src\GNode.h" />
+    <ClInclude Include="src\LinearTexture.h" />
     <ClInclude Include="src\MEnvironmentCtrl.h" />
     <ClInclude Include="src\MGameEngine.h" />
     <ClInclude Include="src\MGameFactory.h" />
     <ClInclude Include="src\MGameStorage.h" />
     <ClInclude Include="src\MResourceCtrl.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
+    <ClInclude Include="src\PixelTexture.h" />
     <ClInclude Include="src\SmartPointer.h" />
   </ItemGroup>
   <ItemGroup>
