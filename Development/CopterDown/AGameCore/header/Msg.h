@@ -19,25 +19,25 @@ public:
 	Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
 	Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* data);
 
-	int GetAction();
+	int GetAction() const;
 	void SetAction(int val);
 
-	ElemType GetCategory();
+	ElemType GetCategory() const;
 	void SetCategory(ElemType val);
 
-	EnFlags GetTraverse();
+	EnFlags GetTraverse() const;
 	void SetTraverse(EnFlags val);
 
-	SenderType GetSenderType();
+	SenderType GetSenderType() const;
 	void SetSenderType(SenderType val);
 
-	void* GetData();
+	void* GetData() const;
 	void SetData(void* val);
 
-	void* GetResponse();
+	void* GetResponse() const;
 	void SetResponse(void* val);
 
-	int GetOwnerId();
+	int GetOwnerId() const;
 	void SetOwnerId(int val);
 };
 
@@ -49,49 +49,49 @@ Msg::Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* dat
 
 }
 
-int Msg::GetAction(){
+int Msg::GetAction() const{
 	return 0;
 }
 void Msg::SetAction(int val){
 
 }
 
-ElemType Msg::GetCategory(){
+ElemType Msg::GetCategory() const{
 	return ElemType::ALL;
 }
 void Msg::SetCategory(ElemType val){
 
 }
 
-EnFlags Msg::GetTraverse(){
+EnFlags Msg::GetTraverse() const{
 	return EnFlags();
 }
 void Msg::SetTraverse(EnFlags val){
 
 }
 
-SenderType Msg::GetSenderType(){
+SenderType Msg::GetSenderType() const{
 	return SenderType::ATTR;
 }
 void Msg::SetSenderType(SenderType val){
 
 }
 
-void* Msg::GetData(){
+void* Msg::GetData() const{
 	return nullptr;
 }
 void Msg::SetData(void* val){
 
 }
 
-void* Msg::GetResponse(){
+void* Msg::GetResponse() const{
 	return nullptr;
 }
 void Msg::SetResponse(void* val){
 
 }
 
-int Msg::GetOwnerId(){
+int Msg::GetOwnerId() const{
 	return 0;
 }
 void Msg::SetOwnerId(int val){

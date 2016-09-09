@@ -5,12 +5,16 @@
 #include <map>
 using namespace std;
 
+
 class EnFlags{
 private:
 	enum Operation { HAS, SET, RESET };
-	map<int, int>* states;
-	int GetStateIndex(int state);
-	int GetStateOffset(int state);
+	int statePart1;
+	int statePart2;
+	int statePart3;
+	int statePart4;
+	int GetStateIndex(int state) const;
+	int GetStateOffset(int state) const;
 
 public:
 	EnFlags();
@@ -27,13 +31,13 @@ public:
 
 	EnFlags(int state1, int state2, int state3, int state4, int state5);
 
-	EnFlags(const EnFlags &obj);
+	EnFlags(const EnFlags& obj);
 
 	~EnFlags();
 
-	CIwArray<int> GetAllStates();
+	CIwArray<int> GetAllStates() const;
 
-	bool HasState(int state);
+	bool HasState(int state) const;
 
 	void SetState(int state);
 
@@ -55,18 +59,18 @@ public:
 
 	EnFlags& operator-(int st2);
 
-	bool Contains(EnFlags other);
+	bool Contains(EnFlags& other) const;
 
-	bool ContainsAtLeastOne(EnFlags other);
+	bool ContainsAtLeastOne(EnFlags& other) const;
 
 };
 
 
 
-int EnFlags::GetStateIndex(int state){
+int EnFlags::GetStateIndex(int state) const{
 	return 0;
 }
-int EnFlags::GetStateOffset(int state){
+int EnFlags::GetStateOffset(int state) const{
 	return 0;
 }
 
@@ -99,7 +103,7 @@ EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
 
 }
 
-EnFlags::EnFlags(const EnFlags &obj){
+EnFlags::EnFlags(const EnFlags& obj){
 
 }
 
@@ -107,11 +111,11 @@ EnFlags::~EnFlags(){
 
 }
 
-CIwArray<int> EnFlags::GetAllStates(){
+CIwArray<int> EnFlags::GetAllStates() const{
 	return CIwArray<int>();
 }
 
-bool EnFlags::HasState(int state){
+bool EnFlags::HasState(int state) const{
 	return false;
 }
 
@@ -155,11 +159,11 @@ EnFlags& EnFlags::operator-(int st2){
 	return EnFlags();
 }
 
-bool EnFlags::Contains(EnFlags other){
+bool EnFlags::Contains(EnFlags& other) const{
 	return false;
 }
 
-bool EnFlags::ContainsAtLeastOne(EnFlags other){
+bool EnFlags::ContainsAtLeastOne(EnFlags& other) const{
 	return false;
 }
 

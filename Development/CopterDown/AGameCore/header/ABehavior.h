@@ -11,33 +11,33 @@ class ABehavior{
 
 protected:
 	static int idCounter;
-	ElemType _elemType;
-	int _id;
+	const ElemType _elemType;
+	const int _id;
 	BehState _behState;
 	EnFlags _msgInvoker;
 	GNode* _node;
 
 	ABehavior(ElemType elemType, EnFlags msgInvoker);
 
-	Msg* SendMessage(EnFlags traverse, int action, void* data);
+	void SendMessage(EnFlags traverse, int action, Msg& msg, void* data) const;
 
 public:
-	ElemType GetElemType();
+	ElemType GetElemType() const;
 
-	int GetId();
+	int GetId() const;
 
-	BehState GetBehState();
+	BehState GetBehState() const;
 
-	void SetBehState(BehState val);
+	void SetBehState(BehState val) ;
 
-	EnFlags GetMessageInvoker();
+	EnFlags& GetMessageInvoker();
 
-	GNode* GetGNode();
+	const GNode* GetGNode() const;
 
-	void SetGNode(GNode* node);
+	void SetGNode(const GNode* node);
 
-	virtual void OnMessage(Msg msg) const = 0;
-	virtual void Update(uint64 delta, uint64 absolute) const = 0;
+	virtual void OnMessage(Msg& msg) const = 0;
+	virtual void Update(const uint64 delta, const uint64 absolute) const = 0;
 };
 
 
@@ -45,26 +45,32 @@ public:
 
 int ABehavior::idCounter = 0;
 
-ABehavior::ABehavior(ElemType elemType, EnFlags msgInvoker) : _behState(BehState::ACTIVE_ALL), _elemType(elemType), _msgInvoker(msgInvoker) {
-	this->_id = idCounter++;
+ABehavior::ABehavior(ElemType elemType, EnFlags msgInvoker) : _behState(BehState::ACTIVE_ALL), 
+_elemType(elemType), _msgInvoker(msgInvoker), _id(idCounter++) {
+
 }
 
-Msg* ABehavior::SendMessage(EnFlags traverse, int action, void* data){
-	Msg* msg = new Msg(_elemType, traverse, action, SenderType::BEHAVIOR, _id, data);
+void ABehavior::SendMessage(EnFlags traverse, int action, Msg& msg, void* data) const{
+	msg.SetCategory(_elemType);
+	msg.SetTraverse(traverse);
+	msg.SetAction(action);
+	msg.SetSenderType(SenderType::BEHAVIOR);
+	msg.SetOwnerId(_id);
+	msg.SetData(data);
+	
 	_node->SendMessage(msg);
-	return msg;
 }
 
 
-ElemType ABehavior::GetElemType(){
+ElemType ABehavior::GetElemType() const{
 		return _elemType;
 	}
 
-int ABehavior::GetId(){
+int ABehavior::GetId() const{
 		return _id;
 	}
 
-BehState ABehavior::GetBehState(){
+BehState ABehavior::GetBehState() const{
 		return _behState;
 	}
 
@@ -72,16 +78,16 @@ void ABehavior::SetBehState(BehState val){
 		_behState = val;
 	}
 
-EnFlags ABehavior::GetMessageInvoker(){
+EnFlags& ABehavior::GetMessageInvoker(){
 		return _msgInvoker;
 	}
 
-GNode* ABehavior::GetGNode(){
+const GNode* ABehavior::GetGNode() const{
 		return _node;
 	}
 
-void ABehavior::SetGNode(GNode* node){
-		this->_node = node;
+void ABehavior::SetGNode(const GNode* node){
+	this->_node = const_cast<GNode*>(node);
 	}
 
 #endif

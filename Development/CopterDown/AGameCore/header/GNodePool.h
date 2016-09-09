@@ -21,16 +21,16 @@ public:
 	static GNodePool* Get();
 
 	void AddGameObject(GNode* node);
-	int GetGameObjCountBySubType(int type);
+	int GetGameObjCountBySubType(int type) const;
 	void RemoveGameObject(GNode* node);
 	void AddBehavior(ABehavior* beh);
 	void RemoveBehavior(ABehavior* beh);
-	bool IsRegisteredListener(int listenerType);
-	GNode* FindGameObjectById(int id);
-	GNode* FindGameObjectByTag(char* tag);
-	CIwArray<GNode*> FindGameObjectsByTag(char* tag);
-	GNode* FindGameObjectBySubType(int subtype);
-	CIwArray<GNode*> FindGameObjectsBySubType(int subtype);
+	bool IsRegisteredListener(int listenerType) const;
+	GNode* FindGameObjectById(int id) const;
+	GNode* FindGameObjectByTag(char* tag) const;
+	CIwArray<GNode*> FindGameObjectsByTag(char* tag) const;
+	GNode* FindGameObjectBySubType(int subtype) const;
+	CIwArray<GNode*> FindGameObjectsBySubType(int subtype) const;
 
 	void OnMessage(Msg msg);
 };

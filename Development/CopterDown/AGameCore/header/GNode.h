@@ -36,7 +36,7 @@ public:
 
 	~GNode();
 
-	void SendMessage(Msg* msg);
+	void SendMessage(Msg& msg) const;
 
 	void Update(int delta, int absolute);
 
@@ -48,50 +48,50 @@ public:
 
 	void RemoveAttr(int key);
 
-	template<class T> Attrx<T> FindAtt(int id);
+	template<class T> Attrx<T> FindAtt(int id) const;
 
-	template<class T> T FindAttValue(int id);
+	template<class T> T FindAttValue(int id) const;
 
-	CIwArray<Attr*> GetAttributes();
+	CIwArray<Attr*> GetAttributes() const;
 
-	CIwArray<ABehavior*> GetBehaviors();
+	CIwArray<ABehavior*> GetBehaviors() const;
 
-	CIwArray<GNode*>* GetChildren();
+	CIwArray<GNode*>* GetChildren() const;
 
 	void AddChild(GNode* child);
 
 	void RemoveChild(GNode* child);
 
-	GNode GetParent();
+	GNode GetParent() const;
 	void SetParent(GNode val);
 
-	int GetId();
+	int GetId() const;
 	void SetId(int val);
 
-	char* GetTag();
+	char* GetTag() const;
 	void SetTag(char* tag);
 
-	ObjType GetType();
+	ObjType GetType() const;
 	void SetType(ObjType val);
 
-	int GetSubType();
+	int GetSubType() const;
 	void SetSubType(int val);
 
-	GNode FindParent(ObjType type);
+	GNode FindParent(ObjType type) const;
 
-	GNode GetSceneRoot();
+	GNode GetSceneRoot() const;
 	
-	GNode GetRoot();
+	GNode GetRoot() const;
 
-	CIwFMat2D GetTransform();
+	CIwFMat2D GetTransform() const;
 	CIwFMat2D SetTransform(CIwFMat2D val);
 
 	template<class T> void AddAttribute(ElemType elemType, int key, T value);
 
-	EnFlags GetGroups();
+	EnFlags GetGroups() const;
 	void SetGroups(EnFlags val);
 
-	EnFlags GetStates();
+	EnFlags GetStates() const;
 	void SetStates(EnFlags val);
 };
 
@@ -104,7 +104,7 @@ GNode::~GNode(){
 
 }
 
-void GNode::SendMessage(Msg* msg){
+void GNode::SendMessage(Msg& msg) const{
 
 }
 
@@ -127,23 +127,23 @@ void GNode::RemoveAttr(int key){
 
 }
 
-template<typename T> Attrx<T> GNode::FindAtt(int id){
+template<typename T> Attrx<T> GNode::FindAtt(int id) const{
 	return Attrx<T>();
 }
 
-template<class T> T GNode::FindAttValue(int id){
+template<class T> T GNode::FindAttValue(int id) const{
 	return T();
 }
 
-CIwArray<Attr*> GNode::GetAttributes(){
+CIwArray<Attr*> GNode::GetAttributes() const{
 	return CIwArray<Attr*>();
 }
 
-CIwArray<ABehavior*> GNode::GetBehaviors(){
+CIwArray<ABehavior*> GNode::GetBehaviors() const{
 	return CIwArray<ABehavior*>();
 }
 
-CIwArray<GNode*>* GNode::GetChildren(){
+CIwArray<GNode*>* GNode::GetChildren() const{
 	return _children;
 }
 
@@ -155,7 +155,7 @@ void GNode::RemoveChild(GNode* child){
 
 }
 
-GNode GNode::GetParent(){
+GNode GNode::GetParent() const{
 	return GNode(ObjType::HUD, 12, nullptr);
 }
 
@@ -163,7 +163,7 @@ void GNode::SetParent(GNode val){
 
 }
 
-int GNode::GetId(){
+int GNode::GetId() const{
 	return 0;
 }
 
@@ -171,7 +171,7 @@ void GNode::SetId(int val){
 
 }
 
-char* GNode::GetTag(){
+char* GNode::GetTag() const{
 	return new char[5];
 }
 
@@ -179,7 +179,7 @@ void GNode::SetTag(char* tag){
 
 }
 
-ObjType GNode::GetType(){
+ObjType GNode::GetType() const{
 	return ObjType::HUD;
 }
 
@@ -187,7 +187,7 @@ void GNode::SetType(ObjType val){
 
 }
 
-int GNode::GetSubType(){
+int GNode::GetSubType() const{
 	return 0;
 }
 
@@ -195,19 +195,19 @@ void GNode::SetSubType(int val){
 
 }
 
-GNode GNode::FindParent(ObjType type){
+GNode GNode::FindParent(ObjType type) const{
 	return GNode(ObjType::HUD, 12, nullptr);
 }
 
-GNode GNode::GetSceneRoot(){
+GNode GNode::GetSceneRoot() const{
 	return GNode(ObjType::HUD, 12, nullptr);
 }
 
-GNode GNode::GetRoot(){
+GNode GNode::GetRoot() const{
 	return GNode(ObjType::HUD, 12, nullptr);
 }
 
-CIwFMat2D GNode::GetTransform(){
+CIwFMat2D GNode::GetTransform() const{
 	return CIwFMat2D();
 }
 
@@ -219,7 +219,7 @@ template<class T> void GNode::AddAttribute(ElemType elemType, int key, T value){
 
 }
 
-EnFlags GNode::GetGroups(){
+EnFlags GNode::GetGroups() const{
 	return EnFlags();
 }
 
@@ -227,7 +227,7 @@ void GNode::SetGroups(EnFlags val){
 
 }
 
-EnFlags GNode::GetStates(){
+EnFlags GNode::GetStates() const{
 	return EnFlags();
 }
 

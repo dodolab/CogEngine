@@ -10,68 +10,68 @@ class GNode;
 class Attr{
 protected:
 	GNode* _owner;
-	ElemType _elemType;
-	int _key;
+	const ElemType _elemType;
+	const int _key;
 
 public:
-	Attr(){
-
-	}
+	Attr();
 
 	Attr(ElemType type, GNode* owner, int key);
 
-	GNode* GetOwner();
+	const GNode* GetOwner() const;
 
-	ElemType GetElemType();
+	ElemType GetElemType() const;
 
-	int GetKey();
+	int GetKey() const;
 };
 
 
 template <typename  T>
 class Attrx : public Attr{
 protected:
-	T _value;
+	T* _value;
 	bool isEmpty;
-	void OnAttrChanged(T old, T newAt);
+	void OnAttrChanged(T& old, T& newAt);
 
 public:
-	Attrx(ElemType type, GNode* owner, int key, T val) : Attr(type, owner, key), _value(val){
+	Attrx() : Attr(){
 
 	}
 
-	Attrx() : Attr(), isEmpty(true){
+	Attrx(ElemType type, GNode* owner, int key, T& val) : Attr(type, owner, key), _value(val){
 
 	}
 
-	T GetValue(){
-		return _value;
+	T& GetValue(){
+		return *_value;
 	}
 
-	void SetValue(T val){
+	void SetValue(T& val){
 		this->_value = val;
 	}
 
-	bool HasValue(){
+	bool HasValue() const{
 		return !isEmpty;
 	}
 };
 
+Attr::Attr() : _elemType(ElemType::ALL), _key(0){
 
+}
 
 Attr::Attr(ElemType type, GNode* owner, int key) : _elemType(type), _owner(owner), _key(key){
 
 }
 
-GNode* Attr::GetOwner(){
+const GNode* Attr::GetOwner() const{
 	return _owner;
 }
 
-ElemType Attr::GetElemType(){
+ElemType Attr::GetElemType() const{
 	return _elemType;
 }
 
-int Attr::GetKey(){
+int Attr::GetKey() const{
 	return _key;
 }
 

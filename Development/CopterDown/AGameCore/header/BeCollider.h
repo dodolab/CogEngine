@@ -19,8 +19,8 @@ public:
 
 	BeCollider(int firstColGroup, int secondColGroup);
 
-	void OnMessage(Msg msg);
-	void Update(uint64 delta, uint64 absolute);
+	void OnMessage(Msg& msg);
+	void Update(const uint64 delta, const uint64 absolute);
 };
 
 
@@ -38,11 +38,11 @@ BeCollider::BeCollider(int firstColGroup, int secondColGroup) : BeCollider(EnFla
 
 }
 
-void BeCollider::OnMessage(Msg msg){
+void BeCollider::OnMessage(Msg& msg){
 
 }
 
-void BeCollider::Update(uint64 delta, uint64 absolute){
+void BeCollider::Update(const uint64 delta, const uint64 absolute){
 	CIwArray<GNode*>* childrens = _node->GetChildren();
 
 	for (int i = 0; i < childrens->size(); i++){
@@ -60,9 +60,9 @@ void BeCollider::Update(uint64 delta, uint64 absolute){
 				if ((isInFirstGroup && isSecondInSecondGroup) || (isInSecondGroup && isSecondInFirstGroup)){
 					Attrx<EnBounds*> firstBounds = first->FindAtt<EnBounds*>(Attrs::BOUNDS);
 
-					if (firstBounds.HasValue() && firstBounds.GetValue()->Collides(first, second)){
+					if (firstBounds.HasValue() && firstBounds.GetValue()->Collides(*first, *second)){
 						EnCollision* col = new EnCollision(first->GetId(), second->GetId());
-						Msg* msg = new Msg(ElemType::MODEL, Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, SenderType::BEHAVIOR, _id, col);
+						Msg msg(ElemType::MODEL, Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, SenderType::BEHAVIOR, _id, col);
 
 						_node->SendMessage(msg);
 					}
