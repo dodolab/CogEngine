@@ -12,3 +12,5 @@ Development/COGEngine/src/NoahFactory.cpp
 Development/COGEngine/src/NoahBeMenu.h
 Development/COGEngine/src/NoahBeFlip.h
 Development/COGEngine/src/NoahBeGame.h
+Development/NoahMatching/
+*.suo

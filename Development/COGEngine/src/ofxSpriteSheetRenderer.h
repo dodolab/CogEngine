@@ -27,10 +27,10 @@ public:
 	* @param _defaultLayer default layer index (0)
 	* @param _tileSize default size of one tile
 	*/
-	ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileSize);
+	ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileWidth, int _tileHeight);
 	~ofxSpriteSheetRenderer();
 
-	void reAllocateArrays(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileSize);
+	void reAllocateArrays(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileWidth, int _tileHeight);
 
 	/**
 	* Loads texture from file
@@ -38,7 +38,7 @@ public:
 	* @param internalGLScaleMode - opengl scaling, possibles values: GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST,
 	* GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_LINEAR
 	*/
-	void loadTexture(string fileName, int widthHeight, int internalGLScaleMode);
+	void loadTexture(string fileName, int width, int height, int internalGLScaleMode);
 	void loadTexture(ofTexture * _texture, bool isExternal = true);
 	void loadTexture(CollageTexture * _texture);
 	void loadTexture(SpriteTexture * _texture);
@@ -61,15 +61,23 @@ public:
 	void draw();
 
 	int getSpriteSheetWidth(){
-		return spriteSheetWidth;
-	};
+		return spriteSheet_width;
+	}
 
-	int getTileSize(){
-		return tileSize;
-	};
+	int getSpriteSheetHeight(){
+		return spriteSheet_height;
+	}
+
+	int getTileSizeWidth(){
+		return tileSize_w;
+	}
+
+	int getTileSizeHeight(){
+		return tileSize_h;
+	}
 
 	// texture creation ------------------------
-	void allocate(int widthHeight, int internalGLScaleMode);
+	void allocate(int width, int height, int internalGLScaleMode);
 	
 	void clearTexture();
 
@@ -81,7 +89,10 @@ public:
 
 protected:
 
-	float tileSize_f;
+	int tileWidth;
+	int tileHeight;
+	float tileSize_w;
+	float tileSize_h;
 	bool textureIsExternal;
 
 	ofTexture* texture;
@@ -89,14 +100,14 @@ protected:
 	int numLayers;
 	int defaultLayer;
 	int tilesPerLayer;
-	int tileSize;
 
 	float* verts;
 	float* coords;
 	unsigned char * colors;
 
 	int* numSprites;
-	int spriteSheetWidth;
+	int spriteSheet_width;
+	int spriteSheet_height;
 
 	void getFrameXandY(int tile_position, float &x, float &y);
 

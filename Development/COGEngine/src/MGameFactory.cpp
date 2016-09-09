@@ -239,39 +239,6 @@ GNode* CreateMask(int width, int height, ofVec3f position){
 
 
 
-
-
-
-ofVec3f MGameFactory::CalcScale(spt<ofImage> img, float width, GNode* scene){
-	int screenWidth = COGGetWidth();
-
-	// width is always 100 units !
-	float rel = width/100.0f;
-
-	float absoluteWidth = rel*screenWidth;
-
-	float otp = ((absoluteWidth / img->width)) / scene->GetTransform().AbsScale.x;
-	return ofVec3f(otp,otp,1);
-}
-
-float MGameFactory::RelPosX(float posX, GNode* scene){
-	int screenWidth = COGGetWidth();
-
-	// width is always 100 units !
-	float rel = posX/100.0f;
-
-	return (rel*screenWidth-screenWidth/2)/scene->GetTransform().AbsScale.x;
-}
-
-float MGameFactory::RelPosY(float posY, GNode* scene){
-	int screenHeight = COGGetHeight();
-
-	// width is always 60 units !
-	float rel = posY/60.0f;
-
-	return (rel*screenHeight - screenHeight / 2) / scene->GetTransform().AbsScale.x;
-}
-
 ofVec2f MGameFactory::GetCenter(){
 	return ofVec2f(COGGetWidth() / 2, COGGetHeight() / 2);
 }
@@ -320,6 +287,29 @@ void MGameFactory::SetRenderImageAbsolute(GNode* node, string imgPath, ofVec2f p
 
 	SetTransformAbs(node, pos, absolutePos, scaleX, absoluteScale, anchor, img->getWidth(), img->getHeight(), parent);
 
+}
+
+ofVec2f MGameFactory::CalcPositionAbsolute(GNode* node, ofVec2f pos, bool absolutePos, ofVec2f anchor, GNode* parent){
+	ofVec2f scrSize = MEngine.GetSize();
+	EnTransform& parentTrans = parent->GetTransform();
+	ofVec2f absPos;
+
+	if (absolutePos){
+		absPos = ofVec2f((pos.x - parentTrans.AbsPos.x) / parentTrans.AbsScale.x, (pos.y - parentTrans.AbsPos.y) / parentTrans.AbsScale.y);
+	}
+	else{
+		absPos = ofVec2f((pos.x*scrSize.x - parentTrans.AbsPos.x) / parentTrans.AbsScale.x, (pos.y*scrSize.y - parentTrans.AbsPos.y) / parentTrans.AbsScale.y);
+	}
+
+	return absPos;
+}
+
+ofVec3f MGameFactory::CalsScaleAbsolute(GNode* node, float scaleX, float width, bool absoluteScale, GNode* parent){
+	ofVec2f scrSize = MEngine.GetSize();
+	EnTransform& parentTrans = parent->GetTransform();
+	float calcScale = absoluteScale ? scaleX : (scaleX* scrSize.x / width) / parentTrans.AbsScale.x;
+
+	return ofVec3f(calcScale);
 }
 
 void MGameFactory::SetTransformAbs(GNode* node, ofVec2f pos, bool absolutePos, float scaleX, bool absoluteScale, ofVec2f anchor,int width, int height, GNode* parent){

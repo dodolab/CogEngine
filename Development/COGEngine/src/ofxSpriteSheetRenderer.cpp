@@ -1,6 +1,6 @@
 #include "ofxSpriteSheetRenderer.h"
 
-ofxSpriteSheetRenderer::ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileSize)
+ofxSpriteSheetRenderer::ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileWidth, int _tileHeight)
 {
 	texture = nullptr;
 	verts = nullptr;
@@ -11,7 +11,7 @@ ofxSpriteSheetRenderer::ofxSpriteSheetRenderer(int _numLayers, int _tilesPerLaye
 	textureIsExternal = false;
 	safeMode = true;
 
-	reAllocateArrays(_numLayers, _tilesPerLayer, _defaultLayer, _tileSize);
+	reAllocateArrays(_numLayers, _tilesPerLayer, _defaultLayer, _tileWidth, _tileHeight);
 
 	//shape stuff
 	brushIndex = -1;
@@ -34,10 +34,11 @@ ofxSpriteSheetRenderer::~ofxSpriteSheetRenderer()
 		delete[] numSprites;
 }
 
-void ofxSpriteSheetRenderer::reAllocateArrays(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileSize)
+void ofxSpriteSheetRenderer::reAllocateArrays(int _numLayers, int _tilesPerLayer, int _defaultLayer, int _tileWidth, int _tileHeight)
 {
 	numLayers = _numLayers;
-	tileSize = _tileSize;
+	tileWidth = _tileWidth;
+	tileHeight = _tileHeight;
 	tilesPerLayer = _tilesPerLayer;
 	defaultLayer = _defaultLayer;
 
@@ -73,20 +74,24 @@ void ofxSpriteSheetRenderer::clearTexture()
 	}
 }
 
-void ofxSpriteSheetRenderer::allocate(int widthHeight, int internalGLScaleMode)
+void ofxSpriteSheetRenderer::allocate(int width, int height, int internalGLScaleMode)
 {
 	if (texture == nullptr)
 	{
-		tileSize_f = tileSize;
+		tileSize_w = tileWidth;
+		tileSize_h = tileHeight;
+
 #ifdef TARGET_OPENGLES	// if we don't have arb, it's crazy important that things are power of 2 so that this float is set properly
-		tileSize_f /= widthHeight;
+		tileSize_w /= width;
+		tileSize_h /= height;
 #endif
 
-		spriteSheetWidth = widthHeight / tileSize;
+		spriteSheet_width = width / tileWidth;
+		spriteSheet_height = height / tileHeight;
 
 		CollageTexture * newTexture = new CollageTexture();
 
-		newTexture->allocate(widthHeight, widthHeight, GL_RGBA, internalGLScaleMode);
+		newTexture->allocate(width, height, GL_RGBA, internalGLScaleMode);
 
 		texture = (ofTexture*)newTexture;
 	}
@@ -106,11 +111,11 @@ void ofxSpriteSheetRenderer::finishTexture()
 	cTexture->finish();
 }
 
-void ofxSpriteSheetRenderer::loadTexture(string fileName, int widthHeight, int internalGLScaleMode)
+void ofxSpriteSheetRenderer::loadTexture(string fileName, int width, int height, int internalGLScaleMode)
 {
 	clearTexture();
 	clearCounters();
-	allocate(widthHeight, internalGLScaleMode);
+	allocate(width, height, internalGLScaleMode);
 	addMisc(fileName, 0, 0);
 	finishTexture();
 	textureIsExternal = false;
@@ -122,10 +127,14 @@ void ofxSpriteSheetRenderer::loadTexture(ofTexture * _texture, bool isExternal)
 	clearTexture();
 	textureIsExternal = isExternal;
 	texture = _texture;
-	spriteSheetWidth = _texture->getWidth() / tileSize;
-	tileSize_f = tileSize;
+	spriteSheet_width = _texture->getWidth() / tileWidth;
+	spriteSheet_height = _texture->getHeight() / tileHeight;
+	tileSize_w = tileWidth;
+	tileSize_h = tileHeight;
+
 #ifdef TARGET_OPENGLES	// if we don't have arb, it's crazy important that things are power of 2 so that this float is set properly
-	tileSize_f /= widthHeight;
+	tileSize_w /= (_texture->getWidth());
+	tileSize_h /= (_texture->getHeight());
 #endif
 
 }
@@ -215,9 +224,9 @@ bool ofxSpriteSheetRenderer::addTile(int index, int frame, float x, float y, flo
 
 	addTexCoords(f, framePos.x, framePos.y, layer, w, h);
 
-	w = w*scale*tileSize/2;
+	w = w*scale*tileWidth/2;
 
-	h*= h*scale*tileSize/2;
+	h*= h*scale*tileHeight/2;
 
 	//verticies ------------------------------------
 	makeQuad(vertexOffset, 
@@ -269,8 +278,8 @@ void ofxSpriteSheetRenderer::addTexCoords(flipDirection f, float &frameX, float 
 	int layerOffset = getLayerOffset(layer);
 	int coordOffset = getCoordOffset(layer);
 
-	w *= tileSize_f;
-	h *= tileSize_f;
+	w *= tileSize_w;
+	h *= tileSize_h;
 
 	switch (f) {
 	case F_NONE:
@@ -349,20 +358,20 @@ bool ofxSpriteSheetRenderer::addRect(float x, float y, float z, float w, float h
 
 void ofxSpriteSheetRenderer::getFrameXandY(int tile_position, float &x, float &y)
 {
-	y = (tile_position / spriteSheetWidth);
-	x = (tile_position - y * spriteSheetWidth);
+	y = (tile_position / spriteSheet_height);
+	x = (tile_position - y * spriteSheet_width);
 
-	x *= tileSize_f;
-	y *= tileSize_f;
+	x *= tileSize_w;
+	y *= tileSize_h;
 }
 
 ofPoint ofxSpriteSheetRenderer::getFramePosOnSheet(float _frameX, float _frameY, int _frame, float _w) {
 
 	ofPoint framePos;
 	framePos.set(_frameX, _frameY);
-	int rowNum = floor(_frame / spriteSheetWidth);
-	framePos.x += (_frame - spriteSheetWidth * rowNum) * _w * tileSize_f;
-	framePos.y += tileSize_f * rowNum;
+	int rowNum = floor(_frame / spriteSheet_width);
+	framePos.x += (_frame - spriteSheet_width * rowNum) * _w * tileSize_w;
+	framePos.y += tileSize_w * rowNum;
 	return framePos;
 }
 
@@ -380,6 +389,6 @@ void ofxSpriteSheetRenderer::setBrushIndex(int index, int wh)
 	brushIndex = index;
 	getFrameXandY(brushIndex, brushX, brushY);
 
-	brushSize = tileSize_f * wh;
+	brushSize = tileSize_w * wh;
 	halfBrushSize = brushSize / 2;
 }
