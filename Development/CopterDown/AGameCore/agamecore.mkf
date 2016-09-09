@@ -25,6 +25,22 @@ files
 
 	[Src]
     (src)
+	ABehavior.cpp
+	Attr.cpp
+	BeCollider.cpp
+	BeMove.cpp
+	BeRender.cpp
+	BeRotateAnim.cpp
+	BeTranslateAnim.cpp
+	EnBounds.cpp
+	EnCollision.cpp
+	EnInputAct.cpp
+	EnPair.cpp
+	EnFlags.cpp
+	EnUserAct.cpp
+	GNode.cpp
+	GNodePool.cpp
+	Msg.cpp
 
     [Docs]
     (docs)

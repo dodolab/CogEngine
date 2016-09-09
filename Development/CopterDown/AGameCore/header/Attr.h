@@ -3,7 +3,7 @@
 #define ATTR_H
 
 #include "Enums.h"
-#include "Gnode.h"
+
 
 class GNode;
 
@@ -26,7 +26,7 @@ public:
 };
 
 
-template <typename  T>
+template <class  T>
 class Attrx : public Attr{
 protected:
 	T* _value;
@@ -40,8 +40,16 @@ protected:
 
 public:
 
-	Attrx(ElemType type, GNode* owner, int key, T& val) : Attr(type, owner, key), _value(val){
+	Attrx(){
 
+	}
+
+	Attrx(ElemType type, GNode* owner, int key, T& val) : Attr(type, owner, key), _value(val){
+		
+	}
+
+	~Attrx(){
+		delete _value;
 	}
 
 	T& GetValue(){
@@ -58,25 +66,5 @@ public:
 	}
 };
 
-
-Attr::Attr() : _elemType(ElemType::ALL), _owner(nullptr), _key(0){
-
-}
-
-Attr::Attr(ElemType type, GNode* owner, int key) : _elemType(type), _owner(owner), _key(key){
-
-}
-
-const GNode* Attr::GetOwner() const{
-	return _owner;
-}
-
-ElemType Attr::GetElemType() const{
-	return _elemType;
-}
-
-int Attr::GetKey() const{
-	return _key;
-}
 
 #endif

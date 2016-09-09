@@ -11,25 +11,38 @@ private:
 	int _cycleNumber;
 
 public:
-	EnInputAct();
+	EnInputAct(){
 
-	EnInputAct(T& actValue);
+	}
 
-	bool GetHandled() const;
-	void SetHandled(bool val);
+	EnInputAct(T& actValue){
 
-	bool GetEnded() const;
-	void SetEnded(bool val);
+	}
 
-	int GetCycleNumber() const;
-	void SetCycleNumber(int val);
+	bool GetHandled() const{
+		return false;
+	}
+
+	void SetHandled(bool val){
+
+	}
+
+	bool GetEnded() const{
+		return false;
+	}
+
+	void SetEnded(bool val){
+
+	}
+
+	int GetCycleNumber() const{
+		return 0;
+	}
+
+	void SetCycleNumber(int val){
+
+	}
 };
-
-// need to be implemented
-template<class T>
-EnInputAct<T>::EnInputAct(){
-
-}
 
 
 #endif
