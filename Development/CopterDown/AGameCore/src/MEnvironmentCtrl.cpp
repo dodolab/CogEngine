@@ -149,6 +149,10 @@ void MEnvironmentCtrl::RemoveEndedInputs(){
 			GetPressedKeys().erase(it);
 			break;
 		}
+
+		if ((*it).started){
+			(*it).started = false;
+		}
 	}
 
 	// remove ended touches
@@ -156,6 +160,10 @@ void MEnvironmentCtrl::RemoveEndedInputs(){
 		if ((*it).ended){
 			GetPressedPoints().erase(it);
 			break;
+		}
+
+		if ((*it).started){
+			(*it).started = false;
 		}
 	}
 }
