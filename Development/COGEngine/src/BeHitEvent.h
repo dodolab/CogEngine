@@ -52,6 +52,8 @@ public:
 			if (owner->HasAttr(Attrs::IMGSOURCE)){
 				spt<ofImage> hitImage = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
 
+				bool atLeastOneTouch = false;
+
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 
 					ofVec3f touchVector = touch.position;
@@ -62,19 +64,22 @@ public:
 #ifdef TARGET_ANDROID
 							    ofxAndroidVibrator::vibrate(50);
 #endif
-							    owner->SetState(States::HIT);
+								atLeastOneTouch = true;
+								owner->SetState(States::HIT);
 								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
 						}
 						else if (touch.ended){
 							// todo: multitouch problem!!
-								owner->ResetState(States::HIT);
-								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+								//owner->ResetState(States::HIT);
+								//SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
 						}
 						else{
+							atLeastOneTouch = true;
 							if (!owner->HasState(States::HIT)){
 #ifdef TARGET_ANDROID
 							    ofxAndroidVibrator::vibrate(50);
 #endif
+								
 								owner->SetState(States::HIT);
 								SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_HIT, nullptr, owner);
 							}
@@ -82,12 +87,22 @@ public:
 					}
 					else{
 						if (owner->HasState(States::HIT)){
-							owner->ResetState(States::HIT);
-							SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+							//owner->ResetState(States::HIT);
+							//SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
 						}
 					}
 
+					
+
 				}
+
+				if (!atLeastOneTouch){
+					if (owner->HasState(States::HIT)){
+						owner->ResetState(States::HIT);
+						SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::OBJECT_RELEASED, nullptr, owner);
+					}
+				}
+
 			}
 			else{
 

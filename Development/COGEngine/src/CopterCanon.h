@@ -33,12 +33,12 @@ public:
 
 		if (actions.HasState((int)Act::LEFT)){
 			if (transform.Rotation > -80){
-				transform.Rotation -= 2;
+				transform.Rotation -= 5;
 			}
 		}
 		else if (actions.HasState((int)Act::RIGHT)){
 			if (transform.Rotation < 80){
-				transform.Rotation += 2;
+				transform.Rotation += 5;
 			}
 		}
 

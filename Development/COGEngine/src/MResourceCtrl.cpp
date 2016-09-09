@@ -52,3 +52,15 @@ spt<ofVboMesh> MResourceCtrl::GetMesh(string name){
 void MResourceCtrl::Terminate(){
 	//IwResManagerTerminate();
 }
+
+spt<ofTrueTypeFont> MResourceCtrl::GetFont(string name, int size){
+	ofTrueTypeFont::setGlobalDpi(72);
+
+	ofTrueTypeFont* font = new ofTrueTypeFont();
+
+	font->loadFont(name, size, true, true);
+	font->setLineHeight(18.0f);
+	font->setLetterSpacing(1.037);
+
+	return spt<ofTrueTypeFont>(font);
+}

@@ -206,17 +206,17 @@ void ofAndroidApp::windowResized(int w, int h){
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchDown(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,true);
+	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchMoved(int x, int y, int id){
-	MEngine.environmentCtrl->OnSingleTouchMotion(x,y);
+	MEngine.environmentCtrl->OnMultiTouchMotion(x,y,id);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchUp(int x, int y, int button){
-	MEngine.environmentCtrl->OnSingleTouchButton(x,y,button,false);
+	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,false);
 }
 
 //--------------------------------------------------------------

@@ -154,12 +154,14 @@ bool GNode::AddChild(GNode* child){
 	return true;
 }
 
-bool GNode::RemoveChild(GNode* child){
+bool GNode::RemoveChild(GNode* child, bool immediately){
 	auto found = find(_children.begin(), _children.end(), child);
 
 	bool result = _children.end() != found;
-	if (result) _childrenToRemove.push_back(child);
-
+	if (result){
+		if (immediately) _children.remove(child);
+		else _childrenToRemove.push_back(child);
+	}
 	return result;
 }
 

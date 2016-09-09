@@ -14,8 +14,10 @@ void MGameEngine::Update(uint64 delta, uint64 absolute){
 
 	this->_root->GetRoot()->UpdateTransforms();
 
-	this->_root->GetRoot()->Update(delta, absolute);
+	//this->_root->GetRoot()->Update(delta, absolute);
 
+	// fixed delta -> no glitches
+	this->_root->GetRoot()->Update(16, absolute);
 	environmentCtrl->RemoveEndedInputs();
 }
 

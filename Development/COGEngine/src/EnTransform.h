@@ -29,7 +29,7 @@ public:
 	}
 
 	void CalcAbsTransform(EnTransform& parent){
-		float angle = parent.AbsRotation / 180.0f*PI+(atan2(LocalPos.y, LocalPos.x));
+		float angle = parent.AbsRotation / 180.0f*PI + (atan2(LocalPos.y, LocalPos.x));
 		float length = sqrt(LocalPos.x*LocalPos.x + LocalPos.y*LocalPos.y);
 		ofVec3f rotPos = ofVec3f(length*cos(angle), length*sin(angle), LocalPos.z);
 		AbsPos = rotPos*parent.AbsScale + parent.AbsPos;

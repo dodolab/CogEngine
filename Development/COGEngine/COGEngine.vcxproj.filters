@@ -200,6 +200,12 @@
     <ClInclude Include="src\CopterPara.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\CopterLives.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CopterScore.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

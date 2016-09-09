@@ -34,7 +34,10 @@ public:
 			msg.GetSourceObject()->AddBehavior(new BeTempRender(MEngine.resourceCtrl->Get2DImage("images/explosion.png"), 3));
 
 			// remove copter with delay
-			if (health < 0) msg.GetSourceObject()->AddBehavior(new BeDelayRemove(100));
+			if (health < 0){
+				msg.GetSourceObject()->AddBehavior(new BeDelayRemove(100));
+				SendMessage(Traversation(ScopeType::SCENE, true, true), Actions::COPTER_KILLED, nullptr, msg.GetSourceObject());
+			}
 		}
 	}
 

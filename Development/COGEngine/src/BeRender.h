@@ -8,7 +8,7 @@
 
 /*! User input action enumerator */
 enum class RenderType{
-	IMAGE, RECTANGLE, POLYGON, ARC
+	IMAGE, RECTANGLE, POLYGON, ARC, TEXT
 };
 
 /**
@@ -45,6 +45,8 @@ public:
 		case RenderType::RECTANGLE:
 			RenderRectangle(owner);
 			break;
+		case RenderType::TEXT:
+			RenderText(owner);
 		}
 
 	}
@@ -84,6 +86,13 @@ public:
 
 		// todo: draw arc
 		//Iw2DFillArc(ofVec3f(0, 0), size, 0, PI * 2, 60);
+	}
+
+	void RenderText(GNode* owner){
+		ofSetColor(0,0,0);
+		spt<ofTrueTypeFont> font = owner->GetAttr<spt<ofTrueTypeFont>>(Attrs::FONT);
+		string text = owner->GetAttr<string>(Attrs::TEXT);
+		font->drawString(text, 0, 0);
 	}
 };
 

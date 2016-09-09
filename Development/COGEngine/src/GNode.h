@@ -150,7 +150,7 @@ public:
 	* @param child child to remove
 	* @return true, if child has been removed
 	*/
-	bool RemoveChild(GNode* child);
+	bool RemoveChild(GNode* child, bool immediately = false);
 
 	/**
 	* Gets pointer to the parent of this game node

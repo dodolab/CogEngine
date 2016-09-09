@@ -46,6 +46,7 @@ public:
 	}
 
 	virtual void Update(const uint64 delta, const uint64 absolute, GNode* owner){
+
 		if (!tweenEnded){
 			if (!tweenStarted) Init();
 
@@ -56,8 +57,14 @@ public:
 
 			float widthActual = width*actual;
 
-			tweenIn->GetTransform().LocalPos.x = width/2 + (width-widthActual);
-			tweenOut->GetTransform().LocalPos.x = width / 2 - widthActual;
+			if (direction == TweenDirection::RIGHT){
+				tweenOut->GetTransform().LocalPos.x = width / 2 + (widthActual);
+				tweenIn->GetTransform().LocalPos.x = -width / 2  + widthActual;
+			}
+			else if (direction == TweenDirection::LEFT){
+				tweenIn->GetTransform().LocalPos.x = width / 2 + (width - widthActual);
+				tweenOut->GetTransform().LocalPos.x = width / 2 - widthActual;
+			}
 		}
 	}
 };
