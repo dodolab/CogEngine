@@ -37,7 +37,7 @@ namespace CopterDown.Game
             var score = GameObject.FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE);
 
             TextBlock text = new TextBlock();
-            text.Text = "Score: " + score.Value.ToString();
+            text.Text = "Score: " + score.Value;
             text.FontSize = 20;
             GameLoop._canvas.Children.Add(text);
             Canvas.SetLeft(text, 20);
@@ -45,7 +45,7 @@ namespace CopterDown.Game
             Canvas.SetZIndex(text,10);
 
             text = new TextBlock();
-            text.Text = "Lives: " + lives.Value.ToString();
+            text.Text = "Lives: " + lives.Value;
             text.FontSize = 20;
             GameLoop._canvas.Children.Add(text);
             Canvas.SetLeft(text, 500);
@@ -68,10 +68,10 @@ namespace CopterDown.Game
 
                 GameObject copter = new GameObject(ObjectType.COPTER, "copter");
                 copter.SetTransform(new Core.CoreAttribs.Transform(posX, posY));
-                copter.AddModelAttribute<bool>(AT.AT_COPTER_LEFTDIRECTION, leftdirection);
-                copter.AddViewAttribute<int>(AT.AT_COM_FRAME, 0);
-                copter.AddModelAttribute<bool>(AT.AT_COPTER_PARA_ISHIT, false);
-                copter.AddViewAttribute<int>(AT.AT_COPTER_HITFRAME, 0);
+                copter.AddModelAttribute(AT.AT_COPTER_LEFTDIRECTION, leftdirection);
+                copter.AddViewAttribute(AT.AT_COM_FRAME, 0);
+                copter.AddModelAttribute(AT.AT_COPTER_PARA_ISHIT, false);
+                copter.AddViewAttribute(AT.AT_COPTER_HITFRAME, 0);
 
                 copter.AddViewBehavior(new CopterBehavior());
 
