@@ -3,18 +3,19 @@
 #define ENSTATE_H
 
 #include <map>
+#include "IwArray.h"
 using namespace std;
 
+#define FLAGS_COUNT 15
 
 class EnFlags{
 private:
 	enum Operation { HAS, SET, RESET };
-	int statePart1;
-	int statePart2;
-	int statePart3;
-	int statePart4;
+	int primaryPart;
+	int** secondParts;
 	int GetStateIndex(int state) const;
 	int GetStateOffset(int state) const;
+	
 
 public:
 	EnFlags();
@@ -77,42 +78,49 @@ int EnFlags::GetStateOffset(int state) const{
 
 EnFlags::EnFlags(){
 
-	}
+}
 
 EnFlags::EnFlags(CIwArray<int> states){
+	for (int i = 0; i < states.size(); i++) SetState(states[i]);
+}
+
+EnFlags::EnFlags(int state) : EnFlags(state, -1, -1, -1, -1){
 
 }
 
-EnFlags::EnFlags(int state){
+EnFlags::EnFlags(int state1, int state2) : EnFlags(state1, state2, -1, -1, -1){
 
 }
 
-EnFlags::EnFlags(int state1, int state2){
+EnFlags::EnFlags(int state1, int state2, int state3) : EnFlags(state1, state2, state3, -1, -1){
 
 }
 
-EnFlags::EnFlags(int state1, int state2, int state3){
-
-}
-
-EnFlags::EnFlags(int state1, int state2, int state3, int state4){
+EnFlags::EnFlags(int state1, int state2, int state3, int state4) : EnFlags(state1, state2, state3, state4, -1){
 
 }
 
 EnFlags::EnFlags(int state1, int state2, int state3, int state4, int state5){
-
+	if (state1 != -1) SetState(state1);
+	if (state2 != -1) SetState(state2);
+	if (state3 != -1) SetState(state3);
+	if (state4 != -1) SetState(state4);
+	if (state5 != -1) SetState(state5);
 }
 
 EnFlags::EnFlags(const EnFlags& obj){
-
+	CIwArray<int> allStates = obj.GetAllStates();
+	for (int i = 0; i < allStates.size(); i++) SetState(allStates[i]);
 }
 
 EnFlags::~EnFlags(){
-
+	delete[] secondParts;
 }
 
 CIwArray<int> EnFlags::GetAllStates() const{
-	return CIwArray<int>();
+	CIwArray<int> output;
+
+	return output;
 }
 
 bool EnFlags::HasState(int state) const{

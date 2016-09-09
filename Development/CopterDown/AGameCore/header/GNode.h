@@ -36,7 +36,7 @@ public:
 
 	~GNode();
 
-	void SendMessage(Msg& msg) const;
+	void SendMessage(Msg& msg, Msg& resp) const;
 
 	void Update(int delta, int absolute);
 
@@ -104,7 +104,7 @@ GNode::~GNode(){
 
 }
 
-void GNode::SendMessage(Msg& msg) const{
+void GNode::SendMessage(Msg& msg, Msg& resp) const{
 
 }
 

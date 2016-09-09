@@ -62,9 +62,8 @@ void BeCollider::Update(const uint64 delta, const uint64 absolute){
 
 					if (firstBounds.HasValue() && firstBounds.GetValue()->Collides(*first, *second)){
 						EnCollision* col = new EnCollision(first->GetId(), second->GetId());
-						Msg msg(ElemType::MODEL, Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, SenderType::BEHAVIOR, _id, col);
 
-						_node->SendMessage(msg);
+						SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr);
 					}
 				}
 			}

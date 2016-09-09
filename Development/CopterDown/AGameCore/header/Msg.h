@@ -5,97 +5,178 @@
 #include "Enums.h"
 #include "EnFlags.h"
 
+
+/**
+* Message that is used to send information between game objects
+* and their behaviors
+
+* Can be initialized using constructor or method Initialize
+* Can be initialized at most once
+*/
 class Msg{
 private:
+	// identifier counter
+	static int idCounter;
+	// id of this message
+	int _id;
+	// type of action
 	int _action;
+	// category
 	ElemType _category;
+	// for who is message intended
 	EnFlags _traverse;
+	// who is sender
 	SenderType _senderType;
+	// data payload (not mandatory)
 	void* _data;
-	void* _response;
+	// id of game object or behavior that sends this message
 	int _ownerId;
 
 public:
+
+	/**
+	* Creates uninitialized message
+	* Should be initialized using Initialize method
+	*/
+	Msg(){
+	}
+
+	~Msg(){
+		delete _data;
+	}
+
+	/**
+	* Crates a new message
+	* @param cat type of message (view, model)
+	* @param traverse state machine that indicates who should process this message
+	* @param action id of action; see Actions namespace for common action ids
+	* @param senderType type of sender (attribute, behavior, game object)
+	* @param ownerId id of the object who has sent this message
+	* @param data payload
+	* @return false, if message has been already initialized (and it can't be initialized more than once)
+	*/
 	Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
+
+	/**
+	* Crates a new message that will be traversed from the scene root
+	* @param cat type of message (view, model)
+	* @param action id of action; see Actions namespace for common action ids
+	* @param senderType type of sender (attribute, behavior, game object)
+	* @param ownerId id of the object who has sent this message
+	* @param data payload
+	* @return false, if message has been already initialized (and it can't be initialized more than once)
+	*/
 	Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* data);
 
-	int GetAction() const;
-	void SetAction(int val);
+	/**
+	* Gets id of action; see Actions for common action ids
+	*/
+	const int GetAction() const;
 
-	ElemType GetCategory() const;
-	void SetCategory(ElemType val);
+	/**
+	* Gets type of this message
+	*/
+	const ElemType GetCategory() const;
 
-	EnFlags GetTraverse() const;
-	void SetTraverse(EnFlags val);
+	/**
+	* Gets traversation state
+	*/
+	const EnFlags& GetTraverse() const;
 
-	SenderType GetSenderType() const;
-	void SetSenderType(SenderType val);
+	/**
+	* Gets type of sender object
+	*/
+	const SenderType GetSenderType() const;
 
-	void* GetData() const;
-	void SetData(void* val);
+	/**
+	* Gets data payload
+	*/
+	const void* GetData() const;
+	
+	/**
+	* Gets data payload
+	*/
+	void* GetData();
 
-	void* GetResponse() const;
-	void SetResponse(void* val);
+	/**
+	* Gets identifier of the sender object
+	*/
+	const int GetOwnerId() const;
 
-	int GetOwnerId() const;
-	void SetOwnerId(int val);
+	/**
+	* Indicates, if the message has been initialized
+	*/
+	const bool IsInitialized() const;
+
+	/**
+	* Initializes message, if it hasn't been initialized yet
+	* @param cat type of message (view, model)
+	* @param traverse state machine that indicates who should process this message
+	* @param action id of action; see Actions namespace for common action ids
+	* @param senderType type of sender (attribute, behavior, game object)
+	* @param ownerId id of the object who has sent this message
+	* @param data payload
+	* @return false, if message has been already initialized (and it can't be initialized more than once)
+	*/
+	bool Initialize(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
 };
 
+int Msg::idCounter = 0;
 
-Msg::Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data){
-
-}
-Msg::Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* data){
-
+Msg::Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data) : _category(cat), _traverse(traverse), _action(action),
+_senderType(senderType), _ownerId(ownerId), _data(data), _id(idCounter++) {
 }
 
-int Msg::GetAction() const{
-	return 0;
-}
-void Msg::SetAction(int val){
-
+Msg::Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* data) : _category(cat), _traverse(EnFlags(Traverses::SCENEROOT)), _action(action),
+_senderType(senderType), _ownerId(ownerId), _data(data), _id(idCounter++) {
 }
 
-ElemType Msg::GetCategory() const{
-	return ElemType::ALL;
-}
-void Msg::SetCategory(ElemType val){
-
+const int Msg::GetAction() const{
+	return _action;
 }
 
-EnFlags Msg::GetTraverse() const{
-	return EnFlags();
-}
-void Msg::SetTraverse(EnFlags val){
-
+const ElemType Msg::GetCategory() const{
+	return _category;
 }
 
-SenderType Msg::GetSenderType() const{
-	return SenderType::ATTR;
-}
-void Msg::SetSenderType(SenderType val){
-
+const EnFlags& Msg::GetTraverse() const{
+	return _traverse;
 }
 
-void* Msg::GetData() const{
-	return nullptr;
-}
-void Msg::SetData(void* val){
-
+const SenderType Msg::GetSenderType() const{
+	return _senderType;
 }
 
-void* Msg::GetResponse() const{
-	return nullptr;
-}
-void Msg::SetResponse(void* val){
-
+const void* Msg::GetData() const{
+	return _data;
 }
 
-int Msg::GetOwnerId() const{
-	return 0;
+void* Msg::GetData(){
+	return _data;
 }
-void Msg::SetOwnerId(int val){
 
+const int Msg::GetOwnerId() const{
+	return _ownerId;
+}
+
+const bool Msg::IsInitialized() const{
+	return _id == 0;
+}
+
+bool Msg::Initialize(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data){
+	if (!IsInitialized()){
+		_id == idCounter++;
+
+		_category = cat;
+		_traverse = traverse;
+		_action = action;
+		_senderType = senderType;
+		_ownerId = ownerId;
+		_data = data;
+
+		return true;
+	}
+	else return false;
 }
 
 
