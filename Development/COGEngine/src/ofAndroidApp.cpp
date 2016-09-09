@@ -3,6 +3,8 @@
 #include "ofAndroidApp.h"
 #include "MGameEngine.h"
 #include "CopterFactory.h"
+#include "NoahFactory.h"
+#include "MFacade.h"
 
 //The circle parameters
 float Rad = 25; 			//Raduis of circle
@@ -20,7 +22,7 @@ void ofAndroidApp::setup(){
 	ofEnableSmoothing();
 	ofEnableAntiAliasing();
 	// initialize game engine
-	MEngine.Init(new CopterFactory(), new MGameStorage());
+	MEngine.Init(new NoahFactory());
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
 /*
@@ -198,25 +200,26 @@ void ofAndroidApp::keyReleased(int key){
 
 }
 
+
 //--------------------------------------------------------------
 void ofAndroidApp::windowResized(int w, int h){
-	COGOnScreenSizeChanged(w,h);
+	MEngine.environmentCtrl->OnScreenSizeChanged(w,h);
 }
 
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchDown(int x, int y, int button){
-	COGOnMultiTouchButton(x,y,button,true);
+	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,true);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchMoved(int x, int y, int id){
-	COGOnMultiTouchMotion(x,y,id);
+	MEngine.environmentCtrl->OnMultiTouchMotion(x,y,id);
 }
 
 //--------------------------------------------------------------
 void ofAndroidApp::touchUp(int x, int y, int button){
-	COGOnMultiTouchButton(x,y,button,false);
+	MEngine.environmentCtrl->OnMultiTouchButton(x,y,button,false);
 }
 
 //--------------------------------------------------------------

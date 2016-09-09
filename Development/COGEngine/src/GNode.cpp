@@ -9,6 +9,11 @@
 // first id is always 1
 int GNode::idCounter = 1;
 
+GNode::GNode(string tag) : _type(ObjType::OBJECT), _subType(0), _id(idCounter++), _transform(0, 0){
+	Construct();
+	if (!tag.empty()) SetTag(tag);
+}
+
 GNode::GNode(ObjType type, int subType, string tag):  _type(type), _subType(subType), _id(idCounter++), _transform(0,0){
 	Construct();
 	if (!tag.empty()) SetTag(tag);
@@ -132,6 +137,7 @@ bool GNode::AddBehavior(GBehavior* beh){
 	beh->owner = this;
 	_behaviors.push_back(beh);
 	COGAddBehavior(beh);
+	beh->Init();
 	return true;
 }
 
@@ -299,29 +305,45 @@ void GNode::SetStates(EnFlags val){
 	this->_states = new EnFlags(val);
 }
 
-string GNode::GetInfo(bool complete){
+string GNode::GetInfo(bool includeChildren, bool includeAttributes){
 	std::ostringstream ss;
-	GetInfo(complete, ss, 0);
+	GetInfo(includeChildren,includeAttributes, ss, 0);
 	std::cout << ss.str() << std::endl;
 	return ss.str();
 }
 
 
-void GNode::GetInfo(bool complete, std::ostringstream& ss, int level){
+void GNode::GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level){
 	spaces(level * 4, ss);
-	ss << (*_tag) << " " << _subType << std::endl;
+	ss << "--" << (*_tag) << " " << _subType << std::endl;
 	
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		GBehavior* beh = (*it);
 		spaces(level * 4 + 2, ss);
-		ss << typeid(*beh).name() << std::endl;
+		ss << "beh " << typeid(*beh).name() << std::endl;
+	}
+
+	for (auto it = _attributes.begin(); it != _attributes.end(); ++it){
+		spaces(level * 4 + 2, ss);
+		int key = (*it).first;
+		ss << "att " << Attrs::ToString(key) << std::endl;
+	}
+
+	if (_states != nullptr){
+		vector<int> states = _states->GetAllStates();
+		for (auto it = states.begin(); it != states.end(); ++it){
+			spaces(level * 4 + 2, ss);
+			int state = (*it);
+			ss << "st  " << States::ToString(state) << std::endl;
+		}
 	}
 
 	ss << std::endl;
 
-	if (complete){
+	if (includeChildren){
+		// write info 
 		for (auto it = _children.begin(); it != _children.end(); ++it){
-			(*it)->GetInfo(complete, ss, level + 1);
+			(*it)->GetInfo(includeChildren, includeAttributes, ss, level + 1);
 		}
 	}
 }

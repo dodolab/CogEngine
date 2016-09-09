@@ -15,8 +15,12 @@ private:
 	CopterFactory* factory;
 
 public:
-	CopterCollisionMgr(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::COLLISION_OCURRED)){
+	CopterCollisionMgr(CopterFactory* factory) : GBehavior(ElemType::MODEL){
 		this->factory = factory;
+	}
+
+	void Init(){
+		RegisterListening(Actions::COLLISION_OCURRED);
 	}
 
 	virtual void OnMessage(GMsg& msg){

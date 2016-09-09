@@ -18,7 +18,7 @@ private:
 
 
 public:
-	BeInputKey() : GBehavior(ElemType::MODEL, EnFlags()){
+	BeInputKey() : GBehavior(ElemType::MODEL){
 
 	}
 

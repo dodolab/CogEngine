@@ -15,8 +15,12 @@ private:
 
 
 public:
-	CopterLives(int lives) : GBehavior(ElemType::MODEL, EnFlags(Actions::PARA_GROUNDED)){
+	CopterLives(int lives) : GBehavior(ElemType::MODEL){
 		this->lives = lives;
+	}
+
+	void Init(){
+		RegisterListening(Actions::PARA_GROUNDED);
 	}
 
 	virtual void OnMessage(GMsg& msg){

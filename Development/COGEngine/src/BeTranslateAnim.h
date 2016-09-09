@@ -24,7 +24,7 @@ private:
 	bool _stopped;
 
 public:
-	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL, EnFlags()),
+	BeTranslateAnim(ofVec3f from, ofVec3f to, float speed, bool additive, bool repeat) : GBehavior(ElemType::MODEL),
 		_additive(additive), _to(to), _from(from), _repeat(repeat){
 		this->_actual = ofVec3f(from);
 		this->_distX = to.x - from.x;

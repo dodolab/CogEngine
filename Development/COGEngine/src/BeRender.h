@@ -17,7 +17,7 @@ class BeRender : public GBehavior{
 private:
 	RenderType _type;
 public:
-	BeRender(RenderType type) : GBehavior(ElemType::VIEW, EnFlags()){
+	BeRender(RenderType type) : GBehavior(ElemType::VIEW){
 		this->_type = type;
 	}
 

@@ -10,7 +10,7 @@ void MGameStorage::SendMessageToBehaviors(GMsg& msg, GNode* actualNode){
 		if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
 			(beh->GetId() != msg.GetBehaviorId()) &&
 			(msg.GetCategory() == ElemType::ALL || beh->GetElemType() == msg.GetCategory())){
-			if (beh->GetMessageFlags().HasState(msg.GetAction())){
+			if (IsRegisteredListener(msg.GetAction(), beh)){
 				beh->OnMessage(msg);
 			}
 		}

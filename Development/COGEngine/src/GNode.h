@@ -69,6 +69,8 @@ protected:
 	
 public:
 
+	GNode(string tag);
+
 	/**
 	* Creates a new game object
 	* @param type object type {ROOT, SCENE, OBJECT, HUD, INFO}
@@ -388,9 +390,9 @@ public:
 		return _id != other._id;
 	}
 
-	string GetInfo(bool complete);
+	string GetInfo(bool includeChildren, bool includeAttributes);
 
-	void GetInfo(bool complete, std::ostringstream& ss, int level);
+	void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
 	friend class MGameStorage;
 };

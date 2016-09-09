@@ -18,7 +18,7 @@ protected:
 	float speed;
 
 public:
-	BeTween(GNode* tweenIn, GNode* tweenOut, float speed) : GBehavior(ElemType::MODEL, EnFlags()), tweenIn(tweenIn), tweenOut(tweenOut), speed(speed){
+	BeTween(GNode* tweenIn, GNode* tweenOut, float speed) : GBehavior(ElemType::MODEL), tweenIn(tweenIn), tweenOut(tweenOut), speed(speed){
 		tweenStarted = false;
 		tweenEnded = false;
 	}
@@ -53,6 +53,7 @@ public:
 
 			float widthActual = width*actual;
 
+
 			if (direction == TweenDirection::RIGHT){
 				tweenOut->GetTransform().LocalPos.x = width / 2 + (widthActual);
 				tweenIn->GetTransform().LocalPos.x = -width / 2  + widthActual;
@@ -60,6 +61,11 @@ public:
 			else if (direction == TweenDirection::LEFT){
 				tweenIn->GetTransform().LocalPos.x = width / 2 + (width - widthActual);
 				tweenOut->GetTransform().LocalPos.x = width / 2 - widthActual;
+			}
+
+			if (actual >= 1.0f){
+				tweenEnded = true;
+				SendMessage(Traversation(ScopeType::DIRECT_NO_TRAVERSE, true, true), Actions::TWEEN_ENDED, nullptr, tweenIn);
 			}
 		}
 	}

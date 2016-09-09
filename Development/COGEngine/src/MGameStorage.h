@@ -14,6 +14,7 @@ class MGameStorage{
 private:
 	map<int, vector<std::pair<int,MsgCallback>>> callBackListeners;
 	map<int, vector<GBehavior*>> behListeners;
+	map<int, vector<int>> behListenerActions;
 
 	static int callBackIdCounter;
 	// list of all game objects
@@ -78,6 +79,12 @@ public:
 
 		vector<GBehavior*>& listeners = behListeners[action];
 		listeners.push_back(beh);
+
+		if (behListenerActions.find(beh->GetId()) == behListenerActions.end()){
+			behListenerActions[beh->GetId()] = vector<int>();
+		}
+
+		behListenerActions[beh->GetId()].push_back(action);
 	}
 
 	void UnregisterListener(int action, GBehavior* beh){
@@ -93,12 +100,26 @@ public:
 		}
 	}
 
+	void UnregisterListener(GBehavior* beh){
+		if (behListenerActions.find(beh->GetId()) != behListenerActions.end()){
+			behListenerActions.erase(beh->GetId());
+		}
+	}
+
 	void SendTraversationMessage(GMsg& msg, GNode* actualNode);
 
 	void SendMessage(GMsg& msg);
 
 	bool IsRegisteredListener(int key) const{
 		return behListeners.find(key) != behListeners.end();
+	}
+
+	bool IsRegisteredListener(int action, GBehavior* beh){
+		if (behListenerActions.find(beh->GetId()) == behListenerActions.end()) return false;
+
+		vector<int>& actions = behListenerActions[beh->GetId()];
+
+		return (std::find(actions.begin(), actions.end(), action) != actions.end());
 	}
 
 	bool IsRegisteredCallBack(int key) const{
@@ -138,13 +159,6 @@ public:
 		if (found == allBehaviors.end()){
 			allBehaviors.push_back(beh);
 
-			const EnFlags& flags = beh->GetMessageFlags();
-			vector<int> allStates = flags.GetAllStates();
-
-			for (auto it = allStates.begin(); it != allStates.end(); ++it){
-				RegisterListener((*it), beh);
-			}
-
 			return true;
 		}
 		else return false;
@@ -154,12 +168,7 @@ public:
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found != allBehaviors.end()) allBehaviors.erase(found);
 
-		const EnFlags& flags = beh->GetMessageFlags();
-		vector<int> allStates = flags.GetAllStates();
-
-		for (auto it = allStates.begin(); it != allStates.end(); ++it){
-			UnregisterListener((*it),beh);
-		}
+		UnregisterListener(beh);
 	}
 
 	void OnMessage(GMsg msg){

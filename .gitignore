@@ -6,3 +6,9 @@ Development/PrototypeSolution/Prototype/Prototype/bin/
 Development/MARMSolution/CopterDown/build_copterdown_vc11/
 Development/MARMSolution/CopterDown/build_copterdown_vc12x/
 Development/MARMSolution/CopterDown/project_CopterDown/
+Development/COGEngine/bin/data/noah/
+Development/COGEngine/src/NoahFactory.h
+Development/COGEngine/src/NoahFactory.cpp
+Development/COGEngine/src/NoahBeMenu.h
+Development/COGEngine/src/NoahBeFlip.h
+Development/COGEngine/src/NoahBeGame.h

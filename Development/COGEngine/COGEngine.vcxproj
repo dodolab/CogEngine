@@ -110,10 +110,15 @@
     <ClCompile Include="src\MGameFactory.cpp" />
     <ClCompile Include="src\MGameStorage.cpp" />
     <ClCompile Include="src\MResourceCtrl.cpp" />
+    <ClCompile Include="src\NoahFactory.cpp" />
     <ClCompile Include="src\ofAndroidApp.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ofxSpriteSheetRenderer.cpp" />
+    <ClCompile Include="src\ofxXmlSettings.cpp" />
     <ClCompile Include="src\PixelTexture.cpp" />
+    <ClCompile Include="src\tinyxml.cpp" />
+    <ClCompile Include="src\tinyxmlerror.cpp" />
+    <ClCompile Include="src\tinyxmlparser.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,11 +164,17 @@
     <ClInclude Include="src\MGameStorage.h" />
     <ClInclude Include="src\MLogger.h" />
     <ClInclude Include="src\MResourceCtrl.h" />
+    <ClInclude Include="src\NoahBeFlip.h" />
+    <ClInclude Include="src\NoahBeGame.h" />
+    <ClInclude Include="src\NoahBeMenu.h" />
+    <ClInclude Include="src\NoahFactory.h" />
     <ClInclude Include="src\ofAndroidApp.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ofxSpriteSheetRenderer.h" />
+    <ClInclude Include="src\ofxXmlSettings.h" />
     <ClInclude Include="src\PixelTexture.h" />
     <ClInclude Include="src\SmartPointer.h" />
+    <ClInclude Include="src\tinyxml.h" />
     <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>

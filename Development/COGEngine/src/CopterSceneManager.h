@@ -15,10 +15,14 @@ private:
 	bool finishingMode;
 
 public:
-	CopterSceneManager(CopterFactory* factory) : GBehavior(ElemType::MODEL, EnFlags(Actions::OBJECT_HIT, Actions::PLAYER_LOOSE)), factory(factory){
+	CopterSceneManager(CopterFactory* factory) : GBehavior(ElemType::MODEL), factory(factory){
 		_behState = BehState::ACTIVE_ALL;
 		actualScene = 1;
 		finishingMode = false;
+	}
+
+	void Init(){
+		RegisterListening(Actions::OBJECT_HIT, Actions::PLAYER_LOOSE);
 	}
 
 	void OnMessage(GMsg& msg){
