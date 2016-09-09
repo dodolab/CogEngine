@@ -33,5 +33,7 @@ namespace Attrs{
 
 /*! States*/
 namespace States{
-	extern int HITTABLE = 1;
+	 int HITTABLE = 1;
+	 int TO_LEFT=2;
+	 int TO_RIGHT=3;
 }

@@ -27,7 +27,7 @@ GNode* CreateFirst(){
 		child->GetTransform().LocalPos = actualSize;
 		if (i == 0){
 			child->GetTransform().LocalPos = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
-			child->GetTransform().Scale = scale * 30;
+			child->GetTransform().Scale =  Vectorf3(scale * 30,scale * 30,scale * 30);
 			child->AddAttr(Attrs::IMGSOURCE, rytmus);
 			child->SetState(States::HITTABLE);
 			child->AddBehavior(new BeHitEvent());
@@ -51,7 +51,7 @@ GNode* CreateFirst(){
 		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
 		sChild->AddBehavior(new BeHitEvent());
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -63,7 +63,7 @@ GNode* CreateFirst(){
 		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
 		sChild->AddBehavior(new BeHitEvent());
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -75,7 +75,7 @@ GNode* CreateFirst(){
 		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
 		sChild->AddBehavior(new BeHitEvent());
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -87,7 +87,7 @@ GNode* CreateFirst(){
 		sChild->SetState(States::HITTABLE);
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
 		sChild->AddBehavior(new BeHitEvent());
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		actual = child;
@@ -114,7 +114,7 @@ GNode* CreateSecond(){
 		child->GetTransform().LocalPos = actualSize;
 		if (i == 0){
 			child->GetTransform().LocalPos = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
-			child->GetTransform().Scale = scale * 30;
+			child->GetTransform().Scale = Vectorf3(scale * 30, scale * 30, scale * 30);
 			child->SetState(States::HITTABLE);
 			child->AddBehavior(new BeHitEvent());
 		}
@@ -132,7 +132,7 @@ GNode* CreateSecond(){
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
 		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -141,7 +141,7 @@ GNode* CreateSecond(){
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
 		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale =Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -150,7 +150,7 @@ GNode* CreateSecond(){
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
 		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		sChild = new GNode(ObjType::OBJECT, 0, "other");
@@ -159,7 +159,7 @@ GNode* CreateSecond(){
 		sChild->AddAttr(Attrs::SIZE, actualSize / 4);
 		sChild->AddBehavior(new BeRender(RenderType::RECTANGLE));
 		sChild->AddBehavior(new BeRotateAnim(0, 0, 2, false));
-		sChild->GetTransform().Scale = 0.4f;
+		sChild->GetTransform().Scale = Vectorf3(0.4f,0.4f,0.4f);
 		child->AddChild(sChild);
 
 		actual = child;
@@ -181,7 +181,7 @@ GNode* CreateThird(){
 
 	GNode* child = new GNode(ObjType::OBJECT, 10, "other");
 	child->GetTransform().LocalPos = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2);
-	child->GetTransform().Scale = scale * 10;
+	child->GetTransform().Scale = Vectorf3(scale * 10, scale * 10, scale * 10);
 	child->AddAttr(Attrs::IMGSOURCE, rytmus);
 	child->SetState(States::HITTABLE);
 	child->AddBehavior(new BeHitEvent());
@@ -197,7 +197,7 @@ GNode* CreateThird(){
 			MEngine.environmentCtrl->GetHeight() / 2 + MEngine.environmentCtrl->GetWidth() / 2));
 
 		particle->GetTransform().LocalPos = randomTransform;
-		particle->GetTransform().Scale = scale*2;
+		particle->GetTransform().Scale = Vectorf3(scale * 2, scale * 2, scale * 2);
 		particle->GetTransform().RotationOrigin = Vectorf3(MEngine.environmentCtrl->GetWidth() / 2, MEngine.environmentCtrl->GetHeight() / 2) - particle->GetTransform().LocalPos;
 		particle->AddAttr<spt<ofImage>>(Attrs::IMGSOURCE, image);
 	
@@ -234,12 +234,40 @@ GNode* CreateMask(int width, int height, Vectorf3 position){
 
 
 
+Vectorf3 MGameFactory::CalcScale(spt<ofImage> img, float width, GNode* scene){
+	int screenWidth = MEngine.environmentCtrl->GetWidth();
 
+	// width is always 100 units !
+	float rel = width/100.0f;
+
+	float absoluteWidth = rel*screenWidth;
+
+	float otp= ((absoluteWidth/img->width))/scene->GetTransform().Scale.x;
+	return Vectorf3(otp,otp,otp);
+}
+
+float MGameFactory::RelPosX(float posX, GNode* scene){
+	int screenWidth = MEngine.environmentCtrl->GetWidth();
+
+	// width is always 100 units !
+	float rel = posX/100.0f;
+
+	return (rel*screenWidth-screenWidth/2)/scene->GetTransform().Scale.x;
+}
+
+float MGameFactory::RelPosY(float posY, GNode* scene){
+	int screenHeight = MEngine.environmentCtrl->GetHeight();
+
+	// width is always 60 units !
+	float rel = posY/60.0f;
+
+	return (rel*screenHeight-screenHeight/2)/scene->GetTransform().Scale.x;
+}
 
 
 void MGameFactory::SetTransform(GNode* node, float posX, float posY, float scale){
 	node->GetTransform().LocalPos = Vectorf3(posX, posY);
-	node->GetTransform().Scale = scale;
+	node->GetTransform().Scale = Vectorf3(scale,scale,scale);
 }
 
 // TODO !!!!! create Renderable entity with ANCHORS
@@ -291,4 +319,8 @@ GNode* MGameFactory::CreateRoot(){
 
 	return _root;
 
+}
+
+void MGameFactory::SwitchToScene(int scene){
+	// nothing to do here...
 }

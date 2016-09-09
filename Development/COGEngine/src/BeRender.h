@@ -30,7 +30,7 @@ public:
 	virtual void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 
 		ofLoadMatrix(absMatrix);
-
+		int mojo = owner->GetSubType();
 		switch (_type){
 		case RenderType::ARC:
 			RenderArc(owner);
@@ -52,11 +52,11 @@ public:
 
 		ofSetColor(0x000000ff);
 		spt<ofImage> image = owner->GetAttr<spt<ofImage>>(Attrs::IMGSOURCE);
-		//image->draw(-image->getWidth()/2,-image->getHeight()/2);
-		spt<ofVboMesh> mesh = MEngine.resourceCtrl->GetMesh("images/blue.png");
+		image->draw(-image->getWidth()/2,-image->getHeight()/2);
+		/*spt<ofVboMesh> mesh = MEngine.resourceCtrl->GetMesh("images/blue.png");
 		image->bind();
 		mesh->draw();
-		image->unbind();
+		image->unbind();*/
 	}
 
 	void RenderPolygon(GNode* owner){

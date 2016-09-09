@@ -7,6 +7,12 @@
 class MGameFactory{
 
 protected:
+	Vectorf3 CalcScale(spt<ofImage> img, float width, GNode* scene);
+
+	float RelPosX(float posX, GNode* scene);
+
+	float RelPosY(float posY, GNode* scene);
+
 	void SetTransform(GNode* node, float posX, float posY, float scale);
 
 	void SetRenderImage(GNode* node, string imgPath, bool isHittable);
@@ -23,6 +29,8 @@ public:
 	void Terminate(){
 
 	}
+
+	virtual void SwitchToScene(int scene);
 	
 	virtual GNode* CreateRoot();
 
