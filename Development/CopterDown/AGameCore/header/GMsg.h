@@ -1,4 +1,3 @@
-
 #ifndef MSG_H
 #define MSG_H
 
@@ -13,7 +12,7 @@
 * Can be initialized using constructor or method Initialize
 * Can be initialized at most once
 */
-class Msg{
+class GMsg{
 private:
 	// identifier counter
 	static int idCounter;
@@ -38,10 +37,10 @@ public:
 	* Creates uninitialized message
 	* Should be initialized using Initialize method
 	*/
-	Msg(){
+	GMsg(){
 	}
 
-	~Msg(){
+	~GMsg(){
 		//delete _data;
 	}
 
@@ -55,7 +54,7 @@ public:
 	* @param data payload
 	* @return false, if message has been already initialized (and it can't be initialized more than once)
 	*/
-	Msg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
+	GMsg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
 
 	/**
 	* Creates a new message that will be traversed from the scene root
@@ -66,7 +65,7 @@ public:
 	* @param data payload
 	* @return false, if message has been already initialized (and it can't be initialized more than once)
 	*/
-	Msg(ElemType cat, int action, SenderType senderType, int ownerId, void* data);
+	GMsg(ElemType cat, int action, SenderType senderType, int ownerId, void* data);
 
 	/**
 	* Gets id of action; see Actions for common action ids

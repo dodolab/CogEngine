@@ -1,10 +1,9 @@
-
-#ifndef ABEHAVIOR_H
-#define ABEHAVIOR_H
+#ifndef GBEHAVIOR_H
+#define GBEHAVIOR_H
 
 #include "EnFlags.h"
 #include "Enums.h"
-#include "Msg.h"
+#include "GMsg.h"
 #include <list>
 #include "IwGeomFMat2D.h"
 
@@ -12,16 +11,16 @@ class GNode;
 
 
 /**
-* ABehavior - common abstract class for all behaviors
+* GBehavior - common abstract class for all behaviors
 *
 */
-class ABehavior{
+class GBehavior{
 
 protected:
 	// identifier incremental counter
 	static int idCounter;
 	// dummy response message
-	static Msg _dummyMsg;
+	static GMsg _dummyMsg;
 	// element type {ALL, VIEW, MODEL}
 	const ElemType _elemType;
 	// identifier
@@ -31,7 +30,7 @@ protected:
 	// message acceptation mask
 	EnFlags _msgFlags;
 
-	virtual ~ABehavior()
+	virtual ~GBehavior()
 	{
 
 	}
@@ -41,7 +40,7 @@ protected:
 	* @param elemType element type {ALL, VIEW, MODEL}
 	* @param msgFlags message acceptation mask
 	*/
-	ABehavior(ElemType elemType, EnFlags msgFlags);
+	GBehavior(ElemType elemType, EnFlags msgFlags);
 
 	/**
 	* Sends a message, expecting response
@@ -51,7 +50,7 @@ protected:
 	* @param resp response that can be initialized only once
 	* @param target target game object
 	*/
-	void SendMessage(EnFlags traverse, int action, void* data, Msg& resp, GNode* target) const;
+	void SendMessage(EnFlags traverse, int action, void* data, GMsg& resp, GNode* target) const;
 
 	/**
 	* Sends a message without response
@@ -106,9 +105,9 @@ public:
 
 	/**
 	* Receives a message
-	* @param msg received message
+	* @param GMsg received message
 	*/
-	virtual void OnMessage(Msg& msg)  = 0;
+	virtual void OnMessage(GMsg& msg)  = 0;
 
 	/**
 	* Updates behavior inner state
@@ -122,7 +121,7 @@ public:
 		return this->_id == id;
 	}
 
-	bool operator==(const ABehavior& other){
+	bool operator==(const GBehavior& other){
 		return _id == other._id;
 	}
 
@@ -130,7 +129,7 @@ public:
 		return this->_id != id;
 	}
 
-	bool operator!=(const ABehavior& other){
+	bool operator!=(const GBehavior& other){
 		return _id != other._id;
 	}
 

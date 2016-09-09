@@ -14,7 +14,7 @@ using namespace Iw2DSceneGraphCore;
 MGameEngine MEngine;
 
 void MGameEngine::Update(uint64 delta, uint64 absolute){
-	this->gameCtrl->GetRoot()->Update(delta, absolute, CIwFMat2D::g_Identity);
+	this->_root->GetRoot()->Update(delta, absolute, CIwFMat2D::g_Identity);
 }
 
 void MGameEngine::Draw(uint64 delta, uint64 absolute){
@@ -22,33 +22,28 @@ void MGameEngine::Draw(uint64 delta, uint64 absolute){
 	Iw2DSurfaceClear(0xff000000);
 
 	// draw the root node
-	this->gameCtrl->GetRoot()->Draw(delta, absolute, CIwFMat2D::g_Identity);
+	this->_root->GetRoot()->Draw(delta, absolute, CIwFMat2D::g_Identity);
 
 	// Show the drawing surface
 	Iw2DSurfaceShow();
 }
 
 
-void MGameEngine::Init(){
+void MGameEngine::Init(MGameFactory* factory, MGameStorage* storage){
 
 	environmentCtrl = new MEnvironmentCtrl();
-	gameCtrl = new MGameCtrl();
 	resourceCtrl = new MResourceCtrl();
+	this->factory = factory;
+	this->storage = storage;
 
 	absolute = s3eTimerGetMs();
 
-	// initialize 2D graphic system
-	Iw2DInit();
-	// initialize common graphic system
-	IwGxInit();
-	
-	// dont use mipmaps -> better memory usage
-	Iw2DSetUseMipMapping(false);
-
-	resourceCtrl->Init();
 	environmentCtrl->Init();
+	resourceCtrl->Init();
+	factory->Init();
+	storage->Init();
 
-	gameCtrl->Init();
+	_root = factory->CreateRoot();
 }
 
 void MGameEngine::StartLoop(){
@@ -73,7 +68,10 @@ void MGameEngine::StartLoop(){
 }
 
 void MGameEngine::Terminate(){
+	storage->Terminate();
+	factory->Terminate();
 	resourceCtrl->Terminate();
+	environmentCtrl->Terminate();
+
 	Iw2DTerminate();
-	IwGxTerminate();
 }

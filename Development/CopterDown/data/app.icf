@@ -19,7 +19,11 @@
 [S3E]
 MemSize=64000000
 MemSizeDebug=64000000
+DispFixRot=FixedLandscape # fix to a single landscape orientation
+
+
 [Util]
 MemMgrMaxAllocWarning=0
 [GX]
 DataCacheSize=64365
+

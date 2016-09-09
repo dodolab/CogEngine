@@ -23,6 +23,7 @@ subprojects
     iwresmanager
     iwtween
 	AGameCore
+	CopterDown
 }
 
 deployment
@@ -31,3 +32,8 @@ deployment
 }
 
 option cflags="-std=c++11"
+#### AUTO GENERATED deployment settings from DeployTool.exe. Do not edit below this line ####
+deployments
+{
+	["Default"]
+}

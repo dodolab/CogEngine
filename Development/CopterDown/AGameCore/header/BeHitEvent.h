@@ -1,26 +1,27 @@
 #ifndef BE_HITEVENT_H
 #define BE_HITEVENT_H
 
-#include "ABehavior.h"
+#include "GBehavior.h"
 #include "MGameEngine.h"
 #include "EnHitImage.h"
 #include "IwGeomFMat2D.h"
 #include "BeTranslateAnim.h"
+#include "Enums.h"
 
 /**
 * Behavior for hit testing
 */
-class BeHitEvent : public ABehavior{
+class BeHitEvent : public GBehavior{
 private:
 
 
 
 public:
-	BeHitEvent() : ABehavior(ElemType::MODEL, EnFlags()){
+	BeHitEvent() : GBehavior(ElemType::MODEL, EnFlags()){
 
 	}
 
-	virtual void OnMessage(Msg& msg){
+	virtual void OnMessage(GMsg& msg){
 
 	}
 
@@ -43,32 +44,32 @@ public:
 
 		if (index == 1){
 			third->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
-			BeTranslateAnim* trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth() * 2, 0), CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			BeTranslateAnim* trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth() * 2, 0), Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			third->AddBehavior(trans);
 
-			trans = new BeTranslateAnim(CIwFVec2(first->GetTransform().LocalPos.x, 0), CIwFVec2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(first->GetTransform().LocalPos.x, 0), Vectorf2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			first->AddBehavior(trans);
-			trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), CIwFVec2(0, 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), Vectorf2(0, 0), 1, false, false);
 			second->AddBehavior(trans);
 		}
 		else if (index == 2){
 			first->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
-			BeTranslateAnim* trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth() * 2, 0), CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			BeTranslateAnim* trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth() * 2, 0), Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			first->AddBehavior(trans);
 
-			trans = new BeTranslateAnim(CIwFVec2(second->GetTransform().LocalPos.x, 0), CIwFVec2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(second->GetTransform().LocalPos.x, 0), Vectorf2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			second->AddBehavior(trans);
-			trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), CIwFVec2(0, 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), Vectorf2(0, 0), 1, false, false);
 			third->AddBehavior(trans);
 		}
 		else{
 			second->GetTransform().LocalPos.x = MEngine.environmentCtrl->GetWidth() * 2;
-			BeTranslateAnim* trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth() * 2, 0), CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			BeTranslateAnim* trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth() * 2, 0), Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			second->AddBehavior(trans);
 
-			trans = new BeTranslateAnim(CIwFVec2(third->GetTransform().LocalPos.x, 0), CIwFVec2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(third->GetTransform().LocalPos.x, 0), Vectorf2(-MEngine.environmentCtrl->GetWidth(), 0), 1, false, false);
 			third->AddBehavior(trans);
-			trans = new BeTranslateAnim(CIwFVec2(MEngine.environmentCtrl->GetWidth(), 0), CIwFVec2(0, 0), 1, false, false);
+			trans = new BeTranslateAnim(Vectorf2(MEngine.environmentCtrl->GetWidth(), 0), Vectorf2(0, 0), 1, false, false);
 			first->AddBehavior(trans);
 		}
 	}
@@ -83,8 +84,8 @@ public:
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 
 					if (touch.started){
-						CIwFVec2 touchVector = touch.position;
-						CIwFVec2 touchTrans = absMatrix.GetInverse().TransformVec(touchVector);
+						Vectorf2 touchVector = touch.position;
+						Vectorf2 touchTrans = absMatrix.GetInverse().TransformVec(touchVector);
 
 
 						if (hitImage->HitTest(touchTrans)){
@@ -128,10 +129,10 @@ public:
 
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 					if (touch.started){
-						CIwFVec2 touchVector = touch.position;
-						CIwFVec2 touchTrans = absMatrix.GetInverse().TransformVec(touchVector);
-						CIwFVec2 size = owner->GetAttr<CIwFVec2>(Attrs::SIZE);
-						CIwFVec2 sizeTrans = owner->GetTransform().Scale*size;
+						Vectorf2 touchVector = touch.position;
+						Vectorf2 touchTrans = absMatrix.GetInverse().TransformVec(touchVector);
+						Vectorf2 size = owner->GetAttr<Vectorf2>(Attrs::SIZE);
+						Vectorf2 sizeTrans = owner->GetTransform().Scale*size;
 
 						if (touchTrans.x+sizeTrans.x/2 <= sizeTrans.x && touchTrans.y+sizeTrans.y/2 <= sizeTrans.y &&
 							touchTrans.x+sizeTrans.x/2 >= 0 && touchTrans.y+sizeTrans.y/2>=0){

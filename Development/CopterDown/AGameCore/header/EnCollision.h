@@ -1,4 +1,3 @@
-
 #ifndef ENCOLLISION_H
 #define ENCOLLISION_H
 

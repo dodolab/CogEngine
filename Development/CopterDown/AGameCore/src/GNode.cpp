@@ -1,13 +1,14 @@
 #include "GNode.h"
-#include "ABehavior.h"
-#include "GNodePool.h"
+#include "GBehavior.h"
+#include "MGameStorage.h"
 #include <vector>
 #include <list>
 #include <string>
+#include "MGameEngine.h"
 
 // first id is always 1
 int GNode::idCounter = 1;
-Msg GNode::_dummyMsg = Msg();
+GMsg GNode::_dummyMsg = GMsg();
 
 GNode::GNode(ObjType type, int subType, string tag):  _type(type), _subType(subType), _id(idCounter++){
 	if (!tag.empty()) SetTag(tag);
@@ -30,21 +31,21 @@ GNode::~GNode(){
 	delete _states;
 
 	// delete all behaviors
-	for (list<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
+	for (list<GBehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
 	{
 		delete (*it);
 	}
 	_behaviors.clear();
 
-	for (map<int, Attr*>::iterator it = _attributes.begin(); it != _attributes.end(); ++it){
+	for (map<int, GAttr*>::iterator it = _attributes.begin(); it != _attributes.end(); ++it){
 		delete (it->second);
 	}
 }
 
-void GNode::SendMessage(Msg& msg, Msg& resp){
-	GNodePool::Get()->OnMessage(msg);
+void GNode::SendMessage(GMsg& msg, GMsg& resp){
+	MEngine.storage->OnMessage(msg);
 
-	if (GNodePool::Get()->IsRegisteredListener(msg.GetAction())){
+	if (MEngine.storage->IsRegisteredListener(msg.GetAction())){
 		if (msg.GetTraverse().HasState(Traverses::ROOT)){
 			msg.GetTraverse().ResetState(Traverses::ROOT);
 
@@ -76,7 +77,7 @@ void GNode::SendMessage(Msg& msg, Msg& resp){
 		}
 
 		for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
-			ABehavior* beh = (*it);
+			GBehavior* beh = (*it);
 			if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
 				(msg.GetSenderType() != SenderType::BEHAVIOR || beh->GetId() != msg.GetOwnerId()) &&
 				(msg.GetCategory() == ElemType::ALL || beh->GetElemType() == msg.GetCategory())){
@@ -94,7 +95,7 @@ void GNode::SendMessage(Msg& msg, Msg& resp){
 	}
 }
 
-void GNode::SendMessageNoResp(Msg& msg){
+void GNode::SendMessageNoResp(GMsg& msg){
 	SendMessage(msg, _dummyMsg);
 }
 
@@ -108,7 +109,7 @@ void GNode::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& a
 	}
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
-		ABehavior* beh = *it;
+		GBehavior* beh = *it;
 	    if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) && beh->GetElemType() == ElemType::MODEL){
 			beh->Update(delta, absolute, absoluteMatrix, this);
 		}
@@ -120,7 +121,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 	CIwFMat2D absoluteMatrix = _transform.GetMatrix()*absMatrix;
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
-		ABehavior* beh = (*it);
+		GBehavior* beh = (*it);
 
 		if (beh->GetElemType() == ElemType::VIEW && (beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES)){
 			beh->Update(delta, absolute, absoluteMatrix, this);
@@ -132,12 +133,12 @@ void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix
 	}
 }
 
-bool GNode::AddBehavior(ABehavior* beh){
+bool GNode::AddBehavior(GBehavior* beh){
 	_behaviors.push_back(beh);
 	return true;
 }
 
-bool GNode::RemoveBehavior(ABehavior* beh){  
+bool GNode::RemoveBehavior(GBehavior* beh){  
 	auto found = find(_behaviors.begin(), _behaviors.end(),beh);
 	
 	bool result = _behaviors.end() != found;
@@ -149,10 +150,10 @@ bool GNode::RemoveBehavior(ABehavior* beh){
 
 bool GNode::RemoveAttr(int key){
 	
-	map<int, Attr*>::iterator it = _attributes.find(key);
+	map<int, GAttr*>::iterator it = _attributes.find(key);
 
 	if (it != _attributes.end()){
-		Attr* attr = it->second;
+		GAttr* attr = it->second;
 		_attributes.erase(it);
 		delete attr;
 		return true;
@@ -164,11 +165,11 @@ bool GNode::HasAttr(int key) const{
 	return _attributes.find(key) != _attributes.end();
 }
 
-list<ABehavior*> GNode::GetBehaviorsCopy() const{
+list<GBehavior*> GNode::GetBehaviorsCopy() const{
 	return _behaviors;
 }
 
-const list<ABehavior*>& GNode::GetBehaviors() const{
+const list<GBehavior*>& GNode::GetBehaviors() const{
 	return _behaviors;
 }
 

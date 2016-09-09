@@ -1,0 +1,13 @@
+includepath header
+includepath src
+
+files
+{
+	[Header]
+    (header)
+
+	[Src]
+    (src)
+	
+
+}

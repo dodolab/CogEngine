@@ -1,18 +1,15 @@
-
-#ifndef GNODEPOOL_H
-#define GNODEPOOL_H
+#ifndef GAMESTORAGE_H
+#define GAMESTORAGE_H
 
 #include <map>
 #include "GNode.h"
-#include "ABehavior.h"
+#include "GBehavior.h"
 
 /**
-* GNodePool - game object manager
+* MGameStorage - game object manager
 */
-class GNodePool{
+class MGameStorage{
 private:
-	// singleton instance
-	static GNodePool* _instance;
 	// behavior listeners
 	map<int, int> behListeners;
 	// types counter
@@ -20,19 +17,21 @@ private:
 	// list of all game objects
 	list<GNode*> allGameObjects;
 	// list of all behaviors
-	list<ABehavior*> allBehaviors;
+	list<GBehavior*> allBehaviors;
 
 public:
-	GNodePool(){
+
+	void Init(){
+
+	}
+	void Terminate(){
 
 	}
 
-	static GNodePool* Get(){
-		if (_instance == nullptr){
-			_instance = new GNodePool();
-		}
-		return _instance;
+	MGameStorage(){
+
 	}
+
 
 	bool IsRegisteredListener(int listenerType) const{
 		return true;
@@ -73,11 +72,9 @@ public:
 		return output;
 	}
 
-	void OnMessage(Msg msg){
+	void OnMessage(GMsg msg){
 
 	}
 };
-
-GNodePool* GNodePool::_instance = nullptr;
 
 #endif

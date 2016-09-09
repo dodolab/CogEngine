@@ -1,4 +1,3 @@
-
 #ifndef ENSTATE_H
 #define ENSTATE_H
 

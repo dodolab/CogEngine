@@ -1,6 +1,12 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+#include "IwGeomFVec2.h"
+
+typedef CIwFVec2 Vectorf2;
+
+
+
 /*! User input action enumerator */
 enum class Act{
 	NONE=0,		/*!< none */
