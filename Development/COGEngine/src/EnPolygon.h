@@ -4,7 +4,7 @@
 
 class EnPolygon{
 public:
-	Vectorf3 *verts;
+	ofVec3f *verts;
 	int vertCount;
 };
 

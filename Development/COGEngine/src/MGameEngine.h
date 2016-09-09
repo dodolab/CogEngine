@@ -46,6 +46,16 @@ public:
 	void Init(MGameFactory* factory, MGameStorage* storage);
 	void StartLoop();
 	void Terminate();
+
+	// help functions
+	ofVec2f GetSize(){
+		return ofVec2f(environmentCtrl->GetWidth(), environmentCtrl->GetHeight());
+	}
+
+	float TranslateSpeed(float speed){
+		// speed = 1 translates over the whole width per 10 seconds
+		return speed * 0.001f*environmentCtrl->GetWidth();
+	}
 };
 
 

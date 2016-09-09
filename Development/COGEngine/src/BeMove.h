@@ -21,7 +21,7 @@ public:
 	void Update(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner){
 		EnTransform& transform = owner->GetTransform();
 
-		Vectorf3 velocity = owner->GetAttr<Vectorf3>(Attrs::VELOCITY);
+		ofVec3f velocity = owner->GetAttr<ofVec3f>(Attrs::VELOCITY);
 
 		transform.LocalPos.x += velocity.x * delta;
 		transform.LocalPos.y += velocity.y * delta;

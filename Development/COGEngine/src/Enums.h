@@ -3,7 +3,6 @@
 
 #include "ofMain.h"
 
-typedef ofVec3f Vectorf3;
 typedef unsigned int uint64;
 
 
@@ -20,7 +19,7 @@ enum class Act{
 
 /*! Types of traversation */
 namespace Traverses{
-	extern int CHILD_FIRST;	/*!< child is updated first */
+	extern int CHILD_FIRST;     /*!< child is updated first */
 	extern int BEH_FIRST;		/*!< behaviors are updated first */
 	extern int ROOT;			/*!< root is updated first */
 	extern int SCENEROOT;		/*!< scene root is updated first */
@@ -36,6 +35,7 @@ namespace Actions{
 	extern int COLLISION_OCURRED;
 	extern int GAMEOBJECT_DESTROYED;
 	extern int ATTRIBUTE_CHANGED;
+	extern int OBJECT_HIT;
 }
 
 

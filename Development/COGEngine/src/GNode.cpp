@@ -47,7 +47,7 @@ GNode::~GNode(){
 void GNode::SendMessage(GMsg& msg, GMsg& resp){
 	MEngine.storage->OnMessage(msg);
 
-	if (MEngine.storage->IsRegisteredListener(msg.GetAction())){
+	//if (MEngine.storage->IsRegisteredListener(msg.GetAction())){
 		if (msg.GetTraverse().HasState(Traverses::ROOT)){
 			msg.GetTraverse().ResetState(Traverses::ROOT);
 
@@ -94,7 +94,7 @@ void GNode::SendMessage(GMsg& msg, GMsg& resp){
 				(*it)->SendMessage(msg, resp);
 			}
 		}
-	}
+//	}
 }
 
 void GNode::SendMessageNoResp(GMsg& msg){

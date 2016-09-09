@@ -20,10 +20,10 @@ spt<ofImage> MResourceCtrl::Get2DImage(string name){
 
 	ofVboMesh* mesh = new ofVboMesh();
 	mesh->setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-	mesh->addVertex(Vectorf3(-img->width/2,-img->height/2,1));
-	mesh->addVertex(Vectorf3(img->width/2,-img->height/2,1));
-	mesh->addVertex(Vectorf3(-img->width/2,img->height/2,1));
-	mesh->addVertex(Vectorf3(img->width/2,img->height/2,1));
+	mesh->addVertex(ofVec3f(-img->width/2,-img->height/2,1));
+	mesh->addVertex(ofVec3f(img->width/2,-img->height/2,1));
+	mesh->addVertex(ofVec3f(-img->width/2,img->height/2,1));
+	mesh->addVertex(ofVec3f(img->width/2,img->height/2,1));
 
 	// todo: for some devices (android) it has to be normalized
 	mesh->addTexCoord(ofVec2f(0,0));

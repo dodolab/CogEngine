@@ -6,32 +6,30 @@
 #include "BeTranslateAnim.h"
 #include "Enums.h"
 
-typedef  void(*HitHandler)(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner);
-
 /**
 * Behavior for hit testing
 */
 class BeHitEvent : public GBehavior{
 private:
-	HitHandler handler;
+	int handlerId;
 
 
 public:
 	BeHitEvent() : GBehavior(ElemType::MODEL, EnFlags()){
-		handler = nullptr;
+		handlerId = -1;
 	}
 
-	BeHitEvent(HitHandler hitHandler) : GBehavior(ElemType::MODEL, EnFlags()){
-		this->handler = hitHandler;
+	BeHitEvent(int handlerId) : GBehavior(ElemType::MODEL, EnFlags()), handlerId(handlerId){
+
 	}
 
 	virtual void OnMessage(GMsg& msg){
 
 	}
 
-	bool ImageHitTest(spt<ofImage> image, Vectorf3 testPos){
+	bool ImageHitTest(spt<ofImage> image, ofVec3f testPos){
 		//Move the test position into "local" coordinate space
-		Vectorf3 localPos = testPos + Vectorf3(image->width / 2, image->height / 2);
+		ofVec3f localPos = testPos + ofVec3f(image->width / 2, image->height / 2);
 		//Test for location outside the image rectangle
 		if (localPos.x < 0
 			|| localPos.y < 0
@@ -54,12 +52,14 @@ public:
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 
 					if (touch.started){
-						Vectorf3 touchVector = touch.position;
-						Vectorf3 touchTrans = touchVector*absMatrix.getInverse();
+						ofVec3f touchVector = touch.position;
+						ofVec3f touchTrans = touchVector*absMatrix.getInverse();
 
-						if(ImageHitTest(hitImage, touchTrans)){
+						if (ImageHitTest(hitImage, touchTrans)){ 
 							// is hit
-							if (handler != nullptr) handler(delta, absolute, absMatrix, owner);
+							//if (handlerId != -1){
+								SendMessageNoResp(Traverses::BEH_FIRST, Actions::OBJECT_HIT, nullptr, owner);
+							//}
 						}
 					}
 				}
@@ -68,10 +68,10 @@ public:
 
 				for (auto touch : MEngine.environmentCtrl->GetPressedPoints()){
 					if (touch.started){
-						Vectorf3 touchVector = touch.position;
-						Vectorf3 touchTrans = absMatrix.getInverse()*(touchVector);
-						Vectorf3 size = owner->GetAttr<Vectorf3>(Attrs::SIZE);
-						Vectorf3 sizeTrans = owner->GetTransform().Scale*size;
+						ofVec3f touchVector = touch.position;
+						ofVec3f touchTrans = absMatrix.getInverse()*(touchVector);
+						ofVec3f size = owner->GetAttr<ofVec3f>(Attrs::SIZE);
+						ofVec3f sizeTrans = owner->GetTransform().Scale*size;
 
 						if (touchTrans.x+sizeTrans.x/2 <= sizeTrans.x && touchTrans.y+sizeTrans.y/2 <= sizeTrans.y &&
 							touchTrans.x+sizeTrans.x/2 >= 0 && touchTrans.y+sizeTrans.y/2>=0){

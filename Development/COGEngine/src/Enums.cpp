@@ -16,6 +16,7 @@ namespace Actions{
 	int COLLISION_OCURRED = 5;
 	int GAMEOBJECT_DESTROYED = 6;
 	int ATTRIBUTE_CHANGED = 7;
+	int OBJECT_HIT = 8;
 }
 
 

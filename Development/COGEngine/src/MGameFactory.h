@@ -4,22 +4,25 @@
 
 #include "GNode.h"
 
+
 class MGameFactory{
 
 protected:
-	Vectorf3 CalcScale(spt<ofImage> img, float width, GNode* scene);
+	ofVec3f CalcScale(spt<ofImage> img, float width, GNode* scene);
 
 	float RelPosX(float posX, GNode* scene);
 
 	float RelPosY(float posY, GNode* scene);
 
-	void SetTransform(GNode* node, float posX, float posY, float scale);
+	ofVec2f GetCenter();
+
+	void SetTransform(GNode* node, float posX, float posY, ofVec2f scale);
 
 	void SetRenderImage(GNode* node, string imgPath, bool isHittable);
 
-	void SetSingleBackground(GNode* node, string imgPath, bool isHittable);
+	void SetRenderImage(GNode* node, string imgPath, float pScaleX, ofVec2f pPos, ofVec2f anchor);
 
-	Vectorf3 GetPercentageVec(float xPerc, float yPerc);
+	ofVec3f GetPercentageVec(float xPerc, float yPerc);
 
 
 public:

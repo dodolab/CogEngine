@@ -176,6 +176,9 @@
     <ClInclude Include="src\ofAndroidApp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\CopterSceneManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
