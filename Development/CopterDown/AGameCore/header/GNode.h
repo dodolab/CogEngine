@@ -10,6 +10,7 @@
 #include "IwList.h"
 #include "EnBounds.h"
 #include "IwMap.h"
+#include "Enums.h"
 
 using namespace std;
 
@@ -66,13 +67,13 @@ public:
 	* @param msg message that will be sent
     * @param resp response that could be filled (at most once)
 	*/
-	void SendMessage(Msg& msg, Msg& resp) const;
+	void SendMessage(Msg& msg, Msg& resp);
 
 	/**
 	* Sends a message to behaviors and other game objects, expecting no response
 	* @param msg message that will be sent
 	*/
-	void SendMessageNoResp(Msg& msg) const;
+	void SendMessageNoResp(Msg& msg);
 
 	/**
 	* Updates behavior inner state
@@ -241,53 +242,84 @@ public:
 	void SetStates(EnFlags& val);
 
 	/**
+	* Add Attribute Value
 	* Adds a new attribute, using regular object
 	* @param key key of the attribute
 	* @param elemType type of attribute {ALL, MODEL, VIEW}
 	* @param value attribute value
 	*/
-	template<class T> void AddAttr(int key, ElemType elemtype, T value){
+	template<class T> void AddAttrV(int key, ElemType elemType, T value){
+		if(_attributes.find(key) != _attributes.end()){
+			RemoveAttr(key);
+		}
 
+		_attributes[key] = new AttrR<T>(key, elemType, value, this);
 	}
 
 	/**
+	* Add Attribute Reference
 	* Adds a new attribute, using reference
 	* @param key key of the attribute
 	* @param elemType type of attribute {ALL, MODEL, VIEW}
 	* @param value reference
 	* @param managed if true, attribute will be destroyed together with attribute
 	*/
-	template<class T> void AddAttr(int key, ElemType elemType, T const& value, bool managed){
+	template<class T> void AddAttrR(int key, ElemType elemType, T& value){
+		if (_attributes.find(key) != _attributes.end()){
+			RemoveAttr(key);
+		}
 
+		_attributes[key] = new AttrR<T>(key, elemType, value, this);
 	}
 
 	/**
+	* Add Attribute Pointer
 	* Adds a new attribute, using pointer
 	* @param key key of the attribute
 	* @param elemType type of attribute {ALL, MODEL, VIEW}
 	* @param value pointer
-	* @param managed if true, attribute will be destroyed together with attribute
 	*/
-	template<class T> void AddAttr(int key, ElemType elemtype, T const* value, bool managed){
+	template<class T> void AddAttrP(int key, ElemType elemType, T* value){
+		if (_attributes.find(key) != _attributes.end()){
+			RemoveAttr(key);
+		}
 
+		_attributes[key] = new AttrP<T>(key, elemType, value, this, false);
 	}
 
 	/**
-	* Finds an attribute
-	* @param key attribute key
-	*/
-	template<class T> T const& FindAttr(int key) const{
-		return *(new T());
-	}
-
-	/**
-	* Finds unmanaged attribute; if it doesn't exist, creates a new
-	* Warning! Use this method only for primitive types or classes of primitive types!
-	* @param key attribute key
+	* Add Attribute Pointer Managed
+	* Adds a new attribute, using pointer; attribute is managed - will be deleted when removed from game object
+	* @param key key of the attribute
 	* @param elemType type of attribute {ALL, MODEL, VIEW}
+	* @param value pointer
 	*/
-	template<class T> T const& FindOrCreateAttr(int key, ElemType elemtype){
-		return *(new T());
+	template<class T> void AddAttrPM(int key, ElemType elemType, T* value){
+		if (_attributes.find(key) != _attributes.end()){
+			RemoveAttr(key);
+		}
+
+		_attributes[key] = new AttrP<T>(key, elemType, value, this, true);
+	}
+
+	/**
+	* Finds an reference attribute
+	* @param key attribute key
+	*/
+	template<class T> T const& FindAttrR(int key) const{
+		 auto it = _attributes.find(key);
+		 AttrR<T>* attr =	static_cast<AttrR<T>*>(it->second);
+		 return attr->GetValue();
+	}
+
+	/**
+	* Finds an pointer attribute
+	* @param key attribute key
+	*/
+	template<class T> T const* FindAttrP(int key) const{
+		auto it = _attributes.find(key);
+		AttrP<T>* attr = static_cast<AttrP<T>*>(it->second);
+		return attr->GetValue();
 	}
 
 	/**
@@ -296,7 +328,9 @@ public:
 	* @param value new value
 	*/
 	template<class T> void ChangeAttr(int key, T* value){
-
+		auto it = _attributes.find(key);
+		AttrP<T>* attr = static_cast<AttrP<T>*>(it->second);
+		attr->SetValue(value);
 	}
 
 	/**
@@ -305,7 +339,9 @@ public:
 	* @param value new value
 	*/
 	template<class T> void ChangeAttr(int key, T const& value){
-
+		auto it = _attributes.find(key);
+		AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
+		attr->SetValue(value);
 	}
 
 	bool operator==(int id){

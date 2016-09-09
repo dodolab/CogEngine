@@ -18,7 +18,7 @@ const ElemType Msg::GetCategory() const{
 	return _category;
 }
 
-const EnFlags& Msg::GetTraverse() const{
+EnFlags& Msg::GetTraverse(){
 	return _traverse;
 }
 

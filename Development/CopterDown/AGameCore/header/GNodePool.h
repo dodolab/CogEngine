@@ -18,9 +18,13 @@ private:
 public:
 	GNodePool();
 
-	static GNodePool* Get();
+	static GNodePool* Get(){
+		return nullptr;
+	}
 
-	int GetGameObjCountBySubType(int type) const;
+	int GetGameObjCountBySubType(int type) const{
+		return 0;
+	}
 
 	void AllocateNode(GNode* node){
 
@@ -38,14 +42,28 @@ public:
 
 	}
 
-	bool IsRegisteredListener(int listenerType) const;
-	GNode* FindGameObjectById(int id) const;
-	GNode* FindGameObjectByTag(char* tag) const;
-	CIwArray<GNode*> FindGameObjectsByTag(char* tag) const;
-	GNode* FindGameObjectBySubType(int subtype) const;
-	CIwArray<GNode*> FindGameObjectsBySubType(int subtype) const;
+	bool IsRegisteredListener(int listenerType) const{
+		return true;
+	}
+	GNode* FindGameObjectById(int id) const{
+		return nullptr;
+	}
+	GNode* FindGameObjectByTag(char* tag) const{
+		return nullptr;
+	}
+	CIwArray<GNode*> FindGameObjectsByTag(char* tag) const{
+		return CIwArray<GNode*>();
+	}
+	GNode* FindGameObjectBySubType(int subtype) const{
+		return nullptr;
+	}
+	CIwArray<GNode*> FindGameObjectsBySubType(int subtype) const{
+		return CIwArray<GNode*>();
+	}
 
-	void OnMessage(Msg msg);
+	void OnMessage(Msg msg){
+
+	}
 };
 
 #endif

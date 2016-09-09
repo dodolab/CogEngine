@@ -141,8 +141,9 @@ void Terminate(){
 
 // ============================== MAIN METHOD
 
-int main()
-{
+GNode* node;
+
+void test(){
 	// enflags test
 	EnFlags flags;
 	flags.SetState(1);
@@ -156,6 +157,21 @@ int main()
 
 	flags = 12;
 	flags = 13;
+
+	node = new GNode(ObjType::OBJECT, 12, "fofka");
+	node->AddAttrV(12, ElemType::ALL, 12);
+
+	int* pointer = new int(4);
+	node->AddAttrP(13, ElemType::ALL, pointer);
+
+	int mojo = 5;
+	node->AddAttrR(6, ElemType::ALL, mojo);
+}
+
+int main()
+{
+
+	test();
 
 	int gnodeSize = sizeof(GNode);
 
