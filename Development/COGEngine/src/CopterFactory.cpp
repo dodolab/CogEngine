@@ -93,4 +93,7 @@ void CopterFactory::SwitchToScene(int sc){
 		copter->AddBehavior(new CopterBeh());
 		scene->AddChild(copter);
 	}
+
+	//MEngine.storage->RegisterCallback(12, CopterFactory::Test);
+	//MEngine.storage->UnregisterCallback(12, CopterFactory::Test);
 }

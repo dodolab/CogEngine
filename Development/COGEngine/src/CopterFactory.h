@@ -60,6 +60,10 @@ public:
 	virtual void SwitchToScene(int scene);
 
 	void OnBackgroundhit(const uint64 delta, const uint64 absolute, const ofMatrix4x4& absMatrix, GNode* owner);
+
+	void Test(GMsg& mojo){
+
+	}
 };
 
 

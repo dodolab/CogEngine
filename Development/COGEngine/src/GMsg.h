@@ -4,6 +4,27 @@
 #include "Enums.h"
 #include "EnFlags.h"
 
+class GMsg;
+
+typedef std::tr1::function<void(GMsg& mojo)> MsgCallback;
+
+class GNode;
+
+// traversation settings
+class Traversation{
+
+public:
+
+	Traversation(ScopeType scopeType, bool deep, bool bubbleDown) : scope(scopeType), deep(deep), bubbleDown(bubbleDown){
+
+	}
+	// scope object
+	ScopeType scope;
+	// if true, all object below/up will be traversed
+	bool deep;
+	// if true, traversation goes up-down; otherwise it goes down-up
+	bool bubbleDown;
+};
 
 /**
 * Message that is used to send information between game objects
@@ -23,26 +44,19 @@ private:
 	// category
 	ElemType _category;
 	// for who is message intended
-	EnFlags _traverse;
-	// who is sender
-	SenderType _senderType;
+	Traversation _traverse;
 	// data payload (not mandatory)
 	void* _data;
-	// id of game object or behavior that sends this message
-	int _ownerId;
+	// id of behavior that sends this message
+	int _behaviorId;
+	// game object whose behavior has created this message
+	GNode* _sourceObj;
 
 	void Construct(){
 
 	}
 
 public:
-
-	/**
-	* Creates uninitialized message
-	* Should be initialized using Initialize method
-	*/
-	GMsg(){
-	}
 
 	~GMsg(){
 		//delete _data;
@@ -51,25 +65,15 @@ public:
 	/**
 	* Creates a new message
 	* @param cat type of message (view, model)
-	* @param traverse state machine that indicates who should process this message
+	* @param who should process this message
 	* @param action id of action; see Actions namespace for common action ids
-	* @param senderType type of sender (attribute, behavior, game object)
-	* @param ownerId id of the object who has sent this message
+	* @param behaviorId id of the behavior who has sent this message
+	* @param sourceObj source object
 	* @param data payload
 	* @return false, if message has been already initialized (and it can't be initialized more than once)
 	*/
-	GMsg(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
+	GMsg(ElemType cat, Traversation traverse, int action, int behaviorId, GNode* sourceObj, void* data);
 
-	/**
-	* Creates a new message that will be traversed from the scene root
-	* @param cat type of message (view, model)
-	* @param action id of action; see Actions namespace for common action ids
-	* @param senderType type of sender (attribute, behavior, game object)
-	* @param ownerId id of the object who has sent this message
-	* @param data payload
-	* @return false, if message has been already initialized (and it can't be initialized more than once)
-	*/
-	GMsg(ElemType cat, int action, SenderType senderType, int ownerId, void* data);
 
 	/**
 	* Gets id of action; see Actions for common action ids
@@ -82,14 +86,9 @@ public:
 	const ElemType GetCategory() const;
 
 	/**
-	* Gets traversation state
+	* Gets traversation configuration
 	*/
-	EnFlags& GetTraverse();
-
-	/**
-	* Gets type of sender object
-	*/
-	const SenderType GetSenderType() const;
+	Traversation& GetTraverse();
 
 	/**
 	* Gets data payload
@@ -104,24 +103,12 @@ public:
 	/**
 	* Gets identifier of the sender object
 	*/
-	const int GetOwnerId() const;
+	const int GetBehaviorId() const;
 
-	/**
-	* Indicates, if the message has been initialized
-	*/
-	const bool IsInitialized() const;
+	GNode* GetSourceObject(){
+		return _sourceObj;
+	}
 
-	/**
-	* Initializes message, if it hasn't been initialized yet
-	* @param cat type of message (view, model)
-	* @param traverse state machine that indicates who should process this message
-	* @param action id of action; see Actions namespace for common action ids
-	* @param senderType type of sender (attribute, behavior, game object)
-	* @param ownerId id of the object who has sent this message
-	* @param data payload
-	* @return false, if message has been already initialized (and it can't be initialized more than once)
-	*/
-	bool Initialize(ElemType cat, EnFlags traverse, int action, SenderType senderType, int ownerId, void* data);
 };
 
 

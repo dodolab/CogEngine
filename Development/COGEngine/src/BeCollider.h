@@ -54,7 +54,7 @@ public:
 						if (first->HasAttr(Attrs::BOUNDS) && first->GetAttr<EnBounds>(Attrs::BOUNDS).Collides(*first, *second)){
 							EnCollision* col = new EnCollision(first->GetId(), second->GetId());
 
-							SendMessageNoResp(Traverses::BEH_FIRST, Actions::COLLISION_OCURRED, nullptr, owner);
+							SendMessage(Traversation(ScopeType::ROOT,true,true), Actions::COLLISION_OCURRED, nullptr, owner);
 						}
 					}
 				}
