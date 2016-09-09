@@ -14,7 +14,7 @@ void BeMove::OnMessage(Msg& msg){
 
 }
 
-void BeMove::Update(const uint64 delta, const uint64 absolute){
+void BeMove::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
 	CIwFMat2D transform = _owner->GetTransform();
 
 	CIwVec2 velocity = _owner->GetAttr<CIwVec2>(Attrs::VELOCITY);

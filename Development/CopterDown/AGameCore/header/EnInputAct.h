@@ -4,44 +4,24 @@
 
 template<class T>
 class EnInputAct{
-private:
-	T _actValue;
-	bool _handled = false;
-	bool _ended = false;
-	int _cycleNumber = 0;
-
 public:
+	T value;
+	// indicates, if input has been handled
+	bool Handled = false;
+	// indicates, if input has ended (e.g. key release)
+	bool Ended = false;
+	// indicates, how many cycle has been this input detected before it ended
+	int CycleNumber = 0;
+
+
 	EnInputAct(){
 
 	}
 
-	EnInputAct(T& actValue){
-
+	EnInputAct(T actValue){
+		this->value = actValue;
 	}
 
-	bool GetHandled() const{
-		return false;
-	}
-
-	void SetHandled(bool val){
-
-	}
-
-	bool GetEnded() const{
-		return false;
-	}
-
-	void SetEnded(bool val){
-
-	}
-
-	int GetCycleNumber() const{
-		return 0;
-	}
-
-	void SetCycleNumber(int val){
-
-	}
 };
 
 

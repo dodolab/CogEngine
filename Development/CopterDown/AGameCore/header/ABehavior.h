@@ -6,6 +6,7 @@
 #include "Enums.h"
 #include "Msg.h"
 #include <list>
+#include "IwGeomFMat2D.h"
 
 class GNode;
 
@@ -116,8 +117,9 @@ public:
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun
+	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	virtual void Update(const uint64 delta, const uint64 absolute) const = 0;
+	virtual void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix) const = 0;
 
 	bool operator==(int id){
 		return this->_id == id;

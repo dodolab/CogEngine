@@ -204,6 +204,8 @@ void test(){
 	spt<TestM> testik2 = spt<TestM>(new TestM(555));
 	TestM* testik3 = new TestM(123);
 
+	int sizeOfObject = sizeof(GNode);
+
 	//TestM& testikPuvodni = node->FindAttr<TestM>(10);
 
 //	spt<TestM> testikPointer = node->FindAttr<spt<TestM>>(11);

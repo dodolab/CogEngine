@@ -3,17 +3,18 @@
 #include "GNodePool.h"
 #include <vector>
 #include <list>
+#include <string>
 
 // first id is always 1
 int GNode::idCounter = 1;
 Msg GNode::_dummyMsg = Msg();
 
-GNode::GNode(ObjType type, int subType, char* tag):_type(type), _subType(subType), _tag(tag), _id(idCounter++){
+GNode::GNode(ObjType type, int subType, string tag):_type(type), _subType(subType), _id(idCounter++){
 
 }
 
 GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _id(idCounter++){
-	memcpy(copy._tag, _tag, sizeof(copy._tag));
+	_tag = copy._tag;
 	_attributes = copy._attributes;
 	_behaviors = copy._behaviors;
 	_parent = copy._parent;
@@ -23,7 +24,10 @@ GNode::GNode(const GNode& copy) : _type(copy._type), _subType(copy._subType), _i
 }
 
 GNode::~GNode(){
-	delete[] _tag;
+	
+	delete _tag;
+	delete _groups;
+	delete _states;
 
 	// delete all behaviors
 	for (list<ABehavior*>::iterator it = _behaviors.begin(); it != _behaviors.end(); ++it)
@@ -94,27 +98,29 @@ void GNode::SendMessageNoResp(Msg& msg){
 	SendMessage(msg, _dummyMsg);
 }
 
-void GNode::Update(const uint64 delta, const uint64 absolute){
-	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->UpdateTransform(_transform);
+void GNode::Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix){
 
-	}
+	CIwFMat2D absoluteMatrix = _transform*absMatrix;
+	
 
 	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Update(delta, absolute);
+		(*it)->Update(delta, absolute, absoluteMatrix);
 	}
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
 		ABehavior* beh = *it;
 	    if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) && beh->GetElemType() == ElemType::MODEL){
-			beh->Update(delta, absolute);
+			beh->Update(delta, absolute, absoluteMatrix);
 		}
 	}
 }
 
-void GNode::Draw(const uint64 delta, const uint64 absolute){
+void GNode::Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix){
+
+	CIwFMat2D absoluteMatrix = _transform*absMatrix;
+
 	for (auto it = _children.begin(); it != _children.end(); ++it){
-		(*it)->Draw(delta, absolute);
+		(*it)->Draw(delta, absolute, absoluteMatrix);
 	}
 
 	for (auto it = _behaviors.begin(); it != _behaviors.end(); ++it){
@@ -122,7 +128,7 @@ void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 		if ((beh->GetBehState() == BehState::ACTIVE_ALL || beh->GetBehState() == BehState::ACTIVE_UPDATES) &&
 			beh->GetElemType() == ElemType::VIEW){
-			beh->Update(delta, absolute);
+			beh->Update(delta, absolute, absoluteMatrix);
 		}
 	}
 }
@@ -133,12 +139,13 @@ bool GNode::AddBehavior(ABehavior* beh){
 	return true;
 }
 
-bool GNode::RemoveBehavior(ABehavior* beh){
-		list<ABehavior*>::iterator found = find(_behaviors.begin(), _behaviors.end(),beh);
+bool GNode::RemoveBehavior(ABehavior* beh){  
+	auto found = find(_behaviors.begin(), _behaviors.end(),beh);
 	
 	bool result = _behaviors.end() != found;
-	if (result) _behaviors.remove(*found);
-
+	if (result){
+		_behaviors.remove(*found);
+	}
 	return result;
 }
 
@@ -168,12 +175,6 @@ const list<ABehavior*>& GNode::GetBehaviors() const{
 }
 
 list<GNode*> GNode::GetChildrenCopy() const{
-	list<GNode*> output;
-
-//	for (list<GNode*>::iterator it = _children.begin(); it != _children.end(); ++it){
-
-	//}
-
 	return _children;
 }
 
@@ -182,82 +183,96 @@ const list<GNode*>& GNode::GetChildren() const{
 }
 
 bool GNode::AddChild(GNode* child){
+	_children.push_back(child);
+	child->_parent = this;
 	return true;
 }
 
 bool GNode::RemoveChild(GNode* child){
-	return true;
+	auto found = find(_children.begin(), _children.end(), child);
+
+	bool result = _children.end() != found;
+	if (result) _children.remove(*found);
+
+	return result;
 }
 
-GNode* GNode::GetParent() const{
-	return nullptr;
+GNode* GNode::GetParent(){
+	return _parent;
 }
 
 void GNode::SetParent(GNode* val){
-
+	_parent = val;
 }
 
-GNode* GNode::FindPredecessor(ObjType type) const{
-	return nullptr;
+GNode* GNode::FindPredecessor(ObjType type){
+	GNode* parent = _parent;
+
+	while (parent != nullptr && parent->_type != type) parent = parent->_parent;
+	return parent;
 }
 
-GNode* GNode::GetSceneRoot() const{
-	return nullptr;
+GNode* GNode::GetSceneRoot(){
+	if (_type == ObjType::SCENE) return this;
+	else return FindPredecessor(ObjType::SCENE);
 }
 
-GNode* GNode::GetRoot() const{
-	return nullptr;
+GNode* GNode::GetRoot(){
+	if (_type == ObjType::ROOT) return this;
+	else return FindPredecessor(ObjType::ROOT);
 }
 
 int GNode::GetId() const{
-	return 0;
+	return _id;
 }
 	
-char* GNode::GetTag() const{
-	return new char[5];
+string GNode::GetTag() const{
+	if (_tag == nullptr) return "";
+	else return string(*_tag);
 }
 
-void GNode::SetTag(char* tag){
-
+void GNode::SetTag(string tag){
+	delete _tag;
+	this->_tag = new string(tag);
 }
 
 ObjType GNode::GetType() const{
-	return ObjType::HUD;
+	return this->_type;
 }
 
 int GNode::GetSubType() const{
-	return 0;
+	return _subType;
 }
 
 void GNode::SetSubType(int val){
-
+	this->_subType = val;
 }
 
-CIwFMat2D& GNode::GetTransform() const{
-	return CIwFMat2D();
+CIwFMat2D& GNode::GetTransform(){
+	return _transform;
 }
 
-void GNode::SetTransform(CIwFMat2D& val){
-	
+void GNode::SetTransform(CIwFMat2D val){
+	this->_transform = val;
 }
 
-void GNode::UpdateTransform(CIwFMat2D& parent){
-
+EnFlags& GNode::GetGroups(){
+	if (_groups == nullptr) _groups = new EnFlags();
+	return *_groups;
 }
 
-EnFlags& GNode::GetGroups() const{
-	return EnFlags();
+void GNode::SetGroups(EnFlags val){
+	delete _groups;
+	this->_groups = new EnFlags(val);
 }
 
-void GNode::SetGroups(EnFlags& val){
-
+EnFlags& GNode::GetStates() {
+	if (_states == nullptr) _states = new EnFlags();
+	return *_states;
 }
 
-EnFlags& GNode::GetStates() const{
-	return EnFlags();
-}
-
-void GNode::SetStates(EnFlags& val){
-
+void GNode::SetStates(EnFlags val){
+	delete _states;
+	this->_states = new EnFlags(val);
 }
 

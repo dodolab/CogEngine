@@ -14,6 +14,7 @@
 #include <list>
 #include "SmartPointer.h"
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 
@@ -39,16 +40,16 @@ protected:
 	// id of this node
 	const int _id;
 	// tag or name
-	char* _tag = nullptr;
+	string* _tag = nullptr;
 	// object type {ROOT, SCENE, OBJECT, HUD, INFO}
 	ObjType _type;
 	// subtype (or category)
 	int _subType = 0;
 	// groups this object is in
-	EnFlags _groups;
+	EnFlags* _groups = nullptr;
 	// states this object has set
-	EnFlags _states;
-	// transformation matrix
+	EnFlags* _states = nullptr;
+	// transformation matrix (size = 24)
 	CIwFMat2D  _transform;
 	
 public:
@@ -59,7 +60,7 @@ public:
 	* @param subType subtype/category number
 	* @param tag tag/name 
 	*/
-	GNode(ObjType type, int subType, char* tag);
+	GNode(ObjType type, int subType, string tag);
 
 	GNode(const GNode& copy);
 
@@ -82,15 +83,17 @@ public:
 	* Updates behavior inner state
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun
+	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	void Update(const uint64 delta, const uint64 absolute);
+	void Update(const uint64 delta, const uint64 absolute, const CIwFMat2D& absMatrix);
 
 	/**
 	* Draws all objects
 	* @param delta delta time from the last loop
 	* @param absolute absolute time since the game begun
+	* @param absMatrix current absolute matrix, traversed from parent
 	*/
-	void Draw(const uint64 delta, const uint64 absolute);
+	void Draw(const uint64 delta, const uint64 absolute, CIwFMat2D& absMatrix);
 
 	/**
 	* Adds a new behavior
@@ -155,7 +158,7 @@ public:
 	/**
 	* Gets pointer to the parent of this game node
 	*/
-	GNode* GetParent() const;
+	GNode* GetParent();
 
 	/**
 	* Sets parent of this game object
@@ -166,17 +169,17 @@ public:
 	* Finds the first predecessor of given object type
 	* @param type predecessor type {ROOT, SCENE, OBJECT, HUD, INFO}
 	*/
-	GNode* FindPredecessor(ObjType type) const;
+	GNode* FindPredecessor(ObjType type);
 
 	/**
 	* Gets the nearest parent that is a scene root (if exists)
 	*/
-	GNode* GetSceneRoot() const;
+	GNode* GetSceneRoot();
 
 	/**
 	* Gets the root of the game scene
 	*/
-	GNode* GetRoot() const;
+	GNode* GetRoot();
 
 	/**
 	* Gets unique identifier of this game object
@@ -186,12 +189,12 @@ public:
 	/**
 	* Gets tag/name
 	*/
-	char* GetTag() const;
+	string GetTag() const;
 
 	/**
 	* Sets tag/name
 	*/
-	void SetTag(char* tag);
+	void SetTag(string tag);
 
 	/**
 	* Gets type/category of this game object {ROOT, SCENE, OBJECT, HUD, INFO}
@@ -211,38 +214,50 @@ public:
 	/**
 	* Gets transformation matrix
 	*/
-	CIwFMat2D& GetTransform() const;
+	CIwFMat2D& GetTransform();
 
 	/**
 	* Sets transformation matrix
 	*/
-	void SetTransform(CIwFMat2D& val);
+	void SetTransform(CIwFMat2D val);
 
 	/**
-	* Updates transformation matrix
-	* @parent updated transformation matrix of the parent
+	* Returns indicator, if groups has been initialized
+	* Check this indicator first before asking for groups, because
+	* they are lazy initialized
 	*/
-	void UpdateTransform(CIwFMat2D& parent);
+	const bool HasGroups() const{
+		return _groups != nullptr;
+	}
 
 	/**
 	* Gets flag array, representing list of all groups this object belongs to
 	*/
-	EnFlags& GetGroups() const;
+	EnFlags& GetGroups();
 
 	/**
 	* Sets groups this objects belongs to
 	*/
-	void SetGroups(EnFlags& val);
+	void SetGroups(EnFlags val);
+
+	/**
+	* Returns indicator, if states has been initialized
+	* Check this indicator first before asking for states, because
+	* they are lazy initialized
+	*/
+	const bool HasStates() const{
+		return _states != nullptr;
+	}
 
 	/**
 	* Gets flag array, representing all states this object has set
 	*/
-	EnFlags& GetStates() const;
+	EnFlags& GetStates();
 
 	/**
 	* Sets states this object has set
 	*/
-	void SetStates(EnFlags& val);
+	void SetStates(EnFlags val);
 
 	/**
 	* Adds a new attribute of value type

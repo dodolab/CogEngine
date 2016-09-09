@@ -23,7 +23,7 @@ private:
 	// fourth flag bit array
 	int flags4 = 0;
 	// map for other flags (if used)
-	map<int, int>* otherFlags;
+	map<int, int>* otherFlags = nullptr;
 
 	/**
 	* Gets index of a state
