@@ -19,3 +19,5 @@ subprojects
 deployment
 {
 }
+
+option cflags="-std=c++0x"
