@@ -14,6 +14,9 @@ protected:
 	int _key;
 
 public:
+	Attr(){
+
+	}
 
 	Attr(ElemType type, GNode* owner, int key);
 
@@ -25,15 +28,19 @@ public:
 };
 
 
-template <class T>
+template <typename  T>
 class Attrx : public Attr{
 protected:
 	T _value;
-
+	bool isEmpty;
 	void OnAttrChanged(T old, T newAt);
 
 public:
 	Attrx(ElemType type, GNode* owner, int key, T val) : Attr(type, owner, key), _value(val){
+
+	}
+
+	Attrx() : Attr(), isEmpty(true){
 
 	}
 
@@ -43,6 +50,10 @@ public:
 
 	void SetValue(T val){
 		this->_value = val;
+	}
+
+	bool HasValue(){
+		return !isEmpty;
 	}
 };
 

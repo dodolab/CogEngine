@@ -18,7 +18,7 @@ public:
 	BeRotateAnim(float from, float to, float speed, bool additive);
 
 	void OnMessage(Msg msg);
-	void Update(int delta, int absolute);
+	void Update(uint64 delta, uint64 absolute);
 };
 
 
@@ -30,7 +30,7 @@ void BeRotateAnim::OnMessage(Msg msg){
 
 }
 
-void BeRotateAnim::Update(int delta, int absolute){
+void BeRotateAnim::Update(uint64 delta, uint64 absolute){
 
 }
 

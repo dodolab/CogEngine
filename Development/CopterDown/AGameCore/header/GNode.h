@@ -15,9 +15,9 @@ class ABehavior;
 class GNode{
 protected:
 	map<int, Attr> _attributes;
-	vector<ABehavior*> _behaviors;
+	CIwArray<ABehavior*> _behaviors;
 	GNode* _parent;
-	vector<GNode*> _children;
+	CIwArray<GNode*>* _children;
 
 	int _id;
 	char* _tag;
@@ -52,11 +52,11 @@ public:
 
 	template<class T> T FindAttValue(int id);
 
-	vector<Attr*> GetAttributes();
+	CIwArray<Attr*> GetAttributes();
 
-	vector<ABehavior*> GetBehaviors();
+	CIwArray<ABehavior*> GetBehaviors();
 
-	vector<GNode*> GetChildren();
+	CIwArray<GNode*>* GetChildren();
 
 	void AddChild(GNode* child);
 
@@ -127,7 +127,7 @@ void GNode::RemoveAttr(int key){
 
 }
 
-template<class T> Attrx<T> GNode::FindAtt(int id){
+template<typename T> Attrx<T> GNode::FindAtt(int id){
 	return Attrx<T>();
 }
 
@@ -135,16 +135,16 @@ template<class T> T GNode::FindAttValue(int id){
 	return T();
 }
 
-vector<Attr*> GNode::GetAttributes(){
-	return vector<Attr*>();
+CIwArray<Attr*> GNode::GetAttributes(){
+	return CIwArray<Attr*>();
 }
 
-vector<ABehavior*> GNode::GetBehaviors(){
-	return vector<ABehavior*>();
+CIwArray<ABehavior*> GNode::GetBehaviors(){
+	return CIwArray<ABehavior*>();
 }
 
-vector<GNode*> GNode::GetChildren(){
-	return vector<GNode*>();
+CIwArray<GNode*>* GNode::GetChildren(){
+	return _children;
 }
 
 void GNode::AddChild(GNode* child){

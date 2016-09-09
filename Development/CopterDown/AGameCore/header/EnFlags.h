@@ -15,7 +15,7 @@ private:
 public:
 	EnFlags();
 
-	EnFlags(vector<int> states);
+	EnFlags(CIwArray<int> states);
 
 	EnFlags(int state);
 
@@ -31,7 +31,7 @@ public:
 
 	~EnFlags();
 
-	vector<int> GetAllStates();
+	CIwArray<int> GetAllStates();
 
 	bool HasState(int state);
 
@@ -75,7 +75,7 @@ EnFlags::EnFlags(){
 
 	}
 
-EnFlags::EnFlags(vector<int> states){
+EnFlags::EnFlags(CIwArray<int> states){
 
 }
 
@@ -107,8 +107,8 @@ EnFlags::~EnFlags(){
 
 }
 
-vector<int> EnFlags::GetAllStates(){
-	return vector<int>();
+CIwArray<int> EnFlags::GetAllStates(){
+	return CIwArray<int>();
 }
 
 bool EnFlags::HasState(int state){
