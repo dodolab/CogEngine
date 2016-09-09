@@ -14,10 +14,10 @@ class ABehavior;
 
 class GNode{
 protected:
-	map<int, Attr> _attributes;
+	map<int, Attr*> _attributes;
 	CIwArray<ABehavior*> _behaviors;
 	GNode* _parent;
-	CIwArray<GNode*>* _children;
+	CIwArray<GNode*> _children;
 
 	int _id;
 	char* _tag;
@@ -38,9 +38,11 @@ public:
 
 	void SendMessage(Msg& msg, Msg& resp) const;
 
-	void Update(int delta, int absolute);
+	void SendMessageNoResp(Msg& msg) const;
 
-	void Draw(int delta, int absolute);
+	void Update(const uint64 delta, const uint64 absolute);
+
+	void Draw(const uint64 delta, const uint64 absolute);
 
 	void AddBehavior(ABehavior* beh);
 
@@ -48,22 +50,20 @@ public:
 
 	void RemoveAttr(int key);
 
-	template<class T> Attrx<T> FindAtt(int id) const;
+	template<class T> Attrx<T>* FindAtt(int id) const;
 
-	template<class T> T FindAttValue(int id) const;
+	template<class T> T* FindAttValue(int id) const;
 
-	CIwArray<Attr*> GetAttributes() const;
+	const CIwArray<ABehavior*> GetBehaviors() const;
 
-	CIwArray<ABehavior*> GetBehaviors() const;
-
-	CIwArray<GNode*>* GetChildren() const;
+	const CIwArray<GNode*> GetChildren() const;
 
 	void AddChild(GNode* child);
 
 	void RemoveChild(GNode* child);
 
-	GNode GetParent() const;
-	void SetParent(GNode val);
+	GNode* GetParent() const;
+	void SetParent(GNode* val);
 
 	int GetId() const;
 	void SetId(int val);
@@ -77,16 +77,16 @@ public:
 	int GetSubType() const;
 	void SetSubType(int val);
 
-	GNode FindParent(ObjType type) const;
+	GNode* FindParent(ObjType type) const;
 
-	GNode GetSceneRoot() const;
+	GNode* GetSceneRoot() const;
 	
-	GNode GetRoot() const;
+	GNode* GetRoot() const;
 
 	CIwFMat2D GetTransform() const;
 	CIwFMat2D SetTransform(CIwFMat2D val);
 
-	template<class T> void AddAttribute(ElemType elemType, int key, T value);
+	template<class T> void AddAttribute(ElemType elemType, int key, T& value);
 
 	EnFlags GetGroups() const;
 	void SetGroups(EnFlags val);
@@ -108,11 +108,16 @@ void GNode::SendMessage(Msg& msg, Msg& resp) const{
 
 }
 
-void GNode::Update(int delta, int absolute){
+void GNode::SendMessageNoResp(Msg& msg) const{
+	Msg resp;
+	SendMessage(msg, resp);
+}
+
+void GNode::Update(const uint64 delta, const uint64 absolute){
 
 }
 
-void GNode::Draw(int delta, int absolute){
+void GNode::Draw(const uint64 delta, const uint64 absolute){
 
 }
 
@@ -127,23 +132,19 @@ void GNode::RemoveAttr(int key){
 
 }
 
-template<typename T> Attrx<T> GNode::FindAtt(int id) const{
-	return Attrx<T>();
+template<typename T> Attrx<T>* GNode::FindAtt(int id) const{
+	return nullptr;
 }
 
-template<class T> T GNode::FindAttValue(int id) const{
-	return T();
+template<class T> T* GNode::FindAttValue(int id) const{
+	return nullptr;
 }
 
-CIwArray<Attr*> GNode::GetAttributes() const{
-	return CIwArray<Attr*>();
+const CIwArray<ABehavior*> GNode::GetBehaviors() const{
+	return _behaviors;
 }
 
-CIwArray<ABehavior*> GNode::GetBehaviors() const{
-	return CIwArray<ABehavior*>();
-}
-
-CIwArray<GNode*>* GNode::GetChildren() const{
+const CIwArray<GNode*> GNode::GetChildren() const{
 	return _children;
 }
 
@@ -155,11 +156,11 @@ void GNode::RemoveChild(GNode* child){
 
 }
 
-GNode GNode::GetParent() const{
-	return GNode(ObjType::HUD, 12, nullptr);
+GNode* GNode::GetParent() const{
+	return nullptr;
 }
 
-void GNode::SetParent(GNode val){
+void GNode::SetParent(GNode* val){
 
 }
 
@@ -195,16 +196,16 @@ void GNode::SetSubType(int val){
 
 }
 
-GNode GNode::FindParent(ObjType type) const{
-	return GNode(ObjType::HUD, 12, nullptr);
+GNode* GNode::FindParent(ObjType type) const{
+	return nullptr;
 }
 
-GNode GNode::GetSceneRoot() const{
-	return GNode(ObjType::HUD, 12, nullptr);
+GNode* GNode::GetSceneRoot() const{
+	return nullptr;
 }
 
-GNode GNode::GetRoot() const{
-	return GNode(ObjType::HUD, 12, nullptr);
+GNode* GNode::GetRoot() const{
+	return nullptr;
 }
 
 CIwFMat2D GNode::GetTransform() const{
@@ -215,7 +216,7 @@ CIwFMat2D GNode::SetTransform(CIwFMat2D val){
 	return CIwFMat2D();
 }
 
-template<class T> void GNode::AddAttribute(ElemType elemType, int key, T value){
+template<class T> void GNode::AddAttribute(ElemType elemType, int key, T& value){
 
 }
 

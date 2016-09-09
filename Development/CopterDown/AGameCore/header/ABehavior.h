@@ -30,15 +30,13 @@ public:
 
 	const BehState GetBehState() const;
 
-	void SetBehState(BehState val) ;
+	void SetBehState(BehState val);
 
 	EnFlags& GetMessageInvoker();
 
 	const GNode* GetGNode() const;
 
-	GNode* GetGNode();
-
-	void SetGNode(const GNode* node);
+	void SetGNode(GNode* node);
 
 	virtual void OnMessage(Msg& msg) const = 0;
 	virtual void Update(const uint64 delta, const uint64 absolute) const = 0;
@@ -86,12 +84,9 @@ const GNode* ABehavior::GetGNode() const{
 	return _node;
 }
 
-GNode* ABehavior::GetGNode(){
-	return _node;
-}
 
-void ABehavior::SetGNode(const GNode* node){
-	this->_node = const_cast<GNode*>(node);
+void ABehavior::SetGNode(GNode* node){
+	this->_node = node;
 	}
 
 #endif
