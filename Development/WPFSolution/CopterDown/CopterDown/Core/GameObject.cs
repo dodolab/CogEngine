@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using CopterDown.Behavior;
+using CopterDown.Core.CoreAttribs;
 
 namespace CopterDown.Core
 {
@@ -25,10 +26,17 @@ namespace CopterDown.Core
         private List<GameObject> _children;
         private int _id;
         private string _tag;
+        private ObjectType type;
+        private bool isSceneRoot;
 
-        public GameObject(int id)
+        private static int ids = 0;
+
+
+        public GameObject(ObjectType type, string tag)
         {
-            _id = id;
+            this.type = type;
+            _id = ids++;
+            this._tag = tag;
         }
 
         /// <summary>
@@ -64,7 +72,7 @@ namespace CopterDown.Core
         public void Update(TimeSpan delta, TimeSpan absolute)
         {
 
-            if(_children != null) foreach (var child in _children) child.Update(delta, absolute);
+            if(_children != null) foreach (var child in _children.ToList()) child.Update(delta, absolute);
 
             if(_modelBehaviors != null) foreach (var beh in _modelBehaviors) beh.Update(delta, absolute);
 
@@ -81,7 +89,7 @@ namespace CopterDown.Core
 
         public void Draw(TimeSpan delta, TimeSpan absolute)
         {
-            if (_children != null) foreach (var child in _children) child.Draw(delta, absolute);
+            if (_children != null) foreach (var child in _children.ToList()) child.Draw(delta, absolute);
 
             if(_viewBehaviors != null) foreach (var beh in _viewBehaviors) beh.Update(delta, absolute);
         }
@@ -138,12 +146,12 @@ namespace CopterDown.Core
             _viewAttribToRemove.Add(attr);
         }
 
-        public Attribute FindModelAttributeById(int id)
+        public Attribute FindModelAtt(int id)
         {
             return (_modelAttributes != null && _modelAttributes.ContainsKey(id)) ? _modelAttributes[id] : null;
         }
 
-        public Attribute FindViewAttributeById(int id)
+        public Attribute FindViewAtt(int id)
         {
             return (_viewAttributes != null && _viewAttributes.ContainsKey(id)) ? _viewAttributes[id] : null;
         }
@@ -210,6 +218,90 @@ namespace CopterDown.Core
         public void SetTag(string tag)
         {
             this._tag = tag;
+        }
+
+        public ObjectType GetObjectType()
+        {
+            return type;
+        }
+
+        public void SetIsSceneRoot(bool val)
+        {
+            isSceneRoot = val;
+        }
+
+        public bool GetIsSceneRoot()
+        {
+            return isSceneRoot;
+        }
+
+        public GameObject GetSceneRoot()
+        {
+            var parent = GetParent();
+
+            while (parent != null)
+            {
+                if (parent.isSceneRoot) return parent;
+                parent = parent.GetParent();
+            }
+            return parent;
+        }
+
+        public GameObject GetRoot()
+        {
+            var parent = GetParent();
+            while (parent != null && parent.GetParent() != null) parent = parent.GetParent();
+            return parent;
+        }
+
+        public void SetTransform(Transform transform)
+        {
+            AddModelAttribute(new Attribute<Transform>(transform),AT.AT_COM_TRANSFORM);
+        }
+
+        public Transform GetTransform()
+        {
+            return ((Attribute<Transform>)FindModelAtt(AT.AT_COM_TRANSFORM)).Value;
+        }
+
+        public Attribute<int> GetIntModelAttr(int key)
+        {
+            return FindModelAtt(key) as Attribute<int>;
+        }
+
+        public Attribute<int> GetIntViewAttr(int key)
+        {
+            return FindViewAtt(key) as Attribute<int>;
+        }
+
+        public Attribute<float> GetFloatModelAttr(int key)
+        {
+            return FindModelAtt(key) as Attribute<float>;
+        }
+
+        public Attribute<float> GetFloatViewAttr(int key)
+        {
+            return FindViewAtt(key) as Attribute<float>;
+        }
+
+        public Attribute<bool> GetBoolModelAttr(int key)
+        {
+            return FindModelAtt(key) as Attribute<bool>;
+        }
+
+        public Attribute<bool> GetBoolViewAttr(int key)
+        {
+            return FindViewAtt(key) as Attribute<bool>;
+        }
+
+        public Attribute<Vector2d> GetVectorModelAttr(int key)
+        {
+            return FindModelAtt(key) as Attribute<Vector2d>;
+        }
+
+        public Attribute<Vector2d> GetVectorViewAttr(int key)
+        {
+            return FindViewAtt(key) as Attribute<Vector2d>;
         }
     }
 }

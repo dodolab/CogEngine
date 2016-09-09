@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CopterDown.Core;
+using CopterDown.Core.CoreAttribs;
 
 namespace CopterDown.Core
 {
@@ -21,7 +22,6 @@ namespace CopterDown.Core
         public bool Active { get; set; }
 
         public GameObject GameObject { get; set; }
-
 
         public abstract void OnMessage(Message msg);
 

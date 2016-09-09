@@ -38,7 +38,8 @@ namespace CopterDown.Core
         BEHAVIOR_CREATED,
         BEHAVIOR_REMOVED,
         OBJECT_CREATED,
-        OBJECT_REMOVED
+        OBJECT_REMOVED,
+        USER_INPUT
     }
 
     public enum MessageCat

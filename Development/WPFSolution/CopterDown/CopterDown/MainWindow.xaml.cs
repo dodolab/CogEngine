@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using CopterDown.Core;
 
 namespace CopterDown
@@ -26,30 +14,22 @@ namespace CopterDown
         public MainWindow()
         {
             InitializeComponent();
-            this.KeyDown += MainWindow_KeyDown;
+            this.KeyDown += MainWindow_OnKeyDown;
+            this.KeyUp += MainWindow_OnKeyUp;
             loop = new GameLoop(Dispatcher, MyCanvas, 20, 20);
             loop.Start();
         }
 
-        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
-            {
-                // posleme 12tku, aby si to odcyhtil ten MovementBehavior
-                loop.root.SendMessage(new Message(MessageCat.MODEL,TraverseMode.NOTRAV,new float[]{20,0}){TypeId=12});
-            }
-            if (e.Key == Key.Left)
-            {
-                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { -20, 00 }) { TypeId = 12 });
-            }
-            if (e.Key == Key.Up)
-            {
-                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { 0, -20 }) { TypeId = 12 });
-            }
-            if (e.Key == Key.Down)
-            {
-                loop.root.SendMessage(new Message(MessageCat.MODEL, TraverseMode.NOTRAV, new float[] { 0, 20 }) { TypeId = 12 });
-            }
+            if (!loop.KeysPressed.Contains(e.Key)) loop.KeysPressed.Add(e.Key);
         }
+
+
+        private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (loop.KeysPressed.Contains(e.Key)) loop.KeysPressed.Remove(e.Key);
+        }
+
     }
 }

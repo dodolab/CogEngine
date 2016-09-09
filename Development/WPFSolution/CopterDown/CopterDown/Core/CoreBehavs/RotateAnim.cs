@@ -31,22 +31,22 @@ namespace CopterDown.Core.CoreBehavs
             
         }
 
-        protected SimpleValAttribute<float> GetRotation(GameObject obj)
+  /*      protected Attribute<float> GetRotation(GameObject obj)
         {
             var rotation =
-                obj.FindModelAttributeById( AttributeList.ATTR_ROTATION) as SimpleValAttribute<float>;
+                obj.FindModelAtt( AT.AT_COM_ROTATION) as Attribute<float>;
 
             if (rotation == null)
             {
-                rotation = new SimpleValAttribute<float>(0);
-                obj.AddModelAttribute(rotation,  AttributeList.ATTR_ROTATION);
+                rotation = new Attribute<float>(0);
+                obj.AddModelAttribute(rotation,  AT.AT_COM_ROTATION);
             }
             return rotation;
         }
-
+        */
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            if (Active)
+            /*if (Active)
             {
                 // toto je diskutabilni
                 if (actual >= to)
@@ -67,7 +67,7 @@ namespace CopterDown.Core.CoreBehavs
                     GetRotation(GameObject);
 
                 rotation.Value += diff;
-            }
+            }*/
         }
     }
 }
