@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CopterDown.Core;
 
 namespace CopterDown.Messages
 {
     public class Message
     {
-        public Message(MessageCat cat, TraverseMode traverse, object data)
+        public Message(ElementType cat, TraverseMode traverse, object data)
         {
             this.Category = cat;
             this.Data = data;
             this.Traverse = traverse;
         }
 
-        public Message(MessageCat cat, TraverseMode traverse, MessageType type, object data)
+        public Message(ElementType cat, TraverseMode traverse, MessageType type, object data)
         {
             this.Category = cat;
             this.Data = data;
@@ -28,7 +29,7 @@ namespace CopterDown.Messages
         /// </summary>
         public int TypeId { get; set; }
         public MessageType Type { get; set; }
-        public MessageCat Category { get; set; }
+        public ElementType Category { get; set; }
         public TraverseMode Traverse { get; set; }
         public object Data { get; set; }
     }
@@ -42,11 +43,6 @@ namespace CopterDown.Messages
         USER_INPUT,
         COLISION_OCURRED,
         GAMEOBJECT_DESTROYED
-    }
-
-    public enum MessageCat
-    {
-        VIEW,MODEL
     }
 
     public enum TraverseMode

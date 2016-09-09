@@ -14,10 +14,7 @@ namespace CopterDown.Behavior
     /// </summary>
     public class MovementBehavior : ABehavior
     {
-        public MovementBehavior()
-        {
-            
-        }
+        public MovementBehavior(ElementType type) : base(type){}
 
         private float[] lastMovement;
 

@@ -13,11 +13,14 @@ namespace CopterDown.Core
     {
         private static int idCounter;
 
-        protected ABehavior()
+        protected ABehavior(ElementType elemType)
         {
             this.Active = true;
             this.Id = idCounter++;
+            this.ElementType = elemType;
         }
+
+        public ElementType ElementType { get; private set; }
 
         public int Id { get; protected set; }
         public bool Active { get; set; }

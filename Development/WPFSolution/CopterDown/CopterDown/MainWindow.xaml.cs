@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using CopterDown.Core;
+using CopterDown.Core.CoreAttribs;
 
 namespace CopterDown
 {

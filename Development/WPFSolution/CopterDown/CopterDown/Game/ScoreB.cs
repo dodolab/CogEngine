@@ -10,17 +10,20 @@ namespace CopterDown.Game
 {
     public class ScoreB : ABehavior
     {
+        public ScoreB() : base(ElementType.MODEL){}
+
         public override void OnMessage(Messages.Message msg)
         {
             if (msg.Type == MessageType.GAMEOBJECT_DESTROYED)
             {
                 var gameObj = msg.Data as GameObject;
-                if (gameObj.GetObjectType() == ObjectType.COPTER)
+                if (gameObj.GetObjectCategory() == ObjTypes.COPTER)
                 {
-                    GameObject.GetSceneRoot().FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 100;
-                }else if (gameObj.GetObjectType() == ObjectType.PARA)
+                    GameObject.GetSceneRoot().FindAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 100;
+                }
+                else if (gameObj.GetObjectCategory() == ObjTypes.PARA)
                 {
-                    GameObject.GetSceneRoot().FindModelAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 20;
+                    GameObject.GetSceneRoot().FindAtt<int>(AT.AT_COPTER_PLAYER_SCORE).Value += 20;
                 }
                 
             }

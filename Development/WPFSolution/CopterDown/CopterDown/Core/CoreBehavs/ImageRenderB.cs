@@ -15,6 +15,8 @@ namespace CopterDown.Core.CoreBehavs
 {
     public class ImageRenderB : ABehavior
     {
+        public ImageRenderB() : base(ElementType.VIEW){}
+
         public override void OnMessage(Message msg)
         {
             
@@ -22,7 +24,7 @@ namespace CopterDown.Core.CoreBehavs
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var imgSource = GameObject.FindViewAtt<string>(AT.AT_COM_IMGSOURCE);
+            var imgSource = GameObject.FindAtt<string>(AT.AT_COM_IMGSOURCE);
             var transform = GameObject.GetTransform();
 
             Helper.DrawImage(GameLoop._canvas, imgSource.Value, transform.LocalPos.X, transform.LocalPos.Y, 
