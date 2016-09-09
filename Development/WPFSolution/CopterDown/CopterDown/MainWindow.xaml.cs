@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using CopterDown.Core;
-using CopterDown.Core.CoreAttribs;
+using CopterDown.Core.Enums;
 
 namespace CopterDown
 {
@@ -23,13 +23,49 @@ namespace CopterDown
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (!loop.KeysPressed.Contains(e.Key)) loop.KeysPressed.Add(e.Key);
+            var userAct = loop.KeysPressed;
+
+            Act act = Act.FIRE;
+
+            switch (e.Key)
+            {
+                case Key.Left:
+                    act = Act.LEFT;
+                    break;
+                case Key.Right:
+                    act = Act.RIGHT;
+                    break;
+                case Key.Space:
+                    act = Act.FIRE;
+                    break;
+            }
+
+            if(!userAct.ActionsStarted.Contains(act)) userAct.ActionsStarted.Add(act);
         }
 
 
         private void MainWindow_OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (loop.KeysPressed.Contains(e.Key)) loop.KeysPressed.Remove(e.Key);
+            var userAct = loop.KeysPressed;
+
+            Act act;
+
+            switch (e.Key)
+            {
+                case Key.Left:
+                    act = Act.LEFT;
+                    break;
+                case Key.Right:
+                    act = Act.RIGHT;
+                    break;
+                case Key.Space:
+                default:
+                    act = Act.FIRE;
+                    break;
+            }
+
+            if (userAct.ActionsStarted.Contains(act)) userAct.ActionsStarted.Remove(act);
+            if(!userAct.ActionsEnded.Contains(act)) userAct.ActionsEnded.Add(act);
         }
 
     }

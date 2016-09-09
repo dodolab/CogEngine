@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace CopterDown.Game
+namespace CopterDown.Utils
 {
     public static class Helper
     {

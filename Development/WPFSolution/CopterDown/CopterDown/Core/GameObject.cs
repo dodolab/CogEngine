@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using CopterDown.Behavior;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Core.Enums;
+using CopterDown.Core.Types;
+using CopterDown.Enums;
 
 namespace CopterDown.Core
 {
@@ -18,21 +15,31 @@ namespace CopterDown.Core
 
         protected GameObject _parent;
         protected List<GameObject> _children;
+     
         protected int _id;
         protected string _tag;
-        protected ObjectType type;
-        protected int category;
-        protected List<Group> _groups;
+        protected ObjectType _type;
+        protected int _subType;
+        protected State _groups;
+        protected State _states;
+        protected Transform _transform;
 
         protected static int ids = 0;
 
 
-        public GameObject(ObjectType type, string tag)
+        public GameObject(ObjectType type, int subtype, string tag)
         {
-            SetTransform(new Transform(0,0));
-            this.type = type;
+            _transform = new Transform(0,0);
+            this._type = type;
+            this._subType = subtype;
             _id = ids++;
+            // prevention from overflow into negative numbers
+            if (ids < 0) ids = 0;
             this._tag = tag;
+            this._groups = new State();
+            this._states = new State();
+
+            GameObjectManager.Get.AddGameObject(this);
         }
 
         /// <summary>
@@ -40,26 +47,69 @@ namespace CopterDown.Core
         /// </summary>
         public void Destroy()
         {
-           GetParent().RemoveChild(this);
+            Parent.RemoveChild(this);
+            foreach(var beh in _behaviors) GameObjectManager.Get.RemoveBehavior(beh);
+            GameObjectManager.Get.RemoveGameObject(this);
+            SendMessage(new Message(ElementType.ALL, new State(Traverses.SCENEROOT), Actions.GAMEOBJECT_DESTROYED, SenderType.GAMEOBJECT, Id, this));
         }
 
         public void SendMessage(Message msg)
         {
-            // traverse children at first
-            if (msg.Traverse == TraverseMode.TRAV_CHILDFIRST)
-            {
-                if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
-            }
+            GameObjectManager.Get.OnMessage(msg);
 
-            foreach (var behavior in _behaviors)
+            if (GameObjectManager.Get.IsRegisteredListener(msg.Action))
             {
-                if(behavior.ElementType == msg.Category) behavior.OnMessage(msg);
-            }
+                if (msg.Traverse.HasState(Traverses.ROOT))
+                {
+                    msg.Traverse.ResetState(Traverses.ROOT);
+                    if (Root != null)
+                    {
+                        Root.SendMessage(msg);
+                        return;
+                    }
+                }
 
-            // traverse children at last
-            if (msg.Traverse == TraverseMode.TRAV_BEHFIRST)
-            {
-                if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
+                if (msg.Traverse.HasState(Traverses.SCENEROOT))
+                {
+                    msg.Traverse.ResetState(Traverses.SCENEROOT);
+                    if (SceneRoot != null)
+                    {
+                        SceneRoot.SendMessage(msg);
+                        return;
+                    }
+                }
+
+                // check only to prevent from settings traverses to both: child first and beh first
+                bool childfirst = false;
+
+                // traverse children at first
+                if (msg.Traverse.HasState(Traverses.CHILD_FIRST))
+                {
+                    childfirst = true;
+                    if (_children != null)
+                        foreach (var child in _children.ToList())
+                        {
+                            child.SendMessage(msg);
+                        }
+                }
+
+                foreach (var behavior in _behaviors)
+                {
+                    if (behavior.Id != msg.OwnerId &&
+                        (msg.Category == ElementType.ALL || behavior.ElemType == msg.Category))
+                    {
+                        if (behavior.MessageListeners.HasState(msg.Action))
+                        {
+                            behavior.OnMessage(msg);
+                        }
+                    }
+                }
+
+                // traverse children at last
+                if (!childfirst && msg.Traverse.HasState(Traverses.BEH_FIRST))
+                {
+                    if (_children != null) foreach (var child in _children.ToList()) child.SendMessage(msg);
+                }
             }
         }
 
@@ -71,7 +121,7 @@ namespace CopterDown.Core
                 foreach (var child in _children.ToList())
                 {
                     // make transformation node
-                    child.GetTransform().UpdateTransform(GetTransform());
+                    child.Transform.UpdateTransform(Transform);
                 }
 
                 foreach (var child in _children.ToList())
@@ -85,7 +135,7 @@ namespace CopterDown.Core
             {
                 foreach (var beh in _behaviors)
                 {
-                    if (beh.ElementType == ElementType.MODEL)
+                    if (beh.ElemType == ElementType.MODEL)
                     {
                         beh.Update(delta, absolute);
                     }
@@ -101,7 +151,7 @@ namespace CopterDown.Core
             {
                 foreach (var beh in _behaviors)
                 {
-                    if (beh.ElementType == ElementType.VIEW)
+                    if (beh.ElemType == ElementType.VIEW)
                     {
                         beh.Update(delta, absolute);
                     }
@@ -114,13 +164,15 @@ namespace CopterDown.Core
             if (_behaviors == null) _behaviors = new List<ABehavior>();
             beh.GameObject = this;
             _behaviors.Add(beh);
-            SendMessage(new Message(beh.ElementType, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_CREATED, beh));
+            GameObjectManager.Get.AddBehavior(beh);
+            SendMessage(new Message(ElementType.ALL, Traverses.SCENEROOT, Actions.BEHAVIOR_ADDED, SenderType.GAMEOBJECT, _id, beh));
         }
 
         public void RemoveBehavior(ABehavior beh)
         {
             _behaviors.Remove(beh);
-            SendMessage(new Message(beh.ElementType, TraverseMode.TRAV_BEHFIRST, MessageType.BEHAVIOR_REMOVED, beh));
+            GameObjectManager.Get.RemoveBehavior(beh);
+            SendMessage(new Message(ElementType.ALL, Traverses.SCENEROOT, Actions.BEHAVIOR_REMOVED, SenderType.GAMEOBJECT, _id, beh));
         }
 
         public void RemoveAttribute(int key)
@@ -139,19 +191,28 @@ namespace CopterDown.Core
             return output == null ? default(T) : output.Value;
         }
 
-        public IReadOnlyCollection<Attribute> GetAttributes()
+        public IReadOnlyCollection<Attribute> Attributes
         {
-            return _attributes.Values.ToList().AsReadOnly();
+            get
+            {
+                return _attributes.Values.ToList().AsReadOnly();
+            }
         }
 
-        public IReadOnlyCollection<ABehavior> GetBehaviors()
+        public IReadOnlyCollection<ABehavior> Behaviors
         {
-            return _behaviors;
+            get
+            {
+                return _behaviors;
+            }
         }
 
-        public IReadOnlyCollection<GameObject> GetChildren()
+        public IReadOnlyCollection<GameObject> Children
         {
-            return _children;
+            get
+            {
+                return _children;
+            }
         }
 
         public void AddChild(GameObject child)
@@ -163,100 +224,86 @@ namespace CopterDown.Core
 
         public void RemoveChild(GameObject child)
         {
-            child.SetParent(null);
+            child.Parent = null;
             _children.Remove(child);
         }
 
-        public GameObject GetParent()
+        public GameObject Parent
         {
-            return _parent;
+            get { return _parent; }
+            set { this._parent = value; }
         }
 
-        public void SetParent(GameObject parent)
+        public int Id
         {
-            this._parent = parent;
+            get { return _id; }
+            protected set { _id = value; }
         }
 
-        public int GetId()
+        public string Tag
         {
-            return _id;
+            get { return _tag; }
+            set { _tag = value; }
         }
 
-        public string GetTag()
+        public ObjectType Type
         {
-            return _tag;
+            get { return _type; }
+            protected set { _type = value; }
         }
 
-        public void SetTag(string tag)
+        public int SubType
         {
-            this._tag = tag;
-        }
-
-        public ObjectType GetObjectType()
-        {
-            return type;
-        }
-
-        public int GetObjectCategory()
-        {
-            return category;
-        }
-
-        public void SetObjectCategory(int value)
-        {
-            this.category = value;
+            get { return _subType; }
+            protected set { _subType = value; }
         }
 
         public GameObject FindParent(ObjectType type)
         {
-            var parent = GetParent();
-            while (parent != null && parent.type != type) parent = parent.GetParent();
+            var parent = Parent;
+            while (parent != null && parent._type != type) parent = parent.Parent;
             return parent;
         }
 
-        public GameObject GetSceneRoot()
+        public GameObject SceneRoot
         {
-            return type == ObjectType.SCENE ? this : FindParent(ObjectType.SCENE);
+            get
+            {
+                return _type == ObjectType.SCENE ? this : FindParent(ObjectType.SCENE);
+            }
         }
 
-        public GameObject GetRoot()
+        public GameObject Root
         {
-            return type == ObjectType.ROOT ? this : FindParent(ObjectType.ROOT);
+            get
+            {
+                return _type == ObjectType.ROOT ? this : FindParent(ObjectType.ROOT);
+            }
         }
 
-        public void SetTransform(Transform transform)
+        public Transform Transform
         {
-            AddAttribute(ElementType.MODEL, AT.AT_COM_TRANSFORM, transform);
+            get { return _transform; }
+            set { _transform = value; }
         }
 
-        public Transform GetTransform()
+        public void AddAttribute<T>(ElementType elemType, int key, T value)
         {
-            return FindAtt<Transform>(AT.AT_COM_TRANSFORM).Value;
-        }
-
-        public void AddAttribute<T>(ElementType type, int key, T value)
-        {
-            var newAttrib = new Attribute<T>(type, value);
-            newAttrib.Key = key;
+            var newAttrib = new Attribute<T>(elemType, this, key, value);
             if (_attributes == null) _attributes = new Dictionary<int, Attribute>();
             _attributes[newAttrib.Key] = newAttrib;
-        
         }
 
-        public void SetGroup(Group group)
+        public State Groups
         {
-            if(_groups == null) _groups = new List<Group>();
-            if(!_groups.Contains(group)) _groups.Add(group);
+            get { return _groups; }
+            protected set { _groups = value; }
         }
 
-        public void RemoveGroup(Group group)
+        public State States
         {
-            if (_groups != null) _groups.Remove(group);
-        }
-
-        public bool IsInGroup(Group group)
-        {
-            return (_groups != null && _groups.Contains(group));
+            get { return _states; }
+            protected set { _states = value; }
         }
     }
 }

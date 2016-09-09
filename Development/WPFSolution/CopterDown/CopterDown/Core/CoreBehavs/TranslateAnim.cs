@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CopterDown.Core.CoreAttribs;
-using CopterDown.Core.Utils;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Enums;
 
 namespace CopterDown.Core.CoreBehavs
 {
@@ -21,7 +18,8 @@ namespace CopterDown.Core.CoreBehavs
         // 0 to 1
         private Vector2d actual;
 
-        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish) : base(ElementType.MODEL)
+        public TranslateAnim(Vector2d from, Vector2d to, float speed, bool removeAfterFinish)
+            : base(ElementType.MODEL, new State())
         {
             this.from = from;
             this.to = to;

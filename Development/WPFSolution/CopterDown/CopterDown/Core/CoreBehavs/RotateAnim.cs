@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Enums;
 
 namespace CopterDown.Core.CoreBehavs
 {
@@ -18,7 +15,8 @@ namespace CopterDown.Core.CoreBehavs
         // 0 to 1
         private float actual;
 
-        public RotateAnim(float from, float to, float speed, bool removeAfterFinish) : base(ElementType.MODEL)
+        public RotateAnim(float from, float to, float speed, bool removeAfterFinish)
+            : base(ElementType.MODEL, new State())
         {
             this.from = from;
             this.to = to;
@@ -35,12 +33,12 @@ namespace CopterDown.Core.CoreBehavs
   /*      protected Attribute<float> GetRotation(GameObject obj)
         {
             var rotation =
-                obj.FindAtt( AT.AT_COM_ROTATION) as Attribute<float>;
+                obj.FindAtt( Attr.AT_COM_ROTATION) as Attribute<float>;
 
             if (rotation == null)
             {
                 rotation = new Attribute<float>(0);
-                obj.AddAttribute(ElementType.MODELrotation,  AT.AT_COM_ROTATION);
+                obj.AddAttribute(ElementType.MODELrotation,  Attr.AT_COM_ROTATION);
             }
             return rotation;
         }

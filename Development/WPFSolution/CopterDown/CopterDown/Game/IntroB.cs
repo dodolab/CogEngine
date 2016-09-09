@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using CopterDown.Core;
-using CopterDown.Messages;
+using CopterDown.Core.Entities;
+using CopterDown.Enums;
+using CopterDown.Types;
 
 namespace CopterDown.Game
 {
     public class IntroB : ABehavior
     {
-        public IntroB() : base(ElementType.MODEL){}
+        public IntroB() : base(ElementType.MODEL, new State()){}
 
         public override void OnMessage(Message msg)
         {
@@ -20,11 +18,11 @@ namespace CopterDown.Game
 
         public override void Update(TimeSpan delta, TimeSpan absolute)
         {
-            var keys = GameObject.GetRoot().FindAtt<List<Key>>(AT.AT_COPTER_KEYINPUT);
+            var keys = GameObject.Root.FindAtt<UserAction>(Attr.USERACTION);
 
-            if (keys.Value.Any())
+            if (keys.Value.ActionsStarted.Any())
             {
-                var root = GameObject.GetRoot();
+                var root = GameObject.Root;
                 GameObject.Destroy();
                 root.AddChild(new GameBuilder().CreateGameScene());
             }

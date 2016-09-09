@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CopterDown.Core
+namespace CopterDown.Enums
 {
-    public enum Group
+    public enum ObjectType
     {
-        COLLIDABLE
+        ROOT, SCENE, OBJECT, HUD
     }
 }
