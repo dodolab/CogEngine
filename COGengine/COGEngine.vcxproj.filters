@@ -105,9 +105,6 @@
     <ClInclude Include="3rdParty\dukbind\dukbind_validation.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Animator.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\Button.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -318,6 +315,9 @@
     <ClInclude Include="Source\Core\Attr.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\SheetAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -430,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="Source\Attributes\Bounds.cpp">
       <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\SpriteSet.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

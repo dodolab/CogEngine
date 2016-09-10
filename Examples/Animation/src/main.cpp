@@ -15,6 +15,7 @@ class XmlTestingApp : public CogApp {
 		
 		COGEngine.Init(xmlPtr);
 
+
 		xmlPtr->popAll();
 		xmlPtr->pushTag("app_config");
 		xmlPtr->pushTag("scenes");

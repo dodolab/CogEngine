@@ -48,7 +48,7 @@ namespace Cog {
 		float height = 0;
 
 	public:
-		Rectangle(float width, float height) : width(width), height(height) {
+		Rectangle(float width, float height) : width(width), height(height), Shape(RenderType::RECTANGLE) {
 		}
 
 		float GetWidth() {
@@ -159,38 +159,38 @@ namespace Cog {
 	class SpriteShape : public Shape {
 	private:
 		spt<Sprite> sprite;
+		Trans transform;
 
 	public:
 
 		SpriteShape(spt<Sprite> sprite) : Shape(RenderType::SPRITE) {
 			this->sprite = sprite;
+			transform = Trans();
 		}
 
 		spt<Sprite>& GetSprite() {
 			return sprite;
 		}
+
+		void SetSprite(spt<Sprite> sprite) {
+			this->sprite = sprite;
+		}
+
+		Trans& GetTransform() {
+			return transform;
+		}
 	};
 
-	/**
-	* Crate for multisprite object.
-	* Multisprite differs from sprite that it
-	* has transformation coordinates in it
-	*/
-	class MSpriteCrate {
-	public:
-		spt<Sprite> sprite;
-		Trans transform;
-	};
 
 	class SpritesShape : public Shape {
 	private:
-		vector<spt<MSpriteCrate>> sprites;
+		vector<spt<SpriteShape>> sprites;
 		int width = 1;
 		int height = 1;
 		string name;
 
 	public:
-		SpritesShape(string name, vector<spt<MSpriteCrate>> sprites) : Shape(RenderType::MULTISPRITE), name(name), sprites(sprites) {
+		SpritesShape(string name, vector<spt<SpriteShape>> sprites) : Shape(RenderType::MULTISPRITE), name(name), sprites(sprites) {
 			Recalc();
 		}
 
@@ -204,21 +204,21 @@ namespace Cog {
 			int mHeight = 0;
 
 			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-				spt<MSpriteCrate> crt = (*it);
-				int posX = (int)crt->transform.localPos.x;
-				int posY = (int)crt->transform.localPos.y;
+				spt<SpriteShape> crt = (*it);
+				int posX = (int)crt->GetTransform().localPos.x;
+				int posY = (int)crt->GetTransform().localPos.y;
 
 				if (posX < minX) minX = posX;
 				if (posY < minY) minY = posY;
 				
 				if (posX > maxX) {
 					maxX = posX;
-					mWidth = crt->sprite->GetWidth();
+					mWidth = crt->GetSprite()->GetWidth();
 				}
 
 				if (posY > maxY) {
 					maxY = posY;
-					mHeight = crt->sprite->GetHeight();
+					mHeight = crt->GetSprite()->GetHeight();
 				}
 			}
 
@@ -226,7 +226,7 @@ namespace Cog {
 			this->height = (maxY - minY) + mHeight;
 		}
 
-		vector<spt<MSpriteCrate>>& GetSprites() {
+		vector<spt<SpriteShape>>& GetSprites() {
 			return sprites;
 		}
 

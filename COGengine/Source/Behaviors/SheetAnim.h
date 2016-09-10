@@ -84,8 +84,8 @@ namespace Cog {
 	/**x
 	* Behavior for common animations
 	*/
-	class Animator : public Behavior {
-		OBJECT_PROTOTYPE_INIT(Animator)
+	class SheetAnim : public Behavior {
+		OBJECT_PROTOTYPE_INIT(SheetAnim)
 	private:
 		// animation root
 		spt<Anim> root = spt<Anim>();
@@ -95,11 +95,11 @@ namespace Cog {
 		stack<AnimSceneContext> nodeStack;
 	public:
 
-		Animator(spt<Anim> anim) : root(anim) {
+		SheetAnim(spt<Anim> anim) : root(anim) {
 
 		}
 
-		Animator(Setting& setting) {
+		SheetAnim(Setting& setting) {
 			string animation = setting.GetItemVal("animation");
 			auto resCache = GETCOMPONENT(ResourceCache);
 			this->root = resCache->GetAnimation(animation);
@@ -134,7 +134,6 @@ namespace Cog {
 
 				if (actualNodeName != actualNode->GetName()) {
 					actualNodeName = actualNode->GetName();
-					cout << "OPENING " << actualNodeName << endl;
 				}
 
 				if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1) {
@@ -143,7 +142,7 @@ namespace Cog {
 					spt<ofImage> spriteSheet = CogGet2DImage(imagePath);
 
 					// calculate image offset
-					int frameIndex = actualIndex + actualNode->GetStart() - 1;
+					int frameIndex = actualIndex + actualNode->GetStart();
 
 					int frameRow = frameIndex / actualNode->GetFrames();
 					int frameColumn = frameIndex % actualNode->GetFrames();

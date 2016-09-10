@@ -42,6 +42,10 @@ namespace Cog {
 		*/
 		void LoadBehaviorFromXml(spt<ofxXml> xml, Node* node);
 
+		/**
+		* Loads shape from xml
+		*/
+		void LoadShapeFromXml(spt<ofxXml> xml, Node* node);
 	};
 
 }// namespace

@@ -184,26 +184,29 @@ namespace Cog {
 
 	void Renderer::RenderSprite(Node* owner) {
 
-		// BEGIN UPGRADE
-		Trans& trans = owner->GetTransform();
-		ofMatrix4x4 abs = owner->GetTransform().GetAbsMatrix();
+
 		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
-
-
-		spt<Sprite>& sprite = shape->GetSprite();
+		spt<Sprite> sprite = shape->GetSprite();
+		Trans& trans = shape->GetTransform();
+		trans.CalcAbsTransform(owner->GetTransform());
 
 		drawingTile.height = sprite->GetHeight();
 		drawingTile.offsetX = sprite->GetPosX();
 		drawingTile.offsetY = sprite->GetPosY();
-		drawingTile.posX = abs.getTranslation().x;
-		drawingTile.posY = abs.getTranslation().y;
+
+
+		drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
+		drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;
 		drawingTile.posZ = trans.absPos.z;
 		drawingTile.rotation = trans.rotation / 360;
-		drawingTile.scaleX = trans.scale.x;
-		drawingTile.scaleY = trans.scale.y;
+		drawingTile.scaleX = trans.absScale.x;
+		drawingTile.scaleY = trans.absScale.y;
 		drawingTile.width = sprite->GetWidth();
 
 		renderer->addTile(drawingTile);
+
+		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+		renderer->draw();
 	}
 
 	void Renderer::RenderMultiSprite(Node* owner) {
@@ -211,12 +214,12 @@ namespace Cog {
 
 		spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
 		renderer->setActualBuffer(shape->GetName());
-		vector<spt<MSpriteCrate>> sprites = shape->GetSprites();
+		vector<spt<SpriteShape>> sprites = shape->GetSprites();
 
 		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			spt<MSpriteCrate> crate = (*it);
-			spt<Sprite> sprite = crate->sprite;
-			Trans trans = crate->transform;
+			spt<SpriteShape> crate = (*it);
+			spt<Sprite> sprite = crate->GetSprite();
+			Trans trans = crate->GetTransform();
 			trans.CalcAbsTransform(owner->GetTransform());
 
 			drawingTile.height = sprite->GetHeight();

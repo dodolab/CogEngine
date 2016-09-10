@@ -21,7 +21,7 @@ namespace Cog {
 		Vec2i originalMousePos = Vec2i(0, 0);
 		TransformMath math = TransformMath();
 		// how far should the pointer go before scrolling will start (proper for mobile phones)
-		int scrollPrevention = 0;
+		int scrollPrevention = 0; 
 
 	public:
 

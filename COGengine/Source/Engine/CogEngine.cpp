@@ -2,7 +2,7 @@
 #include "Node.h"
 #include "ResourceCache.h"
 #include "ofSoundPlayer.h"
-#include "Animator.h"
+#include "SheetAnim.h"
 #include "Button.h"
 #include "Collider.h"
 #include "DelayAction.h"
@@ -128,7 +128,7 @@ namespace Cog {
 		auto sceneMgr = new SceneManager();
 		REGISTER_COMPONENT(sceneMgr);
 
-		REGISTER_BEHAVIOR(Animator);
+		REGISTER_BEHAVIOR(SheetAnim);
 		REGISTER_BEHAVIOR(Button);
 		REGISTER_BEHAVIOR(Collider);
 		REGISTER_BEHAVIOR(DelayAction);
