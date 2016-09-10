@@ -85,7 +85,7 @@ namespace Cog {
 			}
 
 			pressedKeys.push_back(new InputAct(key));
-			CogSendMessageToListeners(StringHash(ACT_KEY_PRESSED), 0, nullptr, nullptr, this->GetId());
+			CogSendMessageToListeners(StrId(ACT_KEY_PRESSED), 0, nullptr, nullptr, this->GetId());
 		}
 		else {
 			// key up
@@ -99,10 +99,17 @@ namespace Cog {
 	}
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
-		// user touches the screen with more fingers
+		// user touches the screen with more fingers		
 		FixTouchPosition(x, y);
 
 		if (pressed) {
+			// sometimes the first button shows twice
+			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
+				if ((*it)->touchId == button) {
+					pressedPoints.erase(it);
+					break;
+				}
+			}
 			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
 		}
 		else {
@@ -131,10 +138,16 @@ namespace Cog {
 
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen
-
 		FixTouchPosition(x, y);
 
 		if (pressed) {
+			// sometimes the first button shows twice
+			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
+				if ((*it)->touchId == button) {
+					pressedPoints.erase(it);
+					break;
+				}
+			}
 			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
 		}
 		else {
@@ -150,7 +163,6 @@ namespace Cog {
 	}
 
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
-
 		FixTouchPosition(x, y);
 
 		// user moves finger

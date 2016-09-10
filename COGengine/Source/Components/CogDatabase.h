@@ -10,8 +10,6 @@ namespace Cog {
 	*/
 	class CogDatabase : public Component{
 	
-		OBJECT(CogDatabase)
-	
 	private:
 		ofxSQLite* sql;
 		string dbPath;

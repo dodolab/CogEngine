@@ -11,7 +11,6 @@ namespace Cog {
 	* World has to be specified in some measureable units
 	*/
 	class FloatingScene : public Behavior {
-		OBJECT_PROTOTYPE_INIT(FloatingScene)
 	protected:
 		// if true, user will be able to scroll the scene
 		bool scrollEnabled = false;
@@ -23,11 +22,15 @@ namespace Cog {
 		bool scrollStarted = false;
 	public:
 
+		FloatingScene() {
+
+		}
+
 		FloatingScene(bool scrollEnabled) : scrollEnabled(scrollEnabled) {
 
 		}
 
-		FloatingScene(Setting setting) {
+		virtual void Load(Setting& setting) {
 			scrollEnabled = setting.GetItem("scroll_enabled").GetValBool();
 		}
 

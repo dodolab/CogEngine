@@ -5,7 +5,7 @@ using namespace std;
 namespace Cog {
 
 	class SpriteSheetGenerator {
-		vector<string> images = vector<string>();
+		vector<string> images;
 
 	public:
 		void AddImage(string path) {

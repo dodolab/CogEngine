@@ -4,7 +4,7 @@
 #include "CogEngine.h"
 #include "ofxCogMain.h"
 #include "Goal.h"
-#include "StringHash.h"
+#include "StrId.h"
 
 #include "catch.hpp"
 using namespace Cog;
@@ -13,7 +13,7 @@ class DummyGoal : public Goal {
  public:
 	bool complete;
 
-	DummyGoal(bool complete) : Goal(StringHash()), complete(complete) {
+	DummyGoal(bool complete) : Goal(StrId()), complete(complete) {
 
 	}
 
@@ -42,7 +42,7 @@ TEST_CASE("GoalTest", "[class]")
 		Goal* g3 = new DummyGoal(true);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(true);
-		GoalComposite* composite = new GoalComposite(StringHash(), true);
+		GoalComposite* composite = new GoalComposite(StrId(), true);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);
@@ -84,7 +84,7 @@ TEST_CASE("GoalTest", "[class]")
 		Goal* g3 = new DummyGoal(false);
 		Goal* g4 = new DummyGoal(true);
 		Goal* g5 = new DummyGoal(false);
-		GoalComposite* composite = new GoalComposite(StringHash(), false);
+		GoalComposite* composite = new GoalComposite(StrId(), false);
 		composite->AddSubgoal(g1);
 		composite->AddSubgoal(g2);
 		composite->AddSubgoal(g3);

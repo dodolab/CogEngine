@@ -4,7 +4,7 @@
 
 namespace Cog {
 
-	StringHash MsgLua::GetAction() const {
+	StrId MsgLua::GetAction() const {
 		return msg->GetAction();
 	}
 

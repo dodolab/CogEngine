@@ -19,14 +19,14 @@ namespace Cog {
 
 		node->AddBehavior(new HitEvent(-1, false, false));
 		node->AddBehavior(new Button(CogPreload2DImage(defaultImg), CogPreload2DImage(clickedImg), disabledImgPtr));
-		node->GetStates().SetState(StringHash(STATES_HITTABLE));
+		node->GetStates().SetState(StrId(STATES_HITTABLE));
 	}
 
 
 	void NodeBuilder::SetMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 		node->AddBehavior(new HitEvent(-1, false, false));
-		node->AddBehavior(new MultiSelection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StringHash(selectionGroup)));
-		node->GetGroups().SetState(StringHash(selectionGroup));
+		node->AddBehavior(new MultiSelection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StrId(selectionGroup)));
+		node->GetGroups().SetState(StrId(selectionGroup));
 	}
 
 	void NodeBuilder::SetSelectionNode(Node* node, string defaultImg, string selectImg) {
@@ -95,8 +95,8 @@ namespace Cog {
 
 		if (!spriteSetEntity) throw IllegalArgumentException(string_format("Spriteset %s not found!", spriteSet.c_str()));
 
-		spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
-		auto shape = spt<SpriteShape>(new SpriteShape(sprite, layer));
+		Sprite sprite = Sprite(spriteSetEntity, row, column);
+		auto shape = spt<SpriteShape>(new SpriteShape(sprite, spriteSetEntity, layer));
 		return shape;
 	}
 
@@ -116,26 +116,18 @@ namespace Cog {
 		auto resourceCache = GETCOMPONENT(ResourceCache);
 
 		if (!entity->type.empty()) {
-			// load directly
-			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(entity->type);
-
+			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(entity->type);
 			if (!entity->setting.Empty()) {
-				behavior = prototype->CreatePrototype(entity->setting);
-			}
-			else {
-				behavior = prototype->CreatePrototype();
+				behavior->Load(entity->setting);
 			}
 		}
 		else {
 			// load from reference
 			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->ref);
-			Behavior* prototype = CogGetEntityStorage()->GetBehaviorPrototype(refent->type);
-
-			if (!refent->setting.Empty()) behavior = prototype->CreatePrototype(refent->setting);
-			else behavior = prototype->CreatePrototype();
+			
+			behavior = CogGetEntityStorage()->CreateBehaviorPrototype(refent->type);
+			if (!refent->setting.Empty()) behavior->Load(refent->setting);
 		}
-
-		if (behavior == nullptr) throw IllegalArgumentException(string_format("Error while parsing %s behavior; no prototype found", entity->type.c_str()));
 
 		return behavior;
 	}
@@ -153,7 +145,6 @@ namespace Cog {
 		Node* node = new Node(NodeType::OBJECT, 0, name);
 		// set default shape
 		node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
-
 
 		return node;
 	}
@@ -242,7 +233,7 @@ namespace Cog {
 
 			for (int i = 0; i < states; i++) {
 				string stateName = xml->getValue("state", "", i);
-				node->GetStates().SetState(StringHash(stateName));
+				node->GetStates().SetState(StrId(stateName));
 			}
 		}
 

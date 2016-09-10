@@ -8,14 +8,16 @@ namespace Cog {
 	* Behavior that switches button on-click images
 	*/
 	class Button : public Behavior {
-		OBJECT_PROTOTYPE(Button)
 	protected:
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> pressedImg = spt<ofImage>();
 		spt<ofImage> disabledImg = spt<ofImage>();
-		StringHash stateDisabled = StringHash(STATES_DISABLED);
+		StrId stateDisabled = StrId(STATES_DISABLED);
 
 	public:
+		Button() {
+
+		}
 
 		/**
 		* Creates a new switch-button behavior

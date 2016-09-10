@@ -202,7 +202,7 @@ namespace Cog {
 			}
 
 			// items can be declared as attributes, e.g. <setting name="myset" key1="value1" key2="value2" />
-			vector<string> allAttributes = vector<string>();
+			vector<string> allAttributes;
 			xml->getAttributeNames(":", allAttributes);
 
 			for (string attr : allAttributes) {
@@ -239,17 +239,17 @@ namespace Cog {
 		}
 
 		string GetSettingVal(string setKey, string itemKey) {
-			if (settings.find(setKey) == settings.end()) return "";
+			if (settings.count(setKey) == 0) return "";
 			else return GetSetting(setKey).GetItemVal(itemKey);
 		}
 
 		int GetSettingValInt(string setKey, string itemKey) {
-			if (settings.find(setKey) == settings.end()) return 0;
+			if (settings.count(setKey) == 0) return 0;
 			else return GetSetting(setKey).GetItem(itemKey).GetValInt();
 		}
 
 		float GetSettingValFloat(string setKey, string itemKey) {
-			if (settings.find(setKey) == settings.end()) return 0;
+			if (settings.count(setKey) == 0) return 0;
 			else return GetSetting(setKey).GetItem(itemKey).GetValFloat();
 		}
 

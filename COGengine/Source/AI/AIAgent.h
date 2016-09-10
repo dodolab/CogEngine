@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "StringHash.h"
+#include "StrId.h"
 #include "Simulator.h"
 #include "ofxSmartPointer.h"
 

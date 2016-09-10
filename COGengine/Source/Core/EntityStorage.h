@@ -3,6 +3,8 @@
 #include "Node.h"
 #include "Behavior.h"
 #include "Component.h"
+#include <typeindex>
+#include <typeinfo>
 
 namespace Cog {
 
@@ -13,9 +15,9 @@ namespace Cog {
 
 	protected:
 		// components, mapped by their keys
-		map<StringHash, Component*> components;
+		map<type_index, Component*> components;
 		// behaviors, mapped by their keys
-		map<StringHash, Behavior*> behaviorPrototypes;
+		map<StrId, BehaviorCreator*> behaviorBuilders;
 
 	public:
 
@@ -24,7 +26,7 @@ namespace Cog {
 				delete key.second;
 			}
 
-			for (auto& key : behaviorPrototypes) {
+			for (auto& key : behaviorBuilders) {
 				delete key.second;
 			}
 		}
@@ -34,7 +36,7 @@ namespace Cog {
 		*/
 		vector<Component*> GetAllComponents() {
 			
-			vector<Component*> output = vector<Component*>();
+			vector<Component*> output;
 			
 			for (auto it = components.begin(); it != components.end(); ++it) {
 				output.push_back((*it).second);
@@ -43,81 +45,65 @@ namespace Cog {
 			return output;
 		}
 
-		map<StringHash, Component*>& GetComponents() {
+		map<type_index, Component*>& GetComponents() {
 			return components;
 		}
 
-		/**
-		* Gets list of all behaviors
-		*/
-		vector<Behavior*> GetAllBehaviorPrototypes() {
-
-			vector<Behavior*> output = vector<Behavior*>();
-
-			for (auto it = behaviorPrototypes.begin(); it != behaviorPrototypes.end(); ++it) {
-				output.push_back((*it).second);
-			}
-
-			return output;
-		}
 
 		/**
 		* Adds a new component; or replaces already existing component
 		* @param key key of the component
 		* @param component reference
 		*/
-		void RegisterComponent(Component* value) {
-			StringHash key = value->GetClassName();
-
-			if (ExistsComponent(key)) {
-				COGLOGDEBUG("ENTITY_STORAGE", "Warning, attempt to insert already inserted component %s ",value->GetClassName().c_str());
-				RemoveComponent(key);
+		template<class T>
+		void RegisterComponent(T* value) {
+			
+			if (ExistsComponent<T>()) {
+				COGLOGDEBUG("ENTITY_STORAGE", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
+				RemoveComponent<T>();
 			}
 
-			components[key] = value;
+			components[typeid(T)] = value;
 		}
 
+		
 		/**
 		* Adds a new behaviors; or replaces already existing behavior
 		* @param key key of the component
 		* @param component reference
 		*/
-		void RegisterBehaviorPrototype(StringHash name, Behavior* prototype) {
+		template<class T>
+		void RegisterBehaviorBuilder(StrId name) {
 			
-			if (ExistsBehaviorPrototype(name)) {
-				RemoveBehaviorPrototype(name);
+			if (ExistsBehaviorBuilder(name)) {
+				RemoveBehaviorBuilder(name);
 			}
-
-			behaviorPrototypes[name] = prototype;
+			
+			static_assert(std::is_default_constructible<T>::value, "All Behavior classes must have default constructor");
+			auto builder = new BehaviorCreatorImpl<T>(); //T::creator;
+			behaviorBuilders[name] = builder;
 		}
 
 		/**
 		* Removes existing components (by its key)
 		* @return true, if components has been removed
 		*/
-		bool RemoveComponent(StringHash key) {
-			map<StringHash, Component*>::iterator it = components.find(key);
-
-			if (it != components.end()) {
-				Component* cmp = it->second;
-				
-				components.erase(it);
-				delete cmp;
+		template<class T>
+		bool RemoveComponent() {
+			if (components.count(typeid(T)) != 0) {
+				components.erase(typeid(T));
 				return true;
 			}
 			return false;
 		}
 
 		/**
-		* Removes existing behaviors (by its key)
-		* @return true, if behaviors has been removed
+		* Removes existing behavior builder
+		* @return true, if builder has been removed
 		*/
-		bool RemoveBehaviorPrototype(StringHash key) {
-			map<StringHash, Behavior*>::iterator it = behaviorPrototypes.find(key);
-
-			if (it != behaviorPrototypes.end()) {
-				Behavior* beh = it->second;
-				behaviorPrototypes.erase(it);
+		bool RemoveBehaviorBuilder(StrId key) {
+			if (ExistsBehaviorBuilder(key)) {
+				behaviorBuilders.erase(key);
 				return true;
 			}
 			return false;
@@ -126,49 +112,37 @@ namespace Cog {
 		/**
 		* Returns true, if the component is presented
 		*/
-		bool ExistsComponent(StringHash key) const {
-			return components.find(key) != components.end();
+		template<class T>
+		bool ExistsComponent() const {
+			return components.count(typeid(T)) != 0;
 		}
 
 		/**
 		* Returns true, if the behavior is presented
 		*/
-		bool ExistsBehaviorPrototype(StringHash key) const {
-			return behaviorPrototypes.find(key) != behaviorPrototypes.end();
+		bool ExistsBehaviorBuilder(StrId key) const {
+			return behaviorBuilders.count(key) != 0;
 		}
 
 		/**
 		* Gets component by key; call this method only if you are sure that the component exists
 		* @param key component key
 		*/
-		template<class T> T* GetComponent(StringHash key) {
-			auto it = components.find(key);
+		template<class T> T* GetComponent() {
+			auto it = components.find(typeid(T));
 
-			COGASSERT(it != components.end(), "ENTITY_STORAGE", "Component %s doesn't exists", StringHash::GetStringValue(key).c_str());
+			COGASSERT(it != components.end(), "ENTITY_STORAGE", "Component %s doesn't exists", typeid(T).name());
 
 			T* attr = static_cast<T*>(it->second);
 			return attr;
 		}
 
-		Behavior* GetBehaviorPrototype(StringHash key) {
-			auto it = behaviorPrototypes.find(key);
+		Behavior* CreateBehaviorPrototype(StrId key) {
+			auto it = behaviorBuilders.find(key);
 
-			COGASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", StringHash::GetStringValue(key).c_str());
-
-			return it->second;
-		}
-
-		/**
-		* Gets behavior by key; call this method only if you are sure that the component exists
-		* @param key behavior key
-		*/
-		template<class T> T* GetBehaviorPrototype(StringHash key) {
-			auto it = behaviorPrototypes.find(key);
-
-			COGASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", StringHash::GetStringValue(key).c_str());
-
-			T* attr = static_cast<T*>(it->second);
-			return attr;
+			COGASSERT(it != behaviorBuilders.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", StrId::GetStringValue(key).c_str());
+			auto builder = it->second;
+			return builder->CreateDefault();
 		}
 	};
 

@@ -12,8 +12,6 @@ namespace Cog {
 	* Behavior for hit testing
 	*/
 	class HitEvent : public Behavior {
-		OBJECT_PROTOTYPE_INIT(HitEvent)
-		BEHAVIOR_UNIQUE()
 
 	protected:
 		// if true, device will vibrate when object is hit
@@ -31,6 +29,10 @@ namespace Cog {
 
 	public:
 
+		HitEvent() {
+
+		}
+
 		/**
 		* Creates a new behavior for hit testing
 		* @param handlerBehId id of handler behavior (set -1 for all handlers that listens HIT events)
@@ -41,12 +43,12 @@ namespace Cog {
 
 		}
 
-		HitEvent(Setting setting) {
+		virtual void Load(Setting& setting) {
 			preciseTest = setting.GetItemValBool("precise_test", false);
 		}
 
 		void OnStart() {
-			owner->SetState(StringHash(STATES_HITTABLE));
+			owner->SetState(StrId(STATES_HITTABLE));
 		}
 
 		template<class CShape>

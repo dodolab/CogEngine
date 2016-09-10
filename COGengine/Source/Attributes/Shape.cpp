@@ -13,7 +13,7 @@ namespace Cog{
 		int mHeight = 0;
 
 		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			spt<Sprite> crt = (*it)->sprite;
+			Sprite& crt = (*it)->sprite;
 			Trans transform = (*it)->transform;
 
 			int posX = (int)transform.localPos.x;
@@ -24,12 +24,12 @@ namespace Cog{
 
 			if (posX > maxX) {
 				maxX = posX;
-				mWidth = crt->GetWidth();
+				mWidth = crt.GetWidth();
 			}
 
 			if (posY > maxY) {
 				maxY = posY;
-				mHeight = crt->GetHeight();
+				mHeight = crt.GetHeight();
 			}
 		}
 

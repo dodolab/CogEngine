@@ -5,7 +5,7 @@
 #include "ofxCogMain.h"
 #include "StateMachine.h"
 #include "State.h"
-#include "StringHash.h"
+#include "StrId.h"
 
 
 #include "catch.hpp"
@@ -14,28 +14,28 @@ using namespace Cog;
 class MiningState : public State {
 public:
 
-	MiningState(StringHash state) : State(state) {
+	MiningState(StrId state) : State(state) {
 
 	}
 
 
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		int progress = owner->GetAttr<int>(StringHash("PROGRESS"));
+		int progress = owner->GetAttr<int>(StrId("PROGRESS"));
 		progress += 10;
 		cout << "mining ..." << endl;
 		if (progress >= 100) {
 			cout << "mining finished" << endl;
-			this->GetParent()->ChangeState(StringHash("REST"));
+			this->GetParent()->ChangeState(StrId("REST"));
 		}
 
-		owner->ChangeAttr(StringHash("PROGRESS"), progress);
+		owner->ChangeAttr(StrId("PROGRESS"), progress);
 	}
 };
 
 class RestState : public State {
 public:
 
-	RestState(StringHash state) : State(state) {
+	RestState(StrId state) : State(state) {
 
 	}
 
@@ -46,9 +46,9 @@ public:
 
 class StateSwitcher : public State {
 public:
-	StringHash nextState;
+	StrId nextState;
 
-	StateSwitcher(StringHash state, StringHash nextState) : State(state), nextState(nextState) {
+	StateSwitcher(StrId state, StrId nextState) : State(state), nextState(nextState) {
 
 	}
 
@@ -72,13 +72,13 @@ TEST_CASE("StateMachineTest", "[class]")
 		StateMachine* stMach = new StateMachine();
 		
 		// add MINER state and set it as an actual state
-		MiningState* miner = new MiningState(StringHash("MINER"));
+		MiningState* miner = new MiningState(StrId("MINER"));
 		stMach->ChangeState(miner);
 		// add REST state
-		stMach->AddLocalState(new RestState(StringHash("REST")));
+		stMach->AddLocalState(new RestState(StrId("REST")));
 		node->AddBehavior(stMach);
 		// add PROGRESS attribute
-		node->AddAttr(StringHash("PROGRESS"), (int)0);
+		node->AddAttr(StrId("PROGRESS"), (int)0);
 
 		// 4. add main node to the scene
 		scene->GetSceneNode()->AddChild(node);
@@ -91,7 +91,7 @@ TEST_CASE("StateMachineTest", "[class]")
 		}
 		
 		// check if it is in resting state
-		REQUIRE(stMach->GetCurrentState()->GetState() == StringHash("REST"));
+		REQUIRE(stMach->GetCurrentState()->GetState() == StrId("REST"));
 	}
 
 
@@ -109,7 +109,7 @@ TEST_CASE("StateMachineTest", "[class]")
 
 		// add 11 states that will be switching
 		for (int i = 0; i <= 10; i++) {
-			StateSwitcher* switcher = new StateSwitcher(StringHash(i), StringHash(i + 1));
+			StateSwitcher* switcher = new StateSwitcher(StrId(i), StrId(i + 1));
 			stMach->AddLocalState(switcher);
 			if (i == 0) stMach->ChangeState(switcher);
 		}
@@ -126,7 +126,7 @@ TEST_CASE("StateMachineTest", "[class]")
 		}
 
 		// check if it is in 10th state
-		REQUIRE(stMach->GetCurrentState()->GetState() == StringHash(10));
+		REQUIRE(stMach->GetCurrentState()->GetState() == StrId(10));
 	}
 }
 

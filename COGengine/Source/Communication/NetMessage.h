@@ -3,7 +3,7 @@
 #include "ofxSmartPointer.h"
 #include "NetReader.h"
 #include "NetWriter.h"
-#include "StringHash.h"
+#include "StrId.h"
 #include "DeltaInfo.h"
 
 
@@ -35,7 +35,7 @@ namespace Cog {
 		tBYTE syncId = 0;
 		tBYTE acceptedId = 0;
 		NetMsgType msgType = NetMsgType::UPDATE;
-		StringHash action = StringHash();
+		StrId action = StrId();
 		tDWORD msgTime = 0;
 		tBYTE* data = nullptr;
 		int dataLength = 0;
@@ -117,11 +117,11 @@ namespace Cog {
 			this->msgTime = time;
 		}
 
-		StringHash GetAction() {
+		StrId GetAction() {
 			return action;
 		}
 
-		void SetAction(StringHash action) {
+		void SetAction(StrId action) {
 			this->action = action;
 		}
 
@@ -156,7 +156,7 @@ namespace Cog {
 		tBYTE syncId = 0;
 		tBYTE acceptedId = 0;
 		NetMsgType msgType = NetMsgType::UPDATE;
-		StringHash action = StringHash();
+		StrId action = StrId();
 		tDWORD msgTime = 0;
 		NetData* data = nullptr;
 
@@ -215,11 +215,11 @@ namespace Cog {
 			this->msgTime = time;
 		}
 
-		StringHash GetAction() {
+		StrId GetAction() {
 			return action;
 		}
 
-		void SetAction(StringHash action) {
+		void SetAction(StrId action) {
 			this->action = action;
 		}
 

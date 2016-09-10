@@ -55,7 +55,7 @@ public:
 	static vector<ofxSQLTestEntity> GetList(ofxSQLite* sqlite) {
 		ofxSQLTestEntity entdm;
 		
-		vector<ofxSQLTestEntity> output = vector<ofxSQLTestEntity>();
+		vector<ofxSQLTestEntity> output;
 		ofxSQLiteSelect sel = sqlite->select("*").from(entdm.GetTableName().c_str());
 		sel.execute().begin();
 

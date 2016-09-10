@@ -272,23 +272,29 @@ namespace Cog {
 
 	class SpriteShape : public Shape {
 	private:
-		spt<Sprite> sprite;
+		Sprite sprite;
 		string sheetName;
+		spt<SpriteSet> spriteSet;
 	public:
 
-		SpriteShape(spt<Sprite> sprite, string sheetName) : Shape(RenderType::SPRITE), sprite(sprite), sheetName(sheetName) {
+		SpriteShape(Sprite& sprite, spt<SpriteSet> spriteSet, string sheetName) : Shape(RenderType::SPRITE), sprite(sprite), 
+			spriteSet(spriteSet), sheetName(sheetName) {
 		}
 
 		string GetSheetName() {
 			return sheetName;
 		}
 
-		spt<Sprite>& GetSprite() {
+		Sprite& GetSprite() {
 			return sprite;
 		}
 
-		void SetSprite(spt<Sprite> sprite) {
+		void SetSprite(Sprite& sprite) {
 			this->sprite = sprite;
+		}
+
+		spt<SpriteSet> GetSpriteSet() {
+			return spriteSet;
 		}
 
 	};

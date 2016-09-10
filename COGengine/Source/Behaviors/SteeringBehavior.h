@@ -11,7 +11,6 @@ namespace Cog {
 	* Steering behavior
 	*/
 	class SteeringBehavior : public Behavior {
-		OBJECT_PROTOTYPE(SteeringBehavior)
 	protected:
 		SteeringMath steeringMath;
 
@@ -21,6 +20,10 @@ namespace Cog {
 
 	public:
 
+		SteeringBehavior() {
+
+		}
+
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 		}
@@ -29,11 +32,11 @@ namespace Cog {
 	class SeekBehavior : public SteeringBehavior {
 	private:
 		float maxAcceleration = 0;
-		StringHash forceId;
+		StrId forceId;
 	
 	public:
 		SeekBehavior(float maxAcceleration) :maxAcceleration(maxAcceleration){
-			forceId = StringHash(this->GetId());
+			forceId = StrId(this->GetId());
 		}
 
 		void OnStart();
@@ -46,14 +49,14 @@ namespace Cog {
 		float decelerationSpeed = 0;
 		float rotationSpeed = 0;
 		float pointTolerance = 0;
-		StringHash forceId;
+		StrId forceId;
 	public:
 
 		ArriveBehavior(float decelerationSpeed, float rotationSpeed, float pointTolerance) :
 			decelerationSpeed(decelerationSpeed),
 			rotationSpeed(rotationSpeed),
 			pointTolerance(pointTolerance){
-			forceId = StringHash(this->GetId());
+			forceId = StrId(this->GetId());
 		}
 
 
@@ -66,11 +69,11 @@ namespace Cog {
 	private:
 		float maxAcceleration = 0;
 		float fleeDistance = 0;
-		StringHash forceId;
+		StrId forceId;
 	public:
 		FleeBehavior(float maxAcceleration, float fleeDistance) :maxAcceleration(maxAcceleration),
 	    fleeDistance(fleeDistance){
-			forceId = StringHash(this->GetId());
+			forceId = StrId(this->GetId());
 		}
 
 		void OnStart();
@@ -85,11 +88,11 @@ namespace Cog {
 		float maxAcceleration = 0;
 		float pointTolerance = 0;
 		float finalPointTolerance = 0;
-		StringHash forceId;
+		StrId forceId;
 	public:
 		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance, float finalPointTolerance)
 			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance){
-			forceId = StringHash(this->GetId());
+			forceId = StrId(this->GetId());
 		}
 
 		void OnStart();
@@ -102,11 +105,11 @@ namespace Cog {
 		float wanderRadius = 0;
 		float wanderDistance = 0;
 		float wanderJitter = 0;
-		StringHash forceId;
+		StrId forceId;
 	public:
 		WanderBehavior(float wanderRadius, float wanderDistance, float wanderJitter) :
 			wanderRadius(wanderRadius), wanderDistance(wanderDistance), wanderJitter(wanderJitter){
-			forceId = StringHash(this->GetId());
+			forceId = StrId(this->GetId());
 		}
 
 		void OnStart();

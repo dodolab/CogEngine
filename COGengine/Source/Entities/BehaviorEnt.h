@@ -53,7 +53,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
-			vector<string> allAttributes = vector<string>();
+			vector<string> allAttributes;
 			xml->getAttributeNames(":", allAttributes);
 
 			for (string attr : allAttributes) {

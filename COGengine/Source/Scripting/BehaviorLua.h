@@ -28,7 +28,7 @@ namespace Cog {
 
 		int RegisterCt(luabridge::lua_State* L);
 
-		void SendMessage(StringHash msg);
+		void SendMessage(StrId msg);
 
 		void SetOwnerLua(NodeLua* ownerLua);
 
@@ -36,7 +36,7 @@ namespace Cog {
 
 		virtual void Update(const uint64 delta, const uint64 absolute);
 
-		void RegisterListeningLua(string action);
+		void SubscribeForMessagesLua(string action);
 	};
 
 } // namespace

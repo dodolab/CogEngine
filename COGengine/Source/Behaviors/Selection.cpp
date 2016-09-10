@@ -6,7 +6,7 @@ namespace Cog {
 
 
 	void Selection::OnInit() {
-		RegisterListening(ACT_STATE_CHANGED);
+		SubscribeForMessages(ACT_STATE_CHANGED);
 
 	}
 

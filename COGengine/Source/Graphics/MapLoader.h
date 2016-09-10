@@ -62,7 +62,7 @@ namespace Cog {
 		* @param idNameMap map with identifier->human-readable-name, can be empty
 		*/
 		BrickMap LoadFromTextFile(string filename, Setting& idNameMap) {
-			vector<Brick> bricks = vector<Brick>();
+			vector<Brick> bricks;
 
 			ofBuffer buffer = ofBufferFromFile(filename);
 
@@ -120,7 +120,7 @@ namespace Cog {
 			ofFloatPixels pix;
 			ofLoadImage(pix, filename);
 
-			vector<Brick> bricks = vector<Brick>();
+			vector<Brick> bricks;
 
 			for (int i = 0; i < pix.getHeight(); i++) {
 				for (int j = 0; j < pix.getWidth(); j++) {
@@ -154,11 +154,11 @@ namespace Cog {
 		/**
 		* Generates nice map image from sprites
 		*/
-		void GenerateMapImage(BrickMap* bricks, map<string, vector<spt<Sprite>>> sprites, spt<SpriteSheet> spriteSheet, string filePath, float scale) {
+		void GenerateMapImage(BrickMap* bricks, map<string, vector<Sprite>>& sprites, spt<SpriteSheet> spriteSheet, string filePath, float scale) {
 			int mapWidth = bricks->width;
 			int mapHeight = bricks->height;
-			int spriteWidth = (*sprites.begin()).second[0]->GetWidth();
-			int spriteHeight = (*sprites.begin()).second[0]->GetHeight();
+			int spriteWidth = (*sprites.begin()).second[0].GetWidth();
+			int spriteHeight = (*sprites.begin()).second[0].GetHeight();
 
 			int totalWidth = mapWidth*spriteWidth;
 			int totalHeight = mapHeight*spriteHeight;
@@ -177,7 +177,7 @@ namespace Cog {
 					auto brick = bricks->GetBrick(i, j);
 					string name = brick.name;
 					auto sprite = sprites[name][brick.index];
-					image->drawSubsection(i*spriteWidth, j*spriteHeight, spriteWidth, spriteHeight,sprite->GetPosX(),sprite->GetPosY(),spriteWidth,spriteHeight);
+					image->drawSubsection(i*spriteWidth, j*spriteHeight, spriteWidth, spriteHeight,sprite.GetPosX(),sprite.GetPosY(),spriteWidth,spriteHeight);
 				}
 			}
 

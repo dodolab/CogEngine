@@ -8,13 +8,16 @@ namespace Cog {
 	* Behavior thats checks collisions Tween two groups of objects
 	*/
 	class Collider : public Behavior {
-		OBJECT_PROTOTYPE(Collider)
 	protected:
 		// group of collidable objects, groupA is for collidable (bullet) and groupB for hittable (soldier)
 		int groupA = 0;
 		int groupB = 0;
 
 	public:
+
+		Collider() {
+
+		}
 
 		/**
 		* Creates a new collision behavior

@@ -8,7 +8,6 @@ namespace Cog {
 	* Behavior for rotation animation
 	*/
 	class RotateAnim : public Behavior {
-		OBJECT_PROTOTYPE(RotateAnim)
 	private:
 		// starting rotation
 		float from = 0;
@@ -22,6 +21,11 @@ namespace Cog {
 		float actual = 0;
 
 	public:
+
+		RotateAnim() {
+
+		}
+
 		/**
 		* Creates a new behavior for rotation animation
 		* @param from starting rotation

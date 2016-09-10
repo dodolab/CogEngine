@@ -8,7 +8,6 @@ namespace Cog {
 	* Behavior for translation animation
 	*/
 	class TranslateAnim : public Behavior {
-		OBJECT_PROTOTYPE(TranslateAnim)
 	private:
 		// speed in X axis
 		float speedX = 0;
@@ -32,6 +31,10 @@ namespace Cog {
 
 
 	public:
+
+		TranslateAnim() {
+
+		}
 
 		/**
 		* Creates a new behavior for translation animation

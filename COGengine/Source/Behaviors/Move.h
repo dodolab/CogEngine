@@ -8,10 +8,13 @@ namespace Cog {
 	* Behavior for movement
 	*/
 	class Move : public Behavior {
-		OBJECT_PROTOTYPE(Move)
 	protected:
 		bool infiniteBoard;
 	public:
+		Move() {
+
+		}
+
 		// todo: refactor
 		Move(bool infiniteBoard): infiniteBoard(infiniteBoard) {
 

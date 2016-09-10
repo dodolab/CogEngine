@@ -5,7 +5,7 @@ using namespace std;
 
 #include "AgentsReward.h"
 #include "ofxSmartPointer.h"
-#include "StringHash.h"
+#include "StrId.h"
 
 namespace Cog {
 

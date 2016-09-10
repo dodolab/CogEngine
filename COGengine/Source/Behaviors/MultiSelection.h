@@ -9,15 +9,18 @@ namespace Cog {
 	* This behavior should be attached to selection's parents, because it manipulates with more than one nodes
 	*/
 	class MultiSelection : public Behavior {
-		OBJECT_PROTOTYPE_INIT(MultiSelection)
 	protected:
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> selectedImg = spt<ofImage>();
 		ofColor selectedColor;
 		ofColor defaultColor;
-		StringHash selectionGroup;
-		StringHash selectedState = StringHash(STATES_SELECTED);
+		StrId selectionGroup;
+		StrId selectedState = StrId(STATES_SELECTED);
 	public:
+
+		MultiSelection() {
+
+		}
 
 		/**
 		* Creates a new selection behavior
@@ -25,25 +28,25 @@ namespace Cog {
 		* @param selectedImg selected image
 		* @param selectionGroup group in where selection is controlled
 		*/
-		MultiSelection(spt<ofImage> defaultImg, spt<ofImage> selectedImg, StringHash selectionGroup) :
+		MultiSelection(spt<ofImage> defaultImg, spt<ofImage> selectedImg, StrId selectionGroup) :
 			defaultImg(defaultImg), selectedImg(selectedImg), selectionGroup(selectionGroup) {
 		}
 
 		/**
 		* Creates a new selection behavior without images
 		*/
-		MultiSelection(StringHash selectionGroup) : selectionGroup(selectionGroup) {
+		MultiSelection(StrId selectionGroup) : selectionGroup(selectionGroup) {
 		}
 
 
 		/**
 		* Creates a new selection behavior without images
 		*/
-		MultiSelection(ofColor defaultColor, ofColor selectedColor, StringHash selectionGroup) 
+		MultiSelection(ofColor defaultColor, ofColor selectedColor, StrId selectionGroup) 
 			: defaultColor(defaultColor), selectedColor(selectedColor), selectionGroup(selectionGroup) {
 		}
 
-		MultiSelection(Setting& setting);
+		virtual void Load(Setting& setting);
 
 		void OnInit();
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxSmartPointer.h"
-#include "StringHash.h"
+#include "StrId.h"
 
 namespace Cog {
 
@@ -51,9 +51,9 @@ namespace Cog {
 	class AttributeChangeEvent : public MsgEvent {
 	public:
 		AttrChange changeType;
-		StringHash attribute;
+		StrId attribute;
 
-		AttributeChangeEvent(StringHash attribute, AttrChange changeType) : attribute(attribute), changeType(changeType) {
+		AttributeChangeEvent(StrId attribute, AttrChange changeType) : attribute(attribute), changeType(changeType) {
 
 		}
 	};

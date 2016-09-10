@@ -1,6 +1,6 @@
 #include "Flags.h"
 #include <stdarg.h>  
-#include "StringHash.h"
+#include "StrId.h"
 
 namespace Cog {
 
@@ -15,8 +15,8 @@ namespace Cog {
 		SetState(state);
 	}
 
-	Flags::Flags(StringHash state) {
-		SetState(state.Value());
+	Flags::Flags(StrId state) {
+		SetState(state.GetValue());
 	}
 
 
@@ -29,7 +29,7 @@ namespace Cog {
 		if (obj.otherFlags != nullptr) {
 			otherFlags = new map<unsigned, unsigned>();
 
-			for (map<unsigned, unsigned>::iterator it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
+			for (auto it = obj.otherFlags->begin(); it != obj.otherFlags->end(); ++it) {
 				(*otherFlags)[it->first] = it->second;
 			}
 		}
@@ -49,7 +49,7 @@ namespace Cog {
 
 		// oterate over map
 		if (otherFlags != nullptr) {
-			for (map<unsigned, unsigned>::iterator it = otherFlags->begin(); it != otherFlags->end(); ++it) {
+			for (auto it = otherFlags->begin(); it != otherFlags->end(); ++it) {
 				// get value
 				unsigned flag = it->second;
 				if (flag != 0) {
@@ -130,7 +130,7 @@ namespace Cog {
 			// compare map
 			if (st2.otherFlags == nullptr || otherFlags->size() != st2.otherFlags->size()) return false;
 
-			for (map<unsigned, unsigned>::iterator iter = otherFlags->begin(); iter != otherFlags->end(); ++iter)
+			for (auto iter = otherFlags->begin(); iter != otherFlags->end(); ++iter)
 			{
 				unsigned key = iter->first;
 				unsigned value = iter->second;

@@ -38,7 +38,7 @@ namespace Cog {
 			messagesToSend.clear();
 		}
 
-		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", StringHash::GetStringValue(msg->GetAction()).c_str());
+		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", StrId::GetStringValue(msg->GetAction()).c_str());
 		messagesToSend.push_back(msg);
 	}
 
@@ -121,7 +121,7 @@ namespace Cog {
 
 				// send confirmation message
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-				SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
 				messagesToSend.clear();
 
 				network->SendUDPMessage(applicationId, msg);
@@ -154,7 +154,7 @@ namespace Cog {
 				CogLogInfo("NETWORK", "Found peer %s", message->GetSourceIp().c_str());
 
 				network->SetupUDPSender(message->GetSourceIp(), peerPort, true);
-				SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessageToListeners(StrId(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 
 				// update list of discovered servers
 				discoveredPeers[message->GetSourceIp()] = absolute;
@@ -186,7 +186,7 @@ namespace Cog {
 			CogLogInfo("NETWORK", "Connected to peer %s", message->GetSourceIp().c_str());
 			lastReceivedMsgTime = absolute;
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-			SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+			SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::COMMUNICATING;
 		}
@@ -219,12 +219,12 @@ namespace Cog {
 				lastReceivedMsgTime = absolute;
 
 				if (type != NetMsgType::ACCEPT) {
-					if (acceptedMessageIds.find(message->GetSyncId()) == acceptedMessageIds.end()) {
+					if (acceptedMessageIds.count(message->GetSyncId()) == 0) {
 						COGLOGDEBUG("NETWORK_SYNC", "received %d ", (int)message->GetSyncId());
 						acceptedMessageIds.insert(message->GetSyncId());
 					}
 
-					if (acceptedMessageTimes.find(message->GetMsgTime()) == acceptedMessageTimes.end()) {
+					if (acceptedMessageTimes.count(message->GetMsgTime()) == 0) {
 						
 						if (message->GetSyncId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetSyncId()) > 128
 							|| (message->GetAction() != NET_MSG_DELTA_UPDATE)) { // accept only newest delta messages; but for other messages, we can accept old one
@@ -233,7 +233,7 @@ namespace Cog {
 							if(message->GetSyncId() > this->lastReceivedMsgId || this->lastReceivedMsgId - message->GetSyncId() > 128) lastReceivedMsgId = message->GetSyncId();
 							
 							COGLOGDEBUG("NETWORK_SYNC", "informing listeners");
-							SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+							SendMessageToListeners(StrId(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 						}
 
 						acceptedMessageTimes.insert(message->GetMsgTime());
@@ -262,7 +262,7 @@ namespace Cog {
 				CogLogInfo("NETWORK", "Peer %s is reconnecting", message->GetSourceIp().c_str());
 				lastReceivedMsgTime = absolute;
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::CONNECT_RESPONSE));
-				SendMessageToListeners(StringHash(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
+				SendMessageToListeners(StrId(ACT_NET_CLIENT_CONNECTED), 0, new NetworkMsgEvent(message), nullptr);
 				network->SendUDPMessage(applicationId, msg);
 			}
 		}

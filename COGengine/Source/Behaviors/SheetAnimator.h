@@ -9,16 +9,19 @@ namespace Cog {
 	* Behavior for sheet animations
 	*/
 	class SheetAnimator : public Behavior {
-		OBJECT_PROTOTYPE_INIT(SheetAnimator)
 	private:
 		AnimContextStack contextStack;
 	public:
+
+		SheetAnimator() {
+
+		}
 
 		SheetAnimator(spt<SheetAnim> anim) {
 			contextStack = AnimContextStack(anim);
 		}
 
-		SheetAnimator(Setting& setting);
+		virtual void Load(Setting& setting);
 
 		void OnStart();
 

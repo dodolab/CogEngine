@@ -439,17 +439,17 @@ mojo5:Register(next) "
 #define lua_sample " \
  test = { \
    OnInit = function() \
-     test.owner:SetState(StringHash(\"TEST\")) \
-     test.owner:AddAttrInt(StringHash(\"TEST_ATTR\"), 10) \
+     test.owner:SetState(StrId(\"TEST\")) \
+     test.owner:AddAttrInt(StrId(\"TEST_ATTR\"), 10) \
    end, \
    OnMessage = function(msg) \
-     if(msg.action:Value() == StringHash(\"TEST_ACTION\"):Value()) \
+     if(msg.action:GetValue() == StrId(\"TEST_ACTION\"):GetValue()) \
      then \
-       test.owner:SetState(StringHash(\"MSG_ACCEPTED\")) \
+       test.owner:SetState(StrId(\"MSG_ACCEPTED\")) \
      end \
    end, \
    Update = function(delta, absolute) \
-      test.owner:AddAttrInt(StringHash(\"TEST_ATTR\"), 20) \
+      test.owner:AddAttrInt(StrId(\"TEST_ATTR\"), 20) \
    end \
   } \
  testBeh = Behavior() \
@@ -478,13 +478,13 @@ mojo5:Register(next) "
 		// submit all changes (Init function will be called)
 		sc->GetSceneNode()->SubmitChanges(true);
 		auto node = scr->nodes[0];
-		REQUIRE(node->HasAttr(StringHash("TEST_ATTR")));
-		REQUIRE(node->GetAttrInt(StringHash("TEST_ATTR")) == 10);
+		REQUIRE(node->HasAttr(StrId("TEST_ATTR")));
+		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 10);
 		// send message (owner will have MSG_ACCEPTED state set)
-		scr->behs[0]->OnMessage(Msg(HandlingType(Scope::ROOT, true, true), StringHash("TEST_ACTION"), 10, 0, nullptr, nullptr));
-		REQUIRE(node->HasState(StringHash("MSG_ACCEPTED")));
+		scr->behs[0]->OnMessage(Msg(HandlingType(Scope::ROOT, true, true), StrId("TEST_ACTION"), 10, 0, nullptr, nullptr));
+		REQUIRE(node->HasState(StrId("MSG_ACCEPTED")));
 		// update node (owner will have TEST_ATTR set to 20)
 		scr->nodes[0]->Update(10, 10);
-		REQUIRE(node->GetAttrInt(StringHash("TEST_ATTR")) == 20);
+		REQUIRE(node->GetAttrInt(StrId("TEST_ATTR")) == 20);
 	}
 }

@@ -9,7 +9,7 @@
 namespace Cog {
 
 	void SceneSwitchManager::Init() {
-		RegisterGlobalListening(ACT_TWEEN_ENDED);
+		GlobalSubscribeForMessages(ACT_TWEEN_ENDED);
 	}
 
 

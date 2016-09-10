@@ -6,16 +6,16 @@
 
 #include "catch.hpp"
 using namespace Cog;
-#include "StringHash.h"
+#include "StrId.h"
 
 
-TEST_CASE("StringHash test", "[class]")
+TEST_CASE("StrId test", "[class]")
 {
 
 	SECTION("Comparing two hashes")
 	{
-		StringHash st1 = StringHash("MOJO1234");
-		StringHash st2 = StringHash("MOJO1234");
+		StrId st1 = StrId("MOJO1234");
+		StrId st2 = StrId("MOJO1234");
 
 		REQUIRE(st1 == st2);
 	}
@@ -24,7 +24,7 @@ TEST_CASE("StringHash test", "[class]")
 	{
 		unsigned num = 12345;
 
-		StringHash st1 = StringHash(num);
+		StrId st1 = StrId(num);
 
 		REQUIRE(st1 == num);
 	}
@@ -33,8 +33,8 @@ TEST_CASE("StringHash test", "[class]")
 	{
 		unsigned num = 6789;
 
-		StringHash st1 = StringHash(12345);
-		StringHash st2 = StringHash(num);
+		StrId st1 = StrId(12345);
+		StrId st2 = StrId(num);
 		st1 += st2;
 
 		REQUIRE(st1 == (12345 + 6789));

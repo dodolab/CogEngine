@@ -10,14 +10,14 @@ namespace Cog {
 			unsigned key = reader->ReadDWord();
 			float val = reader->ReadFloat();
 
-			deltas[StringHash(key)] = val;
+			deltas[StrId(key)] = val;
 		}
 
 		for (int i = 0; i < teleportSize; i++) {
 			unsigned key = reader->ReadDWord();
 			float val = reader->ReadFloat();
 
-			teleports[StringHash(key)] = val;
+			teleports[StrId(key)] = val;
 		}
 	}
 

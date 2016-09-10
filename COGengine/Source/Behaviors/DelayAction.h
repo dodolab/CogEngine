@@ -9,7 +9,6 @@ namespace Cog {
 	* Behavior that sends message with delay to specific behavior
 	*/
 	class DelayAction : public Behavior {
-		OBJECT_PROTOTYPE(DelayAction)
 	private:
 		// number of milliseconds for delay
 		int millis = 0;
@@ -21,6 +20,10 @@ namespace Cog {
 		MsgEvent* data = nullptr;
 
 	public:
+
+		DelayAction() {
+
+		}
 
 		/**
 		* Creates a new behavior that sends message to another behavior with delay

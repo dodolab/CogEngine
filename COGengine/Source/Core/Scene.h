@@ -10,7 +10,7 @@ namespace Cog
 	class MsgListener;
 	class Behavior;
 	class Msg;
-	class StringHash;
+	class StrId;
 
 	enum class SceneType {
 		SCENE = 0,
@@ -34,9 +34,9 @@ namespace Cog
 		// parent scene; only for partial scenes such as dialogs
 		Scene* parentScene;
 		// message listeners
-		map<StringHash, vector<MsgListener*>> msgListeners;
+		map<StrId, vector<MsgListener*>> msgListeners;
 		// listeners ids and their registered actions
-		map<int, vector<StringHash>> msgListenerActions;
+		map<int, vector<StrId>> msgListenerActions;
 		// list of all nodes
 		vector<Node*> allNodes;
 		// list of all behaviors
@@ -129,13 +129,13 @@ namespace Cog
 		* @param action action to register
 		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterListener(StringHash action, MsgListener* listener);
+		void RegisterListener(StrId action, MsgListener* listener);
 
 		/**
 		* Unregisters message listener for selected action
 		* @return true if listener has been found and erased
 		*/
-		bool UnregisterListener(StringHash action, MsgListener* listener);
+		bool UnregisterListener(StrId action, MsgListener* listener);
 
 		/**
 		* Unregisters all actions that are bound with selected listener
@@ -167,7 +167,7 @@ namespace Cog
 		/**
 		* Returns true, if there is at least one behavior listener for selected action
 		*/
-		bool IsRegisteredListener(StringHash action) const;
+		bool IsRegisteredListener(StrId action) const;
 
 		/**
 		* Returns true, if listener is listening for selected action
@@ -217,7 +217,7 @@ namespace Cog
 		/**
 		* Finds all nodes by group
 		*/
-		vector<Node*> FindNodesByGroup(StringHash group) const;
+		vector<Node*> FindNodesByGroup(StrId group) const;
 
 		/**
 		* Initializes the scene

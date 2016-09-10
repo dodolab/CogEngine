@@ -5,7 +5,7 @@
 namespace Cog {
 
 
-	SheetAnimator::SheetAnimator(Setting& setting) {
+	void SheetAnimator::Load(Setting& setting) {
 		// load animation by name
 		string animation = setting.GetItemVal("animation");
 		auto resCache = GETCOMPONENT(ResourceCache);
@@ -45,8 +45,8 @@ namespace Cog {
 					// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
 
 					// todo: recalculation always...
-					auto spriteSet = owner->GetShape<spt<SpriteShape>>()->GetSprite()->GetSpriteSet();
-					owner->GetShape<spt<SpriteShape>>()->SetSprite(spt<Sprite>(new Sprite(spriteSet, frameIndex)));
+					auto spriteSet = owner->GetShape<spt<SpriteShape>>()->GetSpriteSet();
+					owner->GetShape<spt<SpriteShape>>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
 					if (!owner->HasRenderType(RenderType::IMAGE)) {

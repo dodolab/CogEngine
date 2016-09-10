@@ -22,7 +22,6 @@ namespace Cog {
 	* Scene manager component
 	*/
 	class SceneSwitchManager : public Component {
-		OBJECT(SceneSwitchManager)
 	public:
 		TransformMath math = TransformMath();
 		// scene to switch from

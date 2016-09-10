@@ -21,7 +21,6 @@ using namespace luabridge;
 namespace Cog {
 
 	class LuaScripting : public Component {
-		OBJECT(LuaScripting)
 
 	private:
 		lua_State* L;
@@ -84,11 +83,11 @@ namespace Cog {
 				.LUA_REGFUNC(Trans, SetRotationToPosition)
 				.endClass();
 
-			// StringHash
+			// StrId
 			getGlobalNamespace(L)
-				.beginClass<StringHash>("StringHash")
+				.beginClass<StrId>("StrId")
 				.addConstructor<void(*)(string)>()
-				.LUA_REGFUNC(StringHash, Value)
+				.LUA_REGFUNC(StrId, GetValue)
 				.endClass();
 
 			// Msg proxy
@@ -104,7 +103,7 @@ namespace Cog {
 			getGlobalNamespace(L)
 				.beginClass<BehaviorLua>("Behavior")
 				.addConstructor<void(*)(void)>()
-				.addFunction("RegisterListening", &BehaviorLua::RegisterListeningLua)
+				.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
 				.addCFunction("Register", &BehaviorLua::RegisterCt)
 				.addFunction("SendMessage", &BehaviorLua::SendMessage)
 				.addData("owner", &BehaviorLua::ownerLua)
@@ -113,7 +112,7 @@ namespace Cog {
 			// Flags proxy
 			getGlobalNamespace(L)
 				.beginClass<Flags>("Flags")
-				.addConstructor<void(*)(StringHash)>()
+				.addConstructor<void(*)(StrId)>()
 				.addFunction("HasState", &Flags::HasState)
 				.addFunction("SetState", &Flags::SetState)
 				.addFunction("SwitchState", &Flags::SwitchState)
@@ -169,8 +168,8 @@ namespace Cog {
 			
 		}
 
-		vector<BehaviorLua*> behs = vector<BehaviorLua*>();
-		vector<NodeLua*> nodes = vector<NodeLua*>();
+		vector<BehaviorLua*> behs;
+		vector<NodeLua*> nodes;
 
 		void StoreBehavior(BehaviorLua* beh) {
 			this->behs.push_back(beh);

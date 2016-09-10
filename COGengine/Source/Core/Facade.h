@@ -49,16 +49,16 @@ namespace Cog {
 
 	
 	// =================== MNODESTORAGE ========================
-	void CogRegisterGlobalListener(StringHash action, MsgListener* listener);
-	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener);
+	void CogRegisterGlobalListener(StrId action, MsgListener* listener);
+	void CogUnregisterGlobalListener(StrId action, MsgListener* listener);
 	void CogSendMessage(Msg& msg, Node* actualNode);
 	void CogSendDirectMessageToListener(Msg& msg, int targetId);
-	void CogSendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
-	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
+	void CogSendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source, int listenerId);
+	void CogSendDirectMessageToListener(StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 
 	void CogSendDirectMessageToListener(Scene* scene, Msg& msg, int targetId);
-	void CogSendMessageToListeners(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
-	void CogSendDirectMessageToListener(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
+	void CogSendMessageToListeners(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int listenerId);
+	void CogSendDirectMessageToListener(Scene* scene, StrId action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 	// =================== MLOGGER =========================
 
 	void CogLogError(const char* module, const char* format, ...);
@@ -90,9 +90,9 @@ namespace Cog {
 
 	void CogRegisterComponent(Component* value);
 
-	bool CogRemoveComponent(StringHash key);
+	bool CogRemoveComponent(StrId key);
 
-	bool CogExistsComponent(StringHash key);
+	bool CogExistsComponent(StrId key);
 
 
 }// namespace

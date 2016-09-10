@@ -5,7 +5,7 @@
 namespace Cog {
 
 
-	AttribAnimator::AttribAnimator(Setting& setting) {
+	void AttribAnimator::Load(Setting& setting) {
 		string animation = setting.GetItemVal("animation");
 		string renderTypeStr = setting.GetItemVal("render_type");
 

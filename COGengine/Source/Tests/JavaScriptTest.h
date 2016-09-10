@@ -19,7 +19,7 @@ function TestingBehavior(parameter) {\
 \
 TestingBehavior.prototype.OnMessage = function(action, behaviorId) {\
 \
-	if (action == StringHash('UPDATE_PARAM')) {\
+	if (action == StrId('UPDATE_PARAM')) {\
 		this.parameter++;\
 	}\
 };\
@@ -90,10 +90,10 @@ int DuktapeResultTest(duk_context *ctx) {
 	return 1;
 }
 
-// transforms string to stringHash
-int StringHashEval(duk_context *ctx) {
+// transforms string to StrId
+int StrIdEval(duk_context *ctx) {
 	string param = duk_to_string(ctx, 0);
-	unsigned val = StringHash(param).Value();
+	unsigned val = StrId(param).GetValue();
 	duk_push_int(ctx, val);
 	return 1;
 }
@@ -269,13 +269,13 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 	{
 		duk_push_global_object(ctx);
 		// bind two global functions
-		duk_push_c_function(ctx, StringHashEval, DUK_VARARGS);
-		duk_put_prop_string(ctx, -2 /*idx:global*/, "StringHash");
+		duk_push_c_function(ctx, StrIdEval, DUK_VARARGS);
+		duk_put_prop_string(ctx, -2 /*idx:global*/, "StrId");
 		duk_pop(ctx);
 
 		JavaScriptBehavior* beh = new JavaScriptBehavior(ctx,12345);
 		beh->Update(10, 10);
-		beh->OnMessage(Msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, false, false), StringHash("UPDATE_PARAM"), 0, 0, nullptr, nullptr));
+		beh->OnMessage(Msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, false, false), StrId("UPDATE_PARAM"), 0, 0, nullptr, nullptr));
 
 		int param = beh->GetParameter();
 		int updateCnt = beh->GetUpdateCounter();

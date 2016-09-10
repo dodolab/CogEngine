@@ -7,13 +7,16 @@ namespace Cog {
 
 
 	class Selection : public Behavior {
-		OBJECT_PROTOTYPE(Selection)
 	protected:
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> selectedImg = spt<ofImage>();
-		StringHash selectedState = StringHash(STATES_SELECTED);
+		StrId selectedState = StrId(STATES_SELECTED);
 		bool hasSelectedState = false;
 	public:
+
+		Selection() {
+
+		}
 
 		/**
 		* Creates a new selection behavior

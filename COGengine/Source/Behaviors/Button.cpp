@@ -5,7 +5,7 @@
 namespace Cog {
 
 	void Button::OnInit() {
-		Button::RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
+		SubscribeForMessages(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
 	}
 
 	void Button::OnStart() {
@@ -25,7 +25,7 @@ namespace Cog {
 			else if (!owner->HasState(stateDisabled) && (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST))) {
 				msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
 				if (msg.HasAction(ACT_OBJECT_HIT_ENDED)) {
-					SendMessageToListeners(StringHash(ACT_BUTTON_CLICKED), 0, nullptr, owner);
+					SendMessageToListeners(StrId(ACT_BUTTON_CLICKED), 0, nullptr, owner);
 				}
 			}
 			else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {

@@ -8,7 +8,7 @@ namespace Cog {
 
 
 	void Collider::OnStart() {
-		vector<spt<Collision>> collisions = vector<spt<Collision>>();
+		vector<spt<Collision>> collisions;
 		if (!owner->HasAttr(ATTR_COLLISIONS)) {
 			owner->AddAttr(ATTR_COLLISIONS, collisions);
 		}

@@ -14,8 +14,6 @@ namespace Cog {
 	*/
 	class Environment : public  Component {
 
-		OBJECT(Environment)
-
 	private:
 
 		// flag for screen size change

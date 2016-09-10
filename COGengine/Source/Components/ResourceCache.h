@@ -16,8 +16,6 @@ namespace Cog {
 	*/
 	class ResourceCache : public Component {
 
-		OBJECT(ResourceCache)
-
 	private:
 		// cached images
 		map<string, spt<ofImage>> loadedImages;

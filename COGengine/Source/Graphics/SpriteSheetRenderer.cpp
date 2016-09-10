@@ -96,7 +96,7 @@ namespace Cog {
 
 	void SpriteSheetRenderer::loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode, int zIndex)
 	{
-		if (buffers.find(sheetName) == buffers.end()) {
+		if (buffers.count(sheetName) == 0) {
 			buffers[sheetName] = new SpriteBuffer(zIndex);
 		}
 
@@ -110,7 +110,7 @@ namespace Cog {
 
 	void SpriteSheetRenderer::loadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal)
 	{
-		if (buffers.find(sheetName) == buffers.end()) {
+		if (buffers.count(sheetName) == 0) {
 			buffers[sheetName] = new SpriteBuffer(zIndex);
 		}
 
@@ -258,7 +258,7 @@ namespace Cog {
 
 		// copy buffers into vector and sort it by z-index
 
-		vector<SpriteBuffer*> buffs = vector<SpriteBuffer*>();
+		vector<SpriteBuffer*> buffs;
 
 		for (auto& it : buffers) {
 			buffs.push_back(it.second);

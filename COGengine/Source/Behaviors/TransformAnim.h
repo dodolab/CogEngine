@@ -14,7 +14,6 @@ namespace Cog {
 	* Behavior for common transformation animation
 	*/
 	class TransformAnim : public Behavior {
-		OBJECT_PROTOTYPE_INIT(TransformAnim)
 	private:
 		// duration in ms
 		float duration = 0;
@@ -36,6 +35,10 @@ namespace Cog {
 
 	public:
 
+		TransformAnim() {
+
+		}
+
 		TransformAnim(spt<TransformEnt> from, spt<TransformEnt> to, float duration, float delayAfter, bool repeat, AnimBlend blend) : to(to), from(from), duration(duration),
 			delayAfter(delayAfter), repeat(repeat), blend(blend) {
 		}
@@ -44,7 +47,7 @@ namespace Cog {
 			to(to), from(from), duration(duration), delayAfter(delayAfter), repeat(repeat), blend(blend), fadeFunction(fadeFunction) {
 		}
 
-		TransformAnim(Setting setting);
+		virtual void Load(Setting& setting);
 
 		void OnStart();
 
