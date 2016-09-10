@@ -1,40 +1,40 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Msg.h"
+#include "Bounds.h"
+#include "Collision.h"
+#include "Shape.h"
 #include "Node.h"
+#include "Movement.h"
 
 namespace Cog {
 
 	/**x
-	* Behavior for simple movement
+	* Behavior for movement
 	*/
 	class Move : public Behavior {
 		OBJECT_PROTOTYPE(Move)
 	protected:
-		float speed = 0;
+
 	public:
 
-		/**
-		* Creates a new behavior for simple movement
-		* @param speed movement speed
-		*/
-		Move(float speed) : speed(speed) {
-
-		}
 
 		void Init() {
-			if (!owner->HasAttr(ATTR_VELOCITY)) {
-				owner->AddAttr(ATTR_VELOCITY, ofVec3f());
+			if (!owner->HasAttr(ATTR_MOVEMENT)) {
+				owner->AddAttr(ATTR_MOVEMENT,  Movement());
 			}
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
 			Trans& transform = owner->GetTransform();
+			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
-			ofVec3f velocity = owner->GetAttr<ofVec3f>(ATTR_VELOCITY);
-			transform.localPos.x += speed*0.001f*CogGetScreenWidth()*velocity.x * delta;
-			transform.localPos.y += speed*0.001f*CogGetScreenWidth()*velocity.y * delta;
+			movement.SetVelocity(movement.GetVelocity()+movement.GetAcceleration()*0.001f*delta);
+
+			transform.localPos.x += movement.GetVelocity().x*0.001f*delta;
+			transform.localPos.y += movement.GetVelocity().y*0.001f*delta;
+
+			transform.rotation += movement.GetAngularSpeed()*0.001f*delta;
 		}
 
 	};

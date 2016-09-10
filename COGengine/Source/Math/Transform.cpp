@@ -27,7 +27,7 @@ namespace Cog {
 			float length = realLocPos.length();
 
 			// calculate angle against parent
-			float angle = ofDegToRad(parent.absRotation) + (atan2(realLocPos.y, realLocPos.x));
+			float angle = ofDegToRad(parent.absRotation) + (atan2f(realLocPos.y, realLocPos.x));
 	
 			// calculate rotation offset
 			ofVec3f rotPos = ofVec3f(length*(cos(angle)), length*(sin(angle)), localPos.z);
@@ -37,6 +37,16 @@ namespace Cog {
 		}
 	}
 
+	float Trans::CalcRotationToPosition(ofVec2f pos) {
+		ofVec2f diff = pos - localPos;
+		if (abs(diff.x) > 1E-3 && abs(diff.y) > 1E-3) {
+			return RAD_TO_DEG*(atan2f(diff.x, -diff.y));
+		}
+	}
+
+	void Trans::SetRotationToPosition(ofVec2f pos) {
+		this->rotation = CalcRotationToPosition(pos);
+	}
 
 	ofMatrix4x4 Trans::GetAbsMatrix() {
 		ofMatrix4x4 matrix;

@@ -52,6 +52,16 @@ namespace Cog {
 		*/
 		void CalcAbsTransform(Trans& parent);
 
+		/**
+		* Calculates rotation to the selected position
+		*/
+		float CalcRotationToPosition(ofVec2f pos);
+
+		/**
+		* Sets rotation to the selected local position so that the object will
+		* be oriented to the direction
+		*/
+		void SetRotationToPosition(ofVec2f pos);
 
 		ofMatrix4x4 GetAbsMatrix();
 

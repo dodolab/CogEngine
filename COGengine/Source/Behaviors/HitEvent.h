@@ -86,6 +86,16 @@ public:
 		return true;
 	}
 
+	bool SpriteHitTest(spt<SpriteShape> shape, ofVec3f testPos) {
+		if (testPos.x < 0
+			|| testPos.y < 0
+			|| testPos.x >(float)shape->GetSprite()->GetWidth()
+			|| testPos.y >(float)shape->GetSprite()->GetHeight())
+			return false;
+
+		return true;
+	}
+
 	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		if (owner->HasState(StringHash(STATES_HITTABLE))){
@@ -106,6 +116,9 @@ public:
 					if (owner->HasRenderType(RenderType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
 					else if (owner->HasRenderType(RenderType::MULTISPRITE)) {
 						hasHitTest = MultiSpriteHitTest(owner->GetShape<spt<SpritesShape>>(), touchTrans);
+					}
+					else if (owner->HasRenderType(RenderType::SPRITE)) {
+						hasHitTest = SpriteHitTest(owner->GetShape<spt<SpriteShape>>(), touchTrans);
 					}
 
 					if ((touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId()) && hasHitTest){
