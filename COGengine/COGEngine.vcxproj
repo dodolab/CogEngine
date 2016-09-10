@@ -244,6 +244,7 @@
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
+    <ClInclude Include="Source\Communication\NetMessage.h" />
     <ClInclude Include="Source\Communication\NetReader.h" />
     <ClInclude Include="Source\Communication\NetWriter.h" />
     <ClInclude Include="Source\Components\CellPartitioner.h" />
@@ -251,6 +252,9 @@
     <ClInclude Include="Source\Components\InputHandler.h" />
     <ClInclude Include="Source\Components\Logger.h" />
     <ClInclude Include="Source\Components\Network.h" />
+    <ClInclude Include="Source\Components\NetworkBinder.h" />
+    <ClInclude Include="Source\Components\NetworkBindReceiver.h" />
+    <ClInclude Include="Source\Components\NetworkBindSender.h" />
     <ClInclude Include="Source\Components\ResourceCache.h" />
     <ClInclude Include="Source\Components\Environment.h" />
     <ClInclude Include="Source\Components\Renderer.h" />
@@ -355,10 +359,14 @@
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Attributes\HitBox.cpp" />
     <ClCompile Include="Source\Attributes\Shape.cpp" />
+    <ClCompile Include="Source\Communication\NetMessage.cpp" />
     <ClCompile Include="Source\Communication\NetReader.cpp" />
     <ClCompile Include="Source\Communication\NetWriter.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
     <ClCompile Include="Source\Components\Network.cpp" />
+    <ClCompile Include="Source\Components\NetworkBinder.cpp" />
+    <ClCompile Include="Source\Components\NetworkBindReceiver.cpp" />
+    <ClCompile Include="Source\Components\NetworkBindSender.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />

@@ -46,7 +46,7 @@
 		<transform pos_x="0.15r" pos_y="0.15r"  z_index="10" />
 		
 		<behavior type="MultiAnim" animations="transform1|transform2" />
-		<behavior name="squareanim" />
+		<behavior ref="squareanim" />
 	  </node>
     </scene>
   </scenes>

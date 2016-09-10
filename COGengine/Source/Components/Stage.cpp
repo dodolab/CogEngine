@@ -89,6 +89,10 @@ namespace Cog {
 
 		vector<MsgListener*>& listeners = msgListeners[action];
 		listeners.push_back(listener);
+		
+		if (this->actualScene != nullptr) {
+			this->actualScene->RegisterListener(action, listener);
+		}
 	}
 
 	bool Stage::UnregisterGlobalListener(StringHash action, MsgListener* listener) {
@@ -98,6 +102,11 @@ namespace Cog {
 			for (auto it = listeners.begin(); it != listeners.end(); ++it) {
 				if ((*it)->GetId() == listener->GetId()) {
 					listeners.erase(it);
+
+					if (this->actualScene != nullptr) {
+						this->actualScene->UnregisterListener(action, listener);
+					}
+
 					return true;
 				}
 			}

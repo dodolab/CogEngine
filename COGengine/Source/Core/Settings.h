@@ -200,6 +200,17 @@ namespace Cog {
 				items[item.key] = item;
 				xml->popTag();
 			}
+
+			// items can be declared as attributes, e.g. <setting name="myset" key1="value1" key2="value2" />
+			vector<string> allAttributes = vector<string>();
+			xml->getAttributeNames(":", allAttributes);
+
+			for (string attr : allAttributes) {
+				if (attr.compare("name") != 0) {
+					string val = xml->getAttributex(attr, "");
+					items[attr] = SettingItem(attr, val);
+				}
+			}
 		}
 	};
 

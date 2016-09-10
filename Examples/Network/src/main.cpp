@@ -4,81 +4,65 @@
 #include "ofxTextLabel.h"
 #include "Network.h"
 #include "Shape.h"
-
-class UDPMessage {
-public:
-
-	UDPMessage() {
-
-	}
-
-	UDPMessage(int number)
-		: number(number) {
-
-	}
-
-	int number;
-
-	void LoadFromStream(NetReader* reader) {
-		number = reader->ReadDWord();
-	}
-
-	void SaveToStream(NetWriter* writer) {
-		writer->WriteDWord(number);
-	}
-};
+#include "NetworkBinder.h"
+#include "NetworkBindReceiver.h"
+#include "NetworkBindSender.h"
+#include "NetMessage.h"
 
 class NetworkBehavior : public Behavior {
-
-	Network* network;
+private:
 	bool receiver;
+	NetworkBindReceiver* netReceiver;
+	NetworkBindSender* netSender;
+	NetworkBinder* binder;
 
 public:
-	NetworkBehavior(bool receiver) {
-		this->receiver = receiver;
+	NetworkBehavior(bool receiver): receiver(receiver) {
+
 	}
 
 	void Init() {
-		network = GETCOMPONENT(Network);
 		if (receiver) {
-			network->SetupUDPReceiver(11999, true);
+			netReceiver = new NetworkBindReceiver();
+			REGISTER_COMPONENT(netReceiver);
+			netReceiver->Init(1000, 1001, 11987);
+			
+			binder = GETCOMPONENT(NetworkBinder);
 		}
 		else {
-			network->SetupUDPSender("10.16.0.122", 11999, true);
+			netSender = new NetworkBindSender();
+			REGISTER_COMPONENT(netSender);
+			netSender->Init(1000, 1001, "127.0.0.1", 11987);
 		}
 	}
 
-	int counter = 0;
+	int param = 0;
+	int frame = 0;
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (receiver) {
-			auto reader = network->ReceiveUDPMessage(1000, 1001, 1);
-
-			if (reader != nullptr) {
-				UDPMessage msg = UDPMessage();
-				msg.LoadFromStream(reader);
-				auto label = owner->GetShape<spt<Label>>();
-				label->AppendLine(ofToString(msg.number));
+		if (frame++ % 10 == 0) {
+			if (receiver) {
+				param = this->binder->parameter;
+				owner->GetShape<spt<Label>>()->SetText(ofToString(param));
 			}
-		}
-		else {
-			if ((counter++) % 10 == 0) {
-				UDPMessage msg(ofRandom(0, 100));
-				auto writer = new NetWriter(200);
-				msg.SaveToStream(writer);
-				unsigned int size = 0;
-				auto data = writer->CopyData(size);
+			else {
+				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::DELTA_UPDATE, StringHash("FOFKA")));
+				msg->SetMsgTime(absolute);
+				cout << "SENDING " << param << endl;;
+				msg->SetParameter(param);
+				param += 10;
 
-				// send message
-				network->SendUDPMessage(1000, 1001, data, size);
+				netSender->SendNetworkMessage(msg);
+				delete msg;
 			}
 		}
 	}
 };
 
-
 class ExampleApp : public CogApp {
 
-	void InitComponents() {
+	void RegisterComponents() {
+		auto binder = new NetworkBinder();
+		REGISTER_COMPONENT(binder);
 
 	}
 
@@ -112,7 +96,7 @@ class ExampleApp : public CogApp {
 		auto label = spt<Label>(new Label(font, "test", CogGetScreenWidth()));
 		label->SetColor(ofColor(255, 255, 0));
 		text->SetShape(label);
-		text->AddBehavior(new NetworkBehavior(false));
+		text->AddBehavior(new NetworkBehavior(true));
 		main->GetSceneNode()->AddChild(text);
 
 		// add scene into stage
@@ -121,7 +105,7 @@ class ExampleApp : public CogApp {
 
 		// init logging
 		auto logger = GETCOMPONENT(Logger);
-		logger->SetLogLevel(LogLevel::LDEBUG);
+		//logger->SetLogLevel(LogLevel::LDEBUG);
 
 	}
 

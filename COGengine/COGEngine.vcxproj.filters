@@ -468,6 +468,18 @@
     <ClInclude Include="Source\Graphics\SpriteEntity.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\NetworkBindReceiver.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\NetworkBindSender.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\NetMessage.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\NetworkBinder.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -664,6 +676,18 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteEntity.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NetworkBindReceiver.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NetworkBindSender.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\NetMessage.cpp">
+      <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NetworkBinder.cpp">
+      <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
