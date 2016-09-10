@@ -483,6 +483,7 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
+    <ClCompile Include="3rdParty\lua\print.c" />
     <ClCompile Include="3rdParty\network\ofxTCPClient.cpp" />
     <ClCompile Include="3rdParty\network\ofxTCPManager.cpp" />
     <ClCompile Include="3rdParty\network\ofxTCPServer.cpp" />

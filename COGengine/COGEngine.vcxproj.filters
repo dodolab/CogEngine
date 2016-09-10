@@ -489,6 +489,15 @@
     <ClInclude Include="Source\Tests\LuaTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\lua\lstring.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ltable.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\lua\ltm.h">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
     <ClInclude Include="3rdParty\lua\lua.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
@@ -547,15 +556,6 @@
       <Filter>3rdParty</Filter>
     </ClInclude>
     <ClInclude Include="3rdParty\lua\lstate.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lstring.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltable.h">
-      <Filter>3rdParty</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltm.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
   </ItemGroup>
@@ -767,6 +767,24 @@
     <ClCompile Include="Source\Communication\DeltaMessage.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
+    <ClCompile Include="3rdParty\lua\lstring.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lstrlib.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltable.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltablib.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\ltm.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\lua.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
     <ClCompile Include="3rdParty\lua\luac.c">
       <Filter>3rdParty</Filter>
     </ClCompile>
@@ -777,6 +795,9 @@
       <Filter>3rdParty</Filter>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lzio.c">
+      <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\lua\print.c">
       <Filter>3rdParty</Filter>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lapi.c">
@@ -840,24 +861,6 @@
       <Filter>3rdParty</Filter>
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lstate.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstring.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstrlib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltable.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltablib.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltm.c">
-      <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\lua\lua.c">
       <Filter>3rdParty</Filter>
     </ClCompile>
   </ItemGroup>
