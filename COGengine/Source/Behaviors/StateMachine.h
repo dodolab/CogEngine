@@ -21,10 +21,6 @@ namespace Cog {
 
 	public:
 
-		StateMachine()  {
-
-		}
-
 		void Init() {
 
 			for (auto& globalState : globalStates) {
@@ -33,8 +29,7 @@ namespace Cog {
 			}
 
 			if (currentState != nullptr) {
-				currentState->Init();
-				currentState->SetIsInitialized(true);
+				InitState(currentState);
 			}
 		}
 
@@ -61,8 +56,23 @@ namespace Cog {
 			globalState->SetParent(this);
 
 			if (this->initialized && !globalState->GetIsInitialized()) {
-				globalState->Init();
-				globalState->SetIsInitialized(true);
+				InitState(globalState);
+			}
+		}
+		
+		void AddLocalState(State* localState) {
+			for (auto& local : localStates) {
+				if (local.second->GetState() == localState->GetState()) {
+					CogLogDebug("StateMachine", "An attempt to add already added local state");
+					return;
+				}
+			}
+
+			localStates[localState->GetState()] = localState;
+			localState->SetParent(this);
+
+			if (this->initialized && !localState->GetIsInitialized()) {
+				InitState(localState);
 			}
 		}
 
@@ -81,8 +91,7 @@ namespace Cog {
 			state->SetParent(this);
 
 			if (this->initialized && !state->GetIsInitialized()) {
-				state->Init();
-				state->SetIsInitialized(true);
+				InitState(state);
 			}
 		}
 
@@ -107,6 +116,13 @@ namespace Cog {
 			}
 
 			if (currentState != nullptr) currentState->Update(delta, absolute);
+		}
+
+	protected:
+		void InitState(State* state) {
+			state->SetOwner(state, owner);
+			state->Init();
+			state->SetIsInitialized(true);
 		}
 	};
 

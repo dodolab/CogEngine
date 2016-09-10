@@ -2,9 +2,10 @@
 
 #include "ofxCogCommon.h"
 #include "Behavior.h"
-#include "StateMachine.h"
 
 namespace Cog {
+
+	class StateMachine;
 
 	/**
 	* Common behavior for all behavioral states of the finite state machine
@@ -18,10 +19,6 @@ namespace Cog {
 
 		State(StringHash state) : state(state){
 
-		}
-
-		void Init() {
-			this->owner = parent->GetOwner();
 		}
 
 		StringHash GetState() {

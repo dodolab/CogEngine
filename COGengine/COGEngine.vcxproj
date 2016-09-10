@@ -295,6 +295,7 @@
     <ClInclude Include="Source\Tests\NetworkTest.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
     <ClInclude Include="Source\Tests\SQLTest.h" />
+    <ClInclude Include="Source\Tests\StateMachineTest.h" />
     <ClInclude Include="Source\Tests\StringHashTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
   </ItemGroup>
