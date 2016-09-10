@@ -15,7 +15,7 @@ namespace Cog {
 		string ref = "";
 		// speed multiplier
 		float speed = 1;
-		// number of repetition
+		// number of repetitions
 		int repeat = 1;
 		// if true, animation will be reverted
 		bool isRevert = false;
@@ -54,8 +54,9 @@ namespace Cog {
 			}
 		}
 
+
 		/**
-		* Adds itself and all children to the output array
+		* Returns all nodes in the tree (including this node)
 		*/
 		void GetAllNodes(vector<CommonAnim*> &output) {
 			output.push_back(this);
@@ -67,8 +68,8 @@ namespace Cog {
 		}
 
 		/**
-		* Finds recursively child by name
-		* @param name according  to find the child
+		* Finds a child by name recursively
+		* @param name according to find the child
 		*/
 		CommonAnim* FindChild(string name) {
 			if (this->GetName().compare(name) == 0) return this;
@@ -88,7 +89,7 @@ namespace Cog {
 		/**
 		* Adds a new animation child
 		* @param child child to add
-		* @return true, if child has been added (it didn't exist in the collection)
+		* @return true, if child was added (wasn't included in list of children yet)
 		*/
 		bool AddChild(spt<CommonAnim> child) {
 			auto found = find(children.begin(), children.end(), child);
@@ -104,7 +105,7 @@ namespace Cog {
 		/**
 		* Removes animation child
 		* @param child child to remove
-		* @return true, if child has been removed (it did exist in the collection)
+		* @return true, if child has been removed (was included in list of children)
 		*/
 		bool RemoveChild(spt<CommonAnim> child) {
 			auto found = find(children.begin(), children.end(), child);
@@ -115,11 +116,17 @@ namespace Cog {
 			else return false;
 		}
 
+		/**
+		* Loads base attributes such as ref and name from XML
+		*/
 		virtual void LoadBaseAttributesFromXml(spt<ofxXml> xml) {
 			this->SetRef(xml->getAttribute(":", "ref", this->GetRef()));
 			this->SetName(xml->getAttribute(":", "name", this->GetName()));
 		}
 
+		/**
+		* Loads other attributes from XML
+		*/
 		virtual void LoadAttributesFromXml(spt<ofxXml> xml) {
 			this->SetSpeed(xml->getAttribute(":", "speed", this->GetSpeed()));
 			if (this->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", this->GetName().c_str()));
@@ -128,10 +135,19 @@ namespace Cog {
 			this->SetIsRevert(xml->getBoolAttribute(":", "revert", this->GetIsRevert()));
 		}
 
+		/**
+		* Returns true, if this animation is animatable (has animation content)
+		*/
 		virtual bool IsAnimatable() = 0;
 
-		virtual bool IsMeasurable() = 0;
+		/**
+		* Returns true, if this animations is continuous (used in continuous animations such as transformations)
+		*/
+		virtual bool IsContinous() = 0;
 
+		/**
+		* Gets duration (gets number of frames for discrete animation)
+		*/
 		virtual int GetDuration() = 0;
 
 		/**

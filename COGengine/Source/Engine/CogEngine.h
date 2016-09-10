@@ -22,7 +22,8 @@ namespace Cog {
 	private:
 		// frame counter
 		int frameCounter = 0;
-
+		// frames per second
+		int fps = 0;
 		void RegisterComponents();
 		vector<function<void()>> actions;
 
@@ -89,6 +90,14 @@ namespace Cog {
 		*/
 		int GetFrameCounter() {
 			return frameCounter;
+		}
+
+		int GetFps() {
+			return fps;
+		}
+
+		void SetFps(int fps) {
+			this->fps = fps;
 		}
 
 		/**

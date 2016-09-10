@@ -6,6 +6,11 @@
 
 namespace Cog {
 
+	/**
+	* Class that holds context of an animation entity
+	* Contains from-to values that are calculated according to the 
+	* actual state of the transformation node
+	*/
 	class AttribAnimContext {
 	private:
 		spt<AttrAnimEnt> entity;
@@ -20,24 +25,39 @@ namespace Cog {
 
 		}
 
+		/**
+		* Initializes the context
+		*/
 		void Init(float fromVal, float toVal) {
 			this->fromVal = fromVal;
 			this->toVal = toVal;
 			initialized = true;
 		}
 
+		/**
+		* Returns true, if the context is initialized
+		*/
 		bool IsInitialized() {
 			return initialized;
 		}
 
+		/**
+		* Gets the animation entity
+		*/
 		spt<AttrAnimEnt> GetEntity() {
 			return entity;
 		}
 
+		/**
+		* Gets the calculated value the animation begins
+		*/
 		float GetFromValue() {
 			return fromVal;
 		}
 
+		/**
+		* Gets the calculated value the animation ends
+		*/
 		float GetToValue() {
 			return toVal;
 		}
@@ -65,6 +85,12 @@ namespace Cog {
 			RecalcDuration();
 		}
 
+		virtual ~AttribAnim() {
+		}
+
+		/**
+		* Recalculates duration as the maximum duration of all children
+		*/
 		void RecalcDuration() {
 			for (auto& enti : animEntities) {
 				if (enti.GetEntity()->duration > this->duration) {
@@ -72,10 +98,6 @@ namespace Cog {
 				}
 			}
 		}
-
-		virtual ~AttribAnim() {
-		}
-
 
 		/**
 		* Copies all parameters from other animation
@@ -93,6 +115,9 @@ namespace Cog {
 			CommonAnim::GetParametersFromReference(reference);
 		}
 
+		/**
+		* Loads attributes from xml
+		*/
 		virtual void LoadAttributesFromXml(spt<ofxXml> xml) {
 			
 			CommonAnim::LoadAttributesFromXml(xml);
@@ -115,7 +140,7 @@ namespace Cog {
 			return HasAnimEntities();
 		}
 
-		virtual bool IsMeasurable() {
+		virtual bool IsContinous() {
 			return true;
 		}
 
@@ -123,14 +148,23 @@ namespace Cog {
 			return duration;
 		}
 
+		/**
+		* Sets the duration
+		*/
 		void SetDuration(int duration) {
 			this->duration = duration;
 		}
 
+		/**
+		* Returns true, if the animation has entities to animate
+		*/
 		bool HasAnimEntities() {
 			return this->animEntities.size() != 0;
 		}
 
+		/**
+		* Gets animation entities
+		*/
 		vector<AttribAnimContext>& GetAnimEntities() {
 			return this->animEntities;
 		}

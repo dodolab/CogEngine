@@ -41,12 +41,11 @@ namespace Cog {
 				ended = true;
 				return;
 			}
-
-			//int gridWidth = settings.GetSettingValInt("transform", "grid_width");
-			//int gridHeight = settings.GetSettingValInt("transform", "grid_height");
-			// the root is not in inverted scope (but it can be inverted itself)
 		}
 
+		/**
+		* Initializes animation entity according to the actual transformation of owner node
+		*/
 		void InitEntity(AttribAnimContext& animContext) {
 
 			spt<AttrAnimEnt> animEntity = animContext.GetEntity();
@@ -59,7 +58,8 @@ namespace Cog {
 
 			float fromVal, toVal;
 
-			if (animEntity->isFixed) {
+			if (animEntity->fromValFromActual) {
+				// take the actual transformation as the initial value
 				fromVal = GetAttrib(animEntity->attributeType, ownerTrans);
 				ownerTrans.CalcAbsTransform(owner->GetParent()->GetTransform());
 				toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->measureType == MeasureType::DIRECT ? 
@@ -73,31 +73,41 @@ namespace Cog {
 				toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->measureType == MeasureType::DIRECT ? animEntity->toVal : (animEntity->fromVal + animEntity->toVal));
 			}
 
+			// calculate both values
 			Trans toTrans;
 			math.CalcTransform(toTrans, owner, owner->GetParent(), toTransEnt);
 			toVal = GetAttrib(animEntity->attributeType, toTrans);
 
+			// set calculated values
 			animContext.Init(fromVal, toVal);
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
 			
-			contextStack.MoveToNext(delta);
+			// move to the next transformation state
+			contextStack.MoveToNext(delta, CogEngine::GetInstance().GetFps());
 
 			if (contextStack.Ended()) {
 				Finish();
 				SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
 			}
 			else {
+
+				// get actual animation node
 				spt<AttribAnim> actualChild = contextStack.GetContext().GetActualChild();
 
+				// for each animated value (position, scale, rotation,... ) :
 				for (auto& attr : actualChild->GetAnimEntities()) {
 
 					spt<AttrAnimEnt> entity = attr.GetEntity();
 
-					if (entity->begin < contextStack.GetContext().actualProgress && entity->end > contextStack.GetContext().actualProgress) {
-						float actual = contextStack.GetContext().actualProgress == 0 ? 0 : contextStack.GetContext().actualProgress / entity->duration;
+					// check if this animation should run
+					if (entity->begin < contextStack.GetActualProgress() && entity->end > contextStack.GetActualProgress()) {
+						
+						// get actual progress <0-1>
+						float actual = contextStack.GetActualProgress() == 0 ? 0 : contextStack.GetActualProgress() / entity->duration;
 
+						// apply fade function (if declared)
 						if (entity->fadeFunction != nullptr) {
 							actual = entity->fadeFunction(actual);
 						}
@@ -106,6 +116,7 @@ namespace Cog {
 							this->InitEntity(attr);
 						}
 
+						// set the calculated value
 						float actualValue = attr.GetFromValue() + (attr.GetToValue() - attr.GetFromValue())*actual;
 						Trans& ownerTrans = owner->GetTransform();
 						SetAttrib(entity->attributeType, actualValue, ownerTrans);
@@ -114,6 +125,11 @@ namespace Cog {
 			}
 		}
 
+	private:
+
+		/**
+		* Maps AttrAnimEnt entity into TransformEnt entity that is used in transform calculation
+		*/
 		TransformEnt CreateEntityFromAttrAnim(spt<AttrAnimEnt> entity, float value) {
 			TransformEnt ent = TransformEnt();
 
@@ -166,6 +182,9 @@ namespace Cog {
 			return ent;
 		}
 
+		/**
+		* Gets actual value of the animated property
+		*/
 		float GetAttrib(AttributeType attr, Trans& transform) {
 			switch (attr) {
 			case AttributeType::COMMON:
@@ -198,6 +217,9 @@ namespace Cog {
 			return -1;
 		}
 
+		/**
+		* Sets a new value of the animated property
+		*/
 		void SetAttrib(AttributeType attr, float value, Trans& transform) {
 			switch (attr) {
 				case AttributeType::COMMON:

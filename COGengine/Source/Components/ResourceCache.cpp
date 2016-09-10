@@ -62,7 +62,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
-			// load animations
+			// load sheet animations
 			if (xml->pushTagIfExists("animations")) {
 
 				auto animLoader = AnimLoader();
@@ -83,7 +83,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
-			// load transform animations
+			// load attribute animations
 			if (xml->pushTagIfExists("attranimations")) {
 				auto animLoader = AnimLoader();
 				auto rootAnims = vector<spt<CommonAnim>>();

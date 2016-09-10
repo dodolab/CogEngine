@@ -6,7 +6,7 @@
 namespace Cog {
 
 	/**
-	* Entity for animations
+	* Entity for discrete sheet animations
 	*/
 	class SheetAnim : public CommonAnim {
 	protected:
@@ -73,6 +73,7 @@ namespace Cog {
 			CommonAnim::LoadAttributesFromXml(xml);
 		}
 
+
 		/**
 		* Initializes list of paths to all sheets this animation holds
 		*/
@@ -85,6 +86,7 @@ namespace Cog {
 				return;
 			}
 
+			// the file path can contain more sheets - in such case they are identified by braces, e.g. anim_frames_{0}.png or anim_frames_{000}.png
 			int firstBracket = sheetPath.find("{");
 			int secondBracket = sheetPath.find("}");
 
@@ -93,16 +95,18 @@ namespace Cog {
 				string sequencePrefix = sheetPath.substr(0, firstBracket);
 				string sequenceSuffix = sheetPath.substr(secondBracket + 1, sheetPath.length() - (secondBracket + 1));
 
-				// string is in form {XXX}, it means that this is a file sequence
 				int numberOfDigits = secondBracket - firstBracket - 1;
 
+				if (start > end) throw IllegalArgumentException("Start of the animation must be lower or equal to the end");
+
+				// parse sheet files
 				for (int i = start; i <= end; i += increment) {
-					// todo: danger increment value !!
 					string file = sequencePrefix + ofToString(i, 1, numberOfDigits, '0') + sequenceSuffix;
 					sheets.push_back(file);
 				}
 			}
 			else {
+				// just store path to the sheet
 				sheets.push_back(sheetPath);
 			}
 
@@ -122,7 +126,7 @@ namespace Cog {
 			return HasSheets();
 		}
 
-		virtual bool IsMeasurable() {
+		virtual bool IsContinous() {
 			return false;
 		}
 
