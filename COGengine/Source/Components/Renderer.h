@@ -51,7 +51,6 @@ namespace Cog {
 			// zIndex will be taken always from local position
 			int zIndex = (int)(tr.localPos.z);
 
-
 			auto it = zIndexes.find(zIndex);
 			if (it != zIndexes.end()) {
 				(*it).second.push_back(node);
@@ -119,10 +118,10 @@ namespace Cog {
 
 			if (owner->HasAttr(ATTR_IMGBOUNDS)) {
 				ofRectangle bound = owner->GetAttr<ofRectangle>(ATTR_IMGBOUNDS);
-				image->drawSubsection(-bound.width / 2, -bound.height / 2, bound.width, bound.height, bound.x, bound.y);
+				image->drawSubsection(0,0, bound.width, bound.height, bound.x, bound.y);
 			}
 			else {
-				image->draw(-image->getWidth() / 2, -image->getHeight() / 2);
+				image->draw(0, 0);
 			}
 		}
 
@@ -179,7 +178,9 @@ namespace Cog {
 			// there is maybe a bug in OF : left upper border of the text is not the left upper border of the first letter
 			// but a few pixels nearby -> that's why the coordinate is multiplied by absolute scale
 			spt<ofTrueTypeFont> font = shape->GetFont();
-			font->drawString(shape->GetText(), -shape->GetTextWidth() / 2, owner->GetTransform().absScale.y*shape->GetTextHeight() / 2);
+		
+			// don't touch it! It works :-)
+			font->drawString(shape->GetText(), 0, font->getLineHeight()/2);
 		}
 
 		void RenderSprite(Node* owner) {

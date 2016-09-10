@@ -48,6 +48,13 @@ namespace Cog {
 		}
 
 		/**
+		* Loads object properties from xml
+		*/
+		virtual void LoadFromXml(spt<ofxXml> xml) {
+
+		}
+
+		/**
 		* Gets the owner node
 		*/
 		const Node* GetOwner() const {

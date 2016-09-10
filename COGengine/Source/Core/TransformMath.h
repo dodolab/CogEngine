@@ -44,8 +44,11 @@ namespace Cog {
 			ofVec2f absPos = CalcPosition(node, parent, position, positionCalc, gridWidth, gridHeight);
 
 			// fix position according to the anchor
-			absPos.x += (0.5f - anchor.x) * node->GetShape()->GetWidth()*scale.x;
-			absPos.y += (0.5f - anchor.y) * node->GetShape()->GetHeight()*scale.y;
+			auto shape = node->GetShape();
+
+			
+			absPos.x += (0.0f - anchor.x) * node->GetShape()->GetWidth()*scale.x;
+			absPos.y += (0.0f - anchor.y) * node->GetShape()->GetHeight()*scale.y;
 
 			// if zIndex is equal to 0, the value will be taken from the parent
 			if (zIndex == 0) zIndex = parentTrans.localPos.z;
@@ -87,8 +90,8 @@ namespace Cog {
 				break;
 			case CalcType::PER:
 				// relative percentage -> parent size is 1.0 x 1.0
-				absPos = ofVec2f(2*(-0.5f+pos.x)*parent->GetShape()->GetWidth() * parentTrans.absScale.x, 
-					2*(-0.5f+pos.y)*parent->GetShape()->GetHeight()*parentTrans.absScale.y);
+				absPos = ofVec2f(pos.x*parent->GetShape()->GetWidth() * parentTrans.scale.x,
+					pos.y*parent->GetShape()->GetHeight()*parentTrans.scale.y);
 				break;
 			case CalcType::GRID:
 				// grid percentage -> grid size must be specified
@@ -136,6 +139,7 @@ namespace Cog {
 				scaleX = (width* scrSize.x / node->GetShape()->GetWidth());
 				scaleY = (height* scrSize.y / node->GetShape()->GetHeight());
 				break;
+
 			case CalcType::GRID:
 				// grid scale -> todo, not tested yet :-)
 				float percentageWidth = width / gridWidth;
@@ -179,6 +183,7 @@ namespace Cog {
 				posY = xml->getAttribute(":", "pos_y", 0.0);
 				pos = ofVec2f(posX, posY);
 			}
+
 
 			zIndex = xml->getAttribute(":", "z_index", 0);
 			posCalc = StrToCalcType(xml->getAttribute(":", "ptype", ""));

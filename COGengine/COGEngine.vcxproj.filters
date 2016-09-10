@@ -255,6 +255,9 @@
     <ClInclude Include="Source\Core\MsgListener.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\FloatingScene.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "InputAct.h"
 
 namespace Cog {
 	
@@ -25,6 +26,15 @@ namespace Cog {
 		}
 
 		AttrChangeEvent(StateChange changeType, unsigned state1, unsigned state2) : changeType(changeType), state1(state1), state2(state2) {
+
+		}
+	};
+
+	class InputEvent : public MsgEvent {
+	public:
+		InputAct input;
+
+		InputEvent(InputAct input) : input(input) {
 
 		}
 	};
