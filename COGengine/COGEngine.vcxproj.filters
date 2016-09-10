@@ -282,6 +282,9 @@
     <ClInclude Include="Source\ofxCogMain.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\cpplinq\cpplinq.hpp">
+      <Filter>3rdParty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">
