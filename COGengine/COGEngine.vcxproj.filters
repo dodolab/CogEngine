@@ -37,6 +37,9 @@
     <Filter Include="Source\Attributes">
       <UniqueIdentifier>{193eb7c2-d057-4a2f-ba26-ab9428e9e728}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Communication">
+      <UniqueIdentifier>{77bdc192-ae4b-45a3-9f3d-f0874a7870d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -411,6 +414,15 @@
     <ClInclude Include="Source\Tests\GoalTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\CellPartitioner.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\NetReader.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\NetWriter.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -562,6 +574,12 @@
     </ClCompile>
     <ClCompile Include="Source\Math\PathSegment.cpp">
       <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\NetWriter.cpp">
+      <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\NetReader.cpp">
+      <Filter>Source\Communication</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

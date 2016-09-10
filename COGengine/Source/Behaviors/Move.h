@@ -39,10 +39,10 @@ namespace Cog {
 			transform.rotation += movement.GetAngularSpeed()*0.001f*delta;
 
 			if (infiniteBoard) {
-				if (transform.absPos.x < 0) transform.localPos.x = CogGetScreenWidth() / transform.absScale.x*transform.scale.x;
+				if (transform.absPos.x < -owner->GetShape()->GetWidth()) transform.localPos.x = CogGetScreenWidth() / transform.absScale.x*transform.scale.x;
 				else if (transform.absPos.x > (CogGetScreenWidth()+10)) transform.localPos.x = 0;
 
-				if (transform.absPos.y < 0) transform.localPos.y = CogGetScreenHeight() / transform.absScale.y*transform.scale.y;
+				if (transform.absPos.y < -owner->GetShape()->GetHeight()) transform.localPos.y = CogGetScreenHeight() / transform.absScale.y*transform.scale.y;
 				else if (transform.absPos.y > (CogGetScreenHeight()+10)) transform.localPos.y = 0;
 				
 			}

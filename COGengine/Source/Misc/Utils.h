@@ -4,10 +4,23 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 namespace Cog {
+
+
+	// compares two floats with error tolerance
+	inline bool isEqual(float a, float b)
+	{
+		if (fabs(a - b) < 1E-12)
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	* Creates formatted string
