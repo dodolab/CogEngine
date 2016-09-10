@@ -17,7 +17,7 @@
  
   <scenes initial="main">
     <scene name="main">
-	  <node name="bgr" img="bgr.jpg">
+	  <node name="bgr" img="bgr2.jpg">
 	  </node>
 	  
 	  <node name="square" img="sheet_squares.png">

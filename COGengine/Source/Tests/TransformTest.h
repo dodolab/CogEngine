@@ -31,6 +31,7 @@ using namespace Cog;
 
 	TEST_CASE("Transformation test", "[class]")
 	{
+		CogEngine::GetInstance().SetFps(20);
 		CogEngine::GetInstance().Init();
 		CogEngine::GetInstance().environment->SetVirtualAspectRatio(1);
 		CogEngine::GetInstance().environment->OnScreenSizeChanged(400, 400);

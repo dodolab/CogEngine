@@ -31,17 +31,20 @@ namespace Cog {
 		// frames per second
 		uint64 fps;
 		string configFile;
+		// path to splash screen
+		string splashScreen;
 		spt<ofxXml> xmlConfig;
+		bool engineInitialized = false;
 
 	public:
 
 		/**
 		* Creates a new application wrapper
 		*/
-		CogApp() : configFile(""), fps(APP_SPEED){
+		CogApp() : configFile(""), fps(APP_SPEED), splashScreen(""){
 		}
 
-		CogApp(string configFile) : configFile(configFile), fps(APP_SPEED){
+		CogApp(string configFile) : configFile(configFile), fps(APP_SPEED), splashScreen("") {
 			ofxXml* xml = new ofxXml();
 			xml->loadFile(configFile);
 			this->xmlConfig = spt<ofxXml>(xml);
@@ -49,6 +52,14 @@ namespace Cog {
 
 		uint64 GetFps() {
 			return fps;
+		}
+
+		void SetSplashScreenPath(string splashScreen) {
+			this->splashScreen = splashScreen;
+		}
+
+		string GetSplashScreenPath() {
+			return splashScreen;
 		}
 
 		/**
@@ -69,6 +80,9 @@ namespace Cog {
 
 		// setup function, called before first draw and update
 		void setup();
+		// setup function, called during the first draw and update
+		void setupEngine();
+
 		// drawing function
 		void draw();
 		// update function
@@ -123,6 +137,9 @@ namespace Cog {
 		// handler for android touch-cancel
 		void touchCancelled(int x, int y, int id);
 	#endif
+
+	private:
+		void DrawSplashScreen();
 	};
 
 }// namespace

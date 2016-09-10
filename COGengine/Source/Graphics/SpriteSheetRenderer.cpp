@@ -325,10 +325,10 @@ namespace Cog {
 
 		switch (tile.dir) {
 		case F_NONE:
-			x1 = tile.offsetX;
-			y1 = tile.offsetY;
-			x2 = tile.offsetX + tile.width;
-			y2 = tile.offsetY + tile.height;
+			x1 = tile.offsetX+1; // rounding errors elimination
+			y1 = tile.offsetY+1;
+			x2 = tile.offsetX + tile.width-1;
+			y2 = tile.offsetY + tile.height-1;
 			break;
 		case F_HORIZ:
 			x1 = tile.offsetX + tile.width;

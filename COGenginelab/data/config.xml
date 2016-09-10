@@ -15,7 +15,7 @@
 
   <scenes initial="main">
     <scene name="main">
-      <node img="bgr.jpg" />
+      <node img="bgr2.jpg" />
       <node name="anim" img="sheet_squares.png">
 	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" rotation_origin="0.5" />
 		<behavior type="AttribAnimator" animation="mojo" />
