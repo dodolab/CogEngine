@@ -36,7 +36,7 @@ namespace Cog {
 		* @param spriteHeight height of one frame
 		*/
 		spt<SpriteSet> AddSpriteSet(string name, int totalFrames, int spriteWidth, int spriteHeight) {
-			return AddSpriteSet(name, 0, 0, totalFrames, spriteWidth, spriteHeight, spriteImage->getWidth(), spriteImage->getHeight());
+			return AddSpriteSet(name, 0, 0, totalFrames, spriteWidth, spriteHeight, (int)spriteImage->getWidth(), (int)spriteImage->getHeight());
 		}
 
 		/**

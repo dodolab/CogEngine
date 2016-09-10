@@ -938,5 +938,65 @@
     <ClCompile Include="Source\Scripting\MsgLua.cpp">
       <Filter>Source\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Behaviors\FloatingScene.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Goal.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\HitEvent.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\InputKey.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Move.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\MultiAnim.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\MultiSelection.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\RotateAnim.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Selection.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\SheetAnimator.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\StateMachine.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\SteeringBehavior.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\TransformAnim.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\TranslateAnim.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Tween.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\AttribAnimator.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Button.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Collider.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\DelayAction.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\DelayRemove.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

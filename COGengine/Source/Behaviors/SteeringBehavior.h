@@ -1,14 +1,9 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Bounds.h"
-#include "Collision.h"
-#include "Shape.h"
-#include "Node.h"
 #include "Movement.h"
 #include "Path.h"
 #include "SteeringMath.h"
-#include "Scene.h"
 
 namespace Cog {
 
@@ -20,26 +15,9 @@ namespace Cog {
 	protected:
 		SteeringMath steeringMath;
 
-		float clampAngle(float x) {
-			x = fmod(x + 180, 360);
-			if (x < 0)
-				x += 360;
-			return x - 180;
-		}
+		float clampAngle(float x);
 
-		void SetRotationDirection(Movement& movement, Trans& transform, ofVec2f destination, float maxAcceleration, uint64 delta) {
-			float actualRotation = transform.rotation;
-			float neededRotation = transform.CalcRotationToPosition(destination);
-			
-			actualRotation = DEG_TO_RAD*clampAngle(actualRotation);
-			neededRotation = DEG_TO_RAD*clampAngle(neededRotation);
-
-			float rotDiff = -RAD_TO_DEG*atan2(sin(actualRotation - neededRotation), cos(actualRotation - neededRotation));
-
-			if (isnan(rotDiff)) rotDiff = 0;
-
-			movement.SetAngularSpeed(rotDiff*maxAcceleration);
-		}
+		void SetRotationDirection(Movement& movement, Trans& transform, ofVec2f destination, float maxAcceleration, uint64 delta);
 
 	public:
 
@@ -58,20 +36,9 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
-			}
-		}
+		void OnStart();
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			auto& transform = owner->GetTransform();
-			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f force = steeringMath.Seek(transform, movement, dest, maxAcceleration);
-			movement.AddForce(forceId, force);
-			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 	class ArriveBehavior : public SteeringBehavior {
@@ -90,31 +57,9 @@ namespace Cog {
 		}
 
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
-			}
-
-			if (!owner->HasAttr(ATTR_MOVEMENT)) {
-				owner->AddAttr(ATTR_MOVEMENT, Movement());
-			}
-		}
+		void OnStart();
 		
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-
-			auto& transform = owner->GetTransform();
-			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed, pointTolerance);
-			if (acceleration != ofVec2f(INT_MIN)) {
-				movement.AddForce(forceId, acceleration);
-				this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
-			}
-			else {
-				movement.AddForce(forceId, ofVec2f(0));
-				Finish();
-			}
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 	class FleeBehavior : public SteeringBehavior {
@@ -128,22 +73,9 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
-			}
-		}
+		void OnStart();
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			auto& transform = owner->GetTransform();
-			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-
-			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f acceleration = steeringMath.Flee(transform, movement, dest, fleeDistance, maxAcceleration);
-			movement.AddForce(forceId,acceleration);
-
-			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 	class FollowBehavior : public SteeringBehavior {
@@ -160,32 +92,9 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
-				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
-			}
+		void OnStart();
 
-			if (!owner->HasAttr(ATTR_MOVEMENT)) {
-				owner->AddAttr(ATTR_MOVEMENT, Movement());
-			}
-		}
-
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			auto& transform = owner->GetTransform();
-			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-
-			ofVec2f force = steeringMath.Follow(transform, movement, path, currentPathPoint,
-				pointTolerance, finalPointTolerance, maxAcceleration);
-
-			if (force == ofVec2f(INT_MIN)) {
-				movement.Stop();
-				Finish();
-				return;
-			}
-
-			movement.AddForce(forceId, force);
-			this->SetRotationDirection(movement, transform, transform.localPos+movement.GetVelocity(), maxAcceleration, delta);
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 	class WanderBehavior : public SteeringBehavior {
@@ -200,28 +109,9 @@ namespace Cog {
 			forceId = StringHash(this->GetId());
 		}
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_STEERING_BEH_WANDER)) {
-				owner->AddAttr(ATTR_STEERING_BEH_WANDER, ofVec2f(0));
-			}
-		}
+		void OnStart();
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			auto& transform = owner->GetTransform();
-			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-
-			ofVec2f behWander = owner->GetAttr<ofVec2f>(StringHash(ATTR_STEERING_BEH_WANDER));
-			ofVec2f force = steeringMath.Wander(transform, movement, behWander, wanderRadius, wanderDistance, wanderJitter,delta);
-			owner->ChangeAttr(StringHash(ATTR_STEERING_BEH_WANDER), behWander);
-
-			// debug display
-			//Node* pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
-			//pointer2->GetTransform().localPos = transform.localPos+force*10;
-
-			// add velocity dependency
-			movement.AddForce(forceId, force-movement.GetVelocity()/2);
-			this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), 4, delta);
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 }// namespace

@@ -20,7 +20,7 @@ namespace Cog {
 	struct CalcTypeConverter {
 		static CalcType GetUnitValue(string val, float& floatVal) {
 			stringstream ss;
-			int i;
+			unsigned i;
 			for (i = 0; i < val.length(); i++) {
 				if (isdigit(val[i]) || val[i] == '.' || val[i] == '-') ss << val[i];
 				else break;

@@ -3,6 +3,7 @@
 #include "BehaviorEnt.h"
 #include "Selection.h"
 #include "MultiSelection.h"
+#include "Scene.h"
 
 namespace Cog {
 

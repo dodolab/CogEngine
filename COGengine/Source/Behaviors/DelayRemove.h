@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "TranslateAnim.h"
 #include "Msg.h"
 
 namespace Cog {
@@ -30,16 +29,7 @@ namespace Cog {
 
 		}
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			actual += (int)delta;
-
-			if (actual > millis) {
-				owner->GetParent()->RemoveChild(owner, erase);
-				Finish();
-			}
-		}
-
-
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 }// namespace

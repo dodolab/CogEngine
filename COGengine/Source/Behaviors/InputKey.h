@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Node.h"
 
 namespace Cog {
 
@@ -34,52 +33,14 @@ namespace Cog {
 
 		}
 
-		void OnStart() {
-			if (!owner->HasAttr(ATTR_ACTIONS)) {
-				owner->AddAttr(ATTR_ACTIONS, Flags());
-			}
-		}
+		void OnStart();
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-
-			Flags& actions = owner->GetAttr<Flags>(ATTR_ACTIONS);
-
-			for (auto key : CogGetPressedKeys()) {
-				
-				if (!key->IsHandled()) {
-					
-
-					// todo...
-					if (key->key == (int)('l')) {
-						// handle key press
-						key->handlerNodeId = owner->GetId();
-						// write log
-						CogWriteLogActualScene();
-					}
-					else if (key->key == (int)('r')) {
-						key->handlerNodeId = owner->GetId();
-						CogWriteTimeReport(true);
-					}
-
-					Act inAct = GetAction(key->key);
-					if (inAct != Act::NONE)
-					{
-						if (!key->ended) actions.SetState((int)inAct);
-						else actions.ResetState((int)inAct);
-					}
-				}
-			}
-		}
+		virtual void Update(const uint64 delta, const uint64 absolute);
 
 	private:
 
 		// Gets action by key
-		Act GetAction(int key) {
-			auto find = keyMapping.find(key);
-			if (find != keyMapping.end()) return (*find).second;
-
-			return Act::NONE;
-		}
+		Act GetAction(int key);
 	};
 
 }// namespace

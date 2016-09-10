@@ -1,10 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Bounds.h"
-#include "Collision.h"
-#include "Shape.h"
-#include "Node.h"
 
 namespace Cog {
 
@@ -41,36 +37,11 @@ namespace Cog {
 
 		}
 
-		void OnInit() {
-			RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
-		}
+		void OnInit();
 
-		void OnStart() {
-			if (disabledImg && owner->HasState(stateDisabled)) {
-				owner->GetShape<spt<Image>>()->SetImage(disabledImg);
-			}
-			else {
-				owner->GetShape<spt<Image>>()->SetImage(defaultImg);
-			}
-		}
+		void OnStart();
 
-		void OnMessage(Msg& msg) {
-			if (msg.GetSourceObject()->GetId() == owner->GetId()) {
-				if (!owner->HasState(stateDisabled) && msg.HasAction(ACT_OBJECT_HIT_STARTED)) {
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(pressedImg);
-				}
-				else if (!owner->HasState(stateDisabled) && (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST))) {
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
-				}
-				else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(disabledImg);
-				}
-				else if (defaultImg && !msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
-					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
-				}
-			}
-		}
-
+		void OnMessage(Msg& msg);
 
 		void Update(const uint64 delta, const uint64 absolute) {
 

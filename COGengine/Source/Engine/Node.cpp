@@ -2,6 +2,7 @@
 #include "Behavior.h"
 #include "ResourceCache.h"
 #include "CogEngine.h"
+#include "Scene.h"
 
 namespace Cog {
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "TranslateAnim.h"
 #include "Msg.h"
 
 namespace Cog {
@@ -33,16 +32,7 @@ namespace Cog {
 
 		}
 
-		virtual void Update(const uint64 delta, const uint64 absolute) {
-			actual += (int)delta;
-
-			if (actual > millis) {
-				SendDirectMessage(ACT_DELAY_ACTION, 0, data, owner, targetId);
-				Finish();
-			}
-		}
-
-
+		virtual void Update(const uint64 delta, const uint64 absolute);
 	};
 
 }// namespace
