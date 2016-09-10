@@ -20,9 +20,6 @@ namespace Cog
 	class StringHash
 	{
 	public:
-#ifdef DEBUG
-		string strValue;
-#endif
 		// Construct with zero value.
 		StringHash() :
 			value_(0)
@@ -33,6 +30,7 @@ namespace Cog
 		StringHash(const StringHash& rhs) :
 			value_(rhs.value_)
 		{
+
 		}
 
 		// Construct with an initial value.

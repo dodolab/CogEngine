@@ -32,7 +32,7 @@ namespace Cog {
 
 		COGLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
 		// move elements from collection to insert so they can be removed from classic collections
-		InsertElementsForAdding(false);
+		InsertElementsForAdding(false, false);
 
 
 			// delete all behaviors
@@ -126,7 +126,7 @@ namespace Cog {
 		}
 
 		DeleteElementsForRemoving(false);
-		InsertElementsForAdding(false);
+		InsertElementsForAdding(false, true);
 	}
 
 	void Node::Draw(const uint64 delta, const uint64 absolute) {
@@ -188,7 +188,7 @@ namespace Cog {
 
 
 	void Node::SubmitChanges(bool applyToChildren) {
-		InsertElementsForAdding(applyToChildren);
+		InsertElementsForAdding(applyToChildren, true);
 		DeleteElementsForRemoving(applyToChildren);
 	}
 
@@ -245,7 +245,7 @@ namespace Cog {
 	}
 
 
-	void Node::InsertElementsForAdding(bool applyToChildren) {
+	void Node::InsertElementsForAdding(bool applyToChildren, bool init) {
 
 		// insert children
 		for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it) {
@@ -262,7 +262,7 @@ namespace Cog {
 				child->GetScene()->AddNode(child);
 			}
 
-			if (applyToChildren) child->InsertElementsForAdding(true);
+			if (applyToChildren) child->InsertElementsForAdding(true, init);
 		}
 		childrenToAdd.clear();
 
@@ -290,9 +290,11 @@ namespace Cog {
 				scene->AddBehavior(beh);
 			}
 
-			// initialize
-			beh->Init();
-			beh->Start();
+			if (init) {
+				// initialize
+				beh->Init();
+				beh->Start();
+			}
 		}
 		behaviorsToAdd.clear();
 	}

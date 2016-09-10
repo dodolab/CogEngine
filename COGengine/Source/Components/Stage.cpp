@@ -11,7 +11,7 @@ namespace Cog {
 
 	Stage::~Stage() {
 
-		rootObject->InsertElementsForAdding(true);
+		rootObject->InsertElementsForAdding(true, false);
 		rootObject->DeleteElementsForRemoving(true);
 
 		for (Scene* scene : scenes) {
@@ -142,6 +142,11 @@ namespace Cog {
 			// if actual scene is dialog, close the dialog first
 			if (actualScene->GetSceneType() == SceneType::DIALOG) {
 				this->SwitchBackToScene(TweenDirection::NONE);
+			}
+
+			// set parent scene
+			if (scene->GetSceneType() == SceneType::DIALOG) {
+				scene->SetParentScene(actualScene);
 			}
 
 			Node* from = actualScene->GetSceneNode();

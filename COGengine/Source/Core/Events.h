@@ -68,15 +68,16 @@ namespace Cog {
 		}
 	};
 
-	class DeltaInfo;
-
-	class DeltaMsgEvent : public MsgEvent {
+	template <class  T>
+	class CommonEvent : public MsgEvent {
 	public:
-		spt<DeltaInfo> msg;
+		spt<T> value;
 
-		DeltaMsgEvent(spt<DeltaInfo> msg) : msg(msg) {
+		CommonEvent(spt<T> value) :value(value) {
 
 		}
 	};
+
+
 
 }// namespace

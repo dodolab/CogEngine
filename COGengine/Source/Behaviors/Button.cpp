@@ -24,6 +24,9 @@ namespace Cog {
 			}
 			else if (!owner->HasState(stateDisabled) && (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST))) {
 				msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
+				if (msg.HasAction(ACT_OBJECT_HIT_ENDED)) {
+					SendMessageToListeners(StringHash(ACT_BUTTON_CLICKED), 0, nullptr, owner);
+				}
 			}
 			else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
 				msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(disabledImg);

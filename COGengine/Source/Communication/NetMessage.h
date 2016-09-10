@@ -4,6 +4,7 @@
 #include "NetWriter.h"
 #include "StringHash.h"
 #include "DeltaInfo.h"
+#include "ofxSmartPointer.h"
 
 namespace Cog {
 
@@ -13,7 +14,7 @@ namespace Cog {
 		CONNECT_REQUEST = 3,
 		CONNECT_RESPONSE = 4,
 		UPDATE = 5,
-		CALLBACK_UPDATE = 6,
+		ACCEPT = 6,
 		DISCONNECT = 7
 	};
 
@@ -30,8 +31,9 @@ namespace Cog {
 	private:
 		string sourceIp;
 		int sourcePort;
-		tBYTE id = 0;
-		NetMsgType msgType = NetMsgType::CALLBACK_UPDATE;
+		tBYTE syncId = 0;
+		tBYTE acceptedId = 0;
+		NetMsgType msgType = NetMsgType::UPDATE;
 		StringHash action = StringHash();
 		tDWORD msgTime = 0;
 		tBYTE* data = nullptr;
@@ -42,11 +44,11 @@ namespace Cog {
 			this->dataLength = messageLength - GetHeaderLength();
 		}
 
-		NetInputMessage(int messageLength, int id) : NetInputMessage(messageLength) {
-			this->id = id;
+		NetInputMessage(int messageLength, int syncId) : NetInputMessage(messageLength) {
+			this->syncId = syncId;
 		}
 
-		NetInputMessage(int messageLength, int id, NetMsgType msgType) : NetInputMessage(messageLength, id) {
+		NetInputMessage(int messageLength, int syncId, NetMsgType msgType) : NetInputMessage(messageLength, syncId) {
 			this->msgType = msgType;
 		}
 
@@ -70,12 +72,20 @@ namespace Cog {
 			this->sourcePort = sourcePort;
 		}
 
-		tBYTE GetId() {
-			return id;
+		tBYTE GetSyncId() {
+			return syncId;
 		}
 
-		void SetId(tBYTE id) {
-			this->id = id;
+		void SetSyncId(tBYTE id) {
+			this->syncId = syncId;
+		}
+
+		tBYTE GetAcceptedId() {
+			return acceptedId;
+		}
+
+		void SetAcceptedId(tBYTE id) {
+			this->acceptedId = id;
 		}
 
 		int GetMessageLength() {
@@ -83,7 +93,8 @@ namespace Cog {
 		}
 
 		int GetHeaderLength() {
-			return 	1 // id
+			return 	1 // sync id
+				+ 1 // accepted id
 				+ 1 // msgType
 				+ 4 // action
 				+ 4; // msgTime
@@ -117,6 +128,14 @@ namespace Cog {
 			return data;
 		}
 
+		template<class T>
+		spt<T> GetData() {
+			auto netReader = new NetReader(data, GetDataLength());
+			spt<T> innerMsg = spt<T>(new T());
+			innerMsg->LoadFromStream(netReader);
+			return innerMsg;
+		}
+
 		int GetDataLength() {
 			return dataLength;
 		}
@@ -133,37 +152,46 @@ namespace Cog {
 
 	class NetOutputMessage {
 	private:
-		tBYTE id = 0;
-		NetMsgType msgType = NetMsgType::CALLBACK_UPDATE;
+		tBYTE syncId = 0;
+		tBYTE acceptedId = 0;
+		NetMsgType msgType = NetMsgType::UPDATE;
 		StringHash action = StringHash();
 		tDWORD msgTime = 0;
 		NetData* data = nullptr;
 
 	public:
-		NetOutputMessage(int id) : id(id) {
+		NetOutputMessage(int syncId) : syncId(syncId) {
 
 		}
 
-		NetOutputMessage(int id, NetMsgType msgType) : id(id), msgType(msgType) {
+		NetOutputMessage(int syncId, NetMsgType msgType) : syncId(syncId), msgType(msgType) {
 
 		}
 
 		~NetOutputMessage() {
-			//delete data;
+			delete data;
 		}
 
-
-		tBYTE GetId() {
-			return id;
+		tBYTE GetSyncId() {
+			return syncId;
 		}
 
-		void SetId(tBYTE id) {
-			this->id = id;
+		void SetSyncId(tBYTE syncId) {
+			this->syncId = syncId;
+		}
+
+		tBYTE GetAcceptedId() {
+			return acceptedId;
+		}
+
+		void SetAcceptedId(tBYTE id) {
+			this->acceptedId = id;
 		}
 
 		int GetMessageLength() {
 			return (data == nullptr ? 0 : data->GetDataLength())
-				+ 1 // id
+				+ 1 // sync id
+				+ 1 // accepted id
 				+ 1 // msgType
 				+ 4 // action
 				+ 4; // msgTime

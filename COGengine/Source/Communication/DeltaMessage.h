@@ -7,8 +7,8 @@ namespace Cog {
 
 	class DeltaMessage : public NetData {
 	public:
-		map<StringHash, float> deltas;
-		map<StringHash, float> teleports;
+		map<int, float> deltas;
+		map<int, float> teleports;
 
 
 		DeltaMessage() {

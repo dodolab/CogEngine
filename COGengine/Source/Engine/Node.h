@@ -572,7 +572,7 @@ namespace Cog {
 		* Inserts children and behaviors that should be inserted
 		* at the end of update loop
 		*/
-		void InsertElementsForAdding(bool applyToChildren);
+		void InsertElementsForAdding(bool applyToChildren, bool init);
 
 		/*
 		* Deletes children and behaviors that should be removed
