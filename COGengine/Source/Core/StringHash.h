@@ -9,6 +9,11 @@ namespace Cog
 
 #define CONVERSION_BUFFER_LENGTH 128
 
+
+	/**
+	* Entity that transforms string into unsigned value; is used for quicker access to hashmaps where
+	* numbers are used as keys
+	*/
 	class StringHash
 	{
 	public:

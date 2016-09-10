@@ -71,15 +71,25 @@ public:
 		else return true;
 	}
 
+	/**
+	* Tests if the sprite has been hit
+	*/
+	bool MultiSpriteHitTest(spt<SpritesShape> shape, ofVec3f testPos) {
+		if (testPos.x < 0
+			|| testPos.y < 0
+			|| testPos.x >(float)shape->GetWidth()
+			|| testPos.y >(float)shape->GetHeight())
+			return false;
+
+		return true;
+	}
+
 	virtual void Update(const uint64 delta, const uint64 absolute){
 
 		if (owner->HasState(StringHash(STATES_HITTABLE))){
 
 			// get inverse matrix
 			ofMatrix4x4 inverse = owner->GetTransform().GetAbsMatrix().getInverse();
-
-			if (owner->HasRenderType(RenderType::IMAGE)){
-				spt<ofImage> hitImage = owner->GetShape<spt<Image>>()->GetImage();
 
 				bool atLeastOneTouch = false;
 
@@ -89,7 +99,14 @@ public:
 					ofVec3f touchVector = touch->position;
 					ofVec3f touchTrans = touchVector*inverse;
 
-					if ((touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId()) &&  ImageHitTest(hitImage, touchTrans, preciseTest)){
+					// do hit test
+					bool hasHitTest = false;
+					if (owner->HasRenderType(RenderType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
+					else if (owner->HasRenderType(RenderType::MULTISPRITE)) {
+						hasHitTest = MultiSpriteHitTest(owner->GetShape<spt<SpritesShape>>(), touchTrans);
+					}
+
+					if ((touch->handlerNodeId == -1 || touch->handlerNodeId == owner->GetId()) && hasHitTest){
 						// image has been hit
 						if (touch->started){
 #ifdef ANDROID
@@ -167,25 +184,6 @@ public:
 						else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 					}
 				}
-
-			}
-			else{
-				// TODO
-				/*for (auto touch : GetPressedPoints()){
-					if (touch.started){
-						ofVec3f touchVector = touch.position;
-						ofVec3f touchTrans = inverse*(touchVector);
-						ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
-						ofVec3f sizeTrans = owner->GetTransform().Scale*size;
-
-						if (touchTrans.x+sizeTrans.x/2 <= sizeTrans.x && touchTrans.y+sizeTrans.y/2 <= sizeTrans.y &&
-							touchTrans.x+sizeTrans.x/2 >= 0 && touchTrans.y+sizeTrans.y/2>=0){
-							// is hit
-
-						}
-					}
-				}*/
-			}
 		}
 	}
 

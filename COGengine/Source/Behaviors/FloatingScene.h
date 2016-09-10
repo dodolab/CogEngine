@@ -53,20 +53,25 @@ namespace Cog {
 
 							Trans& transform = owner->GetTransform();
 							ofVec2f oldPos = transform.absPos;
-							ofVec2f newPos = math.CalcPosition(owner, owner->GetParent(), ofVec2f(oldPos.x + diff.x, oldPos.y + diff.y), CalcType::ABS);
+							ofVec2f newPos = oldPos+diff;
 
-							// calculate local width and height
-							float width = (owner->GetShape()->GetWidth() - CogGetScreenWidth() / 2.0f)*transform.scale.x;
-							float height = (owner->GetShape()->GetHeight() - CogGetScreenHeight() / 2.0f)*transform.scale.y;
+
+							float shapeWidth = owner->GetShape()->GetWidth();
+							float shapeHeight = owner->GetShape()->GetHeight();
+
+							// calculate absolute width and height
+							float width = shapeWidth*transform.absScale.x;
+							float height = shapeHeight*transform.absScale.y;
 
 							if (newPos.x > 0) newPos.x = 0;
 							if (newPos.y > 0) newPos.y = 0;
-							if (newPos.x < -(width)) newPos.x = -width;
-							if (newPos.y < (-height)) newPos.y = -height;
+							if (-newPos.x + CogGetScreenWidth() > (width)) newPos.x = CogGetScreenWidth() - width;
+							if (-newPos.y + CogGetScreenHeight() > (height)) newPos.y = CogGetScreenHeight() - height;
 
-							transform.localPos.x = newPos.x;
-							transform.localPos.y = newPos.y;
+							auto newLocalPos = math.CalcPosition(owner, owner->GetParent(), newPos, CalcType::ABS, 0, 0);
 
+							transform.localPos.x = newLocalPos.x;
+							transform.localPos.y = newLocalPos.y;
 						}
 
 						lastMousePos = evt->input->position;

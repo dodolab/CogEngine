@@ -171,5 +171,73 @@ namespace Cog {
 		}
 	};
 
+	/**
+	* Crate for multisprite object.
+	* Multisprite differs from sprite that it
+	* has transformation coordinates in it
+	*/
+	class MSpriteCrate {
+	public:
+		spt<Sprite> sprite;
+		Trans transform;
+	};
+
+	class SpritesShape : public Shape {
+	private:
+		vector<spt<MSpriteCrate>> sprites;
+		int width = 1;
+		int height = 1;
+
+	public:
+		SpritesShape(vector<spt<MSpriteCrate>> sprites) : Shape(RenderType::MULTISPRITE) {
+			this->sprites = sprites;
+			Recalc();
+		}
+
+		void Recalc() {
+
+			int minX = 0;
+			int minY = 0;
+			int maxX = 0;
+			int maxY = 0;
+			int mWidth = 0;
+			int mHeight = 0;
+
+			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
+				spt<MSpriteCrate> crt = (*it);
+				int posX = crt->transform.localPos.x;
+				int posY = crt->transform.localPos.y;
+
+				if (posX < minX) minX = posX;
+				if (posY < minY) minY = posY;
+				
+				if (posX > maxX) {
+					maxX = posX;
+					mWidth = crt->sprite->GetWidth();
+				}
+
+				if (posY > maxY) {
+					maxY = posY;
+					mHeight = crt->sprite->GetHeight();
+				}
+			}
+
+			this->width = (maxX - minX) + mWidth;
+			this->height = (maxY - minY) + mHeight;
+		}
+
+		vector<spt<MSpriteCrate>>& GetSprites() {
+			return sprites;
+		}
+
+		float GetWidth() {
+			return width;
+		}
+
+		float GetHeight() {
+			return height;
+
+		}
+	};
 
 }// namespace

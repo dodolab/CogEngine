@@ -16,26 +16,28 @@ namespace Cog {
 
 	protected:
 		map<int, vector<Node*>> zIndexes;
-		SpriteSheetRenderer* renderer;
-		Tile tempTile;
+		SpriteSheetRenderer* renderer = nullptr;
+		Tile drawingTile;
+		vector<string> rendererLayers = vector<string>();
 
 	public:
 		Renderer() {
-			tempTile = Tile();
+			drawingTile  = Tile();
 		}
 
 		void Init() {
 			zIndexes = map<int, vector<Node*>>();
+		}
 
+		void RestartRenderer() {
+			delete renderer;
+			renderer = new SpriteSheetRenderer();
+			rendererLayers = vector<string>();
+		}
 
-			// BEGIN UPGRADE
-			renderer = new SpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
-			//auto img = CogGet2DImage("images/blue.png");
-
-			//	renderer->loadTexture("images/blue.png", 256, 256, GL_LINEAR);
-			//renderer->loadTexture(&img->getTextureReference(), "blue", 10000, true);
-
-			// END UPGRADE
+		void AddTileLayer(spt<ofImage> img, string name, int bufferSize) {
+			renderer->loadTexture(&img->getTextureReference(), name, bufferSize);
+			rendererLayers.push_back(name);
 		}
 
 		void ClearCounters() {
@@ -62,11 +64,11 @@ namespace Cog {
 			}
 		}
 
-
-
 		void Render() {
-			//renderer->clearCounters("blue");
-
+			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
+				renderer->clearCounters((*it));
+			}
+			
 			for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it) {
 
 				vector<Node*>& arr = (*it).second;
@@ -75,9 +77,6 @@ namespace Cog {
 					Node* node = (*it2);
 
 					switch (node->GetShape()->GetRenderType()) {
-					case RenderType::ARC:
-						RenderArc(node);
-						break;
 					case RenderType::IMAGE:
 						RenderImage(node);
 						break;
@@ -92,12 +91,17 @@ namespace Cog {
 						break;
 					case RenderType::SPRITE:
 						RenderSprite(node);
+						break;
+					case RenderType::MULTISPRITE:
+						RenderMultiSprite(node);
+						break;
 					}
+
 				}
 			}
 
-			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
-			renderer->draw();
+			//ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+			//renderer->draw();
 		}
 
 	protected:
@@ -152,19 +156,6 @@ namespace Cog {
 		}
 
 		/**
-		* Renders an arc
-		* @param owner owner node
-		*/
-		void RenderArc(Node* owner) {
-			/*ofVec3f size = owner->GetAttr<ofVec3f>(ATTR_SIZE);
-			ofColor color = owner->GetAttr<ofColor>(ATTR_COLOR);
-			ofSetColor(color);*/
-
-			// todo: draw arc
-			//Iw2DFillArc(ofVec3f(0, 0), size, 0, PI * 2, 60);
-		}
-
-		/**
 		* Renders a text
 		* @param owner owner node
 		*/
@@ -175,8 +166,6 @@ namespace Cog {
 			spt<Text> shape = owner->GetShape<spt<Text>>();
 			ofSetColor(shape->GetColor());
 			
-			// there is maybe a bug in OF : left upper border of the text is not the left upper border of the first letter
-			// but a few pixels nearby -> that's why the coordinate is multiplied by absolute scale
 			spt<ofTrueTypeFont> font = shape->GetFont();
 		
 			// don't touch it! It works :-)
@@ -196,19 +185,49 @@ namespace Cog {
 
 			spt<Sprite>& sprite = shape->GetSprite();
 
-			tempTile.height = sprite->GetHeight();
-			tempTile.offsetX = sprite->GetPosX();
-			tempTile.offsetY = sprite->GetPosY();
-			tempTile.posX = abs.getTranslation().x;
-			tempTile.posY = abs.getTranslation().y;
-			tempTile.posZ = trans.absPos.z;
-			tempTile.rotation = trans.rotation / 360;
-			tempTile.scaleX = trans.scale.x;
-			tempTile.scaleY = trans.scale.y;
-			tempTile.width = sprite->GetWidth();
+			drawingTile.height = sprite->GetHeight();
+			drawingTile.offsetX = sprite->GetPosX();
+			drawingTile.offsetY = sprite->GetPosY();
+			drawingTile.posX = abs.getTranslation().x;
+			drawingTile.posY = abs.getTranslation().y;
+			drawingTile.posZ = trans.absPos.z;
+			drawingTile.rotation = trans.rotation / 360;
+			drawingTile.scaleX = trans.scale.x;
+			drawingTile.scaleY = trans.scale.y;
+			drawingTile.width = sprite->GetWidth();
+
+			renderer->addTile(drawingTile);
+		}
+
+		void RenderMultiSprite(Node* owner) {
+			renderer->setActualBuffer("water");
 
 
-			renderer->addTile(tempTile);
+			spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
+			vector<spt<MSpriteCrate>> sprites = shape->GetSprites();
+
+			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
+				spt<MSpriteCrate> crate = (*it);
+				spt<Sprite> sprite = crate->sprite;
+				Trans trans = crate->transform;
+				trans.CalcAbsTransform(owner->GetTransform());
+
+				drawingTile.height = sprite->GetHeight();
+				drawingTile.offsetX = sprite->GetPosX();
+				drawingTile.offsetY = sprite->GetPosY();
+				drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width/2;  // [0,0] is topleft corner
+				drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height/2;
+				drawingTile.posZ = trans.absPos.z;
+				drawingTile.rotation = trans.rotation / 360;
+				drawingTile.scaleX = trans.absScale.x;
+				drawingTile.scaleY = trans.absScale.y;
+				drawingTile.width = sprite->GetWidth();
+
+				renderer->addTile(drawingTile);
+			}
+
+			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+			renderer->draw();
 		}
 	};
 
