@@ -17,17 +17,17 @@ namespace Cog {
 
 	};
 
-	class AttrChangeEvent : public MsgEvent {
+	class StateChangeEvent : public MsgEvent {
 	public:
 		StateChange changeType = StateChange::SET;
 		unsigned state1 = 0;
 		unsigned state2 = 0;
 
-		AttrChangeEvent(StateChange changeType, unsigned state1) : changeType(changeType), state1(state1) {
+		StateChangeEvent(StateChange changeType, unsigned state1) : changeType(changeType), state1(state1) {
 
 		}
 
-		AttrChangeEvent(StateChange changeType, unsigned state1, unsigned state2) : changeType(changeType), state1(state1), state2(state2) {
+		StateChangeEvent(StateChange changeType, unsigned state1, unsigned state2) : changeType(changeType), state1(state1), state2(state2) {
 
 		}
 	};
