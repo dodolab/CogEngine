@@ -468,13 +468,19 @@
     <ClInclude Include="Source\Communication\NetMessage.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\NetworkBinder.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Components\NetworkCommunicator.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Communication\Network.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\DeltaUpdate.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\DeltaInfo.h">
+      <Filter>Source\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\DeltaMessage.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
   </ItemGroup>
@@ -674,13 +680,16 @@
     <ClCompile Include="Source\Communication\NetMessage.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\NetworkBinder.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Components\NetworkCommunicator.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Communication\Network.cpp">
+      <Filter>Source\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\DeltaUpdate.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\DeltaMessage.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
   </ItemGroup>

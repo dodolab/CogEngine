@@ -244,6 +244,8 @@
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
+    <ClInclude Include="Source\Communication\DeltaInfo.h" />
+    <ClInclude Include="Source\Communication\DeltaMessage.h" />
     <ClInclude Include="Source\Communication\NetMessage.h" />
     <ClInclude Include="Source\Communication\NetReader.h" />
     <ClInclude Include="Source\Communication\Network.h" />
@@ -252,7 +254,7 @@
     <ClInclude Include="Source\Components\CogDatabase.h" />
     <ClInclude Include="Source\Components\InputHandler.h" />
     <ClInclude Include="Source\Components\Logger.h" />
-    <ClInclude Include="Source\Components\NetworkBinder.h" />
+    <ClInclude Include="Source\Components\DeltaUpdate.h" />
     <ClInclude Include="Source\Components\NetworkCommunicator.h" />
     <ClInclude Include="Source\Components\ResourceCache.h" />
     <ClInclude Include="Source\Components\Environment.h" />
@@ -358,12 +360,13 @@
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Attributes\HitBox.cpp" />
     <ClCompile Include="Source\Attributes\Shape.cpp" />
+    <ClCompile Include="Source\Communication\DeltaMessage.cpp" />
     <ClCompile Include="Source\Communication\NetMessage.cpp" />
     <ClCompile Include="Source\Communication\NetReader.cpp" />
     <ClCompile Include="Source\Communication\Network.cpp" />
     <ClCompile Include="Source\Communication\NetWriter.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
-    <ClCompile Include="Source\Components\NetworkBinder.cpp" />
+    <ClCompile Include="Source\Components\DeltaUpdate.cpp" />
     <ClCompile Include="Source\Components\NetworkCommunicator.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />

@@ -69,7 +69,7 @@ namespace Cog {
 			bufferStream = new NetReader(bufferSize);
 		}
 
-		void SendUDPMessage(unsigned int applicationId, spt<NetMessage> msg) {
+		void SendUDPMessage(unsigned int applicationId, spt<NetOutputMessage> msg) {
 			NetWriter* writer = new NetWriter(msg->GetMessageLength() + 2);
 			// write application id and the content
 			writer->WriteWord(applicationId);
@@ -80,7 +80,7 @@ namespace Cog {
 			delete writer;
 		}
 
-		spt<NetMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec) {
+		spt<NetInputMessage> ReceiveUDPMessage(unsigned int applicationId, int timeoutSec) {
 
 			auto time = ofGetElapsedTimeMillis();
 			int timeOutMillis = timeoutSec * 1000;
@@ -98,19 +98,19 @@ namespace Cog {
 					unsigned int size = bytesBuff - 2;
 
 					// from now, bufferStream1 contains the proper content
-					spt<NetMessage> msg = spt<NetMessage>(new NetMessage());
+					spt<NetInputMessage> msg = spt<NetInputMessage>(new NetInputMessage(size));
 					msg->LoadFromStream(bufferStream);
 					string ipAddress = "";
 					int port = 0;
 					udpReceiver.GetRemoteAddr(ipAddress, port);
-					msg->SetIpAddress(ipAddress);
-					msg->SetPort(port);
+					msg->SetSourceIp(ipAddress);
+					msg->SetSourcePort(port);
 
 					return msg;
 				}
 
 				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) {
-					return spt<NetMessage>();
+					return spt<NetInputMessage>();
 				}
 			}
 		}

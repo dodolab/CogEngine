@@ -30,6 +30,7 @@ namespace Cog {
     #define ACT_SCREEN_CHANGED "SCREEN_CHANGED"
 	#define ACT_NET_MESSAGE_RECEIVED "NET_MESSAGE_RECEIVED"
 	#define ACT_NET_CALLBACK_RECEIVED "NET_CALLBACK_RECEIVED"
+	#define ACT_DELTA_MESSAGE_RECEIVED "DELTA_MESSAGE_RECEIVED"
 
 	/*! Attribute keys */
 	#define ATTR_MOVEMENT "MOVEMENT"
@@ -56,6 +57,8 @@ namespace Cog {
 	#define STATES_LOCKED "LOCKED"
     #define STATES_SELECTED "SELECTED"
 
+	/*! Net message action types*/
+	#define NET_MSG_DELTA_UPDATE "DELTA_UPDATE"
 
 
 }// namespace

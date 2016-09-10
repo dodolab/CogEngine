@@ -53,18 +53,29 @@ namespace Cog {
 		}
 	};
 
-	class NetMessage;
+	class NetInputMessage;
 
 	class NetworkMsgEvent : public MsgEvent {
 	public:
-		spt<NetMessage> msg;
+		spt<NetInputMessage> msg;
 
-		NetworkMsgEvent(spt<NetMessage> msg) : msg(msg) {
+		NetworkMsgEvent(spt<NetInputMessage> msg) : msg(msg) {
 
 		}
 
 		~NetworkMsgEvent(){
 			delete msg;
+		}
+	};
+
+	class DeltaInfo;
+
+	class DeltaMsgEvent : public MsgEvent {
+	public:
+		spt<DeltaInfo> msg;
+
+		DeltaMsgEvent(spt<DeltaInfo> msg) : msg(msg) {
+
 		}
 	};
 

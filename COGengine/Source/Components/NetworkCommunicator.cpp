@@ -27,7 +27,7 @@ namespace Cog {
 
 	}
 
-	void NetworkCommunicator::SendNetworkMessage(spt<NetMessage> msg) {
+	void NetworkCommunicator::SendNetworkMessage(spt<NetOutputMessage> msg) {
 		msgToSent = msg;
 	}
 
@@ -43,10 +43,10 @@ namespace Cog {
 		if (networkState == NetworkComState::LISTENING) {
 			if (frame % 100 == 0) {
 				auto message = network->ReceiveUDPMessage(applicationId, 0);
-				if (message && message->GetMsgType() == NetMsgType::HANDSHAKE_REQUEST) {
-					CogLogInfo("NETWORK", "Connected client %s", message->GetIpAddress().c_str());
-					network->SetupUDPSender(message->GetIpAddress(), port+1, true);
-					this->clientIp = message->GetIpAddress();
+				if (message && message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
+					CogLogInfo("NETWORK", "Connected client %s", message->GetSourceIp().c_str());
+					network->SetupUDPSender(message->GetSourceIp(), port+1, true);
+					this->clientIp = message->GetSourceIp();
 
 					clientLastCallBack = absolute;
 					networkState = NetworkComState::UPDATING_SERVER;
@@ -55,19 +55,22 @@ namespace Cog {
 		}
 		else if (networkState == NetworkComState::UPDATING_SERVER) {
 			if (msgToSent) {
+				msgToSent->SetId(lastSentMsgId++);
+				msgToSent->SetMsgType(NetMsgType::UPDATE);
+				msgToSent->SetMsgTime(absolute);
 				network->SendUDPMessage(applicationId, msgToSent);
-				msgToSent = spt<NetMessage>();
+				msgToSent = spt<NetOutputMessage>();
 			}
 
 			auto message = network->ReceiveUDPMessage(applicationId, 0);
 			if (message) {
 				if (message->GetMsgType() == NetMsgType::CLIENT_CALLBACK) {
-					int acceptedMsgId = message->GetDWORDParameter();
+					BYTE acceptedMsgId = message->GetId();
 					clientLastCallBack = absolute;
 					SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 				}
 				else if (message->GetMsgType() == NetMsgType::DISCONNECT) {
-					CogLogInfo("NETWORK", "Disconnected client %s", message->GetIpAddress().c_str());
+					CogLogInfo("NETWORK", "Disconnected client %s", message->GetSourceIp().c_str());
 				}
 			}
 
@@ -75,7 +78,7 @@ namespace Cog {
 				// disconnect client
 				CogLogInfo("NETWORK", "Disconnecting client %s", this->clientIp.c_str());
 
-				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::DISCONNECT));
+				spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastSentMsgId++,NetMsgType::DISCONNECT));
 				network->SendUDPMessage(applicationId, msg);
 				networkState = NetworkComState::LISTENING;
 			}
@@ -87,7 +90,7 @@ namespace Cog {
 
 		if (networkState == NetworkComState::BROADCASTING) {
 			if (frame % 100 == 0) {
-				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::HANDSHAKE_REQUEST));
+				spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::CONNECT_REQUEST));
 
 				// send broadcast messsages to 192, 10 and localhost
 				MLOGDEBUG("NETWORK", "Broadcasting");
@@ -101,11 +104,11 @@ namespace Cog {
 			else {
 				auto message = network->ReceiveUDPMessage(applicationId, 0);
 				if (message && message->GetMsgType() == NetMsgType::UPDATE) {
-					CogLogInfo("NETWORK", "Connected to server %s", message->GetIpAddress().c_str());
-					network->SetupUDPSender(message->GetIpAddress(), port, true);
+					CogLogInfo("NETWORK", "Connected to server %s", message->GetSourceIp().c_str());
+					network->SetupUDPSender(message->GetSourceIp(), port, true);
 					networkState = NetworkComState::UPDATING_CLIENT;
 					serverLastUpdate = absolute;
-					this->lastReceivedMsgId = -1;
+					this->lastReceivedMsgId = message->GetId();
 				}
 			}
 		}
@@ -116,18 +119,19 @@ namespace Cog {
 				// dispose old messages
 				this->lastReceivedMsgId = message->GetId();
 				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
-
-				// notify server that we have accepted this message
-				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::CLIENT_CALLBACK));
-				msg->SetDWORDParameter(message->GetId());
-				network->SendUDPMessage(applicationId, msg);
 				serverLastUpdate = absolute;
 			}
 
-			if (msgToSent) {
-				network->SendUDPMessage(applicationId, msgToSent);
-				msgToSent = spt<NetMessage>();
+			if (!msgToSent) {
+				msgToSent = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId,NetMsgType::CLIENT_CALLBACK));
 			}
+
+			msgToSent->SetMsgType(NetMsgType::CLIENT_CALLBACK);
+			msgToSent->SetId(lastReceivedMsgId);
+			msgToSent->SetMsgTime(absolute);
+			network->SendUDPMessage(applicationId, msgToSent);
+			msgToSent = spt<NetOutputMessage>();
+
 
 			if ((absolute - serverLastUpdate) > 4000) {
 				// disconnect client
