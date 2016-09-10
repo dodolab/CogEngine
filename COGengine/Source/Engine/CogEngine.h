@@ -29,6 +29,7 @@ namespace Cog {
 		int frameCounter = 0;
 
 		void RegisterComponents();
+		vector<function<void()>> actions;
 
 	public:
 		// global configuration file
@@ -92,6 +93,10 @@ namespace Cog {
 			return frameCounter;
 		}
 
+		/**
+		* Adds a new action that is executed when the update process is finished
+		*/
+		void AddPostUpdateAction(function<void()> action);
 
 		// ================================= SINGLETON PART ==========================
 	public:

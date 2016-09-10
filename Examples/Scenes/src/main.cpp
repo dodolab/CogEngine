@@ -5,7 +5,65 @@
 #include "MultiAnim.h"
 #include "ofxNetwork.h"
 
-class XmlTestingApp : public CogApp {
+
+class SwitchBehavior : public Behavior {
+private:
+	int actualConfig = 0;
+	vector<string> configFiles;
+public:
+
+	SwitchBehavior(vector<string> configFiles) {
+		this->configFiles = configFiles;
+	}
+
+	void Init() {
+
+	}
+
+	virtual void Update(const uint64 delta, const uint64 absolute) {
+		for (auto key : CogGetPressedKeys()) {
+
+			if (!key->IsHandled()) {
+
+
+				string newConfig = "";
+
+				if (key->key == (int)(OF_KEY_END)) {
+					// restarts actual config file
+					newConfig = configFiles[actualConfig];
+				}
+				else if (key->key == OF_KEY_PAGE_UP) {
+					// goes to previous config file
+					actualConfig = (actualConfig == 0 ? (configFiles.size() - 1) : (actualConfig - 1)) % configFiles.size();
+					newConfig = configFiles[actualConfig];
+				}
+				else if (key->key == OF_KEY_PAGE_DOWN) {
+					// goes to next config file
+					actualConfig = (actualConfig + 1) % configFiles.size();
+					newConfig = configFiles[actualConfig];
+				}
+
+				if (!newConfig.empty()) {
+
+					// insert action that resets the engine
+					auto action = [newConfig, this]() {
+						CogLogInfo("Main", "Loading config %s", newConfig.c_str());
+						ofxXml* xml = new ofxXml();
+						xml->loadFile(newConfig.c_str());
+						auto xmlPtr = spt<ofxXml>(xml);
+						CogEngine::GetInstance().Init(xmlPtr);
+						CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(this);
+					};
+
+					CogEngine::GetInstance().AddPostUpdateAction(action);
+				}
+			}
+		}
+	}
+};
+
+
+class ExampleApp : public CogApp {
 
 
 	void InitComponents() {
@@ -13,13 +71,29 @@ class XmlTestingApp : public CogApp {
 	}
 
 	void InitEngine() {
-		ofxXml* xml = new ofxXml();
-		xml->loadFile("config3.xml");
-		auto xmlPtr = spt<ofxXml>(xml);
 		
+		// find all config files
+		ofDirectory dir = ofDirectory(".");
+		auto files = dir.getFiles();
+		auto configFiles = vector<string>();
+
+		for (auto& file : files) {
+			if (file.getExtension().compare("xml") == 0) {
+				configFiles.push_back(file.getFileName());
+			}
+		}
+
+		// load first config file
+		ofxXml* xml = new ofxXml();
+		xml->loadFile(configFiles[0]);
+		auto xmlPtr = spt<ofxXml>(xml);
 		CogEngine::GetInstance().Init(xmlPtr);
+		CogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles));
 		return;
 
+
+
+		// this example is an alternative for config1.xml
 		CogEngine::GetInstance().Init();
 
 		auto resCache = GETCOMPONENT(ResourceCache);
@@ -117,9 +191,8 @@ class XmlTestingApp : public CogApp {
 
  
 int main() {
-
 	ofSetupOpenGL(800, 450, OF_WINDOW);
-	ofRunApp(new XmlTestingApp());
+	ofRunApp(new ExampleApp());
 	return 0;
 }
 

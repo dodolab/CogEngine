@@ -363,6 +363,9 @@
     <ClInclude Include="Source\Tests\NetworkTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\EasingFunc.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -496,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="Source\Misc\TimeMeasure.cpp">
       <Filter>Source\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\EasingFunc.cpp">
+      <Filter>Source\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

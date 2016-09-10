@@ -1,6 +1,10 @@
-#include "ofxCogCommon.h"
+#include "Utils.h"
+#include <stdarg.h>  
+#include "ofUtils.h"
 
 namespace Cog {
+
+	
 
 	string string_format(const char* fmt_str, ...) {
 		va_list args;

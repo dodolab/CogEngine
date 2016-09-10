@@ -4,7 +4,7 @@
 #include "Node.h"
 #include "Scene.h"
 #include "Tween.h"
-
+#include "EasingFunc.h"
 
 namespace Cog {
 
@@ -100,11 +100,7 @@ namespace Cog {
 		else {
 			auto slide = new SlideTween(tweenDir, from, to, 1);
 
-			auto fadeFunc = [](float x) {
-				return x * x * (3.0f - 2.0f * x);
-			};
-
-			slide->SetFadeFunction(fadeFunc);
+			slide->SetFadeFunction(EasingManager::cosineInOut);
 
 			to->AddBehavior(slide);
 			// node will be set visible at first update

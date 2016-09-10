@@ -96,6 +96,12 @@ namespace Cog {
 			logger->Flush();
 		}
 
+		// execute post-update actions
+		for (auto action : actions) {
+			action();
+		}
+		actions.clear();
+
 		ofSoundUpdate();
 
 		COGMEASURE_END("ENGINE_UPDATE");
@@ -129,6 +135,10 @@ namespace Cog {
 		renderer->EndRender();
 
 		COGMEASURE_END("ENGINE_DRAW");
+	}
+
+	void CogEngine::AddPostUpdateAction(function<void()> action) {
+		actions.push_back(action);
 	}
 
 	void CogEngine::RegisterComponents() {
