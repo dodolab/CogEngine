@@ -16,6 +16,12 @@ namespace Cog {
 
 		NodeLua(string tag);
 
+		~NodeLua() {
+			bool mojo = false;
+		}
+
+		void AddToActualScene();
+
 		void UpdateTransform(bool deep);
 
 		void Update(const uint64 delta, const uint64 absolute);
@@ -48,6 +54,55 @@ namespace Cog {
 
 		void SetTransform(Trans val);
 
+		bool HasGroups() const;
+
+		Flags& GetGroups() const;
+
+		void SetGroups(Flags val);
+
+		bool IsInGroup(StringHash group);
+
+		void SetGroup(StringHash group);
+
+		void UnsetGroup(StringHash group);
+
+		bool HasStates() const;
+
+		Flags& GetStates() const;
+
+		void SetStates(Flags val);
+
+		bool HasState(StringHash state) const;
+
+		void SetState(StringHash state);
+
+		void ResetState(StringHash state);
+
+		void SwitchState(StringHash state1, StringHash state2);
+
+		void AddAttrString(StringHash key, string val);
+
+		void AddAttrInt(StringHash key, int val);
+
+		void AddAttrFloat(StringHash key, float val);
+
+		void AddAttrVector2f(StringHash key, ofVec2f val);
+
+		void AddAttrVector3f(StringHash key, ofVec3f val);
+
+		void AddAttrVec2i(StringHash key, Vec2i val);
+
+		string GetAttrString(StringHash key);
+		
+		int GetAttrInt(StringHash key);
+
+		float GetAttrFloat(StringHash key);
+
+		ofVec2f GetAttrVector2f(StringHash key);
+
+		ofVec3f GetAttrVector3f(StringHash key);
+		
+		Vec2i GetAttrVec2i(StringHash key);
 	};
 
 } // namespace

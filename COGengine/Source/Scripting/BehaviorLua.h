@@ -4,7 +4,7 @@
 #include "MsgLua.h"
 
 namespace luabridge {
-	class lua_State;
+	struct lua_State;
 }
 
 namespace Cog {
@@ -16,18 +16,21 @@ namespace Cog {
 		luabridge::lua_State* L;
 	public:
 		
-		
+		NodeLua* ownerLua;
+
 		BehaviorLua();
 
+		~BehaviorLua() {
 
-		void Init() {
-			bool mojo = true;
 		}
 
-		int UpdateLua(luabridge::lua_State* L) {
-			bool mojo = false;
-			return 0;
-		}
+		void Init();
+
+		int RegisterBehaviorCt(luabridge::lua_State* L);
+
+		void SendMessage(StringHash msg);
+
+		void SetOwnerLua(NodeLua* ownerLua);
 
 		void OnMessage(Msg msg);
 

@@ -16,6 +16,8 @@ extern "C" {
 # include "lualib.h"
 }
 
+#include "LuaScripting.h"
+
 struct BindObject {
 public:
 
@@ -61,6 +63,11 @@ int LuaGlobalFunction(lua_State *L)
 
 	lua_pushnumber(L, 123); // return value
 	return 1; // number of return values
+}
+
+int lastGlobalFuncClsParam = 0;
+void LuaGlobalFunction2(int param) {
+	lastGlobalFuncClsParam = param;
 }
 
 
@@ -359,5 +366,125 @@ ghost = { \
 
 		
 		REQUIRE(testVec.x == 60);
+	}
+	
+	SECTION("Luabind to CogEngine") {
+		CogEngine::GetInstance().Init();
+		auto scr = new LuaScripting();
+		REGISTER_COMPONENT(scr);
+		scr->Init();
+
+#define lua_sample " \
+mojo = { \
+ attr1 = 12, \
+ Update = function(delta, absolute) \
+   globalFunc(12345) \
+ end, \
+ Init = function() \
+ end \
+ } \
+mojo2 = Behavior() \
+mojo2:RegisterBehavior(mojo) \
+mojo3 = { \
+ attr1 = 12, \
+ Update = function(delta, absolute) \
+   globalFunc(555) \
+ end, \
+ Init = function() \
+ end \
+ } \
+mojo4 = Behavior() \
+mojo4:RegisterBehavior(mojo3) \
+\
+next = { \
+ Update = function(delta, absolute) \
+  globalFunc(6) \
+ end \
+} \
+mojo5 = Behavior() \
+mojo5:RegisterBehavior(next) "
+
+		auto L = scr->GetLua();
+
+		getGlobalNamespace(L)
+			.addFunction("globalFunc", &LuaGlobalFunction2);
+
+		int status = luaL_loadstring(L, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+			}
+		}
+
+		auto behavior = scr->behs[0];
+		behavior->Update(10, 20);
+		REQUIRE(lastGlobalFuncClsParam == 12345);
+		scr->behs[1]->Update(30, 40);
+		REQUIRE(lastGlobalFuncClsParam == 555);
+		scr->behs[2]->Update(30, 40);
+		REQUIRE(lastGlobalFuncClsParam == 6);
+	}
+	
+	SECTION("Luabind to CogEngine 2") {
+		CogEngine::GetInstance().Init();
+		auto scr = new LuaScripting();
+		REGISTER_COMPONENT(scr);
+		scr->Init();
+
+#define lua_sample " \
+ test = { \
+   Init = function() \
+     test.owner:SetState(StringHash(\"TEST\")) \
+     test.owner:AddAttrInt(StringHash(\"TEST_ATTR\"), 10) \
+   end, \
+   OnMessage = function(msg) \
+     if(msg.action:Value() == StringHash(\"TEST_ACTION\"):Value()) \
+     then \
+       test.owner:SetState(StringHash(\"MSG_ACCEPTED\")) \
+     end \
+   end, \
+   Update = function(delta, absolute) \
+      test.owner:AddAttrInt(StringHash(\"TEST_ATTR\"), 20) \
+   end \
+  } \
+ testBeh = Behavior() \
+ testBeh:RegisterBehavior(test) \
+ mNode = Node(\"testNode\") \
+ mNode:AddBehavior(testBeh) \
+ mNode:AddToActualScene() "
+
+		// create scene
+		Scene* sc = new Scene("testScene", false);
+		auto stage = GETCOMPONENT(Stage);
+		stage->AddScene(sc, true);
+		auto L = scr->GetLua();
+		int status = luaL_loadstring(L, lua_sample);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+		}
+		else {
+			// execute program
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(L, -1) << std::endl;
+			}
+		}
+
+		// submit all changes (Init function will be called)
+		sc->GetSceneNode()->SubmitChanges(true);
+		auto node = scr->nodes[0];
+		REQUIRE(node->HasAttr(StringHash("TEST_ATTR")));
+		REQUIRE(node->GetAttrInt(StringHash("TEST_ATTR")) == 10);
+		// send message (owner will have MSG_ACCEPTED state set)
+		scr->behs[0]->OnMessage(Msg(BubblingType(Scope::ROOT, true, true), StringHash("TEST_ACTION"), 10, 0, nullptr, nullptr));
+		REQUIRE(node->HasState(StringHash("MSG_ACCEPTED")));
+		// update node (owner will have TEST_ATTR set to 20)
+		scr->nodes[0]->Update(10, 10);
+		REQUIRE(node->GetAttrInt(StringHash("TEST_ATTR")) == 20);
 	}
 }

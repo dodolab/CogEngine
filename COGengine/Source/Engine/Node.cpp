@@ -40,7 +40,9 @@ namespace Cog {
 			if (scene != nullptr) {
 				this->scene->RemoveBehavior(*it);
 			}
-			delete (*it);
+			if (!(*it)->IsExternal()) {
+				delete (*it);
+			}
 		}
 		behaviors.clear();
 
@@ -58,7 +60,10 @@ namespace Cog {
 				if (scene != nullptr) {
 					scene->RemoveNode(*it);
 				}
-				delete (*it);
+
+				if (!(*it)->IsExternal()) {
+					delete (*it);
+				}
 			}
 			children.clear();
 		}
