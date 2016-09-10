@@ -35,6 +35,13 @@
 	    <shape type="sprite" layer="bgr" />
 	  </node>
 	  
+	  <!-- red rectangle
+	  <node name="pokus">
+	    <shape type="plane" size="200" color="0xFF0000" />
+		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
+	  </node>
+	  -->
+	  
 	  <node name="square_2">
         <shape type="sprite" layer="squares" row="0" column="1" />
 		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
