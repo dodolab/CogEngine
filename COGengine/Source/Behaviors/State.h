@@ -37,6 +37,13 @@ namespace Cog {
 			this->parent = parent;
 		}
 
+		virtual void EnterState() {
+
+		}
+
+		virtual void LeaveState() {
+
+		}
 	};
 
 }// namespace

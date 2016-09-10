@@ -281,6 +281,7 @@
     <ClInclude Include="Source\Math\Flags.h" />
     <ClInclude Include="Source\Math\Path.h" />
     <ClInclude Include="Source\Math\PathSegment.h" />
+    <ClInclude Include="Source\Math\SteeringMath.h" />
     <ClInclude Include="Source\Math\Vec2i.h" />
     <ClInclude Include="Source\Math\StringHash.h" />
     <ClInclude Include="Source\Math\Transform.h" />

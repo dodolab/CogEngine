@@ -402,6 +402,9 @@
     <ClInclude Include="Source\Tests\StateMachineTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\SteeringMath.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

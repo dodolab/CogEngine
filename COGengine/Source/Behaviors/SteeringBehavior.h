@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "Movement.h"
 #include "Path.h"
+#include "SteeringMath.h"
 
 namespace Cog {
 
@@ -16,6 +17,7 @@ namespace Cog {
 	class SteeringBehavior : public Behavior {
 		OBJECT_PROTOTYPE(SteeringBehavior)
 	protected:
+		SteeringMath steeringMath;
 
 		float clampAngle(float x) {
 			x = fmod(x + 180, 360);
@@ -49,6 +51,7 @@ namespace Cog {
 	private:
 		float maxAcceleration = 0;
 		StringHash forceId;
+	
 	public:
 		SeekBehavior(float maxAcceleration) :maxAcceleration(maxAcceleration){
 			forceId = StringHash(this->GetId());
@@ -63,28 +66,23 @@ namespace Cog {
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 			auto& transform = owner->GetTransform();
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-
 			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f direction = dest - transform.localPos;
-			direction = direction.normalize();
-			// todo verify the time scale
-			movement.AddForce(forceId, direction*maxAcceleration);
-			
+			ofVec2f force = steeringMath.Seek(transform, movement, dest, maxAcceleration);
+			movement.AddForce(forceId, force);
 			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
 		}
 	};
 
 	class ArriveBehavior : public SteeringBehavior {
 	private:
-		float accelerationSpeed = 0;
+		float decelerationSpeed = 0;
 		float rotationSpeed = 0;
-		float decelerateDistance = 0;
 		StringHash forceId;
 	public:
 
-		ArriveBehavior(float accelerationSpeed, float rotationSpeed, float decelerateDistance) :
-			accelerationSpeed(accelerationSpeed),
-			rotationSpeed(rotationSpeed), decelerateDistance(decelerateDistance){
+		ArriveBehavior(float decelerationSpeed, float rotationSpeed) :
+			decelerationSpeed(decelerationSpeed),
+			rotationSpeed(rotationSpeed){
 			forceId = StringHash(this->GetId());
 		}
 
@@ -93,35 +91,21 @@ namespace Cog {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
-
 		}
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
+
 			auto& transform = owner->GetTransform();
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
-
 			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f direction = dest - transform.localPos;
-			float distance = direction.length();
-			direction = direction.normalize();
-
-			if (distance < 10) {
-				movement.Stop();
-				return;
-			}
-
-			float desiredSpeed = 0;
-			if (distance < decelerateDistance) {
-				desiredSpeed = accelerationSpeed*distance / decelerateDistance;
+			ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed);
+			if (acceleration != ofVec2f(INT_MIN)) {
+				movement.AddForce(forceId, acceleration);
+				this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
 			}
 			else {
-				desiredSpeed = accelerationSpeed;
+				movement.AddForce(forceId, ofVec2f(0));
 			}
-
-			ofVec2f acceleration = direction*desiredSpeed - movement.GetVelocity();
-
-			movement.AddForce(forceId, acceleration);
-			this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
 		}
 	};
 
@@ -147,20 +131,7 @@ namespace Cog {
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
 			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f distance = dest - transform.localPos;
-			float length = distance.length();
-			distance.normalize();
-			ofVec2f desiredSpeed;
-
-			if (length > fleeDistance) {
-				desiredSpeed = ofVec2f(0);
-			}
-			else {
-				desiredSpeed = -distance*maxAcceleration;
-			}
-			
-			ofVec2f acceleration = desiredSpeed - movement.GetVelocity();
-
+			ofVec2f acceleration = steeringMath.Flee(transform, movement, dest, fleeDistance, maxAcceleration);
 			movement.AddForce(forceId,acceleration);
 
 			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
@@ -191,25 +162,15 @@ namespace Cog {
 			auto& transform = owner->GetTransform();
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
-			// find point on the path that is closest to the owner position
-			float newPathPoint = path->CalcPathPoint(currentPathPoint, transform.localPos);
-			currentPathPoint = newPathPoint;
+			ofVec2f force = steeringMath.Follow(transform, movement, path, currentPathPoint,
+				pointTolerance, maxAcceleration);
 
-			if (newPathPoint == -1 || path->pathLength <= (currentPathPoint + pointTolerance)) {
-				// nowhere to go
+			if (force == ofVec2f(INT_MIN)) {
 				Finish();
 				return;
 			}
 
-			// find new destination point
-			ofVec2f destination = path->CalcPathPosition(currentPathPoint + pointTolerance);
-			cout << destination.x << ", " << destination.y << endl;
-			owner->ChangeAttr(ATTR_STEERING_BEH_SEEK_DEST,destination);
-
-			ofVec2f direction = destination - transform.localPos;
-			direction = direction.normalize();
-			movement.AddForce(forceId, direction*maxAcceleration);
-
+			movement.AddForce(forceId, force);
 			this->SetRotationDirection(movement, transform, transform.localPos+movement.GetVelocity(), maxAcceleration, delta);
 		}
 	};

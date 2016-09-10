@@ -81,6 +81,9 @@ namespace Cog {
 		*/
 		void ChangeState(State* state) {
 			this->previousState = currentState;
+
+			if (this->currentState != nullptr) this->currentState->LeaveState();
+
 			this->currentState = state;
 
 			// add the state into map
@@ -93,6 +96,8 @@ namespace Cog {
 			if (this->initialized && !state->GetIsInitialized()) {
 				InitState(state);
 			}
+
+			this->currentState->EnterState();
 		}
 
 		/**
