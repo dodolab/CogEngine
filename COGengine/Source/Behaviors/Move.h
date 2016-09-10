@@ -12,7 +12,7 @@ namespace Cog {
 	class Move : public Behavior {
 		OBJECT_PROTOTYPE(Move)
 	protected:
-		float speed;
+		float speed = 0;
 	public:
 
 		/**

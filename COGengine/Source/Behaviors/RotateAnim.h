@@ -12,15 +12,15 @@ namespace Cog {
 		OBJECT_PROTOTYPE(RotateAnim)
 	private:
 		// starting rotation
-		float from;
+		float from = 0;
 		// ending rotation
-		float to;
+		float to = 0;
 		// rotation speed in angles per second
-		float speed;
+		float speed = 0;
 		// if true, rotation will be additive (doesn't override actual rotation)
-		bool additive;
+		bool additive = false;
 		// actual rotation value
-		float actual;
+		float actual = 0;
 
 	public:
 		/**

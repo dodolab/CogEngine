@@ -16,6 +16,7 @@ namespace Cog {
 	*/
 	class Behavior {
 		OBJECT_VIRTUAL()
+		PROTOTYPE_VIRTUAL(Behavior)
 
 	protected:
 		// identifier incremental counter

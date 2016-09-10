@@ -12,28 +12,26 @@ namespace Cog {
 		OBJECT_PROTOTYPE(TransformAnim)
 	private:
 		// duration in ms
-		float duration;
+		float duration = 0;
 		// starting transform
-		Trans to;
+		Trans to = Trans();
 		// ending transform
-		Trans from;
+		Trans from = Trans();
 		// actual duration
-		float actual;
+		float actual = 0;
 		// fade function
 		FadeFunction fadeFunction;
-		float delayAfter;
+		float delayAfter = 0;
 
 	public:
 
 		TransformAnim(Trans from, Trans to, float duration, float delayAfter) : to(to), from(from), duration(duration),
 			delayAfter(delayAfter) {
-			this->actual = 0;
 			fadeFunction = nullptr;
 		}
 
 		TransformAnim(Trans from, Trans to, float duration, float delayAfter, FadeFunction fadeFunction) :
 			to(to), from(from), duration(duration), delayAfter(delayAfter) {
-			this->actual = 0;
 			this->fadeFunction = fadeFunction;
 		}
 

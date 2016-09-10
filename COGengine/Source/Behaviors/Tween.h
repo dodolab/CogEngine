@@ -16,13 +16,13 @@ namespace Cog {
 		
 	protected:
 		// scene that will be tweened out
-		Node* tweenOut;
+		Node* tweenOut = nullptr;
 		// scene that will be tweened in
-		Node* tweenIn;
+		Node* tweenIn = nullptr;
 		// tweening speed (in display width per second)
-		float speed;
+		float speed = 0;
 		// actual tween position
-		float actual;
+		float actual = 0;
 
 	public:
 

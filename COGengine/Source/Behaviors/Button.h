@@ -14,8 +14,8 @@ namespace Cog {
 	class Button : public Behavior {
 		OBJECT_PROTOTYPE(Button)
 	protected:
-		spt<ofImage> defaultImg;
-		spt<ofImage> pressedImg;
+		spt<ofImage> defaultImg = spt<ofImage>();
+		spt<ofImage> pressedImg = spt<ofImage>();
 
 	public:
 

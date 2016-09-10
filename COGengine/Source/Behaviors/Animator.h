@@ -277,7 +277,7 @@ namespace Cog {
 		OBJECT_PROTOTYPE(Animator)
 	private:
 		// animation root
-		spt<Anim> root;
+		spt<Anim> root = spt<Anim>();
 		// actual tree context
 		AnimNodeContext context;
 		// stack of processing tree

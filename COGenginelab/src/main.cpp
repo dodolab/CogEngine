@@ -444,12 +444,12 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 }
 
 
-
-
-
 #else
 
 
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
+#include "BaseTests.h"
 
 int main() {
 
@@ -490,7 +490,7 @@ int main() {
 	//window.setGlutDisplayString("rgba double samples=4 depth");
 	//window.setWindowTitle("COGEngine");
 	//ofRunApp(new MTestApp());
-	
+	int result = Catch::Session().run();
 	//ofRunApp(new TestingApp());
 	ofRunApp(new XmlTestingApp());
 

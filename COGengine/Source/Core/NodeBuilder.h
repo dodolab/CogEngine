@@ -44,6 +44,7 @@ namespace Cog {
 		Node* LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Settings& settings) {
 			TransformMath math = TransformMath();
 
+
 			string name = xml->getAttribute(":", "name", "");
 			string type = xml->getAttribute(":", "type", "");
 			string img = xml->getAttribute(":", "img", "");
@@ -80,6 +81,16 @@ namespace Cog {
 				xml->popTag();
 			}
 
+			if (xml->tagExists("behavior")) {
+				int behaviors = xml->getNumTags("behavior");
+
+				for (int i = 0; i < behaviors; i++) {
+					xml->pushTag("behavior", i);
+					LoadBehaviorFromXml(xml, node);
+					xml->popTag();
+				}
+			}
+
 			if (xml->tagExists("node")) {
 				int children = xml->getNumTags("node");
 
@@ -104,6 +115,12 @@ namespace Cog {
 			ofColor color = ofColor::fromHex(ofHexToInt(colorStr));
 
 			AssignText(node, font, size, color, value);
+		}
+
+		void LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
+			string name = xml->getAttribute(":", "name", "");
+			auto newBeh = COGEngine.entityStorage->GetBehaviorPrototype(name)->CreatePrototype();
+			node->AddBehavior(newBeh);
 		}
 
 	};

@@ -15,15 +15,15 @@ class HitEvent : public Behavior{
 	OBJECT_PROTOTYPE(HitEvent)
 protected:
 	// if true, device will vibrate when object is hit
-	bool vibrate;
+	bool vibrate = false;
 	// indicator, if hit has started over this object
-	bool hitStarted;
+	bool hitStarted = false;
 	// indicator, if hit has been lost
-	bool hitLost;
+	bool hitLost = false;
 	// id of button who started the hit
-	int hitStartedTouchId;
+	int hitStartedTouchId = -1;
 	// id of handler behavior (-1 for all behaviors)
-	int handlerBehId;
+	int handlerBehId = -1;
 
 public:
 

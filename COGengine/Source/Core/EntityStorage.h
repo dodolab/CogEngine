@@ -135,6 +135,14 @@ namespace Cog {
 			return attr;
 		}
 
+		Behavior* GetBehaviorPrototype(StringHash key) {
+			auto it = behaviorPrototypes.find(key);
+
+			MASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %d doesn't exists", key);
+
+			return it->second;
+		}
+
 		/**
 		* Gets behavior by key; call this method only if you are sure that the component exists
 		* @param key behavior key

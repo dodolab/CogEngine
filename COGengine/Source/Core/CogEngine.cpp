@@ -102,6 +102,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(TransformAnim);
 		REGISTER_BEHAVIOR(TranslateAnim);
 		REGISTER_BEHAVIOR(SlideTween);
+
 	}
 
 }// namespace

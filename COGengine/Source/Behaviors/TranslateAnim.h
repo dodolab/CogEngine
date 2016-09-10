@@ -12,22 +12,22 @@ namespace Cog {
 		OBJECT_PROTOTYPE(TranslateAnim)
 	private:
 		// speed in X axis
-		float speedX;
+		float speedX = 0;
 		// speed in Y axis
-		float speedY;
+		float speedY = 0;
 		// distance in X axis
-		float distX;
+		float distX = 0;
 		// distance in Y axis
-		float distY;
+		float distY = 0;
 		// if true, animation will be additive
-		bool additive;
+		bool additive = false;
 		// starting position
-		ofVec3f to;
+		ofVec3f to = ofVec3f();
 		// ending position
-		ofVec3f from;
+		ofVec3f from = ofVec3f();
 
 		// actual position
-		ofVec3f actual;
+		ofVec3f actual = ofVec3f();
 
 		FadeFunction fadeFunction;
 

@@ -29,10 +29,10 @@ namespace Cog {
 
 			// BEGIN UPGRADE
 			renderer = new SpriteSheetRenderer(); //declare a new renderer with 1 layer, 10000 tiles per layer, default layer of 0, tile size of 32
-			auto img = CogGet2DImage("images/blue.png");
+			//auto img = CogGet2DImage("images/blue.png");
 
 			//	renderer->loadTexture("images/blue.png", 256, 256, GL_LINEAR);
-			renderer->loadTexture(&img->getTextureReference(), "blue", 10000, true);
+			//renderer->loadTexture(&img->getTextureReference(), "blue", 10000, true);
 
 			// END UPGRADE
 		}
@@ -65,7 +65,7 @@ namespace Cog {
 
 
 		void Render() {
-			renderer->clearCounters("blue");
+			//renderer->clearCounters("blue");
 
 			for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it) {
 
