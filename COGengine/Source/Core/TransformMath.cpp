@@ -40,7 +40,7 @@ namespace Cog {
 		// if zIndex is equal to 0, the value will be taken from the parent
 		if (zIndex == 0) zIndex = (int)parentTrans.localPos.z;
 
-		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth()/ 2, shape->GetHeight() / 2);
+		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth()/ 2/parentTrans.absScale.x, shape->GetHeight() / 2/parentTrans.absScale.y);
 
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
