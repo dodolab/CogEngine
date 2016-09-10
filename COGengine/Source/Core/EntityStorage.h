@@ -43,6 +43,10 @@ namespace Cog {
 			return output;
 		}
 
+		map<StringHash, Component*>& GetComponents() {
+			return components;
+		}
+
 		/**
 		* Gets list of all behaviors
 		*/

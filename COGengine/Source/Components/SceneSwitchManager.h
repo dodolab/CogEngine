@@ -50,6 +50,9 @@ namespace Cog {
 		*/
 		void SwitchToScene(Node* from, Node* to, TweenDirection tweenDir);
 
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+		}
+
 	private:
 
 		void ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir);

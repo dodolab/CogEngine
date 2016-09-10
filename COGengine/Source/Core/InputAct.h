@@ -28,6 +28,9 @@ namespace Cog {
 
 		// handlerId, -1 if there is none
 		int handlerNodeId = -1;
+		// first behavior that will serve the action will set this flag
+		bool isProcessed = false;
+
 		// indicates, if input has just started
 		bool started = true;
 		// indicates, if input has ended (e.g. key release)
@@ -56,6 +59,14 @@ namespace Cog {
 		*/
 		bool IsHandled() {
 			return handlerNodeId != -1;
+		}
+
+		bool IsProcessed() {
+			return isProcessed;
+		}
+
+		void SetIsProcessed(bool processed) {
+			this->isProcessed = processed;
 		}
 
 	};

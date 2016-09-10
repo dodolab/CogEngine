@@ -48,6 +48,10 @@ namespace Cog {
 			ofFile file;
 			file.removeFile(dbPath.c_str());
 		}
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+
+		}
 	};
 
 }// namespace

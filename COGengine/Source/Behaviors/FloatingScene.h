@@ -16,22 +16,20 @@ namespace Cog {
 	protected:
 		// if true, user will be able to scroll the scene
 		bool scrollEnabled = false;
-		Vec2i lastMousePos = Vec2i(0,0);
+		Vec2i lastMousePos = Vec2i(0, 0);
 		int lastDistance = 0;
 		Vec2i originalMousePos = Vec2i(0, 0);
 		TransformMath math = TransformMath();
-		// how far should the pointer go before scrolling will start (proper for mobile phones)
-		int scrollPrevention = 0; 
+
 		bool scrollStarted = false;
 	public:
 
-		FloatingScene(bool scrollEnabled, int scrollPrevention) : scrollEnabled(scrollEnabled), scrollPrevention(scrollPrevention){
+		FloatingScene(bool scrollEnabled) : scrollEnabled(scrollEnabled) {
 
 		}
 
 		FloatingScene(Setting setting) {
 			scrollEnabled = setting.GetItem("scroll_enabled").GetValBool();
-			scrollPrevention = setting.GetItem("scroll_prevention").GetValInt();
 		}
 
 		void Init() {
@@ -58,12 +56,13 @@ namespace Cog {
 					lastMousePos = Vec2i(0); // restart mouse position
 					originalMousePos = Vec2i(0);
 					scrollStarted = false;
-				} else if (msg.GetAction() == ACT_OBJECT_HIT_OVER) {
-					
+				}
+				else if (msg.GetAction() == ACT_OBJECT_HIT_OVER) {
+
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
 
 					// handle only the first touch
-					if(evt->input->touchId == 0){
+					if (evt->input->touchId == 0) {
 
 						auto points = CogGetPressedPoints();
 						if (points.size() > 1) {
@@ -73,8 +72,8 @@ namespace Cog {
 							Vec2i pos2 = points[1]->position;
 
 							int distance = Vec2i::Distance(pos1, pos2);
-							int posX = min(pos1.x, pos2.x) + distance/2;
-							int posY = min(pos1.y, pos2.y) + distance/2;
+							int posX = min(pos1.x, pos2.x) + distance / 2;
+							int posY = min(pos1.y, pos2.y) + distance / 2;
 
 							if (lastDistance != 0 && lastDistance != distance) {
 								bool isZoomIn = lastDistance > distance;
@@ -96,9 +95,21 @@ namespace Cog {
 								originalMousePos = lastMousePos;
 							}
 
-							if (lastMousePos != Vec2i(0) && (scrollStarted || Vec2i::Distance(lastMousePos, originalMousePos) >= scrollPrevention)) { // scroll prevention
+							bool isPointerOver = true;
+							// android tolerance
+#ifdef ANDROID
+							isPointerOver = Vec2i::Distance(lastMousePos, originalMousePos) >= CogGetScreenWidth() / SCREEN_TOLERANCE;
+#endif
+
+							if (lastMousePos != Vec2i(0) && (scrollStarted || isPointerOver)) { // scroll prevention
+
 								scrollStarted = true;
 								Vec2i diff = evt->input->position - lastMousePos;
+
+								if (diff.x != 0 || diff.y != 0) {
+									evt->input->SetIsProcessed(true);
+								}
+
 								ofVec2f diffVec = ofVec2f((float)diff.x, (float)diff.y);
 
 								Trans& transform = owner->GetTransform();
@@ -142,7 +153,7 @@ namespace Cog {
 		}
 
 		void SetNewPosition(Trans& transform, ofVec3f& newAbsPos) {
-			
+
 			CheckNewPosition(transform, newAbsPos);
 
 			// calc new local position from absolute position
@@ -168,7 +179,7 @@ namespace Cog {
 			float minScale = CalcMinScale(owner->GetParent()->GetTransform());
 
 			if (transform.scale.x < minScale) transform.scale = ofVec3f(minScale);
-			
+
 			transform.CalcAbsTransform(owner->GetParent()->GetTransform());
 
 			if (transform.absScale.x > 1 || transform.absScale.y > 1) {
@@ -193,7 +204,7 @@ namespace Cog {
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
-			
+
 		}
 	};
 

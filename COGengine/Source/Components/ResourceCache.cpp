@@ -54,8 +54,8 @@ namespace Cog {
 				for (int i = 0; i < fontNums; i++) {
 					xml->pushTag("font", i);
 					string name = xml->getAttributex("name", "");
-					int size = xml->getAttributex("size", 0);
-					CogGetFont(name, size);
+					int size = xml->getAttributex("size", 1);
+					GetFont(name, size);
 					xml->popTag();
 				}
 

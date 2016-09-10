@@ -67,6 +67,10 @@ namespace Cog {
 				requests.clear();
 			}
 		}
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+			HandleInputs();
+		}
 	};
 
 }// namespace

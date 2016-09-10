@@ -63,6 +63,13 @@ namespace Cog {
 		}
 
 		/**
+		* Virtual method that can be overriden to register custom components
+		*/
+		virtual void RegisterComponents() {
+
+		}
+
+		/**
 		* Virtual method that can be overriden to initialize custom components
 		*/
 		virtual void InitComponents() {

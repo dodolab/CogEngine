@@ -96,28 +96,6 @@ namespace Cog {
 		}
 	public:
 	
-		/**
-		* Updates behavior and owning object inner state
-		* @param delta delta time from the last loop
-		* @param absolute absolute time since the application begun
-		*/
-		virtual void Update(const uint64 delta, const uint64 absolute) = 0;
-
-		bool operator==(int id) {
-			return this->id == id;
-		}
-
-		bool operator==(const Behavior& other) {
-			return id == other.id;
-		}
-
-		bool operator!=(int id) {
-			return this->id != id;
-		}
-
-		bool operator!=(const Behavior& other) {
-			return id != other.id;
-		}
 
 		// allow to access Node private members
 		friend class Node;

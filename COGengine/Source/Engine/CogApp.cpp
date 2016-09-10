@@ -30,7 +30,7 @@ void CogApp::setupEngine() {
 		DrawSplashScreen();
 	}
 
-	
+	this->RegisterComponents();
 	this->InitEngine();
 	this->InitComponents();
 
@@ -172,7 +172,7 @@ void CogApp::touchCancelled(int x, int y, int id){
 void CogApp::DrawSplashScreen() {
 #ifdef WIN32
 	ofImage image = ofImage();
-	image.loadImage(this->splashScreen);
+	image.loadImage(this->splashScreen); 
 	GLFWwindow* window = glfwGetCurrentContext();
 	glfwShowWindow(window);
 	ofSetMatrixMode(OF_MATRIX_PROJECTION);
@@ -186,7 +186,6 @@ void CogApp::DrawSplashScreen() {
 	image.draw(-1, -1, 2, 2);
 	glfwSwapBuffers(window);
 	glFlush();
-
 	//set the context back to main for rest of setup
 	glfwMakeContextCurrent(window);
 	ofSetupScreen();

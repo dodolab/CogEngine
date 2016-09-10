@@ -233,6 +233,10 @@ namespace Cog {
 		*/
 		void RunThread(ofThread* thread);
 
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+			RemoveEndedProcesses();
+		}
+
 	protected:
 
 		/**
