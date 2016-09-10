@@ -40,6 +40,23 @@ namespace Cog {
 					loadedProjectSettings = LoadSettingsFromXml(xml);
 					xml->popTag();
 				}
+			
+				xml->popTag();
+			}
+
+			// preload fonts
+			if (xml->pushTagIfExists("fonts")) {
+				int fontNums = xml->getNumTags("font");
+
+				for (int i = 0; i < fontNums; i++) {
+					xml->pushTag("font", i);
+					string name = xml->getAttributex("name", "");
+					int size = xml->getAttributex("size", 0);
+					CogGetFont(name, size);
+					xml->popTag();
+				}
+
+				xml->popTag();
 			}
 		}
 	}

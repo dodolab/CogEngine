@@ -234,6 +234,7 @@
     <ClInclude Include="Source\Components\Renderer.h" />
     <ClInclude Include="Source\Components\SceneContext.h" />
     <ClInclude Include="Source\Components\SceneManager.h" />
+    <ClInclude Include="Source\Core\AsyncProcess.h" />
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
     <ClInclude Include="Source\Core\CogApp.h" />

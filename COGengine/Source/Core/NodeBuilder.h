@@ -20,22 +20,22 @@ namespace Cog {
 	public:
 
 		void AssignImage(Node* node, string path) {
-			spt<ofImage> image = CogGet2DImage(path);
+			spt<ofImage> image = CogPreload2DImage(path);
 			node->SetShape(spt<Image>(new Image(image)));
 		}
 
 		void AssignButton(Node* node, string defaultImg, string clickedImg, string disabledImg) {
 
-			spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogGet2DImage(disabledImg);
+			spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogPreload2DImage(disabledImg);
 
 			node->AddBehavior(new HitEvent(-1, false,false));
-			node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
+			node->AddBehavior(new Button(CogPreload2DImage(defaultImg), CogPreload2DImage(clickedImg), disabledImgPtr));
 			node->GetStates().SetState(StringHash(STATES_HITTABLE));
 		}
 
 		void AssignSelect(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 			node->AddBehavior(new HitEvent(-1, false, false));
-			node->AddBehavior(new Selection(CogGet2DImage(defaultImg), CogGet2DImage(selectImg), StringHash(selectionGroup)));
+			node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StringHash(selectionGroup)));
 			node->GetGroups().SetState(StringHash(selectionGroup));
 		}
 

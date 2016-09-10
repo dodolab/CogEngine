@@ -34,6 +34,9 @@ namespace Cog {
 		void RegisterComponents();
 
 	public:
+		// global configuration file
+		spt<ofxXml> config;
+
 		// component storage
 		EntityStorage* entityStorage = nullptr;
 

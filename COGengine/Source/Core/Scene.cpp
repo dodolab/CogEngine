@@ -221,15 +221,25 @@ namespace Cog {
 		UnregisterListener(beh);
 	}
 
-	void Scene::LoadFromXml(spt<ofxXml> xml) {
-
-		auto cache = GETCOMPONENT(ResourceCache);
-
+	void Scene::LoadInitDataFromXml(spt<ofxXml> xml, int sceneIndex) {
+		
+		SetIndex(sceneIndex);
 		SetName(xml->getAttribute(":", "name", ""));
 
 		sceneNode = new Node(ObjType::SCENE, 0, name);
 		sceneNode->SetScene(this);
 		sceneNode->SetShape(spt<Shape>(new Rectangle(CogGetScreenWidth(), CogGetScreenHeight())));
+
+		if (xml->attributeExists("lazy") && xml->getBoolAttributex("lazy", false)) {
+			this->lazyLoad = true;
+		}
+	}
+
+	void Scene::LoadFromXml(spt<ofxXml> xml) {
+
+		MLOGDEBUG("Scene", "Loading scene %s", this->name.c_str());
+
+		auto cache = GETCOMPONENT(ResourceCache);
 
 		if (xml->pushTagIfExists("transform")) {
 			auto math = TransformMath();
@@ -261,6 +271,8 @@ namespace Cog {
 
 			xml->popTag();
 		}
+
+		loaded = true;
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {

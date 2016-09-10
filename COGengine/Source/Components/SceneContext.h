@@ -21,6 +21,8 @@ namespace Cog {
 
 		// actual scene
 		Scene* actualScene = nullptr;
+
+		Scene* loadingScene = nullptr;
 		// list of all scenes
 		vector<Scene*> scenes = vector<Scene*>();
 
@@ -73,6 +75,7 @@ namespace Cog {
 				}
 			}
 
+			MLOGDEBUG("SceneContext", "Initializing scene %s", scene->GetName().c_str());
 			scene->GetSceneNode()->SubmitChanges(true);
 		}
 
