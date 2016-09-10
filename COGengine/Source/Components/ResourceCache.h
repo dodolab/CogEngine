@@ -1,13 +1,14 @@
 #pragma once
 
 #include "ofxCogCommon.h"
-#include "SoundFile.h"
-#include "Anim.h"
-#include "SpriteSheet.h"
 #include "Component.h"
 #include "Settings.h"
 
 namespace Cog {
+
+	class SoundFile;
+	class Anim;
+	class SpriteSheet;
 
 	/**
 	* Resource controller that holds images, 3D objects and sounds

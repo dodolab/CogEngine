@@ -2,7 +2,7 @@
 
 #include "ofxCogCommon.h"
 #include "MsgListener.h"
-#include "Facade.h"
+
 
 namespace Cog {
 

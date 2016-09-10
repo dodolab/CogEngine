@@ -1,6 +1,10 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include <map>
+#include <vector>
+
+using std::map;
+using std::vector;
 
 namespace Cog {
 

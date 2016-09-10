@@ -3,6 +3,7 @@
 
 namespace Cog {
 
+
 	/**
 	* Initializes component, using xml settings or default one
 	*/

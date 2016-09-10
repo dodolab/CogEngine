@@ -1,12 +1,14 @@
 #pragma once
 
-#include "Node.h"
-#include "Behavior.h"
-#include "Scene.h"
 #include "Component.h"
-#include "Tween.h"
 
 namespace Cog {
+
+	class Node;
+	class Behavior;
+	class Scene;
+	class Tween;
+	enum class TweenDirection;
 
 	/**
 	* Node context
@@ -55,63 +57,20 @@ namespace Cog {
 		* Adds a new scene
 		* @param setAsActual if true, scene will be set as the actual scene
 		*/
-		void AddScene(Scene* scene, bool setAsActual) {
-
-			rootObject->AddChild(scene->GetSceneNode());
-
-			if (setAsActual) {
-				this->actualScene = scene;
-				scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
-			}
-			else {
-				scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
-			}
-
-			// copy global listeners
-			for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
-				StringHash action = (*it).first;
-				vector <MsgListener*>& listeners = (*it).second;
-
-				for (auto jt = listeners.begin(); jt != listeners.end(); ++jt) {
-					scene->RegisterListener(action, (*jt));
-				}
-			}
-
-			MLOGDEBUG("SceneContext", "Initializing scene %s", scene->GetName().c_str());
-			scene->GetSceneNode()->SubmitChanges(true);
-		}
+		void AddScene(Scene* scene, bool setAsActual);
 
 		/**
 		* Registers behavior listener for selected action
 		* @param action action to register
 		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterListener(StringHash action, MsgListener* listener) {
-			if (msgListeners.find(action) == msgListeners.end()) {
-				msgListeners[action] = vector <MsgListener*>();
-			}
-
-			vector<MsgListener*>& listeners = msgListeners[action];
-			listeners.push_back(listener);
-		}
+		void RegisterListener(StringHash action, MsgListener* listener);
 
 		/**
 		* Unregisters message listener for selected action
 		* @return true if listener has been found and erased
 		*/
-		bool UnregisterListener(StringHash action, MsgListener* listener) {
-			if (msgListeners.find(action) != msgListeners.end()) {
-				vector<MsgListener*>& listeners = msgListeners[action];
-
-				for (auto it = listeners.begin(); it != listeners.end(); ++it) {
-					if ((*it)->GetId() == listener->GetId()) {
-						listeners.erase(it);
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+		bool UnregisterListener(StringHash action, MsgListener* listener);
 
 		/**
 		* Finds scene by its name

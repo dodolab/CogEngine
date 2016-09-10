@@ -1,8 +1,9 @@
 #include "ResourceCache.h"
-#include <string>
-#include "ofImage.h"
-#include "Facade.h"
 #include "SoundFile.h"
+#include "Anim.h"
+#include "SpriteSheet.h"
+#include "Facade.h"
+
 
 namespace Cog {
 
@@ -23,21 +24,21 @@ namespace Cog {
 				// parse default settings
 				if (xml->tagExists("default_settings")) {
 					xml->pushTag("default_settings");
-					loadedDefaultSettings = LoadSettingsFromXml(xml);
+					loadedDefaultSettings = Settings(LoadSettingsFromXml(xml));
 					xml->popTag();
 				}
 
 				// parse global settings
 				if (xml->tagExists("global_settings")) {
 					xml->pushTag("global_settings");
-					loadedGlobalSettings = LoadSettingsFromXml(xml);
+					loadedGlobalSettings = Settings(LoadSettingsFromXml(xml));
 					xml->popTag();
 				}
 
 				// parse project settings
 				if (xml->tagExists("project_settings")) {
 					xml->pushTag("project_settings");
-					loadedProjectSettings = LoadSettingsFromXml(xml);
+					loadedProjectSettings = Settings(LoadSettingsFromXml(xml));
 					xml->popTag();
 				}
 			
