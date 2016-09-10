@@ -85,6 +85,8 @@ namespace Cog {
 		void RenderMultiSprite(Node* owner);
 
 		void RenderLabel(Node* owner);
+
+		void RenderBoundingBox(Node* owner);
 	};
 
 

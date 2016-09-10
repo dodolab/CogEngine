@@ -30,6 +30,7 @@ void CogApp::setupEngine() {
 		DrawSplashScreen();
 	}
 
+	
 	this->InitEngine();
 	this->InitComponents();
 

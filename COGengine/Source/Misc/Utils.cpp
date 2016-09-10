@@ -35,4 +35,18 @@ namespace Cog {
 		return output;
 	}
 
+	ofColor StringToColor(string col) {
+		int hexColor = ofHexToInt(col.substr(2));
+		float alpha = 255;
+
+		if (col.length() == 10) {
+			// get alpha
+			alpha = ofHexToInt(col.substr(8));
+		}
+
+		ofColor color = ofColor::fromHex(hexColor, alpha);
+		return color;
+	}
+
+
 }// namespace

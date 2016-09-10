@@ -15,9 +15,18 @@ namespace Cog {
 
 		CalcTransform(nodeTransform, node, parent, entity, gridWidth, gridHeight);
 
+		auto shape = node->GetShape();
+
+		// for rectangles, width and height is set directly instead of scale
+		if (entity.sType == CalcType::PER && (shape->GetRenderType() == RenderType::RECTANGLE) || shape->GetRenderType() == RenderType::BOUNDING_BOX) {
+			auto rectShape = node->GetShape<spt<Rectangle>>();
+			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
+			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
+			nodeTransform.scale = ofVec3f(1);
+		}
+
 		// refresh transform (recalculate from parent)
 		nodeTransform.CalcAbsTransform(parent->GetTransform());
-
 
 		node->SetTransform(nodeTransform);
 	}
@@ -43,6 +52,7 @@ namespace Cog {
 
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
+
 		outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
 		outputTrans.rotationCentroid = ofVec2f(shape->GetWidth(), shape->GetHeight()) * entity.rotationCentroid * (scale); // multiply by abs scale
 		outputTrans.rotation = entity.rotation;

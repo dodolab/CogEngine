@@ -2,11 +2,12 @@
 
 #include "ofxCogCommon.h"
 #include "Sprite.h"
+#include "SpriteEntity.h"
 
 namespace Cog {
 
 	enum class RenderType {
-		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE, LABEL
+		NONE, IMAGE, RECTANGLE, POLYGON, PLANE, TEXT, SPRITE, MULTISPRITE, LABEL, BOUNDING_BOX
 	};
 
 	struct RenderTypeConverter {
@@ -34,6 +35,9 @@ namespace Cog {
 			}
 			else if (val.compare("label") == 0) {
 				return RenderType::LABEL;
+			}
+			else if (val.compare("bounding_box") == 0) {
+				return RenderType::BOUNDING_BOX;
 			}
 
 			return RenderType::NONE;
@@ -105,7 +109,7 @@ namespace Cog {
 			return height;
 		}
 
-		float SetHeight(float height) {
+		void SetHeight(float height) {
 			this->height = height;
 		}
 	};
@@ -134,7 +138,7 @@ namespace Cog {
 			return height;
 		}
 
-		float SetHeight(float height) {
+		void SetHeight(float height) {
 			this->height = height;
 		}
 	};
@@ -204,7 +208,7 @@ namespace Cog {
 		}
 
 		float GetTextHeight() {
-			return font->stringHeight(stream.str());
+			return font->stringHeight("Ay");
 		}
 
 		string GetText() {
@@ -277,20 +281,21 @@ namespace Cog {
 
 	class SpritesShape : public Shape {
 	private:
-		vector<pair<spt<Sprite>, Trans>> sprites;
+		vector<spt<SpriteEntity>> sprites;
+
 		int width = 1;
 		int height = 1;
 		string sheetName;
 
 	public:
-		SpritesShape(string sheetName, vector<pair<spt<Sprite>, Trans>> sprites) : 
+		SpritesShape(string sheetName, vector<spt<SpriteEntity>> sprites) :
 			Shape(RenderType::MULTISPRITE), sheetName(sheetName), sprites(sprites) {
 			Recalc();
 		}
 
 		void Recalc();
 
-		vector<pair<spt<Sprite>,Trans>>& GetSprites() {
+		vector<spt<SpriteEntity>>& GetSprites() {
 			return sprites;
 		}
 
@@ -304,8 +309,62 @@ namespace Cog {
 
 		float GetHeight() {
 			return (float)height;
-
 		}
 	};
 
+	/**
+	* Renderable bounding box
+	*/
+	class BoundingBox : public Shape {
+	private:
+		float width = 0;
+		float height = 0;
+		bool renderable = true;
+		ofRectangle boundingBox;
+		float margin = 0;
+
+	public:
+		BoundingBox(float width, float height, float margin, bool renderable) : width(width), height(height), margin(margin), renderable(renderable),
+			Shape(RenderType::BOUNDING_BOX) {
+		}
+
+		float GetWidth() {
+			return width;
+		}
+
+		void SetWidth(float width) {
+			this->width = width;
+		}
+
+		float GetHeight() {
+			return height;
+		}
+
+		void SetHeight(float height) {
+			this->height = height;
+		}
+
+		bool IsRenderable() {
+			return renderable;
+		}
+
+		void SetIsRenderable(bool renderable) {
+			this->renderable = renderable;
+		}
+
+		float GetMargin() {
+			return margin;
+		}
+
+		void SetMargin(float margin) {
+			this->margin = margin;
+		}
+
+		void Recalc(Node* owner);
+
+		ofRectangle GetBoundingBox() {
+			return boundingBox;
+		}
+
+	};
 }// namespace

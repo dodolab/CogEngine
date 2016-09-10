@@ -219,11 +219,13 @@
     <ClInclude Include="3rdParty\xml\tinyxml.h" />
     <ClInclude Include="Source\Attributes\Bounds.h" />
     <ClInclude Include="Source\Attributes\Collision.h" />
+    <ClInclude Include="Source\Attributes\HitBox.h" />
     <ClInclude Include="Source\Attributes\Movement.h" />
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
     <ClInclude Include="Source\Behaviors\AttribAnimator.h" />
     <ClInclude Include="Source\Behaviors\Goal.h" />
+    <ClInclude Include="Source\Behaviors\Selection.h" />
     <ClInclude Include="Source\Behaviors\SheetAnimator.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\Collider.h" />
@@ -235,7 +237,7 @@
     <ClInclude Include="Source\Behaviors\Move.h" />
     <ClInclude Include="Source\Behaviors\MultiAnim.h" />
     <ClInclude Include="Source\Behaviors\RotateAnim.h" />
-    <ClInclude Include="Source\Behaviors\Selection.h" />
+    <ClInclude Include="Source\Behaviors\MultiSelection.h" />
     <ClInclude Include="Source\Behaviors\State.h" />
     <ClInclude Include="Source\Behaviors\StateMachine.h" />
     <ClInclude Include="Source\Behaviors\SteeringBehavior.h" />
@@ -288,6 +290,7 @@
     <ClInclude Include="Source\Graphics\CollageTexture.h" />
     <ClInclude Include="Source\Graphics\MapLoader.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />
+    <ClInclude Include="Source\Graphics\SpriteEntity.h" />
     <ClInclude Include="Source\Graphics\SpriteSet.h" />
     <ClInclude Include="Source\Graphics\SpriteSheet.h" />
     <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h" />
@@ -350,6 +353,7 @@
     <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
+    <ClCompile Include="Source\Attributes\HitBox.cpp" />
     <ClCompile Include="Source\Attributes\Shape.cpp" />
     <ClCompile Include="Source\Communication\NetReader.cpp" />
     <ClCompile Include="Source\Communication\NetWriter.cpp" />
@@ -373,6 +377,7 @@
     <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
     <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
+    <ClCompile Include="Source\Graphics\SpriteEntity.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSet.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />

@@ -135,6 +135,7 @@ namespace Cog {
 					case RenderType::PLANE:
 					case RenderType::TEXT:
 					case RenderType::LABEL:
+					case RenderType::BOUNDING_BOX:
 						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
 					case RenderType::SPRITE:
 						RenderSprite(node);
@@ -175,6 +176,9 @@ namespace Cog {
 					break;
 				case RenderType::LABEL:
 					RenderLabel(node);
+					break;
+				case RenderType::BOUNDING_BOX:
+					RenderBoundingBox(node);
 					break;
 				case RenderType::SPRITE:
 				case RenderType::MULTISPRITE:
@@ -263,12 +267,11 @@ namespace Cog {
 
 		spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
 		renderer->setActualBuffer(shape->GetSheetName());
-		vector<pair<spt<Sprite>,Trans>> sprites = shape->GetSprites();
+		vector<spt<SpriteEntity>> sprites = shape->GetSprites();
 
 		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			pair<spt<Sprite>,Trans> crate = (*it);
-			spt<Sprite> sprite = crate.first;
-			Trans& trans = crate.second;
+			spt<Sprite> sprite = (*it)->sprite;
+			Trans& trans = (*it)->transform;
 			trans.CalcAbsTransform(owner->GetTransform());
 
 			drawingTile.width = sprite->GetWidth();
@@ -311,7 +314,7 @@ namespace Cog {
 		lineY = drawBounds.y;
 		int counter = 0;
 
-		int lineHeight = font->stringHeight("Ad");
+		int lineHeight = font->stringHeight("Ay");
 		int linesToDraw = (drawBounds.height / (1.5f*lineHeight));
 		int startingIndex = textLines.size() - linesToDraw;
 		if (startingIndex < 0) startingIndex = 0;
@@ -319,7 +322,7 @@ namespace Cog {
 		// draw only lines that should be drawn
 		for (auto it = (textLines.begin() + startingIndex); it != textLines.end(); ++it) {
 			if (counter++ == 0) {
-				lineY += font->stringHeight("Ad");  // Easiest way to get ascender height.
+				lineY += font->stringHeight("Ay");  // Easiest way to get ascender height.
 			}
 			else {
 				lineY += font->getLineHeight();
@@ -327,8 +330,24 @@ namespace Cog {
 
 			font->drawString(*it, lineX, lineY);
 		}
+	}
 
-		//ofxTextLabel::drawLines(*font, textLines, textBounds, drawBounds);
+	void Renderer::RenderBoundingBox(Node* owner) {
+		spt<BoundingBox> shape = static_cast<spt<BoundingBox>>(owner->GetShape());
+		
+		if (shape->IsRenderable()) {
+			auto bbox = shape->GetBoundingBox();
+			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+
+			ofSetColor(0x000000ff);
+
+			ofColor color = shape->GetColor();
+			shape->Recalc(owner);
+			ofSetColor(color);
+			ofFill();
+
+			ofRect(bbox.x, bbox.y, 0, bbox.width, bbox.height);
+		}
 	}
 
 }// namespace

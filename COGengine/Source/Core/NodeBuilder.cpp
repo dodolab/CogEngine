@@ -1,8 +1,11 @@
 #include "NodeBuilder.h"
 #include "CogEngine.h"
 #include "BehaviorEnt.h"
+#include "Selection.h"
+#include "MultiSelection.h"
 
 namespace Cog {
+
 
 	void NodeBuilder::SetImageNode(Node* node, string path) {
 		spt<ofImage> image = CogPreload2DImage(path);
@@ -19,10 +22,14 @@ namespace Cog {
 	}
 
 
-	void NodeBuilder::SetSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
+	void NodeBuilder::SetMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 		node->AddBehavior(new HitEvent(-1, false, false));
-		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StringHash(selectionGroup)));
+		node->AddBehavior(new MultiSelection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StringHash(selectionGroup)));
 		node->GetGroups().SetState(StringHash(selectionGroup));
+	}
+
+	void NodeBuilder::SetSelectionNode(Node* node, string defaultImg, string selectImg) {
+		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg)));
 	}
 
 	void NodeBuilder::SetTextNode(Node* node, string font, float size, ofColor color, string text) {
@@ -46,6 +53,21 @@ namespace Cog {
 	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color) {
 		auto planeShape = CreatePlaneShape(size, color);
 		node->SetShape(planeShape);
+	}
+
+	void NodeBuilder::SetBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
+		Settings& settings = scene->GetSettings();
+
+		// get reference width and height
+		int refWidth = settings.GetSettingValInt("transform", "ref_width");
+		int refHeight = settings.GetSettingValInt("transform", "ref_height");
+
+		if (refWidth == 0) refWidth = CogGetScreenWidth();
+		if (refHeight == 0) refHeight = CogGetScreenHeight();
+
+		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight,margin,renderable));
+		bbox->SetColor(color);
+		node->SetShape(bbox);
 	}
 
 	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column) {
@@ -156,11 +178,17 @@ namespace Cog {
 			SetButtonNode(node, img, imgClick, imgDisabled);
 		}
 
+		if (xml->attributeExists("img_multiselect")) {
+			// set image on selection
+			string imgSelect = xml->getAttributex("img_multiselect", "");
+			string selectGroup = xml->getAttributex("select_group", "");
+			SetMultiSelectionNode(node, img, imgSelect, selectGroup);
+		}
+
 		if (xml->attributeExists("img_select")) {
 			// set image on selection
 			string imgSelect = xml->getAttributex("img_select", "");
-			string selectGroup = xml->getAttributex("select_group", "");
-			SetSelectionNode(node, img, imgSelect, selectGroup);
+			SetSelectionNode(node, img, imgSelect);
 		}
 
 		// scene node will always fit to screen size
@@ -193,6 +221,7 @@ namespace Cog {
 
 			// set transform according to the parsed values
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
+
 			xml->popTag();
 		}
 		
@@ -236,7 +265,7 @@ namespace Cog {
 		float size = xml->getAttributex("size", 1.0);
 		string value = xml->getValuex("");
 		string colorStr = xml->getAttributex("color", "0x000000");
-		ofColor color = ofColor::fromHex(ofHexToInt(colorStr));
+		ofColor color = StringToColor(colorStr);
 
 		SetTextNode(node, font, size, color, value);
 	}
@@ -266,6 +295,7 @@ namespace Cog {
 			float width = 0;
 			float height = 0;
 
+
 			if (xml->attributeExists("size")) {
 				width = height = xml->getAttributex("size", 1.0);
 			}
@@ -274,10 +304,11 @@ namespace Cog {
 				height = xml->getAttributex("height", 0);
 			}
 
+
 			ofVec2f size = ofVec2f(width, height);
 			string colorStr = xml->getAttributex("color", "0x000000");
-			int hexColor = ofHexToInt(colorStr.substr(2));
-			ofColor color = ofColor::fromHex(hexColor);
+			ofColor color = StringToColor(colorStr);
+
 			SetPlaneNode(node, size, color);
 		}
 		else if (renderType == RenderType::SPRITE) {
@@ -290,6 +321,15 @@ namespace Cog {
 			int column = xml->getAttributex("column", 0);
 
 			SetSpriteNode(scene, node, layer, spriteSet, row, column);
+		}
+		else if (renderType == RenderType::BOUNDING_BOX) {
+			string colorStr = xml->getAttributex("color", "0x000000");
+			ofColor color = StringToColor(colorStr);
+
+			bool renderable = xml->getBoolAttributex("renderable", false);
+			float margin = xml->getAttributex("margin", 0.0f);
+
+			SetBoundingBoxNode(scene, node, color, margin,renderable);
 		}
 	}
 

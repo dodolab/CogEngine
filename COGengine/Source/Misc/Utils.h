@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>
+#include "ofColor.h"
 
 using namespace std;
 
@@ -34,5 +35,6 @@ namespace Cog {
 
 	vector<string> split_string(string str, string delimiter);
 
+	ofColor StringToColor(string col);
 
 } // namespace

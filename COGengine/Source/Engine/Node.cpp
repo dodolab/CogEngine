@@ -31,7 +31,7 @@ namespace Cog {
 
 		MLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
 		// move elements from collection to insert so they can be removed from classic collections
-		InsertElementsForAdding();
+		InsertElementsForAdding(false);
 
 
 			// delete all behaviors
@@ -119,8 +119,8 @@ namespace Cog {
 			}
 		}
 
-		DeleteElementsForRemoving();
-		InsertElementsForAdding();
+		DeleteElementsForRemoving(false);
+		InsertElementsForAdding(false);
 	}
 
 	void Node::Draw(const uint64 delta, const uint64 absolute) {
@@ -182,15 +182,8 @@ namespace Cog {
 
 
 	void Node::SubmitChanges(bool applyToChildren) {
-		InsertElementsForAdding();
-		DeleteElementsForRemoving();
-
-		if (applyToChildren) {
-			for (auto it = children.begin(); it != children.end(); ++it) {
-				Node* child = (*it);
-				child->SubmitChanges(true);
-			}
-		}
+		InsertElementsForAdding(applyToChildren);
+		DeleteElementsForRemoving(applyToChildren);
 	}
 
 
@@ -246,24 +239,7 @@ namespace Cog {
 	}
 
 
-	void Node::InsertElementsForAdding() {
-
-		// insert behaviors
-		for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it) {
-			Behavior* beh = (*it);
-			beh->owner = this;
-			behaviors.push_back(beh);
-			
-			// todo: root node can't have its behaviors stored in the scene
-			if (this->type != NodeType::ROOT) {
-				scene->AddBehavior(beh);
-			}
-
-			// initialize
-			beh->Init();
-			beh->SetIsInitialized(true);
-		}
-		behaviorsToAdd.clear();
+	void Node::InsertElementsForAdding(bool applyToChildren) {
 
 		// insert children
 		for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it) {
@@ -280,11 +256,29 @@ namespace Cog {
 				child->GetScene()->AddNode(child);
 			}
 
+			if (applyToChildren) child->InsertElementsForAdding(true);
 		}
 		childrenToAdd.clear();
+
+		// insert behaviors
+		for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it) {
+			Behavior* beh = (*it);
+			beh->owner = this;
+			behaviors.push_back(beh);
+
+			// todo: root node can't have its behaviors stored in the scene
+			if (this->type != NodeType::ROOT) {
+				scene->AddBehavior(beh);
+			}
+
+			// initialize
+			beh->Init();
+			beh->SetIsInitialized(true);
+		}
+		behaviorsToAdd.clear();
 	}
 
-	void Node::DeleteElementsForRemoving() {
+	void Node::DeleteElementsForRemoving(bool applyToChildren) {
 
 		// delete behaviors
 		for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it) {
@@ -305,6 +299,7 @@ namespace Cog {
 			Node* child = item.first;
 			children.remove(child);
 			scene->RemoveNode(child);
+			if (applyToChildren) child->DeleteElementsForRemoving(true);
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
 		}
