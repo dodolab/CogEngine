@@ -1,19 +1,17 @@
 #pragma once
 
 #include "ofxCogCommon.h"
+#include "CommonAnim.h"
 
 namespace Cog {
+
 	/**
 	* Entity for animations
 	*/
-	class SheetAnim {
+	class SheetAnim : public CommonAnim {
 	protected:
-		// name of animation
-		string name = "";
 		// path to sheet(s)
 		string sheetPath = "";
-		// reference to another animation
-		string ref = "";
 		// number of frames per one line in spritesheet
 		int frames = 1;
 		// number of lines in spritesheet
@@ -24,88 +22,59 @@ namespace Cog {
 		int end = 1;
 		// sequence increment
 		int increment = 1;
-		// speed multiplier
-		double speed = 1;
-		// number of repetition
-		int repeat = 1;
-		// if true, animation will be reverted
-		bool isRevert = false;
-		// list of children
-		vector<spt<SheetAnim>> children;
-
 		// list of paths to sheets this animation holds
 		vector<string> sheets;
 		// indicator, if sheet array has been initialized
 		bool sheetInit = false;
 
-
 	public:
 
-
-		SheetAnim(string name, string sheetPath, string ref, int frames, int lines, int start,
-			int end, int increment, double speed, int repeat, bool isRevert) : name(name), sheetPath(sheetPath), ref(ref),
-			frames(frames), lines(lines), start(start), end(end), increment(increment), speed(speed), repeat(repeat), isRevert(isRevert) {
-
+		SheetAnim() {
 		}
 
-		SheetAnim() {
+		SheetAnim(string name, string sheetPath, string ref, int frames, int lines, int start,
+			int end, int increment, double speed, int repeat, bool isRevert) :
+			CommonAnim(name, ref, speed, repeat, isRevert), sheetPath(sheetPath),
+			frames(frames), lines(lines), start(start), end(end), increment(increment) {
 		}
 
 
 		/**
 		* Copies all parameters from other animation
 		*/
-		void GetParametersFromReference(SheetAnim* reference) {
-			this->SetSheetPath(reference->GetSheetPath());
-			this->SetFrames(reference->GetFrames());
-			this->SetLines(reference->GetLines());
-			this->SetStart(reference->GetStart());
-			this->SetEnd(reference->GetEnd());
-			this->SetIncrement(reference->GetIncrement());
-			this->SetSpeed(reference->GetSpeed());
-			this->SetRepeat(reference->GetRepeat());
-			this->SetIsRevert(reference->GetIsRevert());
+		void GetParametersFromReference(CommonAnim* reference) {
+			auto sheetAnimRef = static_cast<SheetAnim*>(reference);
 
+			this->SetSheetPath(sheetAnimRef->GetSheetPath());
+			this->SetFrames(sheetAnimRef->GetFrames());
+			this->SetLines(sheetAnimRef->GetLines());
+			this->SetStart(sheetAnimRef->GetStart());
+			this->SetEnd(sheetAnimRef->GetEnd());
+			this->SetIncrement(sheetAnimRef->GetIncrement());
 
-			// insert children
-			vector<spt<SheetAnim>>& refChildren = reference->children;
-
-			for (auto it = refChildren.begin(); it != refChildren.end(); ++it) {
-				spt<SheetAnim> child = (*it);
-				AddChild(child);
-			}
+			CommonAnim::GetParametersFromReference(reference);
 		}
 
-		/**
-		* Adds itself and all children to the output array
-		*/
-		void GetAllNodes(vector<SheetAnim*> &output) {
-			output.push_back(this);
-
-			for (auto it = children.begin(); it != children.end(); ++it) {
-				spt<SheetAnim> an = (*it);
-				an->GetAllNodes(output);
-			}
+		virtual void LoadAttributesFromXml(spt<ofxXml> xml) {
+			this->SetSheetPath(xml->getAttribute(":", "sheet", this->GetSheetPath()));
+			this->SetFrames(xml->getAttribute(":", "frames", this->GetFrames()));
+			if (this->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", this->GetName().c_str()));
+			this->SetLines(xml->getAttribute(":", "lines", this->GetLines()));
+			if (this->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", this->GetName().c_str()));
+			this->SetStart(xml->getAttribute(":", "start", this->GetStart()));
+			if (this->GetStart() < 0) throw IllegalArgumentException(string_format("Error in animation %s; start bust be greater or equal to 0", this->GetName().c_str()));
+			this->SetEnd(xml->getAttribute(":", "end", this->GetEnd()));
+			if (this->GetEnd() < 0) throw IllegalArgumentException(string_format("Error in animation %s; end bust be greater or equal to 0", this->GetName().c_str()));
+			if (this->GetStart() > this->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", this->GetName().c_str()));
+			this->SetIncrement(xml->getAttribute(":", "increment", this->GetIncrement()));
+			if (this->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", this->GetName().c_str()));
+			this->SetSpeed(xml->getAttribute(":", "speed", this->GetSpeed()));
+			if (this->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", this->GetName().c_str()));
+			this->SetRepeat(xml->getAttribute(":", "repeat", this->GetRepeat()));
+			if (this->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", this->GetName().c_str()));
+			this->SetIsRevert(xml->getBoolAttribute(":", "revert", this->GetIsRevert()));
 		}
-
-		/**
-		* Finds recursively child by name
-		* @param name according  to find the child
-		*/
-		spt<SheetAnim> FindChild(string name) {
-			if (this->GetName().compare(name) == 0) return spt<SheetAnim>(this);
-
-			for (auto it = children.begin(); it != children.end(); ++it) {
-				if ((*it)->GetName().compare(name) == 0) return (*it);
-				else {
-					auto childFound = (*it)->FindChild(name);
-					if (childFound != spt<SheetAnim>()) return childFound;
-				}
-			}
-
-			return spt<SheetAnim>();
-		}
-
+		
 		/**
 		* Initializes list of paths to all sheets this animation holds
 		*/
@@ -153,55 +122,10 @@ namespace Cog {
 
 
 		/**
-		* Adds a new animation child
-		* @param child child to add
-		* @return true, if child has been added (it didn't exist in the collection)
-		*/
-		bool AddChild(spt<SheetAnim> child) {
-			auto found = find(children.begin(), children.end(), child);
-			if (found != children.end()) {
-				return false;
-			}
-			else {
-				children.push_back(child);
-				return true;
-			}
-		}
-
-		/**
-		* Removes animation child
-		* @param child child to remove
-		* @return true, if child has been removed (it did exist in the collection)
-		*/
-		bool RemoveChild(spt<SheetAnim> child) {
-			auto found = find(children.begin(), children.end(), child);
-			if (found != children.end()) {
-				children.erase(found);
-				return true;
-			}
-			else return false;
-		}
-
-		/**
 		* Returns true, if this animation has sheet(s)
 		*/
 		bool HasSheets() {
 			return sheetPath.length() != 0;
-		}
-
-
-		/**
-		* Gets name of this animation
-		*/
-		const string GetName() const {
-			return name;
-		}
-
-		/**
-		* Sets name of this animation
-		*/
-		void SetName(string name) {
-			this->name = name;
 		}
 
 		/**
@@ -216,20 +140,6 @@ namespace Cog {
 		*/
 		void SetSheetPath(string sheetPath) {
 			this->sheetPath = sheetPath;
-		}
-
-		/**
-		* Gets name of referenced animation
-		*/
-		const string GetRef() const {
-			return ref;
-		}
-
-		/**
-		* Sets name of referenced animation
-		*/
-		void SetRef(string ref) {
-			this->ref = ref;
 		}
 
 		/**
@@ -307,55 +217,6 @@ namespace Cog {
 		*/
 		void SetIncrement(int increment) {
 			this->increment = increment;
-		}
-
-		/**
-		* Gets speed
-		*/
-		const double GetSpeed() const {
-			return speed;
-		}
-
-		/**
-		* Sets speed
-		*/
-		void SetSpeed(double speed) {
-			this->speed = speed;
-		}
-
-		/**
-		* Gets number of repetitions
-		*/
-		const int GetRepeat() const {
-			return repeat;
-		}
-
-		/**
-		* Sets number of repetitions
-		*/
-		void SetRepeat(int repeat) {
-			this->repeat = repeat;
-		}
-
-		/**
-		* Gets indicator, if animation is inverted
-		*/
-		const bool GetIsRevert() const {
-			return isRevert;
-		}
-
-		/**
-		* Sets indicator, if animation is inverted
-		*/
-		void SetIsRevert(bool isRevert) {
-			this->isRevert = isRevert;
-		}
-
-		/**
-		* Gets collection of children
-		*/
-		vector<spt<SheetAnim>>& GetChildren() {
-			return children;
 		}
 
 		/**
