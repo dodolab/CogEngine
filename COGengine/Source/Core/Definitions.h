@@ -79,7 +79,7 @@ public: \
   TimeMeasure::GetInstance().MeasureBlockStart(key); \
   } while(false)
 #else
-#define COGMEASUREBEGIN(key) do {} while(false)
+#define COGMEASURE_BEGIN(key) do {} while(false)
 #endif
 
 #ifdef DEBUG
@@ -88,7 +88,7 @@ public: \
   TimeMeasure::GetInstance().MeasureBlockEnd(key); \
   } while(false)
 #else
-#define COGMEASUREEND(key) do {} while(false)
+#define COGMEASURE_END(key) do {} while(false)
 #endif
 
 

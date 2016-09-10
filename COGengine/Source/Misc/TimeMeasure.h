@@ -56,7 +56,7 @@ namespace Cog {
 
 		void MeasureBlockEnd(string blockName);
 
-		MeasureBlock& GetMeasureBlock(string blockName);
+		MeasureBlock GetMeasureBlock(string blockName);
 
 		void Report(bool restart);
 

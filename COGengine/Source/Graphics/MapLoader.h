@@ -119,10 +119,17 @@ namespace Cog {
 			for (int i = 0; i < pix.getHeight(); i++) {
 				for (int j = 0; j < pix.getWidth(); j++) {
 					ofFloatColor color = pix.getColor(j, i);
-					int hexa = color.getHex();
+					
+					// bug in android: channels b and r are swapped
+
+#if ANDROID
+					int hexa = (((int)(color.b*255) & 0xff) << 16) + ((((int)(color.g*255)) & 0xff) << 8) + (((int)(color.r*255)) & 0xff);
+#elif WIN32
+					int hexa = (((int)(color.r * 255) & 0xff) << 16) + ((((int)(color.g * 255)) & 0xff) << 8) + (((int)(color.b * 255)) & 0xff);
+#endif
 					std::stringstream stream;
 					stream << "0x" << std::setfill('0') << std::setw(6) << std::hex << hexa;
-				
+
 					std::string identifier(stream.str());
 
 					string name = idNameMap.GetItemVal(identifier);

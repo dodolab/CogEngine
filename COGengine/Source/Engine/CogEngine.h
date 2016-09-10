@@ -1,10 +1,5 @@
 #pragma once
 
-namespace Cog {
-	class Engine;
-	extern Engine COGEngine;
-}
-
 
 #include "ResourceCache.h"
 #include "Logger.h"

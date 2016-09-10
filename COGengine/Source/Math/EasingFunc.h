@@ -69,7 +69,7 @@ namespace Cog {
 				return cosineInOut;
 			}
 
-			throw IllegalArgumentException(string_format("No such easing function : %s",name));
+			throw IllegalArgumentException(string_format("No such easing function : %s",name.c_str()));
 		}
 	};
 

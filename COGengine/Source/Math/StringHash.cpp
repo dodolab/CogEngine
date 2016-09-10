@@ -1,7 +1,6 @@
 
 #include "StringHash.h"
 
-
 namespace Cog
 {
 
