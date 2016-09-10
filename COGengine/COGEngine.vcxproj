@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Engine;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/dukbind;$(ProjectDir)/3rdParty/duktape;$(ProjectDir)/3rdParty/smartptr;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/xml;$(ProjectDir)/3rdParty/cpplinq</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -199,6 +199,10 @@
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\xml\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\xml\tinyxml.h" />
+    <ClInclude Include="Source\Attributes\Bounds.h" />
+    <ClInclude Include="Source\Attributes\Collision.h" />
+    <ClInclude Include="Source\Attributes\Pair.h" />
+    <ClInclude Include="Source\Attributes\Shape.h" />
     <ClInclude Include="Source\Behaviors\Animator.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\Collider.h" />
@@ -221,6 +225,7 @@
     <ClInclude Include="Source\Components\Renderer.h" />
     <ClInclude Include="Source\Components\SceneContext.h" />
     <ClInclude Include="Source\Components\SceneManager.h" />
+    <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Component.h" />
     <ClInclude Include="Source\Core\Definitions.h" />
     <ClInclude Include="Source\Core\EntityStorage.h" />
@@ -228,8 +233,11 @@
     <ClInclude Include="Source\Core\Facade.h" />
     <ClInclude Include="Source\Core\Enums.h" />
     <ClInclude Include="Source\Core\Error.h" />
+    <ClInclude Include="Source\Core\InputAct.h" />
     <ClInclude Include="Source\Core\Msg.h" />
     <ClInclude Include="Source\Core\NodeBuilder.h" />
+    <ClInclude Include="Source\Core\Settings.h" />
+    <ClInclude Include="Source\Core\SoundFile.h" />
     <ClInclude Include="Source\Core\TransformMath.h" />
     <ClInclude Include="Source\Engine\AsyncProcess.h" />
     <ClInclude Include="Source\Engine\Behavior.h" />
@@ -238,14 +246,8 @@
     <ClInclude Include="Source\Engine\MsgListener.h" />
     <ClInclude Include="Source\Engine\Node.h" />
     <ClInclude Include="Source\Engine\Scene.h" />
-    <ClInclude Include="Source\Entities\Attr.h" />
-    <ClInclude Include="Source\Entities\Bounds.h" />
-    <ClInclude Include="Source\Entities\Collision.h" />
-    <ClInclude Include="Source\Entities\InputAct.h" />
-    <ClInclude Include="Source\Entities\Pair.h" />
-    <ClInclude Include="Source\Entities\Settings.h" />
-    <ClInclude Include="Source\Entities\Shape.h" />
-    <ClInclude Include="Source\Entities\SoundFile.h" />
+    <ClInclude Include="Source\Entities\DEntity.h" />
+    <ClInclude Include="Source\Entities\TransformEnt.h" />
     <ClInclude Include="Source\Graphics\Anim.h" />
     <ClInclude Include="Source\Graphics\AnimationLoader.h" />
     <ClInclude Include="Source\Graphics\CollageTexture.h" />
@@ -286,6 +288,7 @@
     <ClCompile Include="3rdParty\xml\ofxXmlSettings.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
+    <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Components\Logger.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
@@ -302,7 +305,6 @@
     <ClCompile Include="Source\Engine\MsgListener.cpp" />
     <ClCompile Include="Source\Engine\Node.cpp" />
     <ClCompile Include="Source\Engine\Scene.cpp" />
-    <ClCompile Include="Source\Entities\Bounds.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />

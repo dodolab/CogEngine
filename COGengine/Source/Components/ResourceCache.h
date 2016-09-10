@@ -3,6 +3,7 @@
 #include "ofxCogCommon.h"
 #include "Component.h"
 #include "Settings.h"
+#include "DEntity.h"
 
 namespace Cog {
 
@@ -28,6 +29,8 @@ namespace Cog {
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
 		// cached animation
 		map<string, spt<Anim>> loadedAnimations;
+		// cached entities
+		map<string, spt<DEntity>> loadedEntities;
 		// cached spritesheets
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
 		// loaded fonts (each DPI must have one font loaded)
@@ -109,6 +112,27 @@ namespace Cog {
 		void StoreAnimation(spt<Anim> anim);
 
 		/**
+		* Gets stored entity by name
+		*/
+		spt<DEntity> GetEntity(string name);
+
+		template<class T> spt<T> GetEntityC(string name) {
+			spt<DEntity> entity = GetEntity(name);
+			DEntity* entityPtr = entity.get();
+			MASSERT(typeid(*entity) == typeid(T), "RESOURCE", "Entity %s is of the wrong type!", name);
+
+			T* entityC = static_cast<T*>(entityPtr);
+			return spt<T>(entityC);
+		}
+
+		/**
+		* Stores entity
+		* @param name entity name, has to be unique
+		* @entity entity to store
+		*/
+		void StoreEntity(string name, spt<DEntity> entity);
+
+		/**
 		* Gets spritesheet by name
 		* @param name name of spritesheet
 		*/
@@ -124,6 +148,11 @@ namespace Cog {
 		* Loads settings from XML
 		*/
 		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
+
+		/**
+		* Loads one setting entity from XML
+		*/
+		Setting LoadSettingFromXml(spt<ofxXml> xml);
 
 		Settings& GetDefaultSettings() {
 			return loadedDefaultSettings;

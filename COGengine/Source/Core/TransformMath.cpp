@@ -5,16 +5,15 @@
 namespace Cog {
 
 	void TransformMath::SetSizeToScreen(Node* node, Node* parent) {
-		SetTransform(node, parent, ofVec2f(0, 0), 1, CalcType::PER, ofVec2f(0, 0), ofVec2f(1, 0) // zero because we want to scale according to the x axis
-			, CalcType::ABS_PER, 0, 0);
+		SetTransform(node, parent, TransformEnt(ofVec2f(0, 0), 1, CalcType::PER, ofVec2f(0, 0), ofVec2f(1, 0) // zero because we want to scale according to the x axis
+			, CalcType::ABS_PER), 0, 0);
 	}
 
-	void TransformMath::SetTransform(Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth, int gridHeight) {
-
+	void TransformMath::SetTransform(Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
 
 		Trans nodeTransform = Trans(0, 0);
 
-		CalcTransform(nodeTransform, node, parent, position, zIndex, positionCalc, anchor, size, sizeCalc, gridWidth, gridHeight);
+		CalcTransform(nodeTransform, node, parent, entity, gridWidth, gridHeight);
 
 		// refresh transform (recalculate from parent)
 		nodeTransform.CalcAbsTransform(parent->GetTransform());
@@ -22,26 +21,26 @@ namespace Cog {
 		node->SetTransform(nodeTransform);
 	}
 
-	void TransformMath::CalcTransform(Trans& outputTrans, Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc,
-		ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth, int gridHeight) {
+	void TransformMath::CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
 
 
 		Trans& parentTrans = parent->GetTransform();
 
 		// calculate scale
-		ofVec2f scale = CalcScale(node, parent, size.x, size.y, sizeCalc, gridWidth, gridHeight);
+		ofVec2f scale = CalcScale(node, parent, entity.size.x, entity.size.y, entity.sType, gridWidth, gridHeight);
 		// calculate position
-		ofVec2f absPos = CalcPosition(node, parent, position, positionCalc, gridWidth, gridHeight);
+		ofVec2f absPos = CalcPosition(node, parent, entity.pos, entity.pType, gridWidth, gridHeight);
 
 		// fix position according to the anchor
 		auto shape = node->GetShape();
 
+		absPos.x += (0.0f - entity.anchor.x) * shape->GetWidth()*scale.x;
+		absPos.y += (0.0f - entity.anchor.y) * shape->GetHeight()*scale.y;
 
-		absPos.x += (0.0f - anchor.x) * node->GetShape()->GetWidth()*scale.x;
-		absPos.y += (0.0f - anchor.y) * node->GetShape()->GetHeight()*scale.y;
-
+		int zIndex = entity.zIndex;
 		// if zIndex is equal to 0, the value will be taken from the parent
 		if (zIndex == 0) zIndex = (int)parentTrans.localPos.z;
+
 
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
@@ -133,71 +132,6 @@ namespace Cog {
 		else if (width == 0) return ofVec3f(scaleY, scaleY, 1);
 		else return ofVec3f(scaleX, scaleX, 1); // height == 0
 
-	}
-
-	void TransformMath::LoadTransformFromXml(spt<ofxXml> xml, Node* node, Node* parent, Settings& settings) {
-		TransformMath math = TransformMath();
-
-		ofVec2f pos = ofVec2f();
-		int zIndex = 0;
-		CalcType posCalc = CalcType::PER;
-		CalcType sizeCalc = CalcType::PER;
-		ofVec2f anchor = ofVec2f();
-		ofVec2f size = ofVec2f();
-
-		// =================== get positions
-		if (xml->attributeExists("pos")) {
-			float posF = xml->getAttributex("pos", 0.0);
-			pos = ofVec2f(posF, posF);
-		}
-		else {
-
-			float posX = 0;
-			float posY = 0;
-
-			posX = xml->getAttributex("pos_x", 0.0);
-			posY = xml->getAttributex("pos_y", 0.0);
-			pos = ofVec2f(posX, posY);
-		}
-
-
-		zIndex = xml->getAttributex("z_index", 0);
-		posCalc = StrToCalcType(xml->getAttributex("ptype", ""));
-
-		// =================== get size
-		sizeCalc = StrToCalcType(xml->getAttributex("stype", ""));
-
-		// todo: for text, size has to be equal to 1 and stype must be loc !!
-
-		float width = 0;
-		float height = 0;
-
-		if (xml->attributeExists("size")) {
-			width = height = xml->getAttributex("size", 0.0);
-		}
-		else {
-			width = xml->getAttributex("width", 0.0);
-			height = xml->getAttributex("height", 0.0);
-		}
-
-		size = ofVec2f(width, height);
-
-		// =================== get anchor
-		if (xml->attributeExists("anchor")) {
-			float anchorFlt = xml->getAttributex("anchor", 0.0);
-			anchor = ofVec2f(anchorFlt);
-		}
-		else {
-			anchor.x = xml->getAttributex("anchor_x", 0.0);
-			anchor.y = xml->getAttributex("anchor_y", 0.0);
-		}
-
-		// =================== get grid size (if specified)
-		int gridWidth = settings.GetSettingValInt("transform", "grid_width");
-		int gridHeight = settings.GetSettingValInt("transform", "grid_height");
-
-		// set transform according to the parsed values
-		SetTransform(node, parent, pos, zIndex, posCalc, anchor, size, sizeCalc, gridWidth, gridHeight);
 	}
 
 } // namespace

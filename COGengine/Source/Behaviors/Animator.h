@@ -85,7 +85,7 @@ namespace Cog {
 	* Behavior for common animations
 	*/
 	class Animator : public Behavior {
-		OBJECT_PROTOTYPE(Animator)
+		OBJECT_PROTOTYPE_INIT(Animator)
 	private:
 		// animation root
 		spt<Anim> root = spt<Anim>();
@@ -99,6 +99,12 @@ namespace Cog {
 
 		}
 
+		Animator(Setting& setting) {
+			string animation = setting.GetItemVal("animation");
+			auto resCache = GETCOMPONENT(ResourceCache);
+			this->root = resCache->GetAnimation(animation);
+		}
+
 		void Init() {
 			if (root == spt<Anim>()) {
 				CogLogError("Anim", "Animation cant' run, entity is null");
@@ -106,16 +112,13 @@ namespace Cog {
 				return;
 			}
 
+			//int gridWidth = settings.GetSettingValInt("transform", "grid_width");
+			//int gridHeight = settings.GetSettingValInt("transform", "grid_height");
+
 			// the root is not in inverted scope (but it can be inverted itself)
 			context = AnimSceneContext(root, false, true);
 			// start with -SPEED so the first update will get the proper frame
 			context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames() - root->GetSpeed()) : -root->GetSpeed();
-		}
-
-		void Init(Setting setting) {
-			string animation = setting.GetItemVal("animation");
-			auto resCache = GETCOMPONENT(ResourceCache);
-			this->root = resCache->GetAnimation(animation);
 		}
 
 		// debug only, will be deleted

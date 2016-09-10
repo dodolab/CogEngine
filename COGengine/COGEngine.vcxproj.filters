@@ -16,9 +16,6 @@
     <Filter Include="Source\Core">
       <UniqueIdentifier>{92418f27-8df7-4d4c-8e6e-6f29c4199572}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Tests">
-      <UniqueIdentifier>{344811c4-1bf8-47bc-b46e-f3c25b3b73ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics">
       <UniqueIdentifier>{079526f4-8b2e-46de-886e-24eadae596cc}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,12 @@
     </Filter>
     <Filter Include="Source\Entities">
       <UniqueIdentifier>{6ba6d7d2-4245-4910-b5db-1085bee33925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Tests">
+      <UniqueIdentifier>{344811c4-1bf8-47bc-b46e-f3c25b3b73ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Attributes">
+      <UniqueIdentifier>{193eb7c2-d057-4a2f-ba26-ab9428e9e728}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,27 +255,6 @@
     <ClInclude Include="Source\Graphics\SpriteSheet.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\Pair.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\Shape.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\SoundFile.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\Bounds.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\Collision.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\InputAct.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\Attr.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\CogApp.h">
       <Filter>Source\Engine</Filter>
     </ClInclude>
@@ -297,9 +279,6 @@
     <ClInclude Include="Source\Engine\Node.h">
       <Filter>Source\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\Settings.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Vec2i.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
@@ -308,6 +287,36 @@
     </ClInclude>
     <ClInclude Include="Source\Tests\SettingsTest.h">
       <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entities\TransformEnt.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entities\DEntity.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Bounds.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Collision.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Pair.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Shape.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\InputAct.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Settings.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\SoundFile.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Attr.h">
+      <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +398,6 @@
     <ClCompile Include="Source\Misc\Utils.cpp">
       <Filter>Source\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\Bounds.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\CogEngine.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
@@ -421,6 +427,9 @@
     </ClCompile>
     <ClCompile Include="Source\Math\Transform.cpp">
       <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Bounds.cpp">
+      <Filter>Source\Attributes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

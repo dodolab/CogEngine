@@ -102,6 +102,22 @@ namespace Cog {
 			return GetItem(key).GetValStr();
 		}
 
+		double GetItemValDouble(string key) {
+			return GetItem(key).GetValDouble();
+		}
+
+		int GetItemValInt(string key) {
+			return GetItem(key).GetValInt();
+		}
+
+		float GetItemValFloat(string key) {
+			return GetItem(key).GetValFloat();
+		}
+
+		bool GetItemValBool(string key) {
+			return GetItem(key).GetValBool();
+		}
+
 		vector<string> GetItemVals(string key) {
 			return GetItem(key).values;
 		}

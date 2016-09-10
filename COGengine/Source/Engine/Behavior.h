@@ -17,7 +17,7 @@ namespace Cog {
 	*/
 	class Behavior : public MsgListener {
 		OBJECT_VIRTUAL()
-		PROTOTYPE_VIRTUAL(Behavior)
+		PROTOTYPE_VIRTUAL_INIT(Behavior)
 
 	protected:
 		// owner node
@@ -44,13 +44,6 @@ namespace Cog {
 		* be created here
 		*/
 		virtual void Init() {
-
-		}
-
-		/**
-		* Loads object properties from settings
-		*/
-		virtual void Init(Setting settings) {
 
 		}
 

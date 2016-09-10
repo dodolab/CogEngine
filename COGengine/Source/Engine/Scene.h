@@ -79,6 +79,10 @@ namespace Cog
 			return viewPortOffset;
 		}
 
+		Settings& GetSettings() {
+			return settings;
+		}
+
 		/**
 		* Registers behavior listener for selected action
 		* @param action action to register

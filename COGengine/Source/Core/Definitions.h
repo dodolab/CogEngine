@@ -18,6 +18,13 @@ virtual compName* CreatePrototype(){ \
  return nullptr; \
 }
 
+#define PROTOTYPE_VIRTUAL_INIT(compName) \
+PROTOTYPE_VIRTUAL(compName) \
+public: \
+virtual compName* CreatePrototype(Setting& setting){ \
+  return nullptr; \
+}
+
 #define OBJECT(compName) \
   public: \
   virtual string GetClassName() { \
@@ -33,11 +40,18 @@ public: \
   compName(){ \
   } 
 
+
 #define OBJECT_PROTOTYPE(compName) \
   OBJECT(compName) \
   DEFAULT_CONST(compName) \
   compName* CreatePrototype(){ \
 	return new compName(); \
+  }
+
+#define OBJECT_PROTOTYPE_INIT(compName) \
+  OBJECT_PROTOTYPE(compName) \
+  compName* CreatePrototype(Setting& setting) { \
+    return new compName(setting); \
   }
 
 // assertion with formatted message
