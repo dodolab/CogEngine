@@ -17,7 +17,7 @@ namespace Cog {
 			spt<NetMessage> netMsg = msgEvent->msg;
 			
 			switch (netMsg->GetMsgType()) {
-				case NetMsgType::DELTA_UPDATE:
+				case NetMsgType::UPDATE:
 					AcceptDeltaUpdate(netMsg);
 				break;
 			}

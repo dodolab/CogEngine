@@ -11,6 +11,10 @@ namespace Cog {
 		return CogEngine::GetInstance().entityStorage;
 	}
 
+	int CogGetFrameCounter() {
+		return CogEngine::GetInstance().GetFrameCounter();
+	}
+
 	// =================== MENVIRONMENT ====================
 
 	void CogAddSound(spt<Sound> sound) {

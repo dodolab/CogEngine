@@ -330,9 +330,6 @@
     <ClInclude Include="3rdParty\network\ofxTCPClient.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Network.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Components\CogDatabase.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
@@ -468,17 +465,17 @@
     <ClInclude Include="Source\Graphics\SpriteEntity.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\NetworkBindReceiver.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\NetworkBindSender.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Communication\NetMessage.h">
       <Filter>Source\Communication</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\NetworkBinder.h">
       <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\NetworkCommunicator.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Communication\Network.h">
+      <Filter>Source\Communication</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -608,9 +605,6 @@
     <ClCompile Include="3rdParty\network\ofxTCPClient.cpp">
       <Filter>3rdParty</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Network.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Misc\TimeMeasure.cpp">
       <Filter>Source\Misc</Filter>
     </ClCompile>
@@ -677,17 +671,17 @@
     <ClCompile Include="Source\Graphics\SpriteEntity.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\NetworkBindReceiver.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\NetworkBindSender.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Communication\NetMessage.cpp">
       <Filter>Source\Communication</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\NetworkBinder.cpp">
       <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\NetworkCommunicator.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Communication\Network.cpp">
+      <Filter>Source\Communication</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

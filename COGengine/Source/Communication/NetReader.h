@@ -17,6 +17,7 @@ namespace Cog {
 		BYTE* current;
 		unsigned bufferLength;
 		unsigned bitOffset;
+		bool external;
 
 	public:
 
@@ -25,6 +26,7 @@ namespace Cog {
 			this->bufferLength = bytes*8;
 			this->bitOffset = 0;
 			this->current = buffer;
+			this->external = false;
 		}
 
 		NetReader(BYTE* data, unsigned bytes) {
@@ -32,10 +34,11 @@ namespace Cog {
 			this->bufferLength = bytes*8;
 			this->bitOffset = 0;
 			this->current = data;
+			this->external = true;
 		}
 
 		~NetReader() {
-			delete[] buffer;
+			if(!external) delete[] buffer;
 		}
 
 		void ReadBit(bool& value);

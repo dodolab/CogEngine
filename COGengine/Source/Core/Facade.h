@@ -24,6 +24,9 @@ namespace Cog {
 	/* Facade methods that are used for centralized access to all components */
 	/*************************************************************************/
 
+	// =================== COGENGINE ====================
+	int CogGetFrameCounter();
+
 	// =================== MENVIRONMENT ====================
 	void CogAddSound(spt<Sound> sound);
 	void CogPlaySound(spt<Sound> sound);
