@@ -47,6 +47,14 @@ namespace Cog {
 		RecalcVirtualSize();
 	}
 
+	Vec2i Environment::GetMousePosition() {
+		int x = ofGetMouseX();
+		int y = ofGetMouseY();
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (int)ofGetCurrentViewport().y;
+
+		return Vec2i(x, y);
+	}
 
 	void Environment::OnKeyAction(int key, bool pressed) {
 
@@ -60,6 +68,7 @@ namespace Cog {
 			}
 
 			pressedKeys.push_back(new InputAct(key));
+			CogSendDirectMessage(StringHash(ACT_KEY_PRESSED), 0, nullptr, new Node("dummy"), this->GetId());
 		}
 		else {
 			// key up

@@ -32,6 +32,14 @@ namespace Cog {
 		return COGEngine.environment->GetPlayedSounds();
 	}
 
+	bool CogIsKeyPressed(int key) {
+		return COGEngine.environment->IsKeyPressed(key);
+	}
+
+	Vec2i CogGetMousePosition() {
+		return COGEngine.environment->GetMousePosition();
+	}
+
 	int CogGetScreenWidth() {
 		return COGEngine.environment->GetScreenWidth();
 	}
