@@ -45,6 +45,7 @@ namespace Cog {
 			}
 		}
 
+		this->scenes.push_back(scene);
 		MLOGDEBUG("SceneContext", "Initializing scene %s", scene->GetName().c_str());
 		scene->GetSceneNode()->SubmitChanges(true);
 	}
@@ -165,13 +166,13 @@ namespace Cog {
 				sc->LoadFromXml(xml);
 			}
 
-			this->scenes.push_back(sc);
-
+			
 			if (sc->GetName().compare(initialScene) == 0) {
 				// set as initial
 				AddScene(sc, true);
 			}
 			else if (!loading.empty() && sc->GetName().compare(loading) == 0) {
+				// set as loading scene
 				AddScene(sc, false);
 				this->loadingScene = sc;
 			}
@@ -180,6 +181,15 @@ namespace Cog {
 			}
 
 			xml->popTag();
+		}
+
+		if (actualScene == nullptr) {
+			// if no actual scene specified, use the first one
+			auto firstScene = this->scenes[0];
+
+			this->actualScene = firstScene;
+			firstScene->Init();
+			firstScene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
 		}
 	}
 

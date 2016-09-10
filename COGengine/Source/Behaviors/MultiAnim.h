@@ -38,6 +38,7 @@ namespace Cog {
 			if (actual == nullptr) actual = anim;
 		}
 
+
 		void Init() {
 			if (actual != nullptr) {
 				SetOwner(actual, owner);

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <app_config>
 
+
+  <animations>
+    <anim name="square_anim" sheet="sheet_squares.png" frames="4" lines="2"  start="0" end="3"  repeat="0" increment="1" speed="0.2"></anim>
+  </animations>
+
   <spritesheets>
-    <spritesheet name="balls" img="sheet_balls.png">
-	  <spriteset frames="4" sprite_width="128" sprite_height="128"  />
-	</spritesheet>
-	<spritesheet name="squares" img="sheet_squares.png">
-	  <spriteset frames="4" sprite_width="128" sprite_height="128"  />
-	</spritesheet>
-		<spritesheet name="background" img="bgr.jpg">
-	  <spriteset frames="1" sprite_width="800" sprite_height="450"  />
-	</spritesheet>
+	<spritesheet name="squares" img="sheet_squares.png" frames="4" sprite_width="128" sprite_height="128" />
+	<spritesheet name="bgr" img="bgr.jpg" frames="1" sprite_width="800" sprite_height="450" />
   </spritesheets>
- 
- 
+
    <transforms>
     <transform name="rot_begin" rotation="0" />
     <transform name="rot_end" rotation="360" />
@@ -22,48 +19,20 @@
   </transforms>
   
   <behaviors>
-    <behavior name="transform1" type="TransformAnim">
-	  <setting>
-	    <item key="from" value="rot_begin" />
-		<item key="to" value="rot_end" />
-		<item key="duration" value="4000" />
-		<item key="repeat" value="false" />
-		<item key="type" value="overlay" />
-	  </setting>
-	</behavior>
-	<behavior name="transform2" type="TransformAnim">
-	  <setting>
-	    <item key="from" value="scale_begin" />
-		<item key="to" value="scale_end" />
-		<item key="duration" value="4000" />
-		<item key="repeat" value="false" />
-		<item key="type" value="overlay" />
-	  </setting>
-	</behavior>
+    <behavior name="transform1" type="TransformAnim" from="rot_begin" to="rot_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="transform2" type="TransformAnim" from="scale_begin" to="scale_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="squareanim" type="SheetAnim" animation="square_anim" />
   </behaviors>
  
   <scenes initial="main">
     <scene name="main">
 	  <scene_layers>
-	    <layer name="background" spritesheet="background" buffer_size="1" z_index="1" />
-	    <layer name="balls" spritesheet="balls" buffer_size="100" z_index="2" />
-		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="3" />
-		<layer name="balls2" spritesheet="balls" buffer_size="100" z_index="4" />
+	    <layer name="bgr" spritesheet="bgr" buffer_size="100" z_index="30" />
+		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="30" />
 	  </scene_layers>
 
-	  <node name="bgr">
-        <shape type="sprite" spritesheet="background" row="0" column="0" />
-		<transform pos="0" ptype="rel" size="1" stype="rel" z_index="100" />
-	  </node>
-	  
-	  <node name="square_1">
-        <shape type="sprite" spritesheet="squares" row="1" column="0" />
-		<transform pos_x="0.25" pos_y="0.2" ptype="rel" stype="loc" z_index="100" />
-	  </node>
-	  
-	  <node name="ball_1">
-        <shape type="sprite" spritesheet="balls" row="0" column="0" />
-		<transform pos_x="0.2" pos_y="0.2" ptype="rel" stype="loc" z_index="100" />
+	  <node name="bgr" img="bgr.jpg">
+	    <shape type="sprite" spritesheet="bgr" />
 	  </node>
 	  
 	  <node name="square_2">
@@ -78,14 +47,8 @@
 			</item>
 		  </setting>
 		</behavior>
-		
+		<behavior name="squareanim" />
 	  </node>
-
-	  <node name="ball_2">
-        <shape type="sprite" layer="balls2" row="1" column="1" />
-		<transform pos_x="0.30" pos_y="0.15" ptype="rel" stype="loc" z_index="1000" />
-	  </node>
-	  
     </scene>
   </scenes>
 </app_config>

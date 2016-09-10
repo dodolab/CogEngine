@@ -21,13 +21,40 @@ namespace Cog {
 			this->name = name;
 		}
 
+		~BehaviorEnt() {
+
+		}
+
 		string type;
 		Setting setting;
 
-		void LoadFromXml(spt<ofxXml> xml, Setting& behaviorSetting) {
+		void LoadFromXml(spt<ofxXml> xml, Setting& setting) {
+
 			this->name = xml->getAttributex("name", "");
 			this->type = xml->getAttributex("type", "");
-			this->setting = behaviorSetting;
+			
+			this->setting = Setting();
+
+			if (xml->pushTagIfExists("setting")) {
+				auto resCache = GETCOMPONENT(ResourceCache);
+				
+				this->setting = resCache->LoadSettingFromXml(xml);
+				xml->popTag();
+			}
+
+			vector<string> allAttributes = vector<string>();
+			xml->getAttributeNames(":", allAttributes);
+
+			for (string attr : allAttributes) {
+				if (attr.compare("name") != 0 && attr.compare("type") != 0) {
+					// settings could be specified even as attributes of the behavior tag!
+					string val = xml->getAttributex(attr, "");
+					SettingItem it = SettingItem();
+					it.key = attr;
+					it.values.push_back(val);
+					this->setting.items[attr] =  it;
+				}
+			}
 		}
 
 	};

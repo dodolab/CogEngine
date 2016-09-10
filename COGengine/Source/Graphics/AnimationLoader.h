@@ -124,6 +124,7 @@ namespace Cog {
 				if (anim->GetName() == name) return anim;
 			}
 
+
 			return spt<Anim>();
 		}
 
@@ -138,6 +139,7 @@ namespace Cog {
 			int rootAnimIndex, vector<spt<Anim>>& rootAnims) {
 
 			int innerAnimations = xml->getNumTags("anim");
+
 
 			string ref = (xml->getAttribute(":", "ref", ""));
 			string name = (xml->getAttribute(":", "name", ""));

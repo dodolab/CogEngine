@@ -111,18 +111,26 @@ namespace Cog {
 			// todo: maybe lazy load ?
 			this->spriteImage = CogGet2DImage(img);
 
-
-			for (int i = 0; i < spriteSets; i++) {
-				xml->pushTag("spriteset", i);
-
-				string name = xml->getAttributex("name", "");
+			if (spriteSets == 0) {
+				// 0 spritesets -> attributes are directly in spritesheet node
 				int frames = xml->getAttributex("frames", 0);
 				int spriteWidth = xml->getAttributex("sprite_width", 0);
 				int spriteHeight = xml->getAttributex("sprite_height", 0);
+				AddSpriteSet("default", frames, spriteWidth, spriteHeight);
+			}
+			else {
+				for (int i = 0; i < spriteSets; i++) {
+					xml->pushTag("spriteset", i);
 
-				AddSpriteSet(name, frames, spriteWidth, spriteHeight);
+					string name = xml->getAttributex("name", "");
+					int frames = xml->getAttributex("frames", 0);
+					int spriteWidth = xml->getAttributex("sprite_width", 0);
+					int spriteHeight = xml->getAttributex("sprite_height", 0);
 
-				xml->popTag();
+					AddSpriteSet(name, frames, spriteWidth, spriteHeight);
+
+					xml->popTag();
+				}
 			}
 		}
 	};

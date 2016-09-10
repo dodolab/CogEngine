@@ -7,6 +7,7 @@
 #include "ResourceCache.h"
 #include "TransformMath.h"
 #include "Selection.h"
+#include "BehaviorEnt.h"
 
 namespace Cog {
 
@@ -26,6 +27,8 @@ namespace Cog {
 		void SetSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup);
 
 		void SetTextNode(Node* node, string font, float size, ofColor color, string text);
+
+		Behavior* CreateBehavior(spt<BehaviorEnt> behEntity);
 
 		/**
 		* Loads node from XML

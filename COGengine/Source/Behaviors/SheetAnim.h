@@ -128,6 +128,7 @@ namespace Cog {
 
 			MoveToNext();
 
+
 			if (!Ended()) {
 				int actualIndex = (int)context.actualFrameIndex;
 				spt<Anim> actualNode = context.GetActualChild();
@@ -135,6 +136,7 @@ namespace Cog {
 				if (actualNodeName != actualNode->GetName()) {
 					actualNodeName = actualNode->GetName();
 				}
+
 
 				if (actualNode->GetFrames() > 1 || actualNode->GetLines() > 1) {
 					// image is a spritesheet
@@ -144,22 +146,34 @@ namespace Cog {
 					// calculate image offset
 					int frameIndex = actualIndex + actualNode->GetStart();
 
-					int frameRow = frameIndex / actualNode->GetFrames();
-					int frameColumn = frameIndex % actualNode->GetFrames();
-					int cellWidth = (int) (spriteSheet->getWidth() / actualNode->GetFrames());
-					int cellHeight = (int) (spriteSheet->getHeight() / actualNode->GetLines());
+					if (owner->HasRenderType(RenderType::SPRITE)) {
+						// sprites
 
-					ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
-					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
-					owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
-
-					if (owner->HasRenderType(RenderType::IMAGE)) {
-						owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
+						// todo: performance problem because of recalculation
+						auto spriteSet = owner->GetShape<spt<SpriteShape>>()->GetSprite()->GetSpriteSet();
+						owner->GetShape<spt<SpriteShape>>()->SetSprite(spt<Sprite>(new Sprite(spriteSet, frameIndex)));
 					}
 					else {
-						owner->SetShape(spt<Image>(new Image(spriteSheet)));
-					}
 
+						// images
+
+						int frameRow = frameIndex / actualNode->GetFrames();
+						int frameColumn = frameIndex % actualNode->GetFrames();
+						int cellWidth = (int)(spriteSheet->getWidth() / actualNode->GetFrames());
+						int cellHeight = (int)(spriteSheet->getHeight() / actualNode->GetLines());
+
+						ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
+						owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
+						owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
+
+						if (owner->HasRenderType(RenderType::IMAGE)) {
+							owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
+						}
+						else if (owner->HasRenderType(RenderType::NONE)) {
+							// set the first image
+							owner->SetShape(spt<Image>(new Image(spriteSheet)));
+						}
+					}
 				}
 				else {
 					// image is only a common image

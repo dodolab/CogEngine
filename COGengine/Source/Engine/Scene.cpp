@@ -6,7 +6,7 @@ namespace Cog {
 
 	LayerEnt Scene::FindLayerSettings(string name) {
 
-		for (LayerEnt& entity : this->layerSettings) {
+		for (LayerEnt& entity : this->layers) {
 			if (entity.name.compare(name) == 0) return entity;
 		}
 
@@ -246,7 +246,7 @@ namespace Cog {
 		auto renderer = GETCOMPONENT(Renderer);
 		auto cache = GETCOMPONENT(ResourceCache);
 
-		for (auto layer : layerSettings) {
+		for (auto layer : layers) {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
 		}
@@ -257,24 +257,21 @@ namespace Cog {
 		auto renderer = GETCOMPONENT(Renderer);
 		auto cache = GETCOMPONENT(ResourceCache);
 
-		for (auto layer : layerSettings) {
+		for (auto layer : layers) {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->RemoveTileLayer(layer.name);
 		}
 	}
 
-	void Scene::LoadInitDataFromXml(spt<ofxXml> xml, int sceneIndex) {
+	void Scene::LoadInitData(string name, bool isLazyLoad, int sceneIndex) {
 		
 		SetIndex(sceneIndex);
-		SetName(xml->getAttribute(":", "name", ""));
+		SetName(name);
 
 		sceneNode = new Node(ObjType::SCENE, 0, name);
 		sceneNode->SetScene(this);
 		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
-
-		if (xml->attributeExists("lazy") && xml->getBoolAttributex("lazy", false)) {
-			this->lazyLoad = true;
-		}
+		this->lazyLoad = isLazyLoad;
 	}
 
 	void Scene::LoadFromXml(spt<ofxXml> xml) {
@@ -304,13 +301,12 @@ namespace Cog {
 				xml->pushTag("layer", i);
 				LayerEnt layer = LayerEnt();
 				layer.LoadFromXml(xml);
-				layerSettings.push_back(layer);
+				layers.push_back(layer);
 				xml->popTag();
 			}
 
 			xml->popTag();
 		}
-
 
 		int nodes = xml->getNumTags("node");
 		NodeBuilder bld = NodeBuilder();

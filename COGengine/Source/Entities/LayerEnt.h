@@ -22,6 +22,10 @@ namespace Cog {
 			this->name = name;
 		}
 
+		~LayerEnt() {
+
+		}
+
 		void LoadFromXml(spt<ofxXml> xml) {
 			string sheetName = xml->getAttributex("spritesheet", "");
 			string name = xml->getAttributex("name", "");

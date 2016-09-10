@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "Settings.h"
 #include "DEntity.h"
-
+#include "TransformEnt.h"
 namespace Cog {
 
 	class SoundFile;
@@ -46,6 +46,10 @@ namespace Cog {
 			// resource cache should be initialized with higher priority because it
 			// loads XML settings
 			this->initPriority = InitPriority::HIGH;
+		}
+
+		~ResourceCache() {
+			
 		}
 
 		/**
@@ -126,6 +130,12 @@ namespace Cog {
 			T* entityC = static_cast<T*>(entityPtr);
 			return spt<T>(entityC);
 		}
+
+		/**
+		* Stores entity under its name
+		* @param entity entity to store
+		*/
+		void StoreEntity(spt<DEntity> entity);
 
 		/**
 		* Stores entity

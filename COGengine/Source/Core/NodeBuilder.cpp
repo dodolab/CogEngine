@@ -33,6 +33,37 @@ namespace Cog {
 		node->SetShape(spt<Text>(textShape));
 	}
 
+	Behavior* NodeBuilder::CreateBehavior(spt<BehaviorEnt> entity) {
+		Behavior* behavior = nullptr;
+
+		auto resourceCache = GETCOMPONENT(ResourceCache);
+
+		if (!entity->type.empty()) {
+			// load directly
+			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(entity->type);
+
+			if (!entity->setting.Empty()) {
+				behavior = prototype->CreatePrototype(entity->setting);
+			}
+			else {
+				behavior = prototype->CreatePrototype();
+			}
+
+		}
+		else {
+			// load from reference
+			spt<BehaviorEnt> refent = resourceCache->GetEntityC<BehaviorEnt>(entity->name);
+			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(refent->type);
+
+			if (!refent->setting.Empty()) behavior = prototype->CreatePrototype(refent->setting);
+			else behavior = prototype->CreatePrototype();
+		}
+
+		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found", entity->type.c_str()));
+
+		return behavior;
+	}
+
 	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene, Settings& settings) {
 		TransformMath math = TransformMath();
 
@@ -153,35 +184,12 @@ namespace Cog {
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
 		
-		string type = xml->getAttributex("type", "");
-		string name = xml->getAttributex("name", "");
+		
 		auto resourceCache = GETCOMPONENT(ResourceCache);
+		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
+		ent->LoadFromXml(xml, Setting());
 
-		Behavior* behavior = nullptr;
-
-		if (!type.empty()) {
-			// load directly
-			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(type);
-
-			if (xml->pushTagIfExists("setting")) {
-				auto setting = resourceCache->LoadSettingFromXml(xml);
-				behavior = prototype->CreatePrototype(setting);
-				xml->popTag();
-			}
-			else {
-				behavior = prototype->CreatePrototype();
-			}
-		}
-		else {
-			// load from reference
-			spt<BehaviorEnt> ent = resourceCache->GetEntityC<BehaviorEnt>(name);
-			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(ent->type);
-
-			if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);
-			else behavior = prototype->CreatePrototype();
-		}
-
-		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found", type.c_str()));
+		Behavior* behavior = CreateBehavior(ent);
 
 		node->AddBehavior(behavior);
 	}

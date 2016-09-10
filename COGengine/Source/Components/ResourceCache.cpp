@@ -101,14 +101,8 @@ namespace Cog {
 				for (int i = 0; i < behNum; i++) {
 					xml->pushTag("behavior", i);
 					spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
-					Setting setting = Setting();
 
-					if (xml->pushTagIfExists("setting")) {
-						setting = this->LoadSettingFromXml(xml);
-						xml->popTag();
-					}
-
-					ent->LoadFromXml(xml, setting);
+					ent->LoadFromXml(xml, Setting());
 
 					MASSERT(!ent->name.empty(), "RESOURCE", "Behavior entity on index %d in configuration file must have a name!", i);
 
@@ -129,6 +123,7 @@ namespace Cog {
 					this->StoreSpriteSheet(spriteSheet);
 					xml->popTag();
 				}
+
 
 				xml->popTag();
 			}
@@ -284,6 +279,10 @@ namespace Cog {
 		else {
 			return spt<DEntity>();
 		}
+	}
+
+	void ResourceCache::StoreEntity(spt<DEntity> entity) {
+		loadedEntities[entity->name] = entity;
 	}
 
 	void ResourceCache::StoreEntity(string name, spt<DEntity> entity) {
