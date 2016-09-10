@@ -6,8 +6,8 @@
 namespace Cog {
 
 	void Environment::Init() {
+		virtualAspectRatio = ((float)ofGetWindowSize().x) / ofGetWindowSize().y;
 		OnScreenSizeChanged(ofGetWindowSize().x, ofGetWindowSize().y);
-		virtualAspectRatio = ((float)virtualWidth) / virtualHeight;
 		screenSizeChanged = false;
 	}
 

@@ -1,4 +1,5 @@
 #include "SpriteSheetRenderer.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -18,7 +19,6 @@ namespace Cog {
 			SpriteBuffer* buf = (*it).second;
 			delete buf;
 		}
-
 	}
 
 	void SpriteSheetRenderer::reAllocateArrays(string sheetName, int bufferSize)
@@ -313,30 +313,30 @@ namespace Cog {
 
 		int coordOffset = getCoordOffset();
 
-		int x1, y1, x2, y2;
+		float x1, y1, x2, y2;
 
 		switch (tile.dir) {
 		case F_NONE:
 			x1 = tile.offsetX;
 			y1 = tile.offsetY;
-			x2 = tile.offsetX + tile.width*actualBuffer->textureCoeffX;
-			y2 = tile.offsetY + tile.height*actualBuffer->textureCoeffY;
+			x2 = tile.offsetX + tile.width;
+			y2 = tile.offsetY + tile.height;
 			break;
 		case F_HORIZ:
-			x1 = tile.offsetX + tile.width*actualBuffer->textureCoeffX;
+			x1 = tile.offsetX + tile.width;
 			y1 = tile.offsetY;
 			x2 = tile.offsetX;
-			y2 = tile.offsetY + tile.height*actualBuffer->textureCoeffY;
+			y2 = tile.offsetY + tile.height;
 			break;
 		case F_VERT:
 			x1 = tile.offsetX;
-			y1 = tile.offsetY + tile.height*actualBuffer->textureCoeffY;
-			x2 = tile.offsetX + tile.width*actualBuffer->textureCoeffX;
+			y1 = tile.offsetY + tile.height;
+			x2 = tile.offsetX + tile.width;
 			y2 = tile.offsetY;
 			break;
 		case F_HORIZ_VERT:
-			x1 = tile.offsetX + tile.width*actualBuffer->textureCoeffX;
-			y1 = tile.offsetY + tile.height*actualBuffer->textureCoeffY;
+			x1 = tile.offsetX + tile.width;
+			y1 = tile.offsetY + tile.height;
 			x2 = tile.offsetX;
 			y2 = tile.offsetY;
 			break;
@@ -346,10 +346,10 @@ namespace Cog {
 
 		float* coords = actualBuffer->coords;
 
-		coords[coordOffset] = coords[coordOffset + 4] = coords[coordOffset + 8] = x1;
-		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = y1;
-		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = x2;
-		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = y2;
+		coords[coordOffset] = coords[coordOffset + 4] = coords[coordOffset + 8] = x1*actualBuffer->textureCoeffX;
+		coords[coordOffset + 1] = coords[coordOffset + 3] = coords[coordOffset + 7] = y1*actualBuffer->textureCoeffY;
+		coords[coordOffset + 2] = coords[coordOffset + 6] = coords[coordOffset + 10] = x2*actualBuffer->textureCoeffX;
+		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = y2*actualBuffer->textureCoeffY;
 	}
 
 

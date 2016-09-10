@@ -239,6 +239,7 @@
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
     <ClInclude Include="Source\Core\CogApp.h" />
+    <ClInclude Include="Source\Core\ConfigLoader.h" />
     <ClInclude Include="Source\Core\Definitions.h" />
     <ClInclude Include="Source\Core\EntityStorage.h" />
     <ClInclude Include="Source\Core\CogEngine.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Source\Core\Facade.h" />
     <ClInclude Include="Source\Core\Enums.h" />
     <ClInclude Include="Source\Core\Error.h" />
+    <ClInclude Include="Source\Core\MapLoader.h" />
     <ClInclude Include="Source\Core\Msg.h" />
     <ClInclude Include="Source\Core\MsgListener.h" />
     <ClInclude Include="Source\Core\Node.h" />

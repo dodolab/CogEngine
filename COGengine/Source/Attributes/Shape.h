@@ -187,10 +187,10 @@ namespace Cog {
 		vector<spt<MSpriteCrate>> sprites;
 		int width = 1;
 		int height = 1;
+		string name;
 
 	public:
-		SpritesShape(vector<spt<MSpriteCrate>> sprites) : Shape(RenderType::MULTISPRITE) {
-			this->sprites = sprites;
+		SpritesShape(string name, vector<spt<MSpriteCrate>> sprites) : Shape(RenderType::MULTISPRITE), name(name), sprites(sprites) {
 			Recalc();
 		}
 
@@ -228,6 +228,10 @@ namespace Cog {
 
 		vector<spt<MSpriteCrate>>& GetSprites() {
 			return sprites;
+		}
+
+		string GetName() {
+			return name;
 		}
 
 		float GetWidth() {

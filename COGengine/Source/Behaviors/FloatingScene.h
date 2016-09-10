@@ -55,7 +55,6 @@ namespace Cog {
 							ofVec2f oldPos = transform.absPos;
 							ofVec2f newPos = oldPos+diff;
 
-
 							float shapeWidth = owner->GetShape()->GetWidth();
 							float shapeHeight = owner->GetShape()->GetHeight();
 

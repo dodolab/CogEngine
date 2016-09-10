@@ -285,6 +285,12 @@
     <ClInclude Include="3rdParty\cpplinq\cpplinq.hpp">
       <Filter>3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\MapLoader.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\ConfigLoader.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">
