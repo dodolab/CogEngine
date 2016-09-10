@@ -92,7 +92,9 @@ namespace Cog {
 			state->Init();
 		}
 
-		state->Start();
+		if (this->initialized) {
+			state->Start();
+		}
 	}
 
 	/**

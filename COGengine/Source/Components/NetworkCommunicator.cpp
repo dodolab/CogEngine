@@ -38,6 +38,7 @@ namespace Cog {
 			messagesToSend.clear();
 		}
 
+		COGLOGDEBUG("NETWORK_SYNC", "pushing message for sending: %s ", StringHash::GetStringValue(msg->GetAction()).c_str());
 		messagesToSend.push_back(msg);
 	}
 
@@ -191,13 +192,14 @@ namespace Cog {
 		}
 		else if ((absolute - lastReceivedMsgTime) > 20000) {
 			CogLogInfo("NETWORK", "No message received from peer for 20s, disconnecting...");
-			auto msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::DISCONNECT));
+			auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::DISCONNECT));
 			network->SendUDPMessage(applicationId, msg);
 			networkState = NetworkComState::DISCOVERING;
 		}
 	}
 
 	void NetworkCommunicator::UpdateCommunicating(const uint64 absolute) {
+
 
 		while (true) {
 			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
@@ -209,21 +211,46 @@ namespace Cog {
 			if ((type == NetMsgType::UPDATE || type == NetMsgType::ACCEPT)) {
 
 				tBYTE acceptedMsgId = message->GetAcceptedId();
-				unconfirmedMessages.erase(acceptedMsgId);
-
-				if (type != NetMsgType::ACCEPT) {
-					if (find(acceptedMessages.begin(), acceptedMessages.end(), lastReceivedMsgId) == acceptedMessages.end()) {
-						acceptedMessages.push_back(lastReceivedMsgId);
-					}
+				if (acceptedMsgId != 0) {
+					COGLOGDEBUG("NETWORK_SYNC", "received acceptation of %d ", (int)acceptedMsgId);
+					unconfirmedMessages.erase(acceptedMsgId);
 				}
 
-				if (message->GetSyncId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetSyncId()) > 128) {
-					lastReceivedMsgTime = absolute;
+				lastReceivedMsgTime = absolute;
 
-					if (type != NetMsgType::ACCEPT) {
-						lastReceivedMsgId = message->GetSyncId();
+				if (type != NetMsgType::ACCEPT) {
+					if (acceptedMessageIds.find(message->GetSyncId()) == acceptedMessageIds.end()) {
+						COGLOGDEBUG("NETWORK_SYNC", "received %d ", (int)message->GetSyncId());
+						acceptedMessageIds.insert(message->GetSyncId());
+					}
 
-						SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+					if (acceptedMessageTimes.find(message->GetMsgTime()) == acceptedMessageTimes.end()) {
+						
+						if (message->GetSyncId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetSyncId()) > 128
+							|| (message->GetAction() != NET_MSG_DELTA_UPDATE)) { // accept only newest delta messages; but for other messages, we can accept old one
+							
+
+							if(message->GetSyncId() > this->lastReceivedMsgId || this->lastReceivedMsgId - message->GetSyncId() > 128) lastReceivedMsgId = message->GetSyncId();
+							
+							COGLOGDEBUG("NETWORK_SYNC", "informing listeners");
+							SendMessageToListeners(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+						}
+
+						acceptedMessageTimes.insert(message->GetMsgTime());
+
+						if (acceptedMessageTimes.size() > 128) {
+
+							// remove half of collection
+							for (auto it = acceptedMessageTimes.begin(); it != acceptedMessageTimes.end(); ) {
+								if (acceptedMessageTimes.size() < 64) break;
+								if (*it % 2 == 0) {
+									acceptedMessageTimes.erase(it++);
+								}
+								else {
+									++it;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -250,50 +277,62 @@ namespace Cog {
 			CogLogInfo("NETWORK", "No message received from peer for 4s, reconnecting...");
 			networkState = NetworkComState::CONNECTING;
 		}
+
 	}
 
 	void NetworkCommunicator::SendUpdateMessage(uint64 time) {
+
+		int counter = 0;
 		if (!messagesToSend.empty()) {
 
 			for (auto& msg : messagesToSend) {
-				msg->SetSyncId(lastSentMsgId++);
+				lastSentMsgId++;
+				if (lastSentMsgId == 0) lastSentMsgId++; // zero is for undefined sync messages
 
-				if (!acceptedMessages.empty()) {
-					msg->SetAcceptedId(acceptedMessages.back());
-					acceptedMessages.erase(acceptedMessages.end() - 1);
+				msg->SetSyncId(lastSentMsgId);
+
+				if (!acceptedMessageIds.empty()) {
+					auto lastItem = prev(acceptedMessageIds.end());
+
+					msg->SetAcceptedId(*lastItem);
+					acceptedMessageIds.erase(lastItem);
 				}
 
 				msg->SetMsgType(NetMsgType::UPDATE);
-				msg->SetMsgTime(time);
+				msg->SetMsgTime(time + (counter++));
 
 				// delta updates don't need to be confirmed
 				if (msg->GetAction() != NET_MSG_DELTA_UPDATE) {
 					unconfirmedMessages[msg->GetSyncId()] = msg;
 				}
 				else {
-					//cout << "sending delta" << endl;
+					COGLOGDEBUG("NETWORK_SYNC", "sending delta %d ",(int)msg->GetSyncId());
 					network->SendUDPMessage(applicationId, msg);
 				}
 			}
 
+
 			// send all messages that haven't been confirmed
 			for (auto& key : unconfirmedMessages) {
+				COGLOGDEBUG("NETWORK_SYNC", "sending msg %d ",(int)key.second->GetSyncId());
 				network->SendUDPMessage(applicationId, key.second);
 			}
 
 			messagesToSend.clear();
 		}
-		else if (!acceptedMessages.empty()) {
+		else if (!acceptedMessageIds.empty()) {
 			// send all acceptation messages
-			for (auto& acc : acceptedMessages) {
+			for (auto& acc : acceptedMessageIds) {
 				auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, NetMsgType::ACCEPT));
 				msg->SetMsgTime(time);
 				msg->SetAcceptedId(acc);
+				COGLOGDEBUG("NETWORK_SYNC", "confirmating %d ", (int)msg->GetAcceptedId());
 				network->SendUDPMessage(applicationId, msg);
 			}
 
-			acceptedMessages.clear();
+			acceptedMessageIds.clear();
 		}
+
 	}
 
 } // namespace

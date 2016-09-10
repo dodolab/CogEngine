@@ -148,7 +148,7 @@ namespace Cog {
 		void RegisterListening(StringHash action1, StringHash action2);
 		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
 		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
-
+		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4, StringHash action5);
 
 		/**
 		* Sets owner to behavior

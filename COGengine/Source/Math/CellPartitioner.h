@@ -91,11 +91,11 @@ namespace Cog {
 
 			ofRectangle queryRect = ofRectangle(position-ofVec2f(radius),position+ofVec2f(radius));
 
-			for (auto& it = cells.begin(); it != cells.end(); ++it) {
+			for (auto it = cells.begin(); it != cells.end(); ++it) {
 				Cell* cell = (*it);
 				if (cell->nodes.size() > 0 && cell->boundingBox.intersects(queryRect)) {
 					
-					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
+					for (auto jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
 						Node* node = *jt;
 						auto nodePos = node->GetTransform().localPos;
 						if (position.distanceSquared(nodePos) < radius*radius) {
@@ -111,11 +111,11 @@ namespace Cog {
 		bool ExistsNode(ofVec2f position, float radius) {
 			ofRectangle queryRect = ofRectangle(position - ofVec2f(radius), position + ofVec2f(radius));
 
-			for (auto& it = cells.begin(); it != cells.end(); ++it) {
+			for (auto it = cells.begin(); it != cells.end(); ++it) {
 				Cell* cell = (*it);
 				if (cell->nodes.size() > 0 && cell->boundingBox.intersects(queryRect)) {
 
-					for (auto& jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
+					for (auto jt = cell->nodes.begin(); jt != cell->nodes.end(); ++jt) {
 						Node* node = *jt;
 						if (node->GetTransform().localPos.distanceSquared(position) < radius*radius) {
 							return true;

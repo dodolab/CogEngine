@@ -29,13 +29,15 @@ namespace Cog {
 		int peerPort;
 		string peerIp = "";
 
-		vector<tBYTE> acceptedMessages;
+		set<tBYTE> acceptedMessageIds;
+		set<uint64> acceptedMessageTimes;
 		tBYTE lastReceivedMsgId = -1;
 		tBYTE lastSentMsgId = 0;
 		vector<spt<NetOutputMessage>> messagesToSend;
 		uint64 lastReceivedMsgTime = 0;
 		map<string, uint64> discoveredPeers;
 		map<tBYTE, spt<NetOutputMessage>> unconfirmedMessages;
+		
 
 		// frequency the broadcast is sent, per second
 		float broadcastingFrequency = 1;
