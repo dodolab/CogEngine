@@ -140,7 +140,7 @@ namespace Cog {
 		Behavior* CreateBehaviorPrototype(StrId key) {
 			auto it = behaviorBuilders.find(key);
 
-			COGASSERT(it != behaviorBuilders.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", StrId::GetStringValue(key).c_str());
+			COGASSERT(it != behaviorBuilders.end(), "ENTITY_STORAGE", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
 			auto builder = it->second;
 			return builder->CreateDefault();
 		}

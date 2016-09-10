@@ -20,11 +20,7 @@ namespace Cog {
 			delete sql;
 		}
 
-		void Init() {
-
-		}
-
-		void Init(spt<ofxXml> xml) {
+		void OnInit() {
 
 		}
 

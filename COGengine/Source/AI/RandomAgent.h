@@ -5,6 +5,10 @@
 
 namespace Cog {
 
+	/**
+	* Random agent that selects at each step
+	* a random action from the collection of possible actions
+	*/
 	template<class S, class A>
 	class RandomAgent : public AIAgent<S,A> {
 	protected:
@@ -22,9 +26,7 @@ namespace Cog {
 			auto& actions = simulator->GetPossibleActions();
 			int randIndex = (int)ofRandom(0, actions.size());
 			return actions[randIndex];
-
 		}
-
 	};
 
 } // namespace

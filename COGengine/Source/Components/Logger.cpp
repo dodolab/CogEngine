@@ -7,7 +7,7 @@ namespace Cog {
 	/**
 	* Initializes component, using xml settings or default one
 	*/
-	void Logger::Init(spt<ofxXmlSettings> config) {
+	void Logger::OnInit(spt<ofxXmlSettings> config) {
 		delete channel;
 		channel = nullptr;
 
@@ -39,7 +39,7 @@ namespace Cog {
 			this->excludes = set.GetItemVals("module_exclude");;
 		}
 		else {
-			Init();
+			OnInit();
 		}
 	}
 

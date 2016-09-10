@@ -6,14 +6,14 @@
 
 namespace Cog {
 
-	void Environment::Init() {
+	void Environment::OnInit() {
 		virtualAspectRatio = ((float)ofGetWindowSize().x) / ofGetWindowSize().y;
 		OnScreenSizeChanged((int)ofGetWindowSize().x, (int)ofGetWindowSize().y);
 		screenSizeChanged = false;
 	}
 
-	void Environment::Init(spt<ofxXml> xml) {
-		this->Init();
+	void Environment::OnInit(spt<ofxXml> xml) {
+		this->OnInit();
 
 		auto resCache = GETCOMPONENT(ResourceCache);
 		Setting set = resCache->GetGlobalSettings("display");
@@ -209,6 +209,7 @@ namespace Cog {
 		// remove ended sounds
 		for (auto it = playedSounds.begin(); it != playedSounds.end();) {
 			if ((*it)->Ended()) {
+				delete (*it);
 				it = playedSounds.erase(it);
 
 				continue;

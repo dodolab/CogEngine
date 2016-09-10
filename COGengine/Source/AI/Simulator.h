@@ -10,9 +10,9 @@ using namespace std;
 namespace Cog {
 
 	/**
-	* AI simulator that holds state and transforms it, based on selected action;
-	* When a transformation is made, collection of possible actions is recalculated
-	* and the reward for each agent is saved
+	* AI simulator that makes transition between states according to the selected action,
+	* recalculates collection of possible action when the transition is made and stores
+	* rewards for each agent
 	*/
 	template<class S, class A>
 	class Simulator {
@@ -21,11 +21,12 @@ namespace Cog {
 		S actualState;
 		// list of possible actions that can be applied on actual state
 		vector<A> possibleActions;
-		// rewards for each agent that were calculated during the transformation of state
+		// rewards for each agent that were calculated during the transition of state
 		AgentsReward rewards;
 		// number of agents in simulator
-		int agentsNumber;
-
+		int agentsNumber = 0;
+		// indicator, if this simulator was passed to agent's ChooseAction method(used for logging)
+		bool isInsideAnAgent = false;
 	public:
 
 		Simulator() {
@@ -55,6 +56,7 @@ namespace Cog {
 		void SetActualState(S& state) {
 			this->actualState = state;
 			RecalcPossibleActions();
+			// zero rewards
 			this->rewards = AgentsReward(agentsNumber);
 		}
 
@@ -64,15 +66,25 @@ namespace Cog {
 		void SetActualState(S& state, vector<A>& possibleActions) {
 			this->actualState = state;
 			this->possibleActions = possibleActions;
+			// zero rewards
 			this->rewards = AgentsReward(agentsNumber);
 		}
 
 		/**
-		* Transforms the current state to another state based on selected action
-		* @param action action to make
-		* @param isSimulation if true, the simulator is part of another simulator; used for logging
+		* Gets indicator whether this simulator was passed to agent's 
+		* ChooseAction method (used for logging)
 		*/
-		virtual void MakeAction(A action, bool isSimulation = true) = 0;
+		bool IsInsideAnAgent() const {
+			return isInsideAnAgent;
+		}
+
+		/**
+		* Sets indicator whether this simulator will be passed to agent's
+		* ChooseAction method (used for logging)
+		*/
+		void SetIsInsideAnAgent(bool isInside) {
+			this->isInsideAnAgent = isInside;
+		}
 
 		/**
 		* Gets list of all actions that can be applied to the current state
@@ -91,16 +103,23 @@ namespace Cog {
 		/**
 		* Returns true, if there is no action to make
 		*/
-		bool IsDeadEnd() {
+		bool IsDeadEnd() const {
 			return possibleActions.size() == 0;
 		}
 
 		/**
 		* Gets number of agents
 		*/
-		int GetAgentsNumber() {
+		int GetAgentsNumber() const {
 			return agentsNumber;
 		}
+
+		/**
+		* Makes a transition according to the selected action
+		* @param action action to make
+		*/
+		virtual void MakeAction(A action) = 0;
+
 
 	protected:
 		/**

@@ -9,9 +9,7 @@ namespace Cog {
 	}
 
 	Scene::Scene(string name, bool isLazyLoaded) :name(name), lazyLoad(isLazyLoaded) {
-		sceneNode = new Node(NodeType::SCENE, 0, name);
-		sceneNode->SetScene(this);
-		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
+		this->CreateSceneNode();
 	}
 
 	void Scene::SetSceneSettings(Settings& settings) {
@@ -91,7 +89,7 @@ namespace Cog {
 
 	void Scene::SendMessage(Msg& msg, Node* actualNode) {
 
-		COGLOGDEBUG("Messaging", "Message %s:%s", StrId::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
+		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
 
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
@@ -113,7 +111,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToListener(Msg& msg, int targetId) {
 
-		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", StrId::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", msg.GetAction().GetStringValue().c_str(), targetId);
 
 		Behavior* beh = FindBehaviorById(targetId);
 
@@ -128,7 +126,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToNode(Msg& msg, int targetId) {
 
-		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", StrId::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", msg.GetAction().GetStringValue().c_str(), targetId);
 
 		Node* node = FindNodeById(targetId);
 
@@ -154,10 +152,9 @@ namespace Cog {
 	}
 
 	Node* Scene::FindNodeById(int id) const {
-		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetId() == id) return (*it);
-		}
-		return nullptr;
+		auto found = allNodes_id.find(id);
+		if (found == allNodes_id.end()) return nullptr;
+		else return found->second;
 	}
 
 	Behavior* Scene::FindBehaviorById(int id) const {
@@ -176,10 +173,9 @@ namespace Cog {
 	}
 
 	Node* Scene::FindNodeByTag(string tag) const {
-		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetTag().compare(tag) == 0) return (*it);
-		}
-		return nullptr;
+		auto found = allNodes_tag.find(StrId(tag));
+		if (found == allNodes_tag.end()) return nullptr;
+		else return found->second;
 	}
 
 	vector<Node*> Scene::FindNodesByTag(char* tag) const {
@@ -253,6 +249,28 @@ namespace Cog {
 		}
 	}
 
+	void Scene::Finish() {
+		loaded = false;
+		initialized = false;
+		this->allBehaviors.clear();
+		this->allNodes.clear();
+
+		// delete listeners but copy global again
+		this->msgListeners.clear();
+		this->msgListenerActions.clear();
+		auto stage = GETCOMPONENT(Stage);
+		stage->CopyGlobalListenersToScene(this);
+		
+		// delete scene node with delay
+		auto sceneNodePtr = this->sceneNode;
+		this->sceneNode->RemoveFromParent(true);
+		CreateSceneNode();
+
+		sceneNode->SetRunningMode(RunningMode::DISABLED);
+		// add new scene node into root object
+		stage->GetRootObject()->AddChild(sceneNode);
+	}
+
 	void Scene::LoadFromXml(spt<ofxXml> xml) {
 
 		COGLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
@@ -302,13 +320,19 @@ namespace Cog {
 		loaded = true;
 	}
 
+	void Scene::CreateSceneNode() {
+		sceneNode = new Node(NodeType::SCENE, 0, name);
+		sceneNode->SetScene(this);
+		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
+	}
+
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
 			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
 				(beh->GetId() != msg.GetBehaviorId())) {
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
-					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", StrId::GetStringValue(msg.GetAction()).c_str(), typeid(beh).name(), beh->GetId());
+					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", msg.GetAction().GetStringValue().c_str(), typeid(beh).name(), beh->GetId());
 					beh->OnMessage(msg);
 				}
 			}
@@ -382,6 +406,10 @@ namespace Cog {
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found == allNodes.end()) {
 			allNodes.push_back(node);
+			allNodes_id[node->GetId()] = node;
+
+			if (!node->GetTag().empty()) allNodes_tag[StrId(node->GetTag())] = node;
+			
 			node->SetScene(this);
 			return true;
 		}
@@ -392,6 +420,9 @@ namespace Cog {
 		COGLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found != allNodes.end()) allNodes.erase(found);
+
+		if (allNodes_id.count(node->GetId()) != 0) allNodes_id.erase(node->GetId());
+		if (!node->GetTag().empty() && allNodes_tag.count(StrId(node->GetTag())) != 0) allNodes_tag.erase(StrId(node->GetTag()));
 	}
 
 	bool Scene::AddBehavior(Behavior* beh) {
@@ -429,7 +460,7 @@ namespace Cog {
 			int listeners = (*it).second.size();
 
 			if (listeners > 0) {
-				string str = StrId::GetStringValue(key)+":"+ofToString(listeners);
+				string str = key.GetStringValue ()+":"+ofToString(listeners);
 				CogLogTree("INFO_SCENE", logLevel+2, str.c_str());
 			}
 		}

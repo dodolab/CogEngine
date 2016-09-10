@@ -6,51 +6,64 @@ using namespace std;
 #include "AIState.h"
 #include "Simulator.h"
 #include "AIAgent.h"
-#include "ActionHistory.h"
 #include "AgentsReward.h"
 
 namespace Cog {
 
 	/**
-	* MonteCarlo searching algorithm
-	* Uses simulator and agents to simulate game and collects
-	* statistical data
+	* Game simulator - simulates game between selected agents and collects results
+	* To simulate a game, three entities must be defined:
+	* - state that represents any state of a game, derived from AIState class
+	* - action that represents transition between two states (equality operators must be overridden)
+	* - simulator that makes a transition according to the selected action, calculates collection of possible actions and rewards for each agent
+	* @tparam S state the simulator operates with
+	* @tparam A action the simulator and the state operate with
 	*/
 	template<class S, class A>
-	class MonteCarloSearch {
+	class GameSimulator {
 	protected:
+		// main simulator whose clone is used during the loop
 		spt<Simulator<S, A>> mainSimulator;
+		// collection of agents
 		vector<spt<AIAgent<S, A>>> agents;
-		ActionHistory<S, A> actionHistory;
-		// sum of rewards for each agent
+		// sum of rewards for each agent per each simulation
 		vector<AgentsReward> totalRewards;
-		// holds number of steps for each simulation
+		// number of steps for each simulation
 		vector<int> stepsCounter;
 
 	public:
-		MonteCarloSearch() {
+
+		GameSimulator() {
 
 		}
 
-		MonteCarloSearch(spt<Simulator<S,A>> simulator, vector<spt<AIAgent<S,A>>> agents) : mainSimulator(simulator), agents(agents) {
+		/**
+		* Creates a new Game Simulator
+		* @param simulator main simulator that makes transition between states
+		* @param agents collection of agents that will play the game
+		*/
+		GameSimulator(spt<Simulator<S,A>> simulator, vector<spt<AIAgent<S,A>>> agents)
+			: mainSimulator(simulator), agents(agents) {
 		}
 
-		spt<Simulator<S,A>> GetSimulator() {
+		/**
+		* Gets the main simulator
+		*/
+		spt<Simulator<S,A>> GetSimulator() const{
 			return mainSimulator;
 		}
 
-		vector<spt<AIAgent<S,A>>>& GetAgents() {
+		/**
+		* Gets the collection of agents
+		*/
+		vector<spt<AIAgent<S,A>>>& GetAgents() const{
 			return agents;
-		}
-
-		ActionHistory<S, A>& GetActionHistory() {
-			return actionHistory;
 		}
 
 		/**
 		* Calculates sum of rewards for selected agent
 		*/
-		int GetRewardSum(int agentIndex) {
+		int CalcRewardSum(int agentIndex) const{
 			int total = 0;
 			for (auto& reward : totalRewards) {
 				total += reward.GetReward(agentIndex);
@@ -59,16 +72,16 @@ namespace Cog {
 		}
 
 		/**
-		* Calculates avg reward for selected agent
+		* Calculates average reward for selected agent
 		*/
-		float GetRewardAvg(int agentIndex) {
+		float CalcRewardAvg(int agentIndex) const{
 			return GetRewardSum(agentIndex) / ((float)GetRewardsNum());
 		}
 
 		/**
-		* Calculates number of all steps during the simulation
+		* Calculates number of all steps during all simulations
 		*/
-		int GetStepsSum() {
+		int CalcStepsSum() const{
 			int total = 0;
 			for (auto& step : stepsCounter) {
 				total += step;
@@ -79,7 +92,7 @@ namespace Cog {
 		/**
 		* Calculates number of wins for selected agent
 		*/
-		int GetNumberOfWins(int agentIndex) {
+		int CalcNumberOfWins(int agentIndex) const {
 			int total = 0;
 
 			for (auto& reward : totalRewards) {
@@ -96,59 +109,71 @@ namespace Cog {
 			return total;
 		}
 
+		/**
+		* Executes simulations
+		* @param attempts number of simulations
+		* @param initState indicator, if the simulator should be reinitialized
+		*/
 		void RunSimulations(int attempts, bool initState = true) {
-
 			// run simulation
 			for (int i = 0; i < attempts; i++) {
 				RunSimulation(initState);
 			}
 
-			COGLOGDEBUG("AI", WriteInfo().c_str());
+			COGLOGDEBUG("AI", this->WriteInfo().c_str());
 		}
 
 	protected:
 
 		/**
-		* Executes simulation for one attempt
+		* Executes one simulation
+		* @param initState indicator, if the simulator should be reinitialized
 		*/
 		void RunSimulation(bool initState) {
+			// simulator for this loop
+			auto loopSimulator = mainSimulator->DeepCopy(); 
+			// simulator for agents (they can play with it as they please)
+			auto agentSimulator = mainSimulator->DeepCopy();
+			agentSimulator->SetIsInsideAnAgent(true);
 
-			auto loopSimulator = mainSimulator->DeepCopy(); // simulator for this loop
-			auto agentSimulator = mainSimulator->DeepCopy(); // simulator for agents (let them do it with it what they want)
+			// initialize simulator
+			if (initState) loopSimulator->InitState();
 
-			if(initState) loopSimulator->InitState();
-			
 			int stepCounter = 0;
 			AgentsReward rw = AgentsReward(agents.size());
 
+			// simulate until the game has ended
 			while (!loopSimulator->IsDeadEnd()) {
-				// get agent on turn
+
 				int agentOnTurn = loopSimulator->GetActualState().GetAgentOnTurn();
 
 				// copy state of main simulator into its copy
 				agentSimulator->SetActualState(loopSimulator->GetActualState());
+				
 				auto agent = agents[agentOnTurn];
+				
 				// let the agent choose the appropriate action
 				A action = agent->ChooseAction(agentSimulator);
 
 				// apply the selected action into the simulator
-				loopSimulator->MakeAction(action,false);
-				// get rewards of the selected action
+				loopSimulator->MakeAction(action);
+				
 				stepCounter++;
+				// merge rewards of the selected action
 				rw.Merge(loopSimulator->GetRewards());
-				// update history
-				actionHistory.AddRecord(loopSimulator->GetActualState(), action, agentOnTurn);
 			}
 
 			this->totalRewards.push_back(rw);
 			this->stepsCounter.push_back(stepCounter);
 		}
 
-		string WriteInfo() {
-
+		/**
+		* Writes info about collected data into string
+		*/
+		string WriteInfo() const {
 			ostringstream ss;
 
-			ss << "MonteCarloSearch result:" << endl;
+			ss << "GameSimulator result:" << endl;
 
 			ss << "Rewards: [ ";
 
@@ -161,14 +186,14 @@ namespace Cog {
 
 			ss << "RewardsSum: [ ";
 			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
-				ss << GetRewardSum(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
+				ss << CalcRewardSum(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
 			}
 
 			ss << endl;
 
 			ss << "Wins: [ ";
 			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
-				ss << GetNumberOfWins(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
+				ss << CalcNumberOfWins(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
 			}
 
 			ss << endl;

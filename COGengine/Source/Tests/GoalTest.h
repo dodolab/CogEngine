@@ -2,29 +2,15 @@
 
 #include "ofMain.h"
 #include "CogEngine.h"
-#include "ofxCogMain.h"
-#include "Goal.h"
-#include "StrId.h"
 
 #include "catch.hpp"
 using namespace Cog;
 
-class DummyGoal : public Goal {
- public:
-	bool complete;
-
-	DummyGoal(bool complete) : Goal(StrId()), complete(complete) {
-
-	}
-
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if(complete) Complete();
-		else Fail();
-	}
-};
+#include "GoalTestAssets.h"
 
 
-TEST_CASE("GoalTest", "[class]")
+
+TEST_CASE("GoalTest")
 {
 	SECTION("All complete test")
 	{

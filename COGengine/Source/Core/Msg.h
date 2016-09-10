@@ -125,7 +125,7 @@ namespace Cog {
 		}
 
 		template <class T>
-		T* GetDataS() {
+		T* GetData() {
 			return static_cast<T*>(data);
 		}
 

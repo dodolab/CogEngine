@@ -2,62 +2,23 @@
 
 #include "ofMain.h"
 #include "CogEngine.h"
-#include "ofxCogMain.h"
-#include "StateMachine.h"
-#include "State.h"
-#include "StrId.h"
-
 
 #include "catch.hpp"
 using namespace Cog;
 
-class MiningState : public State {
-public:
-
-	MiningState(StrId state) : State(state) {
-
-	}
+#include "StateMachineTestAssets.h"
 
 
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		int progress = owner->GetAttr<int>(StrId("PROGRESS"));
-		progress += 10;
-		cout << "mining ..." << endl;
-		if (progress >= 100) {
-			cout << "mining finished" << endl;
-			this->GetParent()->ChangeState(StrId("REST"));
-		}
 
-		owner->ChangeAttr(StrId("PROGRESS"), progress);
-	}
-};
 
-class RestState : public State {
-public:
 
-	RestState(StrId state) : State(state) {
 
-	}
 
-	virtual void Update(const uint64 delta, const uint64 absolute) {
 
-	}
-};
 
-class StateSwitcher : public State {
-public:
-	StrId nextState;
 
-	StateSwitcher(StrId state, StrId nextState) : State(state), nextState(nextState) {
 
-	}
-
-	virtual void Update(const uint64 delta, const uint64 absolute) {
-		this->GetParent()->ChangeState(nextState);
-	}
-};
-
-TEST_CASE("StateMachineTest", "[class]")
+TEST_CASE("StateMachineTest")
 {
 	SECTION("Miner test")
 	{

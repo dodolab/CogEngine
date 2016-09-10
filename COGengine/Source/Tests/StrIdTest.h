@@ -9,7 +9,17 @@ using namespace Cog;
 #include "StrId.h"
 
 
-TEST_CASE("StrId test", "[class]")
+
+
+
+
+
+
+
+
+
+
+TEST_CASE("StrId")
 {
 
 	SECTION("Comparing two hashes")

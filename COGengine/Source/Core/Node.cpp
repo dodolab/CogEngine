@@ -247,7 +247,14 @@ namespace Cog {
 		// insert children
 		for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it) {
 			Node* child = (*it);
-			children.push_back(child);
+
+			if (this->type == NodeType::ROOT && child->scene->sceneType != SceneType::DIALOG) {
+				children.push_front(child); // scenes always on front
+			}
+			else {
+				children.push_back(child);
+			}
+
 			child->parent = this;
 			
 			// root has no scene
@@ -305,7 +312,7 @@ namespace Cog {
 			std::pair<Behavior*, bool> item = (*it);
 			Behavior* beh = item.first;
 			behaviors.remove(beh);
-			scene->RemoveBehavior(beh);
+			if(scene != nullptr) scene->RemoveBehavior(beh);
 			beh->owner = nullptr;
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
@@ -318,7 +325,7 @@ namespace Cog {
 			std::pair<Node*, bool> item = (*it);
 			Node* child = item.first;
 			children.remove(child);
-			scene->RemoveNode(child);
+			if (scene != nullptr) scene->RemoveNode(child);
 			if (applyToChildren) child->DeleteElementsForRemoving(true);
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
@@ -336,7 +343,7 @@ namespace Cog {
 
 		for (auto it = attributes.begin(); it != attributes.end(); ++it) {
 			StrId key = (*it).first;
-			CogLogTree("INFO_NODE", logLevel + 2, StrId::GetStringValue(key).c_str());
+			CogLogTree("INFO_NODE", logLevel + 2, key.GetStringValue().c_str());
 		}
 #endif
 
@@ -358,7 +365,7 @@ namespace Cog {
 				CogLogTree("INFO_FLAGS", logLevel+1, "Flags: %d", allStates.size());
 
 				for (unsigned un : allStates) {
-					CogLogTree("INFO_FLAGS", logLevel + 2, StrId::GetStringValue(un).c_str());
+					CogLogTree("INFO_FLAGS", logLevel + 2, StrId(un).GetStringValue().c_str());
 				}
 			}
 		}

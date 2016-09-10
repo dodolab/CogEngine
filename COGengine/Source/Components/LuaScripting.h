@@ -35,7 +35,7 @@ namespace Cog {
 		}
 
 
-		void Init() {
+		void OnInit() {
 			L = luaL_newstate();
 			luaL_openlibs(L);
 

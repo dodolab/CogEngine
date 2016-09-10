@@ -30,11 +30,11 @@ namespace Cog {
 	uint64 CogGetAbsoluteTime();
 
 	// =================== MENVIRONMENT ====================
-	void CogAddSound(spt<Sound> sound);
-	void CogPlaySound(spt<Sound> sound);
+	void CogAddSound(Sound* sound);
+	void CogPlaySound(Sound* sound);
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
-	vector<spt<Sound>>& CogGetPlayedSounds();
+	vector<Sound*>& CogGetPlayedSounds();
 	bool CogIsKeyPressed(int key);
 	Vec2i CogGetMousePosition();
 	int CogGetScreenWidth();
@@ -80,7 +80,7 @@ namespace Cog {
 	spt<ofImage> CogPreload2DImage(string path);
 	spt<ofVboMesh> CogGetMesh(string path);
 	spt<ofTrueTypeFont> CogGetFont(string path, int size);
-	spt<Sound> CogGetSound(string path);
+	Sound* CogGetSound(string path);
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
 	spt<SheetAnim> CogGetAnimation(string name);

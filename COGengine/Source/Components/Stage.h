@@ -36,7 +36,7 @@ namespace Cog {
 
 		~Stage();
 
-		void Init();
+		void OnInit();
 
 		void OnMessage(Msg& msg);
 
@@ -59,6 +59,8 @@ namespace Cog {
 		* @param setAsActual if true, scene will be set as the actual scene
 		*/
 		void AddScene(Scene* scene, bool setAsActual);
+
+		void CopyGlobalListenersToScene(Scene* scene);
 
 		/**
 		* Registers global behavior listener for selected action

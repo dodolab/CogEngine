@@ -33,7 +33,7 @@ namespace Cog {
 
 		queue<TweenContext> waitingTweens = queue<TweenContext>();
 
-		void Init();
+		void OnInit();
 
 
 		void OnMessage(Msg& msg);

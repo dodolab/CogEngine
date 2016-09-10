@@ -257,11 +257,10 @@
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\xml\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\xml\tinyxml.h" />
-    <ClInclude Include="Source\AI\ActionHistory.h" />
     <ClInclude Include="Source\AI\AgentsReward.h" />
     <ClInclude Include="Source\AI\AIAgent.h" />
     <ClInclude Include="Source\AI\AIState.h" />
-    <ClInclude Include="Source\AI\MonteCarloSearch.h" />
+    <ClInclude Include="Source\AI\GameSimulator.h" />
     <ClInclude Include="Source\AI\RandomAgent.h" />
     <ClInclude Include="Source\AI\Simulator.h" />
     <ClInclude Include="Source\AI\UCTAgent.h" />
@@ -272,6 +271,7 @@
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
     <ClInclude Include="Source\Behaviors\AttribAnimator.h" />
+    <ClInclude Include="Source\Behaviors\CompositeBehavior.h" />
     <ClInclude Include="Source\Behaviors\Goal.h" />
     <ClInclude Include="Source\Behaviors\Selection.h" />
     <ClInclude Include="Source\Behaviors\SheetAnimator.h" />
@@ -372,18 +372,27 @@
     <ClInclude Include="Source\Scripting\NodeLua.h" />
     <ClInclude Include="Source\Tests\CoroutineTest.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
+    <ClInclude Include="Source\Tests\EngineTestAssets.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\GoalTest.h" />
+    <ClInclude Include="Source\Tests\GoalTestAssets.h" />
     <ClInclude Include="Source\Tests\JavaScriptTest.h" />
+    <ClInclude Include="Source\Tests\JavaScriptTestAssets.h" />
     <ClInclude Include="Source\Tests\LuaTest.h" />
+    <ClInclude Include="Source\Tests\LuaTestAssets.h" />
     <ClInclude Include="Source\Tests\MeasureTest.h" />
     <ClInclude Include="Source\Tests\MonteCarloTest.h" />
+    <ClInclude Include="Source\Tests\MonteCarloTestAssets.h" />
     <ClInclude Include="Source\Tests\NetworkTest.h" />
+    <ClInclude Include="Source\Tests\NetworkTestAssets.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
     <ClInclude Include="Source\Tests\SQLTest.h" />
+    <ClInclude Include="Source\Tests\SQLTestAssets.h" />
     <ClInclude Include="Source\Tests\StateMachineTest.h" />
+    <ClInclude Include="Source\Tests\StateMachineTestAssets.h" />
     <ClInclude Include="Source\Tests\StrIdTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
+    <ClInclude Include="Source\Tests\TransformTestAssets.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\dukbind\dukbind.cpp" />
@@ -548,6 +557,7 @@
     <ClCompile Include="Source\Behaviors\AttribAnimator.cpp" />
     <ClCompile Include="Source\Behaviors\Button.cpp" />
     <ClCompile Include="Source\Behaviors\Collider.cpp" />
+    <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp" />
     <ClCompile Include="Source\Behaviors\DelayAction.cpp" />
     <ClCompile Include="Source\Behaviors\DelayRemove.cpp" />
     <ClCompile Include="Source\Behaviors\FloatingScene.cpp" />
@@ -582,6 +592,7 @@
     <ClCompile Include="Source\Core\Behavior.cpp" />
     <ClCompile Include="Source\Core\CogApp.cpp" />
     <ClCompile Include="Source\Core\CogEngine.cpp" />
+    <ClCompile Include="Source\Core\Component.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\MsgListener.cpp" />

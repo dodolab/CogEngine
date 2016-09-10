@@ -2,17 +2,12 @@
 
 #include "ofMain.h"
 #include "CogEngine.h"
-
-
 #include "catch.hpp"
 using namespace Cog;
 #include "CoroutineContext.h"
 
-class Dummy {
 
-};
-
-TEST_CASE("Coroutine test", "[class]")
+TEST_CASE("Coroutine test")
 {
 
 	SECTION("Lambda coroutine")

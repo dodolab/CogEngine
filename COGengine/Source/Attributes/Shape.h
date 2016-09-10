@@ -289,7 +289,7 @@ namespace Cog {
 			return sprite;
 		}
 
-		void SetSprite(Sprite& sprite) {
+		void SetSprite(Sprite sprite) {
 			this->sprite = sprite;
 		}
 

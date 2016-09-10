@@ -488,6 +488,13 @@ namespace Cog {
 				}
 			}
 
+			// search for not added behaviors
+			for (auto beh : this->behaviorsToAdd) {
+				if (typeid(*beh) == typeid(T)) {
+					return static_cast<T*>(beh);
+				}
+			}
+
 			return nullptr;
 		}
 
@@ -527,8 +534,8 @@ namespace Cog {
 		template<class T> T& GetAttr(StrId key) {
 			auto it = attributes.find(key);
 
-			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue(key.GetValue()).c_str());
-			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue(key.GetValue()).c_str());
+			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %s doesn't exists", tag->c_str(), key.GetStringValue().c_str());
+			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %s is of the wrong type!", tag->c_str(), key.GetStringValue().c_str());
 
 			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 			return attr->GetValue();
