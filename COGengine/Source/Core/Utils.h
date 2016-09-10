@@ -41,7 +41,5 @@ namespace Cog {
 	*/
 	void spaces(int howMany, std::ostream& ss);
 
-	typedef unsigned int uint64;
-
 
 } // namespace

@@ -12,6 +12,39 @@ namespace Cog {
 		ofTrueTypeFont::setGlobalDpi(CogGetScreenWidth() * 72 * 0.001f);
 	}
 
+	void ResourceCache::Init(spt<ofxXml> xml) {
+		xml->popAll();
+
+		if (xml->tagExists("app_config")) {
+			xml->pushTag("app_config");
+
+			if (xml->tagExists("settings")) {
+				xml->pushTag("settings");
+
+				// parse default settings
+				if (xml->tagExists("default_settings")) {
+					xml->pushTag("default_settings");
+					loadedDefaultSettings = LoadSettingsFromXml(xml);
+					xml->popTag();
+				}
+
+				// parse global settings
+				if (xml->tagExists("global_settings")) {
+					xml->pushTag("global_settings");
+					loadedGlobalSettings = LoadSettingsFromXml(xml);
+					xml->popTag();
+				}
+
+				// parse project settings
+				if (xml->tagExists("project_settings")) {
+					xml->pushTag("project_settings");
+					loadedProjectSettings = LoadSettingsFromXml(xml);
+					xml->popTag();
+				}
+			}
+		}
+	}
+
 	spt<ofImage> ResourceCache::Get2DImage(string path) {
 
 		auto found = loadedImages.find(path);
@@ -141,6 +174,36 @@ namespace Cog {
 		if (found == loadedSpriteSheets.end()) {
 			loadedSpriteSheets[spriteSheet->GetName()] = spriteSheet;
 		}
+	}
+
+	map<string, Setting> ResourceCache::LoadSettingsFromXml(spt<ofxXml> xml) {
+		map<string, Setting> setMap = map<string, Setting>();
+
+		int numOfSettings = xml->getNumTags("setting");
+
+		for (int i = 0; i < numOfSettings; i++) {
+			xml->pushTag("setting", i);
+
+			Setting set = Setting();
+			set.name = xml->getAttribute(":", "name", "");;
+
+			int items = xml->getNumTags("item");
+
+			for (int j = 0; j < items; j++) {
+				xml->pushTag("item", j);
+
+				SettingItem item = SettingItem();
+				item.key = xml->getAttribute(":", "key", "");
+				item.value = xml->getAttribute(":", "value", "");
+				set.items[item.key] = item;
+				xml->popTag();
+			}
+
+			setMap[set.name] = set;
+			xml->popTag();
+		}
+
+		return setMap;
 	}
 
 }// namespace

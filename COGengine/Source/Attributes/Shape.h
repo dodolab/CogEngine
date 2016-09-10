@@ -24,6 +24,14 @@ namespace Cog {
 		RenderType GetRenderType() {
 			return renderType;
 		}
+
+		virtual float GetWidth() {
+			return 0;
+		}
+
+		virtual float GetHeight() {
+			return 0;
+		}
 	};
 
 	class Image : public Shape {
@@ -41,6 +49,14 @@ namespace Cog {
 
 		void SetImage(spt<ofImage> img) {
 			this->image = img;
+		}
+
+		float GetWidth() {
+			return image->getWidth();
+		}
+
+		float GetHeight() {
+			return image->getHeight();
 		}
 	};
 

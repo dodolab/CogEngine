@@ -7,10 +7,13 @@
 
 namespace Cog {
 
-	void CogApp::InitEngine() {
+	void CogApp::InitComponents() {
 		Factory* fact = new Factory();
 		COGEngine.componentStorage->RegisterComponent(fact);
 		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+	}
+
+	void CogApp::InitEngine() {
 		COGEngine.Init();
 	}
 
@@ -20,6 +23,7 @@ void CogApp::setup(){
 	ofSetFrameRate(APP_SPEED);
 	ofEnableAntiAliasing();
 	// initialize COG engine
+	this->InitComponents();
 	this->InitEngine();
 	
 	// initialize time

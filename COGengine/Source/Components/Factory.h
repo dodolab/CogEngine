@@ -8,7 +8,9 @@ namespace Cog {
 	enum class CalcType {
 		ABS,	/*!< absolute */
 		LOC,	/*!< local */
-		PER 	/*!< percentage <0..1> */
+		PER, 	/*!< percentage <0..1> */
+		GRID,    /*!< grid positioning, grid size must be specified */
+		ABS_PER /*!< absolute percentage */
 	};
 
 	/**

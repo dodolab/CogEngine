@@ -1,12 +1,8 @@
 #pragma once
 
+#include "ofxCogMain.h"
 
 namespace Cog {
-
-#define REGISTER_XMLHANDLING(element) \
-  string XmlHandlerName() {\
-    return string(element);\
-  }
 
 #define COMPONENT(compName) \
   public: \
@@ -40,16 +36,11 @@ namespace Cog {
 		/**
 		* Initializes factory, using xml configuration
 		*/
-		virtual void Init(spt<ofxXmlSettings> config) {
-
+		virtual void Init(spt<ofxXml> config) {
+			// call the common init method 
+			Init();
 		}
 
-		/**
-		* Gets name of xml handler
-		*/
-		virtual string XmlHandlerName() {
-			return string();
-		}
 	};
 
 }// namespace

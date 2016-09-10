@@ -41,6 +41,9 @@
 
 #pragma warning(pop)
 
+
+typedef unsigned int uint64;
+
 using namespace std;
 
 #endif

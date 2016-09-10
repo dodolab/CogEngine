@@ -26,6 +26,8 @@ namespace Cog {
 
 	public:
 
+		void LoadSceneFromXml(spt<ofxXml> xml);
+
 		/**
 		* Gets the root object
 		*/

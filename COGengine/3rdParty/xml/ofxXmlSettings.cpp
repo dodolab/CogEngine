@@ -255,6 +255,10 @@ int ofxXmlSettings::popTag(){
 	return level;
 }
 
+void ofxXmlSettings::popAll() {
+	while (level != 0) popTag();
+}
+
 //---------------------------------------------------------
 int ofxXmlSettings::getPushLevel(){
 	return level;
