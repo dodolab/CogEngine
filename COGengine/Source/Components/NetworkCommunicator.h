@@ -26,8 +26,42 @@ namespace Cog {
 		bool isServer = false;
 		NetworkComState networkState;
 		spt<NetMessage> msgToSent = spt<NetMessage>();
+		uint64 clientLastCallBack = 0;
+		uint64 serverLastUpdate = 0;
 
 	public:
+
+		int GetApplicationId() {
+			return applicationId;
+		}
+
+		int GetPort() {
+			return port;
+		}
+
+		string GetclientIp() {
+			return clientIp;
+		}
+
+		bool ClientConnected() {
+			return !clientIp.empty() && networkState == NetworkComState::UPDATING_SERVER;
+		}
+
+		int GetLastReceivedMsgId() {
+			return lastReceivedMsgId;
+		}
+
+		NetworkComState GetNetworkState() {
+			return networkState;
+		}
+
+		uint64 GetClientLastCallBack() {
+			return clientLastCallBack;
+		}
+
+		uint64 GetServerLastUpdate() {
+			return serverLastUpdate;
+		}
 
 		void Init(int applicationId, int port, bool isServer);
 

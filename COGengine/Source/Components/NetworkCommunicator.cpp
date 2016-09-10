@@ -13,8 +13,8 @@ namespace Cog {
 		this->applicationId = applicationId;
 
 		network = new Network();
-		network->SetupUDPReceiver(port, 10000, true);
-		network->GetUDPManager().SetEnableBroadcast(true);
+		network->SetupUDPReceiver(isServer ? port : port+1, 10000, true);
+		if(!isServer) network->GetUDPSender().SetEnableBroadcast(true);
 
 		if (isServer) {
 			CogLogInfo("NETWORK", "Listening on port %d", port);
@@ -45,16 +45,39 @@ namespace Cog {
 				auto message = network->ReceiveUDPMessage(applicationId, 0);
 				if (message && message->GetMsgType() == NetMsgType::HANDSHAKE_REQUEST) {
 					CogLogInfo("NETWORK", "Connected client %s", message->GetIpAddress().c_str());
-					network->SetupUDPSender(message->GetIpAddress(), port, true);
+					network->SetupUDPSender(message->GetIpAddress(), port+1, true);
+					this->clientIp = message->GetIpAddress();
+
+					clientLastCallBack = absolute;
 					networkState = NetworkComState::UPDATING_SERVER;
 				}
 			}
 		}
 		else if (networkState == NetworkComState::UPDATING_SERVER) {
 			if (msgToSent) {
-				cout << "sending message" << endl;
 				network->SendUDPMessage(applicationId, msgToSent);
 				msgToSent = spt<NetMessage>();
+			}
+
+			auto message = network->ReceiveUDPMessage(applicationId, 0);
+			if (message) {
+				if (message->GetMsgType() == NetMsgType::CLIENT_CALLBACK) {
+					int acceptedMsgId = message->GetDWORDParameter();
+					clientLastCallBack = absolute;
+					SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+				}
+				else if (message->GetMsgType() == NetMsgType::DISCONNECT) {
+					CogLogInfo("NETWORK", "Disconnected client %s", message->GetIpAddress().c_str());
+				}
+			}
+
+			if ((absolute - clientLastCallBack) > 4000) {
+				// disconnect client
+				CogLogInfo("NETWORK", "Disconnecting client %s", this->clientIp.c_str());
+
+				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::DISCONNECT));
+				network->SendUDPMessage(applicationId, msg);
+				networkState = NetworkComState::LISTENING;
 			}
 		}
 	}
@@ -65,7 +88,6 @@ namespace Cog {
 		if (networkState == NetworkComState::BROADCASTING) {
 			if (frame % 100 == 0) {
 				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::HANDSHAKE_REQUEST));
-				cout << "broadcasting " << endl;
 
 				// send broadcast messsages to 192, 10 and localhost
 				MLOGDEBUG("NETWORK", "Broadcasting");
@@ -82,15 +104,33 @@ namespace Cog {
 					CogLogInfo("NETWORK", "Connected to server %s", message->GetIpAddress().c_str());
 					network->SetupUDPSender(message->GetIpAddress(), port, true);
 					networkState = NetworkComState::UPDATING_CLIENT;
+					serverLastUpdate = absolute;
 				}
 			}
 		}
 		else if (networkState == NetworkComState::UPDATING_CLIENT) {
 			auto message = network->ReceiveUDPMessage(applicationId, 0);
-			if (message &&message->GetId() > this->lastReceivedMsgId) {
+			if (message && message->GetId() > this->lastReceivedMsgId) {
 				// dispose old messages
 				this->lastReceivedMsgId = message->GetId();
 				SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
+
+				// notify server that we have accepted this message
+				spt<NetMessage> msg = spt<NetMessage>(new NetMessage(NetMsgType::CLIENT_CALLBACK));
+				msg->SetDWORDParameter(message->GetId());
+				network->SendUDPMessage(applicationId, msg);
+				serverLastUpdate = absolute;
+			}
+
+			if (msgToSent) {
+				network->SendUDPMessage(applicationId, msgToSent);
+				msgToSent = spt<NetMessage>();
+			}
+
+			if ((absolute - serverLastUpdate) > 4000) {
+				// disconnect client
+				CogLogInfo("NETWORK", "No message received from server for 4s, disconnecting...");
+				networkState = NetworkComState::BROADCASTING;
 			}
 		}
 	}

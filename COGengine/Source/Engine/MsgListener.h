@@ -101,6 +101,30 @@ namespace Cog {
 		void RegisterGlobalListening(StringHash action1);
 
 		/**
+		* Registers itself as a global action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		*/
+		void RegisterGlobalListening(StringHash action1, StringHash action2);
+
+		/**
+		* Registers itself as a global action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		* @param action3 action to listen to
+		*/
+		void RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3);
+
+		/**
+		* Registers itself as a global action listener
+		* @param action1 action to listen to
+		* @param action2 action to listen to
+		* @param action3 action to listen to
+		* @param action4 action to listen to
+		*/
+		void RegisterGlobalListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+
+		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		*/

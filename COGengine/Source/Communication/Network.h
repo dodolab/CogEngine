@@ -14,7 +14,9 @@ namespace Cog {
 	private:
 		ofxTCPClient tcpClient;
 		ofxTCPServer tcpServer;
-		ofxUDPManager udpManager;
+		ofxUDPManager udpSender;
+		ofxUDPManager udpReceiver;
+
 		int udpListenPort = 0;
 
 		// udp receiver buffers
@@ -22,7 +24,8 @@ namespace Cog {
 	public:
 
 		Network() {
-			udpManager.Create();
+			udpSender.Create();
+			udpReceiver.Create();
 		}
 
 		void SetupTCPClient(string ip, int port, string msgDelimiter) {
@@ -45,18 +48,23 @@ namespace Cog {
 		}
 
 		void SetupUDPSender(string ip, int port, bool nonBlocking) {
-			udpManager.Connect(ip.c_str(), port);
-			udpManager.SetNonBlocking(nonBlocking);
+			udpSender.Connect(ip.c_str(), port);
+			udpSender.SetNonBlocking(nonBlocking);
 		}
 
-		ofxUDPManager& GetUDPManager() {
-			return udpManager;
+
+		ofxUDPManager& GetUDPSender() {
+			return udpSender;
+		}
+
+		ofxUDPManager& GetUDPReceiver() {
+			return udpSender;
 		}
 
 		void SetupUDPReceiver(int port, int bufferSize, bool nonBlocking) {
-			udpManager.Bind(port);
-			udpManager.SetNonBlocking(nonBlocking);
-			udpManager.SetReceiveBufferSize(bufferSize);
+			udpReceiver.Bind(port);
+			udpReceiver.SetNonBlocking(nonBlocking);
+			udpReceiver.SetReceiveBufferSize(bufferSize);
 			this->udpListenPort = port;
 			bufferStream = new NetReader(bufferSize);
 		}
@@ -69,7 +77,7 @@ namespace Cog {
 			msg->SaveToStream(writer);
 
 			auto buffer = writer->GetBuffer();
-			udpManager.Send((char*)buffer, writer->GetBufferBites() / 8);
+			udpSender.Send((char*)buffer, writer->GetBufferBites() / 8);
 			delete writer;
 		}
 
@@ -83,7 +91,7 @@ namespace Cog {
 			while (true) {
 
 				bufferStream->Reset();
-				int bytesBuff = udpManager.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
+				int bytesBuff = udpReceiver.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
 
 				if (bytesBuff > 0 && bufferStream->ReadDWord() == applicationId) {
 
@@ -94,7 +102,7 @@ namespace Cog {
 
 					string ipAddress = "";
 					int port = 0;
-					udpManager.GetRemoteAddr(ipAddress, port);
+					udpReceiver.GetRemoteAddr(ipAddress, port);
 					msg->SetIpAddress(ipAddress);
 					msg->SetPort(port);
 

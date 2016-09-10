@@ -32,14 +32,13 @@ public:
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 		if (!server) {
 			param = this->binder->parameter1;
-			//cout << this->param << endl;
 			owner->GetTransform().rotation = binder->parameter1;
 			owner->GetTransform().localPos.x = binder->parameter2;
 			owner->GetTransform().localPos.y = binder->parameter3;
 		}
 		else {
-			if (frame++ % 35 == 0) {
-				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::UPDATE, StringHash("FOFKA")));
+			if (frame++ % 3 == 0) {
+				auto msg = spt<NetMessage>(new NetMessage(NetMsgType::UPDATE, StringHash("ffs")));
 				msg->SetMsgTime(absolute);
 
 
@@ -66,7 +65,7 @@ class ExampleApp : public CogApp {
 		CogEngine::GetInstance().Init("config.xml");
 		CogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 
-		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(false));
+		GETCOMPONENT(Stage)->GetActualScene()->FindNodeByTag("anim")->AddBehavior(new NetworkBehavior(true));
 
 	}
 
