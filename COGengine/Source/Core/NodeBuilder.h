@@ -55,14 +55,11 @@ namespace Cog {
 
 
 			string name = xml->getAttributex("name", "");
-			string type = xml->getAttributex("type", "");
 			string img = xml->getAttributex("img", "");
 
-			auto transSet = GETCOMPONENT(ResourceCache)->GetDefaultSettings("transform");
-
 			// get reference width and height
-			int refWidth = transSet.GetItem("ref_width").GetValInt();
-			int refHeight = transSet.GetItem("ref_height").GetValInt();
+			int refWidth = settings.GetSettingValInt("transform", "ref_width");
+			int refHeight = settings.GetSettingValInt("transform","ref_height");
 			
 
 			Node* node = new Node(ObjType::OBJECT, 0, name);
@@ -88,8 +85,8 @@ namespace Cog {
 				AssignSelect(node, img, imgSelect, selectGroup);
 			}
 
-			if (type.compare("background") == 0) {
-				// set background image
+			// scene node will always fit to screen size
+			if (parent->GetType() == ObjType::SCENE) {
 				math.SetSizeToScreen(node, parent);
 			}
 			
@@ -116,6 +113,7 @@ namespace Cog {
 					xml->popTag();
 				}
 			}
+
 
 			if (xml->tagExists("state")) {
 				int states = xml->getNumTags("state");

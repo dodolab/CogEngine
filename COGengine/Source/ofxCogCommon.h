@@ -15,7 +15,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <functional>
 #include <list>
 #include <stdexcept>
 #include <assert.h>

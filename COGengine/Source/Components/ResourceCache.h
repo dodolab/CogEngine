@@ -32,9 +32,9 @@ namespace Cog {
 		// loaded fonts (each DPI must have one font loaded)
 		map<string, map<int,spt<ofTrueTypeFont>>> loadedFonts;
 
-		map<string, Setting> loadedDefaultSettings;
-		map<string, Setting> loadedGlobalSettings;
-		map<string, Setting> loadedProjectSettings;
+		Settings loadedDefaultSettings;
+		Settings loadedGlobalSettings;
+		Settings loadedProjectSettings;
 
 	public:
 
@@ -123,6 +123,18 @@ namespace Cog {
 		* Loads settings from XML
 		*/
 		map<string, Setting> LoadSettingsFromXml(spt<ofxXml> xml);
+
+		Settings& GetDefaultSettings() {
+			return loadedDefaultSettings;
+		}
+
+		Settings& GetGlobalSettings() {
+			return loadedGlobalSettings;
+		}
+
+		Settings& GetProjectSettings() {
+			return loadedProjectSettings;
+		}
 
 		Setting GetDefaultSettings(string name);
 

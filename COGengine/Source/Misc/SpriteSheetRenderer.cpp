@@ -161,13 +161,12 @@ namespace Cog {
 	}
 
 	void SpriteSheetRenderer::makeQuad(int offset, Tile& tile) {
-		float w = tile.width*tile.scaleX / 2;
-		float h = tile.height*tile.scaleY / 2;
+		float w = tile.width*tile.scaleX / 2.0f;
+		float h = tile.height*tile.scaleY / 2.0f;
 		float x = tile.posX;
 		float y = tile.posY;
 		float z = tile.posZ;
 		float rot = tile.rotation;
-
 		float* verts = actualBuffer->verts;
 
 		verts[offset + 2] = verts[offset + 5] = verts[offset + 11] = verts[offset + 8] = verts[offset + 14] = verts[offset + 17] = z;
@@ -222,25 +221,9 @@ namespace Cog {
 		int vertexOffset = getVertexOffset();
 		int colorOffset = getColorOffset();
 
-		//addTexCoords(tile.dir, tile.offsetX, tile.offsetY, layer, tile.width, tile.height);
 		addTexCoords(tile);
 
 		makeQuad(vertexOffset, tile);
-
-		/*
-		float w = tile.width*tile.scaleX/ 2;
-		float h = tile.height*tile.scaleY / 2;
-		float x = tile.posX;
-		float y = tile.posY;
-		float z = tile.posZ;
-		float rot = tile.rotation;
-
-		//verticies ------------------------------------
-		makeQuad(vertexOffset,
-			x + getX(-w, -h, rot), y + getY(-w, -h, rot),z,
-			x + getX(w, -h, rot),  y + getY(w, -h, rot),z,
-			x + getX(-w, h, rot),  y + getY(-w, h, rot),z,
-			x + getX(w, h, rot),   y + getY(w, h, rot),z);*/
 
 
 
@@ -284,7 +267,7 @@ namespace Cog {
 		}
 	}
 
-	void SpriteSheetRenderer::addTexCoords(flipDirection f, int posX, int posY, float w, float h)
+	void SpriteSheetRenderer::addTexCoords(flipDirection f, float posX, float posY, float w, float h)
 	{
 		int coordOffset = getCoordOffset();
 
