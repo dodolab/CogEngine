@@ -90,6 +90,8 @@ namespace Cog {
 	void CogEngine::Update(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_UPDATE");
 
+		lastAbsoluteTime = absolute;
+
 		frameCounter++;
 
 		// update transforms
@@ -128,13 +130,13 @@ namespace Cog {
 
 		for (auto it = children.begin(); it != children.end(); ++it) {
 			// render scene one by one
-			Node* scene = (*it);
+			Node* sceneNode = (*it);
 
-			if (scene->GetRunningMode() != RunningMode::INVISIBLE &&
-				scene->GetRunningMode() != RunningMode::DISABLED) {
-				renderer->InitViewPort(scene->GetScene());
+			if (sceneNode->GetRunningMode() != RunningMode::INVISIBLE &&
+				sceneNode->GetRunningMode() != RunningMode::DISABLED) {
+				renderer->InitViewPort(sceneNode->GetScene());
 				renderer->ClearCounters();
-				scene->Draw(delta, absolute);
+				sceneNode->Draw(delta, absolute);
 				renderer->Render();
 			}
 		}

@@ -8,14 +8,10 @@ namespace Cog {
 
 	using namespace std;
 
-	typedef unsigned char BYTE;
-	typedef unsigned int DWORD;
-	typedef unsigned short WORD;
-
 	class NetReader {
 	private:
-		BYTE* buffer;
-		BYTE* current;
+		tBYTE* buffer;
+		tBYTE* current;
 		unsigned bufferLength;
 		unsigned bitOffset;
 		bool external;
@@ -23,14 +19,14 @@ namespace Cog {
 	public:
 
 		NetReader(unsigned bytes) {
-			this->buffer = new BYTE[bytes];
+			this->buffer = new tBYTE[bytes];
 			this->bufferLength = bytes*8;
 			this->bitOffset = 0;
 			this->current = buffer;
 			this->external = false;
 		}
 
-		NetReader(BYTE* data, unsigned bytes) {
+		NetReader(tBYTE* data, unsigned bytes) {
 			this->buffer = data;
 			this->bufferLength = bytes*8;
 			this->bitOffset = 0;
@@ -50,26 +46,26 @@ namespace Cog {
 			return output;
 		}
 
-		void ReadByte(BYTE& value);
+		void ReadByte(tBYTE& value);
 
-		inline BYTE ReadByte() {
-			BYTE output = 0;
+		inline tBYTE ReadByte() {
+			tBYTE output = 0;
 			ReadByte(output);
 			return output;
 		}
 
-		void ReadWord(WORD& value);
+		void ReadWord(tWORD& value);
 
-		inline WORD ReadWord() {
-			WORD output = 0;
+		inline tWORD ReadWord() {
+			tWORD output = 0;
 			ReadWord(output);
 			return output;
 		}
 
-		void ReadDWord(DWORD& value);
+		void ReadDWord(tDWORD& value);
 
-		inline DWORD ReadDWord() {
-			DWORD output = 0;
+		inline tDWORD ReadDWord() {
+			tDWORD output = 0;
 			ReadDWord(output);
 			return output;
 		}
@@ -82,18 +78,18 @@ namespace Cog {
 			return output;
 		}
 
-		void ReadBytes(BYTE* data, unsigned size);
+		void ReadBytes(tBYTE* data, unsigned size);
 
-		BYTE* ReadBytes(unsigned size) {
-			BYTE* output = new BYTE[size];
+		tBYTE* ReadBytes(unsigned size) {
+			tBYTE* output = new tBYTE[size];
 			ReadBytes(output, size);
 			return output;
 		}
 
-		void ReadDWords(DWORD* data, unsigned size);
+		void ReadDWords(tDWORD* data, unsigned size);
 
-		DWORD* ReadDWords(unsigned size) {
-			DWORD* output = new DWORD[size];
+		tDWORD* ReadDWords(unsigned size) {
+			tDWORD* output = new tDWORD[size];
 			ReadDWords(output, size);
 			return output;
 		}
@@ -108,11 +104,11 @@ namespace Cog {
 
 		string ReadString();
 
-		BYTE* GetBuffer() {
+		tBYTE* GetBuffer() {
 			return buffer;
 		}
 
-		BYTE* GetActualPointer() {
+		tBYTE* GetActualPointer() {
 			return current;
 		}
 

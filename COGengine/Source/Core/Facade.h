@@ -5,6 +5,7 @@
 #include "InputAct.h"
 #include "SoundFile.h"
 #include "SheetAnim.h"
+#include "Definitions.h"
 
 namespace Cog {
 
@@ -26,6 +27,7 @@ namespace Cog {
 
 	// =================== COGENGINE ====================
 	int CogGetFrameCounter();
+	uint64 CogGetAbsoluteTime();
 
 	// =================== MENVIRONMENT ====================
 	void CogAddSound(spt<Sound> sound);
@@ -54,6 +56,9 @@ namespace Cog {
 	void CogSendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
 	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 
+	void CogSendDirectMessageToListener(Scene* scene, Msg& msg, int targetId);
+	void CogSendMessageToListeners(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
+	void CogSendDirectMessageToListener(Scene* scene, StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 	// =================== MLOGGER =========================
 
 	void CogLogError(const char* module, const char* format, ...);

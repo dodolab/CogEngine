@@ -82,7 +82,7 @@ namespace Cog {
 
 		this->scenes.push_back(scene);
 
-		MLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
+		COGLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
 		scene->GetSceneNode()->SubmitChanges(true);
 	}
 
@@ -94,8 +94,8 @@ namespace Cog {
 		vector<MsgListener*>& listeners = msgListeners[action];
 		listeners.push_back(listener);
 		
-		if (this->actualScene != nullptr) {
-			this->actualScene->RegisterListener(action, listener);
+		for (Scene* sc : this->scenes) {
+			sc->RegisterListener(action, listener);
 		}
 	}
 
@@ -107,8 +107,8 @@ namespace Cog {
 				if ((*it)->GetId() == listener->GetId()) {
 					listeners.erase(it);
 
-					if (this->actualScene != nullptr) {
-						this->actualScene->UnregisterListener(action, listener);
+					for (Scene* sc : this->scenes) {
+						sc->UnregisterListener(listener);
 					}
 
 					return true;
@@ -138,18 +138,25 @@ namespace Cog {
 		else {
 			// switch, using switch manager
 			auto manager = GETCOMPONENT(SceneSwitchManager);
+			
+			// if actual scene is dialog, close the dialog first
+			if (actualScene->GetSceneType() == SceneType::DIALOG) {
+				this->SwitchBackToScene(TweenDirection::NONE);
+			}
+
 			Node* from = actualScene->GetSceneNode();
+			
 
 			if (scene->IsLazyLoad() && !scene->Loaded()) {
 				// scene is lazy loaded -> run asynchronous loading process
 
 				auto async = new AsyncProcess(new SceneLoader(CogEngine::GetInstance().config, scene, tweenDir));
 
-				MLOGDEBUG("Stage", "Scene is lazy loaded!");
+				COGLOGDEBUG("Stage", "Scene is lazy loaded!");
 
 				// lazy load the scene
 				if (this->loadingScene != nullptr) {
-					MLOGDEBUG("Stage", "Loading progress scene instead");
+					COGLOGDEBUG("Stage", "Loading progress scene instead");
 
 					Node* to = loadingScene->GetSceneNode();
 					sceneStack.push(actualScene);
@@ -186,7 +193,7 @@ namespace Cog {
 			Node* to = scene->GetSceneNode();
 			actualScene = scene;
 
-			MLOGDEBUG("Stage", "Switching to previous scene");
+			COGLOGDEBUG("Stage", "Switching to previous scene");
 
 			manager->SwitchToScene(from, to, tweenDir);
 
@@ -200,7 +207,7 @@ namespace Cog {
 
 	void Stage::LoadScenesFromXml(spt<ofxXml> xml) {
 
-		MLOGDEBUG("Stage", "Loading scenes from XML");
+		COGLOGDEBUG("Stage", "Loading scenes from XML");
 
 		string initialScene = xml->getAttributex("initial", "");
 		string loading = xml->getAttributex("loading", "");

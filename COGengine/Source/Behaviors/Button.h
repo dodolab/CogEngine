@@ -41,9 +41,11 @@ namespace Cog {
 
 		}
 
-		void Init() {
+		void OnInit() {
 			RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED, ACT_STATE_CHANGED);
+		}
 
+		void OnStart() {
 			if (disabledImg && owner->HasState(stateDisabled)) {
 				owner->GetShape<spt<Image>>()->SetImage(disabledImg);
 			}

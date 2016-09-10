@@ -380,7 +380,7 @@ mojo = { \
  Update = function(delta, absolute) \
    globalFunc(12345) \
  end, \
- Init = function() \
+ OnInit = function() \
  end \
  } \
 mojo2 = Behavior() \
@@ -390,7 +390,7 @@ mojo3 = { \
  Update = function(delta, absolute) \
    globalFunc(555) \
  end, \
- Init = function() \
+ OnInit = function() \
  end \
  } \
 mojo4 = Behavior() \
@@ -438,7 +438,7 @@ mojo5:RegisterBehavior(next) "
 
 #define lua_sample " \
  test = { \
-   Init = function() \
+   OnInit = function() \
      test.owner:SetState(StringHash(\"TEST\")) \
      test.owner:AddAttrInt(StringHash(\"TEST_ATTR\"), 10) \
    end, \

@@ -16,17 +16,37 @@ namespace Cog {
 	*
 	*/
 	class Behavior : public MsgListener {
-		OBJECT_VIRTUAL()
-		PROTOTYPE_VIRTUAL_INIT(Behavior)
+	public: 
+		virtual string GetClassName() {
+			return typeid(*this).name();
+		}
+
+		virtual Behavior* CreatePrototype() {
+			return nullptr; 
+		}
+
+		virtual Behavior* CreatePrototype(Setting& setting) {
+			return this->CreatePrototype();
+		}
+
+		/**
+		* Gets maximal number the specific behavior the node could contain
+		* May be overidden for specific purposes
+		*/
+		virtual int GetMaxCount() {
+			return INT_MAX;
+		}
 
 	protected:
 		// owner node
 		Node* owner;
 		// indicator if this behavior has ended
-		bool ended = false;
+		bool finished = false;
 		// indicator, if this behavior has been initialized
 		bool initialized = false;
 		bool isExternal = false;
+		bool started = false;
+		bool removeWhenFinish = false;
 
 		/**
 		* Creates a new behavior
@@ -46,10 +66,25 @@ namespace Cog {
 		* Any attribute that is owned only by specific behavior should
 		* be created here
 		*/
-		virtual void Init() {
-
+		void Init() {
+			if (!initialized) {
+				this->finished = false;
+				this->OnInit();
+				this->initialized = true;
+			}
 		}
 
+		void Start() {
+			this->finished = false;
+			this->OnStart();
+			this->started = true;
+		}
+
+
+		/**
+		* Finishes the behavior
+		*/
+		void Finish();
 		/**
 		* Gets the owner node
 		*/
@@ -58,50 +93,38 @@ namespace Cog {
 		}
 
 
-
-		/**
-		* Returns true, if the behavior has ended
-		*/
-		bool Ended() {
-			return ended;
-		}
-
-		/**
-		* Finishes the behavior
-		*/
-		void Finish() {
-			ended = true;
-			SendMessageToListeners(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
-		}
-
-		/**
-		* Restarts the behavior
-		*/
-		void Restart() {
-			ended = false;
-			Init();
-		}
-
 		/**
 		* Gets indicator, if this behavior has been initialized
 		*/
-		bool GetIsInitialized() {
+		bool IsInitialized() {
 			return initialized;
-		}
-
-		/**
-		* Sets the indicator, if this behavior has been initialized
-		*/
-		void SetIsInitialized(bool isInitialized) {
-			this->initialized = isInitialized;
 		}
 
 		bool IsExternal() {
 			return isExternal;
 		}
+
+		/**
+		* Returns true, if the behavior has ended
+		*/
+		bool IsFinished() {
+			return finished;
+		}
+
+		bool IsStarted() {
+			return started;
+		}
 	
 		void SetIsExternal(bool ext) {
 			this->isExternal = ext;
+		}
+
+		bool RemoveWhenFinish() {
+			return this->removeWhenFinish;
+		}
+
+		void SetRemoveWhenFinish(bool remove) {
+			this->removeWhenFinish = remove;
 		}
 
 		// allow to access Node private members
@@ -109,11 +132,22 @@ namespace Cog {
 
 	protected:
 	
+		virtual void OnInit() {
+
+		}
+
+		virtual void OnStart() {
+
+		}
+
+		virtual void OnFinish() {
+
+		}
+
 		void RegisterListening(StringHash action1);
 		void RegisterListening(StringHash action1, StringHash action2);
 		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
 		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
-
 
 
 		/**

@@ -15,18 +15,14 @@ namespace Cog {
 
 	void SceneSwitchManager::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_TWEEN_ENDED) && waitingForTween) {
-			MLOGDEBUG("SceneSwitchManager", "Scene %s switched", to->GetTag().c_str());
+			COGLOGDEBUG("SceneSwitchManager", "Scene %s switched", to->GetTag().c_str());
 
 			to->SetRunningMode(RUNNING);
-			
-			if (to->GetScene()->GetSceneType() != SceneType::DIALOG) {
-				from->SetRunningMode(DISABLED);
-				from->GetScene()->Dispose();
-			}
-
+		
 			waitingForTween = false;
 
-			SendMessageToListeners(ACT_SCENE_SWITCHED, 0, nullptr, to);
+			StopSceneAndNotify();
+
 			CheckWaitingTweens();
 		}
 	}
@@ -66,14 +62,14 @@ namespace Cog {
 	* @param tweenDir tween direction
 	*/
 	void SceneSwitchManager::SwitchToScene(Node* from, Node* to, TweenDirection tweenDir) {
-		MLOGDEBUG("SceneSwitchManager", "Switching from %s to %s", from->GetTag().c_str(), to->GetTag().c_str());
+		COGLOGDEBUG("SceneSwitchManager", "Switching from %s to %s", from->GetTag().c_str(), to->GetTag().c_str());
 
 		if (waitingForTween) {
-			MLOGDEBUG("SceneSwitchManager", "-another switch in progress; pushing context");
+			COGLOGDEBUG("SceneSwitchManager", "-another switch in progress; pushing context");
 			PushSceneSwitch(from, to, tweenDir, true);
 		}
 		else if (!waitingTweens.empty()) {
-			MLOGDEBUG("SceneSwitchManager", "-another switches on the stack; pushing context");
+			COGLOGDEBUG("SceneSwitchManager", "-another switches on the stack; pushing context");
 			PushSceneSwitch(from, to, tweenDir, true);
 		}
 		else {
@@ -93,13 +89,15 @@ namespace Cog {
 
 		if (tweenDir == TweenDirection::NONE) {
 			// switch immediately
-			from->SetRunningMode(isDialog  ? PAUSED_ALL : DISABLED);
+			
 			to->SetRunningMode(RUNNING);
 			// set viewport to proper position
 			to->GetScene()->GetViewPortOffset().x = 0;
 			to->GetScene()->GetViewPortOffset().y = 0;
-			SendMessageToListeners(ACT_SCENE_SWITCHED, 0, nullptr, to);
-			
+
+			StopSceneAndNotify();
+
+
 			CheckWaitingTweens();
 		}
 		else {
@@ -122,10 +120,25 @@ namespace Cog {
 		}
 	}
 
+	void SceneSwitchManager::StopSceneAndNotify() {
+		// run the first scene until message is sent
+		from->SetRunningMode(RUNNING);
+		CogSendMessageToListeners(from->GetScene(), ACT_SCENE_SWITCHED, 0, nullptr, to, id);
+		CogSendMessageToListeners(to->GetScene(), ACT_SCENE_SWITCHED, 0, nullptr, to, id);
+
+		if (to->GetScene()->GetSceneType() != SceneType::DIALOG) {
+			from->SetRunningMode(DISABLED);
+			from->GetScene()->Dispose();
+		}
+		else {
+			from->SetRunningMode(PAUSED_ALL);
+		}
+	}
+
 	void SceneSwitchManager::CheckWaitingTweens() {
 		// switch to waiting scenes
 		if (!waitingTweens.empty()) {
-			MLOGDEBUG("SceneSwitchManager", "--reading next switch context from the stack");
+			COGLOGDEBUG("SceneSwitchManager", "--reading next switch context from the stack");
 
 			TweenContext ctx = waitingTweens.front();
 			if (ctx.readyToGo) {

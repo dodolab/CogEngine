@@ -50,10 +50,10 @@ namespace Cog {
 			this->repeat = repeat;
 		}
 
-		void Init() {
+		void OnStart() {
 			if (actual != nullptr) {
 				SetOwner(actual, owner);
-				actual->Restart();
+				actual->Start();
 			}
 		}
 
@@ -65,22 +65,21 @@ namespace Cog {
 		void Update(const uint64 delta, const uint64 absolute) {
 
 			if (actual != nullptr) actual->Update(delta, absolute);
-			if (actual->Ended()) {
+			if (actual->IsFinished()) {
 				// get next behavior
 				auto it = std::find(animations.begin(), animations.end(), actual);
 
 				if ((it + 1) != animations.end()) {
 					actual = *(++it);
 					SetOwner(actual, owner);
-					actual->Restart();
+					actual->Start();
 				}
 				else if (repeat) {
 					actual = animations[0];
-					Init();
+					Start();
 				}
 				else {
 					Finish();
-
 				}
 			}
 		}

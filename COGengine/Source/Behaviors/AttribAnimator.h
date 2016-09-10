@@ -35,11 +35,10 @@ namespace Cog {
 			contextStack.SetRootNode(resCache->GetAnimation(animation));
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!contextStack.GetRootNode()) {
 				CogLogError("Anim", "Animation cant' run, entity is null");
-				ended = true;
-				return;
+				Finish();
 			}
 		}
 

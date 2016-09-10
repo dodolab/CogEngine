@@ -21,15 +21,26 @@ namespace Cog {
 
 	public:
 
-		void Init() {
+		void OnInit() {
+			for (auto& globalState : globalStates) {
+				SetOwner(globalState, owner);
+				globalState->Init();
+			}
+
+			for (auto& localState : localStates) {
+				SetOwner(localState.second, owner);
+				localState.second->Init();
+			}
+		}
+
+		void OnStart() {
 
 			for (auto& globalState : globalStates) {
-				globalState->Init();
-				globalState->SetIsInitialized(true);
+				globalState->Start();
 			}
 
 			if (currentState != nullptr) {
-				InitState(currentState);
+				StartState(currentState);
 			}
 		}
 
@@ -55,8 +66,8 @@ namespace Cog {
 			globalStates.push_back(globalState);
 			globalState->SetParent(this);
 
-			if (this->initialized && !globalState->GetIsInitialized()) {
-				InitState(globalState);
+			if (this->initialized && !globalState->IsInitialized()) {
+				globalState->Init();
 			}
 		}
 		
@@ -71,8 +82,8 @@ namespace Cog {
 			localStates[localState->GetState()] = localState;
 			localState->SetParent(this);
 
-			if (this->initialized && !localState->GetIsInitialized()) {
-				InitState(localState);
+			if (this->initialized && !localState->IsInitialized()) {
+				localState->Init();
 			}
 		}
 
@@ -82,7 +93,7 @@ namespace Cog {
 		void ChangeState(State* state) {
 			this->previousState = currentState;
 
-			if (this->currentState != nullptr) this->currentState->LeaveState();
+			if (this->currentState != nullptr) this->currentState->Finish();
 
 			this->currentState = state;
 
@@ -93,11 +104,11 @@ namespace Cog {
 
 			state->SetParent(this);
 
-			if (this->initialized && !state->GetIsInitialized()) {
-				InitState(state);
+			if (this->initialized && !state->IsInitialized()) {
+				state->Init();
 			}
 
-			this->currentState->EnterState();
+			state->Start();
 		}
 
 		/**
@@ -130,10 +141,9 @@ namespace Cog {
 		}
 
 	protected:
-		void InitState(State* state) {
+		void StartState(State* state) {
 			SetOwner(state, owner);
-			state->Init();
-			state->SetIsInitialized(true);
+			state->Start();
 		}
 	};
 

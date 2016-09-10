@@ -36,14 +36,6 @@ namespace Cog {
 		void SetParent(StateMachine* parent) {
 			this->parent = parent;
 		}
-
-		virtual void EnterState() {
-
-		}
-
-		virtual void LeaveState() {
-
-		}
 	};
 
 }// namespace

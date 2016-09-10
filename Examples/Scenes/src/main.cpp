@@ -20,7 +20,7 @@ public:
 		this->configFiles = configFiles;
 	}
 
-	void Init() {
+	void OnInit() {
 
 	}
 

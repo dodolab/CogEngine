@@ -29,7 +29,7 @@ namespace Cog {
 
 	Node::~Node() {
 
-		MLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
+		COGLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
 		// move elements from collection to insert so they can be removed from classic collections
 		InsertElementsForAdding(false);
 
@@ -102,7 +102,7 @@ namespace Cog {
 			// update behaviors
 			for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
 				Behavior* beh = *it;
-				if (!beh->ended && (beh->GetListenerState() == ListenerState::ACTIVE_ALL
+				if (!beh->IsFinished() && (beh->GetListenerState() == ListenerState::ACTIVE_ALL
 					|| beh->GetListenerState() == ListenerState::ACTIVE_UPDATES)) {
 					beh->Update(delta, absolute);
 				}
@@ -144,7 +144,7 @@ namespace Cog {
 
 	bool Node::AddBehavior(Behavior* beh) {
 
-		MLOGDEBUG("Node", "Adding behavior %s into node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
+		COGLOGDEBUG("Node", "Adding behavior %s into node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
 		behaviorsToAdd.push_back(beh);
 
 		return true;
@@ -155,7 +155,7 @@ namespace Cog {
 
 		bool result = behaviors.end() != found;
 		if (result) {
-			MLOGDEBUG("Node", "Removing behavior %s from node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
+			COGLOGDEBUG("Node", "Removing behavior %s from node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
 			// behavior found
 			// check if there isn't already such behavior marked for deleting
 			for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it) {
@@ -194,7 +194,7 @@ namespace Cog {
 
 	bool Node::AddChild(Node* child) {
 
-		MLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag != nullptr ? 
+		COGLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag != nullptr ? 
 			child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
 		auto existing = std::find(children.begin(), children.end(), child);
 		if (existing != children.end()) {
@@ -212,7 +212,7 @@ namespace Cog {
 
 		bool result = children.end() != found;
 		if (result) {
-			MLOGDEBUG("Node", "Removing child %d (%s) from node %d (%s)", child->id, child->tag != nullptr ? 
+			COGLOGDEBUG("Node", "Removing child %d (%s) from node %d (%s)", child->id, child->tag != nullptr ? 
 				child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
 			// check if there isn't already such child marked for deleting
 			for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it) {
@@ -268,6 +268,19 @@ namespace Cog {
 		// insert behaviors
 		for (auto it = behaviorsToAdd.begin(); it != behaviorsToAdd.end(); ++it) {
 			Behavior* beh = (*it);
+
+			if (beh->GetMaxCount() != INT_MAX) {
+				// check the number of already stored behavior
+				int stored = 0;
+				for (auto cBeh : behaviors) {
+					if (typeid(*cBeh).name() == typeid(*beh).name()) stored++;
+				}
+				if (stored >= beh->GetMaxCount()) {
+					CogLogError("Node", "Attempt to add more behaviors of type %s than allowed; max number is %d", beh->GetClassName().c_str(), beh->GetMaxCount());
+					continue;
+				}
+			}
+
 			beh->owner = this;
 			behaviors.push_back(beh);
 
@@ -278,7 +291,7 @@ namespace Cog {
 
 			// initialize
 			beh->Init();
-			beh->SetIsInitialized(true);
+			beh->Start();
 		}
 		behaviorsToAdd.clear();
 	}

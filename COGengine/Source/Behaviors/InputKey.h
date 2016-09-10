@@ -34,7 +34,7 @@ namespace Cog {
 
 		}
 
-		void Init() {
+		void OnStart() {
 			if (!owner->HasAttr(ATTR_ACTIONS)) {
 				owner->AddAttr(ATTR_ACTIONS, Flags());
 			}

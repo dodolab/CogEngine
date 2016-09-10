@@ -57,6 +57,8 @@ namespace Cog {
 
 		void ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir);
 
+		void StopSceneAndNotify();
+
 		void CheckWaitingTweens();
 	};
 

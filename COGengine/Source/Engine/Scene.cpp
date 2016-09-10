@@ -91,7 +91,7 @@ namespace Cog {
 
 	void Scene::SendMessage(Msg& msg, Node* actualNode) {
 
-		MLOGDEBUG("Messaging", "Message %s:%s", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
+		COGLOGDEBUG("Messaging", "Message %s:%s", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode != nullptr ? actualNode->GetTag().c_str() : "");
 
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
@@ -113,7 +113,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToListener(Msg& msg, int targetId) {
 
-		MLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to listener %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
 
 		Behavior* beh = FindBehaviorById(targetId);
 
@@ -128,7 +128,7 @@ namespace Cog {
 
 	void Scene::SendDirectMessageToNode(Msg& msg, int targetId) {
 
-		MLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
+		COGLOGDEBUG("Messaging", "Direct Message to node %s; target: %d", StringHash::GetStringValue(msg.GetAction()).c_str(), targetId);
 
 		Node* node = FindNodeById(targetId);
 
@@ -255,7 +255,7 @@ namespace Cog {
 
 	void Scene::LoadFromXml(spt<ofxXml> xml) {
 
-		MLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
+		COGLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
 
 		string type = xml->getAttributex("type", "scene");
 
@@ -308,7 +308,7 @@ namespace Cog {
 			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
 				(beh->GetId() != msg.GetBehaviorId())) {
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
-					MLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", StringHash::GetStringValue(msg.GetAction()).c_str(), beh->GetClassName().c_str(), beh->GetId());
+					COGLOGDEBUG("Messaging", "Sending msg  %s; to behavior %s with id %d", StringHash::GetStringValue(msg.GetAction()).c_str(), beh->GetClassName().c_str(), beh->GetId());
 					beh->OnMessage(msg);
 				}
 			}
@@ -378,7 +378,7 @@ namespace Cog {
 	}
 
 	bool Scene::AddNode(Node* node) {
-		MLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
+		COGLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found == allNodes.end()) {
 			allNodes.push_back(node);
@@ -389,14 +389,14 @@ namespace Cog {
 	}
 
 	void Scene::RemoveNode(Node* node) {
-		MLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
+		COGLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found != allNodes.end()) allNodes.erase(found);
 	}
 
 	bool Scene::AddBehavior(Behavior* beh) {
 		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		MLOGDEBUG("Scene", "Adding behavior %s to node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+		COGLOGDEBUG("Scene", "Adding behavior %s to node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found == allBehaviors.end()) {
 			allBehaviors.push_back(beh);
@@ -408,7 +408,7 @@ namespace Cog {
 
 	void Scene::RemoveBehavior(Behavior* beh) {
 		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		MLOGDEBUG("Scene", "Removing behavior %s from node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+		COGLOGDEBUG("Scene", "Removing behavior %s from node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
 
 		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
 		if (found != allBehaviors.end()) allBehaviors.erase(found);

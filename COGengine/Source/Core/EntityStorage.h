@@ -70,7 +70,7 @@ namespace Cog {
 			StringHash key = value->GetClassName();
 
 			if (ExistsComponent(key)) {
-				MLOGDEBUG("ENTITY_STORAGE", "Warning, attempt to insert already inserted component %s ",value->GetClassName().c_str());
+				COGLOGDEBUG("ENTITY_STORAGE", "Warning, attempt to insert already inserted component %s ",value->GetClassName().c_str());
 				RemoveComponent(key);
 			}
 

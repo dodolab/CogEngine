@@ -16,11 +16,11 @@ namespace Cog {
 		scr->StoreBehavior(this);
 	}
 
-	void BehaviorLua::Init() {
+	void BehaviorLua::OnInit() {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
-		auto init = ref["Init"];
+		auto init = ref["OnInit"];
 		COGASSERT(!init.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		init();
 	}

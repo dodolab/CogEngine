@@ -23,6 +23,7 @@ namespace Cog
 	class Scene
 	{
 	private:
+		// unique name
 		string name;
 		// settings
 		Settings settings;
@@ -62,7 +63,7 @@ namespace Cog
 			return sceneNode;
 		}
 
-		string GetName() {
+		const string GetName() const {
 			return name;
 		}
 
@@ -223,6 +224,22 @@ namespace Cog
 		* Loads scene from xml
 		*/
 		void LoadFromXml(spt<ofxXml> xml);
+
+		bool operator==(string name) {
+			return this->name.compare(name) == 0;
+		}
+
+		bool operator==(const Scene& other) {
+			return other.GetName().compare(name) == 0;
+		}
+
+		bool operator!=(int id) {
+			return this->name.compare(name) != 0;
+		}
+
+		bool operator!=(const Scene& other) {
+			return other.GetName().compare(name) != 0;
+		}
 
 		private:
 

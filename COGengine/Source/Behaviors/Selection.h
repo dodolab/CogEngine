@@ -28,9 +28,12 @@ namespace Cog {
 
 		}
 
-		void Init() {
+		void OnInit() {
 			RegisterListening(ACT_STATE_CHANGED);
-			
+
+		}
+
+		void OnStart() {
 			if (owner->HasState(selectedState)) {
 				owner->GetShape<spt<Image>>()->SetImage(selectedImg);
 			}
