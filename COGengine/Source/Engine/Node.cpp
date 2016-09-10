@@ -261,6 +261,7 @@ namespace Cog {
 
 			// initialize
 			beh->Init();
+			beh->SetIsInitialized(true);
 		}
 		behaviorsToAdd.clear();
 
