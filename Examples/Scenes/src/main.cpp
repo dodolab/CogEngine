@@ -1,5 +1,5 @@
 #include "ofxCogMain.h"
-#include "AnimationLoader.h"
+#include "AnimSheetLoader.h"
 #include "BehaviorEnt.h"
 #include "NodeBuilder.h"
 #include "MultiAnim.h"
@@ -109,8 +109,8 @@ public:
 		auto resCache = GETCOMPONENT(ResourceCache);
 
 		// <animations>
-		auto anims = vector<spt<Anim>>();
-		spt<Anim> anim = spt<Anim>(new Anim("square_anim", "sheet_squares.png", "", 4, 2, 0, 3, 1, 0.2, 0, false));
+		auto anims = vector<spt<SheetAnim>>();
+		spt<SheetAnim> anim = spt<SheetAnim>(new SheetAnim("square_anim", "sheet_squares.png", "", 4, 2, 0, 3, 1, 0.2, 0, false));
 		resCache->StoreAnimation(anim);
 
 		// <spritesheets>

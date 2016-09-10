@@ -209,7 +209,8 @@
     <ClInclude Include="Source\Attributes\Collision.h" />
     <ClInclude Include="Source\Attributes\Pair.h" />
     <ClInclude Include="Source\Attributes\Shape.h" />
-    <ClInclude Include="Source\Behaviors\SheetAnim.h" />
+    <ClInclude Include="Source\Behaviors\AttribAnim.h" />
+    <ClInclude Include="Source\Behaviors\SheetAnimBeh.h" />
     <ClInclude Include="Source\Behaviors\Button.h" />
     <ClInclude Include="Source\Behaviors\Collider.h" />
     <ClInclude Include="Source\Behaviors\DelayAction.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="Source\Behaviors\MultiAnim.h" />
     <ClInclude Include="Source\Behaviors\RotateAnim.h" />
     <ClInclude Include="Source\Behaviors\Selection.h" />
+    <ClInclude Include="Source\Behaviors\AttribsAnim.h" />
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
@@ -254,12 +256,14 @@
     <ClInclude Include="Source\Engine\MsgListener.h" />
     <ClInclude Include="Source\Engine\Node.h" />
     <ClInclude Include="Source\Engine\Scene.h" />
+    <ClInclude Include="Source\Entities\AttrAnimSetEnt.h" />
     <ClInclude Include="Source\Entities\BehaviorEnt.h" />
     <ClInclude Include="Source\Entities\DEntity.h" />
     <ClInclude Include="Source\Entities\LayerEnt.h" />
+    <ClInclude Include="Source\Entities\AttrAnimEnt.h" />
     <ClInclude Include="Source\Entities\TransformEnt.h" />
-    <ClInclude Include="Source\Graphics\Anim.h" />
-    <ClInclude Include="Source\Graphics\AnimationLoader.h" />
+    <ClInclude Include="Source\Graphics\SheetAnim.h" />
+    <ClInclude Include="Source\Graphics\AnimSheetLoader.h" />
     <ClInclude Include="Source\Graphics\CollageTexture.h" />
     <ClInclude Include="Source\Graphics\MapLoader.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />

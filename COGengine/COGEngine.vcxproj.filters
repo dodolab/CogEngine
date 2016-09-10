@@ -201,9 +201,6 @@
     <ClInclude Include="Source\Core\Component.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\AnimationLoader.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\Flags.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
@@ -227,9 +224,6 @@
     </ClInclude>
     <ClInclude Include="Source\Misc\Utils.h">
       <Filter>Source\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\Anim.h">
-      <Filter>Source\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\MapLoader.h">
       <Filter>Source\Graphics</Filter>
@@ -306,9 +300,6 @@
     <ClInclude Include="Source\Core\Attr.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\SheetAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Entities\LayerEnt.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
@@ -365,6 +356,27 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Constants.h">
       <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entities\AttrAnimEnt.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\AttribsAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\AttribAnim.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entities\AttrAnimSetEnt.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\AnimSheetLoader.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\SheetAnim.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\SheetAnimBeh.h">
+      <Filter>Source\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,43 +2,45 @@
 
 #include "ofxCogCommon.h"
 #include "Component.h"
-#include "Anim.h"
+#include "SheetAnim.h"
 
 namespace Cog {
 
 	/**
 	* XML animation loader
 	*/
-	class AnimationLoader  {
+	class AnimSheetLoader  {
 
 	public:
 
 		/**
 		* Loads animation from xml
 		*/
-		void LoadAnimationsFromXml(spt<ofxXmlSettings> xml, vector<spt<Anim>>& rootAnims) {
+		void LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<SheetAnim>>& rootAnims) {
 
 				int numberOfAnims = xml->getNumTags("anim");
 				// referenced anims will be processed at second phase
-				map<string, Anim*> referencedAnims;
+				map<int, SheetAnim*> referencedAnims;
 
+				int actualAnimIndex = 0;
 				// phase 1: load not-referenced animations
 				for (int i = 0; i < numberOfAnims; i++) {
 
 					xml->pushTag("anim", i);
 					// load
-					spt<Anim> anim = spt<Anim>(CreateAnimationFromXml(xml, referencedAnims));
+					spt<SheetAnim> anim = spt<SheetAnim>(CreateAnimationFromXml(xml, referencedAnims, actualAnimIndex));
 					if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
 
 					rootAnims.push_back(anim);
 					xml->popTag();
 				}
 
+				actualAnimIndex = 0;
 				// phase 2: load referenced animations
 				for (int i = 0; i < numberOfAnims; i++) {
 
 					xml->pushTag("anim", i);
-					ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims);
+					ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims, actualAnimIndex);
 					xml->popTag();
 				}
 		}
@@ -51,18 +53,18 @@ namespace Cog {
 		* @param referencedAnims array that will be filled with animations that couldn't be load yet becase
 		* they reference to another animation
 		*/
-		Anim* CreateAnimationFromXml(spt<ofxXmlSettings> xml, map<string, Anim*>& referencedAnims) {
+		SheetAnim* CreateAnimationFromXml(spt<ofxXml> xml, map<int, SheetAnim*>& referencedAnims, int& actualAnimIndex) {
 
 			int innerAnimations = xml->getNumTags("anim");
 
-			Anim* anim = new Anim();
+			SheetAnim* anim = new SheetAnim();
 
 			// fill ref and name attribute
 			FillBaseAttributes(xml, anim);
 
 			if (anim->GetRef().length() != 0) {
 				// animation is referenced -> push it to the referencedAnims and return
-				referencedAnims[anim->GetName()] = anim;
+				referencedAnims[actualAnimIndex] = anim;
 				if (innerAnimations != 0) throw ConfigErrorException("Referenced animations mustn't have inner animations!");
 
 				return anim;
@@ -71,7 +73,7 @@ namespace Cog {
 				// children will be taken from referenced animation
 				for (int i = 0; i < innerAnimations; i++) {
 					xml->pushTag("anim", i);
-					spt<Anim> newAnim = spt<Anim>(CreateAnimationFromXml(xml, referencedAnims));
+					spt<SheetAnim> newAnim = spt<SheetAnim>(CreateAnimationFromXml(xml, referencedAnims, ++actualAnimIndex));
 					anim->GetChildren().push_back(newAnim);
 					xml->popTag();
 				}
@@ -86,7 +88,7 @@ namespace Cog {
 		/**
 		* Fills base attributes (ref and name)
 		*/
-		void FillBaseAttributes(spt<ofxXmlSettings> xml, Anim* anim) {
+		void FillBaseAttributes(spt<ofxXml> xml, SheetAnim* anim) {
 			anim->SetRef(xml->getAttribute(":", "ref", anim->GetRef()));
 			anim->SetName(xml->getAttribute(":", "name", anim->GetName()));
 		}
@@ -94,7 +96,7 @@ namespace Cog {
 		/**
 		* Fills other attributes
 		*/
-		void FillOtherAttributes(spt<ofxXmlSettings> xml, Anim* anim) {
+		void FillOtherAttributes(spt<ofxXml> xml, SheetAnim* anim) {
 			anim->SetSheetPath(xml->getAttribute(":", "sheet", anim->GetSheetPath()));
 			anim->SetFrames(xml->getAttribute(":", "frames", anim->GetFrames()));
 			if (anim->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", anim->GetName().c_str()));
@@ -112,20 +114,19 @@ namespace Cog {
 			anim->SetRepeat(xml->getAttribute(":", "repeat", anim->GetRepeat()));
 			if (anim->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", anim->GetName().c_str()));
 			anim->SetIsRevert(xml->getBoolAttribute(":", "revert", anim->GetIsRevert()));
-
 		}
 
 		/**
 		* Finds animation by name, in selected collection
 		*/
-		spt<Anim> FindAnimByName(string name, vector<spt<Anim>> anims) {
+		spt<SheetAnim> FindAnimByName(string name, vector<spt<SheetAnim>> anims) {
 			for (auto it = anims.begin(); it != anims.end(); ++it) {
-				spt<Anim> anim = (*it);
+				spt<SheetAnim> anim = (*it);
 				if (anim->GetName() == name) return anim;
 			}
 
 
-			return spt<Anim>();
+			return spt<SheetAnim>();
 		}
 
 		/**
@@ -135,8 +136,8 @@ namespace Cog {
 		* @rootAnimIndex index of root for actual XML scope
 		* @rootAnims list of all root animations
 		*/
-		void ProcessRefAnimationFromXml(spt<ofxXmlSettings> xml, map<string, Anim*>& referencedAnims,
-			int rootAnimIndex, vector<spt<Anim>>& rootAnims) {
+		void ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, SheetAnim*>& referencedAnims,
+			int rootAnimIndex, vector<spt<SheetAnim>>& rootAnims, int& actualAnimIndex) {
 
 			int innerAnimations = xml->getNumTags("anim");
 
@@ -147,20 +148,20 @@ namespace Cog {
 			if (ref.length() != 0) {
 				// got referenced animation
 
-				Anim* refAnim = referencedAnims[name];
+				SheetAnim* refAnim = referencedAnims[actualAnimIndex];
 
 				if (ref.find(".") == -1) {
 					// reference doesn't contain dot - it means that we can find its reference in THIS scope
-					spt<Anim> reference = rootAnims[rootAnimIndex]->FindChild(ref);
+					spt<SheetAnim> reference = rootAnims[rootAnimIndex]->FindChild(ref);
 
-					if (reference != spt<Anim>()) {
+					if (reference != spt<SheetAnim>()) {
 						// found reference
 						refAnim->GetParametersFromReference(reference);
 					}
 					else {
 						// reference anim doesn't contain dot, but it isn't in this scope... that means it must refer to some other root animation
-						spt<Anim> rootReference = FindAnimByName(ref, rootAnims);
-						if (rootReference == spt<Anim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
+						spt<SheetAnim> rootReference = FindAnimByName(ref, rootAnims);
+						if (rootReference == spt<SheetAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 						refAnim->GetParametersFromReference(rootReference);
 					}
 				}
@@ -168,9 +169,9 @@ namespace Cog {
 					// reference contains dot -> referenced animation should be in another scope
 					string rootAnimName = ref.substr(0, ref.find("."));
 					string subAnim = ref.substr(ref.find(".") + 1);
-					spt<Anim> root = FindAnimByName(rootAnimName, rootAnims);
-					spt<Anim> scopeAnim = root->FindChild(subAnim);
-					if (root == spt<Anim>() || scopeAnim == spt<Anim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
+					spt<SheetAnim> root = FindAnimByName(rootAnimName, rootAnims);
+					spt<SheetAnim> scopeAnim = root->FindChild(subAnim);
+					if (root == spt<SheetAnim>() || scopeAnim == spt<SheetAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 
 					refAnim->GetParametersFromReference(scopeAnim);
 				}
@@ -185,7 +186,7 @@ namespace Cog {
 				for (int i = 0; i < innerAnimations; i++) {
 					// use recursion
 					xml->pushTag("anim", i);
-					ProcessRefAnimationFromXml(xml, referencedAnims, rootAnimIndex, rootAnims);
+					ProcessRefAnimationFromXml(xml, referencedAnims, rootAnimIndex, rootAnims, ++actualAnimIndex);
 					xml->popTag();
 				}
 			}

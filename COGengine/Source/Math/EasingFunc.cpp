@@ -58,4 +58,16 @@ namespace Cog {
 		return (x < 0.5f) ? cosineIn(x * 2.0f) * 0.5f : 1 - cosineIn(2.0f - x * 2.0f) * 0.5f;
 	};
 
+	FadeFunction EasingManager::sinIn = [](float x) {
+		return sinf(x * HALF_PI);
+	};
+
+	FadeFunction EasingManager::sinOut = [](float x) {
+		return sinf((1 - x)*HALF_PI);
+	};
+
+	FadeFunction EasingManager::sinInOut = [](float x) {
+		return (x < 0.5f) ? sinIn(x * 2.0f) * 0.5f : 1 - sinIn(2.0f - x * 2.0f) * 0.5f;
+	};
+
 } // namespace

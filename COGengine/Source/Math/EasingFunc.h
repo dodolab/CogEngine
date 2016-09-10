@@ -27,6 +27,9 @@ namespace Cog {
 		static FadeFunction cosineIn;
 		static FadeFunction cosineOut;
 		static FadeFunction cosineInOut;
+		static FadeFunction sinIn;
+		static FadeFunction sinOut;
+		static FadeFunction sinInOut;
 		
 		static FadeFunction GetFadeFunction(string name) {
 			if (name.compare("linear") == 0) {
@@ -68,6 +71,16 @@ namespace Cog {
 			if (name.compare("cosine") == 0) {
 				return cosineInOut;
 			}
+			if (name.compare("sin_in") == 0) {
+				return sinIn;
+			}
+			if (name.compare("sin_out") == 0) {
+				return sinOut;
+			}
+			if (name.compare("sin") == 0) {
+				return sinInOut;
+			}
+
 
 			throw IllegalArgumentException(string_format("No such easing function : %s",name.c_str()));
 		}

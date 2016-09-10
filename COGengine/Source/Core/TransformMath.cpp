@@ -18,6 +18,7 @@ namespace Cog {
 		// refresh transform (recalculate from parent)
 		nodeTransform.CalcAbsTransform(parent->GetTransform());
 
+
 		node->SetTransform(nodeTransform);
 	}
 
@@ -43,7 +44,7 @@ namespace Cog {
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
 		outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
-		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth(), shape->GetHeight()) * entity.rotationOrigin * (scale); // multiply by abs scale
+		outputTrans.rotationCentroid = ofVec2f(shape->GetWidth(), shape->GetHeight()) * entity.rotationCentroid * (scale); // multiply by abs scale
 		outputTrans.rotation = entity.rotation;
 	}
 

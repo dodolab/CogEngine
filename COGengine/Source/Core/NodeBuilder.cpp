@@ -167,6 +167,11 @@ namespace Cog {
 			math.SetSizeToScreen(node, parent);
 		}
 
+		if (xml->pushTagIfExists("shape")) {
+			// load shape
+			LoadShapeFromXml(xml, node, scene);
+			xml->popTag();
+		}
 
 		// text must be loaded before transform
 		if (xml->pushTagIfExists("text")) {
@@ -191,11 +196,6 @@ namespace Cog {
 		}
 
 
-		if (xml->pushTagIfExists("shape")) {
-			// load shape
-			LoadShapeFromXml(xml, node, scene);
-			xml->popTag();
-		}
 
 		if (xml->tagExists("behavior")) {
 			int behaviors = xml->getNumTags("behavior");
@@ -255,25 +255,15 @@ namespace Cog {
 		node->AddBehavior(behavior);
 	}
 
-
 	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
+		RenderType renderType = RenderTypeConverter::StrToRenderType(type);
 
-
-		if (type.compare("image") == 0) {
+		if (renderType == RenderType::IMAGE) {
 			string img = xml->getAttributex("img", "");
 			this->SetImageNode(node, img);
 		}
-		else if (type.compare("rectangle") == 0) {
-			// todo
-		}
-		else if (type.compare("polygon") == 0) {
-			// todo
-		}
-		else if (type.compare("text") == 0) {
-			// todo
-		}
-		else if (type.compare("plane") == 0) {
+		else if (renderType == RenderType::PLANE) {
 			float width = 0;
 			float height = 0;
 
@@ -291,20 +281,16 @@ namespace Cog {
 			ofColor color = ofColor::fromHex(hexColor);
 			SetPlaneNode(node, size, color);
 		}
-		else if (type.compare("sprite") == 0) {
-
+		else if (renderType == RenderType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");
 
-			if(layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
+			if (layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
 
 			string spriteSet = xml->getAttributex("spriteset", "");
 			int row = xml->getAttributex("row", 0);
 			int column = xml->getAttributex("column", 0);
 
-			SetSpriteNode(scene, node, layer, spriteSet, row, column);			
-		}
-		else if (type.compare("multisprite") == 0) {
-			// todo
+			SetSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
 	}
 
