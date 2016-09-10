@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "CogEngine.h"
 #include "NodeBuilder.h"
+#include "SpriteSheet.h"
 
 namespace Cog {
 

@@ -4,7 +4,7 @@
 #include "SQLiteEntity.h"
 
 
-class ofxSQLTestEntity : public ofxSQLiteEntity {
+class ofxSQLTestEntity : public SQLiteEntity {
 protected:
 
 	void InternalCreate(ofxSQLiteInsert& insert) {
@@ -41,7 +41,7 @@ public:
 
 	}
 
-	ofxSQLTestEntity(ofxSQLite* sqlite) :ofxSQLiteEntity(sqlite) {
+	ofxSQLTestEntity(ofxSQLite* sqlite) :SQLiteEntity(sqlite) {
 		numVal = 0;
 		strVal = "";
 		boolVal = false;

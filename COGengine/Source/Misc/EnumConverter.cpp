@@ -35,9 +35,6 @@ namespace Cog {
 		return ShapeType::NONE;
 	}
 
-	/**
-	* Transforms string into TransformType enum
-	*/
 	TransformType EnumConverter::StrToMeasureType(string val) {
 		if (val.compare("direct") == 0) return TransformType::DIRECT;
 		else if (val.compare("diff") == 0) return TransformType::DIFF;
@@ -45,9 +42,6 @@ namespace Cog {
 		return TransformType::DIRECT;
 	}
 
-	/**
-	* Transforms string into AttributeType enum
-	*/
 	AttributeType EnumConverter::StrToAttributeType(string val) {
 		if (val.compare("pos_x") == 0) return AttributeType::POS_X;
 		else if (val.compare("pos_y") == 0) return AttributeType::POS_Y;
@@ -63,19 +57,6 @@ namespace Cog {
 		return AttributeType::COMMON;
 	}
 
-	CalcType EnumConverter::GetUnitValue(string val, float& floatVal) {
-		stringstream ss;
-		unsigned i;
-		for (i = 0; i < val.length(); i++) {
-			if (isdigit(val[i]) || val[i] == '.' || val[i] == '-') ss << val[i];
-			else break;
-		}
-
-		if (i != 0) floatVal = ofToFloat(ss.str());
-		return StrToCalcType(val.substr(i));
-	}
-
-
 	CalcType EnumConverter::StrToCalcType(string val) {
 		if (val.compare("r") == 0) return CalcType::PER;
 		else if (val.compare("gr") == 0) return CalcType::GRID;
@@ -83,12 +64,12 @@ namespace Cog {
 		else if (val.compare("un") == 0) return CalcType::ABS;
 		else if (val.empty()) return CalcType::LOC;
 
-		CogLogError("CalcTypeConverter", "Error! %s is not valid unit, expected [r, gr, rp, un] or empty", val.c_str());
+		CogLogError("EnumConverter", "Error! %s is not valid unit, expected [r, gr, rp, un] or empty", val.c_str());
 
 		return CalcType::LOC;
 	}
 
-	FadeFunction EnumConverter::GetFadeFunction(string name) {
+	FadeFunction EnumConverter::StrToFadeFunction(string name) {
 		if (name.compare("linear") == 0) {
 			return EasingFunc::linear;
 		}
@@ -138,8 +119,32 @@ namespace Cog {
 			return EasingFunc::sinInOut;
 		}
 
+		CogLogError("EnumConverter","No such easing function : %s", name.c_str());
+	}
 
-		throw IllegalArgumentException(string_format("No such easing function : %s", name.c_str()));
+	CalcType EnumConverter::GetUnitValue(string val, float& floatVal) {
+		stringstream ss;
+		unsigned i;
+		for (i = 0; i < val.length(); i++) {
+			if (isdigit(val[i]) || val[i] == '.' || val[i] == '-') ss << val[i];
+			else break;
+		}
+
+		if (i != 0) floatVal = ofToFloat(ss.str());
+		return StrToCalcType(val.substr(i));
+	}
+
+	ofColor EnumConverter::StrToColor(string col) {
+		int hexColor = ofHexToInt(col.substr(2));
+		float alpha = 255;
+
+		if (col.length() == 10) {
+			// get alpha
+			alpha = ofHexToInt(col.substr(8));
+		}
+
+		ofColor color = ofColor::fromHex(hexColor, alpha);
+		return color;
 	}
 
 } // namespace

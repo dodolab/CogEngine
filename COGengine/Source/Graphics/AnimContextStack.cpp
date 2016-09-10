@@ -3,8 +3,46 @@
 namespace Cog {
 
 
-	void AnimContextStack::SetRootNode(spt<CommonAnim> node) {
+	AnimContextStack::AnimContext::AnimContext(spt<GeneralAnim> node, bool isScopeReverted, float scopeSpeed, bool isRootNode) {
+
+		this->isRootNode = isRootNode;
+		this->actualLoop = 0;
+		this->node = node;
+		this->isScopeReverted = isScopeReverted;
+		this->scopeSpeed = scopeSpeed;
+
+		if (isScopeReverted) {
+			// start at end
+			this->actualChildIndex = node->GetChildren().size() - 1;
+		}
+		else {
+			// start at the beginning
+			this->actualChildIndex = 0;
+		}
+
+		RefreshProgress();
+	}
+
+	void AnimContextStack::AnimContext::RefreshProgress() {
+		if (IsChildReverted()) {
+			if (GetActualChild()->IsContinous()) {
+				// start from the end
+				this->actualProgress = GetActualChild()->GetDuration();
+			}
+			else {
+				// start from the beginning
+				this->actualProgress = GetActualChild()->GetDuration() - GetActualChild()->GetSpeed();
+			}
+		}
+		else {
+			this->actualProgress = 0;
+		}
+	}
+
+
+	void AnimContextStack::SetRootNode(spt<GeneralAnim> node) {
 		this->root = node;
+		
 		// set context
 		context = AnimContext(root, false, 1, true);
 
@@ -19,7 +57,7 @@ namespace Cog {
 
 	void AnimContextStack::MoveToNext(const uint64 delta, int fps) {
 
-		spt<CommonAnim> actualNode;
+		spt<GeneralAnim> actualNode;
 
 		do {
 
@@ -59,7 +97,7 @@ namespace Cog {
 	}
 
 
-	bool AnimContextStack::TryNextFrame(spt<CommonAnim> actualNode, const uint64 delta, int fps) {
+	bool AnimContextStack::TryNextFrame(spt<GeneralAnim> actualNode, const uint64 delta, int fps) {
 
 		float timeMultiplier = context.GetActualChild()->IsContinous() ? delta : delta / ((float)(1000 / fps));
 
@@ -77,7 +115,7 @@ namespace Cog {
 	}
 
 
-	bool AnimContextStack::TryChildren(spt<CommonAnim> actualNode) {
+	bool AnimContextStack::TryChildren(spt<GeneralAnim> actualNode) {
 
 		if (actualNode->GetChildren().size() != 0) {
 			// node has children -> push context and go deeper
@@ -91,7 +129,7 @@ namespace Cog {
 		else return false;
 	}
 
-	bool AnimContextStack::TryNextLoop(spt<CommonAnim> actualNode, const uint64 delta, int fps) {
+	bool AnimContextStack::TryNextLoop(spt<GeneralAnim> actualNode, const uint64 delta, int fps) {
 
 		float timeMultiplier = context.GetActualChild()->IsContinous() ? delta : delta / ((float)(1000 / fps));
 

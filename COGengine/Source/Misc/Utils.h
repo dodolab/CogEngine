@@ -13,15 +13,14 @@ using namespace std;
 namespace Cog {
 
 
-	// compares two floats with error tolerance
+	// ======================== GLOBAL HELPER METHODS ==============================
+
+	/**
+	* Compares two floats with error tolerance
+	*/
 	inline bool isEqual(float a, float b)
 	{
-		if (fabs(a - b) < 1E-12)
-		{
-			return true;
-		}
-
-		return false;
+		return fabs(a - b) < 1E-12;
 	}
 
 	/**
@@ -34,12 +33,23 @@ namespace Cog {
 	*/
 	void spaces(int howMany, ostream& ss);
 
+	/**
+	* Splits string
+	*/
 	vector<string> split_string(string str, string delimiter);
 
-	ofColor StringToColor(string col);
-
+	/**
+	* Returns true, if it is proper time to execute an action according to the frequency 
+	* the action should be executed
+	* @param lastTime the last time the action has been executed
+	* @param actualTime current time
+	* @param frequency the frequency the action should be executed
+	*/
 	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency);
 
+	/**
+	* Combines values into the hash
+	*/
 	inline int HashCombine(int hash, int value) {
 		return (hash + (324723947 + value)) ^ 93485734985;
 	}

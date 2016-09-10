@@ -5,6 +5,7 @@
 #include "MultiSelection.h"
 #include "Scene.h"
 #include "EnumConverter.h"
+#include "SpriteSheet.h"
 
 namespace Cog {
 
@@ -259,7 +260,7 @@ namespace Cog {
 		float size = xml->getAttributex("size", 1.0);
 		string value = xml->getValuex("");
 		string colorStr = xml->getAttributex("color", "0x000000");
-		ofColor color = StringToColor(colorStr);
+		ofColor color = EnumConverter::StrToColor(colorStr);
 
 		SetTextNode(node, font, size, color, value);
 	}
@@ -299,7 +300,7 @@ namespace Cog {
 
 			ofVec2f size = ofVec2f(width, height);
 			string colorStr = xml->getAttributex("color", "0x000000");
-			ofColor color = StringToColor(colorStr);
+			ofColor color = EnumConverter::StrToColor(colorStr);
 			bool noFill = xml->getBoolAttributex("no_fill", false);
 			SetPlaneNode(node, size, color, noFill);
 		}
@@ -316,7 +317,7 @@ namespace Cog {
 		}
 		else if (renderType == ShapeType::BOUNDING_BOX) {
 			string colorStr = xml->getAttributex("color", "0x000000");
-			ofColor color = StringToColor(colorStr);
+			ofColor color = EnumConverter::StrToColor(colorStr);
 
 			bool renderable = xml->getBoolAttributex("renderable", false);
 			float margin = xml->getAttributex("margin", 0.0f);

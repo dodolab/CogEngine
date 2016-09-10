@@ -6,6 +6,9 @@ namespace Cog {
 
 	class Node;
 
+	/**
+	* Node wrapper for Lua script
+	*/
 	class NodeLua {
 	public:
 		Node* node;

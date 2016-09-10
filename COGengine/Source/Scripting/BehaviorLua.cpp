@@ -9,8 +9,10 @@ using namespace luabridge;
 namespace Cog {
 
 	BehaviorLua::BehaviorLua() {
-		// objects allocated in lua always have to be external (aren't deallocated in Node's destructor)
+		// objects allocated in lua always have to be 
+		//external (they aren't deallocated in Node's destructor)
 		this->isExternal = true; 
+
 		auto scr = GETCOMPONENT(LuaScripting);
 		L = scr->GetLua();
 		scr->StoreBehavior(this);

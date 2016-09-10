@@ -15,7 +15,7 @@ namespace Cog {
 
 
 	void Renderer::AddTileLayer(spt<ofImage> img, string name, int bufferSize, int zindex) {
-		renderer->loadTexture(&img->getTexture(), name, bufferSize, zindex);
+		renderer->LoadTexture(&img->getTexture(), name, bufferSize, zindex);
 		rendererLayers.push_back(name);
 	}
 
@@ -23,7 +23,7 @@ namespace Cog {
 		auto layer = find(rendererLayers.begin(), rendererLayers.end(), name);
 		if (layer != rendererLayers.end()) rendererLayers.erase(layer);
 
-		renderer->clearTexture(name);
+		renderer->ClearTexture(name);
 	}
 
 	void Renderer::ClearCounters() {
@@ -116,7 +116,7 @@ namespace Cog {
 		if (rendererLayers.size() != 0) {
 
 			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
-				renderer->clearCounters((*it));
+				renderer->ClearCounters((*it));
 			}
 
 			for (auto it = zIndexSheetBuffer.begin(); it != zIndexSheetBuffer.end(); ++it) {
@@ -146,7 +146,7 @@ namespace Cog {
 	
 			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 			ofFill();
-			renderer->draw();
+			renderer->Draw();
 		}
 		
 		COGMEASURE_END("RENDER_LAYERS");
@@ -248,7 +248,7 @@ namespace Cog {
 		spt<SpriteShape> shape = static_pointer_cast<SpriteShape>(owner->GetShape());
 		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
-		renderer->setActualBuffer(shape->GetLayerName());
+		renderer->SetActualBuffer(shape->GetLayerName());
 
 		drawingTile.width = sprite.GetWidth();
 		drawingTile.height = sprite.GetHeight();
@@ -262,7 +262,7 @@ namespace Cog {
 		drawingTile.scaleX = trans.absScale.x;
 		drawingTile.scaleY = trans.absScale.y;
 		
-		renderer->addTile(drawingTile);
+		renderer->AddTile(drawingTile);
 	}
 
 	void Renderer::RenderMultiSprite(Node* owner) {
@@ -270,7 +270,7 @@ namespace Cog {
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
 		spt<MultiSpriteShape> shape = static_pointer_cast<MultiSpriteShape>(owner->GetShape());
-		renderer->setActualBuffer(shape->GetLayerName());
+		renderer->SetActualBuffer(shape->GetLayerName());
 		auto& sprites = shape->GetSprites();
 
 		for (auto& spr : sprites) {
@@ -291,7 +291,7 @@ namespace Cog {
 			drawingTile.scaleX = trans.absScale.x;
 			drawingTile.scaleY = trans.absScale.y;
 			
-			renderer->addTile(drawingTile);
+			renderer->AddTile(drawingTile);
 		}
 
 		COGMEASURE_END("RENDER_PREPARE_MULTISPRITE");

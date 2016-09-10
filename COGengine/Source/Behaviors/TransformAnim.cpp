@@ -20,7 +20,7 @@ namespace Cog {
 
 		string easing = setting.GetItemVal("easefunc");
 		if (!easing.empty()) {
-			this->fadeFunction = EnumConverter::GetFadeFunction(easing);
+			this->fadeFunction = EnumConverter::StrToFadeFunction(easing);
 		}
 	}
 

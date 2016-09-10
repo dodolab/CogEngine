@@ -20,12 +20,12 @@ namespace Cog {
 		map<int, vector<Node*>> zIndexSheetBuffer;
 
 		SpriteSheetRenderer* renderer = nullptr;
-		Tile drawingTile;
+		SpriteTile drawingTile;
 		vector<string> rendererLayers;
 
 	public:
 		Renderer() {
-			drawingTile  = Tile();
+			drawingTile  = SpriteTile();
 		}
 
 		void OnInit();

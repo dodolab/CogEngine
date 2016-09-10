@@ -30,6 +30,14 @@ namespace Cog {
 			: width(width), height(height) {}
 
 
+		int GetWidth() const {
+			return width;
+		}
+
+		int GetHeight() const {
+			return height;
+		}
+
 		/**
 		* Adds a new block at selected position that can't be crossed
 		*/
@@ -44,6 +52,11 @@ namespace Cog {
 		* Inserts a rectangle area into grid that couldn't be crossed
 		*/
 		void AddBlocks(int x1, int y1, int x2, int y2);
+
+		/**
+		* Returns true, if the grid has block at selected position
+		*/
+		bool HasBlock(int x, int y);
 
 		/**
 		* Gets all neighbors of selected position

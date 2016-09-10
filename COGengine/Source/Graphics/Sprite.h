@@ -1,10 +1,14 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "SpriteSheet.h"
+#include "Definitions.h"
+#include "SpriteSet.h"
 
 namespace Cog {
 
+	/**
+	* Sprite entity, a part of a texture image called sprite sheet
+	* Identified by frame index, pointing to the area on the sheet
+	*/
 	class Sprite {
 	private:
 		int frame;
@@ -14,87 +18,52 @@ namespace Cog {
 		int width;
 		int height;
 
-		void Recalc(spt<SpriteSet> spriteSet) {
-			width = spriteSet->GetSpriteWidth();
-			height = spriteSet->GetSpriteHeight();
-
-			int frameInGrid = 0;
-			int totalFramesInGrid = 0;
-
-			if (spriteSet->GetSpriteSetWidth() == spriteSet->GetSpriteSheetWidth()) {
-				// sprite set is continuous; it means that it begins somewhere and when it reaches the end 
-				// of the image, the next sprite will be at the beginning of the image
-				// EXAMPLE (x for sprite):
-				// * * * x x
-				// x x x x x
-				// x x * * *
-				// * * * * *
-				// * * * * *
-				int firstRowColumns = (spriteSet->GetSpriteSheetWidth() - spriteSet->GetOffsetX()) / width;
-				int otherRowsColumns = spriteSet->GetSpriteSheetWidth() / width;
-
-				frameInGrid = frame + (otherRowsColumns - firstRowColumns);
-				totalFramesInGrid = (otherRowsColumns - firstRowColumns) + spriteSet->GetTotalFrames();
-			}
-			else {
-				// if sprite set isn't continuous, it means that it forms rectangle inside the sprite image
-				// and the first frame is at the very beginning of this rectangle
-				// EXAMPLE (x for sprite):
-				// * * x x *
-				// * * x x *
-				// * * * * *
-				// * * * * *
-				// * * * * *
-
-				frameInGrid = frame;
-			}
-
-			int columns = spriteSet->GetSpriteSetWidth() / width;
-			int rows = (totalFramesInGrid*width) / spriteSet->GetSpriteSetWidth();
-
-			int column = frameInGrid%columns;
-			int row = rows == 1 ? 0 : frameInGrid / (rows);
-
-			posX = spriteSet->GetOffsetX() + column*width;
-			posY = spriteSet->GetOffsetY() + row*height;
-		}
-
 	public:
 
 		Sprite() {
 
 		}
 
-		Sprite(spt<SpriteSet> spriteSet, int row, int column)  {
+		/**
+		* Creates a new sprite
+		* @param spriteSet collection of sprites
+		* @param row index of a row in which this sprite is located
+		* @param column index of a column in which this sprite is located
+		*/
+		Sprite(spt<SpriteSet> spriteSet, int row, int column);
 
-			int columns = spriteSet->GetSpriteSetWidth() / spriteSet->GetSpriteWidth();
-			this->frame = row*columns + column;
-			Recalc(spriteSet);
-		}
+		/**
+		* Creates a new sprite
+		* @param spriteSet collection of sprites
+		* @param frame index of a frame on the sprite sheet
+		*/
+		Sprite(spt<SpriteSet> spriteSet, int frame);
 
-		Sprite(spt<SpriteSet> spriteSet, int frame) : frame(frame) {
-			Recalc(spriteSet);
-		}
-
-		int GetFrame() {
+		int GetFrame() const {
 			return frame;
 		}
 
-		int GetPosX() {
+		int GetPosX() const {
 			return posX;
 		}
 
-		int GetPosY() {
+		int GetPosY() const {
 			return posY;
 		}
 
-		int GetWidth() {
+		int GetWidth() const {
 			return width;
 		}
 
-		int GetHeight() {
+		int GetHeight() const {
 			return height;
-		};
+		}
+
+	protected:
+		/**
+		* Recalculates attributes (width, height), according to values in sprite set
+		*/
+		void Recalc(spt<SpriteSet> spriteSet);
 	};
 
 }// namespace

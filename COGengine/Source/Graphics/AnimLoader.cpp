@@ -1,22 +1,24 @@
 #include "AnimLoader.h"
+#include "Error.h"
+#include "Utils.h"
 
 namespace Cog {
 
-		void AnimLoader::LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<CommonAnim>>& rootAnims, SheetAnimBuilder builder) {
+		void AnimLoader::LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder) {
 
 			int numberOfAnims = xml->getNumTags("anim");
 
-			// referenced anims (those with ref attribute) will be processed at second phase
-			map<int, CommonAnim*> referencedAnims;
+			// referenced anims (those with ref attribute) will be processed in second phase
+			map<int, GeneralAnim*> referencedAnims;
 
 			int actualAnimIndex = 0;
 
-			// phase 1: load not referenced animations
+			// phase 1: load direct animations (not referenced)
 			for (int i = 0; i < numberOfAnims; i++) {
 
 				xml->pushTag("anim", i);
 				// load
-				spt<CommonAnim> anim = spt<CommonAnim>(CreateAnimationFromXml(xml, referencedAnims, actualAnimIndex, builder));
+				spt<GeneralAnim> anim = spt<GeneralAnim>(CreateAnimationFromXml(xml, referencedAnims, actualAnimIndex, builder));
 				if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
 
 				rootAnims.push_back(anim);
@@ -33,11 +35,11 @@ namespace Cog {
 			}
 		}
 
-		CommonAnim* AnimLoader::CreateAnimationFromXml(spt<ofxXml> xml, map<int, CommonAnim*>& referencedAnims, int& actualAnimIndex, SheetAnimBuilder builder) {
+		GeneralAnim* AnimLoader::CreateAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims, int& actualAnimIndex, SheetAnimBuilder builder) {
 
 			int innerAnimations = xml->getNumTags("anim");
 
-			CommonAnim* anim = builder();
+			GeneralAnim* anim = builder();
 
 			// fill ref and name attribute
 			anim->LoadBaseAttributesFromXml(xml);
@@ -54,30 +56,31 @@ namespace Cog {
 				for (int i = 0; i < innerAnimations; i++) {
 					xml->pushTag("anim", i);
 					// process recursively
-					spt<CommonAnim> newAnim = spt<CommonAnim>(CreateAnimationFromXml(xml, referencedAnims, ++actualAnimIndex, builder));
+					spt<GeneralAnim> newAnim = spt<GeneralAnim>(CreateAnimationFromXml(xml, referencedAnims, ++actualAnimIndex, builder));
 					anim->GetChildren().push_back(newAnim);
 					xml->popTag();
 				}
 			}
 
-			// set other attributes, using virtual method of the new CommonAnim object (each type of animation could have different attributes)
+			// set other attributes, using virtual method of the new GeneralAnim object (each type of animation could have different attributes)
 			anim->LoadAttributesFromXml(xml);
 
 			return anim;
 		}
 
-		spt<CommonAnim> AnimLoader::FindAnimByName(string name, vector<spt<CommonAnim>> anims) {
+		spt<GeneralAnim> AnimLoader::FindAnimByName(string name, vector<spt<GeneralAnim>>& anims) {
 			for (auto it = anims.begin(); it != anims.end(); ++it) {
-				spt<CommonAnim> anim = (*it);
-				if (anim->GetName() == name) return anim;
+				spt<GeneralAnim> anim = (*it);
+				if (anim->GetName().compare(name) == 0) return anim;
 			}
 
-			return spt<CommonAnim>();
+			return spt<GeneralAnim>();
 		}
 
-		void AnimLoader::ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, CommonAnim*>& referencedAnims,
-			int rootAnimIndex, vector<spt<CommonAnim>>& rootAnims, int& actualAnimIndex) {
+		void AnimLoader::ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims,
+			int rootAnimIndex, vector<spt<GeneralAnim>>& rootAnims, int& actualAnimIndex) {
 
+			// get number of animations under this element
 			int innerAnimations = xml->getNumTags("anim");
 
 			string ref = (xml->getAttribute(":", "ref", ""));
@@ -97,7 +100,7 @@ namespace Cog {
 					}
 					else {
 						// reference not found; but it still could be located under different root animation
-						spt<CommonAnim> rootReference = FindAnimByName(ref, rootAnims);
+						spt<GeneralAnim> rootReference = FindAnimByName(ref, rootAnims);
 						if (!rootReference) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 						// reference was found -> load other parameters
 						refAnim->GetParametersFromReference(rootReference);
@@ -108,7 +111,7 @@ namespace Cog {
 					string rootAnimName = ref.substr(0, ref.find("."));
 					string subAnim = ref.substr(ref.find(".") + 1);
 					// get sub-animation
-					spt<CommonAnim> root = FindAnimByName(rootAnimName, rootAnims);
+					spt<GeneralAnim> root = FindAnimByName(rootAnimName, rootAnims);
 					auto scopeAnim = root->FindChild(subAnim);
 					if (!root || !scopeAnim) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 

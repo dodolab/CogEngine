@@ -1,21 +1,22 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "CommonAnim.h"
+#include "Definitions.h"
 #include "AttrAnimEnt.h"
+#include "ofxXmlSettings.h"
 
 namespace Cog {
 
 	/**
-	* Class that holds context of an animation entity
+	* Container for context of an animation entity
 	* Contains from-to values that are calculated according to the 
 	* actual state of the transformation node
 	*/
 	class AttribAnimContext {
 	private:
 		spt<AttrAnimEnt> entity;
-		// real from and to values that are set when animation is initialized
+		// starting value
 		float fromVal;
+		// ending value
 		float toVal;
 		bool initialized = false;
 
@@ -28,16 +29,12 @@ namespace Cog {
 		/**
 		* Initializes the context
 		*/
-		void Init(float fromVal, float toVal) {
-			this->fromVal = fromVal;
-			this->toVal = toVal;
-			initialized = true;
-		}
+		void Init(float fromVal, float toVal);
 
 		/**
 		* Returns true, if the context is initialized
 		*/
-		bool IsInitialized() {
+		bool IsInitialized() const {
 			return initialized;
 		}
 
@@ -49,16 +46,16 @@ namespace Cog {
 		}
 
 		/**
-		* Gets the calculated value the animation begins
+		* Gets the starting animation value
 		*/
-		float GetFromValue() {
+		float GetFromValue() const {
 			return fromVal;
 		}
 
 		/**
-		* Gets the calculated value the animation ends
+		* Gets the ending animation value
 		*/
-		float GetToValue() {
+		float GetToValue() const {
 			return toVal;
 		}
 	};
@@ -66,7 +63,7 @@ namespace Cog {
 	/**
 	* Entity for attribute animations
 	*/
-	class AttribAnim : public CommonAnim {
+	class AttribAnim : public GeneralAnim {
 	protected:
 		vector<AttribAnimContext> animEntities;
 		int duration = 0;
@@ -76,14 +73,26 @@ namespace Cog {
 
 		}
 
-		AttribAnim(string name, string ref, float speed, int repeat, bool isRevert) : CommonAnim(name,ref,speed,repeat,isRevert) {
-			RecalcDuration();
-		}
+		/**
+		* Creates a new attribute animation
+		* @param name animation name
+		* @param ref name of referenced animation
+		* @param speed animation speed (in multiple units)
+		* @param repeat number of repetitions (0 for infinite)
+		* @param isRevert indicator whether the animation is reverted
+		*/
+		AttribAnim(string name, string ref, float speed, int repeat, bool isRevert);
 
-		AttribAnim(string name, string ref, float speed, int repeat, bool isRevert, vector<AttribAnimContext> animEntities) :
-			CommonAnim(name, ref, speed, repeat, isRevert), animEntities(animEntities) {
-			RecalcDuration();
-		}
+		/**
+		* Creates a new attribute animation
+		* @param name animation name
+		* @param ref name of referenced animation
+		* @param speed animation speed (in multiple units)
+		* @param repeat number of repetitions (0 for infinite)
+		* @param isRevert indicator whether the animation is reverted
+		* @param animEntities collection of entities with animated attributes
+		*/
+		AttribAnim(string name, string ref, float speed, int repeat, bool isRevert, vector<AttribAnimContext>& animEntities);
 
 		virtual ~AttribAnim() {
 		}
@@ -91,50 +100,17 @@ namespace Cog {
 		/**
 		* Recalculates duration as the maximum duration of all children
 		*/
-		void RecalcDuration() {
-			for (auto& enti : animEntities) {
-				if (enti.GetEntity()->duration > this->duration) {
-					this->duration = enti.GetEntity()->duration;
-				}
-			}
-		}
+		void RecalcDuration();
 
 		/**
-		* Copies all parameters from other animation
+		* Copies all parameters from referenced animation
 		*/
-		void GetParametersFromReference(spt<CommonAnim> reference) {
-			auto attribAnimRef = static_pointer_cast<AttribAnim>(reference);
-
-			this->SetDuration(attribAnimRef->GetDuration());
-			
-			for (auto& ent : attribAnimRef->GetAnimEntities()) {
-				AttribAnimContext ctx = AttribAnimContext(ent.GetEntity());
-				animEntities.push_back(ctx);
-			}
-
-			CommonAnim::GetParametersFromReference(reference);
-		}
+		void GetParametersFromReference(spt<GeneralAnim> reference);
 
 		/**
 		* Loads attributes from xml
 		*/
-		virtual void LoadAttributesFromXml(spt<ofxXml> xml) {
-			
-			CommonAnim::LoadAttributesFromXml(xml);
-
-			int attrAnims = xml->getNumTags("attranim");
-
-			for (int i = 0; i < attrAnims; i++) {
-				xml->pushTag("attranim", i);
-				spt<AttrAnimEnt> trans = spt<AttrAnimEnt>(new AttrAnimEnt());
-				auto dummySet = Setting();
-				trans->LoadFromXml(xml, dummySet);
-				this->animEntities.push_back(AttribAnimContext(trans));
-				xml->popTag();
-			}
-
-			RecalcDuration();
-		}
+		virtual void LoadAttributesFromXml(spt<ofxXml> xml);
 
 		virtual bool IsAnimatable() {
 			return HasAnimEntities();
@@ -148,9 +124,6 @@ namespace Cog {
 			return duration;
 		}
 
-		/**
-		* Sets the duration
-		*/
 		void SetDuration(int duration) {
 			this->duration = duration;
 		}
@@ -163,7 +136,7 @@ namespace Cog {
 		}
 
 		/**
-		* Gets animation entities
+		* Gets collection of animation entities
 		*/
 		vector<AttribAnimContext>& GetAnimEntities() {
 			return this->animEntities;

@@ -1,6 +1,7 @@
 
 #include "MultiSelection.h"
 #include "CogEngine.h"
+#include "EnumConverter.h"
 
 namespace Cog {
 
@@ -23,8 +24,8 @@ namespace Cog {
 			string selectedColorStr = setting.GetItemVal("selected_color");
 
 			if (!defaultColorStr.empty() && !selectedColorStr.empty()) {
-				this->defaultColor = StringToColor(defaultColorStr);
-				this->selectedColor = StringToColor(selectedColorStr);
+				this->defaultColor = EnumConverter::StrToColor(defaultColorStr);
+				this->selectedColor = EnumConverter::StrToColor(selectedColorStr);
 			}
 		}
 	}

@@ -4,8 +4,6 @@
 
 namespace Cog {
 
-	
-
 	string string_format(const char* fmt_str, ...) {
 		va_list args;
 		va_start(args, fmt_str);
@@ -35,18 +33,6 @@ namespace Cog {
 		return output;
 	}
 
-	ofColor StringToColor(string col) {
-		int hexColor = ofHexToInt(col.substr(2));
-		float alpha = 255;
-
-		if (col.length() == 10) {
-			// get alpha
-			alpha = ofHexToInt(col.substr(8));
-		}
-
-		ofColor color = ofColor::fromHex(hexColor, alpha);
-		return color;
-	}
 
 	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency) {
 		float period = 1000 / frequency;

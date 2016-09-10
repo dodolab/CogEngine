@@ -34,8 +34,8 @@ TEST_CASE("Measuring test")
 
 		COGMEASURE_END("Outer block");
 
-		auto outer = TimeMeasure::GetInstance().GetMeasureBlock("Outer block");
-		auto inner = TimeMeasure::GetInstance().GetMeasureBlock("Inner block");
+		auto outer = TimeMeasure::GetInstance().GetMeasureScope("Outer block");
+		auto inner = TimeMeasure::GetInstance().GetMeasureScope("Inner block");
 
 		REQUIRE(outer.duration > 0);
 		REQUIRE(inner.duration > 0);
