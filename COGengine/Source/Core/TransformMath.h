@@ -180,8 +180,8 @@ namespace Cog {
 			ofVec2f size = ofVec2f();
 
 			// =================== get positions
-			if (xml->attributeExists(":", "pos")) {
-				float posF = xml->getAttribute(":", "pos", 0.0);
+			if (xml->attributeExists("pos")) {
+				float posF = xml->getAttributex("pos", 0.0);
 				pos = ofVec2f(posF, posF);
 			}
 			else {
@@ -189,41 +189,41 @@ namespace Cog {
 				float posX = 0;
 				float posY = 0;
 
-				posX = xml->getAttribute(":", "pos_x", 0.0);
-				posY = xml->getAttribute(":", "pos_y", 0.0);
+				posX = xml->getAttributex("pos_x", 0.0);
+				posY = xml->getAttributex("pos_y", 0.0);
 				pos = ofVec2f(posX, posY);
 			}
 
 
-			zIndex = xml->getAttribute(":", "z_index", 0);
-			posCalc = StrToCalcType(xml->getAttribute(":", "ptype", ""));
+			zIndex = xml->getAttributex("z_index", 0);
+			posCalc = StrToCalcType(xml->getAttributex("ptype", ""));
 			
 			// =================== get size
-			sizeCalc = StrToCalcType(xml->getAttribute(":", "stype", ""));
+			sizeCalc = StrToCalcType(xml->getAttributex("stype", ""));
 
 			// todo: for text, size has to be equal to 1 and stype must be loc !!
 
 			float width = 0;
 			float height = 0;
 
-			if (xml->attributeExists(":", "size")) {
-				width = height = xml->getAttribute(":", "size", 0.0);
+			if (xml->attributeExists("size")) {
+				width = height = xml->getAttributex("size", 0.0);
 			}
 			else {
-				width = xml->getAttribute(":", "width", 0.0);
-				height = xml->getAttribute(":", "height", 0.0);
+				width = xml->getAttributex("width", 0.0);
+				height = xml->getAttributex("height", 0.0);
 			}
 
 			size = ofVec2f(width, height);
 
 			// =================== get anchor
-			if (xml->attributeExists(":", "anchor")) {
-				float anchorFlt = xml->getAttribute(":", "anchor", 0.0);
+			if (xml->attributeExists("anchor")) {
+				float anchorFlt = xml->getAttributex("anchor", 0.0);
 				anchor = ofVec2f(anchorFlt);
 			}
 			else {
-				anchor.x = xml->getAttribute(":", "anchor_x", 0.0);
-				anchor.y = xml->getAttribute(":", "anchor_y", 0.0);
+				anchor.x = xml->getAttributex("anchor_x", 0.0);
+				anchor.y = xml->getAttributex("anchor_y", 0.0);
 			}
 
 			// =================== get grid size (if specified)

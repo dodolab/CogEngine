@@ -28,8 +28,7 @@ namespace Cog {
 			spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogGet2DImage(disabledImg);
 
 			node->AddBehavior(new HitEvent(-1, false));
-			node->AddBehavior(new Button(CogGet2DImage(defaultImg),
-				CogGet2DImage(clickedImg), disabledImgPtr));
+			node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
 			node->SetState(StringHash(STATES_HITTABLE));
 		}
 
@@ -48,22 +47,23 @@ namespace Cog {
 			TransformMath math = TransformMath();
 
 
-			string name = xml->getAttribute(":", "name", "");
-			string type = xml->getAttribute(":", "type", "");
-			string img = xml->getAttribute(":", "img", "");
+			string name = xml->getAttributex("name", "");
+			string type = xml->getAttributex("type", "");
+			string img = xml->getAttributex("img", "");
 
 			Node* node = new Node(ObjType::OBJECT, 0, name);
 			if (!img.empty()) {
 				AssignImage(node, img);
 			}
 
-			if (xml->attributeExists(":", "img_click")) {
+			if (xml->attributeExists("img_click")) {
 				// set image on click
-				string imgClick = xml->getAttribute(":", "img_click", "");
-				string imgDisabled = xml->getAttribute(":", "img_disabled", "");
+				string imgClick = xml->getAttributex("img_click", "");
+				string imgDisabled = xml->getAttributex("img_disabled", "");
 
 				AssignButton(node, img, imgClick, imgDisabled);
 			}
+
 
 			if (!type.empty()) {
 				if (type.compare("background") == 0) {
@@ -73,15 +73,13 @@ namespace Cog {
 			}
 
 			// text must be loaded before transform
-			if (xml->tagExists("text")) {
-				xml->pushTag("text");
+			if (xml->pushTagIfExists("text")) {
 				LoadTextFromXml(xml, node, parent);
 				xml->popTag();
 			}
 
-			if (xml->tagExists("transform")) {
+			if (xml->pushTagIfExists("transform")) {
 			// load transform
-				xml->pushTag("transform");
 				math.LoadTransformFromXml(xml, node, parent, settings);
 				xml->popTag();
 			}
@@ -122,10 +120,10 @@ namespace Cog {
 		}
 
 		void LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
-			string font = xml->getAttribute(":", "font", "");
-			double size = xml->getAttribute(":", "size", 1.0);
-			string value = xml->getValue(":", "");
-			string colorStr = xml->getAttribute(":", "color", "0x000000");
+			string font = xml->getAttributex("font", "");
+			double size = xml->getAttributex("size", 1.0);
+			string value = xml->getValuex("");
+			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = ofColor::fromHex(ofHexToInt(colorStr));
 
 			AssignText(node, font, size, color, value);

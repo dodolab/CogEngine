@@ -45,6 +45,12 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 		float 	getValue(const string&  tag, float         defaultValue, int which = 0);
 		string 	getValue(const string&  tag, const string& 	defaultValue, int which = 0);
 
+		bool	getBoolValuex(bool			defaultValue, int which = 0);
+		int 	getValuex(int            defaultValue, int which = 0);
+		double 	getValuex(double         defaultValue, int which = 0);
+		float 	getValuex(float         defaultValue, int which = 0);
+		string 	getValuex(const string& 	defaultValue, int which = 0);
+
 		int		setValue(const string&	tag, bool			value, int which = 0);
 		int 	setValue(const string&  tag, int            value, int which = 0);
 		int 	setValue(const string&  tag, double         value, int which = 0);
@@ -62,6 +68,7 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 		//at the top most level.
 
 		bool	pushTag(const string&  tag, int which = 0);
+		bool    pushTagIfExists(const string& tag, int which = 0);
 		int		popTag();
 		void    popAll();
 		int		getPushLevel();
@@ -106,6 +113,7 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 		int		getNumAttributes(const string& tag, int which = 0);
 
 		bool	attributeExists(const string& tag, const string& attribute, int which = 0);
+		bool    attributeExists(const string& attribute, int which = 0);
 
 		bool    getAttributeNames(const string& tag, vector<string>& outNames, int which = 0);
 
@@ -113,6 +121,11 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 		int		getAttribute(const string& tag, const string& attribute, int defaultValue, int which = 0);
 		double	getAttribute(const string& tag, const string& attribute, double defaultValue, int which = 0);
 		string	getAttribute(const string& tag, const string& attribute, const string& defaultValue, int which = 0);
+
+		bool	getBoolAttributex(const string& attribute, bool defaultValue, int which = 0);
+		int		getAttributex(const string& attribute, int defaultValue, int which = 0);
+		double	getAttributex(const string& attribute, double defaultValue, int which = 0);
+		string	getAttributex(const string& attribute, const string& defaultValue, int which = 0);
 
 		int		setAttribute(const string& tag, const string& attribute, int value, int which = 0);
 		int		setAttribute(const string& tag, const string& attribute, double value, int which = 0);

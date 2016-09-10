@@ -4,7 +4,7 @@
 namespace Cog {
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
-		string name = xml->getAttribute(":", "name", "");
+		string name = xml->getAttributex("name", "");
 		auto newBeh = COGEngine.entityStorage->GetBehaviorPrototype(name)->CreatePrototype();
 		newBeh->LoadFromXml(xml);
 		node->AddBehavior(newBeh);
