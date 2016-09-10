@@ -381,6 +381,12 @@
     <ClInclude Include="Source\Behaviors\SheetAnimator.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\StateMachine.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\State.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

@@ -28,7 +28,7 @@ namespace Cog {
 
 			// calculate angle against parent
 			float angle = ofDegToRad(parent.absRotation) + (atan2(realLocPos.y, realLocPos.x));
-		
+	
 			// calculate rotation offset
 			ofVec3f rotPos = ofVec3f(length*(cos(angle)), length*(sin(angle)), localPos.z);
 
