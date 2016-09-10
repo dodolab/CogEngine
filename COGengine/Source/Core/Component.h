@@ -25,6 +25,10 @@ namespace Cog {
 
 		OBJECT_VIRTUAL()
 
+		virtual ~Component() {
+
+		}
+
 		/**
 		* Initializes factory
 		*/

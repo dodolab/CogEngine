@@ -3,6 +3,7 @@
 #include "BehaviorEnt.h"
 #include "NodeBuilder.h"
 #include "MultiAnim.h"
+#include "ofxNetwork.h"
 
 class XmlTestingApp : public CogApp {
 
@@ -105,16 +106,19 @@ class XmlTestingApp : public CogApp {
 		// add scene into stage
 		auto stage = GETCOMPONENT(Stage);
 		stage->AddScene(main, true);
+
+		// init logging
+		auto logger = GETCOMPONENT(Logger);
+		logger->SetLogLevel(LogLevel::LDEBUG);
+
 	}
 };
-
 
  
 int main() {
 
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	ofRunApp(new XmlTestingApp());
-
 	return 0;
 }
 

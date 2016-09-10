@@ -86,6 +86,8 @@ namespace Cog {
 		*/
 		void LoadScenesFromXml(spt<ofxXml> xml);
 
+		void WriteInfo(int logLevel = 0);
+
 	};
 
 }// namespace

@@ -107,6 +107,11 @@ namespace Cog {
 			return data;
 		}
 
+		template <class T>
+		T* GetDataS() {
+			return static_cast<T*>(data);
+		}
+
 		/**
 		* Gets identifier of the behavior that sent this message
 		*/

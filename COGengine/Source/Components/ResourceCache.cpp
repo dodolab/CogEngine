@@ -83,7 +83,7 @@ namespace Cog {
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
-					COGASSERT(!trans->name.empty(),"RESOURCE","Transform entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!trans->name.empty(),"ResourceCache","Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
@@ -101,7 +101,7 @@ namespace Cog {
 
 					ent->LoadFromXml(xml, Setting());
 
-					COGASSERT(!ent->name.empty(), "RESOURCE", "Behavior entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!ent->name.empty(), "ResourceCache", "Behavior entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(ent->name, ent);
 					xml->popTag();
@@ -142,6 +142,7 @@ namespace Cog {
 		}
 
 
+		MLOGDEBUG("ResourceCache","Loading image %s",path.c_str());
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -173,6 +174,7 @@ namespace Cog {
 			return (found->second);
 		}
 
+		MLOGDEBUG("ResourceCache", "Preloading image %s", path.c_str());
 		ofImage* img = new ofImage();
 		// don't use texture because images are loaded in separate thread
 		img->setUseTexture(false);
@@ -207,6 +209,7 @@ namespace Cog {
 			fontSet = fontSetIt->second;
 		}
 
+		MLOGDEBUG("ResourceCache", "Loading font %s", path.c_str());
 		map<int, spt<ofTrueTypeFont>>& fs = loadedFonts.find(path)->second;
 
 		auto font = (fs).find(size);
@@ -229,6 +232,7 @@ namespace Cog {
 			return (found->second);
 		}
 
+		MLOGDEBUG("ResourceCache", "Loading sound %s", path.c_str());
 		Sound* snd = new Sound(path);
 		return spt<Sound>(snd);
 	}
@@ -260,7 +264,7 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreAnimation(spt<Anim> anim) {
-		COGASSERT(anim->GetName().compare("") != 0, "Cache", "Attempt to store animation without a name!");
+		COGASSERT(anim->GetName().compare("") != 0, "ResourceCache", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());
 		if (found == loadedAnimations.end()) {
@@ -293,7 +297,7 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
-		COGASSERT(spriteSheet->GetName().compare("") != 0, "Cache", "Attempt to store spritesheet without a name!");
+		COGASSERT(spriteSheet->GetName().compare("") != 0, "ResourceCache", "Attempt to store spritesheet without a name!");
 
 		auto found = loadedSpriteSheets.find(spriteSheet->GetName());
 		if (found == loadedSpriteSheets.end()) {

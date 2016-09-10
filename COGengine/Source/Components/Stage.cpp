@@ -5,7 +5,7 @@
 #include "CogEngine.h"
 #include "AsyncProcess.h"
 #include "Tween.h"
-
+#include "InputKey.h"
 
 namespace Cog {
 
@@ -13,12 +13,38 @@ namespace Cog {
 		// create root object with default behaviors, states and attributes
 		this->rootObject = new Node(ObjType::ROOT, 0, "root");
 		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
+		CogRegisterGlobalListener(ACT_SCREEN_CHANGED, this);
+		this->rootObject->AddBehavior(new InputKey(map<int,Act>()));
+
 	}
 
 	void Stage::OnMessage(Msg& msg) {
 		if (msg.GetAction() == ACT_SCENE_SWITCHED) {
 			Node* scene =  (Node*)msg.GetSourceObject();
 			actualScene = scene->GetScene();
+		}
+		else if (msg.GetAction() == ACT_SCREEN_CHANGED) {
+			// scale root node
+			if (actualScene != nullptr) {
+				auto environment = GETCOMPONENT(Environment);
+				// set scale according to the new ratio
+				Node* sceneNode = actualScene->GetSceneNode();
+				auto changeEvent = msg.GetDataS<ValueChangeEvent<Vec2i>>();
+				
+
+				auto virtuals = CogGetVirtualScreenSize();
+				auto scSize = CogGetScreenSize();
+
+				float absoluteRatio = (environment->GetScreenAspectRatio() / environment->GetVirtualAspectRatio());
+
+				float heightRatio = scSize.y / (float)virtuals.y;
+				float widthRatio = scSize.x / (float)virtuals.x;
+				cout << "widthRatio " << widthRatio << endl;
+				cout << "heightRatio " << heightRatio << endl;
+
+				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x/((float)environment->GetOriginalWidth()));
+
+			}
 		}
 	}
 
@@ -46,6 +72,7 @@ namespace Cog {
 		}
 
 		this->scenes.push_back(scene);
+
 		MLOGDEBUG("Stage", "Initializing scene %s", scene->GetName().c_str());
 		scene->GetSceneNode()->SubmitChanges(true);
 	}
@@ -195,6 +222,19 @@ namespace Cog {
 			// if no actual scene specified, use the first one
 			auto firstScene = this->scenes[0];
 			SwitchToScene(firstScene, TweenDirection::NONE);
+		}
+	}
+
+	void Stage::WriteInfo(int logLevel) {
+		
+		if(actualScene != nullptr) CogLogTree("INFO_STAGE", logLevel, "Actual scene: ", actualScene->GetName());
+
+		if (this->scenes.size() > 0) {
+			CogLogTree("INFO_STAGE_SCENES", logLevel, "Scenes: %d", scenes.size());
+
+			for (Scene* sc : scenes) {
+				sc->WriteInfo(logLevel + 2);
+			}
 		}
 	}
 

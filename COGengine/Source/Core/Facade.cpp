@@ -121,6 +121,13 @@ namespace Cog {
 		va_end(args);
 	}
 
+	void CogLogTree(const char* module, int logLevel, const char* format, ...) {
+		va_list args;
+		va_start(args, format);
+		COGEngine.logger->LogInfo(module, logLevel, format, args);
+		va_end(args);
+	}
+
 	void CogLogDebug(const char* module, const char* format, ...) {
 		va_list args;
 		va_start(args, format);
@@ -132,6 +139,16 @@ namespace Cog {
 		COGEngine.logger->Flush();
 	}
 
+	void CogWriteLogStage() {
+		auto stage = GETCOMPONENT(Stage);
+		stage->WriteInfo(0);
+	}
+
+	void CogWriteLogActualScene() {
+		auto stage = GETCOMPONENT(Stage);
+		auto actualScene = stage->GetActualScene();
+		if (actualScene != nullptr) actualScene->WriteInfo(0);
+	}
 
 	// =================== MRENDERER =========================
 	void CogPushNodeForRendering(Node* node) {

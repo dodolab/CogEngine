@@ -122,6 +122,8 @@ namespace Cog {
 	}
 
 	bool Node::AddBehavior(Behavior* beh) {
+
+		MLOGDEBUG("Node", "Adding behavior %s into node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
 		behaviorsToAdd.push_back(beh);
 
 		return true;
@@ -132,6 +134,7 @@ namespace Cog {
 
 		bool result = behaviors.end() != found;
 		if (result) {
+			MLOGDEBUG("Node", "Removing behavior %s from node %d (%s)", typeid(*beh).name(), id, tag != nullptr ? tag->c_str() : "<noname>");
 			// behavior found
 			// check if there isn't already such behavior marked for deleting
 			for (auto it = behaviorToRemove.begin(); it != behaviorToRemove.end(); ++it) {
@@ -177,6 +180,8 @@ namespace Cog {
 
 	bool Node::AddChild(Node* child) {
 
+		MLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag != nullptr ? 
+			child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
 		auto existing = std::find(children.begin(), children.end(), child);
 		if (existing != children.end()) {
 			CogLogError("Attempt to add already existing child: %s into %s", child->tag->c_str(), tag->c_str());
@@ -193,6 +198,8 @@ namespace Cog {
 
 		bool result = children.end() != found;
 		if (result) {
+			MLOGDEBUG("Node", "Removing child %d (%s) from node %d (%s)", child->id, child->tag != nullptr ? 
+				child->tag->c_str() : "<noname>", id, tag != nullptr ? tag->c_str() : "<noname>");
 			// check if there isn't already such child marked for deleting
 			for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it) {
 				if ((*it).first->GetId() == child->GetId()) return true;
@@ -222,50 +229,6 @@ namespace Cog {
 		return parent;
 	}
 
-
-
-	string Node::GetInfo(bool includeChildren, bool includeAttributes) {
-		std::ostringstream ss;
-		GetInfo(includeChildren, includeAttributes, ss, 0);
-		std::cout << ss.str() << std::endl;
-		return ss.str();
-	}
-
-
-	void Node::GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level) {
-		spaces(level * 4, ss);
-		ss << "--" << (*tag) << " " << subType << std::endl;
-
-		for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
-			Behavior* beh = (*it);
-			spaces(level * 4 + 2, ss);
-			ss << "beh " << typeid(*beh).name() << std::endl;
-		}
-
-		for (auto it = attributes.begin(); it != attributes.end(); ++it) {
-			spaces(level * 4 + 2, ss);
-			int key = (*it).first;
-			ss << "att " << ofToString(key) << std::endl;
-		}
-
-		if (states != nullptr) {
-			vector<unsigned> states = this->states->GetAllStates();
-			for (auto it = states.begin(); it != states.end(); ++it) {
-				spaces(level * 4 + 2, ss);
-				int state = (*it);
-				ss << "st  " << ofToString(state) << std::endl;
-			}
-		}
-
-		ss << std::endl;
-
-		if (includeChildren) {
-			// write info 
-			for (auto it = children.begin(); it != children.end(); ++it) {
-				(*it)->GetInfo(includeChildren, includeAttributes, ss, level + 1);
-			}
-		}
-	}
 
 	void Node::InsertElementsForAdding() {
 
@@ -330,6 +293,59 @@ namespace Cog {
 		}
 
 		childrenToRemove.clear();
+	}
+
+	void Node::WriteInfo(int logLevel) {
+		CogLogTree("INFO_NODE", logLevel, "Node %s (%d)", this->tag != nullptr ? this->tag->c_str() : "<noname>", this->id);
+
+#if DEBUG
+
+		if(attributes.size() > 0) CogLogTree("INFO_NODE", logLevel+1, "Attributes:");
+
+		for (auto it = attributes.begin(); it != attributes.end(); ++it) {
+			StringHash key = (*it).first;
+			CogLogTree("INFO_NODE", logLevel + 2, StringHash::GetStringValue(key).c_str());
+		}
+#endif
+
+		CogLogTree("INFO_TRANSFORM", logLevel+1, "Transform: ");
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "LPos: [%f,%f]",transform.localPos.x, transform.localPos.y);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "LScal: [%f,%f]", transform.scale.x, transform.scale.y);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "ZIndex: %d", transform.scale.z);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "Rotation: %f", transform.rotation);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsPos: [%f,%f]", transform.absPos.x, transform.absPos.y);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsScal: [%f,%f]", transform.absScale.x, transform.absScale.y);
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsRotation: %f", transform.absRotation);
+
+		CogLogTree("INFO_SHAPE", logLevel+1, "Shape: %s", typeid(*this->shape).name());
+		CogLogTree("INFO_SHAPE", logLevel+2, "Size: [%f x %f]", this->shape->GetWidth(), this->shape->GetHeight());
+		
+		if (states != nullptr) {
+			vector<unsigned> allStates = states->GetAllStates();
+			if (allStates.size() > 0) {
+				CogLogTree("INFO_FLAGS", logLevel+1, "Flags: %d", allStates.size());
+
+				for (unsigned un : allStates) {
+					CogLogTree("INFO_FLAGS", logLevel + 2, StringHash::GetStringValue(un).c_str());
+				}
+			}
+		}
+
+		if (behaviors.size() > 0) {
+			CogLogTree("INFO_BEHAVIOR", logLevel+1, "Behaviors: %d",behaviors.size());
+
+			for (Behavior* beh : behaviors) {
+				CogLogTree("INFO_BEHAVIOR", logLevel + 2, typeid(*beh).name());
+			}
+		}
+
+		if (children.size() > 0) {
+			CogLogTree("INFO_NODE_CHILDREN", logLevel+1, "Children: %d", children.size());
+			for (Node* child : children) {
+				child->WriteInfo(logLevel + 3);
+			}
+		}
+
 	}
 
 }// namespace

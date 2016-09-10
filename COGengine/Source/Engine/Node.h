@@ -519,22 +519,6 @@ namespace Cog {
 			return id != other.id;
 		}
 
-		/**
-		* Writes information to the console and returns it as a string
-		* @param includeChildren if true, children will be included in info report
-		* @param includeAttribute if true, attributes will be included in info report
-		*/
-		string GetInfo(bool includeChildren, bool includeAttributes);
-
-		/**
-		* Writes information to the stringstream
-		* @param includeChildren if true, children will be included in info report
-		* @param includeAttribute if true, attributes will be included in info report
-		* @param ss stringstream to write into
-		* @param level actual space padding
-		*/
-		void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
-
 		// stage can access private members
 		friend class Stage;
 
@@ -550,6 +534,9 @@ namespace Cog {
 		* at the end of update loop
 		*/
 		void DeleteElementsForRemoving();
+
+	public:
+		void WriteInfo(int logLevel = 0);
 	};
 
 }// namespace

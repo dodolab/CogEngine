@@ -145,7 +145,7 @@ namespace Cog {
 		OBJECT(Logger)
 
 	protected:
-		LoggerChannel* channel;
+		LoggerChannel* channel = nullptr;
 		LogLevel logLevel;
 		spt<ofxXmlSettings> config;
 		vector<string> includes;
@@ -167,7 +167,7 @@ namespace Cog {
 
 		void Init() {
 			channel = new ConsoleLoggerChannel();
-			logLevel = LogLevel::LERROR;
+			logLevel = LogLevel::LINFO;
 		}
 
 		/**
@@ -222,6 +222,20 @@ namespace Cog {
 		*/
 		void Flush() {
 			channel->Flush();
+		}
+
+		void SetLogLevel(LogLevel logLevel) {
+			this->logLevel = logLevel;
+		}
+
+		void SetOutputToConsole() {
+			delete channel;
+			channel = new ConsoleLoggerChannel();
+		}
+
+		void SetOutputToFile(string path, bool append) {
+			delete channel;
+			channel = new FileLoggerChannel(path, append);
 		}
 
 	};

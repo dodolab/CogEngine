@@ -55,6 +55,7 @@ public: \
   }
 
 // assertion with formatted message
+// this macro can be used widely for severe conditions, no matter how difficult
 #ifdef DEBUG
 #   define COGASSERT(condition, module, message, ...) \
     do { \
@@ -68,6 +69,17 @@ public: \
 #else
 #   define COGASSERT(condition, message, ...) do { } while (false)
 #endif
+
+
+// todo ...
+#ifdef DEBUG
+#define COGMEASURE(key) \
+  do { \
+  } while(false)
+#else
+#define COGMEASURE(key) do {} while(false)
+#endif
+
 
 // macro for debug-only logging
 #ifdef DEBUG
