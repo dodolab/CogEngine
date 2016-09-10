@@ -7,38 +7,55 @@ namespace Cog {
 
 	class DeltaMessage : public NetData {
 	public:
-		map<StringHash, float> vals;
+		map<StringHash, float> deltas;
+		map<StringHash, float> teleports;
+
 
 		DeltaMessage() {
 
 		}
 
 		DeltaMessage(spt<DeltaInfo> info) {
-			this->vals = info->deltas;
+			this->deltas = info->deltas;
+			this->teleports = info->teleports;
 		}
 
 		void LoadFromStream(NetReader* reader) {
-			int values = reader->ReadDWord();
+			int deltaSize = reader->ReadDWord();
+			int teleportSize = reader->ReadDWord();
 
-			for (int i = 0; i < values; i++) {
+			for (int i = 0; i < deltaSize; i++) {
 				unsigned key = reader->ReadDWord();
 				float val = reader->ReadFloat();
 
-				vals[StringHash(key)] = val;
+				deltas[StringHash(key)] = val;
+			}
+
+			for (int i = 0; i < teleportSize; i++) {
+				unsigned key = reader->ReadDWord();
+				float val = reader->ReadFloat();
+
+				teleports[StringHash(key)] = val;
 			}
 		}
 
 		void SaveToStream(NetWriter* writer) {
-			writer->WriteDWord(vals.size());
+			writer->WriteDWord(deltas.size());
+			writer->WriteDWord(teleports.size());
 
-			for (auto& key : vals) {
+			for (auto& key : deltas) {
+				writer->WriteDWord(key.first.Value());
+				writer->WriteFloat(key.second);
+			}
+
+			for (auto& key : teleports) {
 				writer->WriteDWord(key.first.Value());
 				writer->WriteFloat(key.second);
 			}
 		}
 
 		int GetDataLength() {
-			return vals.size() * 8 + 4;
+			return (deltas.size()+teleports.size()) * 8 + 4 + 4;
 		}
 	};
 

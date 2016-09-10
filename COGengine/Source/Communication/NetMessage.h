@@ -146,7 +146,7 @@ namespace Cog {
 		}
 
 		~NetOutputMessage() {
-			delete data;
+			//delete data;
 		}
 
 

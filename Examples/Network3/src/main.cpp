@@ -12,7 +12,7 @@
 #include "Path.h"
 #include "SteeringBehavior.h"
 
-#define IS_SERVER true
+#define IS_SERVER false
 #define POINTERS 50
 
 class NetworkBehavior : public Behavior {
@@ -32,8 +32,17 @@ public:
 		if (!server) {
 			deltaUpdate = GETCOMPONENT(DeltaUpdate);
 		}
-
+		
 		communicator->Init(1234, 11987, server);
+
+		if (!server) {
+			for (auto& beh : owner->GetBehaviors()) {
+				if (beh->GetClassNameW().compare("AttribAnimator") == 0) {
+					owner->RemoveBehavior(beh, true);
+					break;
+				}
+			}
+		}
 	}
 
 
@@ -43,7 +52,7 @@ public:
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 		if (!server) {
 			auto delta = this->deltaUpdate->actual;
-
+			
 			/*
 			auto pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
 			pointer2->GetTransform().rotation = delta->GetVal(StringHash(string_format("%s_rot","wanderer")));
@@ -60,10 +69,10 @@ public:
 		}
 		else {
 			if (frame++ % 3 == 0) {
-
+				
 				spt<DeltaInfo> delta = spt<DeltaInfo>(new DeltaInfo());
 
-				/*	auto pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
+			/*	auto pointer2 = owner->GetScene()->FindNodeByTag("pointer2");
 				delta->deltas[StringHash(string_format("%s_rot", "wanderer"))] = pointer2->GetTransform().rotation;
 				delta->deltas[StringHash(string_format("%s_posx", "wanderer"))] = pointer2->GetTransform().localPos.x;
 				delta->deltas[StringHash(string_format("%s_posy", "wanderer"))] = pointer2->GetTransform().localPos.y;
@@ -77,14 +86,14 @@ public:
 					if (previous != nullptr) {
 						string posXStr = string_format("pointer_%d_posx", i);
 						string posYStr = string_format("pointer_%d_posy", i);
-
-						if (previous->deltas.find(posXStr) != previous->deltas.end() && previous->deltas.find(posYStr) != previous->deltas.end()) {
+						
+						if (previous->deltas.find(posXStr) != previous->deltas.end() &&previous->deltas.find(posYStr) != previous->deltas.end()) {
 							float previousPosX = previous->deltas.find(posXStr)->second;
 							float previousPosY = previous->deltas.find(posYStr)->second;
 							float actualPosX = pointer->GetTransform().localPos.x;
 							float actualPosY = pointer->GetTransform().localPos.y;
 
-							if (abs(actualPosY - previousPosY) > 100 || abs(actualPosX - previousPosX) >100) {
+							if (abs(actualPosY - previousPosY) > 100 || abs(actualPosX-previousPosX) >100) {
 								// use teleport
 								delta->teleports[posXStr] = actualPosX;
 								delta->teleports[posYStr] = actualPosY;
@@ -177,7 +186,7 @@ class ExampleApp : public CogApp {
 		}
 
 
-		/*	Node* wanderer = new Node("pointer2");
+	/*	Node* wanderer = new Node("pointer2");
 		bld.SetImageNode(wanderer, "pawn2.png");
 
 		TransformEnt node2trans = TransformEnt();
@@ -195,23 +204,23 @@ class ExampleApp : public CogApp {
 		wanderer->GetTransform().SetRotationToPosition(ofVec2f(500, 500));
 
 		if (IS_SERVER) {
-		auto movement = Movement();
+			auto movement = Movement();
 
-		wanderer->AddAttr(ATTR_MOVEMENT, movement);
-		wanderer->AddBehavior(new Move(true));
+			wanderer->AddAttr(ATTR_MOVEMENT, movement);
+			wanderer->AddBehavior(new Move(true));
 
-		Path* path = new Path(ofVec2f(0, 0), ofVec2f(10, 10));
-		path->AddSegment(ofVec2f(50, 50));
-		path->AddSegment(ofVec2f(100, 50));
-		path->AddSegment(ofVec2f(200, 50));
-		path->AddSegment(ofVec2f(200, 100));
-		path->AddSegment(ofVec2f(200, 150));
-		path->AddSegment(ofVec2f(100, 50));
-		path->AddSegment(ofVec2f(50, 50));
+			Path* path = new Path(ofVec2f(0, 0), ofVec2f(10, 10));
+			path->AddSegment(ofVec2f(50, 50));
+			path->AddSegment(ofVec2f(100, 50));
+			path->AddSegment(ofVec2f(200, 50));
+			path->AddSegment(ofVec2f(200, 100));
+			path->AddSegment(ofVec2f(200, 150));
+			path->AddSegment(ofVec2f(100, 50));
+			path->AddSegment(ofVec2f(50, 50));
 
-		//pointer->AddBehavior(new ArriveBehavior(10,15));
-		wanderer->AddBehavior(new FollowBehavior(path, 10, 10));
-		wanderer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200, 200));
+			//pointer->AddBehavior(new ArriveBehavior(10,15));
+			wanderer->AddBehavior(new FollowBehavior(path, 10, 10));
+			wanderer->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(200, 200));
 		}*/
 
 		// add scene into stage
@@ -222,7 +231,7 @@ class ExampleApp : public CogApp {
 		auto logger = GETCOMPONENT(Logger);
 		logger->SetLogLevel(LogLevel::LDEBUG);
 
-
+		
 		GETCOMPONENT(Stage)->GetActualScene()->GetSceneNode()->AddBehavior(new NetworkBehavior(IS_SERVER));
 
 	}
@@ -232,27 +241,10 @@ class ExampleApp : public CogApp {
 };
 
 
-
-
-#ifndef WIN32
-#include <jni.h>
-#endif
-
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);
 	ofRunApp(new ExampleApp());
 	return 0;
 }
-
-#ifndef WIN32
-
-//========================================================================
-extern "C" {
-	void Java_cc_openframeworks_OFAndroid_init(JNIEnv*  env, jobject  thiz) {
-		main();
-	}
-}
-#endif
-
 
 
