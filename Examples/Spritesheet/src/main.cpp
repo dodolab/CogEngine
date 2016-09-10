@@ -14,12 +14,13 @@ class XmlTestingApp : public CogApp {
 
 	void InitEngine() {
 		ofxXml* xml = new ofxXml();
-	/*	xml->loadFile("config.xml");
+		xml->loadFile("config2.xml");
 		auto xmlPtr = spt<ofxXml>(xml);
 		
-		COGEngine.Init(xmlPtr);
-		return;*/
-		COGEngine.Init();
+		CogEngine::GetInstance().Init(xmlPtr);
+		return;
+
+		CogEngine::GetInstance().Init();
 
 		auto resCache = GETCOMPONENT(ResourceCache);
 

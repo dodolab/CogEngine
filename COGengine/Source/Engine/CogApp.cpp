@@ -12,7 +12,7 @@ namespace Cog {
 	}
 
 	void CogApp::InitEngine() {
-		COGEngine.Init();
+		CogEngine::GetInstance().Init();
 	}
 
 void CogApp::setup(){
@@ -31,7 +31,7 @@ void CogApp::setup(){
 
 void CogApp::draw(){
 	// drawing loop
-	COGEngine.Draw(delta, absolute);
+	CogEngine::GetInstance().Draw(delta, absolute);
 }
 
 void CogApp::update(){
@@ -41,19 +41,19 @@ void CogApp::update(){
 
 	uint64 semiFixedDelta = (delta < 16) ? 16 : (delta < 32) ? delta : 32;
 
-	COGEngine.Update(semiFixedDelta, absolute);
+	CogEngine::GetInstance().Update(semiFixedDelta, absolute);
 }
 
 void CogApp::keyPressed(int key){
-	COGEngine.environment->OnKeyAction(key, true);
+	CogEngine::GetInstance().environment->OnKeyAction(key, true);
 }
 
 void CogApp::keyReleased(int key){
-	COGEngine.environment->OnKeyAction(key, false);
+	CogEngine::GetInstance().environment->OnKeyAction(key, false);
 }
 
 void CogApp::windowResized(int w, int h){
-	COGEngine.environment->OnScreenSizeChanged(w, h);
+	CogEngine::GetInstance().environment->OnScreenSizeChanged(w, h);
 }
 
 
@@ -65,16 +65,16 @@ void CogApp::mouseMoved(int x, int y){
 }
 
 void CogApp::mouseDragged(int x, int y, int button){
-	COGEngine.environment->OnSingleTouchMotion(x, y, button);
+	CogEngine::GetInstance().environment->OnSingleTouchMotion(x, y, button);
 
 }
 
 void CogApp::mousePressed(int x, int y, int button){
-	COGEngine.environment->OnSingleTouchButton(x, y, button, true);
+	CogEngine::GetInstance().environment->OnSingleTouchButton(x, y, button, true);
 }
 
 void CogApp::mouseReleased(int x, int y, int button){
-	COGEngine.environment->OnSingleTouchButton(x, y, button, false);
+	CogEngine::GetInstance().environment->OnSingleTouchButton(x, y, button, false);
 }
 
 void CogApp::dragEvent(ofDragInfo dragInfo){

@@ -59,7 +59,7 @@ namespace Cog {
 		MLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
-		if (COGEngine.stage->GetActualScene() != nullptr) {
+		if (CogEngine::GetInstance().stage->GetActualScene() != nullptr) {
 			SendMessageNoBubbling(ACT_SCREEN_CHANGED, 0, new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize()),nullptr);
 		}
 	}

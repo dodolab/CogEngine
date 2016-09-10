@@ -273,10 +273,14 @@
     <ClInclude Include="Source\Math\StringHash.h" />
     <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
+    <ClInclude Include="Source\Misc\TimeMeasure.h" />
     <ClInclude Include="Source\Misc\Utils.h" />
     <ClInclude Include="Source\ofxCogCommon.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
+    <ClInclude Include="Source\Tests\EngineTest.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
+    <ClInclude Include="Source\Tests\MeasureTest.h" />
+    <ClInclude Include="Source\Tests\NetworkTest.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
     <ClInclude Include="Source\Tests\SQLTest.h" />
     <ClInclude Include="Source\Tests\StringHashTest.h" />
@@ -328,6 +332,7 @@
     <ClCompile Include="Source\Math\Flags.cpp" />
     <ClCompile Include="Source\Math\StringHash.cpp" />
     <ClCompile Include="Source\Math\Transform.cpp" />
+    <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -60,6 +60,7 @@ namespace Cog {
 
 	void CogWriteLogStage();
 	void CogWriteLogActualScene();
+	void CogWriteTimeReport(bool restart);
 
 	// =================== MRENDERER =========================
 	void CogPushNodeForRendering(Node* node);

@@ -165,20 +165,32 @@ namespace Cog {
 		float h = tile.height*tile.scaleY / 2.0f;
 		float x = tile.posX;
 		float y = tile.posY;
-		float z = tile.posZ;
 		float rot = tile.rotation;
 		float* verts = actualBuffer->verts;
 
-		verts[offset + 2] = verts[offset + 5] = verts[offset + 11] = verts[offset + 8] = verts[offset + 14] = verts[offset + 17] = z;
+		verts[offset + 2] = verts[offset + 5] = verts[offset + 11] = verts[offset + 8] = verts[offset + 14] = verts[offset + 17] = tile.posZ;
 
-		verts[offset] = x + getX(-w, -h, rot);
-		verts[offset + 1] = y + getY(-w, -h, rot);
-		verts[offset + 3] = verts[offset + 9] = x + getX(w, -h, rot);
-		verts[offset + 4] = verts[offset + 10] = y + getY(w, -h, rot);
-		verts[offset + 6] = verts[offset + 12] = x + getX(-w, h, rot);
-		verts[offset + 7] = verts[offset + 13] = y + getY(-w, h, rot);
-		verts[offset + 15] = x + getX(w, h, rot);
-		verts[offset + 16] = y + getY(w, h, rot);
+		if (rot == 0) {
+			// simlify
+			verts[offset] = x + -w;
+			verts[offset + 1] = y + -h;
+			verts[offset + 3] = verts[offset + 9] = x + w;
+			verts[offset + 4] = verts[offset + 10] = y + -h;
+			verts[offset + 6] = verts[offset + 12] = x + -w;
+			verts[offset + 7] = verts[offset + 13] = y + h;
+			verts[offset + 15] = x + w;
+			verts[offset + 16] = y + h;
+		}
+		else {
+			verts[offset] = x + getX(-w, -h, rot);
+			verts[offset + 1] = y + getY(-w, -h, rot);
+			verts[offset + 3] = verts[offset + 9] = x + getX(w, -h, rot);
+			verts[offset + 4] = verts[offset + 10] = y + getY(w, -h, rot);
+			verts[offset + 6] = verts[offset + 12] = x + getX(-w, h, rot);
+			verts[offset + 7] = verts[offset + 13] = y + getY(-w, h, rot);
+			verts[offset + 15] = x + getX(w, h, rot);
+			verts[offset + 16] = y + getY(w, h, rot);
+		}
 	}
 
 	void SpriteSheetRenderer::makeColorQuad(int offset, int a, int r, int g, int b) {

@@ -113,7 +113,7 @@ TEST_CASE("SQL test", "[class]")
 		ofxSQLTestEntity::RemoveTable(sql);
 		ofxSQLTestEntity::CreateTableIfNotExists(sql);
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			ofxSQLTestEntity entity(sql);
 			entity.boolVal = true;
 			entity.numVal = i;;
@@ -122,7 +122,7 @@ TEST_CASE("SQL test", "[class]")
 		}
 
 		vector<ofxSQLTestEntity> list = ofxSQLTestEntity::GetList(sql);
-		REQUIRE(list.size() == 100);
+		REQUIRE(list.size() == 10);
 	}
 
 	ofxSQLTestEntity::RemoveTable(sql);

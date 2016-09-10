@@ -23,7 +23,6 @@ namespace Cog {
 
 	void TransformMath::CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
 
-
 		Trans& parentTrans = parent->GetTransform();
 
 		// calculate scale
@@ -41,6 +40,7 @@ namespace Cog {
 		// if zIndex is equal to 0, the value will be taken from the parent
 		if (zIndex == 0) zIndex = (int)parentTrans.localPos.z;
 
+		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth()/ 2, shape->GetHeight() / 2);
 
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
@@ -92,7 +92,6 @@ namespace Cog {
 
 		float scaleX = 1;
 		float scaleY = 1;
-
 
 		switch (scaleCalc) {
 		case CalcType::ABS:

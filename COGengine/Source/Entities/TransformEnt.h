@@ -36,6 +36,12 @@ namespace Cog {
 			this->rotation = rotation;
 		}
 
+		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
+			ofVec2f anchor, ofVec2f size, CalcType sizeCalc) :pos(position), zIndex(zIndex), pType(positionCalc), anchor(anchor),
+			size(size), sType(sizeCalc), rotation(0) {
+			this->name = "";
+		}
+
 		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation):pos(position),zIndex(zIndex),pType(positionCalc),anchor(anchor),
 			size(size),sType(sizeCalc), rotation(rotation){
@@ -59,7 +65,7 @@ namespace Cog {
 
 			// =================== get positions
 			if (xml->attributeExists("pos")) {
-				float posF = xml->getAttributex("pos", defaultSettings.GetItemValFloat("pos",0));
+				float posF = xml->getAttributex("pos", defaultSettings.GetItemValFloat("pos",0.0));
 				pos = ofVec2f(posF, posF);
 			}
 			else {
@@ -67,8 +73,8 @@ namespace Cog {
 				float posX = 0;
 				float posY = 0;
 
-				posX = xml->getAttributex("pos_x", defaultSettings.GetItemValFloat("pos_x", 0));
-				posY = xml->getAttributex("pos_y", defaultSettings.GetItemValFloat("pos_y", 0));
+				posX = xml->getAttributex("pos_x", defaultSettings.GetItemValFloat("pos_x", 0.0));
+				posY = xml->getAttributex("pos_y", defaultSettings.GetItemValFloat("pos_y", 0.0));
 				pos = ofVec2f(posX, posY);
 			}
 
@@ -83,11 +89,11 @@ namespace Cog {
 			float height = 0;
 
 			if (xml->attributeExists("size")) {
-				width = height = xml->getAttributex("size", 1);
+				width = height = xml->getAttributex("size", 1.0);
 			}
 			else {
-				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1));
-				height = xml->getAttributex("height", defaultSettings.GetItemValFloat("height", 1));
+				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1.0));
+				height = xml->getAttributex("height", defaultSettings.GetItemValFloat("height", 1.0));
 			}
 
 			size = ofVec2f(width, height);
@@ -98,11 +104,11 @@ namespace Cog {
 				anchor = ofVec2f(anchorFlt);
 			}
 			else {
-				anchor.x = xml->getAttributex("anchor_x", defaultSettings.GetItemValFloat("anchor_x", 0));
-				anchor.y = xml->getAttributex("anchor_y", defaultSettings.GetItemValFloat("anchor_y", 0));
+				anchor.x = xml->getAttributex("anchor_x", defaultSettings.GetItemValFloat("anchor_x", 0.0));
+				anchor.y = xml->getAttributex("anchor_y", defaultSettings.GetItemValFloat("anchor_y", 0.0));
 			}
 
-			rotation = xml->getAttributex("rotation", defaultSettings.GetItemValFloat("rotation", 0));
+			rotation = xml->getAttributex("rotation", defaultSettings.GetItemValFloat("rotation", 0.0));
 		}
 
 	private:

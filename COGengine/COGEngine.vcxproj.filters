@@ -351,6 +351,18 @@
     <ClInclude Include="Source\Components\CogDatabase.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Misc\TimeMeasure.h">
+      <Filter>Source\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\MeasureTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\EngineTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tests\NetworkTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -481,6 +493,9 @@
     </ClCompile>
     <ClCompile Include="Source\Components\Network.cpp">
       <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Misc\TimeMeasure.cpp">
+      <Filter>Source\Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

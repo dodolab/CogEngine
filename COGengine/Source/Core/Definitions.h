@@ -1,10 +1,10 @@
 #pragma once
 
 #define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>(#className)
-#define GETBEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)
-#define CREATE_BEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
-#define REGISTER_COMPONENT(object) COGEngine.entityStorage->RegisterComponent(object)
-#define REGISTER_BEHAVIOR(className) COGEngine.entityStorage->RegisterBehaviorPrototype(#className, new className())
+#define GETBEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)
+#define CREATE_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
+#define REGISTER_COMPONENT(object) CogEngine::GetInstance().entityStorage->RegisterComponent(object)
+#define REGISTER_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->RegisterBehaviorPrototype(#className, new className())
 
 #define OBJECT_VIRTUAL() \
 public: \
@@ -54,6 +54,7 @@ public: \
     return new compName(setting); \
   }
 
+
 // assertion with formatted message
 // this macro can be used widely for severe conditions, no matter how difficult
 #ifdef DEBUG
@@ -71,13 +72,23 @@ public: \
 #endif
 
 
-// todo ...
+// time measurement
 #ifdef DEBUG
-#define COGMEASURE(key) \
+#define COGMEASURE_BEGIN(key) \
   do { \
+  TimeMeasure::GetInstance().MeasureBlockStart(key); \
   } while(false)
 #else
-#define COGMEASURE(key) do {} while(false)
+#define COGMEASUREBEGIN(key) do {} while(false)
+#endif
+
+#ifdef DEBUG
+#define COGMEASURE_END(key) \
+  do { \
+  TimeMeasure::GetInstance().MeasureBlockEnd(key); \
+  } while(false)
+#else
+#define COGMEASUREEND(key) do {} while(false)
 #endif
 
 

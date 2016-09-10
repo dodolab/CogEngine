@@ -19,8 +19,8 @@ TEST_CASE("Settings test", "[class]")
 		spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
 		xml->loadFromBuffer(SETTINGS);
 
-		auto res = GETCOMPONENT(ResourceCache);
-		auto settings = Settings(res->LoadSettingsFromXml(xml));
+		auto settings = Settings();
+		settings.LoadFromXml(xml);
 
 		auto val = settings.GetSettingVal("test_settings", "test_key");
 

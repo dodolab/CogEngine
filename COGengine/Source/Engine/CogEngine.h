@@ -19,14 +19,11 @@ namespace Cog {
 
 namespace Cog {
 
-	class Engine;
-	extern Engine COGEngine;
-
 	/**
 	* COG engine that holds references to all other components and
 	* executes drawing and update loops
 	*/
-	class Engine {
+	class CogEngine {
 	private:
 		// frame counter
 		int frameCounter = 0;
@@ -48,11 +45,11 @@ namespace Cog {
 		Stage* stage = nullptr;
 		InputHandler* inputHandler = nullptr;
 		
-		Engine() {
+		CogEngine() {
 			entityStorage = new EntityStorage();
 		}
 
-		~Engine() {
+		~CogEngine() {
 			delete environment;
 			delete resourceCache;
 			delete stage;
@@ -94,6 +91,22 @@ namespace Cog {
 		int GetFrameCounter() {
 			return frameCounter;
 		}
+
+
+		// ================================= SINGLETON PART ==========================
+	public:
+		static CogEngine& GetInstance()
+		{
+			// guaranteed to be destroyed,
+			// instantiated on first use
+			static CogEngine instance;
+			return instance;
+		}
+
+		// deleted functions should be public as it results
+		// int better error messages due compiling
+		CogEngine(CogEngine const&) = delete;
+		void operator=(CogEngine const&) = delete;
 	};
 
 

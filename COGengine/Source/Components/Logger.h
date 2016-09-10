@@ -166,6 +166,7 @@ namespace Cog {
 		}
 
 		void Init() {
+			delete channel;
 			channel = new ConsoleLoggerChannel();
 			logLevel = LogLevel::LINFO;
 		}

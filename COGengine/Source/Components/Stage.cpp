@@ -125,7 +125,7 @@ namespace Cog {
 			if (scene->IsLazyLoad() && !scene->Loaded()) {
 				// scene is lazy loaded -> run asynchronous loading process
 
-				auto async = new AsyncProcess(new SceneLoader(COGEngine.config, scene, tweenDir));
+				auto async = new AsyncProcess(new SceneLoader(CogEngine::GetInstance().config, scene, tweenDir));
 
 				MLOGDEBUG("Stage", "Scene is lazy loaded!");
 

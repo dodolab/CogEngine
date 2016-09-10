@@ -68,11 +68,17 @@ namespace Cog {
 			int gridWidth = sceneSettings.GetSettingValInt("transform", "grid_width");
 			int gridHeight = sceneSettings.GetSettingValInt("transform", "grid_height");
 
+			fromTrans = Trans();
+			toTrans = Trans();
+
+
 			if(from) math.CalcTransform(fromTrans, owner, owner->GetParent(), *from, gridWidth,gridHeight);
 			else fromTrans = owner->GetTransform();
 
 			if(to) math.CalcTransform(toTrans, owner, owner->GetParent(), *to, gridWidth, gridHeight);
 			else toTrans = owner->GetTransform();
+			actual = 0;
+			lastPercent = 0;
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
@@ -129,6 +135,7 @@ namespace Cog {
 				}
 			}
 		}
+
 
 		private:
 			AnimBlend StrToAnimBlend(string val) {
