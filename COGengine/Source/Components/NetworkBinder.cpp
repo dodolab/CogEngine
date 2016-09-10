@@ -6,7 +6,7 @@ namespace Cog {
 
 	void NetworkBinder::Init() {
 		RegisterGlobalListening(ACT_NET_MESSAGE_RECEIVED);
-		this->parameter = 0;
+		
 	}
 
 	void NetworkBinder::OnMessage(Msg& msg) {
@@ -27,21 +27,31 @@ namespace Cog {
 	void NetworkBinder::AcceptDeltaUpdate(NetMessage* msg) {
 		if (!gotFirstMessage) {
 			gotFirstMessage = true;
-			this->parameter = msg->GetFloatParameter();
+			this->parameter1 = msg->GetFloatParameter1();
+			this->parameter2 = msg->GetFloatParameter2();
+			this->parameter3 = msg->GetFloatParameter3();
 			this->parameterTime = msg->GetMsgTime();
-			this->previousParameter = msg->GetFloatParameter();
+			this->previousParameter1 = msg->GetFloatParameter1();
+			this->previousParameter2 = msg->GetFloatParameter2();
+			this->previousParameter3 = msg->GetFloatParameter3();
 			this->previousParameterTime = msg->GetMsgTime();
 		}
 		else if (!gotSecondMessage) {
 			gotSecondMessage = true;
-			this->nextParameter = msg->GetFloatParameter();
+			this->nextParameter1 = msg->GetFloatParameter1();
+			this->nextParameter2 = msg->GetFloatParameter2();
+			this->nextParameter3 = msg->GetFloatParameter3();
 			this->nextParameterTime = msg->GetMsgTime();
 		}
 		else {
-			this->previousParameter = this->nextParameter;
+			this->previousParameter1 = this->nextParameter1;
+			this->previousParameter2 = this->nextParameter2;
+			this->previousParameter3 = this->nextParameter3;
 			this->previousParameterTime = this->nextParameterTime;
 
-			this->nextParameter = msg->GetFloatParameter();
+			this->nextParameter1 = msg->GetFloatParameter1();
+			this->nextParameter2 = msg->GetFloatParameter2();
+			this->nextParameter3 = msg->GetFloatParameter3();
 			this->nextParameterTime = msg->GetMsgTime();
 		}
 	}
@@ -49,23 +59,28 @@ namespace Cog {
 	void NetworkBinder::Update(const uint64 delta, const uint64 absolute) {
 		if (gotFirstMessage && gotSecondMessage) {
 
-			this->parameterTime += (int)(delta*deltaSpeed);
+			parameterTime += (int)(delta*deltaSpeed);
 
+			if (parameterTime - nextParameterTime < extrapolationTimeout) {
 
-			if (this->parameterTime < this->previousParameterTime) {
-				deltaSpeed *= 1.1f;
+				if (this->parameterTime < this->previousParameterTime) {
+					deltaSpeed *= 1.1f;
+				}
+				else {
+					deltaSpeed = 1;
+				}
+
+				auto diffTime = this->nextParameterTime - this->previousParameterTime;
+				auto diffParam1 = this->nextParameter1 - this->previousParameter1;
+				auto diffParam2 = this->nextParameter2 - this->previousParameter2;
+				auto diffParam3 = this->nextParameter3 - this->previousParameter3;
+
+				auto diffLow = this->parameterTime - this->previousParameterTime;
+
+				this->parameter1 = this->previousParameter1 + diffParam1*(((float)diffLow) / diffTime);
+				this->parameter2 = this->previousParameter2 + diffParam2*(((float)diffLow) / diffTime);
+				this->parameter3 = this->previousParameter3 + diffParam3*(((float)diffLow) / diffTime);
 			}
-			else {
-				deltaSpeed = 1;
-			}
-
-			auto diffTime = this->nextParameterTime - this->previousParameterTime;
-			auto diffParam = this->nextParameter - this->previousParameter;
-
-			auto diffLow = this->parameterTime - this->previousParameterTime;
-
-			this->parameter = this->previousParameter + diffParam*(((float)diffLow)/diffTime);
-
 		}
 	}
 

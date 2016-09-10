@@ -22,7 +22,7 @@ namespace Cog {
 	}
 
 	void NetworkBindSender::SendNetworkMessage(spt<NetMessage> msg) {
-		auto writer = new NetWriter(msg->GetDataLength()+4+4+4+4+4+4);
+		auto writer = new NetWriter(msg->GetMessageLength());
 		msg->SaveToStream(writer);
 		unsigned int size = 0;
 		auto data = writer->CopyData(size);
