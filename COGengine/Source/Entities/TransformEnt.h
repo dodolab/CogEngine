@@ -10,13 +10,39 @@ namespace Cog {
 	* Calculation type
 	*/
 	enum class CalcType {
-		ABS,	/*!< absolute */
-		LOC,	/*!< local */
-		PER,	/*!< percentage <0..1> */
-		GRID,	/*!< grid positioning */
-		ABS_PER /*!< absolute percentage */
+		ABS,	/*!< absolute (un) */
+		LOC,	/*!< local (-) */
+		PER,	/*!< percentage <0..1> (r)*/
+		GRID,	/*!< grid positioning (gr)*/
+		ABS_PER /*!< absolute percentage (rp) */
 	};
 
+	struct CalcTypeConverter {
+		static CalcType GetUnitValue(string val, float& floatVal) {
+			stringstream ss;
+			int i;
+			for (i = 0; i < val.length(); i++) {
+				if (isdigit(val[i]) || val[i] == '.' || val[i] == '-') ss << val[i];
+				else break;
+			}
+
+			if (i != 0) floatVal = ofToFloat(ss.str());
+			return StrToCalcType(val.substr(i));
+		}
+
+
+		static CalcType StrToCalcType(string val) {
+			if (val.compare("r") == 0) return CalcType::PER;
+			else if (val.compare("gr") == 0) return CalcType::GRID;
+			else if (val.compare("rp") == 0) return CalcType::ABS_PER;
+			else if (val.compare("un") == 0) return CalcType::ABS;
+			else if (val.empty()) return CalcType::LOC;
+
+			CogLogError("CalcTypeConverter", "Error! %s is not valid unit, expected [r, gr, rp, un] or empty", val.c_str());
+
+			return CalcType::LOC;
+		}
+	};
 
 	class TransformEnt : public DEntity{
 	public:
@@ -71,37 +97,53 @@ namespace Cog {
 		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
 			this->name = xml->getAttributex("name", "");
 
+			pType = sType = CalcType::LOC;
+
 			// =================== get positions
 			if (xml->attributeExists("pos")) {
-				float posF = xml->getAttributex("pos", defaultSettings.GetItemValFloat("pos",0.0));
+				string posString = xml->getAttributex("pos", "");
+				float posF = defaultSettings.GetItemValFloat("pos", 0.0);
+				pType = CalcTypeConverter::GetUnitValue(posString, posF);
 				pos = ofVec2f(posF, posF);
 			}
 			else {
+				string posXStr = xml->getAttributex("pos_x", "");
+				string posYStr = xml->getAttributex("pos_y", "");
 
-				float posX = 0;
-				float posY = 0;
+				float posX = defaultSettings.GetItemValFloat("pos_x", 0.0);
+				float posY = defaultSettings.GetItemValFloat("pos_y", 0.0);
 
-				posX = xml->getAttributex("pos_x", defaultSettings.GetItemValFloat("pos_x", 0.0));
-				posY = xml->getAttributex("pos_y", defaultSettings.GetItemValFloat("pos_y", 0.0));
+				if(!posXStr.empty()) pType = CalcTypeConverter::GetUnitValue(posXStr, posX);
+				if(!posYStr.empty()) pType = CalcTypeConverter::GetUnitValue(posYStr, posY);
+
 				pos = ofVec2f(posX, posY);
 			}
 
 
 			zIndex = xml->getAttributex("z_index", defaultSettings.GetItemValFloat("z_index", 0));
-			pType = StrToCalcType(xml->getAttributex("ptype", defaultSettings.GetItemVal("ptype", "per")));
-
+			
 			// =================== get size
-			sType = StrToCalcType(xml->getAttributex("stype", defaultSettings.GetItemVal("stype", "loc")));
-
+			
 			float width = 0;
 			float height = 0;
 
 			if (xml->attributeExists("size")) {
-				width = height = xml->getAttributex("size", 1.0);
+				string sizeStr = xml->getAttributex("size", "1.0");
+				float size = defaultSettings.GetItemValFloat("size", 1.0);
+				sType = CalcTypeConverter::GetUnitValue(sizeStr, size);
+
+				width = height = size;
 			}
 			else {
-				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1.0));
-				height = xml->getAttributex("height", defaultSettings.GetItemValFloat("height", 1.0));
+				string widthStr = xml->getAttributex("width", "");
+				string heightStr = xml->getAttributex("height", "");
+
+				width = defaultSettings.GetItemValFloat("width", 1.0);
+				height = defaultSettings.GetItemValFloat("height", 1.0);
+
+				// calc width and height
+			 	if(!widthStr.empty()) sType = CalcTypeConverter::GetUnitValue(widthStr, width);
+				if(!heightStr.empty()) sType = CalcTypeConverter::GetUnitValue(heightStr, height);
 
 				// set the other property to 0 so that we know that it should have the same value
 				if (width != height) {
@@ -135,16 +177,6 @@ namespace Cog {
 			}
 		}
 
-	private:
-		CalcType StrToCalcType(string val) {
-			if (val.compare("per") == 0) return CalcType::PER;
-			else if (val.compare("abs") == 0) return CalcType::ABS;
-			else if (val.compare("grid") == 0) return CalcType::GRID;
-			else if (val.compare("absper") == 0) return CalcType::ABS_PER;
-			else if (val.compare("loc") == 0) return CalcType::LOC;
-
-			return CalcType::PER;
-		}
 	};
 
 

@@ -4,10 +4,10 @@
 
 <attranimations>
   <anim name="rotation" repeat="0">
-	<attranim attr="rotation" from="0" to="360" ttype="abs" mtype="direct" duration="5000"  />
+	<attranim attr="rotation" from="0un" to="360un" mtype="direct" duration="5000"  />
   </anim>
   <anim name="rotation2" repeat="0">
-	<attranim attr="rotation" from="0" to="-360" ttype="abs" mtype="direct" duration="5000"  />
+	<attranim attr="rotation" from="0un" to="-360un"  mtype="direct" duration="5000"  />
   </anim>
 </attranimations>
 
@@ -27,15 +27,15 @@
       <node img="bgr2.jpg" />
 	  <node>
 	     <node name="anim" img="cog.png">
-	      <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="per" anchor="0.5" width="0.5" stype="per" rotation_origin="0.5" />
+	      <transform pos_x="0.5r" pos_y="0.5r" z_index="2" anchor="0.5" width="0.5r" rotation_origin="0.5" />
 		  <behavior type="AttribAnimator" animation="rotation" />
 	    </node>
 	    <node name="anim2" img="cog.png">
-	     <transform pos_x="0.15" pos_y="0.7" z_index="2" ptype="per" anchor="0.5" width="0.35" stype="per" rotation_origin="0.5" />
+	     <transform pos_x="0.15r" pos_y="0.7r" z_index="2" anchor="0.5" width="0.35r" rotation_origin="0.5" />
 		  <behavior type="AttribAnimator" animation="rotation2" />
 	    </node>
 	    <node name="anim3" img="cog.png">
-	      <transform pos_x="0.85" pos_y="0.7" z_index="2" ptype="per" anchor="0.5" width="0.35" stype="per" rotation_origin="0.5" />
+	      <transform pos_x="0.85r" pos_y="0.7r" z_index="2" anchor="0.5" width="0.35r" rotation_origin="0.5" />
 		  <behavior type="AttribAnimator" animation="rotation2" />
 	    </node>
 	  </node>

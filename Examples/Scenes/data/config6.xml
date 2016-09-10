@@ -29,7 +29,7 @@
     <scene name="main">
       <node img="bgr.jpg" />
       <node name="anim" >
-	    <transform pos_x="0.5" pos_y="0.5" z_index="2" ptype="rel" anchor="0.5" />
+	    <transform pos_x="0.5r" pos_y="0.5r" z_index="2"  anchor="0.5" />
 		<shape type="plane" width="1" height="1" />
 		<behavior type="SheetAnimator">
 		  <setting>
