@@ -241,6 +241,7 @@
     <ClInclude Include="Source\Core\Error.h" />
     <ClInclude Include="Source\Core\Msg.h" />
     <ClInclude Include="Source\Core\Node.h" />
+    <ClInclude Include="Source\Core\NodeBuilder.h" />
     <ClInclude Include="Source\Core\Scene.h" />
     <ClInclude Include="Source\Core\StringHash.h" />
     <ClInclude Include="Source\Core\Tests.h" />

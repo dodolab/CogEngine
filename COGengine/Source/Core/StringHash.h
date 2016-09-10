@@ -66,8 +66,8 @@ namespace Cog
 		// Test if greater than another hash.
 		bool operator >(const StringHash& rhs) const { return value_ > rhs.value_; }
 
-		// Return true if nonzero hash value.
-		operator bool() const { return value_ != 0; }
+		// return unsigned value
+		operator unsigned() const { return value_; }
 
 		// Return hash value.
 		unsigned Value() const { return value_; }
