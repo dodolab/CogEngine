@@ -1,8 +1,7 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "Msg.h"
-#include "StringHash.h"
 
 namespace Cog {
 

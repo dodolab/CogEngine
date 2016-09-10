@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Flags.h"
 #include "Bounds.h"
 #include "Collision.h"
 

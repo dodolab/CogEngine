@@ -8,6 +8,13 @@ namespace Cog {
 	void SceneContext::Init() {
 		// create root object with default behaviors, states and attributes
 		this->rootObject = new Node(ObjType::ROOT, 0, "root");
+		RegisterGlobalListening(ACT_SCENE_SWITCHED);
+	}
+
+	void SceneContext::OnMessage(Msg& msg) {
+		if (msg.GetAction() == StringHash(ACT_SCENE_SWITCHED)) {
+			// nothing to do here..for now
+		}
 	}
 
 	Scene* SceneContext::FindSceneByName(string name) const {
@@ -27,18 +34,16 @@ namespace Cog {
 		if (scene->IsLazyLoad() && !scene->Loaded()) {
 			auto async = new AsyncProcess(new SceneLoader(COGEngine.config, scene, tweenDir));
 
+			MLOGDEBUG("SceneContext", "Scene is lazy loaded!");
 
 			// lazy load the scene
 			if (this->loadingScene != nullptr) {
+				MLOGDEBUG("SceneContext", "Loading progress scene instead");
+
 				Node* to = loadingScene->GetSceneNode();
 				sceneStack.push(actualScene);
 				actualScene = loadingScene;
-				if (tweenDir == TweenDirection::NONE) {
-					manager->SwitchToScene(from, to);
-				}
-				else {
-					manager->SwitchToScene(from, to, tweenDir);
-				}
+				manager->SwitchToScene(from, to, tweenDir);
 			}
 
 			CogRunThread(async);
@@ -46,18 +51,12 @@ namespace Cog {
 		}
 
 		Node* to = scene->GetSceneNode();
-		if (loadingScene == nullptr || scene->GetName().compare(loadingScene->GetName()) == 0) {
+		if (loadingScene == nullptr || (actualScene->GetName().compare(loadingScene->GetName()) != 0)) {
 			sceneStack.push(actualScene);
 		}
 
 		actualScene = scene;
-		if (tweenDir == TweenDirection::NONE) {
-			manager->SwitchToScene(from, to);
-		}
-		else {
-			manager->SwitchToScene(from, to, tweenDir);
-		}
-		
+		manager->SwitchToScene(from, to, tweenDir);
 	}
 
 	bool SceneContext::SwitchBackToScene(TweenDirection tweenDir) {
@@ -69,13 +68,9 @@ namespace Cog {
 			Node* to = scene->GetSceneNode();
 			actualScene = scene;
 
-			if (tweenDir == TweenDirection::NONE) {
-				manager->SwitchToScene(from, to);
+			MLOGDEBUG("SceneContext", "Switching to previous scene");
 
-			}
-			else {
-				manager->SwitchToScene(from, to, tweenDir);
-			}
+			manager->SwitchToScene(from, to, tweenDir);
 
 			sceneStack.pop();
 
@@ -85,6 +80,8 @@ namespace Cog {
 	}
 
 	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {
+
+		MLOGDEBUG("SceneContext", "Loading scenes from XML");
 
 		string initialScene = xml->getAttributex("initial", "");
 		string loading = xml->getAttributex("loading", "");

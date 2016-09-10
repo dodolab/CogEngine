@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "Msg.h"
 #include "InputAct.h"
 #include "SoundFile.h"
@@ -36,10 +36,7 @@ namespace Cog {
 	ofVec2f CogGetScreenSize();
 	void CogRunThread(ofThread* thread);
 
-	// =================== MFACTORY ========================
-
-	float CogTranslateSpeed(float speed);
-
+	
 	// =================== MNODESTORAGE ========================
 	void CogRegisterGlobalListener(StringHash action, MsgListener* listener);
 	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener);

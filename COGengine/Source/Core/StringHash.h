@@ -1,11 +1,9 @@
 #pragma once
 
-#include <string>
-#include <map>
+#include "ofxCogCommon.h"
 
 namespace Cog
 {
-	using namespace std;
 
 #define CONVERSION_BUFFER_LENGTH 128
 

@@ -70,12 +70,6 @@ namespace Cog {
 		COGEngine.environment->RunThread(thread);
 	}
 
-	// =================== MFACTORY ========================
-
-	float CogTranslateSpeed(float speed) {
-		// todo: 
-		return speed * 0.001f*COGEngine.environment->GetWidth();
-	}
 
 	// =================== MSTORAGE ========================
 
@@ -88,7 +82,6 @@ namespace Cog {
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
-		MLOGDEBUG("CORE", "Message %s:%s:%d", StringHash::GetStringValue(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
 		COGEngine.sceneContext->GetActualScene()->SendMessage(msg, actualNode);
 	}
 

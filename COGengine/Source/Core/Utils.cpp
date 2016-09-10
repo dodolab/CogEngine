@@ -1,4 +1,4 @@
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 
 namespace Cog {
 

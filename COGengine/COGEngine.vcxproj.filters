@@ -30,9 +30,6 @@
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
       <Filter>Source\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ofxCogMain.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Misc\CollageTexture.h">
       <Filter>Source\Misc</Filter>
     </ClInclude>
@@ -276,6 +273,15 @@
     <ClInclude Include="Source\Core\AsyncProcess.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Definitions.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ofxCogCommon.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ofxCogMain.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">
@@ -336,9 +342,6 @@
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Behavior.cpp">
-      <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Enums.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Facade.cpp">

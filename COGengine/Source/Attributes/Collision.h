@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include "ofxCogCommon.h"
 #include "Node.h"
 
 namespace Cog {

@@ -38,7 +38,7 @@ namespace Cog {
 
 		void OnMessage(Msg& msg) {
 			if (msg.GetAction() == ACT_TWEEN_ENDED && waitingForTween) {
-
+				MLOGDEBUG("SceneManager", "Scene %s switched", to->GetTag().c_str());
 				// change zindex back to original value
 				to->GetTransform().localPos.z = 1;
 				to->SetRunningMode(RUNNING);
@@ -49,31 +49,12 @@ namespace Cog {
 
 				// switch to waiting scenes
 				if (!waitingTweens.empty()) {
+					MLOGDEBUG("SceneManager", "-- taking switching context from the stack");
 					TweenContext ctx = waitingTweens.top();
 					waitingTweens.pop();
 					this->SwitchToScene(ctx.from, ctx.to, ctx.dir);
 				}
 			}
-		}
-
-		/**
-		* Switches to another scene without tweening
-		* @param scene scene to switch to
-		*/
-		void SwitchToScene(Node* from, Node* to) {
-			MLOGDEBUG("SceneManager", "Switching from %s to %s immediately", from->GetTag().c_str(), to->GetTag().c_str());
-
-			// hide scene immediately
-			from->SetRunningMode(DISABLED);
-
-			this->from = from;
-			this->to = to;
-
-			to->SetRunningMode(RUNNING);
-			to->GetTransform().localPos.x = 0;
-			to->GetTransform().localPos.y = 0;
-
-			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
 		}
 
 		/**
@@ -85,7 +66,7 @@ namespace Cog {
 			MLOGDEBUG("SceneManager", "Switching from %s to %s", from->GetTag().c_str(), to->GetTag().c_str());
 
 			if (waitingForTween) {
-				MLOGDEBUG("SceneManager", "Adding tween context onto the stack");
+				MLOGDEBUG("SceneManager", "-another switch in progress; pushing context");
 				TweenContext context = TweenContext();
 				context.from = from;
 				context.to = to;
@@ -100,20 +81,31 @@ namespace Cog {
 				to->GetTransform().localPos.x = to->GetTransform().absPos.x = 100000000;
 				from->SetRunningMode(PAUSED_ALL);
 
-				auto slide = new SlideTween(tweenDir, from, to, 1);
+				if (tweenDir == TweenDirection::NONE) {
+					// switch immediately
+					from->SetRunningMode(DISABLED);
+					to->SetRunningMode(RUNNING);
+					to->GetTransform().localPos.x = 0;
+					to->GetTransform().localPos.y = 0;
 
-				auto fadeFunc = [](float x) {
-					return x * x * (3.0f - 2.0f * x);
-				};
+					SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
+				}
+				else {
+					auto slide = new SlideTween(tweenDir, from, to, 1);
 
-				slide->SetFadeFunction(fadeFunc);
+					auto fadeFunc = [](float x) {
+						return x * x * (3.0f - 2.0f * x);
+					};
 
-				to->AddBehavior(slide);
-				// node will be set visible at first update
-				to->SetRunningMode(INVISIBLE);
+					slide->SetFadeFunction(fadeFunc);
 
-				// wait for tween
-				waitingForTween = true;
+					to->AddBehavior(slide);
+					// node will be set visible at first update
+					to->SetRunningMode(INVISIBLE);
+
+					// wait for tween
+					waitingForTween = true;
+				}
 			}
 		}
 	};

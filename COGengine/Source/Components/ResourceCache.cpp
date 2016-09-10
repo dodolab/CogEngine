@@ -233,7 +233,21 @@ namespace Cog {
 
 				SettingItem item = SettingItem();
 				item.key = xml->getAttribute(":", "key", "");
-				item.value = xml->getAttribute(":", "value", "");
+
+				if (xml->attributeExists("value")) {
+					item.values.push_back(xml->getAttributex("value", ""));
+				}
+				else {
+					// more than one value
+					int values = xml->getNumTags("value");
+					for (int m = 0; m < values; m++) {
+						xml->pushTag("value", m);
+						string val = xml->getValuex("");
+						item.values.push_back(val);
+						xml->popTag();
+					}
+				}
+
 				set.items[item.key] = item;
 				xml->popTag();
 			}

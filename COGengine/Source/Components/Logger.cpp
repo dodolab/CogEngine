@@ -29,6 +29,10 @@ namespace Cog {
 					channel = new FileLoggerChannel(fullPath, append);
 				}
 			}
+
+			// load includes and excludes
+			this->includes = set.GetItemVals("module_include");;
+			this->excludes = set.GetItemVals("module_exclude");;
 		}
 		else {
 			Init();
