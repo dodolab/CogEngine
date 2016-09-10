@@ -6,10 +6,11 @@
 
 namespace Cog {
 
+	using namespace std;
+
 	typedef unsigned char BYTE;
 	typedef unsigned int DWORD;
-
-	using namespace std;
+	typedef unsigned short WORD;
 
 	class NetReader {
 	private:
@@ -54,6 +55,14 @@ namespace Cog {
 		inline BYTE ReadByte() {
 			BYTE output = 0;
 			ReadByte(output);
+			return output;
+		}
+
+		void ReadWord(WORD& value);
+
+		inline WORD ReadWord() {
+			WORD output = 0;
+			ReadWord(output);
 			return output;
 		}
 

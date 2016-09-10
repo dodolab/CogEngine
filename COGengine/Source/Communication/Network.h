@@ -70,14 +70,13 @@ namespace Cog {
 		}
 
 		void SendUDPMessage(unsigned int applicationId, spt<NetMessage> msg) {
-			NetWriter* writer = new NetWriter(msg->GetMessageLength() + 4 + 4);
-			// write two parameters and content length
-			writer->WriteDWord(applicationId);
-			writer->WriteDWord(msg->GetMessageLength());
+			NetWriter* writer = new NetWriter(msg->GetMessageLength() + 2);
+			// write application id and the content
+			writer->WriteWord(applicationId);
 			msg->SaveToStream(writer);
 
 			auto buffer = writer->GetBuffer();
-			udpSender.Send((char*)buffer, writer->GetBufferBites() / 8);
+			udpSender.Send((char*)buffer, writer->GetUsedBites() / 8);
 			delete writer;
 		}
 
@@ -93,13 +92,14 @@ namespace Cog {
 				bufferStream->Reset();
 				int bytesBuff = udpReceiver.Receive((char*)bufferStream->GetBuffer(), bufferStream->GetBufferBites() / 8);
 
-				if (bytesBuff > 0 && bufferStream->ReadDWord() == applicationId) {
+				if (bytesBuff > 0 && bufferStream->ReadWord() == applicationId) {
+					
+					// size of content
+					unsigned int size = bytesBuff - 2;
 
-					unsigned int size = bufferStream->ReadDWord();
 					// from now, bufferStream1 contains the proper content
 					spt<NetMessage> msg = spt<NetMessage>(new NetMessage());
 					msg->LoadFromStream(bufferStream);
-
 					string ipAddress = "";
 					int port = 0;
 					udpReceiver.GetRemoteAddr(ipAddress, port);

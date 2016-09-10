@@ -4,7 +4,7 @@
 namespace Cog {
 
 	void NetReader::ReadBit(bool& value) {
-		COGASSERT(FreeSpace(1), "NetWriter", "Buffer length exceeded");
+		COGASSERT(FreeSpace(1), "NetReader", "Buffer length exceeded");
 
 		value = (*current & (1 << (7-bitOffset))) != 0;
 
@@ -17,7 +17,7 @@ namespace Cog {
 	}
 
 	void NetReader::ReadByte(BYTE& value) {
-		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
+		COGASSERT(FreeSpace(8), "NetReader", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -32,8 +32,15 @@ namespace Cog {
 
 	}
 
+	void NetReader::ReadWord(WORD& value) {
+		COGASSERT(FreeSpace(16), "NetReader", "Buffer length exceeded");
+		value = 0;
+		value |= ReadByte() << 8;
+		value |= ReadByte();
+	}
+
 	void NetReader::ReadDWord(DWORD& value) {
-		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
+		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
 		value = 0;
 		value |= ReadByte() << 24;
 		value |= ReadByte() << 16;
@@ -42,7 +49,7 @@ namespace Cog {
 	}
 
 	void NetReader::ReadFloat(float& value) {
-		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
+		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
 
 		DWORD iVal = ReadDWord();
 		
@@ -50,7 +57,7 @@ namespace Cog {
 	}
 
 	void NetReader::ReadBytes(BYTE* data, unsigned size) {
-		COGASSERT(FreeSpace(size*8), "NetWriter", "Buffer length exceeded");
+		COGASSERT(FreeSpace(size*8), "NetReader", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -79,7 +86,7 @@ namespace Cog {
 
 	string NetReader::ReadString() {
 		DWORD size = ReadDWord();
-		COGASSERT(size < 100000, "NetWriter", "Unexpected string size in byte array");
+		COGASSERT(size < 100000, "NetReader", "Unexpected string size in byte array");
 
 		BYTE* bytes = ReadBytes(size);
 		string output = string((char*)bytes, (int)size);

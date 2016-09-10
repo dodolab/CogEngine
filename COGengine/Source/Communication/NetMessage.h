@@ -10,18 +10,18 @@ namespace Cog {
 		HANDSHAKE_REQUEST = 1,
 		UPDATE = 2,
 		CLIENT_CALLBACK = 3,
-		DISCONNECT = 4 
+		DISCONNECT = 4
 	};
 
 	class NetMessage {
 	private:
 		// identifier counter
-		static int idCounter;
+		static BYTE idCounter;
 
 		string ipAddress;
 		int port;
 		// id of this message
-		int id = 0;
+		BYTE id = 0;
 		// message type
 		NetMsgType msgType;
 		// id of action that has been invoked
@@ -67,11 +67,11 @@ namespace Cog {
 			this->port = port;
 		}
 
-		int GetId() {
+		BYTE GetId() {
 			return id;
 		}
 
-		int GetMessageLength(){
+		int GetMessageLength() {
 			return GetDataLength() + 256;
 		}
 
@@ -143,10 +143,19 @@ namespace Cog {
 			this->data = data;
 			this->dataLength = dataLength;
 		}
-		
+
 		void LoadFromStream(NetReader* reader);
 
 		void SaveToStream(NetWriter* writer);
+
+	protected:
+		// this method can be overridden by some derived class
+		virtual void LoadDataFromStream(NetReader* reader) {
+			if (this->dataLength != 0) {
+				this->data = new BYTE[this->dataLength];
+				reader->ReadBytes(this->data, this->dataLength);
+			}
+		}
 	};
 
 } // namespace
