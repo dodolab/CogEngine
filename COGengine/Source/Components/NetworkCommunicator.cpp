@@ -13,6 +13,7 @@ namespace Cog {
 		this->applicationId = applicationId;
 
 		network = new Network();
+		// client will always have different port than server
 		network->SetupUDPReceiver(isServer ? port : port+1, 10000, true);
 		if(!isServer) network->GetUDPSender().SetEnableBroadcast(true);
 
@@ -41,8 +42,8 @@ namespace Cog {
 		int frame = CogGetFrameCounter();
 
 		if (networkState == NetworkComState::LISTENING) {
-			if (frame % 100 == 0) {
-				auto message = network->ReceiveUDPMessage(applicationId, 0);
+			if ((frame-1) % 100 == 0) {
+				auto message = network->ReceiveUDPMessage(applicationId, 0, true);
 				if (message && message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
 					CogLogInfo("NETWORK", "Connected client %s", message->GetSourceIp().c_str());
 					network->SetupUDPSender(message->GetSourceIp(), port+1, true);
@@ -58,14 +59,22 @@ namespace Cog {
 				msgToSent->SetId(lastSentMsgId++);
 				msgToSent->SetMsgType(NetMsgType::UPDATE);
 				msgToSent->SetMsgTime(absolute);
-				network->SendUDPMessage(applicationId, msgToSent);
+
+				confirmations[msgToSent->GetId()] = msgToSent;
+
+				// send all messages that haven't been confirmed
+				for (auto& key : confirmations) {
+					network->SendUDPMessage(applicationId, key.second);
+				}
+				
 				msgToSent = spt<NetOutputMessage>();
 			}
 
-			auto message = network->ReceiveUDPMessage(applicationId, 0);
+			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 			if (message) {
 				if (message->GetMsgType() == NetMsgType::CLIENT_CALLBACK) {
 					BYTE acceptedMsgId = message->GetId();
+					confirmations.erase(acceptedMsgId);
 					clientLastCallBack = absolute;
 					SendMessageNoBubbling(StringHash(ACT_NET_MESSAGE_RECEIVED), 0, new NetworkMsgEvent(message), nullptr);
 				}
@@ -77,7 +86,6 @@ namespace Cog {
 			if ((absolute - clientLastCallBack) > 4000) {
 				// disconnect client
 				CogLogInfo("NETWORK", "Disconnecting client %s", this->clientIp.c_str());
-
 				spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastSentMsgId++,NetMsgType::DISCONNECT));
 				network->SendUDPMessage(applicationId, msg);
 				networkState = NetworkComState::LISTENING;
@@ -102,7 +110,7 @@ namespace Cog {
 				network->SendUDPMessage(applicationId, msg);
 			}
 			else {
-				auto message = network->ReceiveUDPMessage(applicationId, 0);
+				auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 				if (message && message->GetMsgType() == NetMsgType::UPDATE) {
 					CogLogInfo("NETWORK", "Connected to server %s", message->GetSourceIp().c_str());
 					network->SetupUDPSender(message->GetSourceIp(), port, true);
@@ -113,7 +121,7 @@ namespace Cog {
 			}
 		}
 		else if (networkState == NetworkComState::UPDATING_CLIENT) {
-			auto message = network->ReceiveUDPMessage(applicationId, 0);
+			auto message = network->ReceiveUDPMessage(applicationId, 0, false);
 
 			if (message && (message->GetId() > this->lastReceivedMsgId || (this->lastReceivedMsgId - message->GetId()) > 128)) { // check overflow
 				// dispose old messages
@@ -136,6 +144,7 @@ namespace Cog {
 			if ((absolute - serverLastUpdate) > 4000) {
 				// disconnect client
 				CogLogInfo("NETWORK", "No message received from server for 4s, disconnecting...");
+				confirmations.clear();
 				networkState = NetworkComState::BROADCASTING;
 			}
 		}

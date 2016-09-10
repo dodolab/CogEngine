@@ -5,6 +5,9 @@
 #include "Network.h"
 #include "NetReader.h"
 #include "NetWriter.h"
+#include "NetMessage.h"
+#include "DeltaUpdate.h"
+#include "NetworkCommunicator.h"
 
 #define TESTING
 
@@ -48,11 +51,10 @@ public:
 
 TEST_CASE("Network test", "[class]")
 {
-
+	
 	SECTION("TcpClient test message")
 	{
-		CogEngine::GetInstance().Init();
-		auto network = GETCOMPONENT(Network);
+		auto network = new Network();
 
 		// setup server and client (server must go first)
 		network->SetupTCPServer(11999,"_");
@@ -79,12 +81,12 @@ TEST_CASE("Network test", "[class]")
 		client.close();
 
 		REQUIRE(msg.compare("TEST") == 0);
+		delete network;
 	}
 
 	SECTION("TcpClient test bytes")
 	{
-		CogEngine::GetInstance().Init();
-		auto network = GETCOMPONENT(Network);
+		auto network = new Network();
 
 		// setup server and client (server must go first)
 		network->SetupTCPServer(11999, "_");
@@ -116,17 +118,17 @@ TEST_CASE("Network test", "[class]")
 		server.close();
 		client.close();
 		delete bytes;
+		delete network;
 	}
 
-
+	
 	SECTION("Udp test message")
 	{
-		CogEngine::GetInstance().Init();
-		auto network = GETCOMPONENT(Network);
+		auto network = new Network();
 
 		// setup server and client (server must go first)
-		network->SetupUDPReceiver(11999, false);
-		network->SetupUDPSender("127.0.0.1", 11999, false);
+		network->SetupUDPReceiver(11999, 1000,true);
+		network->SetupUDPSender("127.0.0.1", 11999, true);
 
 		auto& receiver = network->GetUDPReceiver();
 		auto& sender = network->GetUDPSender();
@@ -134,7 +136,7 @@ TEST_CASE("Network test", "[class]")
 		char* bytes = new char[4]{ 'a','b','c','d' };
 
 		sender.Send(bytes,4);
-		delete bytes;
+		//delete bytes;
 		bytes = new char[4];
 
 		// wait for message from client
@@ -152,6 +154,7 @@ TEST_CASE("Network test", "[class]")
 		receiver.Close();
 		sender.Close();
 		delete bytes;
+		delete network;
 	}
 
 	SECTION("NetworkStream")
@@ -232,13 +235,11 @@ TEST_CASE("Network test", "[class]")
 		REQUIRE(ints[1] == 10300);
 	}
 
-	SECTION("Message sending")
+	SECTION("Custom message sending")
 	{
-		CogEngine::GetInstance().Init();
-		auto network = GETCOMPONENT(Network);
-
+		auto network = new Network();
 		// setup server and client (server must go first)
-		network->SetupUDPReceiver(11999, false);
+		network->SetupUDPReceiver(11999, 10000, false);
 		network->SetupUDPSender("127.0.0.1", 11999, false);
 
 		auto& receiver = network->GetUDPReceiver();
@@ -249,13 +250,10 @@ TEST_CASE("Network test", "[class]")
 		auto writer = new NetWriter(200);
 		msg1.SaveToStream(writer);
 
-		unsigned int size = 0;
-		auto data =writer->CopyData(size);
-
 		// send message
-		network->SendUDPMessage(1000, 1001, data, size);
+		network->SendUDPMessage(1000, writer);
 		// receive messge
-		auto reader = network->ReceiveUDPMessage(1000, 1001, 10000);
+		auto reader = network->ReceiveUDPMessage(1000, 10000);
 
 		REQUIRE(reader != nullptr);
 
@@ -272,6 +270,131 @@ TEST_CASE("Network test", "[class]")
 
 		receiver.Close();
 		sender.Close();
+		delete network;
+	}
+
+	SECTION("Net message sending")
+	{
+		auto network = new Network();
+		// setup server and client (server must go first)
+		network->SetupUDPReceiver(11999, 10000, false);
+		network->SetupUDPSender("127.0.0.1", 11999, false);
+
+		auto& receiver = network->GetUDPReceiver();
+		auto& sender = network->GetUDPSender();
+
+		// create message
+		DummyMessage msg1(12345, 11137, 680, true);
+		auto writer = new NetWriter(200);
+		msg1.SaveToStream(writer);
+
+		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12));
+		msg->SetAction(StringHash("MOJO"));
+		msg->SetMsgTime(12345);
+		msg->SetMsgType(NetMsgType::CLIENT_CALLBACK);
+
+		// send message
+		network->SendUDPMessage(1000,msg);
+		// receive messge
+		auto inputMsg = network->ReceiveUDPMessage(1000, 10000, false);
+
+		REQUIRE(inputMsg);
+
+		// check message data
+		if (inputMsg) {
+			REQUIRE(inputMsg->GetAction() == StringHash("MOJO"));
+			REQUIRE(inputMsg->GetMsgTime() == 12345);
+			REQUIRE(inputMsg->GetMsgType() == NetMsgType::CLIENT_CALLBACK);
+			REQUIRE(inputMsg->GetId() == 12);
+		}
+
+		receiver.Close();
+		sender.Close();
+		delete network;
+	}
+
+	SECTION("DeltaUpdate test without networking")
+	{
+		DeltaUpdate* delta = new DeltaUpdate();
+		delta->actual = spt<DeltaInfo>(new DeltaInfo());
+
+		// time[10] = 10
+		spt<DeltaInfo> deltaInf = spt<DeltaInfo>(new DeltaInfo(10));
+		deltaInf->deltas[StringHash("MOJO")] = 10;
+		delta->AcceptDeltaUpdate(deltaInf);
+		
+		// time[20] = 20
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(20));
+		deltaInf->deltas[StringHash("MOJO")] = 20;
+		delta->AcceptDeltaUpdate(deltaInf);
+
+		// check that time[15] = 15
+		delta->Update(5, 0);
+		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) == 15);
+
+		// time[30] = 20
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(30));
+		deltaInf->deltas[StringHash("MOJO")] = 20;
+		delta->AcceptDeltaUpdate(deltaInf);
+
+		// check that time[30] = 20
+		delta->Update(15, 0);
+		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) == 20);
+
+		// time[60] = 70
+		deltaInf = spt<DeltaInfo>(new DeltaInfo(60));
+		deltaInf->deltas[StringHash("MOJO")] = 70;
+		deltaInf->time = 60;
+		delta->AcceptDeltaUpdate(deltaInf);
+
+		// check that time[40] >= 36 && time[40] <= 37
+		delta->Update(10, 0);
+		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) >= 36);
+		REQUIRE(((int)delta->actual->deltas[StringHash("MOJO")]) <= 37);
+	}
+
+	SECTION("Lost packet test")
+	{
+		auto netCom = new NetworkCommunicator();
+		REGISTER_COMPONENT(netCom);
+		// init engine
+		CogEngine::GetInstance().SetFps(20);
+		CogEngine::GetInstance().Init();
+		Scene* scene = new Scene("main", false);
+		CogEngine::GetInstance().stage->AddScene(scene, true);
+		CogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+
+		// start server
+		netCom->Init(1000, 12345, true);
+		
+		// start client
+		Network* network = new Network();
+		network->SetupUDPSender("127.0.0.1", 12345, true);
+		network->SetupUDPReceiver(12345, 1000, true);
+
+		// send message to server
+		auto msg = spt<NetOutputMessage>(new NetOutputMessage(1));
+		msg->SetMsgType(NetMsgType::CONNECT_REQUEST);
+		network->SendUDPMessage(1000, msg);
+		// update
+		CogEngine::GetInstance().ResetFrameCounter();
+		CogEngine::GetInstance().Update(10, 10);
+		// client should be connected
+		REQUIRE(netCom->ClientConnected());
+
+	/*	// send message to client
+		auto clMsg = spt<NetOutputMessage>(new NetOutputMessage(2));
+		clMsg->SetMsgType(NetMsgType::UPDATE);
+		clMsg->SetMsgTime(98798);
+		netCom->SendNetworkMessage(clMsg);
+		CogEngine::GetInstance().Update(10, 10);
+
+		auto msgFromServer = network->ReceiveUDPMessage(1000, 5000, false);
+		REQUIRE(msgFromServer);
+
+		if (msgFromServer) {
+			REQUIRE(msgFromServer->GetMsgTime() == 98798);
+		}*/
 	}
 }
 

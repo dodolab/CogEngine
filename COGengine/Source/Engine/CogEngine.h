@@ -92,6 +92,10 @@ namespace Cog {
 			return frameCounter;
 		}
 
+		void ResetFrameCounter() {
+			this->frameCounter = 0;
+		}
+
 		int GetFps() {
 			return fps;
 		}
