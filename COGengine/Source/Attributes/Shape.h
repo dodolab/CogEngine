@@ -159,13 +159,14 @@ namespace Cog {
 	class SpriteShape : public Shape {
 	private:
 		spt<Sprite> sprite;
-		Trans transform;
-
+		string sheetName;
 	public:
 
-		SpriteShape(spt<Sprite> sprite) : Shape(RenderType::SPRITE) {
-			this->sprite = sprite;
-			transform = Trans();
+		SpriteShape(spt<Sprite> sprite, string sheetName) : Shape(RenderType::SPRITE), sprite(sprite), sheetName(sheetName) {
+		}
+
+		string GetSheetName() {
+			return sheetName;
 		}
 
 		spt<Sprite>& GetSprite() {
@@ -176,21 +177,17 @@ namespace Cog {
 			this->sprite = sprite;
 		}
 
-		Trans& GetTransform() {
-			return transform;
-		}
 	};
-
 
 	class SpritesShape : public Shape {
 	private:
-		vector<spt<SpriteShape>> sprites;
+		vector<pair<spt<Sprite>, Trans>> sprites;
 		int width = 1;
 		int height = 1;
-		string name;
+		string sheetName;
 
 	public:
-		SpritesShape(string name, vector<spt<SpriteShape>> sprites) : Shape(RenderType::MULTISPRITE), name(name), sprites(sprites) {
+		SpritesShape(string sheetName, vector<pair<spt<Sprite>, Trans>> sprites) : Shape(RenderType::MULTISPRITE), sheetName(sheetName), sprites(sprites) {
 			Recalc();
 		}
 
@@ -204,21 +201,23 @@ namespace Cog {
 			int mHeight = 0;
 
 			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-				spt<SpriteShape> crt = (*it);
-				int posX = (int)crt->GetTransform().localPos.x;
-				int posY = (int)crt->GetTransform().localPos.y;
+				spt<Sprite> crt = (*it).first;
+				Trans transform = (*it).second;
+
+				int posX = (int)transform.localPos.x;
+				int posY = (int)transform.localPos.y;
 
 				if (posX < minX) minX = posX;
 				if (posY < minY) minY = posY;
 				
 				if (posX > maxX) {
 					maxX = posX;
-					mWidth = crt->GetSprite()->GetWidth();
+					mWidth = crt->GetWidth();
 				}
 
 				if (posY > maxY) {
 					maxY = posY;
-					mHeight = crt->GetSprite()->GetHeight();
+					mHeight = crt->GetHeight();
 				}
 			}
 
@@ -226,12 +225,12 @@ namespace Cog {
 			this->height = (maxY - minY) + mHeight;
 		}
 
-		vector<spt<SpriteShape>>& GetSprites() {
+		vector<pair<spt<Sprite>,Trans>>& GetSprites() {
 			return sprites;
 		}
 
-		string GetName() {
-			return name;
+		string GetSheetName() {
+			return sheetName;
 		}
 
 		float GetWidth() {

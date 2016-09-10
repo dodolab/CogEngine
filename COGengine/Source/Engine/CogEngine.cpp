@@ -12,7 +12,7 @@
 #include "Move.h"
 #include "MultiAnim.h"
 #include "RotateAnim.h"
-#include "SceneManager.h"
+#include "SceneSwitchManager.h"
 #include "TransformAnim.h"
 #include "TranslateAnim.h"
 #include "Tween.h"
@@ -125,7 +125,7 @@ namespace Cog {
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);
 
-		auto sceneMgr = new SceneManager();
+		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
 
 		REGISTER_BEHAVIOR(SheetAnim);

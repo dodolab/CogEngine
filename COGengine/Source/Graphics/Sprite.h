@@ -54,7 +54,7 @@ namespace Cog {
 			int rows = (totalFramesInGrid*width) / spriteSet->GetSpriteSetWidth();
 
 			int column = frameInGrid%columns;
-			int row = rows == 1 ? 0 : frameInGrid / (rows-1);
+			int row = rows == 1 ? 0 : frameInGrid / (rows);
 
 			posX = spriteSet->GetOffsetX() + column*width;
 			posY = spriteSet->GetOffsetY() + row*height;
@@ -96,7 +96,6 @@ namespace Cog {
 		int GetHeight() {
 			return height;
 		};
-
 	};
 
 }// namespace

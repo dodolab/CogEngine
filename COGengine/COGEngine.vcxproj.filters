@@ -177,9 +177,6 @@
     <ClInclude Include="Source\Components\SceneContext.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\SceneManager.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\FloatingScene.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -318,6 +315,12 @@
     <ClInclude Include="Source\Behaviors\SheetAnim.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Entities\LayerEnt.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\SceneSwitchManager.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -422,9 +425,6 @@
     <ClCompile Include="Source\Core\TransformMath.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\SceneManager.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Math\Transform.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
@@ -433,6 +433,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteSet.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\SceneSwitchManager.cpp">
+      <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

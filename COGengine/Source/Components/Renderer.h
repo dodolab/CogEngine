@@ -16,7 +16,11 @@ namespace Cog {
 		OBJECT(Renderer)
 
 	protected:
-		map<int, vector<Node*>> zIndexes;
+		// buffer for z-indices and nodes with those indices
+		map<int, vector<Node*>> zIndexImageBuffer;
+		// buffer for nodes that will be rendered using the SpriteSheetRenderer
+		map<int, vector<Node*>> zIndexSheetBuffer;
+
 		SpriteSheetRenderer* renderer = nullptr;
 		Tile drawingTile;
 		vector<string> rendererLayers = vector<string>();
@@ -28,9 +32,9 @@ namespace Cog {
 
 		void Init();
 
-		void RestartRenderer();
+		void AddTileLayer(spt<ofImage> img, string name, int bufferSize, int zindex);
 
-		void AddTileLayer(spt<ofImage> img, string name, int bufferSize);
+		void RemoveTileLayer(string name);
 
 		void ClearCounters();
 

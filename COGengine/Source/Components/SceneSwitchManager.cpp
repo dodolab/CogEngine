@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+#include "SceneSwitchManager.h"
 #include "Behavior.h"
 #include "Msg.h"
 #include "Node.h"
@@ -8,25 +8,26 @@
 
 namespace Cog {
 
-	void SceneManager::Init() {
+	void SceneSwitchManager::Init() {
 		RegisterGlobalListening(ACT_TWEEN_ENDED);
 	}
 
 
-	void SceneManager::OnMessage(Msg& msg) {
+	void SceneSwitchManager::OnMessage(Msg& msg) {
 		if (msg.GetAction() == ACT_TWEEN_ENDED && waitingForTween) {
-			MLOGDEBUG("SceneManager", "Scene %s switched", to->GetTag().c_str());
+			MLOGDEBUG("SceneSwitchManager", "Scene %s switched", to->GetTag().c_str());
 
 			to->SetRunningMode(RUNNING);
-
 			from->SetRunningMode(DISABLED);
+			from->GetScene()->Dispose();
+
 			waitingForTween = false;
 
 			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
 
 			// switch to waiting scenes
 			if (!waitingTweens.empty()) {
-				MLOGDEBUG("SceneManager", "--reading next switch context from the stack");
+				MLOGDEBUG("SceneSwitchManager", "--reading next switch context from the stack");
 
 				TweenContext ctx = waitingTweens.front();
 				if (ctx.readyToGo) {
@@ -36,7 +37,7 @@ namespace Cog {
 		}
 	}
 
-	void SceneManager::PushSceneSwitch(Node* from, Node* to, TweenDirection tweenDir, bool autoSwitch) {
+	void SceneSwitchManager::PushSceneSwitch(Node* from, Node* to, TweenDirection tweenDir, bool autoSwitch) {
 		TweenContext context = TweenContext();
 		context.to = to;
 		context.dir = tweenDir;
@@ -44,7 +45,7 @@ namespace Cog {
 		waitingTweens.push(context);
 	}
 
-	bool SceneManager::PopSceneSwitch() {
+	bool SceneSwitchManager::PopSceneSwitch() {
 		if (waitingTweens.empty()) return false;
 
 
@@ -70,15 +71,15 @@ namespace Cog {
 	* @param scene scene to switch to
 	* @param tweenDir tween direction
 	*/
-	void SceneManager::SwitchToScene(Node* from, Node* to, TweenDirection tweenDir) {
-		MLOGDEBUG("SceneManager", "Switching from %s to %s", from->GetTag().c_str(), to->GetTag().c_str());
+	void SceneSwitchManager::SwitchToScene(Node* from, Node* to, TweenDirection tweenDir) {
+		MLOGDEBUG("SceneSwitchManager", "Switching from %s to %s", from->GetTag().c_str(), to->GetTag().c_str());
 
 		if (waitingForTween) {
-			MLOGDEBUG("SceneManager", "-another switch in progress; pushing context");
+			MLOGDEBUG("SceneSwitchManager", "-another switch in progress; pushing context");
 			PushSceneSwitch(from, to, tweenDir, true);
 		}
 		else if (!waitingTweens.empty()) {
-			MLOGDEBUG("SceneManager", "-another switches on the stack; pushing context");
+			MLOGDEBUG("SceneSwitchManager", "-another switches on the stack; pushing context");
 			PushSceneSwitch(from, to, tweenDir, true);
 		}
 		else {
@@ -86,11 +87,13 @@ namespace Cog {
 		}
 	}
 
-	void SceneManager::ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir) {
+	void SceneSwitchManager::ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir) {
 		this->from = from;
 		this->to = to;
 
 		from->SetRunningMode(PAUSED_ALL);
+
+		to->GetScene()->Init();
 
 		if (tweenDir == TweenDirection::NONE) {
 			// switch immediately

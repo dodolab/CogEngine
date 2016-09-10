@@ -8,39 +8,51 @@
 namespace Cog {
 
 	void Renderer::Init() {
-		zIndexes = map<int, vector<Node*>>();
-
-	}
-
-	void Renderer::RestartRenderer() {
-		delete renderer;
+		zIndexImageBuffer = map<int, vector<Node*>>();
+		zIndexSheetBuffer = map<int, vector<Node*>>();
 		renderer = new SpriteSheetRenderer();
 		rendererLayers = vector<string>();
 	}
 
-	void Renderer::AddTileLayer(spt<ofImage> img, string name, int bufferSize) {
-		renderer->loadTexture(&img->getTexture(), name, bufferSize);
+
+	void Renderer::AddTileLayer(spt<ofImage> img, string name, int bufferSize, int zindex) {
+		renderer->loadTexture(&img->getTexture(), name, bufferSize, zindex);
 		rendererLayers.push_back(name);
 	}
 
+	void Renderer::RemoveTileLayer(string name) {
+		auto layer = find(rendererLayers.begin(), rendererLayers.end(), name);
+		if (layer != rendererLayers.end()) rendererLayers.erase(layer);
+
+		renderer->clearTexture(name);
+	}
+
 	void Renderer::ClearCounters() {
-		zIndexes = map<int, vector<Node*>>();
+		zIndexImageBuffer = map<int, vector<Node*>>();
+		zIndexSheetBuffer = map<int, vector<Node*>>();
 	}
 
 	void Renderer::PushNode(Node* node) {
+
+		auto renderType = node->GetShape()->GetRenderType();
+		auto& buffer = (renderType == RenderType::SPRITE || renderType == RenderType::MULTISPRITE)
+			? zIndexSheetBuffer : zIndexImageBuffer;
+
+
 		Trans& tr = node->GetTransform();
 		// zIndex will be taken always from local position
 		int zIndex = (int)(tr.localPos.z);
 
-		auto it = zIndexes.find(zIndex);
-		if (it != zIndexes.end()) {
+		auto it = buffer.find(zIndex);
+		if (it != buffer.end()) {
 			(*it).second.push_back(node);
 		}
 		else {
 			vector<Node*> arr = vector<Node*>();
 			arr.push_back(node);
-			zIndexes[zIndex] = arr;
+			buffer[zIndex] = arr;
 		}
+
 	}
 
 	void Renderer::BeginRender() {
@@ -97,12 +109,41 @@ namespace Cog {
 	}
 
 	void Renderer::Render() {
-		
-		for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
-			renderer->clearCounters((*it));
-		}
 
-		for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it) {
+		if (rendererLayers.size() != 0) {
+
+			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
+				renderer->clearCounters((*it));
+			}
+
+			for (auto it = zIndexSheetBuffer.begin(); it != zIndexSheetBuffer.end(); ++it) {
+
+				vector<Node*>& arr = (*it).second;
+
+				for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
+					Node* node = (*it2);
+
+					switch (node->GetShape()->GetRenderType()) {
+					case RenderType::IMAGE:
+					case RenderType::POLYGON:
+					case RenderType::RECTANGLE:
+					case RenderType::TEXT:
+						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
+					case RenderType::SPRITE:
+						RenderSprite(node);
+						break;
+					case RenderType::MULTISPRITE:
+						RenderMultiSprite(node);
+						break;
+					}
+				}
+			}
+	
+			ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+			renderer->draw();
+		}
+		
+		for (auto it = zIndexImageBuffer.begin(); it != zIndexImageBuffer.end(); ++it) {
 
 			vector<Node*>& arr = (*it).second;
 
@@ -123,17 +164,11 @@ namespace Cog {
 					RenderText(node);
 					break;
 				case RenderType::SPRITE:
-					RenderSprite(node);
-					break;
 				case RenderType::MULTISPRITE:
-					RenderMultiSprite(node);
-					break;
+					throw IllegalOperationException("Trying to render sprite node by default renderer!");
 				}
-
 			}
 		}
-		//ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
-		//renderer->draw();
 	}
 
 	void Renderer::RenderImage(Node* owner) {
@@ -187,13 +222,12 @@ namespace Cog {
 
 		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
 		spt<Sprite> sprite = shape->GetSprite();
-		Trans& trans = shape->GetTransform();
-		trans.CalcAbsTransform(owner->GetTransform());
+		Trans& trans = owner->GetTransform();
+		renderer->setActualBuffer(shape->GetSheetName());
 
 		drawingTile.height = sprite->GetHeight();
 		drawingTile.offsetX = sprite->GetPosX();
 		drawingTile.offsetY = sprite->GetPosY();
-
 
 		drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
 		drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;
@@ -203,23 +237,21 @@ namespace Cog {
 		drawingTile.scaleY = trans.absScale.y;
 		drawingTile.width = sprite->GetWidth();
 
-		renderer->addTile(drawingTile);
 
-		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
-		renderer->draw();
+		renderer->addTile(drawingTile);
 	}
 
 	void Renderer::RenderMultiSprite(Node* owner) {
 
 
 		spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
-		renderer->setActualBuffer(shape->GetName());
-		vector<spt<SpriteShape>> sprites = shape->GetSprites();
+		renderer->setActualBuffer(shape->GetSheetName());
+		vector<pair<spt<Sprite>,Trans>> sprites = shape->GetSprites();
 
 		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			spt<SpriteShape> crate = (*it);
-			spt<Sprite> sprite = crate->GetSprite();
-			Trans trans = crate->GetTransform();
+			pair<spt<Sprite>,Trans> crate = (*it);
+			spt<Sprite> sprite = crate.first;
+			Trans& trans = crate.second;
 			trans.CalcAbsTransform(owner->GetTransform());
 
 			drawingTile.height = sprite->GetHeight();
@@ -236,9 +268,6 @@ namespace Cog {
 
 			renderer->addTile(drawingTile);
 		}
-
-		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
-		renderer->draw();
 	}
 
 }// namespace

@@ -224,7 +224,7 @@
     <ClInclude Include="Source\Components\Environment.h" />
     <ClInclude Include="Source\Components\Renderer.h" />
     <ClInclude Include="Source\Components\SceneContext.h" />
-    <ClInclude Include="Source\Components\SceneManager.h" />
+    <ClInclude Include="Source\Components\SceneSwitchManager.h" />
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Component.h" />
     <ClInclude Include="Source\Core\Definitions.h" />
@@ -247,6 +247,7 @@
     <ClInclude Include="Source\Engine\Node.h" />
     <ClInclude Include="Source\Engine\Scene.h" />
     <ClInclude Include="Source\Entities\DEntity.h" />
+    <ClInclude Include="Source\Entities\LayerEnt.h" />
     <ClInclude Include="Source\Entities\TransformEnt.h" />
     <ClInclude Include="Source\Graphics\Anim.h" />
     <ClInclude Include="Source\Graphics\AnimationLoader.h" />
@@ -294,7 +295,7 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\SceneContext.cpp" />
-    <ClCompile Include="Source\Components\SceneManager.cpp" />
+    <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />

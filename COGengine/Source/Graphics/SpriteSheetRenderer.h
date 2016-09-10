@@ -41,7 +41,7 @@ namespace Cog {
 
 	struct SpriteBuffer {
 
-		SpriteBuffer() {
+		SpriteBuffer(int zIndex) : zIndex(zIndex){
 			texture = nullptr;
 			verts = nullptr;
 			coords = nullptr;
@@ -65,6 +65,7 @@ namespace Cog {
 				delete[] colors;
 		}
 
+		int zIndex;
 		string name;
 		float textureCoeffX;
 		float textureCoeffY;
@@ -113,10 +114,10 @@ namespace Cog {
 		* @param internalGLScaleMode - opengl scaling, possibles values: GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST,
 		* GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_LINEAR
 		*/
-		void loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode);
-		void loadTexture(ofTexture * texture, string sheetNAme, int bufferSize, bool isExternal = true);
-		void loadTexture(CollageTexture * texture, string sheetName, int bufferSize);
-		void loadTexture(SpriteTexture * texture, string sheetName, int bufferSize);
+		void loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode, int zIndex);
+		void loadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal = true);
+		void loadTexture(CollageTexture * texture, string sheetName, int bufferSize, int zIndex);
+		void loadTexture(SpriteTexture * texture, string sheetName, int bufferSize, int zIndex);
 
 		// -----------------------------------------
 		void setBrushIndex(int index, int wh = 1);

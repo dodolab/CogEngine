@@ -42,7 +42,7 @@ namespace Cog {
 
 			// switch to scene
 			auto context = GETCOMPONENT(SceneContext);
-			auto manager = GETCOMPONENT(SceneManager);
+			auto manager = GETCOMPONENT(SceneSwitchManager);
 			scene->GetSceneNode()->SubmitChanges(true);
 			context->SetActualScene(scene);
 			manager->PopSceneSwitch();

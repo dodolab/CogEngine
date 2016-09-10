@@ -4,6 +4,15 @@
 
 namespace Cog {
 
+	LayerEnt Scene::FindLayerSettings(string name) {
+
+		for (LayerEnt& entity : this->layerSettings) {
+			if (entity.name.compare(name) == 0) return entity;
+		}
+
+		return LayerEnt();
+	}
+
 	void Scene::RegisterListener(StringHash action, MsgListener* listener) {
 
 		if (msgListeners.find(action) == msgListeners.end()) {
@@ -231,6 +240,29 @@ namespace Cog {
 		UnregisterListener(beh);
 	}
 
+
+
+	void Scene::Init() {
+		auto renderer = GETCOMPONENT(Renderer);
+		auto cache = GETCOMPONENT(ResourceCache);
+
+		for (auto layer : layerSettings) {
+			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
+			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
+		}
+	}
+
+
+	void Scene::Dispose() {
+		auto renderer = GETCOMPONENT(Renderer);
+		auto cache = GETCOMPONENT(ResourceCache);
+
+		for (auto layer : layerSettings) {
+			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
+			renderer->RemoveTileLayer(layer.name);
+		}
+	}
+
 	void Scene::LoadInitDataFromXml(spt<ofxXml> xml, int sceneIndex) {
 		
 		SetIndex(sceneIndex);
@@ -264,9 +296,19 @@ namespace Cog {
 			xml->popTag();
 		}
 		
-		if (xml->tagExists("sceneanim")) {
-			// parse animation
+		if (xml->pushTagIfExists("scene_layers")) {
+			// parse layers
+			int layersNum = xml->getNumTags("layer");
 
+			for (int i = 0; i < layersNum; i++) {
+				xml->pushTag("layer", i);
+				LayerEnt layer = LayerEnt();
+				layer.LoadFromXml(xml);
+				layerSettings.push_back(layer);
+				xml->popTag();
+			}
+
+			xml->popTag();
 		}
 
 
@@ -276,7 +318,7 @@ namespace Cog {
 		for (int i = 0; i < nodes; i++) {
 			xml->pushTag("node", i);
 			// load nodes
-			Node* node = bld.LoadNodeFromXml(xml, sceneNode, settings);
+			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this, settings);
 			sceneNode->AddChild(node);
 			xml->popTag();
 		}
