@@ -23,6 +23,7 @@
 #include "SheetAnimator.h"
 #include "AttribAnimator.h"
 #include "Selection.h"
+#include "Slider.h"
 
 namespace Cog {
 
@@ -186,6 +187,7 @@ namespace Cog {
 		REGISTER_BEHAVIOR(MultiSelection);
 		REGISTER_BEHAVIOR(AttribAnimator);
 		REGISTER_BEHAVIOR(Selection);
+		REGISTER_BEHAVIOR(Slider);
 
 	}
 

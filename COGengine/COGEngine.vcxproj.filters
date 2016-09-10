@@ -624,6 +624,9 @@
     <ClInclude Include="Source\Math\CellPartitioner.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Behaviors\Slider.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -996,6 +999,9 @@
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behaviors\DelayRemove.cpp">
+      <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>

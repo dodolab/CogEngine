@@ -502,6 +502,7 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
+			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
 		}
 
 		/**
@@ -515,6 +516,7 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
+			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
 			return true;
 		}
 
@@ -542,9 +544,11 @@ namespace Cog {
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 				attr->SetValue(value);
+				CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::MODIFY), this, -1);
 			}
 			else {
 				AddAttr(key, value);
+				CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
 			}
 		}
 
