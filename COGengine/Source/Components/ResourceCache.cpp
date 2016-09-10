@@ -3,7 +3,7 @@
 #include "Anim.h"
 #include "SpriteSheet.h"
 #include "Facade.h"
-
+#include "AnimationLoader.h"
 
 namespace Cog {
 
@@ -55,6 +55,21 @@ namespace Cog {
 					int size = xml->getAttributex("size", 0);
 					CogGetFont(name, size);
 					xml->popTag();
+				}
+
+				xml->popTag();
+			}
+
+			// load animations
+			if (xml->pushTagIfExists("animations")) {
+
+				auto animLoader = AnimationLoader();
+				auto rootAnims = vector<spt<Anim>>();
+				animLoader.LoadAnimations(xml, rootAnims);
+
+				// store animation
+				for (spt<Anim> anim : rootAnims) {
+					StoreAnimation(anim);
 				}
 
 				xml->popTag();

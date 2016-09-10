@@ -18,9 +18,6 @@ namespace Cog {
 		*/
 		void LoadAnimations(spt<ofxXmlSettings> xml, vector<spt<Anim>>& rootAnims) {
 
-			if (xml->tagExists("animations")) {
-				xml->pushTag("animations");
-
 				int numberOfAnims = xml->getNumTags("anim");
 				// referenced anims will be processed at second phase
 				map<string, Anim*> referencedAnims;
@@ -44,9 +41,6 @@ namespace Cog {
 					ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims);
 					xml->popTag();
 				}
-
-				xml->popTag();
-			}
 		}
 
 	private:

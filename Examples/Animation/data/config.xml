@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<app_config>
+
+  <settings>
+    <!-- default values -->
+    <default_settings>
+      <setting name="transform">
+		<item key="ref_width" value="800" />
+		<item key="ref_height" value="450" />
+      </setting>
+    </default_settings>
+	<global_settings>
+	  <setting name="display">
+	    <item key="aspect_ratio" value="16/9" />
+	  </setting>
+    </global_settings>
+  </settings>
+ 
+ <animations>
+    <anim name="mario_anim" sheet="mario_{0}.png"  start="0" end="4"  repeat="0" increment="1" speed="0.2">
+    </anim>
+</animations>
+
+ 
+ 
+  <!-- collection of scenes -->
+  <scenes initial="main">
+
+    <scene name="main">
+		  <!-- scene settings overrides default settings -->
+      <scene_settings>
+        <setting name="transform">
+          <!-- grid sizing -->
+          <item key="grid_width" value="800" />
+          <item key="grid_height" value="450" />
+        </setting>
+      </scene_settings>
+
+      <node img="bgr.jpg" />
+      <!-- blue background-->
+
+      <node name="mario" img="mario.png">
+
+		<!-- percentage positioning and sizing, anchor at center (default), 90% of screen width-->
+        <transform pos_x="100" pos_y="200" z_index="2" ptype="abs" anchor="0" width="1" stype="abs" />
+		
+		<behavior name="Animator">
+		  <setting>
+		    <item key="animation" value="mario_anim" />
+		  </setting>
+		</behavior>  
+	  </node>
+	  
+    </scene>
+  </scenes>
+</app_config>

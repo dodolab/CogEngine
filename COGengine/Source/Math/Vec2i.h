@@ -21,6 +21,11 @@ namespace Cog {
 
 		}
 
+		Vec2i(const Vec2i& copy) {
+			x = copy.x;
+			y = copy.y;
+		}
+
 		/** position on the x axis */
 		int x;
 		/** position on the y axis */
@@ -38,6 +43,10 @@ namespace Cog {
 
 		inline bool operator==(const Vec2i& a) const {
 			return x == a.x && y == a.y;
+		}
+
+		inline bool operator==(const int& a) const {
+			return x == a && y == a;
 		}
 
 		inline bool operator!=(const Vec2i& a) const {
@@ -58,6 +67,10 @@ namespace Cog {
 
 		inline Vec2i operator-(const Vec2i& a) const {
 			return Vec2i(x - a.x, y - a.y);
+		}
+
+		static int Distance(const Vec2i& a, const Vec2i& b) {
+			return sqrt((a.x-b.x)*(a.x - b.x) + (a.y-b.y)*(a.y-b.y));
 		}
 	};
 }

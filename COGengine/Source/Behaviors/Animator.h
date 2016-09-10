@@ -112,6 +112,12 @@ namespace Cog {
 			context.actualFrameIndex = root->GetIsRevert() ? (root->GetTotalFrames() - root->GetSpeed()) : -root->GetSpeed();
 		}
 
+		void Init(Setting setting) {
+			string animation = setting.GetItemVal("animation");
+			auto resCache = GETCOMPONENT(ResourceCache);
+			this->root = resCache->GetAnimation(animation);
+		}
+
 		// debug only, will be deleted
 		string actualNodeName;
 
