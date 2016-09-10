@@ -86,9 +86,8 @@ namespace Cog {
 			nodesAndPositions[node->GetId()] = node->GetTransform().localPos;
 		}
 
-		vector<Node*> CalcNeighbors(ofVec2f position, float radius) {
-			auto neighbors = vector<Node*>();
-
+		void CalcNeighbors(ofVec2f position, float radius, vector<Node*>& output) {
+			
 			ofRectangle queryRect = ofRectangle(position-ofVec2f(radius),position+ofVec2f(radius));
 
 			for (auto it = cells.begin(); it != cells.end(); ++it) {
@@ -99,13 +98,11 @@ namespace Cog {
 						Node* node = *jt;
 						auto nodePos = node->GetTransform().localPos;
 						if (position.distanceSquared(nodePos) < radius*radius) {
-							neighbors.push_back(node);
+							output.push_back(node);
 						}
 					}
 				}
 			}
-
-			return neighbors;
 		}
 
 		bool ExistsNode(ofVec2f position, float radius) {

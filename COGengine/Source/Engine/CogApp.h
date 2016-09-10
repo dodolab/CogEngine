@@ -126,6 +126,10 @@ namespace Cog {
 		// handler for reloading textures
 		void reloadTextures();
 
+		virtual bool OnBackPress() {
+			return true;
+		}
+
 		// handler for android backpress
 		bool backPressed();
 		// handler for android OK press

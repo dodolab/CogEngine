@@ -11,129 +11,6 @@ using namespace Cog;
 #include "RandomAgent.h"
 #include "UCTAgent.h"
 
-enum class MCTestAction {
-	GO_LEFT = 1,
-	GO_RIGHT = 2,
-	GO_UP = 3,
-	GO_DOWN = 4
-};
-
-class MCTestState : public AIState {
-public:
-	Vec2i player1Pos;
-	Vec2i player2Pos;
-
-	MCTestState() {
-
-	}
-
-	MCTestState(int agentOnTurn) {
-		this->agentOnTurn = agentOnTurn;
-	}
-
-	MCTestState(const MCTestState& copy) {
-		this->agentOnTurn = agentOnTurn;
-		this->player1Pos = copy.player1Pos;
-		this->player2Pos = copy.player2Pos;
-	}
-
-	inline bool operator==(const MCTestState& a) const { return player1Pos == a.player1Pos && player2Pos == a.player2Pos; }
-	inline bool operator!=(const MCTestState& a) const { return !(*this == a); }
-};
-
-class MCTestSimulator : public Simulator<MCTestState, MCTestAction>
-{
-public:
-	
-	MCTestSimulator() {
-		this->agentsNumber = 2;
-	}
-
-	void InitState() {
-		this->actualState = MCTestState();
-		this->actualState.player1Pos = Vec2i(0, 0);
-		this->actualState.player2Pos = Vec2i(10, 10);
-		this->rewards = AgentsReward(0,0);
-		RecalcPossibleActions();
-	}
-
-	spt<Simulator> DeepCopy() {
-		auto copy = spt<MCTestSimulator>(new MCTestSimulator());
-		copy->actualState = this->actualState;
-		copy->agentsNumber = this->agentsNumber;
-		copy->possibleActions = this->possibleActions;
-		copy->rewards = this->rewards;
-		return copy;
-	}
-
-	void MakeAction(MCTestAction act, bool isSimulation) {
-		if (find(this->possibleActions.begin(), this->possibleActions.end(), act) == this->possibleActions.end()) {
-			throw IllegalOperationException("Wrong action to take!");
-		}
-
-		float distance1 = Vec2i::Distancef(actualState.player1Pos, actualState.player2Pos);
-
-		if (act == MCTestAction::GO_DOWN) {
-			if (actualState.GetAgentOnTurn() == 0) {
-				actualState.player1Pos.y++;
-			}
-			else {
-				actualState.player2Pos.y++;
-			}
-		}
-		else if (act == MCTestAction::GO_LEFT) {
-			if (actualState.GetAgentOnTurn() == 0) {
-				actualState.player1Pos.x--;
-			}
-			else {
-				actualState.player2Pos.x--;
-			}
-		}
-		else if (act == MCTestAction::GO_RIGHT) {
-			if (actualState.GetAgentOnTurn() == 0) {
-				actualState.player1Pos.x++;
-			}
-			else {
-				actualState.player2Pos.x++;
-			}
-		}
-		else if (act == MCTestAction::GO_UP) {
-			if (actualState.GetAgentOnTurn() == 0) {
-				actualState.player1Pos.y--;
-			}
-			else {
-				actualState.player2Pos.y--;
-			}
-		}
-
-		float distance2 = Vec2i::Distancef(actualState.player1Pos, actualState.player2Pos);
-		
-		if (!isSimulation) cout << ((int)distance2) << ", ";
-		
-		int distDiff = (distance2 - distance1);
-
-		// first agent tries to catch the second one
-		this->rewards = AgentsReward(distDiff < 0 ? (30-distance2) : 0, 0);
-
-		this->actualState.SwapAgentOnTurn(this->agentsNumber);
-		RecalcPossibleActions();
-	}
-
-protected:
-
-	virtual void RecalcPossibleActions() {
-		this->possibleActions.clear();
-
-		if (Vec2i::Distance(actualState.player1Pos, actualState.player2Pos) == 0) return;
-
-		// all actions are possible
-		possibleActions.push_back(MCTestAction::GO_DOWN);
-		possibleActions.push_back(MCTestAction::GO_LEFT);
-		possibleActions.push_back(MCTestAction::GO_RIGHT);
-		possibleActions.push_back(MCTestAction::GO_UP);
-	}
-
-};
 
 // =========================================== TIC TAC TOE =============================================
 
@@ -168,6 +45,7 @@ public:
 	TicTacToeState(const TicTacToeState& copy) {
 		this->agentOnTurn = copy.agentOnTurn;
 		this->marks = copy.marks;
+		this->hashCode = copy.hashCode;
 	}
 
 	TTMark GetMark(Vec2i point) const {
@@ -213,6 +91,7 @@ public:
 		copy->agentsNumber = this->agentsNumber;
 		copy->possibleActions = this->possibleActions;
 		copy->rewards = this->rewards;
+
 		return copy;
 	}
 
@@ -343,7 +222,7 @@ public:
 
 		if (gameOver) totalReward = 10000;
 
-		if (!isSimulation && gameOver) {
+		if (!isSimulation) {
 			cout << WriteInfo().c_str() << endl;
 
 		}
@@ -394,51 +273,81 @@ protected:
 
 };
 
+class TicTacToeHumanAgent : public RandomAgent<TicTacToeState, TicTacToeAction> {
+protected:
+public:
+
+	TicTacToeHumanAgent() {
+
+	}
+
+	TicTacToeHumanAgent(string name) : RandomAgent(name) {
+
+	}
+
+	virtual TicTacToeAction ChooseAction(spt<Simulator<TicTacToeState, TicTacToeAction>> simulator) {
+		TicTacToeAction action;
+		int mojo = 12;
+		int dojo = 13;
+		action.positionMark = Vec2i(mojo, dojo);
+		return action;
+	}
+
+};
+
+
+
+
 TEST_CASE("MonteCarloTest test", "[class]")
 {
-	
-	SECTION("UCT agent tries to catch the random agent")
+
+	SECTION("TIC TAC TOE test for UCT agent and random agent deep search")
 	{
 		// set seed so that the randomness will behave as expected
 		ofSeedRandom(120);
-		
-		// there are two agents, one random and the second one is UCT. 
-		// random agent is at location 10,10; UCT agent is at the location 0,0
-		// UCT agent has to catch the Random agent; at each step, they can only go in 4 directions
-		auto simulator = spt<MCTestSimulator>(new MCTestSimulator());
-		auto agents = vector<spt<AIAgent<MCTestState, MCTestAction>>>();
-		agents.push_back(spt<UCTAgent<MCTestState, MCTestAction>>(new UCTAgent<MCTestState, MCTestAction>("UCTAgent",64,32,16)));
-		agents.push_back(spt<RandomAgent<MCTestState, MCTestAction>>(new RandomAgent<MCTestState, MCTestAction>()));
-		auto mt = new MonteCarloSearch<MCTestState, MCTestAction>(simulator, agents);
-		mt->RunSimulations(1);
-		cout << endl;
-		REQUIRE(mt->GetNumberOfWins(0) == 1);
-		auto sum = mt->GetRewardSum(0);
-		REQUIRE(mt->GetRewardSum(0) == 589);
-	}
-
-	SECTION("TIC TAC TOE test for UCT agent and random agent")
-	{
-		// set seed so that the randomness will behave as expected
-		ofSeedRandom(125);
 
 		// Tic tac toe game between UCT agent and random agent
 		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
 		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
-		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 1, sqrt(2)));
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent",20, sqrt(2)));
 		auto agent2 = spt<RandomAgent<TicTacToeState, TicTacToeAction>>(new RandomAgent<TicTacToeState, TicTacToeAction>());
+		//auto agent2 = spt<TicTacToeHumanAgent>(new TicTacToeHumanAgent());
 		agents.push_back(agent1);
 		agents.push_back(agent2);
 
 		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
 		mt->RunSimulations(1);
 
-		// UCT agent won with score 10006
+		TimeMeasure::GetInstance().Report(false);
+		// UCT agent won with score 10007
 		REQUIRE(mt->GetNumberOfWins(0) == 1);
-		REQUIRE(mt->GetRewardSum(0) == 10006);
+		REQUIRE(mt->GetRewardSum(0) == 10007);
 	}
 
-	SECTION("TIC TAC TOE test for two UCT agents")
+	SECTION("TIC TAC TOE test for UCT agent and random agent shallow search")
+	{
+		// set seed so that the randomness will behave as expected
+		ofSeedRandom(120);
+
+		// Tic tac toe game between UCT agent and random agent
+		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
+		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 200, sqrt(2),5));
+		auto agent2 = spt<RandomAgent<TicTacToeState, TicTacToeAction>>(new RandomAgent<TicTacToeState, TicTacToeAction>());
+		//auto agent2 = spt<TicTacToeHumanAgent>(new TicTacToeHumanAgent());
+		agents.push_back(agent1);
+		agents.push_back(agent2);
+
+		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
+		mt->RunSimulations(1);
+
+		TimeMeasure::GetInstance().Report(false);
+		// UCT agent won with score 10008
+		REQUIRE(mt->GetNumberOfWins(0) == 1);
+		REQUIRE(mt->GetRewardSum(0) == 10007);
+	}
+
+	SECTION("TIC TAC TOE test for two UCT agents deep search")
 	{
 		// set seed so that the randomness will behave as expected
 		ofSeedRandom(125);
@@ -446,8 +355,8 @@ TEST_CASE("MonteCarloTest test", "[class]")
 		// Tic tac toe game between two uct agents
 		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
 		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
-		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 2, sqrt(2)));
-		auto agent2 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 2, sqrt(2)));
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 60, sqrt(2)));
+		auto agent2 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 60, sqrt(2)));
 		agents.push_back(agent1);
 		agents.push_back(agent2);
 
@@ -455,7 +364,28 @@ TEST_CASE("MonteCarloTest test", "[class]")
 		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
 		mt->RunSimulations(1);
 		auto sum = mt->GetRewardSum(1);
+		REQUIRE(mt->GetNumberOfWins(0) == 1);
+		REQUIRE(mt->GetRewardSum(0) == 10007);
+	}
+
+	SECTION("TIC TAC TOE test for two UCT agents shallow search")
+	{
+		// set seed so that the randomness will behave as expected
+		ofSeedRandom(125);
+
+		// Tic tac toe game between two uct agents
+		auto simulator = spt<TicTacToeSimulator>(new TicTacToeSimulator());
+		auto agents = vector<spt<AIAgent<TicTacToeState, TicTacToeAction>>>();
+		auto agent1 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 20, sqrt(2),5));
+		auto agent2 = spt<UCTAgent<TicTacToeState, TicTacToeAction>>(new UCTAgent<TicTacToeState, TicTacToeAction>("UCTAgent", 750, sqrt(2),5));
+		agents.push_back(agent1);
+		agents.push_back(agent2);
+
+
+		auto mt = new MonteCarloSearch<TicTacToeState, TicTacToeAction>(simulator, agents);
+		mt->RunSimulations(1);
+		auto sum = mt->GetRewardSum(1);
 		REQUIRE(mt->GetNumberOfWins(1) == 1);
-		REQUIRE(mt->GetRewardSum(1) == 10021);
+		REQUIRE(mt->GetRewardSum(1) == 10007);
 	}
 }

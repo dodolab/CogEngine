@@ -126,6 +126,10 @@ namespace Cog {
 		loader.clear();
 	}
 
+	void CollageTexture::pasteImage(int x, int y, int w, int h, ofImage* image) {
+		pasteImage(x, y, w, h, image->getPixels(), this->texData.glInternalFormat);
+	}
+
 	void CollageTexture::pasteImage(int x, int y, int w, int h, unsigned char * pxls, int glType)
 	{
 		int bpp;

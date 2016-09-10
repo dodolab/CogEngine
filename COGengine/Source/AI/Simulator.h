@@ -52,7 +52,7 @@ namespace Cog {
 		/**
 		* Sets actual state and recalculates list of possible actions
 		*/
-		void SetActualState(S state) {
+		void SetActualState(S& state) {
 			this->actualState = state;
 			RecalcPossibleActions();
 			this->rewards = AgentsReward(agentsNumber);
@@ -61,7 +61,7 @@ namespace Cog {
 		/**
 		* Sets actual state and list of possible actions with no recalculation
 		*/
-		void SetActualState(S state, vector<A> possibleActions) {
+		void SetActualState(S& state, vector<A>& possibleActions) {
 			this->actualState = state;
 			this->possibleActions = possibleActions;
 			this->rewards = AgentsReward(agentsNumber);

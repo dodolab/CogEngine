@@ -51,8 +51,9 @@ namespace Cog {
 		node->SetShape(spriteShape);
 	}
 
-	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color) {
+	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
 		auto planeShape = CreatePlaneShape(size, color);
+		planeShape->SetNoFill(noFill);
 		node->SetShape(planeShape);
 	}
 
@@ -307,8 +308,8 @@ namespace Cog {
 			ofVec2f size = ofVec2f(width, height);
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = StringToColor(colorStr);
-
-			SetPlaneNode(node, size, color);
+			bool noFill = xml->getBoolAttributex("no_fill", false);
+			SetPlaneNode(node, size, color, noFill);
 		}
 		else if (renderType == RenderType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");

@@ -33,7 +33,7 @@ namespace Cog {
 
 		void SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column);
 
-		void SetPlaneNode(Node* node, ofVec2f size, ofColor color);
+		void SetPlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill);
 
 		void SetBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable);
 

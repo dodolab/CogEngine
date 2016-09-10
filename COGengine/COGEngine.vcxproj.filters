@@ -657,6 +657,9 @@
     <ClInclude Include="Source\Tests\MonteCarloTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

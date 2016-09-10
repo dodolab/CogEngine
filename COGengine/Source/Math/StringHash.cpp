@@ -9,7 +9,7 @@ namespace Cog
 	StringHash::StringHash(const char* str) :
 		value_(Calculate(str))
 	{
-#ifdef DEBUG
+#ifdef _DEBUG
 		StringHash::strValues[value_] = string(str);
 #endif
 	}
@@ -17,7 +17,7 @@ namespace Cog
 	StringHash::StringHash(const string& str) :
 		value_(Calculate(str.c_str()))
 	{
-#ifdef DEBUG
+#ifdef _DEBUG
 		StringHash::strValues[value_] = str;
 #endif
 	}
@@ -51,7 +51,7 @@ namespace Cog
 		return string(tempBuffer);
 	}
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	map<unsigned,string> StringHash::strValues = map<unsigned, string>();
 #endif
 }

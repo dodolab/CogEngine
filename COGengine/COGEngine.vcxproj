@@ -345,6 +345,7 @@
     <ClInclude Include="Source\Graphics\MapLoader.h" />
     <ClInclude Include="Source\Graphics\Sprite.h" />
     <ClInclude Include="Source\Graphics\SpriteEntity.h" />
+    <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h" />
     <ClInclude Include="Source\Graphics\SpriteSet.h" />
     <ClInclude Include="Source\Graphics\SpriteSheet.h" />
     <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h" />

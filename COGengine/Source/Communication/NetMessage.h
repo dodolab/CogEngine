@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ofxSmartPointer.h"
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "StringHash.h"
 #include "DeltaInfo.h"
-#include "ofxSmartPointer.h"
+
 
 namespace Cog {
 

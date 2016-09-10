@@ -49,10 +49,9 @@ virtual int GetMaxCount() { \
 
 #define BEHAVIOR_UNIQUE() BEHAVIOR_MAXCOUNT(1)
 
-
 // assertion with formatted message
 // this macro can be used widely for severe conditions, no matter how difficult
-#ifdef DEBUG
+#ifdef _DEBUG
 #   define COGASSERT(condition, module, message, ...) \
     do { \
         if (! (condition)) { \
@@ -68,7 +67,7 @@ virtual int GetMaxCount() { \
 
 
 // time measurement
-#ifdef DEBUG
+#ifdef _DEBUG
 #define COGMEASURE_BEGIN(key) \
   do { \
   TimeMeasure::GetInstance().MeasureBlockStart(key); \
@@ -77,7 +76,7 @@ virtual int GetMaxCount() { \
 #define COGMEASURE_BEGIN(key) do {} while(false)
 #endif
 
-#ifdef DEBUG
+#ifdef _DEBUG
 #define COGMEASURE_END(key) \
   do { \
   TimeMeasure::GetInstance().MeasureBlockEnd(key); \
@@ -88,7 +87,7 @@ virtual int GetMaxCount() { \
 
 
 // macro for debug-only logging
-#ifdef DEBUG
+#ifdef _DEBUG
 #   define COGLOGDEBUG(module, message, ...) \
     do { \
              CogLogDebug(module, message, ##__VA_ARGS__); \
@@ -100,9 +99,9 @@ virtual int GetMaxCount() { \
 #define PIF 3.141592653f
 
 #ifdef ANDROID
-#define SCREEN_TOLERANCE 25;
+#define SCREEN_TOLERANCE 25
 #else
-#define SCREEN_TOLERANCE 50;
+#define SCREEN_TOLERANCE 50
 #endif
 
 typedef float(*FadeFunction)(float);

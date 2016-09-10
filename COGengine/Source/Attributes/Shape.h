@@ -1,8 +1,13 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include <string>
+#include <vector>
+#include "ofRectangle.h"
+#include "ofxSmartPointer.h"
 #include "Sprite.h"
 #include "SpriteEntity.h"
+
+using namespace std;
 
 namespace Cog {
 
@@ -121,6 +126,7 @@ namespace Cog {
 	private:
 		float width = 0;
 		float height = 0;
+		bool noFill = false;
 
 	public:
 		Plane(float width, float height) : width(width), height(height), Shape(RenderType::PLANE) {
@@ -140,6 +146,14 @@ namespace Cog {
 
 		void SetHeight(float height) {
 			this->height = height;
+		}
+
+		bool IsNoFill() {
+			return noFill;
+		}
+
+		void SetNoFill(bool noFill) {
+			this->noFill = noFill;
 		}
 	};
 
@@ -305,6 +319,16 @@ namespace Cog {
 
 		vector<spt<SpriteEntity>>& GetSprites() {
 			return sprites;
+		}
+
+		void RemoveSprite(spt<SpriteEntity> entity) {
+			// todo: performance!
+			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
+				if ((*it)->id == entity->id) {
+					sprites.erase(it);
+					break;
+				}
+			}
 		}
 
 		string GetSheetName() {
