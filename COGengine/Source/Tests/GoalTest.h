@@ -6,8 +6,7 @@
 #include "Goal.h"
 #include "StringHash.h"
 
-#ifdef TESTING
-
+#include "catch.hpp"
 using namespace Cog;
 
 class DummyGoal : public Goal {
@@ -113,5 +112,4 @@ TEST_CASE("GoalTest", "[class]")
 
 }
 
-#endif
 

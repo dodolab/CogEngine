@@ -5,8 +5,7 @@
 #include "ofxCogMain.h"
 
 
-#ifdef TESTING
-
+#include "catch.hpp"
 using namespace Cog;
 
 class CheckBehavior : public Behavior {
@@ -112,6 +111,3 @@ TEST_CASE("COG Engine test", "[class]")
 		REQUIRE(recipient->acceptedMessage == true);
 	}
 }
-
-#endif
-

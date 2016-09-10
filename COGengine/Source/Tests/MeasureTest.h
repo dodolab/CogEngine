@@ -3,8 +3,7 @@
 #include "ofMain.h"
 #include "CogEngine.h"
 
-#ifdef TESTING
-
+#include "catch.hpp"
 using namespace Cog;
 #include "TimeMeasure.h"
 
@@ -39,6 +38,3 @@ using namespace Cog;
 
 		}
 	}
-
-#endif
-	

@@ -3,8 +3,8 @@
 #include "ofMain.h"
 #include "CogEngine.h"
 
-#ifdef TESTING
-
+#include "catch.hpp"
+using namespace Cog;
 
 TEST_CASE("Settings test", "[class]")
 {
@@ -27,6 +27,4 @@ TEST_CASE("Settings test", "[class]")
 		REQUIRE(val.compare("test_val") == 0);
 	}
 }
-
-#endif
 

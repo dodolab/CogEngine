@@ -7,9 +7,8 @@
 #include "State.h"
 #include "StringHash.h"
 
-#ifdef TESTING
 
-
+#include "catch.hpp"
 using namespace Cog;
 
 class MiningState : public State {
@@ -130,6 +129,4 @@ TEST_CASE("StateMachineTest", "[class]")
 		REQUIRE(stMach->GetCurrentState()->GetState() == StringHash(10));
 	}
 }
-
-#endif
 
