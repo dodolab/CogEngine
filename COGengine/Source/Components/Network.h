@@ -105,16 +105,26 @@ namespace Cog {
 					bytesBuff2 = udpReceiver.Receive((char*)bufferStream2->GetBuffer(), bufferStream2->GetBufferBites() / 8);
 				} while (bytesBuff1 > 0 && bytesBuff2 > 0);
 
-				if (bytesBuff2 > 0) bufferStream1 = bufferStream2;
-
+				if (bytesBuff2 > 0) {
+					delete bufferStream1;
+					bufferStream1 = bufferStream2;
+					bufferStream2 = nullptr;
+				}
 				if (bufferStream1->ReadDWord() == param1 && bufferStream1->ReadDWord() == param2) {
 					// get the right message
 					unsigned int size = bufferStream1->ReadDWord();
 					unsigned char* data = bufferStream1->ReadBytes(size);
-					return new NetReader(data, size);
+					delete bufferStream1;
+					delete bufferStream2;
+					return new NetReader(data,size);
 				}
 
-				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) return nullptr;
+			
+				if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) {
+					delete bufferStream1;
+					delete bufferStream2;
+					return nullptr;
+				}
 			}
 
 		}

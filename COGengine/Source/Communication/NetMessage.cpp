@@ -10,7 +10,8 @@ namespace Cog {
 		this->msgType = (NetMsgType) reader->ReadDWord();
 		this->action = StringHash(reader->ReadDWord());
 		this->msgTime = reader->ReadDWord();
-		this->param = reader->ReadDWord();
+		this->dwordParam = reader->ReadDWord();
+		this->floatParam = reader->ReadFloat();
 		this->dataLength = reader->ReadDWord();
 		if (this->dataLength != 0) {
 			this->data = new BYTE[this->dataLength];
@@ -25,7 +26,8 @@ namespace Cog {
 		writer->WriteDWord((DWORD)this->msgType);
 		writer->WriteDWord(this->action.Value());
 		writer->WriteDWord(this->msgTime);
-		writer->WriteDWord(this->param);
+		writer->WriteDWord(this->dwordParam);
+		writer->WriteFloat(this->floatParam);
 		writer->WriteDWord(this->dataLength);
 
 		if (dataLength != 0) {

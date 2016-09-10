@@ -34,6 +34,10 @@ namespace Cog {
 			this->current = data;
 		}
 
+		~NetReader() {
+			delete[] buffer;
+		}
+
 		void ReadBit(bool& value);
 
 		inline bool ReadBit() {

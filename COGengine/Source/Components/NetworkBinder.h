@@ -13,13 +13,13 @@ namespace Cog {
 		bool gotFirstMessage = false;
 		bool gotSecondMessage = false;
 
-		int parameter = 0;
+		float parameter = 0;
 		int parameterTime = 0;
 
-		int previousParameter = 0;
+		float previousParameter = 0;
 		int previousParameterTime = 0;
 
-		int nextParameter = 0;
+		float nextParameter = 0;
 		int nextParameterTime = 0;
 
 		float deltaSpeed = 1;

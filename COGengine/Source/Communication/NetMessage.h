@@ -20,8 +20,9 @@ namespace Cog {
 		NetMsgType msgType;
 		// id of action that has been invoked
 		StringHash action;
-		DWORD msgTime; // time the message was sent
-		DWORD param; // custom parameter
+		DWORD msgTime = 0; // time the message was sent
+		DWORD dwordParam = 0; // custom parameter
+		float floatParam = 0;
 		BYTE* data = nullptr;
 		int dataLength = 0;
 
@@ -51,12 +52,20 @@ namespace Cog {
 			this->msgType = msgType;
 		}
 
-		DWORD GetParameter() {
-			return param;
+		DWORD GetDWORDParameter() {
+			return dwordParam;
 		}
 
-		void SetParameter(DWORD param) {
-			this->param = param;
+		void SetDWORDParameter(DWORD param) {
+			this->dwordParam = param;
+		}
+
+		float GetFloatParameter() {
+			return floatParam;
+		}
+
+		void SetFloatParameter(float param) {
+			this->floatParam = param;
 		}
 
 		DWORD GetMsgTime() {

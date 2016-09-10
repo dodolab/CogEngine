@@ -27,28 +27,30 @@ namespace Cog {
 	void NetworkBinder::AcceptDeltaUpdate(NetMessage* msg) {
 		if (!gotFirstMessage) {
 			gotFirstMessage = true;
-			this->parameter = msg->GetParameter();
+			this->parameter = msg->GetFloatParameter();
 			this->parameterTime = msg->GetMsgTime();
-			this->previousParameter = msg->GetParameter();
+			this->previousParameter = msg->GetFloatParameter();
 			this->previousParameterTime = msg->GetMsgTime();
 		}
 		else if (!gotSecondMessage) {
 			gotSecondMessage = true;
-			this->nextParameter = msg->GetParameter();
+			this->nextParameter = msg->GetFloatParameter();
 			this->nextParameterTime = msg->GetMsgTime();
 		}
 		else {
 			this->previousParameter = this->nextParameter;
 			this->previousParameterTime = this->nextParameterTime;
 
-			this->nextParameter = msg->GetParameter();
+			this->nextParameter = msg->GetFloatParameter();
 			this->nextParameterTime = msg->GetMsgTime();
 		}
 	}
 
 	void NetworkBinder::Update(const uint64 delta, const uint64 absolute) {
 		if (gotFirstMessage && gotSecondMessage) {
-			this->parameterTime += delta*deltaSpeed;
+
+			this->parameterTime += (int)(delta*deltaSpeed);
+
 
 			if (this->parameterTime < this->previousParameterTime) {
 				deltaSpeed *= 1.1f;
@@ -61,8 +63,9 @@ namespace Cog {
 			auto diffParam = this->nextParameter - this->previousParameter;
 
 			auto diffLow = this->parameterTime - this->previousParameterTime;
-		
+
 			this->parameter = this->previousParameter + diffParam*(((float)diffLow)/diffTime);
+
 		}
 	}
 
