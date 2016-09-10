@@ -40,6 +40,9 @@
     <Filter Include="Source\Communication">
       <UniqueIdentifier>{77bdc192-ae4b-45a3-9f3d-f0874a7870d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Scripting">
+      <UniqueIdentifier>{339fca49-afb3-4ab6-85da-0c6166dfa15c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -609,6 +612,18 @@
     <ClInclude Include="3rdParty\luabridge\FuncTraits.h">
       <Filter>3rdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripting\MsgLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\NodeLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\BehaviorLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\LuaScripting.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -913,6 +928,15 @@
     </ClCompile>
     <ClCompile Include="3rdParty\lua\lstate.c">
       <Filter>3rdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\BehaviorLua.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\NodeLua.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\MsgLua.cpp">
+      <Filter>Source\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

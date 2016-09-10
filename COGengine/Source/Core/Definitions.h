@@ -9,6 +9,9 @@
 #define REGISTER_COMPONENT(object) CogEngine::GetInstance().entityStorage->RegisterComponent(object)
 #define REGISTER_BEHAVIOR(className) CogEngine::GetInstance().entityStorage->RegisterBehaviorPrototype(#className, new className())
 
+#define LUA_REGFUNC(className, funcName) addFunction(#funcName, &className::funcName)
+#define LUA_REGDATA(className, dataName) addData(#dataName, &className::dataName)
+
 #define OBJECT_VIRTUAL() \
 public: \
 virtual string GetClassName() { \
