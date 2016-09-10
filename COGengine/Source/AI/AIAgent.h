@@ -6,38 +6,41 @@
 #include "ofxSmartPointer.h"
 
 using namespace std;
-using namespace Cog;
 
-template<class S>
-class AIAgent {
-protected:
-	// identifier incremental counter
-	static int idCounter;
-	const int id;
-	string name;
-public:
-	AIAgent() : id(idCounter++) {
+namespace Cog {
 
-	}
+	template<class S, class A>
+	class AIAgent {
+	protected:
+		// identifier incremental counter
+		static int idCounter;
+		const int id;
+		string name;
+	public:
+		AIAgent() : id(idCounter++) {
 
-	AIAgent(string name) : AIAgent() {
-		this->name = name;
-	}
+		}
 
-	virtual StringHash ChooseAction(spt<Simulator<S>> simulator) = 0;
+		AIAgent(string name) : AIAgent() {
+			this->name = name;
+		}
 
-	int GetId() {
-		return id;
-	}
+		virtual A ChooseAction(spt<Simulator<S, A>> simulator) = 0;
 
-	string GetName() {
-		this->name = name;
-	}
+		int GetId() {
+			return id;
+		}
 
-	void SetName(string name) {
-		this->name = name;
-	}
-};
+		string GetName() {
+			this->name = name;
+		}
 
-template<class S>
-int AIAgent<S>::idCounter = 0;
+		void SetName(string name) {
+			this->name = name;
+		}
+	};
+
+	template<class S, class A>
+	int AIAgent<S, A>::idCounter = 0;
+
+} // namespace

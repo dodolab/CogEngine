@@ -14,4 +14,8 @@ public:
 	void SetAgentOnTurn(int agentOnTurn) {
 		this->agentOnTurn = agentOnTurn;
 	}
+
+	void SwapAgentOnTurn(int maxAgents) {
+		agentOnTurn = (agentOnTurn + 1) % maxAgents;
+	}
 };

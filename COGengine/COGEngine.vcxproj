@@ -257,7 +257,6 @@
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\xml\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\xml\tinyxml.h" />
-    <ClInclude Include="Source\AI\ActionFilter.h" />
     <ClInclude Include="Source\AI\ActionHistory.h" />
     <ClInclude Include="Source\AI\AgentsReward.h" />
     <ClInclude Include="Source\AI\AIAgent.h" />
@@ -377,6 +376,7 @@
     <ClInclude Include="Source\Tests\JavaScriptTest.h" />
     <ClInclude Include="Source\Tests\LuaTest.h" />
     <ClInclude Include="Source\Tests\MeasureTest.h" />
+    <ClInclude Include="Source\Tests\MonteCarloTest.h" />
     <ClInclude Include="Source\Tests\NetworkTest.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
     <ClInclude Include="Source\Tests\SQLTest.h" />
@@ -541,7 +541,6 @@
     <ClCompile Include="3rdParty\xml\ofxXmlSettings.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxml.cpp" />
     <ClCompile Include="3rdParty\xml\tinyxmlparser.cpp" />
-    <ClCompile Include="Source\AI\AIAgent.cpp" />
     <ClCompile Include="Source\Attributes\Bounds.cpp" />
     <ClCompile Include="Source\Attributes\HitBox.cpp" />
     <ClCompile Include="Source\Attributes\Shape.cpp" />

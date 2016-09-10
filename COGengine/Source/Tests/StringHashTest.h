@@ -8,9 +8,6 @@
 using namespace Cog;
 #include "StringHash.h"
 
-class Vods {
-
-};
 
 TEST_CASE("StringHash test", "[class]")
 {

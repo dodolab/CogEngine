@@ -663,8 +663,8 @@
     <ClInclude Include="Source\AI\UCTAgent.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\ActionFilter.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="Source\Tests\MonteCarloTest.h">
+      <Filter>Source\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1042,9 +1042,6 @@
     </ClCompile>
     <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\AI\AIAgent.cpp">
-      <Filter>Source\AI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
