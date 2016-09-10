@@ -128,11 +128,6 @@ namespace Cog {
 		loadTexture((ofTexture *)_texture, sheetName, bufferSize, zIndex);
 	}
 
-	void SpriteSheetRenderer::loadTexture(SpriteTexture * _texture, string sheetName, int bufferSize, int zIndex) {
-		loadTexture((ofTexture *)_texture, sheetName, bufferSize, zIndex);
-	}
-
-
 	void SpriteSheetRenderer::clearCounters(string sheetName)
 	{
 		setActualBuffer(sheetName);

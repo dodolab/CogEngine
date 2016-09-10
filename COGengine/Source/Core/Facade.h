@@ -3,7 +3,7 @@
 #include "ofxCogCommon.h"
 #include "Msg.h"
 #include "InputAct.h"
-#include "SoundFile.h"
+#include "Soundfx.h"
 #include "SheetAnim.h"
 #include "Definitions.h"
 
@@ -30,11 +30,11 @@ namespace Cog {
 	uint64 CogGetAbsoluteTime();
 
 	// =================== MENVIRONMENT ====================
-	void CogAddSound(Sound* sound);
-	void CogPlaySound(Sound* sound);
+	void CogAddSound(Soundfx* sound);
+	void CogPlaySound(Soundfx* sound);
 	vector<InputAct*>& CogGetPressedKeys();
 	vector<InputAct*>& CogGetPressedPoints();
-	vector<Sound*>& CogGetPlayedSounds();
+	vector<Soundfx*>& CogGetPlayedSounds();
 	bool CogIsKeyPressed(int key);
 	Vec2i CogGetMousePosition();
 	int CogGetScreenWidth();
@@ -80,19 +80,11 @@ namespace Cog {
 	spt<ofImage> CogPreload2DImage(string path);
 	spt<ofVboMesh> CogGetMesh(string path);
 	spt<ofTrueTypeFont> CogGetFont(string path, int size);
-	Sound* CogGetSound(string path);
+	Soundfx* CogGetSound(string path);
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
 	spt<SheetAnim> CogGetAnimation(string name);
 	void CogStoreAnimation(spt<SheetAnim> anim);
-
-	// ================== MCOMPONENTSTORAGE ====================
-
-	void CogRegisterComponent(Component* value);
-
-	bool CogRemoveComponent(StrId key);
-
-	bool CogExistsComponent(StrId key);
 
 
 }// namespace

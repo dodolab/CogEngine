@@ -81,6 +81,18 @@ namespace Cog {
 			this->name = name;
 		}
 
+		TransformEnt(const TransformEnt& copy) {
+			this->name = copy.name;
+			this->anchor = copy.anchor;
+			this->pos = copy.pos;
+			this->pType = copy.pType;
+			this->rotation = copy.rotation;
+			this->rotationCentroid = copy.rotationCentroid;
+			this->size = copy.size;
+			this->sType = copy.sType;
+			this->zIndex = copy.zIndex;
+		}
+
 		~TransformEnt() {
 
 		}

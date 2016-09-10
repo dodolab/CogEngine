@@ -114,9 +114,6 @@
     <ClInclude Include="Source\Behaviors\Button.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Collider.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\DelayAction.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -135,13 +132,7 @@
     <ClInclude Include="Source\Behaviors\MultiAnim.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\RotateAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\TransformAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\TranslateAnim.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Behaviors\Tween.h">
@@ -201,22 +192,10 @@
     <ClInclude Include="Source\Core\Component.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Flags.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Math\Transform.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\AStarSearch.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\CollageTexture.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteTexture.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Misc\Utils.h">
@@ -237,9 +216,6 @@
     <ClInclude Include="Source\Core\Msg.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Vec2i.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\SettingsTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
@@ -249,15 +225,6 @@
     <ClInclude Include="Source\Entities\DEntity.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Bounds.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\Collision.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\Pair.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Attributes\Shape.h">
       <Filter>Source\Attributes</Filter>
     </ClInclude>
@@ -265,9 +232,6 @@
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Settings.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\SoundFile.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Attr.h">
@@ -431,9 +395,6 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Events.h">
       <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Attributes\HitBox.h">
-      <Filter>Source\Attributes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\SpriteEntity.h">
       <Filter>Source\Graphics</Filter>
@@ -630,9 +591,6 @@
     <ClInclude Include="Source\Tests\CoroutineTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\StrId.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\StrIdTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
@@ -693,6 +651,24 @@
     <ClInclude Include="Source\AI\GameSimulator.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\CollageTexture.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Soundfx.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\StrId.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Transform.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Vec2i.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Attributes\Flags.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -752,16 +728,7 @@
     <ClCompile Include="Source\Components\Renderer.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Flags.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\CollageTexture.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteTexture.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Misc\Utils.cpp">
@@ -772,12 +739,6 @@
     </ClCompile>
     <ClCompile Include="Source\Core\TransformMath.cpp">
       <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\Transform.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Attributes\Bounds.cpp">
-      <Filter>Source\Attributes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteSet.cpp">
       <Filter>Source\Graphics</Filter>
@@ -859,9 +820,6 @@
     </ClCompile>
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
       <Filter>3rdParty</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Attributes\HitBox.cpp">
-      <Filter>Source\Attributes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteEntity.cpp">
       <Filter>Source\Graphics</Filter>
@@ -1007,9 +965,6 @@
     <ClCompile Include="Source\Behaviors\MultiSelection.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\RotateAnim.cpp">
-      <Filter>Source\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Behaviors\Selection.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
@@ -1025,9 +980,6 @@
     <ClCompile Include="Source\Behaviors\TransformAnim.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\TranslateAnim.cpp">
-      <Filter>Source\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Behaviors\Tween.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
@@ -1035,9 +987,6 @@
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behaviors\Button.cpp">
-      <Filter>Source\Behaviors</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviors\Collider.cpp">
       <Filter>Source\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Behaviors\DelayAction.cpp">
@@ -1048,9 +997,6 @@
     </ClCompile>
     <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\StrId.cpp">
-      <Filter>Source\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\CogEngine.cpp">
       <Filter>Source\Core</Filter>
@@ -1075,6 +1021,18 @@
     </ClCompile>
     <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp">
       <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\CollageTexture.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Transform.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Flags.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\StrId.cpp">
+      <Filter>Source\Attributes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

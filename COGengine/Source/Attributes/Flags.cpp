@@ -7,7 +7,7 @@ namespace Cog {
 	Flags::Flags() {
 	}
 
-	Flags::Flags(vector<unsigned> states) {
+	Flags::Flags(vector<unsigned>& states) {
 		for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 	}
 
@@ -42,12 +42,12 @@ namespace Cog {
 	vector<unsigned> Flags::GetAllStates() const {
 		vector<unsigned> output;
 
-		// iterate over integer flags
+		// iterate over flags
 		for (unsigned i = 0; i < sizeof(unsigned) * 4; i++) {
 			if (HasState(i)) output.push_back(i);
 		}
 
-		// oterate over map
+		// iterate over map
 		if (otherFlags != nullptr) {
 			for (auto it = otherFlags->begin(); it != otherFlags->end(); ++it) {
 				// get value
@@ -55,7 +55,7 @@ namespace Cog {
 				if (flag != 0) {
 					for (unsigned i = 0; i < sizeof(unsigned); i++) {
 						unsigned st = it->first*sizeof(unsigned) + i;
-						// state = key*intsize + i
+						
 						if (HasState(st)) output.push_back(st);
 					}
 				}
@@ -81,7 +81,7 @@ namespace Cog {
 			}
 		}
 
-		// index > 3 - check map
+		// if index > 3, the state should be stored in the map
 		if (otherFlags != nullptr) {
 			return otherFlags->count(index) && (((*otherFlags)[index] & binary) == binary);
 		}
@@ -210,7 +210,7 @@ namespace Cog {
 			}
 		}
 
-		// index >3 - set map
+		// if index > 3, the state will be stored in the map
 		if (otherFlags == nullptr) otherFlags = new map<unsigned, unsigned>();
 
 		if (set) {

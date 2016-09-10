@@ -73,8 +73,9 @@ namespace Cog {
 		}
 		else if (blend == AnimBlend::OVERLAY) {
 			ownerTrans.localPos = fromTrans.localPos + (toTrans.localPos - fromTrans.localPos)*(actualPercent);
-			actualTrans.rotation = fromTrans.rotation + (toTrans.rotation - fromTrans.rotation)*(actualPercent);
-			actualTrans.scale = fromTrans.scale + (toTrans.scale - fromTrans.scale)*(actualPercent);
+			ownerTrans.rotation = fromTrans.rotation + (toTrans.rotation - fromTrans.rotation)*(actualPercent);
+			ownerTrans.scale = fromTrans.scale + (toTrans.scale - fromTrans.scale)*(actualPercent);
+			ownerTrans.rotationCentroid = fromTrans.rotationCentroid;
 		}
 
 		lastPercent = actualPercent;

@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "CollageTexture.h"
-#include "SpriteTexture.h"
 
 namespace Cog {
 
@@ -117,7 +116,6 @@ namespace Cog {
 		void loadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int internalGLScaleMode, int zIndex);
 		void loadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal = true);
 		void loadTexture(CollageTexture * texture, string sheetName, int bufferSize, int zIndex);
-		void loadTexture(SpriteTexture * texture, string sheetName, int bufferSize, int zIndex);
 
 		// -----------------------------------------
 		void setBrushIndex(int index, int wh = 1);

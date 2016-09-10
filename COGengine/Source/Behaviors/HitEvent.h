@@ -4,7 +4,6 @@
 
 #include "EntityStorage.h"
 #include "InputHandler.h"
-#include "HitBox.h"
 
 namespace Cog {
 

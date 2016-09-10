@@ -11,41 +11,46 @@ namespace Cog {
 	class StrId;
 
 	/**
-	* State machine class that holds collection of states
+	* Flag array that holds data about ON/OFF indicators
+	* Flags can be widely used for any object that may be in several states at once
+	* To reduce memory it is recommended to use only flags between 0 and 128 since the 
+	* higher flags are stored in a map
 	*
+	* This class may be used in combination with StrId since both use unsigned type
 	*/
 	class Flags {
 	private:
-		// first flag bit array
+		// flag array between 0-32
 		unsigned flags1 = 0;
-		// second flag bit array
+		// flag array between 33-64
 		unsigned flags2 = 0;
-		// third flag bit array
+		// flag array between 65-96
 		unsigned flags3 = 0;
-		// fourth flag bit array
+		// flag array between 97-128
 		unsigned flags4 = 0;
-		// map for other flags (if used)
+		// map for other flags (lazy initialization)
 		map<unsigned, unsigned>* otherFlags = nullptr;
 
 
 	public:
+
 		/**
-		* Creates a new state machine
+		* Creates a new flag array
 		*/
 		Flags();
 
 		/**
-		* Creates a new state machine, initialized with list of state
+		* Creates a new flag array, initialized with list of states
 		*/
-		Flags(vector<unsigned> states);
+		Flags(vector<unsigned>& states);
 
 		/**
-		* Creates a new state machine, initialized with one state
+		* Creates a new flag array, initialized with one state
 		*/
 		Flags(unsigned state);
 
 		/**
-		* Creates a new state machine, initialized with one state
+		* Creates a new flag array, initialized with one state
 		*/
 		Flags(StrId state);
 
@@ -55,12 +60,12 @@ namespace Cog {
 		~Flags();
 
 		/**
-		* Gets list of all states (flags)
+		* Gets list of all states
 		*/
 		vector<unsigned> GetAllStates() const;
 
 		/**
-		* Returns true, if a state (flag) is set
+		* Returns true, if a state is set
 		*/
 		bool HasState(unsigned state) const;
 
@@ -85,73 +90,29 @@ namespace Cog {
 			return DoStateOperation(false, state);
 		}
 
-		/**
-		* Resets all states and sets one given state
-		* @param st1 state to set
-		*/
 		Flags& operator=(const unsigned& st1);
-
-		/**
-		* Resets all states and sets all states from given EnFlag object
-		* @param st1 EnFlag object to set
-		*/
 		Flags& operator=(const Flags& st1);
-
-		/**
-		* Compares state machine with one state
-		*/
 		bool operator==(unsigned st1);
-
-		/**
-		* Compares state machine with another
-		*/
 		bool operator==(const Flags& st1);
-
-		/**
-		* Compares state machine with one state
-		*/
 		bool operator!=(unsigned st1);
-
-		/**
-		* Compares state machine with another
-		*/
 		bool operator!=(const Flags& st1);
-
-		/**
-		* Adds a state to the state machine and returns a new object
-		* @param st1 state to set
-		*/
 		Flags operator+(unsigned st1);
-
-		/**
-		* Removes a state from the state machine and returns a new object
-		* @param st1 state to reset
-		*/
 		Flags operator-(unsigned st2);
-
-		/**
-		* Adds a state to the state machine
-		* @param st1 state to set
-		*/
 		Flags& operator+=(unsigned st1);
-
-		/**
-		* Renoves a state from the state machine
-		* @param st1 state to reset
-		*/
 		Flags& operator-=(unsigned st1);
 
 		/**
-		* Returns true, if all states from the given state machine are set in this state machine
+		* Returns true, if all states from the given flag array are set in this object
 		*/
 		bool Contains(Flags& other) const;
 
 		/**
-		* Returns true, if at least one state from the given state machine is set in this state machine
+		* Returns true, if at least one state from the given flag array is set in this object
 		*/
 		bool ContainsAtLeastOne(Flags& other) const;
 
 	private:
+
 		/**
 		* Gets index of a state
 		* @param state number of state
@@ -170,7 +131,7 @@ namespace Cog {
 
 		/**
 		* Does state operation (sets or resets the state)
-		* @param set - if true, state will be set; reset otherwise
+		* @param set - if true, state will be set
 		* @param state - state to set/reset
 		*/
 		void DoStateOperation(bool set, unsigned state);

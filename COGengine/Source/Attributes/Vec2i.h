@@ -92,6 +92,18 @@ namespace Cog {
 		static float Distancef(const Vec2i& a, const Vec2i& b) {
 			return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 		}
+
+		int ManhattanDist(const Vec2i& a) {
+			return abs(a.x - x) + abs(a.y - y);
+		}
+
+		int Distance(const Vec2i& a) {
+			return sqrt((a.x - x)*(a.x - x) + (a.y - y)*(a.y - y));
+		}
+
+		float Distancef(const Vec2i& a) {
+			return sqrt((a.x - x)*(a.x - x) + (a.y - y)*(a.y - y));
+		}
 	};
 
 }
