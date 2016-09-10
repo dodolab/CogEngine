@@ -354,6 +354,7 @@
     <ClInclude Include="Source\Math\Path.h" />
     <ClInclude Include="Source\Math\PathSegment.h" />
     <ClInclude Include="Source\Math\SteeringMath.h" />
+    <ClInclude Include="Source\Misc\EnumConverter.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
     <ClInclude Include="Source\Misc\TimeMeasure.h" />
     <ClInclude Include="Source\Misc\Utils.h" />
@@ -590,6 +591,10 @@
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />
     <ClCompile Include="Source\Core\Scene.cpp" />
     <ClCompile Include="Source\Core\TransformMath.cpp" />
+    <ClCompile Include="Source\Entities\AttrAnimEnt.cpp" />
+    <ClCompile Include="Source\Entities\BehaviorEnt.cpp" />
+    <ClCompile Include="Source\Entities\LayerEnt.cpp" />
+    <ClCompile Include="Source\Entities\TransformEnt.cpp" />
     <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
     <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
@@ -599,6 +604,7 @@
     <ClCompile Include="Source\Math\EasingFunc.cpp" />
     <ClCompile Include="Source\Math\Path.cpp" />
     <ClCompile Include="Source\Math\PathSegment.cpp" />
+    <ClCompile Include="Source\Misc\EnumConverter.cpp" />
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />
     <ClCompile Include="Source\Scripting\BehaviorLua.cpp" />

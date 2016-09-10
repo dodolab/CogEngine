@@ -41,7 +41,7 @@ namespace Cog {
 				// calculate image offset
 				int frameIndex = actualIndex + actualNode->GetStart();
 
-				if (owner->HasRenderType(RenderType::SPRITE)) {
+				if (owner->HasShapeType(ShapeType::SPRITE)) {
 					// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
 
 					// todo: recalculation always...
@@ -49,7 +49,7 @@ namespace Cog {
 					owner->GetShape<spt<SpriteShape>>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
-					if (!owner->HasRenderType(RenderType::IMAGE)) {
+					if (!owner->HasShapeType(ShapeType::IMAGE)) {
 						owner->SetShape(spt<Image>(new Image(spriteSheet)));
 					}
 
@@ -63,10 +63,10 @@ namespace Cog {
 					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
 					owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
 
-					if (owner->HasRenderType(RenderType::IMAGE)) {
+					if (owner->HasShapeType(ShapeType::IMAGE)) {
 						owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
 					}
-					else if (owner->HasRenderType(RenderType::NONE)) {
+					else if (owner->HasShapeType(ShapeType::NONE)) {
 						// set the first image
 						owner->SetShape(spt<Image>(new Image(spriteSheet)));
 					}
@@ -78,7 +78,7 @@ namespace Cog {
 
 				string imagePath = actualNode->GetSheet(actualIndex);
 				spt<ofImage> image = CogGet2DImage(imagePath);
-				if (owner->HasRenderType(RenderType::IMAGE)) {
+				if (owner->HasShapeType(ShapeType::IMAGE)) {
 					owner->GetShape<spt<Image>>()->SetImage(image);
 				}
 				else {

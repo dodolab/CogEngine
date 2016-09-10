@@ -669,6 +669,9 @@
     <ClInclude Include="Source\Attributes\Flags.h">
       <Filter>Source\Attributes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Misc\EnumConverter.h">
+      <Filter>Source\Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -1033,6 +1036,21 @@
     </ClCompile>
     <ClCompile Include="Source\Attributes\StrId.cpp">
       <Filter>Source\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities\AttrAnimEnt.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities\BehaviorEnt.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities\LayerEnt.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities\TransformEnt.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Misc\EnumConverter.cpp">
+      <Filter>Source\Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

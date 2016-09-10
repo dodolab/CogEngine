@@ -15,7 +15,7 @@ namespace Cog {
 		Trans& transform = owner->GetTransform();
 		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
-		movement.SetVelocity(movement.GetVelocity() + movement.CalcAccelerationForce()*0.001f*delta);
+		movement.SetVelocity(movement.GetVelocity() + movement.CalcForce()*0.001f*delta);
 
 		transform.localPos.x += movement.GetVelocity().x*0.001f*delta;
 		transform.localPos.y += movement.GetVelocity().y*0.001f*delta;

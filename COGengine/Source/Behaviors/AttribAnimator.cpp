@@ -33,11 +33,11 @@ namespace Cog {
 
 		float fromVal, toVal;
 
-		if (animEntity->fromValFromActual) {
+		if (animEntity->takeInitialFromObject) {
 			// take the actual transformation as the initial value
 			fromVal = GetAttrib(animEntity->attributeType, ownerTrans);
 			ownerTrans.CalcAbsTransform(owner->GetParent()->GetTransform());
-			toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->measureType == MeasureType::DIRECT ?
+			toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->transType == TransformType::DIRECT ?
 				animEntity->toVal : (GetAttrib(animEntity->attributeType, ownerTrans) + animEntity->toVal));
 		}
 		else {
@@ -45,7 +45,7 @@ namespace Cog {
 			Trans fromTrans;
 			math.CalcTransform(fromTrans, owner, owner->GetParent(), fromTransEnt);
 			fromVal = GetAttrib(animEntity->attributeType, fromTrans);
-			toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->measureType == MeasureType::DIRECT ? animEntity->toVal : (animEntity->fromVal + animEntity->toVal));
+			toTransEnt = CreateEntityFromAttrAnim(animEntity, animEntity->transType == TransformType::DIRECT ? animEntity->toVal : (animEntity->fromVal + animEntity->toVal));
 		}
 
 		// calculate both values
@@ -141,12 +141,12 @@ namespace Cog {
 		switch (entity->attributeType) {
 		case AttributeType::POS_X:
 		case AttributeType::POS_Y:
-			ent.pType = entity->transformType;
+			ent.pType = entity->calcType;
 			break;
 		case AttributeType::SIZE_X:
 		case AttributeType::SIZE_Y:
 		case AttributeType::SIZE:
-			ent.sType = entity->transformType;
+			ent.sType = entity->calcType;
 			break;
 		}
 

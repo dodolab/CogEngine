@@ -4,6 +4,7 @@
 #include "Selection.h"
 #include "MultiSelection.h"
 #include "Scene.h"
+#include "EnumConverter.h"
 
 namespace Cog {
 
@@ -278,13 +279,13 @@ namespace Cog {
 
 	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
-		RenderType renderType = RenderTypeConverter::StrToRenderType(type);
+		ShapeType renderType = EnumConverter::StrToShapeType(type);
 
-		if (renderType == RenderType::IMAGE) {
+		if (renderType == ShapeType::IMAGE) {
 			string img = xml->getAttributex("img", "");
 			this->SetImageNode(node, img);
 		}
-		else if (renderType == RenderType::PLANE) {
+		else if (renderType == ShapeType::PLANE) {
 			float width = 0;
 			float height = 0;
 
@@ -302,7 +303,7 @@ namespace Cog {
 			bool noFill = xml->getBoolAttributex("no_fill", false);
 			SetPlaneNode(node, size, color, noFill);
 		}
-		else if (renderType == RenderType::SPRITE) {
+		else if (renderType == ShapeType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");
 
 			if (layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
@@ -313,7 +314,7 @@ namespace Cog {
 
 			SetSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
-		else if (renderType == RenderType::BOUNDING_BOX) {
+		else if (renderType == ShapeType::BOUNDING_BOX) {
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = StringToColor(colorStr);
 

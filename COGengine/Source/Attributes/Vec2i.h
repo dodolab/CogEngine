@@ -5,9 +5,14 @@
 namespace Cog {
 
 	/**
-	* Two-integer vector
+	* 2D vector of integers
 	*/
 	struct Vec2i {
+
+		// position on the x axis 
+		int x;
+		// position on the y axis
+		int y;
 
 		Vec2i() : x(0), y(0) {
 
@@ -34,14 +39,9 @@ namespace Cog {
 
 		}
 
-		/** position on the x axis */
-		int x;
-		/** position on the y axis */
-		int y;
-
 
 		inline operator size_t() const {
-			// seed for Mersenne Twister generator
+			// prime number
 			return x * 1812433253 + y;
 		}
 
@@ -81,26 +81,44 @@ namespace Cog {
 			return Vec2i(x - a.x, y - a.y);
 		}
 
+		/**
+		* Calculates manhattan distance between two vectors
+		*/
 		static int ManhattanDist(const Vec2i& a, const Vec2i& b) {
 			return abs(a.x - b.x) + abs(a.y - b.y);
 		}
 
+		/**
+		* Calculates Euclidean distance between two vectors, returns integer
+		*/
 		static int Distance(const Vec2i& a, const Vec2i& b) {
 			return sqrt((a.x-b.x)*(a.x - b.x) + (a.y-b.y)*(a.y-b.y));
 		}
 
+		/**
+		* Calculates Euclidean distance between two vectors, returns float
+		*/
 		static float Distancef(const Vec2i& a, const Vec2i& b) {
 			return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 		}
 
+		/**
+		* Calculates manhattan distance to other vector
+		*/
 		int ManhattanDist(const Vec2i& a) {
 			return abs(a.x - x) + abs(a.y - y);
 		}
 
+		/**
+		* Calculates euclidean distance to other vector, returns integer
+		*/
 		int Distance(const Vec2i& a) {
 			return sqrt((a.x - x)*(a.x - x) + (a.y - y)*(a.y - y));
 		}
 
+		/**
+		* Calculates euclidean distance to other vector, returns float
+		*/
 		float Distancef(const Vec2i& a) {
 			return sqrt((a.x - x)*(a.x - x) + (a.y - y)*(a.y - y));
 		}

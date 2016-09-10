@@ -32,6 +32,10 @@ namespace Cog {
 		SpriteSet(SpriteSheet* spriteSheet, string name, int offsetX, int offsetY, int totalFrames,
 			int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight);
 
+		SpriteSheet* GetSpriteSheet() {
+			return spriteSheet;
+		}
+
 		string GetName() {
 			return name;
 		}

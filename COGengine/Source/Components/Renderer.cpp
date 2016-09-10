@@ -33,8 +33,8 @@ namespace Cog {
 
 	void Renderer::PushNode(Node* node) {
 
-		auto renderType = node->GetShape()->GetRenderType();
-		auto& buffer = (renderType == RenderType::SPRITE || renderType == RenderType::MULTISPRITE)
+		auto renderType = node->GetShape()->GetShapeType();
+		auto& buffer = (renderType == ShapeType::SPRITE || renderType == ShapeType::MULTISPRITE)
 			? zIndexSheetBuffer : zIndexImageBuffer;
 
 
@@ -126,19 +126,18 @@ namespace Cog {
 				for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
 					Node* node = (*it2);
 
-					switch (node->GetShape()->GetRenderType()) {
-					case RenderType::IMAGE:
-					case RenderType::POLYGON:
-					case RenderType::RECTANGLE:
-					case RenderType::PLANE:
-					case RenderType::TEXT:
-					case RenderType::LABEL:
-					case RenderType::BOUNDING_BOX:
+					switch (node->GetShape()->GetShapeType()) {
+					case ShapeType::IMAGE:
+					case ShapeType::RECTANGLE:
+					case ShapeType::PLANE:
+					case ShapeType::TEXT:
+					case ShapeType::LABEL:
+					case ShapeType::BOUNDING_BOX:
 						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
-					case RenderType::SPRITE:
+					case ShapeType::SPRITE:
 						RenderSprite(node);
 						break;
-					case RenderType::MULTISPRITE:
+					case ShapeType::MULTISPRITE:
 						RenderMultiSprite(node);
 						break;
 					}
@@ -160,27 +159,24 @@ namespace Cog {
 			for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
 				Node* node = (*it2);
 
-				switch (node->GetShape()->GetRenderType()) {
-				case RenderType::IMAGE:
+				switch (node->GetShape()->GetShapeType()) { 
+				case ShapeType::IMAGE:
 					RenderImage(node);
 					break;
-				case RenderType::POLYGON:
-					RenderPolygon(node);
-					break;
-				case RenderType::PLANE:
+				case ShapeType::PLANE:
 					RenderPlane(node);
 					break;
-				case RenderType::TEXT:
+				case ShapeType::TEXT:
 					RenderText(node);
 					break;
-				case RenderType::LABEL:
+				case ShapeType::LABEL:
 					RenderLabel(node);
 					break;
-				case RenderType::BOUNDING_BOX:
+				case ShapeType::BOUNDING_BOX:
 					RenderBoundingBox(node);
 					break;
-				case RenderType::SPRITE:
-				case RenderType::MULTISPRITE:
+				case ShapeType::SPRITE:
+				case ShapeType::MULTISPRITE:
 					throw IllegalOperationException("Trying to render sprite node by default renderer!");
 				}
 			}
@@ -193,7 +189,7 @@ namespace Cog {
 	void Renderer::RenderImage(Node* owner) {
 		auto trans = owner->GetTransform();
 		// load absolute matrix
-		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
@@ -212,7 +208,7 @@ namespace Cog {
 	void Renderer::RenderPlane(Node* owner) {
 		auto trans = owner->GetTransform();
 		// load absolute matrix
-		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
 
 		ofSetColor(0x000000ff);
@@ -236,7 +232,7 @@ namespace Cog {
 
 	void Renderer::RenderText(Node* owner) {
 		// load absolute matrix
-		ofMatrix4x4 absM = owner->GetTransform().GetAbsMatrix();
+		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
 		spt<Text> shape = owner->GetShape<spt<Text>>();
 		ofSetColor(shape->GetColor());
@@ -252,7 +248,7 @@ namespace Cog {
 		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
 		Sprite& sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
-		renderer->setActualBuffer(shape->GetSheetName());
+		renderer->setActualBuffer(shape->GetLayerName());
 
 		drawingTile.width = sprite.GetWidth();
 		drawingTile.height = sprite.GetHeight();
@@ -273,13 +269,14 @@ namespace Cog {
 
 		COGMEASURE_BEGIN("RENDER_PREPARE_MULTISPRITE");
 
-		spt<SpritesShape> shape = static_cast<spt<SpritesShape>>(owner->GetShape());
-		renderer->setActualBuffer(shape->GetSheetName());
-		vector<spt<SpriteEntity>> sprites = shape->GetSprites();
+		spt<MultiSpriteShape> shape = static_cast<spt<MultiSpriteShape>>(owner->GetShape());
+		renderer->setActualBuffer(shape->GetLayerName());
+		auto& sprites = shape->GetSprites();
 
-		for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-			Sprite& sprite = (*it)->sprite;
-			Trans& trans = (*it)->transform;
+		for (auto& spr : sprites) {
+			Sprite& sprite = spr->sprite;
+			Trans& trans = spr->transform;
+
 			trans.CalcAbsTransform(owner->GetTransform());
 
 			drawingTile.width = sprite.GetWidth();
@@ -294,7 +291,6 @@ namespace Cog {
 			drawingTile.scaleX = trans.absScale.x;
 			drawingTile.scaleY = trans.absScale.y;
 			
-
 			renderer->addTile(drawingTile);
 		}
 

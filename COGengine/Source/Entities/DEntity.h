@@ -1,15 +1,20 @@
 #pragma once
 
-#include "ofxCogCommon.h"
+#include <string>
+using namespace std;
 
 namespace Cog {
 
 	/**
-	* Description entity
-	* Common class for all entities that are used to store all information needed to reconstruct the real entity
+	* Common class for all description entities
+	* Description entity is an entity, loaded from xml in general, that contains informations required 
+	* to construct the real entity (e.g. Behavior)
 	*/
 	class DEntity {
 	public:
+		// name of the entity (should be unique)
+		string name;
+
 		DEntity() : name("") {
 
 		}
@@ -17,14 +22,6 @@ namespace Cog {
 		virtual ~DEntity() {
 
 		}
-
-
-		string name;
-
-		virtual void LoadFromXml(spt<ofxXml> xml) {
-
-		}
-
 	};
 
 }// namespace

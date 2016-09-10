@@ -8,7 +8,8 @@
 namespace Cog {
 
 	/**
-	* Behavior entity
+	* Behavior entity; references behavior of given type
+	* Is used for loading from XML where behaviors are declared
 	*/
 	class BehaviorEnt : public DEntity{
 	public:
@@ -17,11 +18,22 @@ namespace Cog {
 
 		}
 
+		/**
+		* Creates a new behavior entity
+		* @param ref reference to existing behavior entity stored in ResourceCache
+		* @param setting behavior key-value settings
+		*/
 		BehaviorEnt(string ref, Setting setting) : setting(setting){
 			this->name = ref;
 			this->ref = ref;
 		}
 
+		/**
+		* Creates a new behavior entity
+		* @param name name of the entity
+		* @param type behavior type (class name)
+		* @param setting behavior key-value settings
+		*/
 		BehaviorEnt(string name, string type, Setting setting) : setting(setting), type(type) {
 			this->name = name;
 		}
@@ -30,41 +42,20 @@ namespace Cog {
 
 		}
 
+		// reference to existing behavior entity
+		// this attribute can be used when a behavior with complex settings is 
+		// declared once in xml with unique name. This name is used as a reference for
+		// other behavior entities
 		string ref;
+		// behavior type (class name, e.g. MultiAnim)
 		string type;
+		// key-value settings (some behaviors have Load method that accepts Setting object)
 		Setting setting;
 
-		void LoadFromXml(spt<ofxXml> xml, Setting& set) {
-
-			this->ref = xml->getAttributex("ref", "");
-
-			if (this->ref.empty()) {
-				this->name = xml->getAttributex("name", "");
-			}
-			else this->name = this->ref;
-
-			this->type = xml->getAttributex("type", "");
-			
-			this->setting = Setting();
-
-			if (xml->pushTagIfExists("setting")) {
-				this->setting = Setting();
-				this->setting.LoadFromXml(xml);
-				xml->popTag();
-			}
-
-			vector<string> allAttributes;
-			xml->getAttributeNames(":", allAttributes);
-
-			for (string attr : allAttributes) {
-				if (attr.compare("name") != 0 && attr.compare("type") != 0 && attr.compare("ref") != 0) {
-					// settings could be specified even as attributes of the behavior tag!
-					string val = xml->getAttributex(attr, "");
-
-					this->setting.AddItem(attr,val);
-				}
-			}
-		}
+		/**
+		* Loads entity from xml
+		*/
+		void LoadFromXml(spt<ofxXml> xml, Setting& set);
 
 	};
 }// namespace

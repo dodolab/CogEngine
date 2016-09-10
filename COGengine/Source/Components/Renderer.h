@@ -59,14 +59,6 @@ namespace Cog {
 		void RenderImage(Node* owner);
 
 		/**
-		* Renders a polygon
-		* @param owner owner node
-		*/
-		void RenderPolygon(Node* owner) {
-			// todo: draw polygon
-		}
-
-		/**
 		* Renders a rectangle
 		* @param owner owner node
 		*/

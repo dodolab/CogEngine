@@ -14,7 +14,7 @@ namespace Cog {
 
 	void SteeringBehavior::SetRotationDirection(Movement& movement, Trans& transform, ofVec2f destination, float maxAcceleration, uint64 delta) {
 		float actualRotation = transform.rotation;
-		float neededRotation = transform.CalcRotationToPosition(destination);
+		float neededRotation = transform.CalcAngle(destination);
 
 		actualRotation = DEG_TO_RAD*clampAngle(actualRotation);
 		neededRotation = DEG_TO_RAD*clampAngle(neededRotation);
@@ -38,7 +38,7 @@ namespace Cog {
 		Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
 		ofVec2f force = steeringMath.Seek(transform, movement, dest, maxAcceleration);
-		movement.AddForce(forceId, force);
+		movement.SetForce(forceId, force);
 		this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
 	}
 
@@ -60,11 +60,11 @@ namespace Cog {
 		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
 		ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed, pointTolerance);
 		if (acceleration != ofVec2f(INT_MIN)) {
-			movement.AddForce(forceId, acceleration);
+			movement.SetForce(forceId, acceleration);
 			this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
 		}
 		else {
-			movement.AddForce(forceId, ofVec2f(0));
+			movement.SetForce(forceId, ofVec2f(0));
 			Finish();
 		}
 	}
@@ -82,7 +82,7 @@ namespace Cog {
 
 		ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
 		ofVec2f acceleration = steeringMath.Flee(transform, movement, dest, fleeDistance, maxAcceleration);
-		movement.AddForce(forceId, acceleration);
+		movement.SetForce(forceId, acceleration);
 
 		this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
 	}
@@ -110,7 +110,7 @@ namespace Cog {
 			return;
 		}
 
-		movement.AddForce(forceId, force);
+		movement.SetForce(forceId, force);
 		this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), maxAcceleration, delta);
 	}
 
@@ -134,7 +134,7 @@ namespace Cog {
 		//pointer2->GetTransform().localPos = transform.localPos+force*10;
 
 		// add velocity dependency
-		movement.AddForce(forceId, force - movement.GetVelocity() / 2);
+		movement.SetForce(forceId, force - movement.GetVelocity() / 2);
 		this->SetRotationDirection(movement, transform, transform.localPos + movement.GetVelocity(), 4, delta);
 	}
 
