@@ -3,25 +3,25 @@
 #include <vector>
 using namespace std;
 
-template<class S, class A>
+template<class S>
 class ActionHistory {
 protected:
 	class ActionRecord {
 	protected:
-		spt<S> state;
-		A action;
+		S state;
+		StringHash action;
 
 	public:
-		ActionRecord(spt<S> state, A& action) {
+		ActionRecord(S state, StringHash action) {
 			this->state = state;
 			this->action = action;
 		}
 
-		spt<S> GetState() {
+		S GetState() {
 			return state;
 		}
 
-		A& GetAction() {
+		StringHash GetAction() {
 			return action;
 		}
 	};
@@ -29,7 +29,7 @@ protected:
 	map<int,vector<ActionRecord>> records;
 	int recordsNum = 0;
 public:
-	void AddRecord(spt<S> state, A& action, int agentIndex) {
+	void AddRecord(S state, StringHash action, int agentIndex) {
 		
 		if (records.find(agentIndex) == records.end()) records[agentIndex] = vector<ActionRecord>();
 		
@@ -38,11 +38,11 @@ public:
 		recordsNum++;
 	}
 
-	spt<S> GetState(int agentIndex, int recordIndex) {
+	S GetState(int agentIndex, int recordIndex) {
 		return records[agentIndex][recordIndex].GetState();
 	}
 
-	A& GetAction(int agentIndex, int recordIndex) {
+	StringHash& GetAction(int agentIndex, int recordIndex) {
 		return records[agentIndex][recordIndex].GetAction();
 	}
 

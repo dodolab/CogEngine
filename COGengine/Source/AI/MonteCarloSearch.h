@@ -3,8 +3,6 @@
 #include <vector>
 using namespace std;
 
-#include "ofxSmartPointer.h"
-
 #include "AIState.h"
 #include "Simulator.h"
 #include "AIAgent.h"
@@ -12,77 +10,76 @@ using namespace std;
 #include "AgentsReward.h"
 
 
-template<class S, class A>
+template<class S>
 class MonteCarloSearch {
 protected:
-	spt<Simulator<S, A>> mainSimulator;
-	vector<spt<AIAgent<S,A>>> agents;
-	ActionHistory<S, A> actionHistory;
-	vector<AgentsReward> rewards;
+	spt<Simulator<S>> mainSimulator;
+	vector<spt<AIAgent<S>>> agents;
+	ActionHistory<S> actionHistory;
+	vector<AgentsReward> totalRewards;
+	vector<int> rewardsCounter;
 
 public:
 	MonteCarloSearch() {
 
 	}
 
-	MonteCarloSearch(spt<Simulator<S, A>> simulator, vector<spt<AIAgent<S,A>>> agents) : mainSimulator(simulator), agents(agents) {
-
+	MonteCarloSearch(spt<Simulator<S>> simulator, vector<spt<AIAgent<S>>> agents) : mainSimulator(simulator), agents(agents) {
 	}
 
-	spt<Simulator<S, A>> GetSimulator() {
+	spt<Simulator<S>> GetSimulator() {
 		return mainSimulator;
 	}
 
-	vector<spt<AIAgent<S,A>>>& GetAgents() {
+	vector<spt<AIAgent<S>>>& GetAgents() {
 		return agents;
 	}
 
-	ActionHistory<S, A>& GetActionHistory() {
+	ActionHistory<S>& GetActionHistory() {
 		return actionHistory;
-	}
-
-	vector<AgentsReward>& GetRewards() {
-		return rewards;
 	}
 
 	int GetRewardSum(int agentIndex) {
 		int total = 0;
-		for (auto& reward : rewards) {
+		for (auto& reward : totalRewards) {
 			total += reward.GetReward(agentIndex);
 		}
 		return total;
 	}
 
 	float GetRewardAvg(int agentIndex) {
-		return GetRewardSum(agentIndex) / ((float)rewards.size());
+		return GetRewardSum(agentIndex) / ((float)GetRewardsNum());
+	}
+
+	int GetRewardsNum() {
+		int total = 0;
+		for (auto& rCounter : rewardsCounter) {
+			total += rCounter;
+		}
+		return total;
 	}
 
 	int GetNumberOfWins(int agentIndex) {
 		int total = 0;
-		for (auto& reward : rewards) {
-			
-			int agentReward = reward.GetReward(agentIndex);
-			bool loose = false;
 
-			for (int i = 0; i < reward.GetAgentsNum(); i++) {
-				if (i == agentIndex) continue;
-				if (reward.GetReward(i) > agentReward) {
-					loose = true;
-					break;
+		for (auto& reward : totalRewards) {
+			int winningAgent = 0;
+
+			for (int i = 0; i < agents.size(); i++) {
+				if (reward.GetReward(i) > reward.GetReward(winningAgent)) {
+					winningAgent = i;
 				}
 			}
 
-			if (!loose) total++;
+			if (winningAgent == agentIndex && reward.GetReward(winningAgent) > 0) total++;
 		}
 		return total;
 	}
 
 	void RunSearch(int attempts) {
-		mainSimulator->InitState();
 
 		for (int i = 0; i < attempts; i++) {
-			spt<Simulator<S, A>> simCopy = mainSimulator->DeepCopy();
-			RunAttempt(simCopy);
+			RunSimulation();
 		}
 
 		cout << "remaining legal actions: " << this->mainSimulator->GetPossibleActions().size() << endl;
@@ -113,20 +110,36 @@ public:
 protected:
 
 
-	void RunAttempt(spt<Simulator<S,A>> simulator) {
+	void RunSimulation() {
+		
+		// initialize main simulator at the beginning of each loop
 		mainSimulator->InitState();
+		int rewardsCount = 0;
+		AgentsReward rw = AgentsReward(agents.size());
+
+		// this simulator can be used by agent for additional search
+		spt<Simulator<S>> simCopy = mainSimulator->DeepCopy();
 
 		while (!mainSimulator->IsDeadEnd()) {
-			int agentOnTurn = mainSimulator->GetActualState()->GetAgentOnTurn();
-
-			spt<Simulator<S, A>> simCopy = simulator->DeepCopy();
+			// get agent on turn
+			int agentOnTurn = mainSimulator->GetActualState().GetAgentOnTurn();
+			
+			// copy state of main simulator into its copy
 			simCopy->SetActualState(mainSimulator->GetActualState());
-			A action = agents[agentOnTurn]->ChooseAction(simCopy);
+			auto agent = agents[agentOnTurn];
+			// let the agent choose the appropriate action
+			StringHash action = agent->ChooseAction(simCopy);
+
+			// apply the selected action into the simulator
 			mainSimulator->MakeAction(action);
-
-			rewards.push_back(mainSimulator->GetRewards());
-
-			actionHistory.AddRecord(simulator->GetActualState(), action, agentOnTurn);
+			// get rewards of the selected action
+			rewardsCount++;
+			rw.Merge(mainSimulator->GetRewards());
+			// update history
+			actionHistory.AddRecord(mainSimulator->GetActualState(), action, agentOnTurn);
 		}
+
+		this->totalRewards.push_back(rw);
+		this->rewardsCounter.push_back(rewardsCount);
 	}
 };

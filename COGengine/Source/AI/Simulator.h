@@ -5,12 +5,15 @@ using namespace std;
 
 #include "AgentsReward.h"
 #include "ofxSmartPointer.h"
+#include "StringHash.h"
 
-template<class S, class A>
+using namespace Cog;
+
+template<class S>
 class Simulator {
 protected:
-	spt<S> actualState;
-	vector<A> possibleActions;
+	S actualState;
+	vector<StringHash> possibleActions;
 	AgentsReward rewards;
 	int agentsNumber;
 
@@ -22,20 +25,26 @@ public:
 
 	virtual void InitState() = 0;
 
-	spt<S> GetActualState() {
+	S& GetActualState() {
 		return actualState;
 	}
 
 	virtual spt<Simulator> DeepCopy() = 0;
 
-	void SetActualState(spt<S> state) {
+	void SetActualState(S state) {
 		this->actualState = state;
 		RecalcPossibleActions();
 	}
 
-	virtual void MakeAction(A action) = 0;
+	void SetActualState(S state, vector<StringHash> possibleActions) {
+		this->actualState = state;
+		this->possibleActions = possibleActions;
+		this->rewards = AgentsReward(agentsNumber);
+	}
 
-	vector<A>& GetPossibleActions() {
+	virtual void MakeAction(StringHash action) = 0;
+
+	vector<StringHash>& GetPossibleActions() {
 		return possibleActions;
 	}
 

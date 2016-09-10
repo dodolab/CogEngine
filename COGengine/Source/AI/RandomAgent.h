@@ -3,8 +3,8 @@
 #include "AIAgent.h"
 #include "ofMath.h"
 
-template<class S, class A>
-class RandomAgent : public AIAgent<S,A> {
+template<class S>
+class RandomAgent : public AIAgent<S> {
 protected:
 public:
 	
@@ -16,9 +16,10 @@ public:
 		
 	}
 
-	virtual A ChooseAction(spt<Simulator<S, A>> simulator) {
+	virtual StringHash ChooseAction(spt<Simulator<S>> simulator) {
 		auto actions = simulator->GetPossibleActions();
-		return actions[(int)ofRandom(0, actions.size())];
+		int randIndex = (int)ofRandom(0, actions.size());
+		return actions[randIndex];
 
 	}
 
