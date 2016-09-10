@@ -34,7 +34,6 @@ namespace Cog {
 				CogLogInfo("Environment", "Aspect ratio set as %s",aspectRatio.c_str());
 			}
 		}
-
 	}
 
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
@@ -45,6 +44,10 @@ namespace Cog {
 
 		aspectRatio = ((float)screenWidth) / screenHeight;
 		RecalcVirtualSize();
+
+		MLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d",screenWidth,screenHeight,virtualWidth,virtualHeight);
+
+		//SendMessageNoBubbling(ACT_SCREEN_CHANGED, 0, nullptr, nullptr);
 	}
 
 	Vec2i Environment::GetMousePosition() {

@@ -32,21 +32,14 @@
 	  </scene_layers>
 
 	  <node name="bgr" img="bgr.jpg">
-	    <shape type="sprite" spritesheet="bgr" />
+	    <shape type="sprite" layer="bgr" />
 	  </node>
 	  
 	  <node name="square_2">
-        <shape type="sprite" spritesheet="squares" row="0" column="1" />
-		<transform pos_x="0.15" pos_y="0.15" ptype="rel" stype="loc" z_index="10" />
+        <shape type="sprite" layer="squares" row="0" column="1" />
+		<transform pos_x="0.15" pos_y="0.15" ptype="per" stype="loc" z_index="10" />
 		
-		<behavior type="MultiAnim">
-		  <setting>
-		    <item key="animations">
-			  <value>transform1</value>
-			  <value>transform2</value>
-			</item>
-		  </setting>
-		</behavior>
+		<behavior type="MultiAnim" animations="transform1|transform2" />
 		<behavior name="squareanim" />
 	  </node>
     </scene>

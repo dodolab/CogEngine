@@ -33,6 +33,48 @@ namespace Cog {
 		node->SetShape(spt<Text>(textShape));
 	}
 
+	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
+		auto spriteShape = CreateSpriteShape(scene, layer, spriteSet, row, column);
+		node->SetShape(spriteShape);
+	}
+
+	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, int row, int column) {
+		auto spriteShape = CreateSpriteShape(scene, layer, row, column);
+		node->SetShape(spriteShape);
+	}
+
+	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column) {
+
+		LayerEnt layerEntity = scene->FindLayerSettings(layer);
+		string spriteSheetName = layerEntity.spriteSheetName;
+
+		auto cache = GETCOMPONENT(ResourceCache);
+		auto spriteSheet = cache->GetSpriteSheet(spriteSheetName);
+
+		if (!spriteSheet) throw IllegalArgumentException("Error while loading sprite sheet. No such spritesheed found!");
+
+		spt<SpriteSet> spriteSetEntity;
+
+		if (spriteSet.empty()) {
+			// load default
+			spriteSetEntity = spriteSheet->GetDefaultSpriteSet();
+		}
+		else {
+			// load by name
+			spriteSetEntity = spriteSheet->GetSpriteSetByName(spriteSet);
+		}
+
+		if (!spriteSetEntity) throw IllegalArgumentException(string_format("Spriteset %s not found!", spriteSet));
+
+		spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
+		auto shape = spt<SpriteShape>(new SpriteShape(sprite, layer));
+		return shape;
+	}
+
+	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, int row, int column) {
+		return CreateSpriteShape(scene, layer, "", row, column);
+	}
+
 	Behavior* NodeBuilder::CreateBehavior(spt<BehaviorEnt> entity) {
 		Behavior* behavior = nullptr;
 
@@ -48,7 +90,6 @@ namespace Cog {
 			else {
 				behavior = prototype->CreatePrototype();
 			}
-
 		}
 		else {
 			// load from reference
@@ -59,17 +100,13 @@ namespace Cog {
 			else behavior = prototype->CreatePrototype();
 		}
 
-		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found", entity->type.c_str()));
+		if (behavior == nullptr) throw IllegalArgumentException(string_format("Error while parsing %s behavior; no prototype found", entity->type.c_str()));
 
 		return behavior;
 	}
 
-	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene, Settings& settings) {
-		TransformMath math = TransformMath();
-
-
-		string name = xml->getAttributex("name", "");
-		string img = xml->getAttributex("img", "");
+	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
+		Settings& settings = scene->GetSettings();
 
 		// get reference width and height
 		int refWidth = settings.GetSettingValInt("transform", "ref_width");
@@ -82,10 +119,22 @@ namespace Cog {
 		// set default shape
 		node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
 
+		return node;
+	}
+
+	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene) {
+
+		TransformMath math = TransformMath();
+		Settings& settings = scene->GetSettings();
+
+		string name = xml->getAttributex("name", "");
+		string img = xml->getAttributex("img", "");
+
+		Node* node = CreateNode(name, scene);
+
 		if (!img.empty()) {
 			SetImageNode(node, img);
 		}
-
 
 		if (xml->attributeExists("img_click")) {
 			// set image on click
@@ -146,7 +195,6 @@ namespace Cog {
 			}
 		}
 
-
 		if (xml->tagExists("state")) {
 			int states = xml->getNumTags("state");
 
@@ -163,7 +211,7 @@ namespace Cog {
 			for (int i = 0; i < children; i++) {
 				xml->pushTag("node", i);
 
-				Node* child = LoadNodeFromXml(xml, node, scene, settings);
+				Node* child = LoadNodeFromXml(xml, node, scene);
 				node->AddChild(child);
 
 				xml->popTag();
@@ -194,6 +242,7 @@ namespace Cog {
 		node->AddBehavior(behavior);
 	}
 
+
 	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
 
@@ -212,48 +261,16 @@ namespace Cog {
 			// todo
 		}
 		else if (type.compare("sprite") == 0) {
-			string spriteSheet = xml->getAttributex("spritesheet", "");
+
 			string layer = xml->getAttributex("layer", "");
 
-			if(spriteSheet.empty() && layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Neither spriteSheet nor layer specified");
+			if(layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
 
 			string spriteSet = xml->getAttributex("spriteset", "");
-
-			auto cache = GETCOMPONENT(ResourceCache);
-
-			// user can specify spritesheet directly or by layer name that points to the spritesheet
-			if (!layer.empty()) {
-				LayerEnt layerEntity = scene->FindLayerSettings(layer);
-				spriteSheet = layerEntity.spriteSheetName;
-			}
-			else {
-				layer = spriteSheet;
-			}
-
-			auto sheet = cache->GetSpriteSheet(spriteSheet);
-
-			if (sheet == nullptr) throw IllegalArgumentException("Error while loading sprite sheet. No such spritesheed found!");
-
-
-			spt<SpriteSet> spriteSetEntity;
-
-			if (spriteSet.empty()) {
-				// load default
-				spriteSetEntity = sheet->GetDefaultSpriteSet();
-			}
-			else {
-				// load by name
-				spriteSetEntity = sheet->GetSpriteSetByName(spriteSet);
-			}
-
 			int row = xml->getAttributex("row", 0);
 			int column = xml->getAttributex("column", 0);
 
-			spt<Sprite> sprite = spt<Sprite>(new Sprite(spriteSetEntity, row, column));
-
-			auto shape = spt<SpriteShape>(new SpriteShape(sprite, layer));
-			node->SetShape(shape);
-			
+			SetSpriteNode(scene, node, layer, spriteSet, row, column);			
 		}
 		else if (type.compare("multisprite") == 0) {
 			// todo

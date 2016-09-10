@@ -8,8 +8,8 @@
 </animations>
 
 <transforms>
-  <transform name="mario_from" pos_x="0" pos_y="0.46" z_index="2" ptype="rel" anchor_x="1" width="1" stype="abs" />
-  <transform name="mario_to" pos_x="1" pos_y="0.46" z_index="2" ptype="rel" anchor="0" width="1" stype="abs" />
+  <transform name="mario_from" pos_x="0" pos_y="0.46" z_index="2" ptype="per" anchor_x="1" width="1" stype="abs" />
+  <transform name="mario_to" pos_x="1" pos_y="0.46" z_index="2" ptype="per" anchor="0" width="1" stype="abs" />
 </transforms>
 
   <scenes initial="main">

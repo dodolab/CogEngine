@@ -12,10 +12,27 @@ namespace Cog {
 	* Entity that holds key-value record, loaded usually from XML
 	*/
 	class SettingItem {
+	private:
+		/** list of values */
+		vector<string> values;
+
 	public:
+		/** key */
+		string key = "";
+
+
+#define MULTIVAL_DELIMITER "|"
 
 		SettingItem() {
 
+		}
+
+		SettingItem(string key) :key(key) {
+
+		}
+
+		SettingItem(string key, string vals) :key(key) {
+			AddValues(vals);
 		}
 
 		SettingItem(const SettingItem& copy) {
@@ -26,11 +43,18 @@ namespace Cog {
 			}
 		}
 
-		/** key */
-		string key = "";
-
-		/** list of values */
-		vector<string> values;
+		void AddValues(string vals) {
+			if (vals.find(MULTIVAL_DELIMITER) != -1) {
+				// more than one value
+				vector<string> multiVals = split_string(vals, MULTIVAL_DELIMITER);
+				for (string valpart : multiVals) {
+					values.push_back(valpart);
+				}
+			}
+			else {
+				values.push_back(vals);
+			}
+		}
 
 		bool HasMoreValues() {
 			return values.size() > 1;
@@ -119,13 +143,11 @@ namespace Cog {
 		}
 
 		vector<string> GetItemVals(string key) {
-			return GetItem(key).values;
+			return GetItem(key).GetValues();
 		}
 
 		void AddItem(string key, string value) {
-			SettingItem newItem = SettingItem();
-			newItem.key = key;
-			newItem.values.push_back(value);
+			SettingItem newItem = SettingItem(key, value);
 			items[key] = newItem;
 		}
 
@@ -142,6 +164,42 @@ namespace Cog {
 
 		bool Empty() {
 			return items.empty();
+		}
+
+		void LoadFromXml(spt<ofxXml> xml) {
+			name = xml->getAttribute(":", "name", "");;
+
+			int itemsNum = xml->getNumTags("item");
+
+			for (int j = 0; j < itemsNum; j++) {
+				xml->pushTag("item", j);
+
+				SettingItem item = SettingItem();
+				item.key = xml->getAttribute(":", "key", "");
+
+				if (xml->attributeExists("value")) {
+					// single string  <item key="abc" value="def" />
+					item.AddValues(xml->getAttributex("value", ""));
+				}
+				else {
+					/* more values:
+					<item key="abc">
+					<value>val1</value>
+					<value>val2</value>
+					</item>
+					*/
+					int values = xml->getNumTags("value");
+					for (int m = 0; m < values; m++) {
+						xml->pushTag("value", m);
+						string val = xml->getValuex("");
+						item.AddValues(val);
+						xml->popTag();
+					}
+				}
+
+				items[item.key] = item;
+				xml->popTag();
+			}
 		}
 	};
 
@@ -215,6 +273,21 @@ namespace Cog {
 
 		void MergeSettings(Settings& newSet) {
 			MergeSettings(newSet.settings);
+		}
+
+		void LoadFromXml(spt<ofxXml> xml) {
+			
+			settings = map<string, Setting>();
+
+			int numOfSettings = xml->getNumTags("setting");
+
+			for (int i = 0; i < numOfSettings; i++) {
+				xml->pushTag("setting", i);
+				auto set = Setting();
+				set.LoadFromXml(xml);
+				settings[set.name] = set;
+				xml->popTag();
+			}
 		}
 	};
 

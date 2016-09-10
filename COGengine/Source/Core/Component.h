@@ -43,7 +43,6 @@ namespace Cog {
 			// call the common init method 
 			Init();
 		}
-
 	};
 
 }// namespace

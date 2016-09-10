@@ -129,7 +129,7 @@ namespace Cog {
 		template<class T> T* GetComponent(StringHash key) {
 			auto it = components.find(key);
 
-			MASSERT(it != components.end(), "ENTITY_STORAGE", "Component %d doesn't exists", (unsigned)key);
+			COGASSERT(it != components.end(), "ENTITY_STORAGE", "Component %d doesn't exists", (unsigned)key);
 
 			T* attr = static_cast<T*>(it->second);
 			return attr;
@@ -138,7 +138,7 @@ namespace Cog {
 		Behavior* GetBehaviorPrototype(StringHash key) {
 			auto it = behaviorPrototypes.find(key);
 
-			MASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %d doesn't exists", (unsigned)key);
+			COGASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %d doesn't exists", (unsigned)key);
 
 			return it->second;
 		}
@@ -150,7 +150,7 @@ namespace Cog {
 		template<class T> T* GetBehaviorPrototype(StringHash key) {
 			auto it = behaviorPrototypes.find(key);
 
-			MASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %d doesn't exists", key);
+			COGASSERT(it != behaviorPrototypes.end(), "ENTITY_STORAGE", "Behavior prototype %d doesn't exists", key);
 
 			T* attr = static_cast<T*>(it->second);
 			return attr;

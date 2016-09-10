@@ -16,7 +16,7 @@ namespace Cog {
 		/**
 		* Loads animation from xml
 		*/
-		void LoadAnimations(spt<ofxXmlSettings> xml, vector<spt<Anim>>& rootAnims) {
+		void LoadAnimationsFromXml(spt<ofxXmlSettings> xml, vector<spt<Anim>>& rootAnims) {
 
 				int numberOfAnims = xml->getNumTags("anim");
 				// referenced anims will be processed at second phase

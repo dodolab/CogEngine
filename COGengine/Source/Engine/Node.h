@@ -480,8 +480,8 @@ namespace Cog {
 		template<class T> T& GetAttr(StringHash key) {
 			auto it = attributes.find(key);
 
-			MASSERT(it != attributes.end(), "GNODE", "%s: Attribute %d doesn't exists", tag->c_str(), (unsigned)key);
-			MASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %d is of the wrong type!", tag->c_str(), (unsigned)key);
+			COGASSERT(it != attributes.end(), "GNODE", "%s: Attribute %d doesn't exists", tag->c_str(), (unsigned)key);
+			COGASSERT(typeid(*it->second) == typeid(AttrR<T>), "GNODE", "%s: Attribute %d is of the wrong type!", tag->c_str(), (unsigned)key);
 
 			AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 			return attr->GetValue();
@@ -535,8 +535,8 @@ namespace Cog {
 		*/
 		void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
-		// app storage can access private members
-		friend class SceneContext;
+		// stage can access private members
+		friend class Stage;
 
 	protected:
 		/*

@@ -174,9 +174,6 @@
     <ClInclude Include="Source\Core\Events.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\SceneContext.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\FloatingScene.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -327,6 +324,9 @@
     <ClInclude Include="Source\Entities\BehaviorEnt.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\Stage.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -375,9 +375,6 @@
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\ResourceCache.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\SceneContext.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\NodeBuilder.cpp">
@@ -441,6 +438,9 @@
       <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Stage.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>

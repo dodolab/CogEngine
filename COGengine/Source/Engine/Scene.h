@@ -38,8 +38,6 @@ namespace Cog
 
 		// indicator, if lazy loading should be used
 		bool lazyLoad = false;
-		// scene index; used only when loading from xml
-		int index;
 		// indicator, if this scene has been loaded
 		bool loaded = false;
 		// indicator, if this scene has been initialized (and can be displayed)
@@ -49,6 +47,8 @@ namespace Cog
 		ofVec2f viewPortOffset = ofVec2f(0,0);
 
 	public:
+
+		Scene(string name, bool isLazyLoaded);
 
 		Node* GetSceneNode() {
 			return sceneNode;
@@ -78,14 +78,6 @@ namespace Cog
 			return initialized;
 		}
 
-		int GetIndex() {
-			return index;
-		}
-
-		void SetIndex(int index) {
-			this->index = index;
-		}
-
 		ofVec2f& GetViewPortOffset() {
 			return viewPortOffset;
 		}
@@ -93,6 +85,8 @@ namespace Cog
 		Settings& GetSettings() {
 			return settings;
 		}
+
+		void SetSceneSettings(Settings& settings);
 
 		void AddLayer(LayerEnt layer) {
 			layers.push_back(layer);
@@ -200,28 +194,6 @@ namespace Cog
 		vector<Node*> FindNodesByGroup(StringHash group) const;
 
 		/**
-		* Adds a new node to the collection
-		* @return true, if node has been added
-		*/
-		bool AddNode(Node* node);
-
-		/**
-		* Removes node from collection
-		*/
-		void RemoveNode(Node* node);
-
-		/**
-		* Adds a new behavior
-		* @return true if behavior has been added
-		*/
-		bool AddBehavior(Behavior* beh);
-
-		/**
-		* Removes behavior from collection
-		*/
-		void RemoveBehavior(Behavior* beh);
-
-		/**
 		* Initializes the scene
 		*/
 		void Init();
@@ -270,6 +242,30 @@ namespace Cog
 			* @param msg message  to send
 			*/
 			void SendDirectMessage(Msg& msg);
+
+			/**
+			* Adds a new node to the collection
+			* @return true, if node has been added
+			*/
+			bool AddNode(Node* node);
+
+			/**
+			* Removes node from collection
+			*/
+			void RemoveNode(Node* node);
+
+			/**
+			* Adds a new behavior
+			* @return true if behavior has been added
+			*/
+			bool AddBehavior(Behavior* beh);
+
+			/**
+			* Removes behavior from collection
+			*/
+			void RemoveBehavior(Behavior* beh);
+
+			friend class Node;
 	};
 
 } // namespace

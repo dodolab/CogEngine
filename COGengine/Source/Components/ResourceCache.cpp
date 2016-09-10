@@ -21,27 +21,23 @@ namespace Cog {
 		if (xml->tagExists("app_config")) {
 			xml->pushTag("app_config");
 
-			if (xml->tagExists("settings")) {
-				xml->pushTag("settings");
+			if (xml->pushTagIfExists("settings")) {
 
-				// parse default settings
-				if (xml->tagExists("default_settings")) {
-					xml->pushTag("default_settings");
-					loadedDefaultSettings = Settings(LoadSettingsFromXml(xml));
+				// load default settings
+				if (xml->pushTagIfExists("default_settings")) {
+					loadedDefaultSettings.LoadFromXml(xml);
 					xml->popTag();
 				}
 
-				// parse global settings
-				if (xml->tagExists("global_settings")) {
-					xml->pushTag("global_settings");
-					loadedGlobalSettings = Settings(LoadSettingsFromXml(xml));
+				// load global settings
+				if (xml->pushTagIfExists("global_settings")) {
+					loadedGlobalSettings.LoadFromXml(xml);
 					xml->popTag();
 				}
 
-				// parse project settings
-				if (xml->tagExists("project_settings")) {
-					xml->pushTag("project_settings");
-					loadedProjectSettings = Settings(LoadSettingsFromXml(xml));
+				// load project settings
+				if (xml->pushTagIfExists("project_settings")) {
+					loadedProjectSettings.LoadFromXml(xml);
 					xml->popTag();
 				}
 			
@@ -68,7 +64,7 @@ namespace Cog {
 
 				auto animLoader = AnimationLoader();
 				auto rootAnims = vector<spt<Anim>>();
-				animLoader.LoadAnimations(xml, rootAnims);
+				animLoader.LoadAnimationsFromXml(xml, rootAnims);
 
 				// store animation
 				for (spt<Anim> anim : rootAnims) {
@@ -78,7 +74,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
-
+			// load transformation entities
 			if (xml->pushTagIfExists("transforms")) {
 				int transNum = xml->getNumTags("transform");
 
@@ -87,7 +83,7 @@ namespace Cog {
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
-					MASSERT(!trans->name.empty(),"RESOURCE","Transform entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!trans->name.empty(),"RESOURCE","Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
@@ -95,6 +91,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
+			// load behaviors
 			if (xml->pushTagIfExists("behaviors")) {
 				int behNum = xml->getNumTags("behavior");
 
@@ -104,7 +101,7 @@ namespace Cog {
 
 					ent->LoadFromXml(xml, Setting());
 
-					MASSERT(!ent->name.empty(), "RESOURCE", "Behavior entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!ent->name.empty(), "RESOURCE", "Behavior entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(ent->name, ent);
 					xml->popTag();
@@ -113,6 +110,7 @@ namespace Cog {
 				xml->popTag();
 			}
 
+			// load spritesheets
 			if (xml->pushTagIfExists("spritesheets")) {
 				int sheetsNum = xml->getNumTags("spritesheet");
 
@@ -123,7 +121,6 @@ namespace Cog {
 					this->StoreSpriteSheet(spriteSheet);
 					xml->popTag();
 				}
-
 
 				xml->popTag();
 			}
@@ -263,7 +260,7 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreAnimation(spt<Anim> anim) {
-		MASSERT(anim->GetName().compare("") != 0, "Cache", "Attempt to store animation without a name!");
+		COGASSERT(anim->GetName().compare("") != 0, "Cache", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());
 		if (found == loadedAnimations.end()) {
@@ -296,60 +293,12 @@ namespace Cog {
 	}
 
 	void ResourceCache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
-		MASSERT(spriteSheet->GetName().compare("") != 0, "Cache", "Attempt to store spritesheet without a name!");
+		COGASSERT(spriteSheet->GetName().compare("") != 0, "Cache", "Attempt to store spritesheet without a name!");
 
 		auto found = loadedSpriteSheets.find(spriteSheet->GetName());
 		if (found == loadedSpriteSheets.end()) {
 			loadedSpriteSheets[spriteSheet->GetName()] = spriteSheet;
 		}
-	}
-
-	map<string, Setting> ResourceCache::LoadSettingsFromXml(spt<ofxXml> xml) {
-		map<string, Setting> setMap = map<string, Setting>();
-
-		int numOfSettings = xml->getNumTags("setting");
-
-		for (int i = 0; i < numOfSettings; i++) {
-			xml->pushTag("setting", i);
-			auto set = LoadSettingFromXml(xml);
-			setMap[set.name] = set;
-			xml->popTag();
-		}
-
-		return setMap;
-	}
-
-	Setting ResourceCache::LoadSettingFromXml(spt<ofxXml> xml) {
-			Setting set = Setting();
-			set.name = xml->getAttribute(":", "name", "");;
-
-			int items = xml->getNumTags("item");
-
-			for (int j = 0; j < items; j++) {
-				xml->pushTag("item", j);
-
-				SettingItem item = SettingItem();
-				item.key = xml->getAttribute(":", "key", "");
-
-				if (xml->attributeExists("value")) {
-					item.values.push_back(xml->getAttributex("value", ""));
-				}
-				else {
-					// more than one value
-					int values = xml->getNumTags("value");
-					for (int m = 0; m < values; m++) {
-						xml->pushTag("value", m);
-						string val = xml->getValuex("");
-						item.values.push_back(val);
-						xml->popTag();
-					}
-				}
-
-				set.items[item.key] = item;
-				xml->popTag();
-			}
-
-			return set;
 	}
 
 	Setting ResourceCache::GetDefaultSettings(string name) {

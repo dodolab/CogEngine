@@ -27,6 +27,7 @@ namespace Cog {
 
 	
 	void Engine::Init() {
+
 		RegisterComponents();
 
 		vector<Component*> components = entityStorage->GetAllComponents();
@@ -37,6 +38,7 @@ namespace Cog {
 			return a->GetPriority() > b->GetPriority();
 		});
 
+		// init all components
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init();
 		}
@@ -56,17 +58,18 @@ namespace Cog {
 			return a->GetPriority() > b->GetPriority();
 		});
 
+		// init all comopnents, using xml file
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init(config);
 		}
 
-
+		// go out
 		config->popAll();
 
 		if (config->pushTagIfExists("app_config") && config->pushTagIfExists("scenes")) {
 			// load scenes
-			auto context = GETCOMPONENT(SceneContext);
-			context->LoadScenesFromXml(config);
+			auto context = GETCOMPONENT(Stage);
+			stage->LoadScenesFromXml(config);
 		}
 	}
 
@@ -75,9 +78,9 @@ namespace Cog {
 		frameCounter++;
 
 		// update transforms
-		sceneContext->GetRootObject()->UpdateTransform(true);
+		stage->GetRootObject()->UpdateTransform(true);
 		// update scene
-		sceneContext->GetRootObject()->Update(delta, absolute);
+		stage->GetRootObject()->Update(delta, absolute);
 		
 		inputHandler->HandleInputs();
 		
@@ -95,9 +98,9 @@ namespace Cog {
 	void Engine::Draw(uint64 delta, uint64 absolute) {
 		
 		// has to be here!
-		sceneContext->GetRootObject()->UpdateTransform(true);
+		stage->GetRootObject()->UpdateTransform(true);
 		
-		Node* root = sceneContext->GetRootObject();
+		Node* root = stage->GetRootObject();
 		auto children = root->GetChildren();
 		
 		renderer->BeginRender();
@@ -123,14 +126,14 @@ namespace Cog {
 		environment = new Environment();
 		resourceCache = new ResourceCache();
 		logger = new Logger();
-		sceneContext = new SceneContext();
+		stage = new Stage();
 		renderer = new Renderer();
 		inputHandler = new InputHandler();
 
 		REGISTER_COMPONENT(logger);
 		REGISTER_COMPONENT(environment);
 		REGISTER_COMPONENT(resourceCache);
-		REGISTER_COMPONENT(sceneContext);
+		REGISTER_COMPONENT(stage);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);
 

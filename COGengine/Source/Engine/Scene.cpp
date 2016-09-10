@@ -4,6 +4,24 @@
 
 namespace Cog {
 
+	Scene::Scene(string name, bool isLazyLoaded) :name(name), lazyLoad(isLazyLoaded) {
+		sceneNode = new Node(ObjType::SCENE, 0, name);
+		sceneNode->SetScene(this);
+		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
+	}
+
+	void Scene::SetSceneSettings(Settings& settings) {
+
+		this->settings = Settings();
+
+		auto cache = GETCOMPONENT(ResourceCache);
+		// always merge from default settings
+		auto defaultSettings = cache->GetDefaultSettings();
+		settings.MergeSettings(defaultSettings);
+	
+		this->settings.MergeSettings(settings);
+	}
+
 	LayerEnt Scene::FindLayerSettings(string name) {
 
 		for (LayerEnt& entity : this->layers) {
@@ -201,100 +219,44 @@ namespace Cog {
 		return output;
 	}
 
-	bool Scene::AddNode(Node* node) {
-		MLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
-		auto found = find(allNodes.begin(), allNodes.end(), node);
-		if (found == allNodes.end()) {
-			allNodes.push_back(node);
-			node->SetScene(this);
-			return true;
-		}
-		else return false;
-	}
-
-	void Scene::RemoveNode(Node* node) {
-		MLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
-		auto found = find(allNodes.begin(), allNodes.end(), node);
-		if (found != allNodes.end()) allNodes.erase(found);
-	}
-
-	bool Scene::AddBehavior(Behavior* beh) {
-		MASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		MLOGDEBUG("Scene", "Adding behavior %s to node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
-		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
-		if (found == allBehaviors.end()) {
-			allBehaviors.push_back(beh);
-
-			return true;
-		}
-		else return false;
-	}
-
-	void Scene::RemoveBehavior(Behavior* beh) {
-		MASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
-		MLOGDEBUG("Scene", "Removing behavior %s from node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
-
-		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
-		if (found != allBehaviors.end()) allBehaviors.erase(found);
-
-		UnregisterListener(beh);
-	}
-
-
-
+	
 	void Scene::Init() {
 		auto renderer = GETCOMPONENT(Renderer);
 		auto cache = GETCOMPONENT(ResourceCache);
 
+		// notify renderer that we will use specific layers
 		for (auto layer : layers) {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
 		}
 	}
 
-
 	void Scene::Dispose() {
 		auto renderer = GETCOMPONENT(Renderer);
 		auto cache = GETCOMPONENT(ResourceCache);
 
+		// remove layers from renderer
 		for (auto layer : layers) {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->RemoveTileLayer(layer.name);
 		}
 	}
 
-	void Scene::LoadInitData(string name, bool isLazyLoad, int sceneIndex) {
-		
-		SetIndex(sceneIndex);
-		SetName(name);
-
-		sceneNode = new Node(ObjType::SCENE, 0, name);
-		sceneNode->SetScene(this);
-		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
-		this->lazyLoad = isLazyLoad;
-	}
-
 	void Scene::LoadFromXml(spt<ofxXml> xml) {
 
 		MLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
 
-		auto cache = GETCOMPONENT(ResourceCache);
-
-		// always merge from default settings
-		auto defaultSettings = cache->GetDefaultSettings();
-		settings.MergeSettings(defaultSettings);
-
-
+		// load settings
 		if (xml->pushTagIfExists("scene_settings")) {
-			
-			auto map = cache->LoadSettingsFromXml(xml);
-			settings.MergeSettings(map);
+			Settings set = Settings();
+			set.LoadFromXml(xml);
+			this->SetSceneSettings(set);
 
 			xml->popTag();
 		}
 		
+		// load layers
 		if (xml->pushTagIfExists("scene_layers")) {
-			// parse layers
 			int layersNum = xml->getNumTags("layer");
 
 			for (int i = 0; i < layersNum; i++) {
@@ -311,10 +273,11 @@ namespace Cog {
 		int nodes = xml->getNumTags("node");
 		NodeBuilder bld = NodeBuilder();
 
+		// load nodes
 		for (int i = 0; i < nodes; i++) {
 			xml->pushTag("node", i);
 			// load nodes
-			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this, settings);
+			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this);
 			sceneNode->AddChild(node);
 			xml->popTag();
 		}
@@ -397,5 +360,45 @@ namespace Cog {
 			}
 		}
 	}
+
+	bool Scene::AddNode(Node* node) {
+		MLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found == allNodes.end()) {
+			allNodes.push_back(node);
+			node->SetScene(this);
+			return true;
+		}
+		else return false;
+	}
+
+	void Scene::RemoveNode(Node* node) {
+		MLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
+		auto found = find(allNodes.begin(), allNodes.end(), node);
+		if (found != allNodes.end()) allNodes.erase(found);
+	}
+
+	bool Scene::AddBehavior(Behavior* beh) {
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
+		MLOGDEBUG("Scene", "Adding behavior %s to node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found == allBehaviors.end()) {
+			allBehaviors.push_back(beh);
+
+			return true;
+		}
+		else return false;
+	}
+
+	void Scene::RemoveBehavior(Behavior* beh) {
+		COGASSERT(beh->GetOwner() != nullptr, "Scene", "Behavior %s hasn't node assigned", beh->GetClassName().c_str());
+		MLOGDEBUG("Scene", "Removing behavior %s from node %s", beh->GetClassName().c_str(), beh->GetOwner()->GetTag().c_str());
+
+		auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
+		if (found != allBehaviors.end()) allBehaviors.erase(found);
+
+		UnregisterListener(beh);
+	}
+
 
 }// namespace

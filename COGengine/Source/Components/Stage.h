@@ -13,9 +13,9 @@ namespace Cog {
 	/**
 	* Node context
 	*/
-	class SceneContext : public Component{
+	class Stage : public Component{
 	
-		OBJECT(SceneContext)
+		OBJECT(Stage)
 	
 	private:
 		// message listeners
@@ -60,17 +60,17 @@ namespace Cog {
 		void AddScene(Scene* scene, bool setAsActual);
 
 		/**
-		* Registers behavior listener for selected action
+		* Registers global behavior listener for selected action
 		* @param action action to register
 		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterListener(StringHash action, MsgListener* listener);
+		void RegisterGlobalListener(StringHash action, MsgListener* listener);
 
 		/**
-		* Unregisters message listener for selected action
+		* Unregisters global message listener for selected action
 		* @return true if listener has been found and erased
 		*/
-		bool UnregisterListener(StringHash action, MsgListener* listener);
+		bool UnregisterGlobalListener(StringHash action, MsgListener* listener);
 
 		/**
 		* Finds scene by its name
@@ -80,8 +80,6 @@ namespace Cog {
 		void SwitchToScene(Scene* scene, TweenDirection tweenDir);
 
 		bool SwitchBackToScene(TweenDirection tweenDir);
-
-		void SetActualScene(Scene* scene);
 
 		/**
 		* Loads scene from xml
