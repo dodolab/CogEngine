@@ -267,6 +267,9 @@
     <ClInclude Include="Source\Tests\FlagsTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\InputHandler.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Misc\CollageTexture.cpp">
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Scene.cpp">
       <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Logger.cpp">
+      <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@
 namespace Cog {
 
 
-#define GETCOMPONENT(className) COGEngine.entityStorage->GetComponent<className>(#className)
+#define GETCOMPONENT(className) CogGetEntityStorage()->GetComponent<className>(#className)
 #define GETBEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)
 #define CREATE_BEHAVIOR(className) COGEngine.entityStorage->GetBehaviorPrototype<className>(#className)->CreatePrototype()
 #define REGISTER_COMPONENT(object) COGEngine.entityStorage->RegisterComponent(object)

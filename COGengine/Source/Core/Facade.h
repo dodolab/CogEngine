@@ -11,6 +11,10 @@ namespace Cog {
 	class Behavior;
 	class Component;
 	class MsgListener;
+	class EntityStorage;
+	class Scene;
+
+	EntityStorage* CogGetEntityStorage();
 
 	/*************************************************************************/
 	/* Facade methods that are used for centralized access to all components */
@@ -19,8 +23,8 @@ namespace Cog {
 	// =================== MENVIRONMENT ====================
 	void CogAddSound(spt<Sound> sound);
 	void CogPlaySound(spt<Sound> sound);
-	vector<InputAct>& CogGetPressedKeys();
-	vector<InputAct>& CogGetPressedPoints();
+	vector<InputAct*>& CogGetPressedKeys();
+	vector<InputAct*>& CogGetPressedPoints();
 	vector<spt<Sound>>& CogGetPlayedSounds();
 	int CogGetScreenRealWidth();
 	int CogGetScreenRealHeight();
@@ -37,9 +41,8 @@ namespace Cog {
 	float CogTranslateSpeed(float speed);
 
 	// =================== MNODESTORAGE ========================
-
-	void CogRegisterListener(StringHash action, MsgListener* listener);
-	void CogUnregisterListener(StringHash action, MsgListener* listener);
+	void CogRegisterGlobalListener(StringHash action, MsgListener* listener);
+	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener);
 	void CogSendMessage(Msg& msg, Node* actualNode);
 	void CogSendDirectMessageToListener(Msg& msg, int targetId);
 	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
@@ -52,8 +55,8 @@ namespace Cog {
 	int CogGetNodesCountBySubType(int subtype);
 	Node* CogFindNodeBySubType(int subtype);
 	vector<Node*> CogFindNodesBySubType(int subtype);
-	bool CogAddNode(Node* node);
-	void CogRemoveNode(Node* node);
+	bool CogAddNode(Scene* scene, Node* node);
+	void CogRemoveNode(Scene* scene, Node* node);
 	bool CogAddBehavior(Behavior* beh);
 	void CogRemoveBehavior(Behavior* beh);
 

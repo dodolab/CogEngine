@@ -166,37 +166,7 @@ namespace Cog {
 		/**
 		* Initializes component, using xml settings or default one
 		*/
-		void Init(spt<ofxXmlSettings> config) {
-			if (config->tagExists("logger")) {
-				config->pushTag("logger");
-
-				string level = ofToLower(config->getValue("level", "info"));
-
-				if (level.compare("error") == 0) logLevel = LogLevel::LERROR;
-				else if (level.compare("info") == 0) logLevel = LogLevel::LINFO;
-				else if (level.compare("debug") == 0) logLevel = LogLevel::LDEBUG;
-
-				if (config->tagExists("channel")) {
-					string type = config->getAttribute("channel", "type", "console");
-
-					if (type.compare("console") == 0) channel = new ConsoleLoggerChannel();
-					else if (type.compare("file") == 0) {
-						bool append = config->getBoolAttribute("channel", "append", true);
-						string path = config->getAttribute("channel", "path", "");
-						string fullPath = ofToDataPath(path);
-						channel = new FileLoggerChannel(fullPath, append);
-					}
-
-				}
-				else channel = new ConsoleLoggerChannel();
-
-
-				config->popTag();
-			}
-			else {
-				Init();
-			}
-		}
+		void Init(spt<ofxXmlSettings> config);
 	
 
 		/**

@@ -26,7 +26,7 @@ namespace Cog {
 		ofVec3f position;
 
 		// handlerId, -1 if there is none
-		int handlerId = -1;
+		int handlerNodeId = -1;
 		// indicates, if input has just started
 		bool started = true;
 		// indicates, if input has ended (e.g. key release)
@@ -51,10 +51,10 @@ namespace Cog {
 		}
 
 		/**
-		* Returns true, if the action has been already handled (by some behavior)
+		* Returns true, if the action has been already handled (by some node)
 		*/
 		bool IsHandled() {
-			return handlerId != -1;
+			return handlerNodeId != -1;
 		}
 
 	};

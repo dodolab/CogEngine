@@ -18,6 +18,7 @@
 #include "Tween.h"
 #include "Component.h"
 #include "FloatingScene.h"
+#include "InputHandler.h"
 
 namespace Cog {
 
@@ -28,6 +29,12 @@ namespace Cog {
 		RegisterComponents();
 
 		vector<Component*> components = entityStorage->GetAllComponents();
+		// sort by priority
+		sort(components.begin(), components.end(),
+			[this](const Component* a, const Component* b) -> bool
+		{
+			return a->GetPriority() > b->GetPriority();
+		});
 
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init();
@@ -36,7 +43,14 @@ namespace Cog {
 
 	void Engine::Init(spt<ofxXmlSettings> config) {
 		RegisterComponents();
+
 		vector<Component*> components = entityStorage->GetAllComponents();
+		// sort by priority
+		sort(components.begin(), components.end(),
+			[this](const Component* a, const Component* b) -> bool
+		{
+			return a->GetPriority() > b->GetPriority();
+		});
 
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init(config);
@@ -51,6 +65,9 @@ namespace Cog {
 		sceneContext->GetRootObject()->UpdateTransform(true);
 		// update scene
 		sceneContext->GetRootObject()->Update(delta, absolute);
+		
+		inputHandler->HandleInputs();
+		
 		// remove ended inputs
 		environment->RemoveEndedProcesses();
 
@@ -92,6 +109,9 @@ namespace Cog {
 		REGISTER_COMPONENT(sceneMgr);
 		auto animLoader = new AnimationLoader();
 		REGISTER_COMPONENT(animLoader);
+
+		inputHandler = new InputHandler();
+		REGISTER_COMPONENT(inputHandler);
 
 		REGISTER_BEHAVIOR(Animator);
 		REGISTER_BEHAVIOR(Button);

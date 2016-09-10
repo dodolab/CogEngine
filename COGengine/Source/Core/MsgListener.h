@@ -7,7 +7,7 @@
 namespace Cog {
 
 	class Node;
-	
+	class Scene;
 
 	/**
 	* Abstract class for all messages listener
@@ -64,17 +64,23 @@ namespace Cog {
 	protected:
 		
 		/**
+		* Registers itself as a global action listener
+		* @param action1 action to listen to
+		*/
+		void RegisterGlobalListening(StringHash action1);
+
+		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		*/
-		void RegisterListening(StringHash action1);
+		void RegisterListening(Scene* scene, StringHash action1);
 
 		/**
 		* Registers itself as a action listener
 		* @param action1 action to listen to
 		* @param action2 action to listen to
 		*/
-		void RegisterListening(StringHash action1, StringHash action2);
+		void RegisterListening(Scene* scene, StringHash action1, StringHash action2);
 
 		/**
 		* Registers itself as a action listener
@@ -82,7 +88,7 @@ namespace Cog {
 		* @param action2 action to listen to
 		* @param action3 action to listen to
 		*/
-		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
+		void RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3);
 
 		/**
 		* Registers itself as a action listener
@@ -91,7 +97,7 @@ namespace Cog {
 		* @param action3 action to listen to
 		* @param action4 action to listen to
 		*/
-		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+		void RegisterListening(Scene* scene, StringHash action1, StringHash action2, StringHash action3, StringHash action4);
 
 
 		/**

@@ -15,6 +15,7 @@ namespace Cog {
 #include "Renderer.h"
 #include "Environment.h"
 #include "EntityStorage.h"
+#include "InputHandler.h"
 
 namespace Cog {
 
@@ -42,6 +43,7 @@ namespace Cog {
 		Logger* logger = nullptr;
 		Renderer* renderer = nullptr;
 		SceneContext* sceneContext = nullptr;
+		InputHandler* inputHandler = nullptr;
 		
 		Engine() {
 			entityStorage = new EntityStorage();
@@ -53,6 +55,8 @@ namespace Cog {
 			delete sceneContext;
 			delete logger;
 			delete renderer;
+			delete inputHandler;
+			delete entityStorage;
 		}
 
 		/**
