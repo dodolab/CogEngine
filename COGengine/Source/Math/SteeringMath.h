@@ -65,6 +65,19 @@ namespace Cog
 			
 			return Seek(transform, movement, destination, maxAcceleration);
 		}
+
+		ofVec2f Wander(Trans& transform, Movement& movement, ofVec2f& wanderTarget, float wanderRadius, float wanderDistance, 
+			float wanderJitter, uint64 deltaTime) {
+			ofVec2f randomVec = ofVec2f(ofRandomf(), ofRandomf());
+			wanderTarget += randomVec*(deltaTime*wanderJitter);
+			wanderTarget.normalize();
+			wanderTarget *= wanderRadius;
+			
+			
+			ofVec2f direction = movement.GetVelocity().normalize();
+			ofVec2f shift = wanderTarget+ (direction*wanderDistance);
+			return shift;
+		}
 	};
 
 
