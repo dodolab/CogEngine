@@ -42,13 +42,20 @@ namespace Cog {
 		}
 
 		vector<MsgListener*>& listeners = msgListeners[action];
-		listeners.push_back(listener);
-
+		
+		if (find(listeners.begin(), listeners.end(), listener) == listeners.end()) {
+			listeners.push_back(listener);
+		}
+		
 		if (msgListenerActions.find(listener->GetId()) == msgListenerActions.end()) {
 			msgListenerActions[listener->GetId()] = vector<StringHash>();
 		}
 
-		msgListenerActions[listener->GetId()].push_back(action);
+		auto msgAction = msgListenerActions[listener->GetId()];
+
+		if (find(msgAction.begin(), msgAction.end(), action) == msgAction.end()) {
+			msgListenerActions[listener->GetId()].push_back(action);
+		}
 	}
 
 	bool Scene::UnregisterListener(StringHash action, MsgListener* listener) {
@@ -89,14 +96,14 @@ namespace Cog {
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
 
-		BubblingType& trav = msg.GetBubblingType();
+		HandlingType& trav = msg.GetHandlingType();
 
 		if (trav.scope == Scope::DIRECT_NO_TRAVERSE) {
-			// no BubblingType - just iterate over the proper collection of behaviors and callbacks
+			// no HandlingType - just iterate over the proper collection of behaviors and callbacks
 			SendDirectMessage(msg);
 
 		}
-		else if(actualNode != nullptr) SendBubblingMessage(msg, actualNode);
+		else if(actualNode != nullptr) SendTunnelingMessage(msg, actualNode);
 
 		if (!msg.DataKept()) {
 			msg.DeleteData();
@@ -126,7 +133,7 @@ namespace Cog {
 		Node* node = FindNodeById(targetId);
 
 		if (node != nullptr) {
-			SendBubblingMessage(msg, node);
+			SendTunnelingMessage(msg, node);
 		}
 
 		if (!msg.DataKept()) {
@@ -250,6 +257,12 @@ namespace Cog {
 
 		MLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
 
+		string type = xml->getAttributex("type", "scene");
+
+		// load scene type
+		if (type.compare("scene") == 0) this->sceneType = SceneType::SCENE;
+		else if (type.compare("dialog") == 0) this->sceneType = SceneType::DIALOG;
+
 		// load settings
 		if (xml->pushTagIfExists("scene_settings")) {
 			Settings set = Settings();
@@ -284,7 +297,6 @@ namespace Cog {
 			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this);
 			sceneNode->AddChild(node);
 			xml->popTag();
-
 		}
 
 		loaded = true;
@@ -303,15 +315,15 @@ namespace Cog {
 		}
 	}
 
-	void Scene::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
+	void Scene::SendTunnelingMessageToChildren(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
 			CogSendMessage(msg, (*it));
 		}
 	}
 
-	void Scene::SendBubblingMessage(Msg& msg, Node* actualNode) {
+	void Scene::SendTunnelingMessage(Msg& msg, Node* actualNode) {
 
-		BubblingType& trav = msg.GetBubblingType();
+		HandlingType& trav = msg.GetHandlingType();
 
 		if (trav.scope == Scope::ROOT) {
 			trav.scope = Scope::OBJECT;
@@ -319,9 +331,9 @@ namespace Cog {
 			Node* root = actualNode->GetRoot();
 			if (root != nullptr) {
 				// call this method again from the root
-				if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, root);
+				if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, root);
 				SendMessageToBehaviors(msg, root);
-				if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, root);
+				if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, root);
 			}
 			return;
 		}
@@ -330,9 +342,9 @@ namespace Cog {
 			// find scene and call recursion
 			Node* scRoot = actualNode->GetSceneRoot();
 			if (scRoot != nullptr) {
-				if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, scRoot);
+				if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, scRoot);
 				SendMessageToBehaviors(msg, scRoot);
-				if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, scRoot);
+				if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, scRoot);
 			}
 			return;
 		}
@@ -340,14 +352,14 @@ namespace Cog {
 		if (trav.scope == Scope::OBJECT) {
 			trav.scope = Scope::OBJECT;
 			// call children and itself
-			if (trav.deep && !trav.bubbleDown) SendBubblingMessageToChildren(msg, actualNode);
+			if (trav.deep && !trav.tunneling) SendTunnelingMessageToChildren(msg, actualNode);
 			SendMessageToBehaviors(msg, actualNode);
-			if (trav.deep && trav.bubbleDown) SendBubblingMessageToChildren(msg, actualNode);
+			if (trav.deep && trav.tunneling) SendTunnelingMessageToChildren(msg, actualNode);
 		}
 		else if (trav.scope == Scope::CHILDREN) {
 			trav.scope = Scope::OBJECT;
 			// call children only
-			SendBubblingMessageToChildren(msg, actualNode);
+			SendTunnelingMessageToChildren(msg, actualNode);
 		}
 	}
 

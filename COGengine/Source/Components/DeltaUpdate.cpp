@@ -12,7 +12,7 @@ namespace Cog {
 
 	void DeltaUpdate::OnMessage(Msg& msg) {
 
-		if (msg.GetAction() == StringHash(ACT_NET_MESSAGE_RECEIVED)) {
+		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED)) {
 			// todo: message could be various types
 			NetworkMsgEvent* msgEvent = msg.GetDataS<NetworkMsgEvent>();
 			auto netMsg = msgEvent->msg;
@@ -28,7 +28,7 @@ namespace Cog {
 				AcceptDeltaUpdate(deltaInfo);
 			}
 
-		}else if (msg.GetAction() == StringHash(ACT_DELTA_MESSAGE_RECEIVED)) {
+		}else if (msg.HasAction(ACT_DELTA_MESSAGE_RECEIVED)) {
 
 			// received delta message
 			DeltaMsgEvent* msgEvent = msg.GetDataS<DeltaMsgEvent>();

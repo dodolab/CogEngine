@@ -51,7 +51,7 @@ namespace Cog {
 	void CogUnregisterGlobalListener(StringHash action, MsgListener* listener);
 	void CogSendMessage(Msg& msg, Node* actualNode);
 	void CogSendDirectMessageToListener(Msg& msg, int targetId);
-	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
+	void CogSendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId);
 	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId);
 
 	// =================== MLOGGER =========================

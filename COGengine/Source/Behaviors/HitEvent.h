@@ -63,6 +63,16 @@ namespace Cog {
 			return true;
 		}
 
+		bool PlaneHitTest(spt<Plane> plane, ofVec3f testPos) {
+			if (testPos.x < 0
+				|| testPos.y < 0
+				|| testPos.x >(float)plane->GetWidth()
+				|| testPos.y >(float)plane->GetHeight())
+				return false;
+
+			return true;
+		}
+
 		bool BoundingBoxHitTest(spt<BoundingBox> bbox, ofVec2f touchVector) {
 			bbox->Recalc(owner);
 			ofRectangle bboxRect = bbox->GetBoundingBox();
@@ -150,6 +160,9 @@ namespace Cog {
 					else if (owner->HasRenderType(RenderType::RECTANGLE)) {
 						hasHitTest = RectangleHitTest(owner->GetShape<spt<Rectangle>>(), touchTrans);
 					}
+					else if (owner->HasRenderType(RenderType::PLANE)) {
+						hasHitTest = PlaneHitTest(owner->GetShape<spt<Plane>>(), touchTrans);
+					}
 					else if (owner->HasRenderType(RenderType::BOUNDING_BOX)) {
 						hasHitTest = BoundingBoxHitTest(owner->GetShape<spt<BoundingBox>>(), touchVector);
 					}
@@ -171,7 +184,7 @@ namespace Cog {
 							/*
 							touch->handlerNodeId = owner->GetId();
 							owner->SetState(StringHash(STATES_HIT));
-							if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
+							if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
 							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);*/
 						}
 						else if (touch->ended) {
@@ -179,13 +192,13 @@ namespace Cog {
 
 							owner->ResetState(StringHash(STATES_HIT));
 							if (hitStarted) {
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner);
+								if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner);
 								else SendDirectMessage(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 							else {
 								// hit has been lost
 								hitLost = true;
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner);
+								if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner);
 								else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 
@@ -206,12 +219,12 @@ namespace Cog {
 							if (hitLost) {
 								hitLost = false;
 								// hit started, lost and started again
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
+								if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
 								else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 							else {
 								// hit started but not on first touch
-								if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner);
+								if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner);
 								else SendDirectMessage(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner, handlerBehId);
 							}
 						}
@@ -229,7 +242,7 @@ namespace Cog {
 					if (owner->HasState(StringHash(STATES_HIT))) {
 						owner->ResetState(StringHash(STATES_HIT));
 						hitLost = true;
-						if (handlerBehId == -1) SendMessageNoBubbling(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
+						if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
 						else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
 					}
 				}

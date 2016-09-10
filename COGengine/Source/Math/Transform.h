@@ -67,5 +67,15 @@ namespace Cog {
 
 		ofMatrix4x4 GetMatrix();
 	};
-
 }// namespace
+
+namespace std {
+	// overriding hash function for transform
+	template <>
+	struct hash<Cog::Trans> {
+		inline size_t operator()(const Cog::Trans& pos) const {
+			return ((int)pos.absPos.x) * 1812433253 + ((int)pos.absPos.y);
+		}
+	};
+}
+

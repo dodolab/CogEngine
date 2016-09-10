@@ -34,13 +34,13 @@ namespace Cog {
 
 		void Init() {
 			if (scrollEnabled) {
-				RegisterListening(owner->GetScene(), ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST, ACT_KEY_PRESSED);
+				RegisterListening(ACT_OBJECT_HIT_OVER, ACT_OBJECT_HIT_ENDED, ACT_OBJECT_HIT_LOST, ACT_KEY_PRESSED);
 			}
 		}
 
 		void OnMessage(Msg& msg) {
 
-			if (msg.GetAction() == ACT_KEY_PRESSED) {
+			if (msg.HasAction(ACT_KEY_PRESSED)) {
 				if (CogIsKeyPressed('m') || CogIsKeyPressed('n')) {
 
 					// zoom for desktop version
@@ -52,12 +52,12 @@ namespace Cog {
 				}
 			}
 			else if (msg.GetSourceObject()->GetId() == owner->GetId()) {
-				if (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST) {
+				if (msg.HasAction(ACT_OBJECT_HIT_ENDED) || msg.HasAction(ACT_OBJECT_HIT_LOST)) {
 					lastMousePos = Vec2i(0); // restart mouse position
 					originalMousePos = Vec2i(0);
 					scrollStarted = false;
 				}
-				else if (msg.GetAction() == ACT_OBJECT_HIT_OVER) {
+				else if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
 
 					InputEvent* evt = static_cast<InputEvent*>(msg.GetData());
 
@@ -95,11 +95,7 @@ namespace Cog {
 								originalMousePos = lastMousePos;
 							}
 
-							bool isPointerOver = true;
-							// android tolerance
-#ifdef ANDROID
-							isPointerOver = Vec2i::Distance(lastMousePos, originalMousePos) >= CogGetScreenWidth() / SCREEN_TOLERANCE;
-#endif
+							bool isPointerOver = Vec2i::Distance(lastMousePos, originalMousePos) >= CogGetScreenWidth() / SCREEN_TOLERANCE;
 
 							if (lastMousePos != Vec2i(0) && (scrollStarted || isPointerOver)) { // scroll prevention
 

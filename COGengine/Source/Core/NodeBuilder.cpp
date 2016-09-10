@@ -295,7 +295,6 @@ namespace Cog {
 			float width = 0;
 			float height = 0;
 
-
 			if (xml->attributeExists("size")) {
 				width = height = xml->getAttributex("size", 1.0);
 			}
@@ -303,7 +302,6 @@ namespace Cog {
 				width = xml->getAttributex("width", 0);
 				height = xml->getAttributex("height", 0);
 			}
-
 
 			ofVec2f size = ofVec2f(width, height);
 			string colorStr = xml->getAttributex("color", "0x000000");

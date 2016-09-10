@@ -136,7 +136,7 @@ namespace Cog {
 				}
 				else {
 					Finish();
-					SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+					SendMessageToListeners(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
 				}
 			}
 		}

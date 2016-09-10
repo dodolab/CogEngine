@@ -71,7 +71,7 @@ namespace Cog {
 		*/
 		void Finish() {
 			ended = true;
-			SendMessageNoBubbling(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
+			SendMessageToListeners(ACT_BEHAVIOR_FINISHED, this->GetId(), nullptr, owner);
 		}
 
 		/**
@@ -109,6 +109,12 @@ namespace Cog {
 
 	protected:
 	
+		void RegisterListening(StringHash action1);
+		void RegisterListening(StringHash action1, StringHash action2);
+		void RegisterListening(StringHash action1, StringHash action2, StringHash action3);
+		void RegisterListening(StringHash action1, StringHash action2, StringHash action3, StringHash action4);
+
+
 
 		/**
 		* Sets owner to behavior

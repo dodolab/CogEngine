@@ -9,6 +9,7 @@ namespace Cog {
 		INACTIVE,
 		PROCESSING,
 		COMPLETED,
+		ABORTED,
 		FAILED
 	};
 	
@@ -18,12 +19,34 @@ namespace Cog {
 	class Goal : public Behavior {
 	protected:
 		GoalState goalState = GoalState::INACTIVE;
+		StringHash stateId;
+
+
+		virtual void OnComplete() {
+
+		}
+
+		virtual void OnAbort() {
+
+		}
+
+		virtual void OnFail() {
+
+		}
+
 	public:
+
+		Goal(StringHash stateId) : stateId(stateId) {
+
+		}
 
 		inline bool IsInactive() { return goalState == GoalState::INACTIVE; }
 		inline bool IsProcessing() { return goalState == GoalState::PROCESSING; }
 		inline bool IsCompleted() { return goalState == GoalState::COMPLETED; }
+		inline bool IsAborted() { return goalState == GoalState::ABORTED; }
 		inline bool IsFailed() { return goalState == GoalState::FAILED; }
+		
+		inline bool HasEnded() { return IsCompleted() || IsAborted() || IsFailed(); }
 
 		GoalState GetGoalState() {
 			return goalState;
@@ -35,10 +58,24 @@ namespace Cog {
 
 		void Complete() {
 			SetGoalState(GoalState::COMPLETED);
+			OnComplete();
+			Finish();
 		}
 
 		void Fail() {
 			SetGoalState(GoalState::FAILED);
+			OnFail();
+			Finish();
+		}
+
+		void Abort() {
+			SetGoalState(GoalState::ABORTED);
+			OnAbort();
+			Finish();
+		}
+
+		StringHash GetStateId() {
+			return stateId;
 		}
 	};
 
@@ -53,20 +90,25 @@ namespace Cog {
 		bool continueOnFail = false;
 	public:
 
-		GoalComposite(bool continueOnFail) : continueOnFail(continueOnFail){
+		GoalComposite(StringHash stateId, bool continueOnFail) : Goal(stateId), continueOnFail(continueOnFail){
 
 		}
 
 		void Init() {
 			if (subgoals.size() > 0) {
-				actualSubgoal = subgoals[subgoalIndex];
-				actualSubgoal->Init();
+				SwitchToSubgoal(subgoals[subgoalIndex]);
 			}
 		}
 
 		void OnMessage(Msg& msg) {
 			if (actualSubgoal != nullptr) {
 				actualSubgoal->OnMessage(msg);
+			}
+		}
+
+		virtual void OnAbort() {
+			if (actualSubgoal != nullptr) {
+				actualSubgoal->Abort();
 			}
 		}
 
@@ -85,9 +127,7 @@ namespace Cog {
 
 					if (actualSubgoal->IsCompleted() || (actualSubgoal->IsFailed() && continueOnFail)) {
 						if (subgoalIndex < (subgoals.size() - 1)) {
-							actualSubgoal = subgoals[++subgoalIndex];
-							actualSubgoal->Init();
-							actualSubgoal->SetGoalState(GoalState::PROCESSING);
+							SwitchToSubgoal(subgoals[++subgoalIndex]);
 						}
 						else {
 							Complete();
@@ -103,6 +143,15 @@ namespace Cog {
 					}
 				} while (true); // safe
 			}
+		}
+
+	protected:
+		void SwitchToSubgoal(Goal* goal) {
+			this->actualSubgoal = goal;
+			SetOwner(goal, owner);
+			goal->SetGoalState(GoalState::PROCESSING);
+			// goal can fail during initialization, so that the state should be changed before init
+			goal->Init();
 		}
 	};
 

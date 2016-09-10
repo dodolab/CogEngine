@@ -89,7 +89,7 @@ namespace Cog {
 
 			if (contextStack.Ended()) {
 				Finish();
-				SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+				SendMessageToListeners(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
 			}
 			else {
 

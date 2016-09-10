@@ -55,13 +55,13 @@ namespace Cog {
 		RegisterListening(scene, action4);
 	}
 
-	void MsgListener::SendMessage(BubblingType bubblingType, StringHash action, int subaction, MsgEvent* data, Node* source) const {
-		Msg msg(bubblingType, action, subaction, id, source, data);
+	void MsgListener::SendMessage(HandlingType handlingType, StringHash action, int subaction, MsgEvent* data, Node* source) const {
+		Msg msg(handlingType, action, subaction, id, source, data);
 		CogSendMessage(msg, source);
 	}
 
-	void MsgListener::SendMessageNoBubbling(StringHash action, int subaction, MsgEvent* data, Node* source) const {
-		CogSendDirectMessage(action, subaction, data, source, id);
+	void MsgListener::SendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source) const {
+		CogSendMessageToListeners(action, subaction, data, source, id);
 	}
 
 	void MsgListener::SendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId) const {

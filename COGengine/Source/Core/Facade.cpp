@@ -100,14 +100,14 @@ namespace Cog {
 		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
 	}
 
-	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
-		Msg msg(BubblingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+	void CogSendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
+		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
 		CogSendMessage(msg, source);
 	}
 
 	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
-		Msg msg(BubblingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
-		CogSendDirectMessageToListener(msg, targetId);
+		Msg msg(HandlingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+		CogEngine::GetInstance().stage->GetActualScene()->SendDirectMessageToListener(msg, targetId);
 	}
 
 	// =================== MLOGGER =========================

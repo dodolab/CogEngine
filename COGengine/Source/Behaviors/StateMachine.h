@@ -111,6 +111,12 @@ namespace Cog {
 			return false;
 		}
 
+		State* FindLocalState(StringHash state) {
+			auto found = localStates.find(state);
+			if (found != localStates.end()) return found->second;
+			else return nullptr;
+		}
+
 		State* GetCurrentState() {
 			return currentState;
 		}
@@ -125,7 +131,7 @@ namespace Cog {
 
 	protected:
 		void InitState(State* state) {
-			state->SetOwner(state, owner);
+			SetOwner(state, owner);
 			state->Init();
 			state->SetIsInitialized(true);
 		}

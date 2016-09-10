@@ -295,6 +295,14 @@ namespace Cog {
 
 		void Recalc();
 
+		void RefreshZIndex() {
+			sort(sprites.begin(), sprites.end(),
+				[](const spt<SpriteEntity>  a, const spt<SpriteEntity> b) -> bool
+			{
+				return a->transform.localPos.z < b->transform.localPos.z;
+			});
+		}
+
 		vector<spt<SpriteEntity>>& GetSprites() {
 			return sprites;
 		}

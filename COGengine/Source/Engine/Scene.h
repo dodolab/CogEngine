@@ -12,6 +12,11 @@ namespace Cog
 	class Msg;
 	class StringHash;
 
+	enum class SceneType {
+		SCENE = 0,
+		DIALOG = 1
+	};
+
 	/**
 	* Scene entity, containing node tree
 	*/
@@ -34,7 +39,8 @@ namespace Cog
 		vector<Node*> allNodes;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
-
+		// type of the scene
+		SceneType sceneType = SceneType::SCENE;
 
 		// indicator, if lazy loading should be used
 		bool lazyLoad = false;
@@ -99,6 +105,14 @@ namespace Cog
 		}
 
 		LayerEnt FindLayerSettings(string name);
+
+		SceneType GetSceneType() {
+			return sceneType;
+		}
+
+		void SetSceneType(SceneType sceneType) {
+			this->sceneType = sceneType;
+		}
 
 		/**
 		* Registers behavior listener for selected action
@@ -224,14 +238,14 @@ namespace Cog
 			* @param msg message to send
 			* @param actualNode actual node in bubbling algorithm
 			*/
-			void SendBubblingMessageToChildren(Msg& msg, Node* actualNode);
+			void SendTunnelingMessageToChildren(Msg& msg, Node* actualNode);
 
 			/**
 			* Sends message that will be bubbled from actualNode
 			* @param msg message to send
 			* @param actualNode actual node in bubbling algorithm
 			*/
-			void SendBubblingMessage(Msg& msg, Node* actualNode);
+			void SendTunnelingMessage(Msg& msg, Node* actualNode);
 
 			/**
 			* Sends direct message - takes all behaviors and callbacks that have

@@ -82,6 +82,9 @@ namespace Cog {
 		}
 
 		void Stop() {
+			if (forces != nullptr) {
+				forces->clear();
+			}
 			this->velocity = ofVec2f(0);
 			this->acceleration = ofVec2f(0);
 			this->angularSpeed = 0;

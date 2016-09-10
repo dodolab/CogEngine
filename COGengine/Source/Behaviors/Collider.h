@@ -83,7 +83,7 @@ namespace Cog {
 			if (collisions.size() != 0) {
 				// send info about collision
 				owner->ChangeAttr(ATTR_COLLISIONS, collisions);
-				SendMessage(BubblingType(Scope::SCENE, true, true), ACT_COLLISION_OCURRED, 0, nullptr, owner);
+				SendMessage(HandlingType(Scope::SCENE, true, true), ACT_COLLISION_OCURRED, 0, nullptr, owner);
 			}
 		}
 

@@ -26,6 +26,10 @@ namespace Cog {
 			udpManager.Create();
 		}
 
+		void CloseUDP() {
+			udpManager.Close();
+		}
+
 		void SetupTCPClient(string ip, int port, string msgDelimiter) {
 			tcpClient.setup(ip.c_str(), port);
 			tcpClient.setMessageDelimiter(msgDelimiter);

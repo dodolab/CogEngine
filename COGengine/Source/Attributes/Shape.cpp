@@ -36,6 +36,8 @@ namespace Cog{
 		this->width = (maxX - minX) + mWidth;
 		this->height = (maxY - minY) + mHeight;
 
+		RefreshZIndex();
+
 	}
 
 	void BoundingBox::Recalc(Node* owner) {

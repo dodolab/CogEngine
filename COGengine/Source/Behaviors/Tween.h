@@ -45,6 +45,83 @@ namespace Cog {
 	};
 
 	/**
+	* Behavior for tweening with override (usable for dialogs)
+	*/
+	class OverrideTween : public Tween {
+		OBJECT_PROTOTYPE(OverrideTween)
+	private:
+		// tween direction
+		TweenDirection direction;
+
+	public:
+
+		/**
+		* Creates a new behavior for slide tweening
+		* @param direction tween direction
+		* @param to scene that will be tweened inm
+		* @param speed tweening speed
+		*/
+		OverrideTween(TweenDirection direction, Node* to, float speed) : Tween(nullptr, to, speed), direction(direction) {
+
+		}
+
+
+		void SetFadeFunction(FadeFunction func) {
+			this->fadeFunction = func;
+		}
+
+
+		virtual void Update(const uint64 delta, const uint64 absolute) {
+
+			// there is a bug for the first render -> the next node flickers
+			if (to->GetRunningMode() == INVISIBLE) {
+				to->SetRunningMode(RUNNING);
+			}
+
+			int width = CogGetVirtualWidth();
+			int height = CogGetVirtualHeight();
+
+			// calculate actual position
+			actual += 1.0f / width * speed*0.001f*width*delta;
+
+			if (actual > 1) {
+				actual = 1;
+			}
+
+			float fadeValue;
+
+			if (fadeFunction != nullptr) fadeValue = fadeFunction(actual);
+			else {
+				fadeValue = (float)sin(actual*PI / 2);
+			}
+
+			float widthActual = width*fadeValue;
+			float heightActual = height*fadeValue;
+
+			// change position according to the tweening direction
+			if (direction == TweenDirection::RIGHT) {
+				to->GetScene()->GetViewPortOffset().x = -width + widthActual;
+			}
+			else if (direction == TweenDirection::LEFT) {
+				to->GetScene()->GetViewPortOffset().x = width - widthActual;
+			}
+			else if (direction == TweenDirection::UP) {
+				to->GetScene()->GetViewPortOffset().x = 0;
+				to->GetScene()->GetViewPortOffset().y = (float)(height - heightActual);
+			}
+			else if (direction == TweenDirection::DOWN) {
+				to->GetScene()->GetViewPortOffset().x = (float)(0);
+				to->GetScene()->GetViewPortOffset().y = (float)(-height + heightActual);
+			}
+
+			if (actual >= 1.0f) {
+				Finish();
+				SendMessageToListeners(ACT_TWEEN_ENDED, 0, nullptr, to);
+			}
+		}
+	};
+
+	/**
 	* Behavior for slide tweening
 	*/
 	class SlideTween : public Tween {
@@ -121,7 +198,7 @@ namespace Cog {
 
 			if (actual >= 1.0f) {
 				Finish();
-				SendMessageNoBubbling(ACT_TWEEN_ENDED, 0, nullptr, to);
+				SendMessageToListeners(ACT_TWEEN_ENDED, 0, nullptr, to);
 			}
 		}
 	};

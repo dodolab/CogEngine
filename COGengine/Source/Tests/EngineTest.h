@@ -47,7 +47,7 @@ public:
 public:
 	bool acceptedMessage = false;
 	virtual void Update(const uint64 delta, const uint64 absolute) {
-		if (send) this->SendMessageNoBubbling("MESSAGE_TEST", 0, nullptr, owner);
+		if (send) this->SendMessageToListeners("MESSAGE_TEST", 0, nullptr, owner);
 	}
 };
 

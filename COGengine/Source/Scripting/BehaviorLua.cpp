@@ -33,7 +33,7 @@ namespace Cog {
 	}
 
 	void BehaviorLua::SendMessage(StringHash msg) {
-		this->SendMessageNoBubbling(msg, 0, nullptr, this->owner);
+		this->SendMessageToListeners(msg, 0, nullptr, this->owner);
 	}
 
 	void BehaviorLua::SetOwnerLua(NodeLua* ownerLua) {
@@ -65,7 +65,7 @@ namespace Cog {
 	}
 
 	void BehaviorLua::RegisterListeningLua(string action) {
-		RegisterListening(owner->GetScene(), StringHash(action));
+		RegisterListening(StringHash(action));
 	}
 
 } // namespace

@@ -157,13 +157,13 @@ namespace Cog {
 
 		/**
 		* Sends a message to any set of behaviors
-		* @param bubblingType setting that indicates who should process this message and how it will bubble through scene tree
+		* @param handlingType setting that indicates who should process this message and how it will bubble through scene tree
 		* @param action id of action; see Actions namespace for common action ids
 		* @param subaction id of subaction; see Actions namespace for common action ids
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessage(BubblingType bubblingType, StringHash action, int subaction, MsgEvent* data, Node* source) const;
+		void SendMessage(HandlingType handlingType, StringHash action, int subaction, MsgEvent* data, Node* source) const;
 
 		/**
 		* Sends a message to any set of behaviors without tree-bubbling
@@ -172,7 +172,7 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessageNoBubbling(StringHash action, int subaction, MsgEvent* data, Node* source) const;
+		void SendMessageToListeners(StringHash action, int subaction, MsgEvent* data, Node* source) const;
 
 		/**
 		* Sends a message to one behavior with specific id

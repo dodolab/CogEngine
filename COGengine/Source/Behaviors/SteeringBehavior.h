@@ -78,12 +78,14 @@ namespace Cog {
 	private:
 		float decelerationSpeed = 0;
 		float rotationSpeed = 0;
+		float pointTolerance = 0;
 		StringHash forceId;
 	public:
 
-		ArriveBehavior(float decelerationSpeed, float rotationSpeed) :
+		ArriveBehavior(float decelerationSpeed, float rotationSpeed, float pointTolerance) :
 			decelerationSpeed(decelerationSpeed),
-			rotationSpeed(rotationSpeed){
+			rotationSpeed(rotationSpeed),
+			pointTolerance(pointTolerance){
 			forceId = StringHash(this->GetId());
 		}
 
@@ -92,21 +94,25 @@ namespace Cog {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
 			}
-		}
-		ofVec2f wanderTarget = ofVec2f(0);
 
+			if (!owner->HasAttr(ATTR_MOVEMENT)) {
+				owner->AddAttr(ATTR_MOVEMENT, Movement());
+			}
+		}
+		
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 			auto& transform = owner->GetTransform();
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed);
+			ofVec2f acceleration = steeringMath.Arrive(transform, movement, dest, decelerationSpeed, pointTolerance);
 			if (acceleration != ofVec2f(INT_MIN)) {
 				movement.AddForce(forceId, acceleration);
 				this->SetRotationDirection(movement, transform, dest, rotationSpeed, delta);
 			}
 			else {
 				movement.AddForce(forceId, ofVec2f(0));
+				Finish();
 			}
 		}
 	};
@@ -146,16 +152,21 @@ namespace Cog {
 		float currentPathPoint = 0;
 		float maxAcceleration = 0;
 		float pointTolerance = 0;
+		float finalPointTolerance = 0;
 		StringHash forceId;
 	public:
-		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance) 
-			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance){
+		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance, float finalPointTolerance)
+			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance){
 			forceId = StringHash(this->GetId());
 		}
 
 		void Init() {
 			if (!owner->HasAttr(ATTR_STEERING_BEH_SEEK_DEST)) {
 				owner->AddAttr(ATTR_STEERING_BEH_SEEK_DEST, ofVec2f(0));
+			}
+
+			if (!owner->HasAttr(ATTR_MOVEMENT)) {
+				owner->AddAttr(ATTR_MOVEMENT, Movement());
 			}
 		}
 
@@ -164,9 +175,10 @@ namespace Cog {
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
 			ofVec2f force = steeringMath.Follow(transform, movement, path, currentPathPoint,
-				pointTolerance, maxAcceleration);
+				pointTolerance, finalPointTolerance, maxAcceleration);
 
 			if (force == ofVec2f(INT_MIN)) {
+				movement.Stop();
 				Finish();
 				return;
 			}
