@@ -53,21 +53,21 @@ namespace Cog {
 				bool hasHitTest = false;
 
 
-				if (owner->HasShapeType(ShapeType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<spt<Image>>()->GetImage(), touchTrans, preciseTest);
+				if (owner->HasShapeType(ShapeType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<Image>()->GetImage(), touchTrans, preciseTest);
 				else if (owner->HasShapeType(ShapeType::MULTISPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<MultiSpriteShape>>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetShape<MultiSpriteShape>(), touchTrans);
 				}
 				else if (owner->HasShapeType(ShapeType::SPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<MultiSpriteShape>>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetShape<MultiSpriteShape>(), touchTrans);
 				}
 				else if (owner->HasShapeType(ShapeType::RECTANGLE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<Rectangle>>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetShape<Rectangle>(), touchTrans);
 				}
 				else if (owner->HasShapeType(ShapeType::PLANE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<spt<Plane>>(), touchTrans);
+					hasHitTest = CShapeHitTest(owner->GetShape<Plane>(), touchTrans);
 				}
 				else if (owner->HasShapeType(ShapeType::BOUNDING_BOX)) {
-					hasHitTest = BoundingBoxHitTest(owner->GetShape<spt<BoundingBox>>(), touchVector);
+					hasHitTest = BoundingBoxHitTest(owner->GetShape<BoundingBox>(), touchVector);
 				}
 
 

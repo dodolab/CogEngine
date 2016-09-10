@@ -42,8 +42,8 @@ namespace Cog {
 		/**
 		* Copies all parameters from other animation
 		*/
-		void GetParametersFromReference(CommonAnim* reference) {
-			auto sheetAnimRef = static_cast<SheetAnim*>(reference);
+		void GetParametersFromReference(spt<CommonAnim> reference) {
+			auto sheetAnimRef = static_pointer_cast<SheetAnim>(reference);
 
 			this->SetSheetPath(sheetAnimRef->GetSheetPath());
 			this->SetFrames(sheetAnimRef->GetFrames());

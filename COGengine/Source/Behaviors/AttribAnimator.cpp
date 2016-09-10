@@ -69,7 +69,7 @@ namespace Cog {
 		else {
 
 			// get actual animation node
-			spt<AttribAnim> actualChild = contextStack.GetContext().GetActualChild();
+			spt<AttribAnim> actualChild = static_pointer_cast<AttribAnim>(contextStack.GetContext().GetActualChild());
 
 			// for each animated value (position, scale, rotation,... ) :
 			for (auto& attr : actualChild->GetAnimEntities()) {

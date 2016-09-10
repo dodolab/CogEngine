@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "AgentsReward.h"
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "StrId.h"
 
 namespace Cog {

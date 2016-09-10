@@ -5,7 +5,6 @@
 #include "StrId.h"
 #include "AIAgent.h"
 #include "ofMath.h"
-#include "ofxSmartPointer.h"
 #include "RandomAgent.h"
 #include "AgentsReward.h"
 #include "Definitions.h"

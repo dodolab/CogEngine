@@ -337,8 +337,8 @@ namespace Cog {
 		/**
 		* Get shape of selected template; must inherit from Shape entity
 		*/
-		template<class T> T GetShape() {
-			auto specialShape = static_cast<T>(shape);
+		template<class T> spt<T> GetShape() {
+			auto specialShape = static_pointer_cast<T>(shape);
 			return specialShape;
 		}
 

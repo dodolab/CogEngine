@@ -40,7 +40,7 @@ namespace Cog {
 		/**
 		* Copies all parameters from other animation
 		*/
-		virtual void GetParametersFromReference(CommonAnim* reference) {
+		virtual void GetParametersFromReference(spt<CommonAnim> reference) {
 			this->SetSpeed(reference->GetSpeed());
 			this->SetRepeat(reference->GetRepeat());
 			this->SetIsRevert(reference->GetIsRevert());
@@ -71,8 +71,8 @@ namespace Cog {
 		* Finds a child by name recursively
 		* @param name according to find the child
 		*/
-		CommonAnim* FindChild(string name) {
-			if (this->GetName().compare(name) == 0) return this;
+		spt<CommonAnim> FindChild(string name) {
+			if (this->GetName().compare(name) == 0) return spt<CommonAnim>(this);
 
 			for (auto it = children.begin(); it != children.end(); ++it) {
 				if ((*it)->GetName().compare(name) == 0) return (*it);

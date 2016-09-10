@@ -76,7 +76,7 @@ namespace Cog {
 
 				// store animation
 				for (spt<CommonAnim> anim : rootAnims) {
-					anim = static_cast<spt<SheetAnim>>(anim);
+					anim = static_pointer_cast<SheetAnim>(anim);
 					StoreAnimation(anim);
 				}
 
@@ -96,7 +96,7 @@ namespace Cog {
 
 				// store animation
 				for (spt<CommonAnim> anim : rootAnims) {
-					anim = static_cast<spt<AttribAnim>>(anim);
+					anim = static_pointer_cast<AttribAnim>(anim);
 					StoreAnimation(anim);
 				}
 

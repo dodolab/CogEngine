@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "NetMessage.h"
 #include "DeltaInfo.h"
 

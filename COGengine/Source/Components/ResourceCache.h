@@ -127,7 +127,7 @@ namespace Cog {
 
 			// never create another pointer, because it will be destroyed within the original!
 			// always use static_cast of the actual pointer
-			return static_cast<spt<T>>(entity);
+			return static_pointer_cast<T>(entity);
 		}
 
 		/**

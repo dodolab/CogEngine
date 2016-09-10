@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "StrId.h"

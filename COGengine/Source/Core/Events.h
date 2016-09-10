@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 #include "StrId.h"
 
 namespace Cog {
@@ -80,7 +80,7 @@ namespace Cog {
 		}
 
 		~NetworkMsgEvent(){
-			delete msg;
+
 		}
 	};
 

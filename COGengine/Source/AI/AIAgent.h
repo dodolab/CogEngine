@@ -3,7 +3,7 @@
 #include <string>
 #include "StrId.h"
 #include "Simulator.h"
-#include "ofxSmartPointer.h"
+#include "Definitions.h"
 
 using namespace std;
 

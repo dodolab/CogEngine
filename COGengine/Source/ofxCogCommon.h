@@ -22,7 +22,6 @@
 #include <functional>
 #include <stack>
 #include "Constants.h"
-#include "ofxSmartPointer.h"
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 #include "Error.h"
