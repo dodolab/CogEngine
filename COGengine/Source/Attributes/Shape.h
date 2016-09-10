@@ -21,6 +21,10 @@ namespace Cog {
 
 		}
 
+		virtual ~Shape() {
+
+		}
+
 		RenderType GetRenderType() {
 			return renderType;
 		}
@@ -74,7 +78,7 @@ namespace Cog {
 	public:
 
 		Image(spt<ofImage> img) : Shape(RenderType::IMAGE) {
-			this->image = img;
+			this->image = img; 
 		}
 
 		spt<ofImage> GetImage() {
@@ -187,43 +191,12 @@ namespace Cog {
 		string sheetName;
 
 	public:
-		SpritesShape(string sheetName, vector<pair<spt<Sprite>, Trans>> sprites) : Shape(RenderType::MULTISPRITE), sheetName(sheetName), sprites(sprites) {
+		SpritesShape(string sheetName, vector<pair<spt<Sprite>, Trans>> sprites) : 
+			Shape(RenderType::MULTISPRITE), sheetName(sheetName), sprites(sprites) {
 			Recalc();
 		}
 
-		void Recalc() {
-
-			int minX = 0;
-			int minY = 0;
-			int maxX = 0;
-			int maxY = 0;
-			int mWidth = 0;
-			int mHeight = 0;
-
-			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
-				spt<Sprite> crt = (*it).first;
-				Trans transform = (*it).second;
-
-				int posX = (int)transform.localPos.x;
-				int posY = (int)transform.localPos.y;
-
-				if (posX < minX) minX = posX;
-				if (posY < minY) minY = posY;
-				
-				if (posX > maxX) {
-					maxX = posX;
-					mWidth = crt->GetWidth();
-				}
-
-				if (posY > maxY) {
-					maxY = posY;
-					mHeight = crt->GetHeight();
-				}
-			}
-
-			this->width = (maxX - minX) + mWidth;
-			this->height = (maxY - minY) + mHeight;
-		}
+		void Recalc();
 
 		vector<pair<spt<Sprite>,Trans>>& GetSprites() {
 			return sprites;

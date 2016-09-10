@@ -503,5 +503,8 @@
     <ClCompile Include="Source\Math\EasingFunc.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Attributes\Shape.cpp">
+      <Filter>Source\Attributes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

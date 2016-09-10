@@ -1,13 +1,21 @@
 #include "Stage.h"
+#include "Scene.h"
 #include "Node.h"
 #include "Behavior.h"
-#include "Scene.h"
 #include "CogEngine.h"
 #include "AsyncProcess.h"
 #include "Tween.h"
 #include "InputKey.h"
 
 namespace Cog {
+
+	Stage::~Stage() {
+		for (Scene* scene : scenes) {
+			delete scene;
+		}
+
+		delete rootObject;
+	}
 
 	void Stage::Init() {
 		// create root object with default behaviors, states and attributes
@@ -39,11 +47,8 @@ namespace Cog {
 
 				float heightRatio = scSize.y / (float)virtuals.y;
 				float widthRatio = scSize.x / (float)virtuals.x;
-				cout << "widthRatio " << widthRatio << endl;
-				cout << "heightRatio " << heightRatio << endl;
-
+				
 				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x/((float)environment->GetOriginalWidth()));
-
 			}
 		}
 	}

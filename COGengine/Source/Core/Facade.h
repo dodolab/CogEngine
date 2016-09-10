@@ -16,6 +16,7 @@ namespace Cog {
 	class Node;
 	class Msg;
 	class MsgEvent;
+	class InputAct;
 
 	EntityStorage* CogGetEntityStorage();
 

@@ -46,13 +46,7 @@ namespace Cog {
 		}
 
 		~CogEngine() {
-			delete environment;
-			delete resourceCache;
-			delete stage;
-			delete logger;
-			delete renderer;
-			delete inputHandler;
-			delete entityStorage;
+			Clear();
 		}
 
 		/**
@@ -60,12 +54,17 @@ namespace Cog {
 		*/
 		void Init();
 
+		/**
+		* Initializes engine from XML file
+		* @param xmlPath path to configuration file
+		*/
+		void Init(string xmlPath);
 
 		/**
 		* Initializes engine from XML file
 		* @param config configuration xml
 		*/
-		void Init(spt<ofxXmlSettings> config);
+		void Init(spt<ofxXml> config);
 
 		/**
 		* Executes one update cycle; this method is called by App
@@ -92,6 +91,9 @@ namespace Cog {
 		* Adds a new action that is executed when the update process is finished
 		*/
 		void AddPostUpdateAction(function<void()> action);
+
+	private:
+		void Clear();
 
 		// ================================= SINGLETON PART ==========================
 	public:

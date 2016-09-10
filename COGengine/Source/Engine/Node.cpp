@@ -29,14 +29,17 @@ namespace Cog {
 
 	Node::~Node() {
 
-		MLOGDEBUG("GNODE", "Destructing node %s", tag->c_str());
+		MLOGDEBUG("GNODE", "Destructing node %s", tag == nullptr ? "<noname>" : tag->c_str());
 		// move elements from collection to insert so they can be removed from classic collections
 		InsertElementsForAdding();
 
-		// delete all behaviors
+
+			// delete all behaviors
 		for (list<Behavior*>::iterator it = behaviors.begin(); it != behaviors.end(); ++it)
 		{
-			this->scene->RemoveBehavior(*it);
+			if (scene != nullptr) {
+				this->scene->RemoveBehavior(*it);
+			}
 			delete (*it);
 		}
 		behaviors.clear();
@@ -47,13 +50,18 @@ namespace Cog {
 		delete (it->second);
 		}*/
 
-		// delete all children
-		for (auto it = children.begin(); it != children.end(); ++it)
-		{
-			scene->RemoveNode(*it);
-			delete (*it);
+		// root node doesn't deallocate its children
+		if (this->type != ObjType::ROOT) {
+			// delete all children
+			for (auto it = children.begin(); it != children.end(); ++it)
+			{
+				if (scene != nullptr) {
+					scene->RemoveNode(*it);
+				}
+				delete (*it);
+			}
+			children.clear();
 		}
-		children.clear();
 
 		delete tag;
 		delete groups;

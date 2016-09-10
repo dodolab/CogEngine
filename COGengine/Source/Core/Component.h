@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ofxCogCommon.h"
 #include "MsgListener.h"
-
+#include "Definitions.h"
+#include "ofxCogCommon.h"
 
 namespace Cog {
 

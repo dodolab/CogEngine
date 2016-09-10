@@ -43,6 +43,13 @@ namespace Cog {
 		}
 	}
 
+	void CogEngine::Init(string xmlPath) {
+		ofxXml* xml = new ofxXml();
+		xml->loadFile(xmlPath.c_str());
+		auto xmlPtr = spt<ofxXml>(xml);
+		Init(xmlPtr);
+	}
+
 	void CogEngine::Init(spt<ofxXml> config) {
 		
 		this->config = config;
@@ -74,7 +81,6 @@ namespace Cog {
 			stage->LoadScenesFromXml(config);
 		}
 	}
-
 
 	void CogEngine::Update(uint64 delta, uint64 absolute) {
 		COGMEASURE_BEGIN("ENGINE_UPDATE");
@@ -178,6 +184,16 @@ namespace Cog {
 		REGISTER_BEHAVIOR(FloatingScene);
 		REGISTER_BEHAVIOR(Selection);
 
+	}
+
+	void CogEngine::Clear() {
+		delete environment;
+		delete resourceCache;
+		delete stage;
+		delete logger;
+		delete renderer;
+		delete inputHandler;
+		delete entityStorage;
 	}
 
 }// namespace

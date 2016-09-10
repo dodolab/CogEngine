@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ofxCogCommon.h"
-#include "Node.h"
 
 namespace Cog {
+
+	class Node;
 
 	/**
 	* Collision entity

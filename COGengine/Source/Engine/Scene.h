@@ -48,6 +48,8 @@ namespace Cog
 
 	public:
 
+		~Scene();
+
 		Scene(string name, bool isLazyLoaded);
 
 		Node* GetSceneNode() {
