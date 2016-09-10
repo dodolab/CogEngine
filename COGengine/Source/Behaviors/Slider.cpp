@@ -27,7 +27,7 @@ namespace Cog {
 		if (text == nullptr && !textNodeTag.empty()) text = owner->GetScene()->FindNodeByTag(textNodeTag);
 
 		if (!body->HasAttr(ATTR_IMGBOUNDS)) {
-			auto image = body->GetShape<Image>();
+			auto image = body->GetMesh<Image>();
 			body->AddAttr(ATTR_IMGBOUNDS, ofRectangle(0,0,image->GetWidth(), image->GetHeight()));
 		}
 
@@ -40,9 +40,9 @@ namespace Cog {
 	void Slider::SetValue(int percentage) {
 		auto bounds = body->GetAttr<ofRectangle>(ATTR_IMGBOUNDS);
 		string percText = ofToString(percentage) + "%";
-		text->GetShape<Text>()->SetText(percText);
+		text->GetMesh<Text>()->SetText(percText);
 
-		auto image = body->GetShape<Image>();
+		auto image = body->GetMesh<Image>();
 		bounds.width = image->GetWidth()*(percentage/100.0f);
 		body->ChangeAttr(ATTR_IMGBOUNDS, bounds);
 	}
@@ -51,10 +51,10 @@ namespace Cog {
 		if (!msgLocked) {
 			msgLocked = true;
 
-			if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+			if (msg.GetContextNode()->GetId() == owner->GetId()) {
 				if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
-					InputEvent* evt = msg.GetData<InputEvent>();
-					auto image = body->GetShape<Image>();
+					spt<InputEvent> evt = msg.GetData<InputEvent>();
+					auto image = body->GetMesh<Image>();
 
 					int width = image->GetWidth();
 					int absoluteWidth = image->GetWidth()*body->GetTransform().absScale.x*body->GetTransform().scale.x;
@@ -69,7 +69,7 @@ namespace Cog {
 
 				}
 				else if (msg.HasAction(ACT_ATTR_CHANGED)) {
-					AttributeChangeEvent* changeEvt = msg.GetData<AttributeChangeEvent>();
+					spt<AttributeChangeEvent> changeEvt = msg.GetData<AttributeChangeEvent>();
 					if (changeEvt->attribute == ATTR_SLIDER_VALUE) {
 						int percentage = owner->GetAttr<int>(ATTR_SLIDER_VALUE);
 						SetValue(percentage);

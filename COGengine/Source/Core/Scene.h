@@ -162,21 +162,7 @@ namespace Cog
 		* @param msg message  to send
 		* @param actualNode actual node in bubbling algorithm
 		*/
-		void SendMessage(Msg& msg, Node* actualNode);
-
-		/**
-		* Sends message to specific listener
-		* @param msg message  to send
-		* @param targetId id of target listener
-		*/
-		void SendDirectMessageToListener(Msg& msg, int targetId);
-
-		/**
-		* Sends message to specific node
-		* @param msg message  to send
-		* @param targetId id of target node
-		*/
-		void SendDirectMessageToNode(Msg& msg, int targetId);
+		void SendMessage(Msg& msg);
 
 		/**
 		* Returns true, if there is at least one behavior listener for selected action
@@ -272,6 +258,7 @@ namespace Cog
 		private:
 
 			void CreateSceneNode();
+
 
 			/**
 			* Sends message to behaviors

@@ -53,21 +53,21 @@ namespace Cog {
 				bool hasHitTest = false;
 
 
-				if (owner->HasShapeType(ShapeType::IMAGE)) hasHitTest = ImageHitTest(owner->GetShape<Image>()->GetImage(), touchTrans, preciseTest);
-				else if (owner->HasShapeType(ShapeType::MULTISPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<MultiSpriteShape>(), touchTrans);
+				if (owner->HasMeshType(MeshType::IMAGE)) hasHitTest = ImageHitTest(owner->GetMesh<Image>()->GetImage(), touchTrans, preciseTest);
+				else if (owner->HasMeshType(MeshType::MULTISPRITE)) {
+					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteShape>(), touchTrans);
 				}
-				else if (owner->HasShapeType(ShapeType::SPRITE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<MultiSpriteShape>(), touchTrans);
+				else if (owner->HasMeshType(MeshType::SPRITE)) {
+					hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteShape>(), touchTrans);
 				}
-				else if (owner->HasShapeType(ShapeType::RECTANGLE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<Rectangle>(), touchTrans);
+				else if (owner->HasMeshType(MeshType::RECTANGLE)) {
+					hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
 				}
-				else if (owner->HasShapeType(ShapeType::PLANE)) {
-					hasHitTest = CShapeHitTest(owner->GetShape<Plane>(), touchTrans);
+				else if (owner->HasMeshType(MeshType::PLANE)) {
+					hasHitTest = CShapeHitTest(owner->GetMesh<Plane>(), touchTrans);
 				}
-				else if (owner->HasShapeType(ShapeType::BOUNDING_BOX)) {
-					hasHitTest = BoundingBoxHitTest(owner->GetShape<BoundingBox>(), touchVector);
+				else if (owner->HasMeshType(MeshType::BOUNDING_BOX)) {
+					hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
 				}
 
 
@@ -95,14 +95,14 @@ namespace Cog {
 
 						owner->ResetState(StrId(STATES_HIT));
 						if (hitStarted) {
-							if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_ENDED, 0, new InputEvent(touch), owner, handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
 						}
 						else {
 							// hit has been lost
 							hitLost = true;
-							if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, new InputEvent(touch), owner, handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_LOST, spt<InputEvent>(new InputEvent(touch)));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
 						}
 
 						if (hitStartedTouchId == touch->touchId && hitStarted) {
@@ -122,13 +122,13 @@ namespace Cog {
 						if (hitLost) {
 							hitLost = false;
 							// hit started, lost and started again
-							if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_STARTED, 0, new InputEvent(touch), owner, handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(touch)));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
 						}
 						else {
 							// hit started but not on first touch
-							if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner);
-							else SendDirectMessage(ACT_OBJECT_HIT_OVER, 0, new InputEvent(touch), owner, handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_OVER, spt<InputEvent>(new InputEvent(touch)));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_OVER, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
 						}
 					}
 				}
@@ -145,8 +145,8 @@ namespace Cog {
 				if (owner->HasState(StrId(STATES_HIT))) {
 					owner->ResetState(StrId(STATES_HIT));
 					hitLost = true;
-					if (handlerBehId == -1) SendMessageToListeners(ACT_OBJECT_HIT_LOST, 0, nullptr, owner);
-					else SendDirectMessage(ACT_OBJECT_HIT_LOST, 0, nullptr, owner, handlerBehId);
+					if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_LOST);
+					else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, handlerBehId);
 				}
 			}
 		}

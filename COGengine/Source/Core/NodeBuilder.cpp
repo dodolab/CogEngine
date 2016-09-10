@@ -12,7 +12,7 @@ namespace Cog {
 
 	void NodeBuilder::SetImageNode(Node* node, string path) {
 		spt<ofImage> image = CogPreload2DImage(path);
-		node->SetShape(spt<Image>(new Image(image)));
+		node->SetMesh(spt<Image>(new Image(image)));
 	}
 
 	void NodeBuilder::SetButtonNode(Node* node, string defaultImg, string clickedImg, string disabledImg) {
@@ -40,23 +40,23 @@ namespace Cog {
 
 		auto textShape = new Text(fontVal, text);
 		textShape->SetColor(color);
-		node->SetShape(spt<Text>(textShape));
+		node->SetMesh(spt<Text>(textShape));
 	}
 
 	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
 		auto spriteShape = CreateSpriteShape(scene, layer, spriteSet, row, column);
-		node->SetShape(spriteShape);
+		node->SetMesh(spriteShape);
 	}
 
 	void NodeBuilder::SetSpriteNode(Scene* scene, Node* node, string layer, int row, int column) {
 		auto spriteShape = CreateSpriteShape(scene, layer, row, column);
-		node->SetShape(spriteShape);
+		node->SetMesh(spriteShape);
 	}
 
 	void NodeBuilder::SetPlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
 		auto planeShape = CreatePlaneShape(size, color);
 		planeShape->SetNoFill(noFill);
-		node->SetShape(planeShape);
+		node->SetMesh(planeShape);
 	}
 
 	void NodeBuilder::SetBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
@@ -71,7 +71,7 @@ namespace Cog {
 
 		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight,margin,renderable));
 		bbox->SetColor(color);
-		node->SetShape(bbox);
+		node->SetMesh(bbox);
 	}
 
 	spt<SpriteShape> NodeBuilder::CreateSpriteShape(Scene* scene, string layer, string spriteSet, int row, int column) {
@@ -146,7 +146,7 @@ namespace Cog {
 
 		Node* node = new Node(NodeType::OBJECT, 0, name);
 		// set default shape
-		node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
+		node->SetMesh(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
 
 		return node;
 	}
@@ -280,13 +280,13 @@ namespace Cog {
 
 	void NodeBuilder::LoadShapeFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
-		ShapeType renderType = EnumConverter::StrToShapeType(type);
+		MeshType renderType = EnumConverter::StrToMeshType(type);
 
-		if (renderType == ShapeType::IMAGE) {
+		if (renderType == MeshType::IMAGE) {
 			string img = xml->getAttributex("img", "");
 			this->SetImageNode(node, img);
 		}
-		else if (renderType == ShapeType::PLANE) {
+		else if (renderType == MeshType::PLANE) {
 			float width = 0;
 			float height = 0;
 
@@ -304,7 +304,7 @@ namespace Cog {
 			bool noFill = xml->getBoolAttributex("no_fill", false);
 			SetPlaneNode(node, size, color, noFill);
 		}
-		else if (renderType == ShapeType::SPRITE) {
+		else if (renderType == MeshType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");
 
 			if (layer.empty()) throw IllegalArgumentException("Error while loading sprite sheet. Layer not specified");
@@ -315,7 +315,7 @@ namespace Cog {
 
 			SetSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
-		else if (renderType == ShapeType::BOUNDING_BOX) {
+		else if (renderType == MeshType::BOUNDING_BOX) {
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
 

@@ -8,7 +8,7 @@ using namespace std;
 
 namespace Cog {
 
-	enum class ShapeType;
+	enum class MeshType;
 	enum class TransformType;
 	enum class AttributeType;
 	enum class CalcType;
@@ -19,9 +19,9 @@ namespace Cog {
 	struct EnumConverter {
 
 		/**
-		* Converts string to ShapeType
+		* Converts string to MeshType
 		*/
-		static ShapeType StrToShapeType(string val);
+		static MeshType StrToMeshType(string val);
 
 		/**
 		* Converts string to MeasureType

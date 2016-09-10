@@ -50,7 +50,7 @@ namespace Cog {
 
 		if (actual >= 1.0f) {
 			Finish();
-			SendMessageToListeners(ACT_TWEEN_ENDED, 0, nullptr, to);
+			SendMessage(ACT_TWEEN_ENDED, to);
 		}
 	}
 
@@ -104,7 +104,7 @@ namespace Cog {
 
 		if (actual >= 1.0f) {
 			Finish();
-			SendMessageToListeners(ACT_TWEEN_ENDED, 0, nullptr, to);
+			SendMessage(ACT_TWEEN_ENDED, to);
 		}
 	}
 

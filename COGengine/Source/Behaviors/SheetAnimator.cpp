@@ -41,16 +41,16 @@ namespace Cog {
 				// calculate image offset
 				int frameIndex = actualIndex + actualNode->GetStart();
 
-				if (owner->HasShapeType(ShapeType::SPRITE)) {
+				if (owner->HasMeshType(MeshType::SPRITE)) {
 					// render as a SpriteShape (better performance than Image, because of using the SpriteSheetManager)
 
 					// todo: recalculation always...
-					auto spriteSet = owner->GetShape<SpriteShape>()->GetSpriteSet();
-					owner->GetShape<SpriteShape>()->SetSprite(Sprite(spriteSet, frameIndex));
+					auto spriteSet = owner->GetMesh<SpriteShape>()->GetSpriteSet();
+					owner->GetMesh<SpriteShape>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
-					if (!owner->HasShapeType(ShapeType::IMAGE)) {
-						owner->SetShape(spt<Image>(new Image(spriteSheet)));
+					if (!owner->HasMeshType(MeshType::IMAGE)) {
+						owner->SetMesh(spt<Image>(new Image(spriteSheet)));
 					}
 
 					// render as a ImageShape
@@ -61,14 +61,14 @@ namespace Cog {
 
 					ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
 					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
-					owner->GetShape<Image>()->SetImage(spriteSheet);
+					owner->GetMesh<Image>()->SetImage(spriteSheet);
 
-					if (owner->HasShapeType(ShapeType::IMAGE)) {
-						owner->GetShape<Image>()->SetImage(spriteSheet);
+					if (owner->HasMeshType(MeshType::IMAGE)) {
+						owner->GetMesh<Image>()->SetImage(spriteSheet);
 					}
-					else if (owner->HasShapeType(ShapeType::NONE)) {
+					else if (owner->HasMeshType(MeshType::NONE)) {
 						// set the first image
-						owner->SetShape(spt<Image>(new Image(spriteSheet)));
+						owner->SetMesh(spt<Image>(new Image(spriteSheet)));
 					}
 				}
 			}
@@ -78,11 +78,11 @@ namespace Cog {
 
 				string imagePath = actualNode->GetSheet(actualIndex);
 				spt<ofImage> image = CogGet2DImage(imagePath);
-				if (owner->HasShapeType(ShapeType::IMAGE)) {
-					owner->GetShape<Image>()->SetImage(image);
+				if (owner->HasMeshType(MeshType::IMAGE)) {
+					owner->GetMesh<Image>()->SetImage(image);
 				}
 				else {
-					owner->SetShape(spt<Image>(new Image(image)));
+					owner->SetMesh(spt<Image>(new Image(image)));
 				}
 			}
 		}

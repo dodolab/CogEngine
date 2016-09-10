@@ -146,16 +146,7 @@ namespace Cog {
 			beh->owner = owner;
 		}
 
-		/**
-		* Sends a message to any set of behaviors
-		* @param handlingType setting that indicates who should process this message and how it will bubble through scene tree
-		* @param action id of action; see Actions namespace for common action ids
-		* @param subaction id of subaction; see Actions namespace for common action ids
-		* @param data payload
-		* @param source source node that is a part of message
-		*/
-		void SendMessage(HandlingType handlingType, StrId action, int subaction, MsgEvent* data, Node* source) const;
-
+		
 		/**
 		* Sends a message to any set of behaviors without tree-bubbling
 		* @param action id of action; see Actions namespace for common action ids
@@ -163,8 +154,15 @@ namespace Cog {
 		* @param data payload
 		* @param source source node that is a part of message
 		*/
-		void SendMessageToListeners(StrId action, int subaction, MsgEvent* data, Node* source) const;
+		void SendMessage(StrId action, spt<MsgEvent> data, Node* contextNode) const;
 
+		void SendMessage(StrId action, spt<MsgEvent> data) const;
+
+		void SendMessage(StrId action, Node* contextNode) const;
+
+		void SendMessage(StrId action) const;
+
+		
 		/**
 		* Sends a message to one behavior with specific id
 		* @param action id of action; see Actions namespace for common action ids
@@ -173,7 +171,13 @@ namespace Cog {
 		* @param source source node that is a part of message
 		* @param listenerId id of listener that should get this message
 		*/
-		void SendDirectMessage(StrId action, int subaction, MsgEvent* data, Node* source, int listenerId) const;
+		void SendMessageToBehavior(StrId action, Node* contextNode, int recipientId) const;
+
+		void SendMessageToBehavior(StrId action, int recipientId) const;
+
+		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, Node* contextNode, int recipientId) const;
+
+		void SendMessageToBehavior(StrId action, spt<MsgEvent> data, int recipientId) const;
 	};
 
 }// namespace

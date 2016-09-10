@@ -35,7 +35,7 @@ namespace Cog {
 	}
 
 	void BehaviorLua::SendMessage(StrId msg) {
-		this->SendMessageToListeners(msg, 0, nullptr, this->owner);
+		this->SendMessage(msg);
 	}
 
 	void BehaviorLua::SetOwnerLua(NodeLua* ownerLua) {

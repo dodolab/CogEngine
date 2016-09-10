@@ -20,7 +20,7 @@ namespace Cog {
 		// cached images
 		map<string, spt<ofImage>> loadedImages;
 		// cached meshes
-		map<string, spt<ofVboMesh>> loadedMeshes;
+		map<string, spt<ofVboMesh>> loadedVboMeshes;
 		// cached sounds and music
 		map<string, Soundfx*> loadedSounds;
 		// cached xml files
@@ -74,7 +74,7 @@ namespace Cog {
 		* Loads mesh from file
 		* @param path path to file
 		*/
-		spt<ofVboMesh> GetMesh(string path);
+		spt<ofVboMesh> GetVboMesh(string path);
 
 		/**
 		* Loads font from file

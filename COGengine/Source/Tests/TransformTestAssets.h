@@ -2,7 +2,7 @@
 
 #include "TransformMath.h"
 
-class DummyShape : public Shape {
+class DummyShape : public Mesh {
 public:
 	int width;
 	int height;

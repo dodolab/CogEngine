@@ -5,7 +5,7 @@
 #include "Behavior.h"
 #include "Msg.h"
 #include "Facade.h"
-#include "Shape.h"
+#include "Mesh.h"
 #include "Events.h"
 
 namespace Cog {
@@ -73,7 +73,7 @@ namespace Cog {
 		// transformation matrix
 		Trans  transform;
 		// mash object
-		spt<Shape> shape = spt<Shape>(new Shape(ShapeType::NONE));
+		spt<Mesh> mesh = spt<Mesh>(new Mesh(MeshType::NONE));
 		// running mode
 		RunningMode runMode = RunningMode::RUNNING;
 		bool isExternal = false;
@@ -316,7 +316,7 @@ namespace Cog {
 		* Gets indicator, if this entity is renderable
 		*/
 		bool IsRenderable() {
-			return shape->GetShapeType() != ShapeType::NONE;
+			return mesh->GetMeshType() != MeshType::NONE;
 		}
 
 		bool IsExternal() {
@@ -330,30 +330,30 @@ namespace Cog {
 		/**
 		* Gets shaping object
 		*/
-		spt<Shape> GetShape() {
-			return shape;
+		spt<Mesh> GetMesh() {
+			return mesh;
 		}
 
 		/**
 		* Get shape of selected template; must inherit from Shape entity
 		*/
-		template<class T> spt<T> GetShape() {
-			auto specialShape = static_pointer_cast<T>(shape);
-			return specialShape;
+		template<class T> spt<T> GetMesh() {
+			auto spMesh = static_pointer_cast<T>(mesh);
+			return spMesh;
 		}
 
 		/**
 		*  Sets shaping object
 		*/
-		void SetShape(spt<Shape> shape) {
-			this->shape = shape;
+		void SetMesh(spt<Mesh> mesh) {
+			this->mesh = mesh;
 		}
 
 		/**
 		* Returns true, if the shape is of the selected type
 		*/
-		bool HasShapeType(ShapeType type) {
-			return shape->GetShapeType() == type;
+		bool HasMeshType(MeshType type) {
+			return mesh->GetMeshType() == type;
 		}
 
 		/**
@@ -440,29 +440,17 @@ namespace Cog {
 		/**
 		* Sets new state
 		*/
-		void SetState(unsigned state) {
-			GetStates().SetState(state);
-
-			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SET, state), this, -1);
-		}
+		void SetState(unsigned state);
 
 		/**
 		* Resets selected state
 		*/
-		void ResetState(unsigned state) {
-			GetStates().ResetState(state);
-
-			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::RESET, state), this, -1);
-		}
+		void ResetState(unsigned state);
 
 		/**
 		* Switches values of two states
 		*/
-		void SwitchState(unsigned state1, unsigned state2) {
-			GetStates().SwitchState(state1, state2);
-			// send message
-			CogSendMessageToListeners(ACT_STATE_CHANGED, 0, new StateChangeEvent(StateChange::SWITCH, state1, state2), this, -1);
-		}
+		void SwitchState(unsigned state1, unsigned state2);
 
 		/**
 		* Gets running mode
@@ -509,7 +497,7 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
-			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
 		}
 
 		/**
@@ -523,7 +511,7 @@ namespace Cog {
 			}
 
 			attributes[key] = new AttrR<T>(key, value, this);
-			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
 			return true;
 		}
 
@@ -551,11 +539,11 @@ namespace Cog {
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 				attr->SetValue(value);
-				CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::MODIFY), this, -1);
+				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::MODIFY)));
 			}
 			else {
 				AddAttr(key, value);
-				CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::ADD), this, -1);
+				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::ADD)));
 			}
 		}
 
@@ -590,6 +578,9 @@ namespace Cog {
 		* at the end of update loop
 		*/
 		void DeleteElementsForRemoving(bool applyToChildren);
+
+		void SendMessage(StrId action, spt<MsgEvent> data);
+
 
 	public:
 		void WriteInfo(int logLevel = 0);

@@ -12,21 +12,21 @@ namespace Cog {
 
 	void Selection::OnStart() {
 		if (owner->HasState(selectedState)) {
-			owner->GetShape<Image>()->SetImage(selectedImg);
+			owner->GetMesh<Image>()->SetImage(selectedImg);
 		}
 		else {
-			owner->GetShape<Image>()->SetImage(defaultImg);
+			owner->GetMesh<Image>()->SetImage(defaultImg);
 		}
 	}
 
 
 	void Selection::OnMessage(Msg& msg) {
-		/*			if (msg.GetAction() == ACT_STATE_CHANGED && msg.GetSourceObject()->GetId() == owner->GetId()) {
+		/*			if (msg.GetAction() == ACT_STATE_CHANGED && msg.GetContextNode()->GetId() == owner->GetId()) {
 						if (owner->HasState(selectedState)) {
-							owner->GetShape<Image>()->SetImage(selectedImg);
+							owner->GetMesh<Image>()->SetImage(selectedImg);
 						}
 						else {
-							owner->GetShape<Image>()->SetImage(defaultImg);
+							owner->GetMesh<Image>()->SetImage(defaultImg);
 						}
 					} moved to the update loop */
 	}
@@ -34,11 +34,11 @@ namespace Cog {
 
 	void Selection::Update(const uint64 delta, const uint64 absolute) {
 		if (!hasSelectedState && owner->HasState(selectedState)) {
-			owner->GetShape<Image>()->SetImage(selectedImg);
+			owner->GetMesh<Image>()->SetImage(selectedImg);
 			hasSelectedState = true;
 		}
 		else if (hasSelectedState && !owner->HasState(selectedState)) {
-			owner->GetShape<Image>()->SetImage(defaultImg);
+			owner->GetMesh<Image>()->SetImage(defaultImg);
 			hasSelectedState = false;
 		}
 	}

@@ -12,9 +12,9 @@ using namespace std;
 namespace Cog {
 
 	/**
-	* Type of a shape
+	* Type of a mesh
 	*/
-	enum class ShapeType {
+	enum class MeshType {
 		NONE,				/** Undefined */
 		IMAGE,				/** 2D image */
 		RECTANGLE,			/** Unrenderable rectangle */
@@ -29,30 +29,30 @@ namespace Cog {
 	class Node;
 
 	/**
-	* Common class for shapes
+	* Common class for meshes
 	*/
-	class Shape {
+	class Mesh {
 	protected:
-		ShapeType shapeType = ShapeType::NONE;
+		MeshType meshType = MeshType::NONE;
 		ofColor color;
 	public:
 
-		Shape() {
+		Mesh() {
 		}
 
-		Shape(ShapeType shapeType) : shapeType(shapeType) {
+		Mesh(MeshType meshType) : meshType(meshType) {
 
 		}
 
-		virtual ~Shape() {
+		virtual ~Mesh() {
 
 		}
 
 		/**
-		* Gets type of the shape
+		* Gets type of the mesh
 		*/
-		ShapeType GetShapeType() const {
-			return shapeType;
+		MeshType GetMeshType() const {
+			return meshType;
 		}
 
 		ofColor GetColor() const {
@@ -64,7 +64,7 @@ namespace Cog {
 		}
 
 		/**
-		* Gets shape width
+		* Gets width of the mesh
 		* If undefined, it returns 1
 		*/
 		virtual float GetWidth() const {
@@ -72,7 +72,7 @@ namespace Cog {
 		}
 
 		/**
-		* Gets shape height
+		* Gets height of the mesh
 		* If undefined, it returns 1
 		*/
 		virtual float GetHeight() const {
@@ -85,14 +85,14 @@ namespace Cog {
 	* Nonrenderable rectangle, used primarily for 
 	* transformation calculations
 	*/
-	class Rectangle : public Shape {
+	class Rectangle : public Mesh {
 	private:
 		float width = 0;
 		float height = 0;
 
 	public:
 		Rectangle(float width, float height) 
-			: width(width), height(height), Shape(ShapeType::RECTANGLE) {
+			: width(width), height(height), Mesh(MeshType::RECTANGLE) {
 		}
 
 		float GetWidth() const{
@@ -115,7 +115,7 @@ namespace Cog {
 	/**
 	* Renderable rectangle
 	*/
-	class Plane : public Shape {
+	class Plane : public Mesh {
 	private:
 		float width = 0;
 		float height = 0;
@@ -124,7 +124,7 @@ namespace Cog {
 
 	public:
 		Plane(float width, float height) 
-			: width(width), height(height), Shape(ShapeType::PLANE) {
+			: width(width), height(height), Mesh(MeshType::PLANE) {
 		}
 
 		float GetWidth() const {
@@ -161,12 +161,12 @@ namespace Cog {
 	/**
 	* 2D image, wrapper for ofImage
 	*/
-	class Image : public Shape {
+	class Image : public Mesh {
 	private:
 		spt<ofImage> image;
 	public:
 
-		Image(spt<ofImage> img) : Shape(ShapeType::IMAGE) {
+		Image(spt<ofImage> img) : Mesh(MeshType::IMAGE) {
 			this->image = img; 
 		}
 
@@ -195,13 +195,13 @@ namespace Cog {
 	/**
 	* 2D text
 	*/
-	class Text : public Shape {
+	class Text : public Mesh {
 	protected:
 		spt<ofTrueTypeFont> font;
 		stringstream stream;
 	public:
 
-		Text(spt<ofTrueTypeFont> font, string text) : Shape(ShapeType::TEXT) {
+		Text(spt<ofTrueTypeFont> font, string text) : Mesh(MeshType::TEXT) {
 			this->font = font;
 			stream << text;
 		}
@@ -273,7 +273,7 @@ namespace Cog {
 		* @param labelWidth absolute width of the label in pixels
 		*/
 		Label(spt<ofTrueTypeFont> font, string text, int labelWidth) : Text(font, text) {
-			this->shapeType = ShapeType::LABEL;
+			this->meshType = MeshType::LABEL;
 			this->labelWidth = labelWidth;
 		}
 
@@ -303,7 +303,7 @@ namespace Cog {
 	/**
 	* 2D sprite that is a part of a spritesheet with given frame index
 	*/
-	class SpriteShape : public Shape {
+	class SpriteShape : public Mesh {
 	private:
 		// sprite entity
 		Sprite sprite;
@@ -314,7 +314,7 @@ namespace Cog {
 	public:
 
 		SpriteShape(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
-			: Shape(ShapeType::SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
+			: Mesh(MeshType::SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
 		}
 
 		/**
@@ -342,7 +342,7 @@ namespace Cog {
 	/**
 	*  Collection of sprites
 	*/
-	class MultiSpriteShape : public Shape {
+	class MultiSpriteShape : public Mesh {
 	private:
 		vector<spt<SpriteInst>> sprites;
 		
@@ -355,11 +355,11 @@ namespace Cog {
 		
 	public:
 		MultiSpriteShape(string layerName)
-			: Shape(ShapeType::MULTISPRITE), layerName(layerName) {
+			: Mesh(MeshType::MULTISPRITE), layerName(layerName) {
 		}
 
 		MultiSpriteShape(string layerName, vector<spt<SpriteInst>>& sprites)
-			: Shape(ShapeType::MULTISPRITE), layerName(layerName), sprites(sprites) {
+			: Mesh(MeshType::MULTISPRITE), layerName(layerName), sprites(sprites) {
 			Recalc();
 		}
 
@@ -418,7 +418,7 @@ namespace Cog {
 	* Renderable bounding box that sets its size according to children
 	* of the selected node
 	*/
-	class BoundingBox : public Shape {
+	class BoundingBox : public Mesh {
 	private:
 		float width = 0;
 		float height = 0;
@@ -438,7 +438,7 @@ namespace Cog {
 		*/
 		BoundingBox(float width, float height, float margin, bool renderable) 
 			: width(width), height(height), margin(margin), renderable(renderable),
-			Shape(ShapeType::BOUNDING_BOX) {
+			Mesh(MeshType::BOUNDING_BOX) {
 		}
 
 		float GetWidth() const {

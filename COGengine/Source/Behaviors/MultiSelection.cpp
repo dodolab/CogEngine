@@ -40,26 +40,26 @@ namespace Cog {
 	}
 
 	void MultiSelection::OnMessage(Msg& msg) {
-		if (msg.HasAction(ACT_OBJECT_HIT_ENDED) && msg.GetSourceObject()->IsInGroup(selectionGroup)) {
+		if (msg.HasAction(ACT_OBJECT_HIT_ENDED) && msg.GetContextNode()->IsInGroup(selectionGroup)) {
 			// check if the object was clicked (user could click on different area and release touch event over the button)
-			InputEvent* evt = msg.GetData<InputEvent>();
-			if (evt->input->handlerNodeId == msg.GetSourceObject()->GetId()) {
+			spt<InputEvent> evt = msg.GetData<InputEvent>();
+			if (evt->input->handlerNodeId == msg.GetContextNode()->GetId()) {
 
 				ProcessCheckMessage(msg, false);
 			}
 		}
-		else if (msg.HasAction(ACT_STATE_CHANGED) && msg.GetSourceObject()->IsInGroup(selectionGroup)) {
+		else if (msg.HasAction(ACT_STATE_CHANGED) && msg.GetContextNode()->IsInGroup(selectionGroup)) {
 			ProcessCheckMessage(msg, true); // set directly, because STATE_CHANGED event has been already raised
 		}
 	}
 
 	void MultiSelection::ProcessCheckMessage(Msg& msg, bool setDirectly) {
-		if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+		if (msg.GetContextNode()->GetId() == owner->GetId()) {
 			// selected actual node
 			if (!owner->HasState(selectedState)) {
 				if (setDirectly) owner->GetStates().SetState(selectedState);
 				else owner->SetState(selectedState);
-				SendMessageToListeners(ACT_OBJECT_SELECTED, 0, nullptr, owner);
+				SendMessage(ACT_OBJECT_SELECTED);
 				CheckState();
 			}
 			else {
@@ -79,18 +79,18 @@ namespace Cog {
 
 		if (owner->HasState(selectedState)) {
 			if (selectedImg) {
-				owner->GetShape<Image>()->SetImage(selectedImg);
+				owner->GetMesh<Image>()->SetImage(selectedImg);
 			}
 			else {
-				owner->GetShape()->SetColor(selectedColor);
+				owner->GetMesh()->SetColor(selectedColor);
 			}
 		}
 		else if (!owner->HasState(selectedState)) {
 			if (defaultImg) {
-				owner->GetShape<Image>()->SetImage(defaultImg);
+				owner->GetMesh<Image>()->SetImage(defaultImg);
 			}
 			else {
-				owner->GetShape()->SetColor(defaultColor);
+				owner->GetMesh()->SetColor(defaultColor);
 			}
 		}
 	}

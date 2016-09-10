@@ -192,7 +192,7 @@ namespace Cog {
 		auto meshPtr = spt<ofVboMesh>(mesh);
 
 		loadedImages[path] = image;
-		loadedMeshes[path] = meshPtr;
+		loadedVboMeshes[path] = meshPtr;
 
 
 		return image;
@@ -218,9 +218,9 @@ namespace Cog {
 		return image;
 	}
 
-	spt<ofVboMesh> ResourceCache::GetMesh(string path) {
-		auto found = loadedMeshes.find(path);
-		if (found != loadedMeshes.end()) {
+	spt<ofVboMesh> ResourceCache::GetVboMesh(string path) {
+		auto found = loadedVboMeshes.find(path);
+		if (found != loadedVboMeshes.end()) {
 			return (found->second);
 		}
 		return spt<ofVboMesh>();

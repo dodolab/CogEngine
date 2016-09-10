@@ -15,11 +15,11 @@ namespace Cog {
 
 		CalcTransform(nodeTransform, node, parent, entity, gridWidth, gridHeight);
 
-		auto shape = node->GetShape();
+		auto shape = node->GetMesh();
 
 		// for rectangles, width and height is set directly instead of scale
-		if (entity.sType == CalcType::PER && (shape->GetShapeType() == ShapeType::RECTANGLE) || shape->GetShapeType() == ShapeType::BOUNDING_BOX) {
-			auto rectShape = node->GetShape<Rectangle>();
+		if (entity.sType == CalcType::PER && (shape->GetMeshType() == MeshType::RECTANGLE) || shape->GetMeshType() == MeshType::BOUNDING_BOX) {
+			auto rectShape = node->GetMesh<Rectangle>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
 			nodeTransform.scale = ofVec3f(1);
@@ -41,7 +41,7 @@ namespace Cog {
 		ofVec2f absPos = CalcPosition(node, parent, entity.pos, entity.pType, gridWidth, gridHeight);
 
 		// fix position according to the anchor
-		auto shape = node->GetShape();
+		auto shape = node->GetMesh();
 
 		absPos.x += (0.0f - entity.anchor.x) * shape->GetWidth()*scale.x;
 		absPos.y += (0.0f - entity.anchor.y) * shape->GetHeight()*scale.y;
@@ -81,8 +81,8 @@ namespace Cog {
 			break;
 		case CalcType::PER:
 			// relative percentage -> parent size is 1.0 x 1.0
-			absPos = ofVec2f(pos.x*parent->GetShape()->GetWidth(),
-				pos.y*parent->GetShape()->GetHeight());
+			absPos = ofVec2f(pos.x*parent->GetMesh()->GetWidth(),
+				pos.y*parent->GetMesh()->GetHeight());
 			break;
 		case CalcType::GRID:
 			// grid percentage -> grid size must be specified
@@ -118,24 +118,24 @@ namespace Cog {
 			break;
 		case CalcType::ABS_PER:
 			// absolute percentage scale -> 1.0 x 1.0 will fit the whole screen
-			scaleX = (width* scrSize.x / node->GetShape()->GetWidth()) / parentTrans.absScale.x;
-			scaleY = (height* scrSize.y / node->GetShape()->GetHeight()) / parentTrans.absScale.y;
+			scaleX = (width* scrSize.x / node->GetMesh()->GetWidth()) / parentTrans.absScale.x;
+			scaleY = (height* scrSize.y / node->GetMesh()->GetHeight()) / parentTrans.absScale.y;
 			break;
 		case CalcType::PER:
 			// relative percentage scale ->1.0 x 1.0 will fit the whole parent
-			if (width == 0) width = height*(node->GetShape()->GetWidth() / ((float)node->GetShape()->GetHeight()));
-			if (height == 0) height = width*(((float)node->GetShape()->GetHeight())/ node->GetShape()->GetWidth());
+			if (width == 0) width = height*(node->GetMesh()->GetWidth() / ((float)node->GetMesh()->GetHeight()));
+			if (height == 0) height = width*(((float)node->GetMesh()->GetHeight())/ node->GetMesh()->GetWidth());
 
-			scaleX = (width * parent->GetShape()->GetWidth() / node->GetShape()->GetWidth());
-			scaleY = (height * parent->GetShape()->GetHeight() / node->GetShape()->GetHeight());
+			scaleX = (width * parent->GetMesh()->GetWidth() / node->GetMesh()->GetWidth());
+			scaleY = (height * parent->GetMesh()->GetHeight() / node->GetMesh()->GetHeight());
 			break;
 
 		case CalcType::GRID:
 			// grid scale -> todo, not tested yet :-)
 			float percentageWidth = width / gridWidth;
 			float percentageHeight = height / gridHeight;
-			scaleX = (percentageWidth* scrSize.x / node->GetShape()->GetWidth()) / parentTrans.absScale.x;
-			scaleY = (percentageHeight* scrSize.y / node->GetShape()->GetHeight()) / parentTrans.absScale.y;
+			scaleX = (percentageWidth* scrSize.x / node->GetMesh()->GetWidth()) / parentTrans.absScale.x;
+			scaleY = (percentageHeight* scrSize.y / node->GetMesh()->GetHeight()) / parentTrans.absScale.y;
 			break;
 		}
 

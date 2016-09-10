@@ -219,9 +219,6 @@
     <ClInclude Include="Source\Entities\DEntity.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Shape.h">
-      <Filter>Source\Attributes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\InputAct.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
@@ -648,6 +645,9 @@
     <ClInclude Include="Source\Graphics\SpriteInst.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Attributes\Mesh.h">
+      <Filter>Source\Attributes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -745,9 +745,6 @@
     </ClCompile>
     <ClCompile Include="Source\Math\EasingFunc.cpp">
       <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Attributes\Shape.cpp">
-      <Filter>Source\Attributes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\AnimContextStack.cpp">
       <Filter>Source\Graphics</Filter>
@@ -1027,6 +1024,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\SpriteInst.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Attributes\Mesh.cpp">
+      <Filter>Source\Attributes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

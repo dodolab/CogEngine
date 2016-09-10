@@ -170,8 +170,7 @@ namespace Cog {
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
 			attributes.erase(it);
-
-			CogSendMessageToListeners(ACT_ATTR_CHANGED, 0, new AttributeChangeEvent(key, AttrChange::REMOVE), this, -1);
+			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChange::REMOVE)));
 
 			if (erase) delete attr;
 			return true;
@@ -239,6 +238,21 @@ namespace Cog {
 
 		while (parent != nullptr && parent->type != type) parent = parent->parent;
 		return parent;
+	}
+
+	void Node::SetState(unsigned state) {
+		GetStates().SetState(state);
+		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::SET, state)));
+	}
+
+	void Node::ResetState(unsigned state) {
+		GetStates().ResetState(state);
+		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::RESET, state)));
+	}
+
+	void Node::SwitchState(unsigned state1, unsigned state2) {
+		GetStates().SwitchState(state1, state2);
+		SendMessage(ACT_STATE_CHANGED, spt<StateChangeEvent>(new StateChangeEvent(StateChange::SWITCH, state1, state2)));
 	}
 
 
@@ -334,6 +348,13 @@ namespace Cog {
 		childrenToRemove.clear();
 	}
 
+	void Node::SendMessage(StrId action, spt<MsgEvent> data) {
+		if (scene != nullptr) {
+			scene->SendMessage(Msg(action, MsgObjectType::NODE_COMMON, this->id, MsgObjectType::SUBSCRIBERS,
+				this, data));
+		}
+	}
+
 	void Node::WriteInfo(int logLevel) {
 		CogLogTree("INFO_NODE", logLevel, "Node %s (%d)", this->tag != nullptr ? this->tag->c_str() : "<noname>", this->id);
 
@@ -356,8 +377,8 @@ namespace Cog {
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsScal: [%f,%f]", transform.absScale.x, transform.absScale.y);
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsRotation: %f", transform.absRotation);
 
-		CogLogTree("INFO_SHAPE", logLevel+1, "Shape: %s", typeid(*this->shape).name());
-		CogLogTree("INFO_SHAPE", logLevel+2, "Size: [%f x %f]", this->shape->GetWidth(), this->shape->GetHeight());
+		CogLogTree("INFO_SHAPE", logLevel+1, "Shape: %s", typeid(*this->mesh).name());
+		CogLogTree("INFO_SHAPE", logLevel+2, "Size: [%f x %f]", this->mesh->GetWidth(), this->mesh->GetHeight());
 		
 		if (states != nullptr) {
 			vector<unsigned> allStates = states->GetAllStates();

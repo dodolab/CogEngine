@@ -1,4 +1,4 @@
-#include "Shape.h"
+#include "Mesh.h"
 #include "Node.h"
 #include "ofRectangle.h"
 
@@ -61,10 +61,10 @@ namespace Cog{
 
 			if (trans.absPos.y < minY) minY = trans.absPos.y;
 
-			if ((trans.absPos.x + child->GetShape()->GetWidth()*child->GetTransform().absScale.x) > maxX) 
-				maxX = trans.absPos.x + child->GetShape()->GetWidth()*child->GetTransform().absScale.x;
-			if ((trans.absPos.y + child->GetShape()->GetHeight()*child->GetTransform().absScale.y) > maxY) 
-				maxY = trans.absPos.y + child->GetShape()->GetHeight()*child->GetTransform().absScale.y;
+			if ((trans.absPos.x + child->GetMesh()->GetWidth()*child->GetTransform().absScale.x) > maxX) 
+				maxX = trans.absPos.x + child->GetMesh()->GetWidth()*child->GetTransform().absScale.x;
+			if ((trans.absPos.y + child->GetMesh()->GetHeight()*child->GetTransform().absScale.y) > maxY) 
+				maxY = trans.absPos.y + child->GetMesh()->GetHeight()*child->GetTransform().absScale.y;
 		}
 
 		if (margin != 0) {

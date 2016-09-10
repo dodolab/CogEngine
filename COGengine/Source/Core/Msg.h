@@ -2,48 +2,38 @@
 
 #include "Events.h"
 #include "StrId.h"
+#include "Definitions.h"
 #include "Constants.h"
+
 
 namespace Cog {
 
 	class Node;
 	
-	/*! Scope object for messaging */
-	enum class Scope {
-		ROOT = 0,				 /*!< root object scope */
-		SCENE = 1,				 /*!< scene object scope */
-		OBJECT = 2,				 /*!< source object scope */
-		CHILDREN = 3,			 /*!< children objects scope */
-		DIRECT_NO_TRAVERSE = 4   /*!< no HandlingType made, objects are obtained from map */
-	};
-
 	/**
-	* Configuration class that holds information how the message should bubble through the scene tre
+	* Type of the object participated in message (sender or recipient)
 	*/
-	class HandlingType {
-
-	public:
-
-		/**
-		* Creates a new handling configuration
-		* @param scopeType type of object handling should start from
-		* @param deep if true, message will be sent to children as well
-		* @param tunneling if true, handling will go from top to bottom; otherwise it will go from bottom (bubbling)
-		*/
-		HandlingType(Scope scopeType, bool deep, bool tunneling) : scope(scopeType), deep(deep), tunneling(tunneling) {
-
-		}
-		// scope object
-		Scope scope;
-		// if true, message will be sent to near nodes as well
-		bool deep;
-		// if true, handling will go from top to bottom; otherwise it will go from bottom (bubbling)
-		bool tunneling;
+	enum class MsgObjectType {
+		NODE_ROOT = 0,				 /** root node */
+		NODE_SCENE = 1,				 /** scene node */
+		NODE_COMMON = 2,			 /** actual node */
+		NODE_CHILDREN = 3,			 /** children of actual node */
+		COMPONENT = 4,				 /** component */
+		BEHAVIOR = 5,				 /** behavior */	
+		SUBSCRIBERS = 6,			 /** all objects that subscribed the action */
+		OTHER = 7					 /** other objects */
 	};
 
 	/**
-	* Message that is used to send information Tween nodes
-	* and their behaviors
+	* Tunneling mode (only for scope that is not of type SUBSCRIBERS)
+	*/
+	enum class TunnelingMode {
+		TUNNELING = 0,		/** message will be sent from top to bottom of the tree */
+		BUBBLING = 1		/** message will be sent from bottom to top of the tree */
+	};
+
+	/**
+	* Message for communicating between behaviors, nodes and components
 	*/
 	class Msg {
 	private:
@@ -51,117 +41,258 @@ namespace Cog {
 		static int idCounter;
 		// id of this message
 		int id;
-		// id of action that has been invoked
+		// type of invoked action 
 		StrId action;
-		// id of subaction that has been invoked
-		int subAction;
-		// handling settings
-		HandlingType handlingType;
+		// custom parameter
+		int parameter = 0;
+		// type of the sender
+		MsgObjectType senderType;
+		// sender id (-1 for entities without id)
+		int senderId;
+		// type of the recipient
+		MsgObjectType recipientType = MsgObjectType::SUBSCRIBERS;
+		// recipient id (-1 for subscribers and other objects)
+		int recipientId = 1;
+		// tunneling mode
+		TunnelingMode tunnelingMode = TunnelingMode::TUNNELING;
+		// indicator whether the message should be sent to the whole subtree of actual node 
+		// (only for recipient that is not of type SUBSCRIBERS)
+		bool sendToWholeTree = true;
+
+
+		// node that is connected with this message
+		Node* contextNode = nullptr;
 		// data payload
-		MsgEvent* data = nullptr;
-		// id of behavior that sent this message
-		int behaviorId;
-		// source node that is connected with this message
-		Node* sourceObj;
-		// indicator, if data has been kept by some object (if true, data won't be deleted)
-		bool dataKept = false;
+		spt<MsgEvent> data = spt<MsgEvent>();
+		// the time the message should be delivered (0 for immediate delivering)
+		uint64 deliverTime = 0;
+		
 	public:
 
 		/**
 		* Creates a new message
-		* @param handlingType handling settings
-		* @param action id of action that has been invoked
-		* @param subAction id of subaction that has been invoked
-		* @param behaviorId id of behavior that sent this message
-		* @param sourceObj source object
-		* @param data payload
+		* @param action type of invoked action
+		* @param senderType type of the sender
+		* @param senderId id of the sender
+		* @param recipientType type of the recipient
+		* @param recipientId id of the recipient
+		* @param tunnelingMode tunneling mode
+		* @param contextNode node that is connected with this message
+		* @param data data payload
 		*/
-		Msg(HandlingType handlingType, StrId action, int subAction, int behaviorId, Node* sourceObj, MsgEvent* data);
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
+			int recipientId, TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data);
+
+		/**
+		* Creates a new message
+		* @param action type of invoked action
+		* @param senderType type of the sender
+		* @param senderId id of the sender
+		* @param recipientType type of the recipient
+		* @param tunnelingMode tunneling mode
+		* @param contextNode node that is connected with this message
+		* @param data data payload
+		*/
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
+			TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data);
+
+		/**
+		* Creates a new message
+		* @param action type of invoked action
+		* @param senderType type of the sender
+		* @param senderId id of the sender
+		* @param recipientType type of the recipient
+		* @param tunnelingMode tunneling mode
+		* @param sendToWholeTree if true, the message whill be sent to the whole subtree of actual node (recipient mustn't be of type SUBSCRIBER)
+		* @param contextNode node that is connected with this message
+		* @param data data payload
+		*/
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
+			TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, spt<MsgEvent> data);
+
+		/**
+		* Creates a new message
+		* @param action type of invoked action
+		* @param senderType type of the sender
+		* @param senderId id of the sender
+		* @param recipientType type of the recipient
+		* @param contextNode node that is connected with this message
+		* @param data data payload
+		*/
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgEvent> data);
+
+		/**
+		* Creates a new message
+		* @param action type of invoked action
+		* @param senderType type of the sender
+		* @param senderId id of the sender
+		* @param recipientType type of the recipient
+		* @param contextNode node that is connected with this message
+		* @param deliverTime the time the message should be delivered (0 for immediate)
+		* @param data data payload
+		*/
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, uint64 deliverTime, spt<MsgEvent> data);
+
 
 		~Msg() {
 
 		}
 
 		/**
-		* Gets id of action; see Actions for common action ids
+		* Gets type of action
 		*/
-		const StrId GetAction() const {
+		StrId GetAction() const {
 			return action;
 		}
 
 		/**
-		* Gets indicator, if the action is equal to selected value
+		* Checkes whether the action is equal to given value
 		*/
-		const bool HasAction(StrId actionCmp) const {
+		bool HasAction(StrId actionCmp) const {
 			return action == actionCmp;
 		}
 
 		/**
-		* Gets id of subaction; see Actions for common action ids
+		* Sets the type of action
 		*/
-		const int GetSubaction() const {
-			return subAction;
+		void SetAction(StrId action) {
+			this->action = action;
 		}
 
 		/**
-		* Gets bubbling configuration
+		* Gets custom parameter
 		*/
-		HandlingType& GetHandlingType() {
-			return handlingType;
+		int GetParameter() const {
+			return parameter;
+		}
+
+		/**
+		* Sets custom parameter
+		*/
+		void SetParameter(int parameter) {
+			this->parameter = parameter;
+		}
+
+		/**
+		* Gets type of the sender
+		*/
+		MsgObjectType GetSenderType() const {
+			return senderType;
+		}
+
+		/**
+		* Sets type of the sender
+		*/
+		void SetSenderType(MsgObjectType type) {
+			this->senderType = type;
+		}
+
+		/**
+		* Gets id of the sender
+		*/
+		int GetSenderId() const {
+			return senderId;
+		}
+
+		/**
+		* Sets id of the sender (-1 for nodes which are not part of the scene)
+		*/
+		void SetSenderId(int senderId) {
+			this->senderId = senderId;
+		}
+
+		/**
+		* Gets type of the recipient
+		*/
+		MsgObjectType GetRecipientType() const {
+			return recipientType;
+		}
+
+		/**
+		* Sets type of the recipient
+		*/
+		void SetRecipientType(MsgObjectType type) {
+			this->recipientType = type;
+		}
+
+		/**
+		* Gets id of the recipient (-1 for subscribers and other objects)
+		*/
+		int GetRecipientId() const {
+			return recipientId;
+		}
+
+		/**
+		* Sets id of the recipient
+		*/
+		void SetRecipientId(int recipientId) {
+			this->recipientId = recipientId;
+		}
+
+		/**
+		* Gets the tunneling mode (BUBBLE or TUNNELING)
+		*/
+		TunnelingMode GetTunnelingMode() const {
+			return tunnelingMode;
+		}
+
+		/**
+		* Sets the tunneling mode (BUBBLE or TUNNELING)
+		*/
+		void SetTunnelingMode(TunnelingMode mode) {
+			this->tunnelingMode = mode;
+		}
+
+		/**
+		* Gets indicator whether the message should be sent to the whole subtree of actual node
+		* (only for recipient that is not of type SUBSCRIBERS)
+		*/
+		bool SendToWholeTree() const {
+			return sendToWholeTree;
+		}
+
+		/**
+		* Sets indicator whether the message should be sent to the whole subtree of actual node 
+		* (only for recipient that is not of type SUBSCRIBERS)
+		*/
+		void SetSendToWholeTree(bool sendToWholeTree) {
+			this->sendToWholeTree = sendToWholeTree;
+		}
+
+		/**
+		* Gets the node that is connected with this message
+		*/
+		Node* GetContextNode() {
+			return contextNode;
+		}
+
+		/**
+		* Sets the node that is connected with this message
+		*/
+		void SetContextNode(Node* contextNode) {
+			this->contextNode = contextNode;
+		}
+
+		/**
+		* Gets the time the message should be delivered (0 for immediate delivering)
+		*/
+		uint64 GetDeliverTime() const {
+			return deliverTime;
+		}
+
+		/**
+		* Sets the time the message should be delivered (0 for immediate delivering)
+		*/
+		void SetDeliverTime(uint64 deliverTime) {
+			this->deliverTime = deliverTime;
 		}
 
 		/**
 		* Gets data payload
 		*/
-		const MsgEvent* GetData() const {
-			return data;
-		}
-
-		/**
-		* Gets data payload
-		*/
-		MsgEvent* GetData() {
-			return data;
-		}
-
 		template <class T>
-		T* GetData() {
-			return static_cast<T*>(data);
-		}
-
-		/**
-		* Gets identifier of the behavior that sent this message
-		*/
-		const int GetBehaviorId() const {
-			return behaviorId;
-		}
-
-		/**
-		* Gets source object that is connected with this message
-		*/
-		Node* GetSourceObject() {
-			return sourceObj;
-		}
-
-		/**
-		* Sets indicator that data has been kept so they won't be deleted
-		*/
-		void SetDataKept(bool val) {
-			this->dataKept = val;
-		}
-
-		/**
-		* Gets indicator, if data has been kept by some object
-		*/
-		bool DataKept() {
-			return this->dataKept;
-		}
-
-		/**
-		* Deletes data
-		*/
-		void DeleteData() {
-			delete data;
+		spt<T> GetData() {
+			return static_pointer_cast<T>(data);
 		}
 	};
 

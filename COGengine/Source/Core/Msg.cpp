@@ -4,9 +4,44 @@ namespace Cog {
 
 	int Msg::idCounter = 0;
 
-	Msg::Msg(HandlingType handlingType, StrId action, int subaction, int behaviorId, Node* sourceObj, MsgEvent* data)
-		: handlingType(handlingType), action(action), subAction(subaction), behaviorId(behaviorId),
-		sourceObj(sourceObj), data(data), id(idCounter++) {
+	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType,
+		int recipientId, TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data) 
+		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType),
+		recipientId(recipientId), tunnelingMode(tunnelingMode), contextNode(contextNode),
+		data(data)
+	{
+
+	}
+
+	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType,
+		TunnelingMode tunnelingMode, Node* contextNode, spt<MsgEvent> data) 
+		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType), 
+		tunnelingMode(tunnelingMode), contextNode(contextNode), data(data)
+	{
+
+	}
+
+	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType,
+		TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, spt<MsgEvent> data) 
+		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType),
+		tunnelingMode(tunnelingMode), sendToWholeTree(sendToWholeTree), contextNode(contextNode), data(data)
+	{
+
+	}
+
+	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgEvent> data)
+		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType),
+		contextNode(contextNode), data(data)
+	{
+
+	}
+
+	Msg::Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType,
+		Node* contextNode, uint64 deliverTime, spt<MsgEvent> data) 
+		: id(idCounter++), action(action), senderType(senderType), senderId(senderId), recipientType(recipientType),
+		contextNode(contextNode), deliverTime(deliverTime), data(data)
+	{
+
 	}
 
 }// namespace
