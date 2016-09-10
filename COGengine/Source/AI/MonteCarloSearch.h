@@ -11,14 +11,21 @@ using namespace std;
 
 namespace Cog {
 
+	/**
+	* MonteCarlo searching algorithm
+	* Uses simulator and agents to simulate game and collects
+	* statistical data
+	*/
 	template<class S, class A>
 	class MonteCarloSearch {
 	protected:
 		spt<Simulator<S, A>> mainSimulator;
 		vector<spt<AIAgent<S, A>>> agents;
 		ActionHistory<S, A> actionHistory;
+		// sum of rewards for each agent
 		vector<AgentsReward> totalRewards;
-		vector<int> rewardsCounter;
+		// holds number of steps for each simulation
+		vector<int> stepsCounter;
 
 	public:
 		MonteCarloSearch() {
@@ -40,6 +47,9 @@ namespace Cog {
 			return actionHistory;
 		}
 
+		/**
+		* Calculates sum of rewards for selected agent
+		*/
 		int GetRewardSum(int agentIndex) {
 			int total = 0;
 			for (auto& reward : totalRewards) {
@@ -48,18 +58,27 @@ namespace Cog {
 			return total;
 		}
 
+		/**
+		* Calculates avg reward for selected agent
+		*/
 		float GetRewardAvg(int agentIndex) {
 			return GetRewardSum(agentIndex) / ((float)GetRewardsNum());
 		}
 
-		int GetRewardsNum() {
+		/**
+		* Calculates number of all steps during the simulation
+		*/
+		int GetStepsSum() {
 			int total = 0;
-			for (auto& rCounter : rewardsCounter) {
-				total += rCounter;
+			for (auto& step : stepsCounter) {
+				total += step;
 			}
 			return total;
 		}
 
+		/**
+		* Calculates number of wins for selected agent
+		*/
 		int GetNumberOfWins(int agentIndex) {
 			int total = 0;
 
@@ -77,45 +96,26 @@ namespace Cog {
 			return total;
 		}
 
-		void RunSearch(int attempts) {
+		void RunSimulations(int attempts) {
 
+			// run simulation
 			for (int i = 0; i < attempts; i++) {
 				RunSimulation();
 			}
 
-			cout << "remaining legal actions: " << this->mainSimulator->GetPossibleActions().size() << endl;
-			cout << "Rewards: [ ";
-
-			AgentsReward& rewards = this->mainSimulator->GetRewards();
-			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
-				cout << rewards.GetReward(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
-			}
-
-			cout << endl;
-
-			cout << "RewardsSum: [ ";
-			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
-				cout << GetRewardSum(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
-			}
-
-			cout << endl;
-
-			cout << "Wins: [ ";
-			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
-				cout << GetNumberOfWins(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
-			}
-
-			cout << endl;
+			COGLOGDEBUG("AI", WriteInfo().c_str());
 		}
 
 	protected:
 
-
+		/**
+		* Executes simulation for one attempt
+		*/
 		void RunSimulation() {
 
 			// initialize main simulator at the beginning of each loop
 			mainSimulator->InitState();
-			int rewardsCount = 0;
+			int stepCounter = 0;
 			AgentsReward rw = AgentsReward(agents.size());
 
 			// this simulator can be used by agent for additional search
@@ -134,14 +134,45 @@ namespace Cog {
 				// apply the selected action into the simulator
 				mainSimulator->MakeAction(action,false);
 				// get rewards of the selected action
-				rewardsCount++;
+				stepCounter++;
 				rw.Merge(mainSimulator->GetRewards());
 				// update history
 				actionHistory.AddRecord(mainSimulator->GetActualState(), action, agentOnTurn);
 			}
 
 			this->totalRewards.push_back(rw);
-			this->rewardsCounter.push_back(rewardsCount);
+			this->stepsCounter.push_back(stepCounter);
+		}
+
+		string WriteInfo() {
+
+			ostringstream ss;
+
+			ss << "MonteCarloSearch result:" << endl;
+
+			ss << "Rewards: [ ";
+
+			AgentsReward& rewards = this->mainSimulator->GetRewards();
+			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
+				ss << rewards.GetReward(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
+			}
+
+			ss << endl;
+
+			ss << "RewardsSum: [ ";
+			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
+				ss << GetRewardSum(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
+			}
+
+			ss << endl;
+
+			ss << "Wins: [ ";
+			for (int i = 0; i < rewards.GetAgentsNum(); i++) {
+				ss << GetNumberOfWins(i) << (i == (rewards.GetAgentsNum() - 1) ? " ]" : ", ");
+			}
+
+			ss << endl;
+			return ss.str();
 		}
 	};
 

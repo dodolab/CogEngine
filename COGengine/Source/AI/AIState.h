@@ -2,6 +2,10 @@
 
 #include "ofxSmartPointer.h"
 
+/**
+* State for AI simulation
+* Each derived class must have equality operator overidden
+*/
 class AIState{
 protected:
 	int agentOnTurn = 0;

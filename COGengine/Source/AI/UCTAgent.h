@@ -341,6 +341,7 @@ namespace Cog {
 			this->iterationLimit = iterationLimit;
 		}
 
+
 		/**
 		* Builds UCT trees and choses the best action, according to the selected configuration
 		* The best action is selected from only those that have been explored
