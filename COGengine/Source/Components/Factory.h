@@ -16,7 +16,9 @@ namespace Cog {
 	* All node construction methods should be implemented
 	* in classes derived from this one
 	*/
-	class Factory {
+	class Factory : public Component {
+
+		COMPONENT(Factory)
 
 	public:
 
@@ -156,12 +158,6 @@ namespace Cog {
 		*/
 		float TranslateSpeed(float speed);
 
-		/**
-		* Initializes factory
-		*/
-		virtual void Init() {
-
-		}
 
 		/**
 		* Creates root node with initial scene

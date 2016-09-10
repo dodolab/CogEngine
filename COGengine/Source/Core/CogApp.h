@@ -22,29 +22,22 @@ namespace Cog {
 	protected:
 		// time elapsed from engine initialization
 		uint64 absolute;
-		// time elapsed Tween frames
+		// time elapsed between frames
 		uint64 delta;
-		// link to default factory
-		Factory* factory;
-
-		spt<ofxXmlSettings> config;
-
+		
 	public:
 
 		/**
 		* Creates a new application wrapper
-		* @param factory default factory
 		*/
-		CogApp(Factory* factory) : factory(factory) {
+		CogApp() {
 		}
 
+
 		/**
-		* Creates a new application wrapper
-		* @param factory default factory
-		* @param config configuration XML
+		* Virtual method that can be used to initialize engine and custom components
 		*/
-		CogApp(Factory* factory, spt<ofxXmlSettings> config) : factory(factory), config(config) {
-		}
+		virtual void InitEngine();
 
 		// setup function, called before first draw and update
 		void setup();

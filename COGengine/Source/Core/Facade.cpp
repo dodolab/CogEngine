@@ -9,137 +9,138 @@ namespace Cog {
 	// =================== MENVIRONMENT ====================
 
 	void CogAddSound(spt<Sound> sound) {
-		COGEngine.environmentCtrl->AddSound(sound);
+		COGEngine.environment->AddSound(sound);
 	}
 
 	void CogPlaySound(spt<Sound> sound) {
-		COGEngine.environmentCtrl->PlaySound(sound);
+		COGEngine.environment->PlaySound(sound);
 	}
 
 	vector<InputAct>& CogGetPressedKeys() {
-		return COGEngine.environmentCtrl->GetPressedKeys();
+		return COGEngine.environment->GetPressedKeys();
 	}
 
 	vector<InputAct>& CogGetPressedPoints() {
-		return COGEngine.environmentCtrl->GetPressedPoints();
+		return COGEngine.environment->GetPressedPoints();
 	}
 
 	vector<spt<Sound>>& CogGetPlayedSounds() {
-		return COGEngine.environmentCtrl->GetPlayedSounds();
+		return COGEngine.environment->GetPlayedSounds();
 	}
 
 	int CogGetScreenRealWidth() {
-		return COGEngine.environmentCtrl->GetRealWidth();
+		return COGEngine.environment->GetRealWidth();
 	}
 
 	int CogGetScreenRealHeight() {
-		return COGEngine.environmentCtrl->GetRealHeight();
+		return COGEngine.environment->GetRealHeight();
 	}
 
 	int CogGetScreenWidth() {
-		return COGEngine.environmentCtrl->GetWidth();
+		return COGEngine.environment->GetWidth();
 	}
 
 	int CogGetScreenHeight() {
-		return COGEngine.environmentCtrl->GetHeight();
+		return COGEngine.environment->GetHeight();
 	}
 
 	float CogGetScreenRealAspectRatio() {
-		return COGEngine.environmentCtrl->GetRealAspectRatio();
+		return COGEngine.environment->GetRealAspectRatio();
 	}
 
 	float CogGetScreenAspectRatio() {
-		return COGEngine.environmentCtrl->GetAspectRatio();
+		return COGEngine.environment->GetAspectRatio();
 	}
 
 	void CogSetScreenAspectRatio(float ratio) {
-		COGEngine.environmentCtrl->SetAspectRatio(ratio);
+		COGEngine.environment->SetAspectRatio(ratio);
 	}
 
 
 
 	ofVec2f CogGetScreenSize() {
-		return COGEngine.environmentCtrl->GetSize();
+		return COGEngine.environment->GetSize();
 	}
 
 	void CogRunThread(ofThread* thread) {
-		COGEngine.environmentCtrl->RunThread(thread);
+		COGEngine.environment->RunThread(thread);
 	}
 
 	// =================== MFACTORY ========================
 
 	float CogTranslateSpeed(float speed) {
-		return COGEngine.factory->TranslateSpeed(speed);
+		// todo: 
+		return speed * 0.001f*COGEngine.environment->GetWidth();
 	}
 
 	// =================== MSTORAGE ========================
 
 	void CogRegisterListener(StringHash action, Behavior* beh) {
-		COGEngine.storage->RegisterListener(action, beh);
+		COGEngine.nodeStorage->RegisterListener(action, beh);
 	}
 
 	void CogUnregisterListener(StringHash action, Behavior* beh) {
-		COGEngine.storage->UnregisterListener(action, beh);
+		COGEngine.nodeStorage->UnregisterListener(action, beh);
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
 		MLOGDEBUG("CORE", "Message %s:%s:%d", ofToString(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
-		COGEngine.storage->SendMessage(msg, actualNode);
+		COGEngine.nodeStorage->SendMessage(msg, actualNode);
 	}
 
 	void CogSendDirectMessageToBehavior(Msg& msg, int targetId) {
-		COGEngine.storage->SendDirectMessageToBehavior(msg, targetId);
+		COGEngine.nodeStorage->SendDirectMessageToBehavior(msg, targetId);
 	}
 
 
 	Node* CogFindNodeById(int id) {
-		return COGEngine.storage->FindNodeById(id);
+		return COGEngine.nodeStorage->FindNodeById(id);
 	}
 
 	int CogGetNodesCountByTag(string tag) {
-		return COGEngine.storage->GetNodesCountByTag(tag);
+		return COGEngine.nodeStorage->GetNodesCountByTag(tag);
 	}
 
 	Node* CogFindNodeByTag(string tag) {
-		return COGEngine.storage->FindNodeByTag(tag);
+		return COGEngine.nodeStorage->FindNodeByTag(tag);
 	}
 
 	vector<Node*> CogFindNodesByTag(char* tag) {
-		return COGEngine.storage->FindNodesByTag(tag);
+		return COGEngine.nodeStorage->FindNodesByTag(tag);
 	}
 
 	int CogGetNodesCountBySubType(int subtype) {
-		return COGEngine.storage->GetNodesCountBySubType(subtype);
+		return COGEngine.nodeStorage->GetNodesCountBySubType(subtype);
 	}
 
 	Node* CogFindNodeBySubType(int subtype) {
-		return COGEngine.storage->FindNodeBySubType(subtype);
+		return COGEngine.nodeStorage->FindNodeBySubType(subtype);
 	}
 
 	vector<Node*> CogFindNodesBySubType(int subtype) {
-		return COGEngine.storage->FindNodesBySubType(subtype);
+		return COGEngine.nodeStorage->FindNodesBySubType(subtype);
 	}
 
 	bool CogAddNode(Node* node) {
 		MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
-		return COGEngine.storage->AddNode(node);
+		return COGEngine.nodeStorage->AddNode(node);
 	}
 
 	void CogRemoveNode(Node* node) {
 		MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
-		COGEngine.storage->RemoveNode(node);
+		COGEngine.nodeStorage->RemoveNode(node);
 	}
 
 	bool CogAddBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		return COGEngine.storage->AddBehavior(beh);
+		return COGEngine.nodeStorage->AddBehavior(beh);
 	}
 
 	void CogRemoveBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		COGEngine.storage->RemoveBehavior(beh);
+		COGEngine.nodeStorage->RemoveBehavior(beh);
 	}
 
 	// =================== MLOGGER =========================
@@ -179,42 +180,57 @@ namespace Cog {
 		COGEngine.renderer->Render();
 	}
 
-	// =================== MRESOURCE =======================
+	// =================== MCACHE =======================
 
 	spt<ofImage> CogGet2DImage(string path) {
-		return COGEngine.resourceCtrl->Get2DImage(path);
+		return COGEngine.resourceCache->Get2DImage(path);
 	}
 
 	spt<ofImage> CogPreload2DImage(string path) {
-		return COGEngine.resourceCtrl->Preload2DImage(path);
+		return COGEngine.resourceCache->Preload2DImage(path);
 	}
 
 	spt<ofVboMesh> CogGetMesh(string path) {
-		return COGEngine.resourceCtrl->GetMesh(path);
+		return COGEngine.resourceCache->GetMesh(path);
 	}
 
 	spt<ofTrueTypeFont> CogGetFont(string path, int size) {
-		return COGEngine.resourceCtrl->GetFont(path, size);
+		return COGEngine.resourceCache->GetFont(path, size);
 	}
 
 	spt<Sound> CogGetSound(string path) {
-		return COGEngine.resourceCtrl->GetSound(path);
+		return COGEngine.resourceCache->GetSound(path);
 	}
 
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path) {
-		return COGEngine.resourceCtrl->PreloadXMLFile(path);
+		return COGEngine.resourceCache->PreloadXMLFile(path);
 	}
 
 	spt<ofxXmlSettings> CogLoadXMLFile(string path) {
-		return COGEngine.resourceCtrl->LoadXMLFile(path);
+		return COGEngine.resourceCache->LoadXMLFile(path);
 	}
 
 	spt<Anim> CogGetAnimation(string name) {
-		return COGEngine.resourceCtrl->GetAnimation(name);
+		return COGEngine.resourceCache->GetAnimation(name);
 	}
 
 	void CogStoreAnimation(spt<Anim> anim) {
-		COGEngine.resourceCtrl->StoreAnimation(anim);
+		COGEngine.resourceCache->StoreAnimation(anim);
+	}
+
+
+	// ================== MCOMPONENTSTORAGE ====================
+
+	void CogRegisterComponent(Component* value) {
+		COGEngine.componentStorage->RegisterComponent(value);
+	}
+
+	bool CogRemoveComponent(StringHash key) {
+		return COGEngine.componentStorage->RemoveComponent(key);
+	}
+
+	bool CogExistsComponent(StringHash key) {
+		return COGEngine.componentStorage->ExistsComponent(key);
 	}
 
 }// namespace

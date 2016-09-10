@@ -9,7 +9,7 @@
 namespace Cog {
 
 	class Behavior;
-
+	class Component;
 
 	/*************************************************************************/
 	/* Facade methods that are used for centralized access to all components */
@@ -35,7 +35,7 @@ namespace Cog {
 
 	float CogTranslateSpeed(float speed);
 
-	// =================== MREPOSITORY ========================
+	// =================== MNODESTORAGE ========================
 
 	void CogRegisterListener(StringHash action, Behavior* beh);
 	void CogUnregisterListener(StringHash action, Behavior* beh);
@@ -64,7 +64,7 @@ namespace Cog {
 	void CogPushNodeForRendering(Node* node);
 	void CogRender();
 
-	// =================== MSTORAGE =======================
+	// =================== MCACHE =======================
 
 	spt<ofImage> CogGet2DImage(string path);
 	spt<ofImage> CogPreload2DImage(string path);
@@ -75,5 +75,14 @@ namespace Cog {
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
 	spt<Anim> CogGetAnimation(string name);
 	void CogStoreAnimation(spt<Anim> anim);
+
+	// ================== MCOMPONENTSTORAGE ====================
+
+	void CogRegisterComponent(StringHash key, Component* value);
+
+	bool CogRemoveComponent(StringHash key);
+
+	bool CogExistsComponent(StringHash key);
+
 
 }// namespace

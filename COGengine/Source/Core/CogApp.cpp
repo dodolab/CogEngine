@@ -7,13 +7,21 @@
 
 namespace Cog {
 
+	void CogApp::InitEngine() {
+		Factory* fact = new Factory();
+		COGEngine.componentStorage->RegisterComponent(fact);
+		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+		COGEngine.Init();
+	}
+
 void CogApp::setup(){
 	// never set vertical sync
 	ofSetVerticalSync(false);
 	ofSetFrameRate(APP_SPEED);
 	ofEnableAntiAliasing();
 	// initialize COG engine
-	COGEngine.Init(factory, config);
+	this->InitEngine();
+	
 	// initialize time
 	absolute = ofGetSystemTime();
 	delta = ofGetSystemTime();
@@ -35,15 +43,15 @@ void CogApp::update(){
 }
 
 void CogApp::keyPressed(int key){
-	COGEngine.environmentCtrl->OnKeyAction(key, true);
+	COGEngine.environment->OnKeyAction(key, true);
 }
 
 void CogApp::keyReleased(int key){
-	COGEngine.environmentCtrl->OnKeyAction(key, false);
+	COGEngine.environment->OnKeyAction(key, false);
 }
 
 void CogApp::windowResized(int w, int h){
-	COGEngine.environmentCtrl->OnScreenSizeChanged(w, h);
+	COGEngine.environment->OnScreenSizeChanged(w, h);
 }
 
 
@@ -55,16 +63,16 @@ void CogApp::mouseMoved(int x, int y){
 }
 
 void CogApp::mouseDragged(int x, int y, int button){
-	COGEngine.environmentCtrl->OnSingleTouchMotion(x, y, button);
+	COGEngine.environment->OnSingleTouchMotion(x, y, button);
 
 }
 
 void CogApp::mousePressed(int x, int y, int button){
-	COGEngine.environmentCtrl->OnSingleTouchButton(x, y, button, true);
+	COGEngine.environment->OnSingleTouchButton(x, y, button, true);
 }
 
 void CogApp::mouseReleased(int x, int y, int button){
-	COGEngine.environmentCtrl->OnSingleTouchButton(x, y, button, false);
+	COGEngine.environment->OnSingleTouchButton(x, y, button, false);
 }
 
 void CogApp::dragEvent(ofDragInfo dragInfo){

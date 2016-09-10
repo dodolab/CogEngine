@@ -34,7 +34,7 @@ protected:
 
 public:
 
-	MTestApp() : CogApp(nullptr) {
+	MTestApp() : CogApp() {
 
 	}
 

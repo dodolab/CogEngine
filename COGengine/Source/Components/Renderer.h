@@ -9,7 +9,9 @@ namespace Cog {
 	/**
 	* Engine for rendering
 	*/
-	class Renderer {
+	class Renderer : public  Component {
+
+		COMPONENT(Renderer)
 
 	protected:
 		map<int, vector<Node*>> zIndexes;

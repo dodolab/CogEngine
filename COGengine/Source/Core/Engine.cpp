@@ -10,26 +10,21 @@ namespace Cog {
 
 	Engine COGEngine;
 
+	
+	void Engine::Init() {
+		RegisterComponents();
 
-	void Engine::Init(Factory* factory, spt<ofxXmlSettings> config) {
+		vector<Component*> components = componentStorage->GetAllComponents();
 
-		// create components
-		environmentCtrl = new Environment();
-		resourceCtrl = new ResourceCache();
-		logger = new Logger(config);
-		storage = new NodeStorage();
-		renderer = new Renderer();
-		componentStorage = new ComponentStorage();
-		this->factory = factory;
+		for (auto it = components.begin(); it != components.end(); ++it) {
+			(*it)->Init();
+		}
+	}
 
-		// initialize components 
-		environmentCtrl->Init();
-		factory->Init();
-		logger->Init();
-		renderer->Init();
-		resourceCtrl->Init();
-		// create root node
-		_root = factory->CreateRoot();
+	void Engine::Init(spt<ofxXmlSettings> config) {
+		RegisterComponents();
+
+		// todo :-)
 	}
 
 
@@ -37,11 +32,11 @@ namespace Cog {
 		frameCounter++;
 
 		// update transforms
-		this->_root->GetRoot()->UpdateTransform(true);
+		nodeStorage->GetRootObject()->UpdateTransform(true);
 		// update scene
-		this->_root->GetRoot()->Update(delta, absolute);
+		nodeStorage->GetRootObject()->Update(delta, absolute);
 		// remove ended inputs
-		environmentCtrl->RemoveEndedProcesses();
+		environment->RemoveEndedProcesses();
 
 		// flush each 100th frame
 		if (frameCounter % 100 == 0) {
@@ -56,12 +51,26 @@ namespace Cog {
 		// clear the drawing surface
 		ofBackground(50, 50, 50);
 		// setup ortographic camera
-		ofSetupScreenOrtho(environmentCtrl->GetRealWidth(), environmentCtrl->GetRealHeight(), -1000, 1000);
-
+		ofSetupScreenOrtho(environment->GetRealWidth(), environment->GetRealHeight(), -1000, 1000);
+		
 		// draw the root node
-		this->_root->GetRoot()->Draw(delta, absolute);
+		nodeStorage->GetRootObject()->Draw(delta, absolute);
 
 		renderer->Render();
+	}
+
+	void Engine::RegisterComponents() {
+		environment = new Environment();
+		resourceCache = new ResourceCache();
+		logger = new Logger();
+		nodeStorage = new NodeStorage();
+		renderer = new Renderer();
+		
+		componentStorage->RegisterComponent(environment);
+		componentStorage->RegisterComponent(resourceCache);
+		componentStorage->RegisterComponent(logger);
+		componentStorage->RegisterComponent(nodeStorage);
+		componentStorage->RegisterComponent(renderer);
 	}
 
 }// namespace
