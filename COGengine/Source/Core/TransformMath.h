@@ -29,14 +29,29 @@ namespace Cog {
 		*/
 		void SetSizeToScreen(Node* node, Node* parent) {
 			SetTransform(node, parent, ofVec2f(0, 0), 1, CalcType::PER, ofVec2f(0, 0), ofVec2f(1, 0) // zero because we want to scale according to the x axis
-				, CalcType::PER, 0, 0);
+				, CalcType::ABS_PER, 0, 0);
 		}
 
 		void SetTransform(Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
+			
+			ofVec2f scrSize = CogGetScreenSize();
+
+			Trans nodeTransform = Trans(0, 0);
+
+			CalcTransform(nodeTransform, node, parent, position, zIndex, positionCalc, anchor, size, sizeCalc, gridWidth, gridHeight);
+
+			// refresh transform (recalculate from parent)
+			nodeTransform.CalcAbsTransform(parent->GetTransform());
+
+			node->SetTransform(nodeTransform);
+		}
+
+		void CalcTransform(Trans& outputTrans, Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, 
+			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
+
 			ofVec2f scrSize = CogGetScreenSize();
 
 			Trans& parentTrans = parent->GetTransform();
-			Trans nodeTransform = Trans(0, 0);
 
 			// calculate scale
 			ofVec2f scale = CalcScale(node, parent, size.x, size.y, sizeCalc, gridWidth, gridHeight);
@@ -46,7 +61,7 @@ namespace Cog {
 			// fix position according to the anchor
 			auto shape = node->GetShape();
 
-			
+
 			absPos.x += (0.0f - anchor.x) * node->GetShape()->GetWidth()*scale.x;
 			absPos.y += (0.0f - anchor.y) * node->GetShape()->GetHeight()*scale.y;
 
@@ -54,13 +69,8 @@ namespace Cog {
 			if (zIndex == 0) zIndex = parentTrans.localPos.z;
 
 			// set transformation
-			nodeTransform.localPos = ofVec3f(absPos.x, absPos.y, zIndex);
-			nodeTransform.scale = ofVec3f(scale.x, scale.y, 1);
-
-			// refresh transform (recalculate from parent)
-			nodeTransform.CalcAbsTransform(parent->GetTransform());
-
-			node->SetTransform(nodeTransform);
+			outputTrans.localPos = ofVec3f(absPos.x, absPos.y, zIndex);
+			outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
 		}
 
 		ofVec2f GetCenter() {
@@ -90,8 +100,8 @@ namespace Cog {
 				break;
 			case CalcType::PER:
 				// relative percentage -> parent size is 1.0 x 1.0
-				absPos = ofVec2f(pos.x*parent->GetShape()->GetWidth() * parentTrans.scale.x,
-					pos.y*parent->GetShape()->GetHeight()*parentTrans.scale.y);
+				absPos = ofVec2f(pos.x*parent->GetShape()->GetWidth(),
+					pos.y*parent->GetShape()->GetHeight());
 				break;
 			case CalcType::GRID:
 				// grid percentage -> grid size must be specified
@@ -136,8 +146,8 @@ namespace Cog {
 				// relative percentage scale ->1.0 x 1.0 will fit the whole parent
 				if (width == 0) width = 1;
 				if (height == 0) height = 1;
-				scaleX = (width* scrSize.x / node->GetShape()->GetWidth());
-				scaleY = (height* scrSize.y / node->GetShape()->GetHeight());
+				scaleX = (width * parent->GetShape()->GetWidth() / node->GetShape()->GetWidth());
+				scaleY = (height * parent->GetShape()->GetHeight() / node->GetShape()->GetHeight());
 				break;
 
 			case CalcType::GRID:
@@ -197,7 +207,7 @@ namespace Cog {
 			float height = 0;
 
 			if (xml->attributeExists(":", "size")) {
-				width = height = xml->getAttribute(":", "size", 0);
+				width = height = xml->getAttribute(":", "size", 0.0);
 			}
 			else {
 				width = xml->getAttribute(":", "width", 0.0);

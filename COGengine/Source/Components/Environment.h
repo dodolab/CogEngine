@@ -147,6 +147,14 @@ namespace Cog {
 		}
 
 		/**
+		* Sets screen size without any recalculation
+		*/
+		void SetScreenSizeHard(ofVec2f size) {
+			this->width = size.x;
+			this->height = size.y;
+		}
+
+		/**
 		* Gets width and height in 2D vector
 		*/
 		ofVec2f GetSize() {

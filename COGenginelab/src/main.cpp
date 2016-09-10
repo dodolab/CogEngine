@@ -1,6 +1,5 @@
 #include "ofMain.h"
 #include "ofApp.h"
-#include "Factory.h"
 #include "Node.h"
 #include "RotateAnim.h"
 #include "TranslateAnim.h"
@@ -162,98 +161,6 @@ public:
 };
 
 
-class TestingFactory : public Factory {
-
-public:
-	Node* CreateRoot() {
-
-		ofLogNotice("test") << "vytvarim hlavni uzel";
-		mstart = temp = ofGetElapsedTimeMillis();
-
-		Node* root = new Node(ObjType::ROOT, 12, "root");
-
-		ofLogNotice("test") << "nacitam barvicky";
-		for (int i = 0; i < 2000; i++) {
-			spt<ofImage> img = CogGet2DImage("images/blue.png");
-			spt<ofImage> img2 = CogGet2DImage("images/red.png");
-
-			Node* child = new Node("item");
-
-			float rand1 = ofRandomf() / 2 + 0.5f;
-			float rand2 = ofRandomf() / 2 + 0.5f;
-
-			SetTransform(child, ofVec2f(rand1, rand2), CalcType::PER, 0.01f, CalcType::PER, ofVec2f(0.5f, 0.5f), 40, 40, root);
-
-
-			if (i % 2 == 0 || true) {
-				child->SetShape(spt<SpriteShape>(new SpriteShape(spt<Sprite>(new Sprite(spt<SpriteSet>(new SpriteSet(
-					new SpriteSheet("mojo", img), 0, 0, 1, 256, 256, 256, 256, 256, 256)), 0)))));
-			}
-			else {
-				child->SetShape(spt<Image>(new Image(img2)));
-			}
-
-
-			float scale = child->GetTransform().scale.x;
-			child->GetTransform().rotationOrigin = ofVec2f((CogGetScreenWidth() / 2 - child->GetTransform().absPos.x) / scale,
-				(CogGetScreenHeight() / 2 - child->GetTransform().absPos.y) / scale);
-
-			RotateAnim* anim = new RotateAnim(0, 360, 0.8f, false);
-			rotateAnimId = anim->GetId();
-			child->AddBehavior(anim);
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 50, rand2 * 100), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, rand2 * 12), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 80, -rand2 * 5), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 40, rand2 * 80), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(rand1 * 30, -rand2 * 60), 0.1f, true));
-			child->AddBehavior(new TranslateAnim(ofVec3f(0, 0, 0), ofVec3f(-rand1 * 20, -rand2 * 2), 0.1f, true));
-			if (i % 2 == 0) child->AddBehavior(new HitEvent(0, false));
-			if (i % 50 == 0) child->SetGroup(12345);
-			root->AddChild(child);
-		}
-
-		WriteTime("INIT");
-
-		ofLogNotice("test") << "zapisuju ze je vsechno OK";
-
-		root->AddBehavior(new Collider(12345));
-		//root->AddBehavior(new TestingBehavior());
-		duk_context *ctx = duk_create_heap_default();
-		duk_push_global_object(ctx);
-		duk_push_c_function(ctx, OnTestAnimFinished, DUK_VARARGS);
-		duk_put_prop_string(ctx, -2 /*idx:global*/, "OnTestAnimFinished");
-		duk_pop(ctx);
-
-
-		JavaScriptBehavior* jsbeh = new JavaScriptBehavior(ctx);
-		root->AddBehavior(jsbeh);
-
-
-		root->SubmitChanges(true);
-
-		WriteTime("SUBMIT CHANGES");
-
-		ofLogNotice("test") << "spoustim barvicky";
-		return root;
-	}
-};
-
-class TestingApp : public CogApp {
-
-	TestingFactory* fact;
-
-	void InitComponents() {
-		fact = new TestingFactory();
-		COGEngine.entityStorage->RegisterComponent(fact);
-	}
-
-	void InitEngine() {
-		spt<ofxXmlSettings> config;
-
-		COGEngine.Init();
-		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
-	}
-};
 
 class XmlTestingApp : public CogApp {
 
@@ -261,6 +168,7 @@ class XmlTestingApp : public CogApp {
 	void InitComponents() {
 
 	}
+
 
 	void InitEngine() {
 		ofxXmlSettings* xml = new ofxXmlSettings();
@@ -272,10 +180,9 @@ class XmlTestingApp : public CogApp {
 		xmlPtr->popAll();
 		xmlPtr->pushTag("app_config");
 		xmlPtr->pushTag("scenes");
-		xmlPtr->pushTag("scene", 0);
 
-		auto mgr = GETCOMPONENT(NodeContext);
-		mgr->LoadSceneFromXml(xmlPtr);
+		auto mgr = GETCOMPONENT(SceneContext);
+		mgr->LoadScenesFromXml(xmlPtr);
 	}
 };
 
@@ -287,6 +194,7 @@ class TestingBehavior : public Behavior {
 public:
 
 	TestingBehavior() {
+
 
 	}
 

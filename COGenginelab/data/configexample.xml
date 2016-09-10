@@ -36,7 +36,7 @@
  
 
   <!-- collection of scenes -->
-  <scenes>
+  <scenes initial="main_menu">
 
     <scene name="main_menu">
 		  <!-- scene settings overrides default settings -->
@@ -44,119 +44,25 @@
         <setting name="transform">
           <!-- grid sizing -->
           <item key="grid_width" value="100" />
-          <item key="grid_height" value="53" />
+          <item key="grid_height" value="50" />
         </setting>
       </scene_settings>
-	
 
-      <node type="background" img="blue_background.png" />
-      <!-- blue background-->
-
-      <node name="desk_board" img="desk_board.png">
-        <!-- percentage positioning and sizing, anchor at center (default), 90% of screen width-->
-        <transform pos_x="10" pos_y="4" z_index="2" ptype="grid" anchor="0" width="80" stype="grid" />
-
-        <!-- desk left and desk right will be behind the board, so posZ is set lower -->
-        <node name="desk_left" img="desk.png">
-          <!-- slightly left of the left corner of the board -->
-          <transform pos_x="8" pos_y="2" z_index="1" ptype="grid" anchor="0" stype="loc" />
-        </node>
-
-        <node name="desk_right" img="desk.png">
-          <!-- slightly right of the right corner of the board, image will be inverted horizontally -->
-          <transform pos_x="92" pos_y="2" z_index="1" ptype="grid" anchor="0" width="-1"  stype="loc" />
-        </node>
-
-        <node name="logo" img="hydroq.png">
-          <!-- horizontal center, 30% vertical, anchor at center, absolute percentage calculation -->
-          <transform pos_x="50" pos_y="12" ptype="grid" anchor="0.5" stype="loc" />
-        </node>
-
-        <!-- buttons -->
-        <node name="continue_but" img="button_default.png" img_click="button_default_click.png">
-          <transform pos_x="50" pos_y="23" ptype="grid" anchor="0.5"  stype="loc"/>
-
-          <node name="continue_but_text">
-            <text font="MotionControl-Bold.otf" size="62" color="0xFFFFFF">Continue</text>
-            <transform pos="0.5" anchor="0.5" ptype="per" size="1" stype="loc"  />
-          </node>
-        </node>
-
-        <node name="sgame_but" img="button_default.png" img_click="button_default_click.png">
-          <transform pos_x="50" pos_y="35" ptype="grid" anchor="0.5" stype="loc"/>
-
-          <node name="sgame_but_text">
-            <text font="MotionControl-Bold.otf" size="62" color="0xFFFFFF">Single game</text>
-            <transform pos="0.5" anchor="0.5" ptype="per" size="1" stype="loc" />
-          </node>
+      <node name="desk_board" img="images/rect_red.jpg">
+        <transform pos_x="0" pos_y="0" ptype="per" size="1" anchor="0" stype="abs" />
+		
+	  <node name="desk_board" img="images/rect_blue.jpg">
+        <transform pos_x="1" pos_y="1" ptype="per" size="2" anchor="0" stype="abs" />
+		
+	    <node name="desk_board" img="images/rect_green.jpg">
+           <transform pos_x="1" pos_y="1" ptype="per" size="4" anchor="0" stype="abs" />
         </node>
       </node>
-    </scene>
-
-    <scene name="game">
-	   <scene_settings>
-        <setting name="transform">
-          <!-- grid sizing -->
-          <item key="grid_width" value="100" />
-          <item key="grid_height" value="53" />
-        </setting>
-      </scene_settings>
-	
-	<!-- parent must have background with the same DPI as rest of images -->
-	<node name="parent" img="blue_background.png" >
-	  <transform pos="0" anchor="0" size="1" stype="per" />
 	  
-      <node name="leftpanel" img="game/gm_leftpanel.png">
-        <transform pos="0" ptype="grid" stype="loc" />
-
-        <node name="playertext">
-          <transform pos_x="1" pos_y="2" ptype="grid" stype="loc" />
-        </node>
-
-        <node name="mapboard" img="game/gm_mapboard.png">
-          <transform pos_x="1" pos_y="4" ptype="grid" stype="loc" />
-        </node>
-
-        <node name="flashicon" img="game/gm_flashicon.png">
-          <transform pos_x="14" pos_y="4"  ptype="grid" stype="loc" />
-        </node>
-
-        <node name="electricity" img="game/gm_electricity.png">
-          <transform pos_x="14" pos_y="6" ptype="grid" stype="loc" />
-        </node>
-
-        <node name="counters">
-          <transform pos_x="1" pos_y="20" ptype="grid" stype="loc" />
-        </node>
       </node>
-
-      <node name="toppanel" img="game/gm_toppanel.png">
-        <transform pos_x="40" pos_y="0"  ptype="grid" stype="loc" />
-
-        <node name="redicon" img="game/gm_redicon.png">
-          <transform pos_x="43" pos_y="1" anchor="0.5"  stype="loc" ptype="grid" />
-        </node>
-        <node name="blueicon" img="game/gm_blueicon.png">
-          <transform pos_x="57" pos_y="1" anchor="0.5" stype="loc" ptype="grid" />
-        </node>
-        <node name="scorebar" img="game/gm_scorebar.png">
-          <transform pos_x="45" pos_y="0.5"  stype="loc" ptype="grid" />
-        </node>
-      </node>
-
-      <node name="rightpanel" img="game/gm_rightpanel.png">
-        <transform pos_x="75" pos_y="10" ptype="grid" stype="loc" />
-      </node>
-
-      <node name="menuicon" img="game/gm_menuicon.png">
-        <transform pos_x="95" pos_y="0" ptype="grid" stype="loc" />
-      </node>
-
-      <!-- floating scene -->
-      <node name="gameboard" type="float">
-
-      </node>
-	</node>
+	  
     </scene>
+
+	
   </scenes>
 </app_config>
