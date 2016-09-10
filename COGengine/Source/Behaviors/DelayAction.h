@@ -10,6 +10,7 @@ namespace Cog {
 	* Behavior that sends message with delay to specific behavior
 	*/
 	class DelayAction : public Behavior {
+		OBJECT_PROTOTYPE(DelayAction)
 	private:
 		// number of milliseconds for delay
 		int millis;

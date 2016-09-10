@@ -3,7 +3,6 @@
 #include "ofxCogMain.h"
 #include "Flags.h"
 #include "Msg.h"
-#include "Utils.h"
 #include "Facade.h"
 
 
@@ -16,6 +15,7 @@ namespace Cog {
 	*
 	*/
 	class Behavior {
+		OBJECT_VIRTUAL()
 
 	protected:
 		// identifier incremental counter

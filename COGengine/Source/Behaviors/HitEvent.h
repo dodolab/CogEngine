@@ -12,6 +12,7 @@ namespace Cog {
 * Behavior for hit testing
 */
 class HitEvent : public Behavior{
+	OBJECT_PROTOTYPE(HitEvent)
 protected:
 	// if true, device will vibrate when object is hit
 	bool vibrate;

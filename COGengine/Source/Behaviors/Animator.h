@@ -274,6 +274,7 @@ namespace Cog {
 	* Behavior for common animations
 	*/
 	class Animator : public Behavior {
+		OBJECT_PROTOTYPE(Animator)
 	private:
 		// animation root
 		spt<Anim> root;

@@ -20,7 +20,7 @@ namespace Cog {
 	*/
 	class Factory : public Component {
 
-		COMPONENT(Factory)
+		OBJECT(Factory)
 
 	public:
 

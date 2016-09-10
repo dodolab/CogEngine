@@ -7,17 +7,15 @@ namespace Cog {
 
 
 #include "ResourceCache.h"
-#include "NodeStorage.h"
 #include "Logger.h"
-#include "Utils.h"
 #include "Node.h"
 #include "Factory.h"
-#include "NodeStorage.h"
+#include "NodeContext.h"
 #include "Tween.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "Environment.h"
-#include "ComponentStorage.h"
+#include "EntityStorage.h"
 
 namespace Cog {
 
@@ -37,17 +35,17 @@ namespace Cog {
 
 	public:
 		// component storage
-		ComponentStorage* componentStorage = nullptr;
+		EntityStorage* entityStorage = nullptr;
 
 		// main components that are simply accessible from this object
 		Environment* environment = nullptr;
 		ResourceCache* resourceCache = nullptr;
 		Logger* logger = nullptr;
 		Renderer* renderer = nullptr;
-		NodeStorage* nodeStorage = nullptr;
+		NodeContext* nodeStorage = nullptr;
 		
 		Engine() {
-			componentStorage = new ComponentStorage();
+			entityStorage = new EntityStorage();
 		}
 
 		~Engine() {
@@ -92,6 +90,5 @@ namespace Cog {
 		}
 	};
 
-#define GETCOMPONENT(className) COGEngine.componentStorage->GetComponent<className>(#className)
 
 }// namespace

@@ -11,7 +11,7 @@ namespace Cog {
 	*/
 	class Renderer : public  Component {
 
-		COMPONENT(Renderer)
+		OBJECT(Renderer)
 
 	protected:
 		map<int, vector<Node*>> zIndexes;

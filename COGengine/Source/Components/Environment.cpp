@@ -1,6 +1,6 @@
 #include "Environment.h"
 #include "InputAct.h"
-#include "Engine.h"
+#include "CogEngine.h"
 #include "Utils.h"
 
 namespace Cog {

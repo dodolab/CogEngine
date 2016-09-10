@@ -13,6 +13,7 @@ namespace Cog {
 	* Behavior for scene tweening
 	*/
 	class Tween : public Behavior {
+		
 	protected:
 		// scene that will be tweened out
 		Node* tweenOut;
@@ -24,6 +25,10 @@ namespace Cog {
 		float actual;
 
 	public:
+
+		Tween() {
+
+		}
 
 		/**
 		* Creates a new behavior for tweening animation Tween scenes
@@ -40,6 +45,7 @@ namespace Cog {
 	* Behavior for slide tweening
 	*/
 	class SlideTween : public Tween {
+		OBJECT_PROTOTYPE(SlideTween)
 	private:
 		// tween direction
 		TweenDirection direction;

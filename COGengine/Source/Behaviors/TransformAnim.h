@@ -9,7 +9,7 @@ namespace Cog {
 	* Behavior for common transformation animation
 	*/
 	class TransformAnim : public Behavior {
-
+		OBJECT_PROTOTYPE(TransformAnim)
 	private:
 		// duration in ms
 		float duration;

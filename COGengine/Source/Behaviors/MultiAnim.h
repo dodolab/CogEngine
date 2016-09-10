@@ -9,19 +9,13 @@ namespace Cog {
 	* Behavior for animation sequence; can store a collection of animations
 	*/
 	class MultiAnim : public Behavior {
-
+		OBJECT_PROTOTYPE(MultiAnim)
 	private:
-		Behavior* actual;
+		Behavior* actual = nullptr;
 		vector<Behavior*> animations;
 
 	public:
 
-		/**
-		* Creates a new behavior for animation sequence
-		*/
-		MultiAnim() {
-			actual = nullptr;
-		}
 
 		void AddAnimation(Behavior* anim) {
 			animations.push_back(anim);

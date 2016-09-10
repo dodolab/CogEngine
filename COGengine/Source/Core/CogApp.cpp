@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CogApp.h"
-#include "Engine.h"
+#include "CogEngine.h"
 
 #define APP_SPEED 60
 
@@ -9,7 +9,7 @@ namespace Cog {
 
 	void CogApp::InitComponents() {
 		Factory* fact = new Factory();
-		COGEngine.componentStorage->RegisterComponent(fact);
+		COGEngine.entityStorage->RegisterComponent(fact);
 		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
 	}
 
@@ -120,15 +120,15 @@ void CogApp::cancelPressed(){
 }
 
 void CogApp::touchDown(int x, int y, int id){
-	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, true);
+	COGEngine.environment->OnMultiTouchButton(x, y, id, true);
 }
 
 void CogApp::touchMoved(int x, int y, int id){
-	COGEngine.environmentCtrl->OnMultiTouchMotion(x, y, id);
+	COGEngine.environment->OnMultiTouchMotion(x, y, id);
 }
 
 void CogApp::touchUp(int x, int y, int id){
-	COGEngine.environmentCtrl->OnMultiTouchButton(x, y, id, false);
+	COGEngine.environment->OnMultiTouchButton(x, y, id, false);
 }
 
 void CogApp::touchDoubleTap(int x, int y, int id){

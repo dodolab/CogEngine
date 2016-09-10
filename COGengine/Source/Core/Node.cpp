@@ -1,7 +1,7 @@
 #include "Node.h"
 #include "Behavior.h"
 #include "ResourceCache.h"
-#include "Engine.h"
+#include "CogEngine.h"
 
 namespace Cog {
 

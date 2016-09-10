@@ -2,7 +2,6 @@
 #include <string>
 #include "ofImage.h"
 #include "Facade.h"
-#include "Utils.h"
 #include "SoundFile.h"
 
 namespace Cog {

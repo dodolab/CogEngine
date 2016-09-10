@@ -9,19 +9,13 @@
 #include "ofxAndroidVibrator.h"
 #endif
 
+#include "ofUtils.h"
 #include "ofBaseTypes.h"
 #include <map>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "Enums.h"
-#include "ofxSmartPointer.h"
-#include "ofSoundPlayer.h"
-#include "ofMain.h"
-#include "ofxSQLite.h"
-#include "ofxXmlSettings.h"
-#include "Error.h"
 #include <functional>
 #include <list>
 #include <stdexcept>
@@ -30,9 +24,16 @@
 #include <memory>    
 #include <cmath>
 #include <functional>
+#include "Utils.h"
+#include "Enums.h"
+#include "ofxSmartPointer.h"
+#include "ofSoundPlayer.h"
+#include "ofMain.h"
+#include "ofxSQLite.h"
+#include "ofxXmlSettings.h"
+#include "Error.h"
 #include "ofImage.h"
 #include "ofTrueTypeFont.h"
-#include "ofUtils.h"
 #include "CollageTexture.h"
 #include "SpriteTexture.h"
 #include "SQLiteEntity.h"

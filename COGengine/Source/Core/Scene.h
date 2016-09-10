@@ -4,7 +4,7 @@
 #include "ResourceCache.h"
 #include "Node.h"
 #include "Component.h"
-#include "Engine.h"
+#include "CogEngine.h"
 #include "NodeBuilder.h"
 
 namespace Cog
@@ -49,9 +49,15 @@ namespace Cog
 			if (xml->tagExists("scene_settings")) {
 				xml->pushTag("scene_settings");
 
-				settings.MergeSettings(cache->LoadSettingsFromXml(xml));
+				auto map = cache->LoadSettingsFromXml(xml);
+				settings.MergeSettings(map);
 
 				xml->popTag();
+			}
+
+			if (xml->tagExists("sceneanim")) {
+				// parse animation
+
 			}
 
 			int nodes = xml->getNumTags("node");

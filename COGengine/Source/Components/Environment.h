@@ -11,7 +11,7 @@ namespace Cog {
 	*/
 	class Environment : public  Component {
 
-		COMPONENT(Environment)
+		OBJECT(Environment)
 
 	private:
 

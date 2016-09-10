@@ -10,6 +10,7 @@ namespace Cog {
 	* Behavior for simple movement
 	*/
 	class Move : public Behavior {
+		OBJECT_PROTOTYPE(Move)
 	protected:
 		float speed;
 	public:
@@ -33,8 +34,8 @@ namespace Cog {
 
 			ofVec3f velocity = owner->GetAttr<ofVec3f>(ATTR_VELOCITY);
 
-			transform.localPos.x += TranslateSpeed(speed)*velocity.x * delta;
-			transform.localPos.y += TranslateSpeed(speed)*velocity.y * delta;
+			transform.localPos.x += CogTranslateSpeed(speed)*velocity.x * delta;
+			transform.localPos.y += CogTranslateSpeed(speed)*velocity.y * delta;
 		}
 
 	};

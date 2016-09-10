@@ -4,10 +4,20 @@ ifneq ($(wildcard config.make),)
 	include config.make
 endif
 
-# make sure the the OF_ROOT location is defined
+ifdef OF_ANDROID
+   # make sure the the OF_ROOT location is defined
 ifndef OF_ROOT
     OF_ROOT=F:/OF/openframeworks/Android
 endif
+endif
+
+ifdef OF_WINDOWS
+   # make sure the the OF_ROOT location is defined
+ifndef OF_ROOT
+    OF_ROOT=/F/OF/openframeworks/msys
+endif
+endif
+
 
 # call the project makefile!
 include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk

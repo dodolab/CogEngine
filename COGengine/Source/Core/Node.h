@@ -5,7 +5,6 @@
 #include "Behavior.h"
 #include "Msg.h"
 #include "Transform.h"
-#include "Utils.h"
 #include "Facade.h"
 #include "Shape.h"
 
@@ -526,7 +525,7 @@ namespace Cog {
 		void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
 		// app storage can access private members
-		friend class NodeStorage;
+		friend class NodeContext;
 
 	protected:
 		/*
