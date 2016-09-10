@@ -75,72 +75,81 @@ namespace Cog {
 
 	// =================== MSTORAGE ========================
 
-	void CogRegisterListener(StringHash action, Behavior* beh) {
-		COGEngine.nodeStorage->RegisterListener(action, beh);
+	void CogRegisterListener(StringHash action, MsgListener* listener) {
+		COGEngine.sceneContext->RegisterListener(action, listener);
 	}
 
-	void CogUnregisterListener(StringHash action, Behavior* beh) {
-		COGEngine.nodeStorage->UnregisterListener(action, beh);
+	void CogUnregisterListener(StringHash action, MsgListener* listener) {
+		COGEngine.sceneContext->UnregisterListener(action, listener);
 	}
 
 	void CogSendMessage(Msg& msg, Node* actualNode) {
 		MLOGDEBUG("CORE", "Message %s:%s:%d", ofToString(msg.GetAction()).c_str(), actualNode->GetTag().c_str(), actualNode->GetSubType());
-		COGEngine.nodeStorage->SendMessage(msg, actualNode);
+		COGEngine.sceneContext->SendMessage(msg, actualNode);
 	}
 
-	void CogSendDirectMessageToBehavior(Msg& msg, int targetId) {
-		COGEngine.nodeStorage->SendDirectMessageToBehavior(msg, targetId);
+	void CogSendDirectMessageToListener(Msg& msg, int targetId) {
+		COGEngine.sceneContext->SendDirectMessageToListener(msg, targetId);
 	}
 
+	void CogSendDirectMessage(StringHash action, int subaction, MsgEvent* data, Node* source, int listenerId) {
+		Msg msg(BubblingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+		CogSendMessage(msg, source);
+	}
+
+	void CogSendDirectMessageToListener(StringHash action, int subaction, MsgEvent* data, Node* source, int targetId, int listenerId) {
+		Msg msg(BubblingType(Scope::DIRECT_NO_TRAVERSE, true, true), action, subaction, listenerId, source, data);
+		CogSendDirectMessageToListener(msg, targetId);
+	}
 
 	Node* CogFindNodeById(int id) {
-		return COGEngine.nodeStorage->FindNodeById(id);
+		return COGEngine.sceneContext->FindNodeById(id);
 	}
 
 	int CogGetNodesCountByTag(string tag) {
-		return COGEngine.nodeStorage->GetNodesCountByTag(tag);
+		return COGEngine.sceneContext->GetNodesCountByTag(tag);
 	}
 
 	Node* CogFindNodeByTag(string tag) {
-		return COGEngine.nodeStorage->FindNodeByTag(tag);
+		return COGEngine.sceneContext->FindNodeByTag(tag);
 	}
 
 	vector<Node*> CogFindNodesByTag(char* tag) {
-		return COGEngine.nodeStorage->FindNodesByTag(tag);
+		return COGEngine.sceneContext->FindNodesByTag(tag);
 	}
 
 	int CogGetNodesCountBySubType(int subtype) {
-		return COGEngine.nodeStorage->GetNodesCountBySubType(subtype);
+		return COGEngine.sceneContext->GetNodesCountBySubType(subtype);
 	}
 
 	Node* CogFindNodeBySubType(int subtype) {
-		return COGEngine.nodeStorage->FindNodeBySubType(subtype);
+		return COGEngine.sceneContext->FindNodeBySubType(subtype);
 	}
 
 	vector<Node*> CogFindNodesBySubType(int subtype) {
-		return COGEngine.nodeStorage->FindNodesBySubType(subtype);
+		return COGEngine.sceneContext->FindNodesBySubType(subtype);
 	}
 
 	bool CogAddNode(Node* node) {
 		MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
-		return COGEngine.nodeStorage->AddNode(node);
+		return COGEngine.sceneContext->AddNode(node);
 	}
 
 	void CogRemoveNode(Node* node) {
 		MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
-		COGEngine.nodeStorage->RemoveNode(node);
+		COGEngine.sceneContext->RemoveNode(node);
 	}
 
 	bool CogAddBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		return COGEngine.nodeStorage->AddBehavior(beh);
+		return COGEngine.sceneContext->AddBehavior(beh);
 	}
 
 	void CogRemoveBehavior(Behavior* beh) {
 		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
 		MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		COGEngine.nodeStorage->RemoveBehavior(beh);
+		COGEngine.sceneContext->RemoveBehavior(beh);
 	}
 
 	// =================== MLOGGER =========================

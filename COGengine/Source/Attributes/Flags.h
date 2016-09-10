@@ -1,7 +1,9 @@
 #pragma once
 
-#include "ofxCogMain.h"
 #include "StringHash.h"
+#include <map>
+#include <vector>
+#include <stdarg.h>  
 
 namespace Cog {
 

@@ -4,6 +4,7 @@
 #include "SoundFile.h"
 #include "Anim.h"
 #include "SpriteSheet.h"
+#include "Component.h"
 
 namespace Cog {
 

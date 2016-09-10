@@ -2,6 +2,7 @@
 
 #include "Behavior.h"
 #include "Node.h"
+#include "Component.h"
 
 namespace Cog {
 

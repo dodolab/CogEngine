@@ -171,9 +171,6 @@
     <ClInclude Include="Source\Behaviors\RotateAnim.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\SceneManager.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\TransformAnim.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -184,9 +181,6 @@
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Environment.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Components\Factory.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Renderer.h">
@@ -211,9 +205,6 @@
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Node.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Tests.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Utils.h">
@@ -246,14 +237,23 @@
     <ClInclude Include="Source\Core\CogEngine.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\NodeContext.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\EntityStorage.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Tests\BaseTests.h">
       <Filter>Source\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Events.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\SceneContext.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\SceneManager.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\MsgListener.h">
+      <Filter>Source\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,9 +314,6 @@
     <ClCompile Include="Source\Components\Environment.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Factory.cpp">
-      <Filter>Source\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Behavior.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
@@ -347,10 +344,19 @@
     <ClCompile Include="Source\Core\CogEngine.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\NodeContext.cpp">
+    <ClCompile Include="Source\Core\EntityStorage.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\SceneContext.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\EntityStorage.cpp">
+    <ClCompile Include="Source\Core\MsgListener.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\NodeBuilder.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Scene.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Facade.h"
 #include "Shape.h"
+#include "Events.h"
 
 namespace Cog {
 
@@ -419,6 +420,8 @@ namespace Cog {
 		*/
 		void SetState(unsigned state) {
 			GetStates().SetState(state);
+
+			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new AttrChangeEvent(StateChange::SET, state), this, -1);
 		}
 
 		/**
@@ -426,6 +429,8 @@ namespace Cog {
 		*/
 		void ResetState(unsigned state) {
 			GetStates().ResetState(state);
+
+			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new AttrChangeEvent(StateChange::RESET, state), this, -1);
 		}
 
 		/**
@@ -433,6 +438,8 @@ namespace Cog {
 		*/
 		void SwitchState(unsigned state1, unsigned state2) {
 			GetStates().SwitchState(state1, state2);
+			// send message
+			CogSendDirectMessage(ACT_STATE_CHANGED, 0, new AttrChangeEvent(StateChange::SWITCH, state1, state2), this, -1);
 		}
 
 		/**
@@ -525,7 +532,7 @@ namespace Cog {
 		void GetInfo(bool includeChildren, bool includeAttributes, std::ostringstream& ss, int level);
 
 		// app storage can access private members
-		friend class NodeContext;
+		friend class SceneContext;
 
 	protected:
 		/*

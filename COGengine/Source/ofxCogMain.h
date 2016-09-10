@@ -38,7 +38,6 @@
 #include "SpriteTexture.h"
 #include "SQLiteEntity.h"
 #include "SpriteSheetRenderer.h"
-#include "Component.h"
 
 #pragma warning(pop)
 

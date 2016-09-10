@@ -8,9 +8,7 @@
 namespace Cog {
 
 	void CogApp::InitComponents() {
-		Factory* fact = new Factory();
-		COGEngine.entityStorage->RegisterComponent(fact);
-		COGEngine.nodeStorage->SetRootObject(fact->CreateRoot());
+
 	}
 
 	void CogApp::InitEngine() {

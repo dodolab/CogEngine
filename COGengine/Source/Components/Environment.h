@@ -3,6 +3,7 @@
 #include "ofxCogMain.h"
 #include "InputAct.h"
 #include "SoundFile.h"
+#include "Component.h"
 
 namespace Cog {
 

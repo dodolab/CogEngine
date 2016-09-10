@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ofxCogMain.h"
+#include <string>
+using namespace std;
 
 namespace Cog
 {

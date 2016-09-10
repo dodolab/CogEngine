@@ -2,31 +2,39 @@
 
 #include "Node.h"
 #include "Behavior.h"
+#include "Scene.h"
+#include "Component.h"
+#include "Tween.h"
 
 namespace Cog {
 
 	/**
 	* Node context
 	*/
-	class NodeContext : public Component{
+	class SceneContext : public Component{
 	
-		OBJECT(NodeContext)
+		OBJECT(SceneContext)
 	
 	private:
-		// behavior listeners
-		map<StringHash, vector<Behavior*>> behListeners;
-		// behavior ids and their registered actions
-		map<int, vector<StringHash>> behListenerActions;
+		// message listeners
+		map<StringHash, vector<MsgListener*>> msgListeners;
+		// listeners ids and their registered actions
+		map<int, vector<StringHash>> msgListenerActions;
 		// list of all nodes
 		vector<Node*> allNodes;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
+		// actual scene
+		Scene* actualScene = nullptr;
+		// list of all scenes
+		vector<Scene*> scenes = vector<Scene*>();
+
 		// root object, should be created only once
-		Node* rootObject;
+		Node* rootObject = nullptr;
 
 	public:
 
-		void LoadSceneFromXml(spt<ofxXml> xml);
+		void Init();
 
 		/**
 		* Gets the root object
@@ -36,42 +44,61 @@ namespace Cog {
 		}
 
 		/**
-		* Sets the root object
+		* Gets actual scene
 		*/
-		void SetRootObject(Node* root) {
-			this->rootObject = root;
+		Scene* GetActualScene() {
+			return actualScene;
+		}
+
+		/**
+		* Adds a new scene
+		* @param setAsActual if true, scene will be set as the actual scene
+		*/
+		void AddScene(Scene* scene, bool setAsActual) {
+
+			rootObject->AddChild(scene->GetSceneNode());
+
+			if (setAsActual) {
+				this->actualScene = scene;
+				scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
+			}
+			else {
+				scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
+			}
+
+			rootObject->SubmitChanges(true);
 		}
 
 		/**
 		* Registers behavior listener for selected action
 		* @param action action to register
-		* @param beh beh that will be called when selected action is invoked
+		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterListener(StringHash action, Behavior* beh) {
-			if (behListeners.find(action) == behListeners.end()) {
-				behListeners[action] = vector <Behavior*>();
+		void RegisterListener(StringHash action, MsgListener* listener) {
+			if (msgListeners.find(action) == msgListeners.end()) {
+				msgListeners[action] = vector <MsgListener*>();
 			}
 
-			vector<Behavior*>& listeners = behListeners[action];
-			listeners.push_back(beh);
+			vector<MsgListener*>& listeners = msgListeners[action];
+			listeners.push_back(listener);
 
-			if (behListenerActions.find(beh->GetId()) == behListenerActions.end()) {
-				behListenerActions[beh->GetId()] = vector<StringHash>();
+			if (msgListenerActions.find(listener->GetId()) == msgListenerActions.end()) {
+				msgListenerActions[listener->GetId()] = vector<StringHash>();
 			}
 
-			behListenerActions[beh->GetId()].push_back(action);
+			msgListenerActions[listener->GetId()].push_back(action);
 		}
 
 		/**
-		* Unregisters behavior listener for selected action
-		* @return true if behavior has been found and erased
+		* Unregisters message listener for selected action
+		* @return true if listener has been found and erased
 		*/
-		bool UnregisterListener(StringHash action, Behavior* beh) {
-			if (behListeners.find(action) != behListeners.end()) {
-				vector<Behavior*>& listeners = behListeners[action];
+		bool UnregisterListener(StringHash action, MsgListener* listener) {
+			if (msgListeners.find(action) != msgListeners.end()) {
+				vector<MsgListener*>& listeners = msgListeners[action];
 
 				for (auto it = listeners.begin(); it != listeners.end(); ++it) {
-					if ((*it)->GetId() == beh->GetId()) {
+					if ((*it)->GetId() == listener->GetId()) {
 						listeners.erase(it);
 						return true;
 					}
@@ -81,13 +108,13 @@ namespace Cog {
 		}
 
 		/**
-		* Unregisters all actions that are bound with selected behavior
-		* @param beh behavior to unregister
+		* Unregisters all actions that are bound with selected listener
+		* @param beh listener to unregister
 		*/
-		void UnregisterListener(Behavior* beh) {
-			auto found = behListenerActions.find(beh->GetId());
+		void UnregisterListener(MsgListener* beh) {
+			auto found = msgListenerActions.find(beh->GetId());
 
-			if (found != behListenerActions.end()) {
+			if (found != msgListenerActions.end()) {
 
 				vector<StringHash> actions = found->second;
 
@@ -97,7 +124,7 @@ namespace Cog {
 				}
 
 				// remove from the second collection
-				behListenerActions.erase(beh->GetId());
+				msgListenerActions.erase(beh->GetId());
 			}
 		}
 
@@ -109,11 +136,11 @@ namespace Cog {
 		void SendMessage(Msg& msg, Node* actualNode);
 
 		/**
-		* Sends message to specific behavior
+		* Sends message to specific listener
 		* @param msg message  to send
-		* @param targetId id of target behavior
+		* @param targetId id of target listener
 		*/
-		void SendDirectMessageToBehavior(Msg& msg, int targetId);
+		void SendDirectMessageToListener(Msg& msg, int targetId);
 
 		/**
 		* Sends message to specific node
@@ -126,16 +153,16 @@ namespace Cog {
 		* Returns true, if there is at least one behavior listener for selected action
 		*/
 		bool IsRegisteredListener(StringHash action) const {
-			return behListeners.find(action) != behListeners.end();
+			return msgListeners.find(action) != msgListeners.end();
 		}
 
 		/**
-		* Returns true, if behavior is listening for selected action
+		* Returns true, if listener is listening for selected action
 		*/
-		bool IsRegisteredListener(int action, Behavior* beh) {
-			if (behListenerActions.find(beh->GetId()) == behListenerActions.end()) return false;
+		bool IsRegisteredListener(int action, MsgListener* beh) {
+			if (msgListenerActions.find(beh->GetId()) == msgListenerActions.end()) return false;
 
-			vector<StringHash>& actions = behListenerActions[beh->GetId()];
+			vector<StringHash>& actions = msgListenerActions[beh->GetId()];
 
 			return (std::find(actions.begin(), actions.end(), action) != actions.end());
 		}
@@ -149,6 +176,11 @@ namespace Cog {
 		* Finds behavior by id
 		*/
 		Behavior* FindBehaviorById(int id) const;
+
+		/**
+		* Finds scene by its name
+		*/
+		Scene* FindSceneByName(string name) const;
 
 		/**
 		* Gets number of nodes with specific tag
@@ -224,6 +256,13 @@ namespace Cog {
 
 			UnregisterListener(beh);
 		}
+
+		void SwitchToScene(Scene* scene, TweenDirection tweenDir);
+
+		/**
+		* Loads scene from xml
+		*/
+		void LoadScenesFromXml(spt<ofxXml> xml);
 
 	private:
 

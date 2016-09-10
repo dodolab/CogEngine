@@ -15,14 +15,16 @@ namespace Cog {
 	class Tween : public Behavior {
 		
 	protected:
-		// scene that will be tweened out
-		Node* tweenOut = nullptr;
 		// scene that will be tweened in
-		Node* tweenIn = nullptr;
+		Node* to= nullptr;
+		// scene that will be tweened out
+		Node* from = nullptr;
 		// tweening speed (in display width per second)
 		float speed = 0;
 		// actual tween position
 		float actual = 0;
+		// fade function
+		FadeFunction fadeFunction = nullptr;
 
 	public:
 
@@ -32,11 +34,11 @@ namespace Cog {
 
 		/**
 		* Creates a new behavior for tweening animation Tween scenes
-		* @param tweenIn scene that will be tweened in
-		* @param tweenOut scene that will be tweened out
+		* @param from scene that will be tweened out
+		* @param to scene that will be tweened to
 		* @param speed tweening speed
 		*/
-		Tween(Node* tweenIn, Node* tweenOut, float speed) : tweenIn(tweenIn), tweenOut(tweenOut), speed(speed), actual(0) {
+		Tween(Node* from, Node* to, float speed) : from(from), to(to), speed(speed), actual(0) {
 
 		}
 	};
@@ -55,12 +57,16 @@ namespace Cog {
 		/**
 		* Creates a new behavior for slide tweening
 		* @param direction tween direction
-		* @param tweenIn scene that will be tweened in
-		* @param tweenOut scene that will be tweened out
+		* @param from scene that will be tweened out
+		* @param to scene that will be tweened inm
 		* @param speed tweening speed
 		*/
-		SlideTween(TweenDirection direction, Node* tweenIn, Node* tweenOut, float speed) : Tween(tweenIn, tweenOut, speed), direction(direction) {
+		SlideTween(TweenDirection direction, Node* from, Node* to, float speed) : Tween(from, to, speed), direction(direction) {
 
+		}
+
+		void SetFadeFunction(FadeFunction func) {
+			this->fadeFunction = func;
 		}
 
 
@@ -76,35 +82,39 @@ namespace Cog {
 				actual = 1;
 			}
 
-			// add sinus tweening
-			float actSinus = (float)sin(actual*PI / 2);
+			float fadeValue;
 
-			float widthActual = width*actSinus;
-			float heightActual = height*actSinus;
+			if (fadeFunction != nullptr) fadeValue = fadeFunction(actual);
+			else {
+				fadeValue = (float)sin(actual*PI / 2);
+			}
+
+			float widthActual = width*fadeValue;
+			float heightActual = height*fadeValue;
 
 			// change position according to the tweening direction
 			if (direction == TweenDirection::RIGHT) {
-				tweenOut->GetTransform().localPos.x = width / 2 + (widthActual);
-				tweenIn->GetTransform().localPos.x = -width / 2 + widthActual;
+				from->GetTransform().localPos.x = (widthActual);
+				to->GetTransform().localPos.x = -width  + widthActual;
 			}
 			else if (direction == TweenDirection::LEFT) {
-				tweenIn->GetTransform().localPos.x = width / 2 + (width - widthActual);
-				tweenOut->GetTransform().localPos.x = width / 2 - widthActual;
+				from->GetTransform().localPos.x = (- widthActual);
+				to->GetTransform().localPos.x = width  - widthActual;
 			}
 			else if (direction == TweenDirection::UP) {
-				tweenIn->GetTransform().localPos.x = width / 2;
-				tweenIn->GetTransform().localPos.y = height / 2 + (height - heightActual);
-				tweenOut->GetTransform().localPos.y = height / 2 - heightActual;
+				to->GetTransform().localPos.x = 0;
+				from->GetTransform().localPos.y = (float)((-heightActual));
+				to->GetTransform().localPos.y = (float)(height - heightActual);
 			}
 			else if (direction == TweenDirection::DOWN) {
-				tweenIn->GetTransform().localPos.x = (float)(width / 2);
-				tweenOut->GetTransform().localPos.y = (float)(height / 2 + (heightActual));
-				tweenIn->GetTransform().localPos.y = (float)(-height / 2 + heightActual);
+				to->GetTransform().localPos.x = (float)(0);
+				from->GetTransform().localPos.y = (float)((heightActual));
+				to->GetTransform().localPos.y = (float)(-height  + heightActual);
 			}
 
 			if (actual >= 1.0f) {
 				Finish();
-				SendMessageNoBubbling(ACT_TWEEN_ENDED, 0, nullptr, tweenIn);
+				SendMessageNoBubbling(ACT_TWEEN_ENDED, 0, nullptr, to);
 			}
 		}
 	};

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofxCogMain.h"
+#include "MsgListener.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -9,7 +11,7 @@ namespace Cog {
 	/**
 	* Common class for all components
 	*/
-	class Component {
+	class Component : public MsgListener {
 	private:
 		
 	public:

@@ -16,8 +16,20 @@ namespace Cog {
 	protected:
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> pressedImg = spt<ofImage>();
+		spt<ofImage> disabledImg = spt<ofImage>();
+		StringHash stateDisabled = StringHash(STATES_DISABLED);
 
 	public:
+
+		/**
+		* Creates a new switch-button behavior
+		* @param defaultImg default image
+		* @param pressedImg pressed image
+		*/
+		Button(spt<ofImage> defaultImg, spt<ofImage> pressedImg, spt<ofImage> disabledImg) :
+			defaultImg(defaultImg), pressedImg(pressedImg), disabledImg(disabledImg) {
+
+		}
 
 		/**
 		* Creates a new switch-button behavior
@@ -31,19 +43,27 @@ namespace Cog {
 
 		void Init() {
 			RegisterListening(ACT_OBJECT_HIT_STARTED, ACT_OBJECT_HIT_LOST, ACT_OBJECT_HIT_ENDED);
+
+			if (disabledImg && owner->HasState(stateDisabled)) {
+				owner->GetShape<spt<Image>>()->SetImage(disabledImg);
+			}
+			else {
+				owner->GetShape<spt<Image>>()->SetImage(defaultImg);
+			}
 		}
 
 		void OnMessage(Msg& msg) {
-			if (msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
+			if (!owner->HasState(stateDisabled) && msg.GetAction() == ACT_OBJECT_HIT_STARTED) {
 				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
 					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(pressedImg);
 				}
-			}
-
-			if (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST) {
-				if (msg.GetSourceObject()->GetId() == owner->GetId()) {
+			}else if (!owner->HasState(stateDisabled) && (msg.GetAction() == ACT_OBJECT_HIT_ENDED || msg.GetAction() == ACT_OBJECT_HIT_LOST)) {
+				if (msg.GetSourceObject()->GetId() == owner->GetId()) { 
 					msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(defaultImg);
 				}
+			}
+			else if (disabledImg && msg.GetSourceObject()->HasState(stateDisabled) && msg.GetAction() == ACT_STATE_CHANGED) {
+				msg.GetSourceObject()->GetShape<spt<Image>>()->SetImage(disabledImg);
 			}
 		}
 

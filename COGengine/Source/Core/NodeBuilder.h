@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ofxCogMain.h"
-#include "TransformMath.h";
 #include "Button.h"
 #include "HitEvent.h"
 #include "Node.h"
 #include "ResourceCache.h"
+#include "TransformMath.h"
 
 namespace Cog {
 
@@ -23,10 +23,13 @@ namespace Cog {
 			node->SetShape(spt<Image>(new Image(image)));
 		}
 
-		void AssignButton(Node* node, string defaultImg, string clickedImg) {
+		void AssignButton(Node* node, string defaultImg, string clickedImg, string disabledImg) {
+
+			spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogGet2DImage(disabledImg);
+
 			node->AddBehavior(new HitEvent(-1, false));
 			node->AddBehavior(new Button(CogGet2DImage(defaultImg),
-				CogGet2DImage(clickedImg)));
+				CogGet2DImage(clickedImg), disabledImgPtr));
 			node->SetState(StringHash(STATES_HITTABLE));
 		}
 
@@ -57,7 +60,9 @@ namespace Cog {
 			if (xml->attributeExists(":", "img_click")) {
 				// set image on click
 				string imgClick = xml->getAttribute(":", "img_click", "");
-				AssignButton(node, img, imgClick);
+				string imgDisabled = xml->getAttribute(":", "img_disabled", "");
+
+				AssignButton(node, img, imgClick, imgDisabled);
 			}
 
 			if (!type.empty()) {
@@ -91,6 +96,15 @@ namespace Cog {
 				}
 			}
 
+			if (xml->tagExists("state")) {
+				int states = xml->getNumTags("state");
+				
+				for (int i = 0; i < states; i++) {
+					string stateName = xml->getValue("state", "", i);
+					node->SetState(StringHash(stateName));
+				}
+			}
+
 			if (xml->tagExists("node")) {
 				int children = xml->getNumTags("node");
 
@@ -117,11 +131,7 @@ namespace Cog {
 			AssignText(node, font, size, color, value);
 		}
 
-		void LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
-			string name = xml->getAttribute(":", "name", "");
-			auto newBeh = COGEngine.entityStorage->GetBehaviorPrototype(name)->CreatePrototype();
-			node->AddBehavior(newBeh);
-		}
+		void LoadBehaviorFromXml(spt<ofxXml> xml, Node* node);
 
 	};
 

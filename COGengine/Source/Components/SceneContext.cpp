@@ -1,15 +1,15 @@
-#include "NodeContext.h"
+#include "SceneContext.h"
 #include "Scene.h"
+#include "CogEngine.h"
 
 namespace Cog {
 
-	void NodeContext::LoadSceneFromXml(spt<ofxXml> xml) {
-		Scene* sc = new Scene();
-		sc->LoadFromXml(xml);
-		this->SetRootObject(sc->GetSceneNode()); // todo
+	void SceneContext::Init() {
+		// create root object with default behaviors, states and attributes
+		this->rootObject = new Node(ObjType::ROOT, 0, "root");
 	}
 
-	void NodeContext::SendMessage(Msg& msg, Node* actualNode) {
+	void SceneContext::SendMessage(Msg& msg, Node* actualNode) {
 		// there is no such callback or behavior that listens to that type of message
 		if (!IsRegisteredListener(msg.GetAction())) return;
 
@@ -21,41 +21,62 @@ namespace Cog {
 
 		}
 		else SendBubblingMessage(msg, actualNode);
+
+		if (!msg.DataKept()) {
+			msg.DeleteData();
+		}
 	}
 
 
-	void NodeContext::SendDirectMessageToBehavior(Msg& msg, int targetId) {
+	void SceneContext::SendDirectMessageToListener(Msg& msg, int targetId) {
 		Behavior* beh = FindBehaviorById(targetId);
 
 		if (beh != nullptr) {
 			beh->OnMessage(msg);
 		}
+
+		if (!msg.DataKept()) {
+			msg.DeleteData();
+		}
 	}
 
-	void NodeContext::SendDirectMessageToNode(Msg& msg, int targetId) {
+	void SceneContext::SendDirectMessageToNode(Msg& msg, int targetId) {
 		Node* node = FindNodeById(targetId);
 
 		if (node != nullptr) {
 			SendBubblingMessage(msg, node);
 		}
+
+		if (!msg.DataKept()) {
+			msg.DeleteData();
+		}
 	}
 
 
-	Node* NodeContext::FindNodeById(int id) const {
+	Node* SceneContext::FindNodeById(int id) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	Behavior* NodeContext::FindBehaviorById(int id) const {
+	Behavior* SceneContext::FindBehaviorById(int id) const {
 		for (auto it = allBehaviors.begin(); it != allBehaviors.end(); ++it) {
 			if ((*it)->GetId() == id) return (*it);
 		}
 		return nullptr;
 	}
 
-	int NodeContext::GetNodesCountByTag(string tag) const {
+	Scene* SceneContext::FindSceneByName(string name) const {
+		for (auto it = scenes.begin(); it != scenes.end(); ++it) {
+			if ((*it)->GetName().compare(name) == 0) {
+				return (*it);
+			}
+		}
+		return nullptr;
+	}
+
+	int SceneContext::GetNodesCountByTag(string tag) const {
 		int counter = 0;
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) counter++;
@@ -63,14 +84,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* NodeContext::FindNodeByTag(string tag) const {
+	Node* SceneContext::FindNodeByTag(string tag) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetTag().compare(tag) == 0) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> NodeContext::FindNodesByTag(char* tag) const {
+	vector<Node*> SceneContext::FindNodesByTag(char* tag) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -79,7 +100,7 @@ namespace Cog {
 		return output;
 	}
 
-	int NodeContext::GetNodesCountBySubType(int subtype) const {
+	int SceneContext::GetNodesCountBySubType(int subtype) const {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -88,14 +109,14 @@ namespace Cog {
 		return counter;
 	}
 
-	Node* NodeContext::FindNodeBySubType(int subtype) const {
+	Node* SceneContext::FindNodeBySubType(int subtype) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			if ((*it)->GetSubType() == subtype) return (*it);
 		}
 		return nullptr;
 	}
 
-	vector<Node*> NodeContext::FindNodesBySubType(int subtype) const {
+	vector<Node*> SceneContext::FindNodesBySubType(int subtype) const {
 		vector<Node*> output;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
@@ -104,11 +125,45 @@ namespace Cog {
 		return output;
 	}
 
+	void SceneContext::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
+		auto manager = GETCOMPONENT(SceneManager);
 
-	void NodeContext::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
+		Node* from = actualScene->GetSceneNode();
+		Node* to = scene->GetSceneNode();
+		actualScene = scene;
+		manager->SwitchToScene(from, to, tweenDir);
+	}
+
+	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {
+
+		string initialScene = xml->getAttribute(":", "initial", "");
+
+		int scenesNum = xml->getNumTags("scene");
+
+		for (int i = 0; i < scenesNum; i++) {
+			xml->pushTag("scene", i);
+
+			Scene* sc = new Scene();
+			sc->LoadFromXml(xml);
+			this->scenes.push_back(sc);
+
+			if (sc->GetName().compare(initialScene) == 0) {
+				// set as initial
+				AddScene(sc, true);
+			}
+			else {
+				AddScene(sc, false);
+			}
+
+			xml->popTag();
+		}
+	}
+
+
+	void SceneContext::SendMessageToBehaviors(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetBehaviors().begin(); it != actualNode->GetBehaviors().end(); ++it) {
 			Behavior* beh = (*it);
-			if ((beh->GetBehState() == BehState::ACTIVE_MESSAGES || beh->GetBehState() == BehState::ACTIVE_ALL) &&
+			if ((beh->GetListenerState() == ListenerState::ACTIVE_MESSAGES || beh->GetListenerState() == ListenerState::ACTIVE_ALL) &&
 				(beh->GetId() != msg.GetBehaviorId())) {
 				if (IsRegisteredListener(msg.GetAction(), beh)) {
 					beh->OnMessage(msg);
@@ -117,14 +172,14 @@ namespace Cog {
 		}
 	}
 
-	void NodeContext::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
+	void SceneContext::SendBubblingMessageToChildren(Msg& msg, Node* actualNode) {
 		for (auto it = actualNode->GetChildren().begin(); it != actualNode->GetChildren().end(); ++it) {
 			CogSendMessage(msg, (*it));
 		}
 	}
 
 
-	void NodeContext::SendBubblingMessage(Msg& msg, Node* actualNode) {
+	void SceneContext::SendBubblingMessage(Msg& msg, Node* actualNode) {
 
 		BubblingType& trav = msg.GetBubblingType();
 
@@ -166,14 +221,14 @@ namespace Cog {
 		}
 	}
 
-	void NodeContext::SendDirectMessage(Msg& msg) {
-		auto behaviors = behListeners.find(msg.GetAction());
+	void SceneContext::SendDirectMessage(Msg& msg) {
+		auto listeners = msgListeners.find(msg.GetAction());
 
-		if (behaviors != behListeners.end()) {
-			vector<Behavior*>& behs = behaviors->second;
+		if (listeners != msgListeners.end()) {
+			vector<MsgListener*>& lsts = listeners->second;
 
-			for (auto it = behs.begin(); it != behs.end(); ++it) {
-				if (((*it)->GetBehState() == BehState::ACTIVE_MESSAGES || (*it)->GetBehState() == BehState::ACTIVE_ALL)) {
+			for (auto it = lsts.begin(); it != lsts.end(); ++it) {
+				if (((*it)->GetListenerState() == ListenerState::ACTIVE_MESSAGES || (*it)->GetListenerState() == ListenerState::ACTIVE_ALL)) {
 					(*it)->OnMessage(msg);
 				}
 			}

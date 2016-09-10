@@ -9,8 +9,7 @@ namespace Cog {
 #include "ResourceCache.h"
 #include "Logger.h"
 #include "Node.h"
-#include "Factory.h"
-#include "NodeContext.h"
+#include "SceneContext.h"
 #include "Tween.h"
 #include "SceneManager.h"
 #include "Renderer.h"
@@ -42,7 +41,7 @@ namespace Cog {
 		ResourceCache* resourceCache = nullptr;
 		Logger* logger = nullptr;
 		Renderer* renderer = nullptr;
-		NodeContext* nodeStorage = nullptr;
+		SceneContext* sceneContext = nullptr;
 		
 		Engine() {
 			entityStorage = new EntityStorage();
@@ -51,7 +50,7 @@ namespace Cog {
 		~Engine() {
 			delete environment;
 			delete resourceCache;
-			delete nodeStorage;
+			delete sceneContext;
 			delete logger;
 			delete renderer;
 		}

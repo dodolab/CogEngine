@@ -86,8 +86,8 @@ namespace Cog {
 			// update behaviors
 			for (auto it = behaviors.begin(); it != behaviors.end(); ++it) {
 				Behavior* beh = *it;
-				if (!beh->ended && (beh->GetBehState() == BehState::ACTIVE_ALL
-					|| beh->GetBehState() == BehState::ACTIVE_UPDATES)) {
+				if (!beh->ended && (beh->GetListenerState() == ListenerState::ACTIVE_ALL
+					|| beh->GetListenerState() == ListenerState::ACTIVE_UPDATES)) {
 					beh->Update(delta, absolute);
 				}
 			}
