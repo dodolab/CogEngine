@@ -71,12 +71,6 @@ namespace Cog {
 		}
 	private:
 		TimeMeasure() {}
-
-		// don't implement
-	//	TimeMeasure(TimeMeasure const&);
-		// don't implement
-	//	void operator=(TimeMeasure const&);
-
 	public:
 		// deleted functions should be public as it results
 		// int better error messages due compiling
