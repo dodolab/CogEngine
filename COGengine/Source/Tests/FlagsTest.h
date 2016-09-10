@@ -20,7 +20,9 @@ using namespace Cog;
 			st.SetState(2);
 			st.SetState(3);
 
-			REQUIRE(st.HasState(1), st.HasState(2), st.HasState(3));
+			REQUIRE(st.HasState(1));
+			REQUIRE(st.HasState(2)); 
+			REQUIRE(st.HasState(3));
 		}
 
 		SECTION("Exceeding state test")
@@ -30,7 +32,9 @@ using namespace Cog;
 			st.SetState(2000);
 			st.SetState(3000);
 
-			REQUIRE(st.HasState(1000), st.HasState(2000), st.HasState(3000));
+			REQUIRE(st.HasState(1000));
+			REQUIRE(st.HasState(2000));
+			REQUIRE(st.HasState(3000));
 		}
 
 		SECTION("Reset state")
@@ -43,7 +47,9 @@ using namespace Cog;
 			st.ResetState(2);
 			st.ResetState(3);
 
-			REQUIRE(!st.HasState(1), !st.HasState(2), !st.HasState(3));
+			REQUIRE(!st.HasState(1));
+			REQUIRE(!st.HasState(2));
+			REQUIRE(!st.HasState(3));
 		}
 
 		SECTION("Exceeding reset")
@@ -56,7 +62,9 @@ using namespace Cog;
 			st.ResetState(2000);
 			st.ResetState(3000);
 
-			REQUIRE(!st.HasState(1000), !st.HasState(2000), !st.HasState(3000));
+			REQUIRE(!st.HasState(1000));
+			REQUIRE(!st.HasState(2000));
+			REQUIRE(!st.HasState(3000));
 		}
 
 		SECTION("Comparing positive")
@@ -108,7 +116,8 @@ using namespace Cog;
 
 			st.SwitchState(1, 2);
 
-			REQUIRE(st.HasState(1), st.HasState(2));
+			REQUIRE(st.HasState(1));
+			REQUIRE(st.HasState(2));
 		}
 
 		SECTION("Switch states 2")
@@ -118,7 +127,8 @@ using namespace Cog;
 
 			st.SwitchState(1, 2);
 
-			REQUIRE(!st.HasState(1), st.HasState(2));
+			REQUIRE(!st.HasState(1));
+			REQUIRE(st.HasState(2));
 		}
 
 		SECTION("Copy states")
@@ -131,7 +141,10 @@ using namespace Cog;
 
 			Flags st2 = st;
 
-			REQUIRE(st2.HasState(1), st2.HasState(2), st2.HasState(1000), st2.HasState(2000));
+			REQUIRE(st2.HasState(1));
+			REQUIRE(st2.HasState(2)); 
+			REQUIRE(st2.HasState(1000));
+			REQUIRE(st2.HasState(2000));
 		}
 
 		SECTION("Get states")
@@ -143,7 +156,11 @@ using namespace Cog;
 			st.SetState(2000);
 			vector<unsigned> states = st.GetAllStates();
 
-			REQUIRE(states.size() == 4, states[0] == 1, states[1] == 2, states[2] == 1000, states[3] == 2000);
+			REQUIRE(states.size() == 4);
+			REQUIRE(states[0] == 1);
+			REQUIRE(states[1] == 2);
+			REQUIRE(states[2] == 1000);
+			REQUIRE(states[3] == 2000);
 		}
 
 		SECTION("Overriding operator = int")
@@ -184,7 +201,8 @@ using namespace Cog;
 			Flags st1 = Flags(12);
 			Flags st3 = st1 + 13;
 
-			REQUIRE(st3.HasState(12), st3.HasState(13));
+			REQUIRE(st3.HasState(12));
+			REQUIRE(st3.HasState(13));
 		}
 
 		SECTION("Overriding operator +=")
@@ -192,7 +210,8 @@ using namespace Cog;
 			Flags st1 = Flags(12);
 			st1 += 13;
 
-			REQUIRE(st1.HasState(12), st1.HasState(13));
+			REQUIRE(st1.HasState(12));
+			REQUIRE(st1.HasState(13));
 		}
 	}
 

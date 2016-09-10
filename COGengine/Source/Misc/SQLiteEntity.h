@@ -29,6 +29,9 @@ namespace Cog {
 
 
 	public:
+		ofxSQLiteEntity() {
+
+		}
 
 		ofxSQLiteEntity(ofxSQLite* sqlite) :sqlite(sqlite) {
 			this->id = 0;
@@ -70,62 +73,6 @@ namespace Cog {
 				.execute();
 		}
 
-	};
-
-	class ofxSQLKrabicka : public ofxSQLiteEntity {
-	protected:
-
-		void InternalCreate(ofxSQLiteInsert& insert) {
-			insert
-				.use("tlacitko", tlacitko)
-				.use("neco", neco)
-				.use("jeSpatne", jeSpatne);
-		}
-
-		void InternalUpdate(ofxSQLiteUpdate& update) {
-			update
-				.use("tlacitko", tlacitko)
-				.use("neco", neco)
-				.use("jeSpatne", jeSpatne);
-		}
-
-		void InternalLoad(ofxSQLiteSelect& select) {
-			tlacitko = select.getInt("tlacitko");
-			neco = select.getString("neco");
-			jeSpatne = select.getBool("jeSpatne");
-		}
-
-		string GetTableName() {
-			return "Krabicka";
-		}
-
-	public:
-
-		int tlacitko;
-		string neco;
-		bool jeSpatne;
-
-
-		ofxSQLKrabicka(ofxSQLite* sqlite) :ofxSQLiteEntity(sqlite) {
-			tlacitko = 0;
-			neco = "";
-			jeSpatne = false;
-		}
-
-		virtual vector<ofxSQLKrabicka> GetList() {
-			vector<ofxSQLKrabicka> output = vector<ofxSQLKrabicka>();
-			ofxSQLiteSelect sel = sqlite->select("*").from(GetTableName().c_str());
-			sel.execute().begin();
-
-			while (sel.hasNext()) {
-				ofxSQLKrabicka krab(sqlite);
-				krab.InternalLoad(sel);
-				output.push_back(krab);
-				sel.next();
-			}
-
-			return output;
-		}
 	};
 
 }// namespace

@@ -59,6 +59,15 @@ namespace Cog {
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->Init(config);
 		}
+
+
+		config->popAll();
+
+		if (config->pushTagIfExists("app_config") && config->pushTagIfExists("scenes")) {
+			// load scenes
+			auto context = GETCOMPONENT(SceneContext);
+			context->LoadScenesFromXml(config);
+		}
 	}
 
 

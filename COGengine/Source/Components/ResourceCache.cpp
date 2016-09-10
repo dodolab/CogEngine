@@ -5,6 +5,7 @@
 #include "Facade.h"
 #include "AnimationLoader.h"
 #include "TransformEnt.h"
+#include "NodeBuilder.h"
 
 namespace Cog {
 

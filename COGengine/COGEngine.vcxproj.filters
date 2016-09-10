@@ -321,6 +321,9 @@
     <ClInclude Include="Source\Components\SceneSwitchManager.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Tests\SQLTest.h">
+      <Filter>Source\Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

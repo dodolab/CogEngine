@@ -269,6 +269,7 @@
     <ClInclude Include="Source\ofxCogMain.h" />
     <ClInclude Include="Source\Tests\FlagsTest.h" />
     <ClInclude Include="Source\Tests\SettingsTest.h" />
+    <ClInclude Include="Source\Tests\SQLTest.h" />
     <ClInclude Include="Source\Tests\StringHashTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
   </ItemGroup>

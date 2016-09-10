@@ -53,6 +53,8 @@ namespace Cog {
 	private:
 
 		void ExecuteSwitch(Node* from, Node* to, TweenDirection tweenDir);
+
+		void CheckWaitingTweens();
 	};
 
 }// namespace

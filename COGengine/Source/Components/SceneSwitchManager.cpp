@@ -24,16 +24,7 @@ namespace Cog {
 			waitingForTween = false;
 
 			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
-
-			// switch to waiting scenes
-			if (!waitingTweens.empty()) {
-				MLOGDEBUG("SceneSwitchManager", "--reading next switch context from the stack");
-
-				TweenContext ctx = waitingTweens.front();
-				if (ctx.readyToGo) {
-					PopSceneSwitch();
-				}
-			}
+			CheckWaitingTweens();
 		}
 	}
 
@@ -103,6 +94,8 @@ namespace Cog {
 			to->GetScene()->GetViewPortOffset().x = 0;
 			to->GetScene()->GetViewPortOffset().y = 0;
 			SendMessageNoBubbling(ACT_SCENE_SWITCHED, 0, nullptr, to);
+
+			CheckWaitingTweens();
 		}
 		else {
 			auto slide = new SlideTween(tweenDir, from, to, 1);
@@ -119,6 +112,18 @@ namespace Cog {
 
 			// wait for tween
 			waitingForTween = true;
+		}
+	}
+
+	void SceneSwitchManager::CheckWaitingTweens() {
+		// switch to waiting scenes
+		if (!waitingTweens.empty()) {
+			MLOGDEBUG("SceneSwitchManager", "--reading next switch context from the stack");
+
+			TweenContext ctx = waitingTweens.front();
+			if (ctx.readyToGo) {
+				PopSceneSwitch();
+			}
 		}
 	}
 
