@@ -58,7 +58,7 @@ namespace Cog {
 	void Renderer::BeginRender() {
 		Vec2i virtualSize = CogGetVirtualScreenSize();
 		ofSetupScreenOrtho((float)virtualSize.x, (float)virtualSize.y, -1000.0f, 1000.0f);
-		ofBackground(0, 0, 0);
+		ofBackground(0);
 	}
 
 	void Renderer::EndRender() {

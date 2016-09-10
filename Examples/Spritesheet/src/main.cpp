@@ -14,7 +14,7 @@ class XmlTestingApp : public CogApp {
 
 	void InitEngine() {
 		ofxXml* xml = new ofxXml();
-		xml->loadFile("config2.xml");
+		xml->loadFile("config3.xml");
 		auto xmlPtr = spt<ofxXml>(xml);
 		
 		CogEngine::GetInstance().Init(xmlPtr);

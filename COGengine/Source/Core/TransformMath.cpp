@@ -40,19 +40,18 @@ namespace Cog {
 		// if zIndex is equal to 0, the value will be taken from the parent
 		if (zIndex == 0) zIndex = (int)parentTrans.localPos.z;
 
-		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth()/ 2/parentTrans.absScale.x, shape->GetHeight() / 2/parentTrans.absScale.y);
-
 		// set transformation
 		outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
 		outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
+		outputTrans.rotationOrigin = ofVec2f(shape->GetWidth(), shape->GetHeight()) * entity.rotationOrigin * (scale); // multiply by abs scale
 		outputTrans.rotation = entity.rotation;
 	}
-
 
 	ofVec2f TransformMath::CalcPosition(Node* node, Node* parent, ofVec2f pos, CalcType posCalc, int gridWidth, int gridHeight) {
 		Vec2i scrSize = CogGetVirtualScreenSize();
 		Trans& parentTrans = parent->GetTransform();
 		ofVec2f absPos;
+
 
 		switch (posCalc) {
 		case CalcType::ABS:

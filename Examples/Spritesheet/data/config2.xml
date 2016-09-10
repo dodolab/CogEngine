@@ -31,7 +31,8 @@
 		<behavior name="rt01" />
 		
 		 <node name="square2" img="sheet_squares.png">
-	       <transform stype="loc" size="0.25" z_index="12" />
+	       <transform stype="loc" pos="0.5" anchor="0.5" size="0.25" z_index="12" />
+		   <behavior name="rt01" />
 	     </node>
 	  </node>
     </scene>
