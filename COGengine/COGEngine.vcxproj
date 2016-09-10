@@ -221,6 +221,7 @@
     <ClInclude Include="Source\Behaviors\Move.h" />
     <ClInclude Include="Source\Behaviors\MultiAnim.h" />
     <ClInclude Include="Source\Behaviors\RotateAnim.h" />
+    <ClInclude Include="Source\Behaviors\Selection.h" />
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\TranslateAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />

@@ -27,6 +27,8 @@ namespace Cog {
 		// root object, should be created only once
 		Node* rootObject = nullptr;
 
+		stack<Scene*> sceneStack = stack<Scene*>();
+
 	public:
 
 		void Init();
@@ -111,9 +113,9 @@ namespace Cog {
 		*/
 		Scene* FindSceneByName(string name) const;
 	
-		void SwitchToScene(Scene* scene);
-
 		void SwitchToScene(Scene* scene, TweenDirection tweenDir);
+
+		bool SwitchBackToScene(TweenDirection tweenDir);
 
 		/**
 		* Loads scene from xml

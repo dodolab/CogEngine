@@ -9,13 +9,6 @@ namespace Cog {
 		this->rootObject = new Node(ObjType::ROOT, 0, "root");
 	}
 
-	void SceneContext::SwitchToScene(Scene* scene) {
-		auto manager = GETCOMPONENT(SceneManager);
-		Node* from = actualScene->GetSceneNode();
-		Node* to = scene->GetSceneNode();
-		manager->SwitchToScene(from, to);
-	}
-
 	Scene* SceneContext::FindSceneByName(string name) const {
 		for (auto it = scenes.begin(); it != scenes.end(); ++it) {
 			if ((*it)->GetName().compare(name) == 0) {
@@ -30,8 +23,39 @@ namespace Cog {
 
 		Node* from = actualScene->GetSceneNode();
 		Node* to = scene->GetSceneNode();
+		sceneStack.push(actualScene);
 		actualScene = scene;
-		manager->SwitchToScene(from, to, tweenDir);
+		if (tweenDir == TweenDirection::NONE) {
+			manager->SwitchToScene(from, to);
+		}
+		else {
+			manager->SwitchToScene(from, to, tweenDir);
+		}
+		
+	}
+
+	bool SceneContext::SwitchBackToScene(TweenDirection tweenDir) {
+		if (!sceneStack.empty()) {
+			auto manager = GETCOMPONENT(SceneManager);
+			Scene* scene = sceneStack.top();
+
+			Node* from = actualScene->GetSceneNode();
+			Node* to = scene->GetSceneNode();
+			actualScene = scene;
+
+			if (tweenDir == TweenDirection::NONE) {
+				manager->SwitchToScene(from, to);
+
+			}
+			else {
+				manager->SwitchToScene(from, to, tweenDir);
+			}
+
+			sceneStack.pop();
+
+			return true;
+		}
+		return false;
 	}
 
 	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {

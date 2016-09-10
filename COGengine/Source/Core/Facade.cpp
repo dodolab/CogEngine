@@ -106,56 +106,6 @@ namespace Cog {
 		CogSendDirectMessageToListener(msg, targetId);
 	}
 
-	Node* CogFindNodeById(int id) {
-		return COGEngine.sceneContext->GetActualScene()->FindNodeById(id);
-	}
-
-	int CogGetNodesCountByTag(string tag) {
-		return COGEngine.sceneContext->GetActualScene()->GetNodesCountByTag(tag);
-	}
-
-	Node* CogFindNodeByTag(string tag) {
-		return COGEngine.sceneContext->GetActualScene()->FindNodeByTag(tag);
-	}
-
-	vector<Node*> CogFindNodesByTag(char* tag) {
-		return COGEngine.sceneContext->GetActualScene()->FindNodesByTag(tag);
-	}
-
-	int CogGetNodesCountBySubType(int subtype) {
-		return COGEngine.sceneContext->GetActualScene()->GetNodesCountBySubType(subtype);
-	}
-
-	Node* CogFindNodeBySubType(int subtype) {
-		return COGEngine.sceneContext->GetActualScene()->FindNodeBySubType(subtype);
-	}
-
-	vector<Node*> CogFindNodesBySubType(int subtype) {
-		return COGEngine.sceneContext->GetActualScene()->FindNodesBySubType(subtype);
-	}
-
-	bool CogAddNode(Scene* scene, Node* node) {
-		MLOGDEBUG("CORE", "Adding node %s", node->GetTag().c_str());
-		return scene->AddNode(node);
-	}
-
-	void CogRemoveNode(Scene* scene, Node* node) {
-		MLOGDEBUG("CORE", "Removing node %s", node->GetTag().c_str());
-		scene->RemoveNode(node);
-	}
-
-	bool CogAddBehavior(Behavior* beh) {
-		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
-		MLOGDEBUG("CORE", "Adding behavior %s to node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		return COGEngine.sceneContext->GetActualScene()->AddBehavior(beh);
-	}
-
-	void CogRemoveBehavior(Behavior* beh) {
-		MASSERT(beh->GetOwner() != nullptr, "CORE", "Behavior %s hasn't node assigned", typeid(*beh).name());
-		MLOGDEBUG("CORE", "Removing behavior %s from node %s", typeid(*beh).name(), beh->GetOwner()->GetTag().c_str());
-		COGEngine.sceneContext->GetActualScene()->RemoveBehavior(beh);
-	}
-
 	// =================== MLOGGER =========================
 
 	void CogLogError(const char* module, const char* format, ...) {

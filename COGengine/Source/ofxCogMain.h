@@ -24,6 +24,7 @@
 #include <memory>    
 #include <cmath>
 #include <functional>
+#include <stack>
 #include "Utils.h"
 #include "Enums.h"
 #include "ofxSmartPointer.h"

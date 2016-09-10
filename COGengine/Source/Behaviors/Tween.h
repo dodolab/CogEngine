@@ -6,7 +6,7 @@ namespace Cog {
 
 	/*! Tween direction Tween scenes */
 	enum class TweenDirection {
-		LEFT, RIGHT, UP, DOWN
+		NONE, LEFT, RIGHT, UP, DOWN
 	};
 
 	/**x

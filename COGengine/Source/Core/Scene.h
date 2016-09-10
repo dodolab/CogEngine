@@ -1,13 +1,16 @@
 #pragma once
 
 #include "ofxCogMain.h"
-#include "ResourceCache.h"
-#include "Node.h"
-#include "Component.h"
-#include "NodeBuilder.h"
+#include "Settings.h"
 
 namespace Cog
 {
+	class Node;
+	class MsgListener;
+	class Behavior;
+	class Msg;
+	class StringHash;
+
 	/**
 	* Scene entity, containing node tree
 	*/
@@ -48,59 +51,19 @@ namespace Cog
 		* @param action action to register
 		* @param listener listener that will be called when selected action is invoked
 		*/
-		void RegisterListener(StringHash action, MsgListener* listener) {
-			if (msgListeners.find(action) == msgListeners.end()) {
-				msgListeners[action] = vector <MsgListener*>();
-			}
-
-			vector<MsgListener*>& listeners = msgListeners[action];
-			listeners.push_back(listener);
-
-			if (msgListenerActions.find(listener->GetId()) == msgListenerActions.end()) {
-				msgListenerActions[listener->GetId()] = vector<StringHash>();
-			}
-
-			msgListenerActions[listener->GetId()].push_back(action);
-		}
+		void RegisterListener(StringHash action, MsgListener* listener);
 
 		/**
 		* Unregisters message listener for selected action
 		* @return true if listener has been found and erased
 		*/
-		bool UnregisterListener(StringHash action, MsgListener* listener) {
-			if (msgListeners.find(action) != msgListeners.end()) {
-				vector<MsgListener*>& listeners = msgListeners[action];
-
-				for (auto it = listeners.begin(); it != listeners.end(); ++it) {
-					if ((*it)->GetId() == listener->GetId()) {
-						listeners.erase(it);
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+		bool UnregisterListener(StringHash action, MsgListener* listener);
 
 		/**
 		* Unregisters all actions that are bound with selected listener
 		* @param beh listener to unregister
 		*/
-		void UnregisterListener(MsgListener* beh) {
-			auto found = msgListenerActions.find(beh->GetId());
-
-			if (found != msgListenerActions.end()) {
-
-				vector<StringHash> actions = found->second;
-
-				// unregister all actions
-				for (auto action : actions) {
-					UnregisterListener(action, beh);
-				}
-
-				// remove from the second collection
-				msgListenerActions.erase(beh->GetId());
-			}
-		}
+		void UnregisterListener(MsgListener* beh);
 
 		/**
 		* Sends common message
@@ -126,20 +89,12 @@ namespace Cog
 		/**
 		* Returns true, if there is at least one behavior listener for selected action
 		*/
-		bool IsRegisteredListener(StringHash action) const {
-			return msgListeners.find(action) != msgListeners.end();
-		}
+		bool IsRegisteredListener(StringHash action) const;
 
 		/**
 		* Returns true, if listener is listening for selected action
 		*/
-		bool IsRegisteredListener(int action, MsgListener* beh) {
-			if (msgListenerActions.find(beh->GetId()) == msgListenerActions.end()) return false;
-
-			vector<StringHash>& actions = msgListenerActions[beh->GetId()];
-
-			return (std::find(actions.begin(), actions.end(), action) != actions.end());
-		}
+		bool IsRegisteredListener(int action, MsgListener* beh);
 
 		/**
 		* Finds node by id
@@ -182,50 +137,31 @@ namespace Cog
 		vector<Node*> FindNodesBySubType(int subtype) const;
 
 		/**
+		* Finds all nodes by group
+		*/
+		vector<Node*> FindNodesByGroup(StringHash group) const;
+
+		/**
 		* Adds a new node to the collection
 		* @return true, if node has been added
 		*/
-		bool AddNode(Node* node) {
-			auto found = find(allNodes.begin(), allNodes.end(), node);
-			if (found == allNodes.end()) {
-				allNodes.push_back(node);
-				node->SetScene(this);
-				return true;
-			}
-			else return false;
-		}
+		bool AddNode(Node* node);
 
 		/**
 		* Removes node from collection
 		*/
-		void RemoveNode(Node* node) {
-			auto found = find(allNodes.begin(), allNodes.end(), node);
-			if (found != allNodes.end()) allNodes.erase(found);
-		}
+		void RemoveNode(Node* node);
 
 		/**
 		* Adds a new behavior
 		* @return true if behavior has been added
 		*/
-		bool AddBehavior(Behavior* beh) {
-			auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
-			if (found == allBehaviors.end()) {
-				allBehaviors.push_back(beh);
-
-				return true;
-			}
-			else return false;
-		}
+		bool AddBehavior(Behavior* beh);
 
 		/**
 		* Removes behavior from collection
 		*/
-		void RemoveBehavior(Behavior* beh) {
-			auto found = find(allBehaviors.begin(), allBehaviors.end(), beh);
-			if (found != allBehaviors.end()) allBehaviors.erase(found);
-
-			UnregisterListener(beh);
-		}
+		void RemoveBehavior(Behavior* beh);
 
 
 		
