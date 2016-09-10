@@ -40,9 +40,9 @@ namespace Cog {
 		Flags(vector<unsigned> states);
 
 		/**
-		* Creates a new state machine, initialized with any number of states
+		* Creates a new state machine, initialized with one state
 		*/
-		Flags(unsigned states, ...);
+		Flags(unsigned state);
 
 		/**
 		* Creates a new state machine, initialized with one state

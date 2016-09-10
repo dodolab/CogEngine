@@ -11,7 +11,7 @@
 #include "MapLoader.h"
 #include "Settings.h"
 #include "AStarSearch.h"
-
+#include "TransformAnim.h"
 
 using namespace std;
 using namespace Cog;

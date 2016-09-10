@@ -11,13 +11,8 @@ namespace Cog {
 		for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 	}
 
-	Flags::Flags(unsigned states, ...) {
-		va_list args;
-		
-		va_start(args, states);          
-		for (unsigned x = 0; x < states; x++)       
-			SetState(va_arg(args, unsigned)); 
-		va_end(args);
+	Flags::Flags(unsigned state) {
+		SetState(state);
 	}
 
 	Flags::Flags(StringHash state) {

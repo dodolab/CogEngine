@@ -44,7 +44,11 @@ namespace Cog
 	string StringHash::ToString() const
 	{
 		char tempBuffer[CONVERSION_BUFFER_LENGTH];
+#ifdef WIN32
 		sprintf_s(tempBuffer, "%08X", value_);
+#else
+		sprintf(tempBuffer, "%08X", value_);
+#endif
 		return string(tempBuffer);
 	}
 

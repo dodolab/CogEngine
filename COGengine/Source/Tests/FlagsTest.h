@@ -5,7 +5,7 @@
 #include "cpplinq.hpp"
 
 #ifdef TESTING
-#else
+
 
 #include "catch.hpp"
 using namespace Cog;
@@ -145,6 +145,55 @@ using namespace Cog;
 			vector<unsigned> states = st.GetAllStates();
 
 			REQUIRE(states.size() == 4, states[0] == 1, states[1] == 2, states[2] == 1000, states[3] == 2000);
+		}
+
+		SECTION("Overriding operator = int")
+		{
+			Flags st = 12;
+			REQUIRE(st.HasState(12));
+		}
+
+		SECTION("Overriding operator = StringHash")
+		{
+			unsigned mojo = StringHash("MOJO");
+			Flags st = StringHash("MOJO");
+			REQUIRE(st.HasState(mojo));
+		}
+
+		SECTION("Overriding operator ==Flags")
+		{
+			Flags st1 = Flags(12);
+			st1.SetState(123);
+			st1.SetState(333);
+
+			Flags st2 = Flags(12);
+			st2.SetState(333);
+			st2.SetState(123);
+
+			REQUIRE(st1 == st2);
+		}
+
+		SECTION("Overriding operator ==int")
+		{
+			Flags st1 = Flags(12);
+
+			REQUIRE(st1 == 12);
+		}
+
+		SECTION("Overriding operator +")
+		{
+			Flags st1 = Flags(12);
+			Flags st3 = st1 + 13;
+
+			REQUIRE(st3.HasState(12), st3.HasState(13));
+		}
+
+		SECTION("Overriding operator +=")
+		{
+			Flags st1 = Flags(12);
+			st1 += 13;
+
+			REQUIRE(st1.HasState(12), st1.HasState(13));
 		}
 	}
 
