@@ -6,6 +6,7 @@
 #include "Shape.h"
 #include "Node.h"
 #include "Movement.h"
+#include "Path.h"
 
 namespace Cog {
 
@@ -31,6 +32,8 @@ namespace Cog {
 			neededRotation = DEG_TO_RAD*clampAngle(neededRotation);
 
 			float rotDiff = -RAD_TO_DEG*atan2(sin(actualRotation - neededRotation), cos(actualRotation - neededRotation));
+
+			if (isnan(rotDiff)) rotDiff = 0;
 
 			movement.SetAngularSpeed(rotDiff*maxAcceleration);
 		}
@@ -149,7 +152,7 @@ namespace Cog {
 			else {
 				desiredSpeed = -distance*maxAcceleration;
 			}
-			cout << desiredSpeed.x << ", " << desiredSpeed.y << endl;
+			
 			ofVec2f acceleration = desiredSpeed - movement.GetVelocity();
 
 			movement.SetAcceleration(acceleration);
@@ -161,12 +164,13 @@ namespace Cog {
 	// must be with seekBehavior
 	class FollowBehavior : public SteeringBehavior {
 	private:
-		vector<Vec2i> path;
+		Path* path;
+		float currentPathPoint = 0;
 		float maxAcceleration = 0;
-		float fleeDistance = 0;
+		float pointTolerance = 0;
 	public:
-		FollowBehavior(vector<Vec2i>& path) :
-			maxAcceleration(maxAcceleration),fleeDistance(fleeDistance), path(path) {
+		FollowBehavior(Path * path, float maxAcceleration, float pointTolerance) 
+			: path(path), maxAcceleration(maxAcceleration), pointTolerance(pointTolerance){
 		}
 
 		void Init() {
@@ -179,24 +183,27 @@ namespace Cog {
 			auto& transform = owner->GetTransform();
 			Movement& movement = owner->GetAttr<Movement>(ATTR_MOVEMENT);
 
-			ofVec2f dest = owner->GetAttr<ofVec2f>(ATTR_STEERING_BEH_SEEK_DEST);
-			ofVec2f distance = dest - transform.localPos;
-			float length = distance.length();
-			distance.normalize();
-			ofVec2f desiredSpeed;
+			// find point on the path that is closest to the owner position
+			float newPathPoint = path->CalcPathPoint(currentPathPoint, transform.localPos);
+			currentPathPoint = newPathPoint;
 
-			if (length > fleeDistance) {
-				desiredSpeed = ofVec2f(0);
+			if (newPathPoint == -1 || path->pathLength <= (currentPathPoint + pointTolerance)) {
+				// nowhere to go
+				Finish();
+				return;
 			}
-			else {
-				desiredSpeed = -distance*maxAcceleration;
-			}
-			cout << desiredSpeed.x << ", " << desiredSpeed.y << endl;
-			ofVec2f acceleration = desiredSpeed - movement.GetVelocity();
 
-			movement.SetAcceleration(acceleration);
+			// find new destination point
+			ofVec2f destination = path->CalcPathPosition(currentPathPoint + pointTolerance);
+			cout << destination.x << ", " << destination.y << endl;
+			owner->ChangeAttr(ATTR_STEERING_BEH_SEEK_DEST,destination);
 
-			this->SetRotationDirection(movement, transform, dest, maxAcceleration, delta);
+			ofVec2f direction = destination - transform.localPos;
+			direction = direction.normalize();
+			// todo verify the time scale
+			movement.SetAcceleration(direction*maxAcceleration);
+
+			this->SetRotationDirection(movement, transform, transform.localPos+movement.GetVelocity(), maxAcceleration, delta);
 		}
 	};
 
