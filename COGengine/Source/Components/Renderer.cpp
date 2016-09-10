@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Node.h"
 #include "Behavior.h"
 #include "Renderer.h"

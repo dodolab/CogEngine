@@ -43,6 +43,9 @@
     <Filter Include="Source\Scripting">
       <UniqueIdentifier>{339fca49-afb3-4ab6-85da-0c6166dfa15c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\AI">
+      <UniqueIdentifier>{4f952ff0-d6f7-4af6-a59c-4a762233773f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -627,6 +630,36 @@
     <ClInclude Include="Source\Behaviors\Slider.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AI\AIState.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\Simulator.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\AIAgent.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\MonteCarloSearch.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\ActionHistory.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\AgentsReward.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\HydroqAction.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\HydroqSimulator.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\HydroqState.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI\RandomAgent.h">
+      <Filter>Source\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -1003,6 +1036,9 @@
     </ClCompile>
     <ClCompile Include="Source\Behaviors\Slider.cpp">
       <Filter>Source\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AI\AIAgent.cpp">
+      <Filter>Source\AI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

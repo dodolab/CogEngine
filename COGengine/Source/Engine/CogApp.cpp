@@ -1,5 +1,3 @@
-#pragma once
-
 #include "CogApp.h"
 #include "CogEngine.h"
 #include "Stage.h"

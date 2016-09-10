@@ -1,4 +1,3 @@
-#pragma once
 
 #include "TimeMeasure.h"
 #include "ofMain.h"

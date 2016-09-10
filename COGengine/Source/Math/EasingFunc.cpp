@@ -1,4 +1,3 @@
-#pragma once
 
 #include "EasingFunc.h"
 #include "ofConstants.h"
