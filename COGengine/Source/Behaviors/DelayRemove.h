@@ -31,7 +31,7 @@ namespace Cog {
 		}
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
-			actual += delta;
+			actual += (int)delta;
 
 			if (actual > millis) {
 				owner->GetParent()->RemoveChild(owner, erase);

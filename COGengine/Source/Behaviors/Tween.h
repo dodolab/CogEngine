@@ -82,7 +82,7 @@ namespace Cog {
 			int height = CogGetVirtualHeight();
 
 			// calculate actual position
-			actual += 1.0f / width * speed*0.001*width*delta;
+			actual += 1.0f / width * speed*0.001f*width*delta;
 
 			if (actual > 1) {
 				actual = 1;

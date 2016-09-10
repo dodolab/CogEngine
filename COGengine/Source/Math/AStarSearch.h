@@ -7,7 +7,7 @@
 #include <utility>
 #include <queue>
 #include <algorithm>
-
+#include "Vec2i.h"
 
 using std::unordered_map;
 using std::unordered_set;
@@ -17,56 +17,12 @@ using std::queue;
 using std::priority_queue;
 using std::pair;
 
-namespace Cog {
-
-	/**
-	* Simple integer position, used in graph-searching
-	*/
-	struct Pos {
-
-		Pos() : x(0), y(0) {
-
-		}
-
-		Pos(int x, int y) : x(x), y(y) {
-
-		}
-
-		/** position on the x axis */
-		int x;
-		/** position on the y axis */
-		int y;
-
-
-		inline operator size_t() const {
-			// we use seed for Mersenne Twister generator
-			return x * 1812433253 + y;
-		}
-
-		inline bool operator==(const Pos& a) const {
-			return x == a.x && y == a.y;
-		}
-
-		inline bool operator!=(const Pos& a) const {
-			return x != a.x || y != a.y;
-		}
-
-		inline bool operator<(const Pos& a) const {
-			return ((size_t)*this) < ((size_t)a);
-		}
-
-		inline bool operator>(const Pos& a) const {
-			return ((size_t)*this) > ((size_t)a);
-		}
-	};
-
-}
 
 namespace std {
 	// overriding hash function for position
 	template <>
-	struct hash<Cog::Pos> {
-		inline size_t operator()(const Cog::Pos& pos) const {
+	struct hash<Cog::Vec2i> {
+		inline size_t operator()(const Cog::Vec2i& pos) const {
 			return pos.x * 1812433253 + pos.y;
 		}
 	};
@@ -83,9 +39,9 @@ namespace Cog {
 		// grid size
 		int width, height;
 		// places that couldn't be crossed
-		unordered_set<Pos> blocks;
+		unordered_set<Vec2i> blocks;
 		// cost of positions (optimal)
-		unordered_map<Pos, int> costs;
+		unordered_map<Vec2i, int> costs;
 
 	public:
 
@@ -103,7 +59,7 @@ namespace Cog {
 		void AddBlocks(int x1, int y1, int x2, int y2) {
 			for (int x = x1; x <= x2; x++) {
 				for (int y = y1; y <= y2; y++) {
-					blocks.insert(Pos{ x, y });
+					blocks.insert(Vec2i{ x, y });
 				}
 			}
 		}
@@ -111,14 +67,14 @@ namespace Cog {
 		/**
 		* Gets all neighbors of selected position
 		*/
-		vector<Pos> Neighbors(Pos pos) const {
-			int dx, dy;
-			vector<Pos> results;
+		vector<Vec2i> Neighbors(Vec2i pos) const {
 
-			Pos nextLeft = Pos(pos.x - 1, pos.y);
-			Pos nextDown = Pos(pos.x, pos.y - 1);
-			Pos nextRight = Pos(pos.x + 1, pos.y);
-			Pos nextUp = Pos(pos.x, pos.y + 1);
+			vector<Vec2i> results;
+
+			Vec2i nextLeft = Vec2i(pos.x - 1, pos.y);
+			Vec2i nextDown = Vec2i(pos.x, pos.y - 1);
+			Vec2i nextRight = Vec2i(pos.x + 1, pos.y);
+			Vec2i nextUp = Vec2i(pos.x, pos.y + 1);
 			
 			if (IsInside(nextLeft) && !blocks.count(nextLeft)) results.push_back(nextLeft);
 			if (IsInside(nextDown) && !blocks.count(nextDown)) results.push_back(nextDown);
@@ -131,13 +87,13 @@ namespace Cog {
 		/**
 		* Gets cost of the position; returns 1, if no cost was specified
 		*/
-		int GetCost(Pos pos) const {
+		int GetCost(Vec2i pos) const {
 			return (costs.find(pos) != costs.end()) ? costs.find(pos)->second : 1;
 		}
 
 	private:
 		/** Returns true, if the position is inside the grid */
-		inline bool IsInside(Pos id) const {
+		inline bool IsInside(Vec2i id) const {
 			return 0 <= id.x && id.x < width && 0 <= id.y && id.y < height;
 		}
 	};
@@ -167,10 +123,10 @@ namespace Cog {
 		* @param jumps collection that will be filled with jumps/steps from start to goal
 		* @param costSum collection that will be filled with visited positions and current price of the path
 		*/
-		void Search(const Grid& grid, Pos start, Pos goal, unordered_map<Pos, Pos>& jumps, unordered_map<Pos, int>& costSum)
+		void Search(const Grid& grid, Vec2i start, Vec2i goal, unordered_map<Vec2i, Vec2i>& jumps, unordered_map<Vec2i, int>& costSum)
 		{
 			// initialize priority queue
-			typedef pair<int, Pos> QueueElem;
+			typedef pair<int, Vec2i> QueueElem;
 			priority_queue<QueueElem, vector<QueueElem>, greater<QueueElem>> priorityQueue;
 
 			// start with the first position
@@ -207,9 +163,9 @@ namespace Cog {
 		/**
 		* Calculates optimal path from collection of jumps that was created during the Search method
 		*/
-		vector<Pos> CalcPathFromJumps(Pos start, Pos goal, unordered_map<Pos, Pos>& jumps) {
-			vector<Pos> path;
-			Pos current = goal;
+		vector<Vec2i> CalcPathFromJumps(Vec2i start, Vec2i goal, unordered_map<Vec2i, Vec2i>& jumps) {
+			vector<Vec2i> path;
+			Vec2i current = goal;
 			path.push_back(current);
 			while (current != start) {
 				current = jumps[current];
@@ -225,7 +181,7 @@ namespace Cog {
 		* Calculates distance between two points
 		* uses simple Manhattan distance 
 		*/
-		inline int CalcDistance(Pos a, Pos b) {
+		inline int CalcDistance(Vec2i a, Vec2i b) {
 			return abs(a.x - b.x) + abs(a.y - b.y);
 		}
 	};

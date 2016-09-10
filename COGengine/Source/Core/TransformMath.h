@@ -34,7 +34,6 @@ namespace Cog {
 
 		void SetTransform(Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
 			
-			ofVec2f scrSize = CogGetVirtualScreenSize();
 
 			Trans nodeTransform = Trans(0, 0);
 
@@ -49,7 +48,6 @@ namespace Cog {
 		void CalcTransform(Trans& outputTrans, Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, 
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
 
-			ofVec2f scrSize = CogGetVirtualScreenSize();
 
 			Trans& parentTrans = parent->GetTransform();
 
@@ -66,20 +64,20 @@ namespace Cog {
 			absPos.y += (0.0f - anchor.y) * node->GetShape()->GetHeight()*scale.y;
 
 			// if zIndex is equal to 0, the value will be taken from the parent
-			if (zIndex == 0) zIndex = parentTrans.localPos.z;
+			if (zIndex == 0) zIndex = (int)parentTrans.localPos.z;
 
 			// set transformation
-			outputTrans.localPos = ofVec3f(absPos.x, absPos.y, zIndex);
+			outputTrans.localPos = ofVec3f(absPos.x, absPos.y, (float)zIndex);
 			outputTrans.scale = ofVec3f(scale.x, scale.y, 1);
 		}
 
 		ofVec2f GetCenter() {
-			return ofVec2f(CogGetScreenWidth() / 2, CogGetScreenHeight() / 2);
+			return ofVec2f(CogGetScreenWidth() / 2.0f, CogGetScreenHeight() / 2.0f);
 		}
 
 
 		ofVec2f CalcPosition(Node* node, Node* parent, ofVec2f pos, CalcType posCalc, int gridWidth = 0, int gridHeight = 0) {
-			ofVec2f scrSize = CogGetVirtualScreenSize();
+			Vec2i scrSize = CogGetVirtualScreenSize();
 			Trans& parentTrans = parent->GetTransform();
 			ofVec2f absPos;
 
@@ -117,7 +115,7 @@ namespace Cog {
 
 
 		ofVec3f CalcScale(Node* node, Node* parent, float width, float height, CalcType scaleCalc, int gridWidth = 0, int gridHeight = 0) {
-			ofVec2f scrSize = CogGetVirtualScreenSize();
+			Vec2i scrSize = CogGetVirtualScreenSize();
 			Trans& parentTrans = parent->GetTransform();
 
 			float scaleX = 1;
@@ -161,7 +159,7 @@ namespace Cog {
 
 			if (width != 0 && height != 0) return ofVec3f(scaleX, scaleY, 1);
 			else if (width == 0) return ofVec3f(scaleY, scaleY, 1);
-			else if (height == 0)return ofVec3f(scaleX, scaleX, 1);
+			else return ofVec3f(scaleX, scaleX, 1); // height == 0
 
 		}
 		

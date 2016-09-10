@@ -41,13 +41,13 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 
 		bool	getBoolValue(const string& tag, bool			defaultValue, int which = 0);
 		int 	getValue(const string&  tag, int            defaultValue, int which = 0);
-		double 	getValue(const string&  tag, double         defaultValue, int which = 0);
+		float 	getValue(const string&  tag, double         defaultValue, int which = 0);
 		float 	getValue(const string&  tag, float         defaultValue, int which = 0);
 		string 	getValue(const string&  tag, const string& 	defaultValue, int which = 0);
 
 		bool	getBoolValuex(bool			defaultValue, int which = 0);
 		int 	getValuex(int            defaultValue, int which = 0);
-		double 	getValuex(double         defaultValue, int which = 0);
+		float 	getValuex(double         defaultValue, int which = 0);
 		float 	getValuex(float         defaultValue, int which = 0);
 		string 	getValuex(const string& 	defaultValue, int which = 0);
 
@@ -119,12 +119,12 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 
 		bool	getBoolAttribute(const string& tag, const string& attribute, bool defaultValue, int which = 0);
 		int		getAttribute(const string& tag, const string& attribute, int defaultValue, int which = 0);
-		double	getAttribute(const string& tag, const string& attribute, double defaultValue, int which = 0);
+		float	getAttribute(const string& tag, const string& attribute, double defaultValue, int which = 0);
 		string	getAttribute(const string& tag, const string& attribute, const string& defaultValue, int which = 0);
 
 		bool	getBoolAttributex(const string& attribute, bool defaultValue, int which = 0);
 		int		getAttributex(const string& attribute, int defaultValue, int which = 0);
-		double	getAttributex(const string& attribute, double defaultValue, int which = 0);
+		float	getAttributex(const string& attribute, double defaultValue, int which = 0);
 		string	getAttributex(const string& attribute, const string& defaultValue, int which = 0);
 
 		int		setAttribute(const string& tag, const string& attribute, int value, int which = 0);

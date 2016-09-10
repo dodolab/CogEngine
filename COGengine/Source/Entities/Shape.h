@@ -205,8 +205,8 @@ namespace Cog {
 
 			for (auto it = sprites.begin(); it != sprites.end(); ++it) {
 				spt<MSpriteCrate> crt = (*it);
-				int posX = crt->transform.localPos.x;
-				int posY = crt->transform.localPos.y;
+				int posX = (int)crt->transform.localPos.x;
+				int posY = (int)crt->transform.localPos.y;
 
 				if (posX < minX) minX = posX;
 				if (posY < minY) minY = posY;
@@ -235,11 +235,11 @@ namespace Cog {
 		}
 
 		float GetWidth() {
-			return width;
+			return (float)width;
 		}
 
 		float GetHeight() {
-			return height;
+			return (float)height;
 
 		}
 	};

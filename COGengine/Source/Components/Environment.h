@@ -102,19 +102,19 @@ namespace Cog {
 			return playedSounds;
 		}
 
-		float GetScreenWidth() {
+		int GetScreenWidth() {
 			return screenWidth;
 		}
 
-		float GetVirtualWidth() {
+		int GetVirtualWidth() {
 			return virtualWidth;
 		}
 
-		float GetScreenHeight() {
+		int GetScreenHeight() {
 			return screenHeight;
 		}
 
-		float GetVirtualHeight() {
+		int GetVirtualHeight() {
 			return virtualHeight;
 		}
 
@@ -129,12 +129,12 @@ namespace Cog {
 		/**
 		* Gets width and height in 2D vector
 		*/
-		ofVec2f GetScreenSize() {
-			return ofVec2f(screenWidth, screenHeight);
+		Vec2i GetScreenSize() {
+			return Vec2i(screenWidth, screenHeight);
 		}
 
-		ofVec2f GetVirtualScreenSize() {
-			return ofVec2f(virtualWidth, virtualHeight);
+		Vec2i GetVirtualScreenSize() {
+			return Vec2i(virtualWidth, virtualHeight);
 		}
 
 
@@ -220,22 +220,22 @@ namespace Cog {
 				case ScreenOrient::LANDSCAPE:
 					if (aspectRatio < virtualAspectRatio) {
 						virtualWidth = screenWidth;
-						virtualHeight = screenWidth / virtualAspectRatio;
+						virtualHeight = (int)(screenWidth / virtualAspectRatio);
 					}
 					else {
-						virtualWidth = screenHeight*virtualAspectRatio;
+						virtualWidth = (int)(screenHeight*virtualAspectRatio);
 						virtualHeight = screenHeight;
 					}
 					break;
 				case ScreenOrient::PORTRAIT:
 
 					if (aspectRatio < virtualAspectRatio) {
-						virtualWidth = screenHeight / virtualAspectRatio;
+						virtualWidth = (int)(screenHeight / virtualAspectRatio);
 						virtualHeight = screenHeight;
 					}
 					else {
 						virtualWidth = screenWidth;
-						virtualHeight = screenHeight*virtualAspectRatio;
+						virtualHeight = (int)(screenHeight*virtualAspectRatio);
 					}
 
 					break;

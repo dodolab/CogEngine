@@ -99,7 +99,7 @@ void ofxSQLiteFieldValues::begin() {
 }
 
 bool ofxSQLiteFieldValues::hasNext() {
-	return (_index < field_values.size());
+	return (_index < (int)field_values.size());
 }
 
 void ofxSQLiteFieldValues::next() {
@@ -307,7 +307,7 @@ ofxSQLiteSelect& ofxSQLiteSelect::limit(int nCount, int nOffset) {
 std::string ofxSQLiteSelect::getLiteralQuery(bool bFillValues) {
 	// inner joins.
 	std::string inner_joins = "";
-	for (int i = 0; i < joins.size(); ++i) {
+	for (unsigned i = 0; i < joins.size(); ++i) {
 		fields += ", " + joins[i].fields;
 		inner_joins = " INNER JOIN " + joins[i].table + " ON " + joins[i].condition;
 	}
@@ -333,7 +333,7 @@ std::string ofxSQLiteSelect::getLiteralQuery(bool bFillValues) {
 	std::string order_by = "";
 	if (orders.size() > 0) {
 		order_by += " ORDER BY ";
-		for (int i = 0; i < orders.size(); ++i) {
+		for (unsigned i = 0; i < orders.size(); ++i) {
 			order_by += " " + orders.at(i).field + " " + orders.at(i).order + ((i < orders.size() - 1) ? ", " : "");
 		}
 	}
@@ -472,7 +472,7 @@ std::string ofxSQLiteSelect::getResultAsAsciiTable() {
 			}
 			//row_results.push_back((unsigned char*)column_txt);
 			row_results.push_back(s);
-			if (s.size() > widths[i]) {
+			if ((int)s.size() > widths[i]) {
 				widths[i] = s.size() + 2;
 			}
 		}
@@ -480,9 +480,9 @@ std::string ofxSQLiteSelect::getResultAsAsciiTable() {
 	}
 
 	stringstream ss;
-	for (int i = 0; i < results.size(); ++i) {
+	for (unsigned i = 0; i < results.size(); ++i) {
 		vector<string> row = results[i];
-		for (int c = 0; c < row.size(); ++c) {
+		for (unsigned c = 0; c < row.size(); ++c) {
 			int col_width = widths[c];
 			ss << setw(col_width) << row[c] << "  |";
 		}

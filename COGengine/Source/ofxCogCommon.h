@@ -40,6 +40,7 @@
 #include "Utils.h"
 #include "StringHash.h"
 #include "Flags.h"
+#include "Vec2i.h"
 
 #pragma warning(pop)
 

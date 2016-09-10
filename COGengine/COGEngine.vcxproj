@@ -257,6 +257,7 @@
     <ClInclude Include="Source\Graphics\SpriteTexture.h" />
     <ClInclude Include="Source\Math\AStarSearch.h" />
     <ClInclude Include="Source\Math\Flags.h" />
+    <ClInclude Include="Source\Math\Vec2i.h" />
     <ClInclude Include="Source\Math\StringHash.h" />
     <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Misc\SQLiteEntity.h" />
@@ -288,7 +289,6 @@
     <ClCompile Include="Source\Components\ResourceCache.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\SceneContext.cpp" />
-    <ClCompile Include="Source\Core\EntityStorage.cpp" />
     <ClCompile Include="Source\Core\Facade.cpp" />
     <ClCompile Include="Source\Core\Msg.cpp" />
     <ClCompile Include="Source\Core\NodeBuilder.cpp" />
@@ -302,7 +302,6 @@
     <ClCompile Include="Source\Graphics\CollageTexture.cpp" />
     <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
     <ClCompile Include="Source\Graphics\SpriteTexture.cpp" />
-    <ClCompile Include="Source\Math\AStarSearch.cpp" />
     <ClCompile Include="Source\Math\Flags.cpp" />
     <ClCompile Include="Source\Math\StringHash.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />

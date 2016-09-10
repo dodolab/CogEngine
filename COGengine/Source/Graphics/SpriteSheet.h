@@ -22,7 +22,7 @@ namespace Cog {
 
 		spt<SpriteSet> AddSpriteSet(int offsetX, int offsetY, int totalFrames, int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight) {
 			SpriteSet* sprite = new SpriteSet(this, offsetX, offsetY, totalFrames, spriteWidth, spriteHeight, spriteSetWidth, spriteSetHeight,
-				this->spriteImage->getWidth(), this->spriteImage->getHeight());
+				(int)this->spriteImage->getWidth(), (int)this->spriteImage->getHeight());
 			spt<SpriteSet> sptSprite = spt<SpriteSet>(sprite);
 
 			sprites.push_back(sptSprite);

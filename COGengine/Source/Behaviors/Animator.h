@@ -138,10 +138,10 @@ namespace Cog {
 
 					int frameRow = frameIndex / actualNode->GetFrames();
 					int frameColumn = frameIndex % actualNode->GetFrames();
-					int cellWidth = spriteSheet->getWidth() / actualNode->GetFrames();
-					int cellHeight = spriteSheet->getHeight() / actualNode->GetLines();
+					int cellWidth = (int) (spriteSheet->getWidth() / actualNode->GetFrames());
+					int cellHeight = (int) (spriteSheet->getHeight() / actualNode->GetLines());
 
-					ofRectangle imageBound(frameColumn*cellWidth, frameRow*cellHeight, cellWidth, cellHeight);
+					ofRectangle imageBound((float)(frameColumn*cellWidth), (float)(frameRow*cellHeight), (float)cellWidth, (float)cellHeight);
 					owner->ChangeAttr(ATTR_IMGBOUNDS, imageBound);
 					owner->GetShape<spt<Image>>()->SetImage(spriteSheet);
 
@@ -233,7 +233,7 @@ namespace Cog {
 		*/
 		bool TrySibling() {
 
-			if (!context.isScopeReverted && context.actualChildIndex < (context.node->GetChildren().size() - 1)) {
+			if (!context.isScopeReverted && context.actualChildIndex < (int)(context.node->GetChildren().size() - 1)) {
 				// go to the next element
 				context.actualChildIndex++;
 				context.RefreshFrameIndex();

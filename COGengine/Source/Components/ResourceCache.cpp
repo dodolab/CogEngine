@@ -8,7 +8,7 @@ namespace Cog {
 
 	void ResourceCache::Init() {
 		// set global dpi so font will have the same pixel size on each display
-		ofTrueTypeFont::setGlobalDpi(CogGetScreenWidth() * 72 * 0.001f);
+		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
 	}
 
 	void ResourceCache::Init(spt<ofxXml> xml) {
@@ -108,7 +108,7 @@ namespace Cog {
 		ofImage* img = new ofImage();
 		// don't use texture because images are loaded in separate thread
 		img->setUseTexture(false);
-		bool loaded = img->loadImage(path);
+		bool loaded = img->load(path);
 		if (!loaded) CogLogError("Image couldn't be loaded: %s", path.c_str());
 
 
@@ -148,7 +148,7 @@ namespace Cog {
 		}
 		else {
 			ofTrueTypeFont* font = new ofTrueTypeFont();
-			font->loadFont(path, size, true, true);
+			font->load(path, size, true, true);
 			auto fontPtr = spt<ofTrueTypeFont>(font);
 			fs[size] = fontPtr;
 			return fontPtr;

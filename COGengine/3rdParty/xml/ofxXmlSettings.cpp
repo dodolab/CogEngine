@@ -175,7 +175,7 @@ int ofxXmlSettings::getValue(const string& tag, int defaultValue, int which){
 }
 
 //---------------------------------------------------------
-double ofxXmlSettings::getValue(const string& tag, double defaultValue, int which){
+float ofxXmlSettings::getValue(const string& tag, double defaultValue, int which){
     TiXmlHandle valHandle(NULL);
 	if (readTag(tag, valHandle, which)){
 		return ofToFloat(valHandle.ToText()->Value());
@@ -209,7 +209,7 @@ int 	ofxXmlSettings::getValuex(int            defaultValue, int which) {
 	return getValue(":", defaultValue, which);
 }
 
-double 	ofxXmlSettings::getValuex(double         defaultValue, int which) {
+float 	ofxXmlSettings::getValuex(double         defaultValue, int which) {
 	return getValue(":", defaultValue, which);
 }
 
@@ -686,7 +686,7 @@ int ofxXmlSettings::getAttribute(const string& tag, const string& attribute, int
 }
 
 //---------------------------------------------------------
-double ofxXmlSettings::getAttribute(const string& tag, const string& attribute, double defaultValue, int which){
+float ofxXmlSettings::getAttribute(const string& tag, const string& attribute, double defaultValue, int which){
     double value = defaultValue;
 	readDoubleAttribute(tag, attribute, value, which);
 	return value;
@@ -707,7 +707,7 @@ int ofxXmlSettings::getAttributex(const string& attribute, int defaultValue, int
 	return getAttribute(":", attribute, defaultValue, which);
 }
 
-double ofxXmlSettings::getAttributex(const string& attribute, double defaultValue, int which) {
+float ofxXmlSettings::getAttributex(const string& attribute, double defaultValue, int which) {
 	return getAttribute(":", attribute, defaultValue, which);
 }
 

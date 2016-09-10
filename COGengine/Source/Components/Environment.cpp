@@ -7,7 +7,7 @@ namespace Cog {
 
 	void Environment::Init() {
 		virtualAspectRatio = ((float)ofGetWindowSize().x) / ofGetWindowSize().y;
-		OnScreenSizeChanged(ofGetWindowSize().x, ofGetWindowSize().y);
+		OnScreenSizeChanged((int)ofGetWindowSize().x, (int)ofGetWindowSize().y);
 		screenSizeChanged = false;
 	}
 
@@ -39,8 +39,8 @@ namespace Cog {
 
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
 		screenSizeChanged = true;
-		screenWidth = virtualWidth = ofGetWindowSize().x;
-		screenHeight = virtualHeight = ofGetWindowSize().y;
+		screenWidth = virtualWidth = (int)ofGetWindowSize().x;
+		screenHeight = virtualHeight = (int)ofGetWindowSize().y;
 		screenOrient = screenWidth > screenHeight ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
 
 		aspectRatio = ((float)screenWidth) / screenHeight;
@@ -74,17 +74,17 @@ namespace Cog {
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen with more fingers
-		x -= ofGetCurrentViewport().x;
-		y -= ofGetCurrentViewport().y;
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (int)ofGetCurrentViewport().y;
 
 		if (pressed) {
-			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
+			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
 		}
 		else {
 			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 				if ((*it)->inputType == InputType::TOUCH && (*it)->touchId == button) {
 					// change position
-					(*it)->position = ofVec3f(x, y);
+					(*it)->position = Vec2i(x, y);
 					(*it)->ended = true;
 					return;
 				}
@@ -95,12 +95,12 @@ namespace Cog {
 	void Environment::OnMultiTouchMotion(int x, int y, int button) {
 		// user moves fingers
 
-		x -= ofGetCurrentViewport().x;
-		y -= ofGetCurrentViewport().y;
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (int)ofGetCurrentViewport().y;
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
-				(*it)->position = ofVec3f(x, y);
+				(*it)->position = Vec2i(x, y);
 			}
 		}
 	}
@@ -108,17 +108,17 @@ namespace Cog {
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen
 
-		x -= ofGetCurrentViewport().x;
-		y -= ofGetCurrentViewport().y;
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (int)ofGetCurrentViewport().y;
 
 		if (pressed) {
-			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
+			pressedPoints.push_back(new InputAct(button, Vec2i(x, y)));
 		}
 		else {
 			for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 				if ((*it)->inputType == InputType::TOUCH) {
 					// change position
-					(*it)->position = ofVec3f(x, y);
+					(*it)->position = Vec2i(x, y);
 					(*it)->ended = true;
 					return;
 				}
@@ -128,13 +128,13 @@ namespace Cog {
 
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
 
-		x -= ofGetCurrentViewport().x;
-		y -= ofGetCurrentViewport().y;
+		x -= (int)ofGetCurrentViewport().x;
+		y -= (int)ofGetCurrentViewport().y;
 
 		// user moves finger
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
-				(*it)->position = ofVec3f(x, y);
+				(*it)->position = Vec2i(x, y);
 			}
 		}
 	}
