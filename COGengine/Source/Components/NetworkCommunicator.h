@@ -37,6 +37,20 @@ namespace Cog {
 		map<string, uint64> discoveredPeers;
 		map<tBYTE, spt<NetOutputMessage>> unconfirmedMessages;
 
+		// frequency the broadcast is sent, per second
+		float broadcastingFrequency = 1;
+		// frequency the discover is made, per second
+		float discoveringFrequency = 4;
+		// frequency the messages are sent, per second
+		float sendingFrequency = 10;
+		// frequency the (re)connecting is made, per second
+		float connectingFrequency = 2;
+		
+		uint64 lastBroadcastTime = 0;
+		uint64 lastDiscoveringTime = 0;
+		uint64 lastSendingTime = 0;
+		uint64 lastConnectingTime = 0;
+
 	public:
 
 		void InitBroadcast(int applicationId, int myPort, int peerPort);
@@ -72,6 +86,30 @@ namespace Cog {
 			return discoveredPeers;
 		}
 
+		float GetBroadcastingFrequency() {
+			return broadcastingFrequency;
+		}
+
+		void SetBroadcastingFrequency(float frequency) {
+			this->broadcastingFrequency = frequency;
+		}
+
+		float GetSendingFrequency() {
+			return sendingFrequency;
+		}
+
+		void SetSendingFrequency(float frequency) {
+			this->sendingFrequency = frequency;
+		}
+
+		float GetConnectingFrequency() {
+			return connectingFrequency;
+		}
+
+		void SetConnectingFrequency(float frequency) {
+			this->connectingFrequency = frequency;
+		}
+
 		void PushMessageForSending(spt<NetOutputMessage> msg);
 		
 		void Close();
@@ -84,13 +122,13 @@ namespace Cog {
 
 	protected:
 
-		void UpdateListening(int frame, const uint64 absolute);
+		void UpdateListening(const uint64 absolute);
 
-		void UpdateDiscovering(int frame, const uint64 absolute);
+		void UpdateDiscovering(const uint64 absolute);
 
-		void UpdateConnecting(int frame, const uint64 absolute);
+		void UpdateConnecting(const uint64 absolute);
 
-		void UpdateCommunicating(int frame, const uint64 absolute);
+		void UpdateCommunicating(const uint64 absolute);
 
 		void SendUpdateMessage(uint64 time);
 	};

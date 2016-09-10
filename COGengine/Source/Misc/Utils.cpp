@@ -48,5 +48,10 @@ namespace Cog {
 		return color;
 	}
 
+	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency) {
+		float period = 1000 / frequency;
+		return (actualTime - lastTime) >= period;
+	}
+
 
 }// namespace
