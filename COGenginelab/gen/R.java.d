@@ -11,10 +11,8 @@ F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginel
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\layout\main_layout.xml \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\menu\main_layout.xml \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\raw\ofdataresources.zip \
-F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\raw\zia23924 \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\values\strings.xml \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\values\styles.xml \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\values-v11\styles.xml \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\res\values-v14\styles.xml \
-F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\bin\res\drawable\ic_launcher.png \
 F:\DATACORE\core\PROJECT\Projekty_II\GameDev\trunk\Development\Stage2\COGenginelab\bin\AndroidManifest.xml \

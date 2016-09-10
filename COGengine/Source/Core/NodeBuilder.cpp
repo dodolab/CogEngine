@@ -28,7 +28,7 @@ namespace Cog {
 	void NodeBuilder::SetTextNode(Node* node, string font, float size, ofColor color, string text) {
 		spt<ofTrueTypeFont> fontVal = CogGetFont(font, (int)size);
 
-		auto textShape = new Text(fontVal, text, size);
+		auto textShape = new Text(fontVal, text);
 		textShape->SetColor(color);
 		node->SetShape(spt<Text>(textShape));
 	}

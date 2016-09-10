@@ -34,10 +34,10 @@ namespace Cog {
 			this->current = data;
 		}
 
-		void ReadBit(BYTE& value);
+		void ReadBit(bool& value);
 
-		inline BYTE ReadBit() {
-			BYTE output = 0;
+		inline bool ReadBit() {
+			bool output = 0;
 			ReadBit(output);
 			return output;
 		}
@@ -58,13 +58,39 @@ namespace Cog {
 			return output;
 		}
 
-		void ReadData(BYTE* data, unsigned size);
+		void ReadFloat(float& value);
 
-		BYTE* ReadData(unsigned size) {
-			BYTE* output = new BYTE[size];
-			ReadData(output, size);
+		inline float ReadFloat() {
+			float output = 0;
+			ReadFloat(output);
 			return output;
 		}
+
+		void ReadBytes(BYTE* data, unsigned size);
+
+		BYTE* ReadBytes(unsigned size) {
+			BYTE* output = new BYTE[size];
+			ReadBytes(output, size);
+			return output;
+		}
+
+		void ReadDWords(DWORD* data, unsigned size);
+
+		DWORD* ReadDWords(unsigned size) {
+			DWORD* output = new DWORD[size];
+			ReadDWords(output, size);
+			return output;
+		}
+
+		void ReadFloats(float* data, unsigned size);
+
+		float* ReadFloats(unsigned size) {
+			float* output = new float[size];
+			ReadFloats(output, size);
+			return output;
+		}
+
+		string ReadString();
 
 		BYTE* GetBuffer() {
 			return buffer;

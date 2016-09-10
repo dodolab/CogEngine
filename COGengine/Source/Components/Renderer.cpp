@@ -4,6 +4,7 @@
 #include "Behavior.h"
 #include "Renderer.h"
 #include "Scene.h"
+#include "ofxTextLabel.h"
 
 namespace Cog {
 
@@ -133,6 +134,7 @@ namespace Cog {
 					case RenderType::RECTANGLE:
 					case RenderType::PLANE:
 					case RenderType::TEXT:
+					case RenderType::LABEL:
 						throw IllegalOperationException("Trying to render non-sprite node by sprite sheet renderer!");
 					case RenderType::SPRITE:
 						RenderSprite(node);
@@ -170,6 +172,9 @@ namespace Cog {
 					break;
 				case RenderType::TEXT:
 					RenderText(node);
+					break;
+				case RenderType::LABEL:
+					RenderLabel(node);
 					break;
 				case RenderType::SPRITE:
 				case RenderType::MULTISPRITE:
@@ -283,6 +288,47 @@ namespace Cog {
 		}
 
 		COGMEASURE_END("RENDER_PREPARE_MULTISPRITE");
+	}
+
+	void Renderer::RenderLabel(Node* owner) {
+		// load absolute matrix
+		auto& trans = owner->GetTransform();
+		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
+
+		spt<Label> shape = owner->GetShape<spt<Label>>();
+		ofSetColor(shape->GetColor());
+
+		spt<ofTrueTypeFont> font = shape->GetFont();
+
+		vector<string> textLines;
+		ofRectangle textBounds = ofRectangle();
+		ofRectangle drawBounds = ofRectangle(trans.absPos.x, trans.absPos.y, shape->GetLabelWidth(), CogGetScreenHeight()-trans.absPos.y);
+		ofxTextLabel::stringToLines(*font, shape->GetText(), drawBounds.width, textLines, textBounds);
+		auto text = shape->GetText();
+
+		float lineX, lineY;
+		lineX = drawBounds.x;
+		lineY = drawBounds.y;
+		int counter = 0;
+
+		int lineHeight = font->stringHeight("Ad");
+		int linesToDraw = (drawBounds.height / (1.5f*lineHeight));
+		int startingIndex = textLines.size() - linesToDraw;
+		if (startingIndex < 0) startingIndex = 0;
+
+		// draw only lines that should be drawn
+		for (auto it = (textLines.begin() + startingIndex); it != textLines.end(); ++it) {
+			if (counter++ == 0) {
+				lineY += font->stringHeight("Ad");  // Easiest way to get ascender height.
+			}
+			else {
+				lineY += font->getLineHeight();
+			}
+
+			font->drawString(*it, lineX, lineY);
+		}
+
+		//ofxTextLabel::drawLines(*font, textLines, textBounds, drawBounds);
 	}
 
 }// namespace
