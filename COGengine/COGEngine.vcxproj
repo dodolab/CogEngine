@@ -290,7 +290,6 @@
     <ClInclude Include="Source\Communication\NetReader.h" />
     <ClInclude Include="Source\Communication\Network.h" />
     <ClInclude Include="Source\Communication\NetWriter.h" />
-    <ClInclude Include="Source\Components\CellPartitioner.h" />
     <ClInclude Include="Source\Components\CogDatabase.h" />
     <ClInclude Include="Source\Components\InputHandler.h" />
     <ClInclude Include="Source\Components\Logger.h" />
@@ -342,6 +341,7 @@
     <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h" />
     <ClInclude Include="Source\Graphics\SpriteTexture.h" />
     <ClInclude Include="Source\Math\AStarSearch.h" />
+    <ClInclude Include="Source\Math\CellPartitioner.h" />
     <ClInclude Include="Source\Math\EasingFunc.h" />
     <ClInclude Include="Source\Math\Flags.h" />
     <ClInclude Include="Source\Math\Path.h" />
