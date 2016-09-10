@@ -330,9 +330,6 @@
     <ClInclude Include="Source\Math\Path.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\PathSegment.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Tests\StateMachineTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
@@ -555,9 +552,6 @@
     <ClInclude Include="Source\Components\LuaScripting.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\CellPartitioner.h">
-      <Filter>Source\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Behaviors\Slider.h">
       <Filter>Source\Behaviors</Filter>
     </ClInclude>
@@ -672,6 +666,15 @@
     <ClInclude Include="Source\Misc\EnumConverter.h">
       <Filter>Source\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Math\GridGraph.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\GridSpace.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\NodeCellObject.h">
+      <Filter>Source\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">
@@ -780,9 +783,6 @@
       <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\Math\Path.cpp">
-      <Filter>Source\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Math\PathSegment.cpp">
       <Filter>Source\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Communication\NetWriter.cpp">
@@ -1051,6 +1051,15 @@
     </ClCompile>
     <ClCompile Include="Source\Misc\EnumConverter.cpp">
       <Filter>Source\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\SteeringMath.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\AStarSearch.cpp">
+      <Filter>Source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\GridGraph.cpp">
+      <Filter>Source\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

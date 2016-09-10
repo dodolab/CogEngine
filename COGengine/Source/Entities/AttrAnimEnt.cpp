@@ -38,7 +38,7 @@ namespace Cog {
 		// get easing function
 		string easing = xml->getAttributex("easefunc", "");
 		if (!easing.empty()) {
-			this->fadeFunction = EasingManager::GetFadeFunction(easing);
+			this->fadeFunction = EnumConverter::GetFadeFunction(easing);
 		}
 	}
 

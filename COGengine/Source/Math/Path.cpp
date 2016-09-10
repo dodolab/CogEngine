@@ -3,16 +3,71 @@
 
 namespace Cog {
 
+	// ========================= PATH SEGMENT ==============================
 
-	Path::Path(const ofVec2f & start, const ofVec2f & end)
+	void PathSegment::operator=(const PathSegment & segment)
 	{
-		PathSegment firstSegment(start, end);
+		this->start = segment.start;
+		this->end = segment.end;
+		this->length = segment.length;
+	}
+
+	PathSegment::PathSegment(const ofVec2f & start, const ofVec2f & end) : start(start), end(end)
+	{
+		length = (end - start).length();
+	}
+
+	ofVec2f PathSegment::CalcPointOnSegment(float distance) const
+	{
+		float percentLength = distance / length;
+		float percentStart = 1 - percentLength;
+		return percentStart * start + percentLength * end;
+	}
+
+	float PathSegment::CalcDistToNearestPoint(const ofVec2f & point) const
+	{
+		// closer to start ( x  ------- )
+		if ((point - start).dot(end - start) < 0) return 0;
+
+		// closer to end ( ------- x)
+		if ((point - end).dot(start - end) < 0) return length;
+
+		// closer to point between start and end ( ------ x ------ )
+		return (end - start).dot(point - start) / length;
+	}
+
+	void PathSegment::AnalyzePoint(const ofVec2f point, const float minDist, float& closestPoint, float& closestPointDist) const
+	{
+		closestPoint = CalcDistToNearestPoint(point);
+
+		if (closestPoint < minDist) closestPoint = minDist;
+		
+
+		// calculate 2D point the segmentPoint represents
+		ofVec2f closest2DPoint = CalcPointOnSegment(closestPoint);
+		// calculate distance between point and closestPoint
+		closestPointDist = (closest2DPoint - point).length();
+	}
+
+	// ========================= PATH ==============================
+
+	Path::Path(const ofVec2f& firstSegmentStart, const ofVec2f& firstSegmentEnd)
+	{
+		PathSegment firstSegment(firstSegmentStart, firstSegmentEnd);
 		segments.push_back(firstSegment);
 		pathLength = firstSegment.length;
 	}
 
+	void Path::AddSegment(const ofVec2f& segmentEndPoint)
+	{
+		// connect the segment to the last one
+		PathSegment segment(segments.back().end, segmentEndPoint);
+		segments.push_back(segment);
+		// increment total length of the path
+		pathLength += segment.length;
+	}
 
-	float Path::CalcPathPoint(float beginning, const ofVec2f & point, int& segment)
+	void Path::CalcPathPoint(float beginning, const ofVec2f point, int& segmentIndex, float& segmentValue)
 	{
 		COGASSERT(beginning >= 0, "PATH", "beginning must be >= 0");
 		COGASSERT(segments.size() >= 1, "PATH", "there is no segment to compute");
@@ -22,8 +77,9 @@ namespace Cog {
 
 		for (int i = 0; i < segments.size(); i++) {
 
-			// found segment to consider
 			if (minDistance < segments[i].length) {
+				// found segment to consider
+				
 				unsigned int closestSegment = i;
 				float segmentPoint; // point on the segment
 				float segmentPointDistance; // distance between given point and segmentPoint
@@ -52,45 +108,37 @@ namespace Cog {
 						break;
 					}
 				}
-				segment = i;
-				return pathPointSoFar + segmentPoint;
+				segmentIndex = i;
+				segmentValue = pathPointSoFar + segmentPoint;
+				return;
 			}
 			else if (i == segments.size() - 1) {
-				segment = i;
-				return -1;
+				segmentIndex = i;
+				segmentValue = -1;
+				return;
 			}
 
-			segment = i;
+			segmentIndex = i;
 			minDistance -= segments[i].length;
 			pathPointSoFar += segments[i].length;
 		}
 
-		return -1;
+		segmentIndex = 0;
+		segmentValue = -1;
+		return;
 	}
 
 	ofVec2f Path::CalcPathPosition(float pathPoint)
 	{
 		COGASSERT(pathPoint >= 0, "PATH","pathPoint must be >=0");
 
-		for (unsigned int i = 0; i < segments.size(); ++i)
-		{
-			if (pathPoint < segments[i].length)
-			{
-				// The position is in the ith segment.
-				return segments[i].CalcPointOnSegment(pathPoint);
-			}
-			pathPoint -= segments[i].length;
+		for (auto& seg : segments) {
+			if (pathPoint < seg.length) return seg.CalcPointOnSegment(pathPoint);
+			pathPoint -= seg.length;
 		}
-		
+
 		// there is no such point...
 		return segments.back().end;
 	}
 
-	void Path::AddSegment(const ofVec2f & segmentEndPoint)
-	{
-		// connect the segment to the last one
-		PathSegment segment(segments.back().end, segmentEndPoint);
-		segments.push_back(segment);
-		pathLength += segment.length;
-	}
 }

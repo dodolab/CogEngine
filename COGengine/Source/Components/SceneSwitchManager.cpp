@@ -103,12 +103,12 @@ namespace Cog {
 		else {
 			if (isDialog) {
 				auto slide = new OverrideTween(tweenDir, to, 1);
-				slide->SetFadeFunction(EasingManager::cosineInOut);
+				slide->SetFadeFunction(EasingFunc::cosineInOut);
 				to->AddBehavior(slide);
 			}
 			else {
 				auto slide = new SlideTween(tweenDir, from, to, 1);
-				slide->SetFadeFunction(EasingManager::cosineInOut);
+				slide->SetFadeFunction(EasingFunc::cosineInOut);
 				to->AddBehavior(slide);
 			}
 			

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofVec2f.h"
+#include "ofVec3f.h"
 
 namespace Cog {
 
