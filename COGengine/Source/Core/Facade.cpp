@@ -32,38 +32,36 @@ namespace Cog {
 		return COGEngine.environment->GetPlayedSounds();
 	}
 
-	int CogGetScreenRealWidth() {
-		return COGEngine.environment->GetRealWidth();
+	float CogGetScreenWidth() {
+		return COGEngine.environment->GetScreenWidth();
 	}
 
-	int CogGetScreenRealHeight() {
-		return COGEngine.environment->GetRealHeight();
+	float CogGetVirtualWidth() {
+		return COGEngine.environment->GetVirtualWidth();
 	}
 
-	int CogGetScreenWidth() {
-		return COGEngine.environment->GetWidth();
+	float CogGetScreenHeight() {
+		return COGEngine.environment->GetScreenHeight();
 	}
 
-	int CogGetScreenHeight() {
-		return COGEngine.environment->GetHeight();
+	float CogGetVirtualHeight() {
+		return COGEngine.environment->GetVirtualHeight();
 	}
 
-	float CogGetScreenRealAspectRatio() {
-		return COGEngine.environment->GetRealAspectRatio();
+	float CogGetVirtualAspectRatio() {
+		return COGEngine.environment->GetVirtualAspectRatio();
 	}
 
 	float CogGetScreenAspectRatio() {
-		return COGEngine.environment->GetAspectRatio();
+		return COGEngine.environment->GetScreenAspectRatio();
 	}
-
-	void CogSetScreenAspectRatio(float ratio) {
-		COGEngine.environment->SetAspectRatio(ratio);
-	}
-
-
 
 	ofVec2f CogGetScreenSize() {
-		return COGEngine.environment->GetSize();
+		return COGEngine.environment->GetScreenSize();
+	}
+
+	ofVec2f CogGetVirtualScreenSize() {
+		return COGEngine.environment->GetVirtualScreenSize();
 	}
 
 	void CogRunThread(ofThread* thread) {
@@ -132,9 +130,6 @@ namespace Cog {
 		COGEngine.renderer->PushNode(node);
 	}
 
-	void CogRender() {
-		COGEngine.renderer->Render();
-	}
 
 	// =================== MCACHE =======================
 

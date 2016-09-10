@@ -12,8 +12,9 @@ namespace Cog {
 	}
 
 	void SceneContext::OnMessage(Msg& msg) {
-		if (msg.GetAction() == StringHash(ACT_SCENE_SWITCHED)) {
-			// nothing to do here..for now
+		if (msg.GetAction() == ACT_SCENE_SWITCHED) {
+			Node* scene =  (Node*)msg.GetSourceObject();
+			actualScene = scene->GetScene();
 		}
 	}
 
@@ -43,19 +44,21 @@ namespace Cog {
 				Node* to = loadingScene->GetSceneNode();
 				sceneStack.push(actualScene);
 				actualScene = loadingScene;
+				
+				// switch to loading window
 				manager->SwitchToScene(from, to, tweenDir);
+				
+				// set tween to the map window, but don't switch automatically
+				manager->PushSceneSwitch(to, scene->GetSceneNode(), tweenDir, false);
 			}
 
 			CogRunThread(async);
 			return;
 		}
 
-		Node* to = scene->GetSceneNode();
-		if (loadingScene == nullptr || (actualScene->GetName().compare(loadingScene->GetName()) != 0)) {
-			sceneStack.push(actualScene);
-		}
+		SetActualScene(scene);
 
-		actualScene = scene;
+		Node* to = scene->GetSceneNode();
 		manager->SwitchToScene(from, to, tweenDir);
 	}
 
@@ -77,6 +80,14 @@ namespace Cog {
 			return true;
 		}
 		return false;
+	}
+
+	void SceneContext::SetActualScene(Scene* scene) {
+		if (loadingScene == nullptr || (actualScene->GetName().compare(loadingScene->GetName()) != 0)) {
+				sceneStack.push(actualScene);
+		}
+
+		actualScene = scene;
 	}
 
 	void SceneContext::LoadScenesFromXml(spt<ofxXml> xml) {

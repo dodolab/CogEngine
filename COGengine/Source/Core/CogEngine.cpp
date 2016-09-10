@@ -84,16 +84,27 @@ namespace Cog {
 	}
 
 	void Engine::Draw(uint64 delta, uint64 absolute) {
-		renderer->ClearCounters();
-		// clear the drawing surface
-		ofBackground(50, 50, 50);
-		// setup ortographic camera
-		ofSetupScreenOrtho(environment->GetRealWidth(), environment->GetRealHeight(), -1000, 1000);
 		
-		// draw the root node
-		sceneContext->GetRootObject()->Draw(delta, absolute);
+		Node* root = sceneContext->GetRootObject();
+		auto children = root->GetChildren();
+		
+		renderer->BeginRender();
 
-		renderer->Render();
+		for (auto it = children.begin(); it != children.end(); ++it) {
+			// render scene one by one
+			Node* scene = (*it);
+
+			if (scene->GetRunningMode() != RunningMode::INVISIBLE && 
+				scene->GetRunningMode() != RunningMode::DISABLED) {
+				renderer->InitViewPort(scene->GetScene());
+				renderer->ClearCounters();
+				scene->Draw(delta, absolute);
+				renderer->Render();
+			}
+
+		}
+
+		renderer->EndRender();
 	}
 
 	void Engine::RegisterComponents() {
@@ -104,9 +115,9 @@ namespace Cog {
 		renderer = new Renderer();
 		inputHandler = new InputHandler();
 
+		REGISTER_COMPONENT(logger);
 		REGISTER_COMPONENT(environment);
 		REGISTER_COMPONENT(resourceCache);
-		REGISTER_COMPONENT(logger);
 		REGISTER_COMPONENT(sceneContext);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);

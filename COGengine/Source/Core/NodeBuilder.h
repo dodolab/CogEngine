@@ -58,7 +58,17 @@ namespace Cog {
 			string type = xml->getAttributex("type", "");
 			string img = xml->getAttributex("img", "");
 
+			auto transSet = GETCOMPONENT(ResourceCache)->GetDefaultSettings("transform");
+
+			// get reference width and height
+			int refWidth = transSet.GetItem("ref_width").GetValInt();
+			int refHeight = transSet.GetItem("ref_height").GetValInt();
+			
+
 			Node* node = new Node(ObjType::OBJECT, 0, name);
+			// set default shape
+			node->SetShape(spt<Rectangle>(new Rectangle(refWidth, refHeight)));
+
 			if (!img.empty()) {
 				AssignImage(node, img);
 			}
@@ -78,12 +88,11 @@ namespace Cog {
 				AssignSelect(node, img, imgSelect, selectGroup);
 			}
 
-			if (!type.empty()) {
-				if (type.compare("background") == 0) {
-					// set background image
-					math.SetSizeToScreen(node, parent);
-				}
+			if (type.compare("background") == 0) {
+				// set background image
+				math.SetSizeToScreen(node, parent);
 			}
+			
 
 			// text must be loaded before transform
 			if (xml->pushTagIfExists("text")) {
@@ -92,7 +101,8 @@ namespace Cog {
 			}
 
 			if (xml->pushTagIfExists("transform")) {
-			// load transform
+
+				// load transform
 				math.LoadTransformFromXml(xml, node, parent, settings);
 				xml->popTag();
 			}

@@ -104,7 +104,7 @@ public:
 	}
 
 	void Init() {
-		RegisterListening(ACT_BEHAVIOR_FINISHED);
+		//RegisterListening(ACT_BEHAVIOR_FINISHED);
 	}
 
 
@@ -201,7 +201,7 @@ public:
 	void Init() {
 		othersEnded = false;
 		fpsCounter = 0;
-		RegisterListening(ACT_BEHAVIOR_FINISHED);
+//		RegisterListening(ACT_BEHAVIOR_FINISHED);
 	}
 
 	int fpsCounter;

@@ -38,6 +38,9 @@ namespace Cog
 		// indicator, if this scene has been loaded
 		bool loaded = false;
 
+		// viewport offset of the scene
+		ofVec2f viewPortOffset = ofVec2f(0,0);
+
 	public:
 
 		Node* GetSceneNode() {
@@ -70,6 +73,10 @@ namespace Cog
 
 		void SetIndex(int index) {
 			this->index = index;
+		}
+
+		ofVec2f& GetViewPortOffset() {
+			return viewPortOffset;
 		}
 
 		/**

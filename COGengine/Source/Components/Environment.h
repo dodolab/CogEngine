@@ -7,6 +7,10 @@
 
 namespace Cog {
 
+	enum class ScreenOrient {
+		PORTRAIT, LANDSCAPE
+	};
+
 	/**
 	* Environment controller for device events (especially inputs)
 	*/
@@ -24,17 +28,22 @@ namespace Cog {
 		vector<InputAct*> pressedPoints;
 		// collection of played sounds
 		vector<spt<Sound>> playedSounds;
+		// screen orientation
+		ScreenOrient screenOrient;
 
 		// scaled screen width
-		int width;
+		int virtualWidth;
 		// scaled screen height
-		int height;
+		int virtualHeight;
 		// real screen width
-		int realWidth;
+		int screenWidth;
 		// real screen height
-		int realHeight;
+		int screenHeight;
 		// virtual aspect ratio
+		float virtualAspectRatio;
+		// real aspect ratio
 		float aspectRatio;
+
 		// collection of running threads
 		vector<ofThread*> runningThreads;
 	public:
@@ -44,6 +53,11 @@ namespace Cog {
 		* Initializes environment controller
 		*/
 		void Init();
+
+		/**
+		* Initializes environment controller, using xml
+		*/
+		void Init(spt<ofxXml> xml);
 
 		/**
 		* Adds a new sound
@@ -88,77 +102,48 @@ namespace Cog {
 			return playedSounds;
 		}
 
-		/**
-		* Gets ratio of virtual size / real size
-		*/
-		float GetRatioScale() {
-			return (aspectRatio) / (((float)realWidth) / realHeight);
+		float GetScreenWidth() {
+			return screenWidth;
 		}
 
-		/**
-		* Gets real device width
-		*/
-		int GetRealWidth() {
-			return realWidth;
+		float GetVirtualWidth() {
+			return virtualWidth;
 		}
 
-		/**
-		* Gets real device height
-		*/
-		int GetRealHeight() {
-			return realHeight;
+		float GetScreenHeight() {
+			return screenHeight;
 		}
 
-		/**
-		* Gets real aspect ratio, calculated from real devide width and height
-		*/
-		float GetRealAspectRatio() {
-			return ((float)realWidth / realHeight);
+		float GetVirtualHeight() {
+			return virtualHeight;
 		}
 
-		/**
-		* Gets virtual aspect ratio
-		*/
-		float GetAspectRatio() {
+		float GetVirtualAspectRatio() {
+			return virtualAspectRatio;
+		}
+
+		float GetScreenAspectRatio() {
 			return aspectRatio;
-		}
-
-		/**
-		* Sets aspect ratio
-		*/
-		void SetAspectRatio(float ratio) {
-			this->aspectRatio = ratio;
-
-			ReinitAspectRatio();
-		}
-
-		/**
-		* Gets screen virtual width
-		*/
-		int GetWidth() {
-			return width;
-		}
-
-		/**
-		* Gets screen virtual height
-		*/
-		int GetHeight() {
-			return height;
-		}
-
-		/**
-		* Sets screen size without any recalculation
-		*/
-		void SetScreenSizeHard(ofVec2f size) {
-			this->width = size.x;
-			this->height = size.y;
 		}
 
 		/**
 		* Gets width and height in 2D vector
 		*/
-		ofVec2f GetSize() {
-			return ofVec2f(GetWidth(), GetHeight());
+		ofVec2f GetScreenSize() {
+			return ofVec2f(screenWidth, screenHeight);
+		}
+
+		ofVec2f GetVirtualScreenSize() {
+			return ofVec2f(virtualWidth, virtualHeight);
+		}
+
+
+		/**
+		* Sets virtual aspect ratio
+		*/
+		void SetVirtualAspectRatio(float ratio) {
+			this->virtualAspectRatio = ratio;
+			RecalcVirtualSize();
 		}
 
 		/**
@@ -226,16 +211,34 @@ namespace Cog {
 		* Reinitializes virtual width and height
 		* according to the actual aspect ratio
 		*/
-		void ReinitAspectRatio() {
-			if (abs(GetAspectRatio() - GetRealAspectRatio()) > 0.1f) {
+		void RecalcVirtualSize() {
 
-				if (realWidth <= realHeight) {
-					width = GetRatioScale()*realWidth;
-					height = realHeight;
-				}
-				else {
-					width = realWidth;
-					height = GetRatioScale()*realHeight;
+			if (abs(virtualAspectRatio - aspectRatio) > 0.01f) {
+				
+				// recalculate virtual width and height
+				switch (screenOrient) {
+				case ScreenOrient::LANDSCAPE:
+					if (aspectRatio < virtualAspectRatio) {
+						virtualWidth = screenWidth;
+						virtualHeight = screenWidth / virtualAspectRatio;
+					}
+					else {
+						virtualWidth = screenHeight*virtualAspectRatio;
+						virtualHeight = screenHeight;
+					}
+					break;
+				case ScreenOrient::PORTRAIT:
+
+					if (aspectRatio < virtualAspectRatio) {
+						virtualWidth = screenHeight / virtualAspectRatio;
+						virtualHeight = screenHeight;
+					}
+					else {
+						virtualWidth = screenWidth;
+						virtualHeight = screenHeight*virtualAspectRatio;
+					}
+
+					break;
 				}
 			}
 		}

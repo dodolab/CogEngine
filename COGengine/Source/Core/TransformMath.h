@@ -34,7 +34,7 @@ namespace Cog {
 
 		void SetTransform(Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
 			
-			ofVec2f scrSize = CogGetScreenSize();
+			ofVec2f scrSize = CogGetVirtualScreenSize();
 
 			Trans nodeTransform = Trans(0, 0);
 
@@ -49,7 +49,7 @@ namespace Cog {
 		void CalcTransform(Trans& outputTrans, Node* node, Node* parent, ofVec2f position, int zIndex, CalcType positionCalc, 
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, int gridWidth = 0, int gridHeight = 0) {
 
-			ofVec2f scrSize = CogGetScreenSize();
+			ofVec2f scrSize = CogGetVirtualScreenSize();
 
 			Trans& parentTrans = parent->GetTransform();
 
@@ -79,7 +79,7 @@ namespace Cog {
 
 
 		ofVec2f CalcPosition(Node* node, Node* parent, ofVec2f pos, CalcType posCalc, int gridWidth = 0, int gridHeight = 0) {
-			ofVec2f scrSize = CogGetScreenSize();
+			ofVec2f scrSize = CogGetVirtualScreenSize();
 			Trans& parentTrans = parent->GetTransform();
 			ofVec2f absPos;
 
@@ -117,7 +117,7 @@ namespace Cog {
 
 
 		ofVec3f CalcScale(Node* node, Node* parent, float width, float height, CalcType scaleCalc, int gridWidth = 0, int gridHeight = 0) {
-			ofVec2f scrSize = CogGetScreenSize();
+			ofVec2f scrSize = CogGetVirtualScreenSize();
 			Trans& parentTrans = parent->GetTransform();
 
 			float scaleX = 1;

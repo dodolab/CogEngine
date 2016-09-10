@@ -6,18 +6,45 @@
 namespace Cog {
 
 	void Environment::Init() {
+		OnScreenSizeChanged(ofGetWindowSize().x, ofGetWindowSize().y);
+		virtualAspectRatio = ((float)virtualWidth) / virtualHeight;
 		screenSizeChanged = false;
-		realWidth = width = ofGetWindowSize().x;
-		realHeight = height = ofGetWindowSize().y;
-		aspectRatio = ((float)realWidth) / realHeight;
-		ReinitAspectRatio();
+	}
+
+	void Environment::Init(spt<ofxXml> xml) {
+		this->Init();
+
+		auto resCache = GETCOMPONENT(ResourceCache);
+		Setting set = resCache->GetGlobalSettings("display");
+
+		if (!set.name.empty()) {
+			string aspectRatio = set.GetItemVal("aspect_ratio");
+
+			if (!aspectRatio.empty()) {
+				int dividerIndex = aspectRatio.find("/");
+
+				if (dividerIndex == -1) {
+					throw IllegalArgumentException(string_format("Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str()));
+				}
+
+				float firstVal = ofToFloat(aspectRatio.substr(0, dividerIndex));
+				float secondVal = ofToFloat(aspectRatio.substr(dividerIndex + 1));
+
+				this->SetVirtualAspectRatio(firstVal / secondVal);
+				CogLogInfo("Environment", "Aspect ratio set as %s",aspectRatio.c_str());
+			}
+		}
+
 	}
 
 	void Environment::OnScreenSizeChanged(int newWidth, int newHeight) {
 		screenSizeChanged = true;
-		realHeight = newHeight;
-		realWidth = newWidth;
-		ReinitAspectRatio();
+		screenWidth = virtualWidth = ofGetWindowSize().x;
+		screenHeight = virtualHeight = ofGetWindowSize().y;
+		screenOrient = screenWidth > screenHeight ? ScreenOrient::LANDSCAPE : ScreenOrient::PORTRAIT;
+
+		aspectRatio = ((float)screenWidth) / screenHeight;
+		RecalcVirtualSize();
 	}
 
 
@@ -47,9 +74,8 @@ namespace Cog {
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen with more fingers
-
-		// todo: scale to format
-		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+		x -= ofGetCurrentViewport().x;
+		y -= ofGetCurrentViewport().y;
 
 		if (pressed) {
 			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
@@ -68,8 +94,9 @@ namespace Cog {
 
 	void Environment::OnMultiTouchMotion(int x, int y, int button) {
 		// user moves fingers
-		// todo: scale to format
-		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+
+		x -= ofGetCurrentViewport().x;
+		y -= ofGetCurrentViewport().y;
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
 			if ((*it)->touchId == button && (*it)->inputType == InputType::TOUCH) {
@@ -81,8 +108,8 @@ namespace Cog {
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
 		// user touches the screen
 
-		// todo: scale to format
-		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+		x -= ofGetCurrentViewport().x;
+		y -= ofGetCurrentViewport().y;
 
 		if (pressed) {
 			pressedPoints.push_back(new InputAct(button, ofVec3f(x, y)));
@@ -100,8 +127,9 @@ namespace Cog {
 	}
 
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
-		// todo: scale to format
-		if (width != GetWidth()) x /= (float)(width / ((float)GetWidth()));
+
+		x -= ofGetCurrentViewport().x;
+		y -= ofGetCurrentViewport().y;
 
 		// user moves finger
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {

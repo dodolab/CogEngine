@@ -27,6 +27,7 @@ namespace Cog {
 
 		void Init() {
 			zIndexes = map<int, vector<Node*>>();
+
 		}
 
 		void RestartRenderer() {
@@ -64,45 +65,13 @@ namespace Cog {
 			}
 		}
 
-		void Render() {
-			for (auto it = rendererLayers.begin(); it != rendererLayers.end(); ++it) {
-				renderer->clearCounters((*it));
-			}
-			
-			for (auto it = zIndexes.begin(); it != zIndexes.end(); ++it) {
+		void BeginRender();
 
-				vector<Node*>& arr = (*it).second;
+		void EndRender();
 
-				for (auto it2 = arr.begin(); it2 != arr.end(); ++it2) {
-					Node* node = (*it2);
+		void InitViewPort(Scene* sceneNode);
 
-					switch (node->GetShape()->GetRenderType()) {
-					case RenderType::IMAGE:
-						RenderImage(node);
-						break;
-					case RenderType::POLYGON:
-						RenderPolygon(node);
-						break;
-					case RenderType::RECTANGLE:
-						RenderRectangle(node);
-						break;
-					case RenderType::TEXT:
-						RenderText(node);
-						break;
-					case RenderType::SPRITE:
-						RenderSprite(node);
-						break;
-					case RenderType::MULTISPRITE:
-						RenderMultiSprite(node);
-						break;
-					}
-
-				}
-			}
-
-			//ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
-			//renderer->draw();
-		}
+		void Render();
 
 	protected:
 
