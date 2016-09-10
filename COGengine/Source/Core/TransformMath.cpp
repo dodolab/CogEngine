@@ -113,8 +113,6 @@ namespace Cog {
 			break;
 		case CalcType::PER:
 			// relative percentage scale ->1.0 x 1.0 will fit the whole parent
-			if (width == 0) width = 1;
-			if (height == 0) height = 1;
 			scaleX = (width * parent->GetShape()->GetWidth() / node->GetShape()->GetWidth());
 			scaleY = (height * parent->GetShape()->GetHeight() / node->GetShape()->GetHeight());
 			break;
@@ -128,6 +126,8 @@ namespace Cog {
 			break;
 		}
 
+
+		// correct auto size
 		if (width != 0 && height != 0) return ofVec3f(scaleX, scaleY, 1);
 		else if (width == 0) return ofVec3f(scaleY, scaleY, 1);
 		else return ofVec3f(scaleX, scaleX, 1); // height == 0

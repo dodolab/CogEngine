@@ -102,6 +102,13 @@ namespace Cog {
 			else {
 				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1.0));
 				height = xml->getAttributex("height", defaultSettings.GetItemValFloat("height", 1.0));
+
+				// set the other property to 0 so that we know that it should have the same value
+				if (width != height) {
+					if (width != 1 && height == 1) height = 0;
+					else if (height != 1 && width == 1) width = 0;
+				}
+
 			}
 
 			size = ofVec2f(width, height);

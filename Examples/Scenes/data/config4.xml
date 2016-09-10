@@ -8,17 +8,17 @@
 </animations>
 
 <transforms>
-  <transform name="mario_from" pos_x="0" pos_y="0.46" z_index="2" ptype="per" anchor_x="1" width="1" stype="abs" />
-  <transform name="mario_to" pos_x="1" pos_y="0.46" z_index="2" ptype="per" anchor="0" width="1" stype="abs" />
+  <transform name="mario_from" pos_x="0" pos_y="0.57" z_index="2" ptype="per" anchor_x="1"  />
+  <transform name="mario_to" pos_x="1" pos_y="0.57" z_index="2" ptype="per" anchor="0"  />
 </transforms>
 
   <scenes initial="main">
     <scene name="main">
       <node img="bgr.jpg" />
       <node name="mario" img="mario_0.png">
-	    <transform pos_x="0" pos_y="0.46" z_index="2" ptype="rel" anchor_x="1" width="1" stype="abs"/>
+	    <transform pos_x="0" pos_y="0.6" z_index="2" ptype="per" anchor_x="1" width="0.1" stype="per"/>
 		
-		<behavior type="SheetAnim">
+		<behavior type="SheetAnimator">
 		  <setting>
 		    <item key="animation" value="mario_anim_sheet" />
 		  </setting>

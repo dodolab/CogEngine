@@ -8,100 +8,56 @@
 #include "Scene.h"
 #include "EasingFunc.h"
 #include "AttrAnimEnt.h"
+#include "AnimContextStack.h"
+#include "AttribAnim.h"
 
 namespace Cog {
-
-
-	class AttrAnimNode {
-	public:
-		vector<spt<AttrAnimNode>> children;
-		spt<AttrAnimEnt> entity;
-	};
-
-	/**
-	* Context entity used in animation behavior as
-	* it goes through the animation tree
-	*/
-	class AttrAnimContext {
-	public:
-		// index of actual loop
-		int actualLoop;
-		// actual node whose children are just processing
-		spt<AttrAnimNode> node;
-		// index of actual child being processed
-		int actualChildIndex;
-		// indicator, if scope of actual node is reverted
-		// two reverted scopes give uninverted scope !!
-		bool isScopeReverted;
-		// indicator, if the node entity is a root node
-		bool isRootNode;
-
-		AttrAnimContext() {
-
-		}
-
-		AttrAnimContext(spt<AttrAnimNode> node, bool isScopeReverted, bool isRootNode) {
-
-			this->isRootNode = isRootNode;
-			this->actualLoop = 0;
-			this->node = node;
-			this->isScopeReverted = isScopeReverted;
-
-			if (isScopeReverted) {
-				// start at end
-				this->actualChildIndex = node->children.size() - 1;
-			}
-			else {
-				// start at the beginning
-				this->actualChildIndex = 0;
-			}
-		}
-
-		/**
-		* Gets true, if this child is reverted; depends on actual scope
-		* and settings of actual child
-		*/
-		bool IsChildReverted() {
-			return isScopeReverted ^ GetActualChild()->entity->inverted;
-		}
-
-		/*
-		* Gets actual child being processed
-		*/
-		spt<AttrAnimNode> GetActualChild() {
-			if (isRootNode) return node;
-			else return node->children[actualChildIndex];
-		}
-	};
-
 
 
 	/**x
 	* Behavior for per-attribute animation
 	*/
-	class AttribAnim : public Behavior {
+	class AttribAnimator : public Behavior {
+		OBJECT_PROTOTYPE_INIT(AttribAnimator)
 	private:
-		spt<AttrAnimEnt> animEntity;
-		float fromVal = 0;
-		float toVal = 0;
-		float actual = 0;
-		float actualRepeat = 0;
-		bool isForwardDirection = true;
+		AnimContextStack contextStack;
 	public:
 
-		AttribAnim(spt<AttrAnimEnt> animEntity) : animEntity(animEntity) {
+		AttribAnimator(spt<SheetAnim> anim) {
+			contextStack = AnimContextStack(anim);
+		}
+
+		AttribAnimator(Setting& setting) {
+			string animation = setting.GetItemVal("animation");
+			string renderTypeStr = setting.GetItemVal("render_type");
+
+			auto resCache = GETCOMPONENT(ResourceCache);
+			contextStack.SetRootNode(resCache->GetAnimation(animation));
 		}
 
 		void Init() {
-			actualRepeat = 0;
-			actual = 0;
-			isForwardDirection = true;
+			if (!contextStack.GetRootNode()) {
+				CogLogError("Anim", "Animation cant' run, entity is null");
+				ended = true;
+				return;
+			}
+
+			//int gridWidth = settings.GetSettingValInt("transform", "grid_width");
+			//int gridHeight = settings.GetSettingValInt("transform", "grid_height");
+			// the root is not in inverted scope (but it can be inverted itself)
+		}
+
+		void InitEntity(AttribAnimContext& animContext) {
+
+			spt<AttrAnimEnt> animEntity = animContext.GetEntity();
 			
 			Trans& ownerTrans = owner->GetTransform();
 			TransformMath math = TransformMath();
 
 			TransformEnt toTransEnt;
 			TransformEnt fromTransEnt;
+
+			float fromVal, toVal;
 
 			if (animEntity->isFixed) {
 				fromVal = GetAttrib(animEntity->attributeType, ownerTrans);
@@ -120,42 +76,39 @@ namespace Cog {
 			Trans toTrans;
 			math.CalcTransform(toTrans, owner, owner->GetParent(), toTransEnt);
 			toVal = GetAttrib(animEntity->attributeType, toTrans);
+
+			animContext.Init(fromVal, toVal);
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
 			
-			actual += delta;
+			contextStack.MoveToNext(delta);
 
-
-			float actualCropped = actual;
-
-			if (actual >= animEntity->duration) {
-				actualCropped = animEntity->duration;
+			if (contextStack.Ended()) {
+				Finish();
+				SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
 			}
+			else {
+				spt<AttribAnim> actualChild = contextStack.GetContext().GetActualChild();
 
-			float actualPercent = actualCropped / animEntity->duration;
-			if (!isForwardDirection) actualPercent = 1 - actualPercent;
-			if (animEntity->fadeFunction != nullptr) {
-				actualPercent = animEntity->fadeFunction(actualPercent);
-			}
-			float actualValue = fromVal + (toVal - fromVal)*actualPercent;
-			Trans& ownerTrans = owner->GetTransform();
-			SetAttrib(animEntity->attributeType, actualValue, ownerTrans);
+				for (auto& attr : actualChild->GetAnimEntities()) {
 
-			if (actual >= animEntity->duration) {
-				if (isForwardDirection && animEntity->biDirectional) {
-					isForwardDirection = false; // go back
-					actual = 0;
-				}
-				else {
-					actualRepeat++;
+					spt<AttrAnimEnt> entity = attr.GetEntity();
 
-					if (animEntity->repeat > actualRepeat || animEntity->isInfinite) {
-						Init();
-					}
-					else {
-						Finish();
-						SendMessageNoBubbling(ACT_TRANSFORM_ENDED, 0, nullptr, owner);
+					if (entity->begin < contextStack.GetContext().actualProgress && entity->end > contextStack.GetContext().actualProgress) {
+						float actual = contextStack.GetContext().actualProgress == 0 ? 0 : contextStack.GetContext().actualProgress / entity->duration;
+
+						if (entity->fadeFunction != nullptr) {
+							actual = entity->fadeFunction(actual);
+						}
+
+						if (!attr.IsInitialized()) {
+							this->InitEntity(attr);
+						}
+
+						float actualValue = attr.GetFromValue() + (attr.GetToValue() - attr.GetFromValue())*actual;
+						Trans& ownerTrans = owner->GetTransform();
+						SetAttrib(entity->attributeType, actualValue, ownerTrans);
 					}
 				}
 			}

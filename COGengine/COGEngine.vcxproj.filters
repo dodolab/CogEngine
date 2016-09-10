@@ -360,26 +360,26 @@
     <ClInclude Include="Source\Entities\AttrAnimEnt.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\AttribsAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\AttribAnim.h">
-      <Filter>Source\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entities\AttrAnimSetEnt.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Graphics\SheetAnim.h">
       <Filter>Source\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Behaviors\SheetAnimBeh.h">
-      <Filter>Source\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\CommonAnim.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Graphics\AnimLoader.h">
       <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\AttribAnim.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\AttribAnimator.h">
+      <Filter>Source\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\AnimContextStack.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behaviors\SheetAnimator.h">
+      <Filter>Source\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

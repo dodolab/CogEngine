@@ -8,6 +8,7 @@
 #include "NodeBuilder.h"
 #include "BehaviorEnt.h"
 #include "AttrAnimEnt.h"
+#include "AttribAnim.h"
 
 namespace Cog {
 
@@ -15,6 +16,7 @@ namespace Cog {
 		// set global dpi so font will have the same pixel size on each display
 		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
 	}
+
 
 	void ResourceCache::Init(spt<ofxXml> xml) {
 		xml->popAll();
@@ -83,19 +85,19 @@ namespace Cog {
 
 			// load transform animations
 			if (xml->pushTagIfExists("attranimations")) {
-				int transAnimNum = xml->getNumTags("attranim");
+				auto animLoader = AnimLoader();
+				auto rootAnims = vector<spt<CommonAnim>>();
 
-				for (int i = 0; i < transAnimNum; i++) {
-					xml->pushTag("attranim", i);
-					spt<AttrAnimEnt> trans = spt<AttrAnimEnt>(new AttrAnimEnt());
-					auto dummySet = Setting();
-					trans->LoadFromXml(xml, dummySet);
+				auto builder = [](void) {
+					return new AttribAnim();
+				};
 
-					COGASSERT(!trans->name.empty(), "ResourceCache", "TransAnim entity on index %d in configuration file must have a name!", i);
+				animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
-					StoreEntity(trans->name, trans);
-
-					xml->popTag();
+				// store animation
+				for (spt<CommonAnim> anim : rootAnims) {
+					anim = static_cast<spt<AttribAnim>>(anim);
+					StoreAnimation(anim);
 				}
 
 				xml->popTag();
@@ -285,14 +287,15 @@ namespace Cog {
 		return xmlPtr;
 	}
 
-	spt<SheetAnim> ResourceCache::GetAnimation(string name) {
+	spt<CommonAnim> ResourceCache::GetAnimation(string name) {
 		auto found = loadedAnimations.find(name);
 		if (found != loadedAnimations.end()) return found->second;
-		else return spt<SheetAnim>();
+		else return spt<CommonAnim>();
 	}
 
-	void ResourceCache::StoreAnimation(spt<SheetAnim> anim) {
+	void ResourceCache::StoreAnimation(spt<CommonAnim> anim) {
 		COGASSERT(anim->GetName().compare("") != 0, "ResourceCache", "Attempt to store animation without a name!");
+
 
 		auto found = loadedAnimations.find(anim->GetName());
 		if (found == loadedAnimations.end()) {

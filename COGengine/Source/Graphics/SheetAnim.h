@@ -68,13 +68,11 @@ namespace Cog {
 			if (this->GetStart() > this->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", this->GetName().c_str()));
 			this->SetIncrement(xml->getAttribute(":", "increment", this->GetIncrement()));
 			if (this->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", this->GetName().c_str()));
-			this->SetSpeed(xml->getAttribute(":", "speed", this->GetSpeed()));
-			if (this->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", this->GetName().c_str()));
-			this->SetRepeat(xml->getAttribute(":", "repeat", this->GetRepeat()));
-			if (this->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", this->GetName().c_str()));
-			this->SetIsRevert(xml->getBoolAttribute(":", "revert", this->GetIsRevert()));
+
+
+			CommonAnim::LoadAttributesFromXml(xml);
 		}
-		
+
 		/**
 		* Initializes list of paths to all sheets this animation holds
 		*/
@@ -120,6 +118,17 @@ namespace Cog {
 			return sheets[frameIndex];
 		}
 
+		virtual bool IsAnimatable() {
+			return HasSheets();
+		}
+
+		virtual bool IsMeasurable() {
+			return false;
+		}
+
+		virtual int GetDuration() {
+			return GetTotalFrames();
+		}
 
 		/**
 		* Returns true, if this animation has sheet(s)

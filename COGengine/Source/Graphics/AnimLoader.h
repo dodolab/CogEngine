@@ -126,9 +126,9 @@ namespace Cog {
 
 				if (ref.find(".") == -1) {
 					// reference doesn't contain dot - it means that we can find its reference in THIS scope
-					spt<CommonAnim> reference = rootAnims[rootAnimIndex]->FindChild(ref);
+					CommonAnim* reference = rootAnims[rootAnimIndex]->FindChild(ref);
 
-					if (reference != spt<CommonAnim>()) {
+					if (reference != nullptr) {
 						// found reference
 						refAnim->GetParametersFromReference(reference);
 					}
@@ -144,8 +144,8 @@ namespace Cog {
 					string rootAnimName = ref.substr(0, ref.find("."));
 					string subAnim = ref.substr(ref.find(".") + 1);
 					spt<CommonAnim> root = FindAnimByName(rootAnimName, rootAnims);
-					spt<CommonAnim> scopeAnim = root->FindChild(subAnim);
-					if (root == spt<CommonAnim>() || scopeAnim == spt<CommonAnim>()) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
+					CommonAnim* scopeAnim = root->FindChild(subAnim);
+					if (!root || scopeAnim == nullptr) throw ConfigErrorException(string_format("Referenced animation %s not found", ref.c_str()));
 
 					refAnim->GetParametersFromReference(scopeAnim);
 				}
