@@ -21,7 +21,7 @@
 #include <cmath>
 #include <functional>
 #include <stack>
-#include "Enums.h"
+#include "Constants.h"
 #include "ofxSmartPointer.h"
 #include "ofMain.h"
 #include "ofxXmlSettings.h"

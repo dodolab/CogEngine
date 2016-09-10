@@ -30,7 +30,7 @@ namespace Cog {
 		}
 
 		/**
-		* Initializes factory
+		* Initializes component
 		*/
 		virtual void Init() {
 
@@ -41,7 +41,7 @@ namespace Cog {
 		}
 
 		/**
-		* Initializes factory, using xml configuration
+		* Initializes component, using xml configuration
 		*/
 		virtual void Init(spt<ofxXml> config) {
 			// call the common init method 

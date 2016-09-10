@@ -9,7 +9,7 @@ namespace Cog {
 	}
 
 	Scene::Scene(string name, bool isLazyLoaded) :name(name), lazyLoad(isLazyLoaded) {
-		sceneNode = new Node(ObjType::SCENE, 0, name);
+		sceneNode = new Node(NodeType::SCENE, 0, name);
 		sceneNode->SetScene(this);
 		sceneNode->SetShape(spt<Shape>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
 	}

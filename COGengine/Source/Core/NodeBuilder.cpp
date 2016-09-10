@@ -126,7 +126,7 @@ namespace Cog {
 		if (refWidth == 0) refWidth = CogGetScreenWidth();
 		if (refHeight == 0) refHeight = CogGetScreenHeight();
 
-		Node* node = new Node(ObjType::OBJECT, 0, name);
+		Node* node = new Node(NodeType::OBJECT, 0, name);
 		// set default shape
 		node->SetShape(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
 
@@ -163,7 +163,7 @@ namespace Cog {
 		}
 
 		// scene node will always fit to screen size
-		if (parent->GetType() == ObjType::SCENE) {
+		if (parent->GetType() == NodeType::SCENE) {
 			math.SetSizeToScreen(node, parent);
 		}
 

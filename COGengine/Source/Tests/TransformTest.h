@@ -959,6 +959,7 @@ using namespace Cog;
 			delete root;
 			delete first;
 			delete second;
+			delete third;
 		}
 
 		SECTION("Relative rotation triple bottomright")
@@ -1021,6 +1022,7 @@ using namespace Cog;
 			delete root;
 			delete first;
 			delete second;
+			delete third;
 		}
 	}
 
