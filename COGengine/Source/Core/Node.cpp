@@ -9,17 +9,14 @@ namespace Cog {
 	int Node::idCounter = 1;
 
 	Node::Node(string tag) : type(ObjType::OBJECT), subType(0), id(idCounter++), transform(0, 0) {
-		Construct();
 		if (!tag.empty()) SetTag(tag);
 	}
 
 	Node::Node(ObjType type, int subType, string tag) : type(type), subType(subType), id(idCounter++), transform(0, 0) {
-		Construct();
 		if (!tag.empty()) SetTag(tag);
 	}
 
 	Node::Node(const Node& copy) : type(copy.type), subType(copy.subType), id(idCounter++), transform(0, 0) {
-		Construct();
 		tag = copy.tag;
 		attributes = copy.attributes;
 		behaviors = copy.behaviors;

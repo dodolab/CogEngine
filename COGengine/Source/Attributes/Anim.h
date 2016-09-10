@@ -9,34 +9,34 @@ namespace Cog {
 	class Anim {
 	protected:
 		// name of animation
-		string name;
+		string name = "";
 		// path to sheet(s)
-		string sheetPath;
+		string sheetPath = "";
 		// reference to another animation
-		string ref;
+		string ref = "";
 		// number of frames per one line in spritesheet
-		int frames;
+		int frames = 1;
 		// number of lines in spritesheet
-		int lines;
+		int lines = 1;
 		// start frame
-		int start;
+		int start = 1;
 		// end frame
-		int end;
+		int end = 1;
 		// sequence increment
-		int increment;
+		int increment = 1;
 		// speed multiplier
-		double speed;
+		double speed = 1;
 		// number of repetition
-		int repeat;
+		int repeat = 1;
 		// if true, animation will be reverted
-		bool isRevert;
+		bool isRevert = false;
 		// list of children
 		vector<spt<Anim>> children;
 
 		// list of paths to sheets this animation holds
 		vector<string> sheets;
 		// indicator, if sheet array has been initialized
-		bool sheetInit;
+		bool sheetInit = false;
 
 
 	public:
@@ -46,21 +46,11 @@ namespace Cog {
 			int end, int increment, double speed, int repeat, bool isRevert) : name(name), sheetPath(sheetPath), ref(ref),
 			frames(frames), lines(lines), start(start), end(end), increment(increment), speed(speed), repeat(repeat), isRevert(isRevert) {
 
-			sheetInit = false;
-			//	this->rootAnim = spt<Anim>();
 		}
 
-		Anim() : name(""), sheetPath(""), ref(""), frames(1), lines(1), start(1), end(1), increment(1), speed(1), repeat(1), isRevert(false) {
-			//this->rootAnim = spt<Anim>();
-			sheetInit = false;
+		Anim() {
 		}
 
-		~Anim() {
-			// todo: some trash here...
-			/*for (auto it = children.begin(); it != children.end(); ++it){
-				delete (*it);
-			}*/
-		}
 
 		/**
 		* Copies all parameters from other animation

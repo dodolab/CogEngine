@@ -37,7 +37,7 @@ namespace Cog {
 		// list of behaviors
 		list<Behavior*> behaviors;
 		// link to the parent
-		Node* parent;
+		Node* parent = nullptr;
 		// list of children that will be removed at the end of update method
 		list<std::pair<Node*, bool>> childrenToRemove;
 		// list of behaviors that will be removed at the end of update method
@@ -50,33 +50,21 @@ namespace Cog {
 		// id of this node
 		const int id;
 		// tag or name
-		string* tag;
+		string* tag = nullptr;
 		// object type {ROOT, SCENE, OBJECT, HUD, INFO}
 		ObjType type;
 		// subtype (or category)
 		int subType;
 		// groups this objects belongs to
-		Flags* groups;
+		Flags* groups = nullptr;
 		// states of this object
-		Flags* states;
+		Flags* states = nullptr;
 		// transformation matrix
 		Trans  transform;
 		// mash object
-		spt<Shape> shape;
+		spt<Shape> shape = spt<Shape>(new Shape(RenderType::NONE));
 		// running mode
-		RunningMode runMode;
-
-		// initialization method
-		void Construct() {
-			parent = nullptr;
-			tag = nullptr;
-			groups = nullptr;
-			states = nullptr;
-			tag = nullptr;
-			runMode = RunningMode::RUNNING;
-			shape = spt<Shape>(new Shape(RenderType::NONE));
-		}
-
+		RunningMode runMode = RunningMode::RUNNING;
 
 	public:
 

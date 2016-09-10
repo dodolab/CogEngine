@@ -33,7 +33,7 @@ public:
 	* @param vibrate if true, device will vibrate when object is hit
 	*/
 	HitEvent(int handlerBehId, bool vibrate) : 
-		handlerBehId(handlerBehId), vibrate(vibrate), hitStarted(false), hitLost(false), hitStartedTouchId(-1){
+		handlerBehId(handlerBehId), vibrate(vibrate){
 
 	}
 

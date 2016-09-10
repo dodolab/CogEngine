@@ -3,16 +3,13 @@
 namespace Cog {
 
 	Flags::Flags() {
-		Init();
 	}
 
 	Flags::Flags(vector<unsigned> states) {
-		Init();
 		for (size_t i = 0; i < states.size(); i++) SetState(states[i]);
 	}
 
 	Flags::Flags(unsigned states, ...) {
-		Init();
 		va_list args;
 		
 		va_start(args, states);          
@@ -22,14 +19,11 @@ namespace Cog {
 	}
 
 	Flags::Flags(StringHash state) {
-		Init();
 		SetState(state.Value());
 	}
 
 
 	Flags::Flags(const Flags& obj) {
-		Init();
-
 		flags1 = obj.flags1;
 		flags2 = obj.flags2;
 		flags3 = obj.flags3;
@@ -63,8 +57,9 @@ namespace Cog {
 				unsigned flag = it->second;
 				if (flag != 0) {
 					for (unsigned i = 0; i < sizeof(unsigned); i++) {
+						unsigned st = it->first*sizeof(unsigned) + i;
 						// state = key*intsize + i
-						if (HasState(it->first*sizeof(unsigned) + i)) output.push_back(i);
+						if (HasState(st)) output.push_back(st);
 					}
 				}
 			}

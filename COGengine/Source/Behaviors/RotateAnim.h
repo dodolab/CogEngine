@@ -31,7 +31,7 @@ namespace Cog {
 		* @param additive if true, rotation will be additive
 		*/
 		RotateAnim(float from, float to, float speed, bool additive) :
-			from(from), to(to), speed(speed), additive(additive), actual(0) {
+			from(from), to(to), speed(speed), additive(additive){
 		}
 
 

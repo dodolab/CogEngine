@@ -357,7 +357,8 @@ TEST_CASE("Class can be passed as pointer", "[binding][class]")
 
 #define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
-#include "BaseTests.h"
+#include "TransformTest.h"
+#include "FlagsTest.h"
 
 int main() {
 

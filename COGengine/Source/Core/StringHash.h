@@ -85,9 +85,25 @@ namespace Cog
 		// Zero hash.
 		static const StringHash ZERO;
 
+#ifdef DEBUG
+		static string GetStringValue(unsigned val) {
+			auto fnd = strValues.find(val);
+
+			if (fnd != strValues.end()) {
+				return fnd->second;
+			}
+			return string("");
+		}
+#endif
+
 	private:
 		// Hash value.
 		unsigned value_;
+
+#ifdef DEBUG
+		// value-string map for logging, only for debug mode
+		static map<unsigned, string>  strValues;
+#endif
 
 	};
 

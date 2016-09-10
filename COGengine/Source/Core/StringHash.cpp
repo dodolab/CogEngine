@@ -10,11 +10,17 @@ namespace Cog
 	StringHash::StringHash(const char* str) :
 		value_(Calculate(str))
 	{
+#ifdef DEBUG
+		strValues[value_] = string(str);
+#endif
 	}
 
 	StringHash::StringHash(const string& str) :
 		value_(Calculate(str.c_str()))
 	{
+#ifdef DEBUG
+		strValues[value_] = str;
+#endif
 	}
 
 	unsigned StringHash::Calculate(const char* str)
@@ -42,4 +48,7 @@ namespace Cog
 		return string(tempBuffer);
 	}
 
+#ifdef DEBUG
+	map<unsigned,string> StringHash::strValues = map<unsigned, string>();
+#endif
 }

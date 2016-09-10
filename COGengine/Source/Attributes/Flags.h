@@ -14,26 +14,16 @@ namespace Cog {
 	class Flags {
 	private:
 		// first flag bit array
-		unsigned flags1;
+		unsigned flags1 = 0;
 		// second flag bit array
-		unsigned flags2;
+		unsigned flags2 = 0;
 		// third flag bit array
-		unsigned flags3;
+		unsigned flags3 = 0;
 		// fourth flag bit array
-		unsigned flags4;
+		unsigned flags4 = 0;
 		// map for other flags (if used)
-		map<unsigned, unsigned>* otherFlags;
+		map<unsigned, unsigned>* otherFlags = nullptr;
 
-		/**
-		* Initializes state machine
-		*/
-		void Init() {
-			flags1 = 0;
-			flags2 = 0;
-			flags3 = 0;
-			flags4 = 0;
-			otherFlags = nullptr;
-		}
 
 	public:
 		/**
