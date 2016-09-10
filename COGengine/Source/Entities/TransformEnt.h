@@ -2,6 +2,7 @@
 
 #include "ofxCogCommon.h"
 #include "DEntity.h"
+#include "Settings.h"
 
 namespace Cog {
 
@@ -20,13 +21,13 @@ namespace Cog {
 	class TransformEnt : public DEntity{
 	public:
 
-		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(0), sType(CalcType::PER) {
+		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), size(0), sType(CalcType::PER), rotation(0) {
 
 		}
 
 		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
 			ofVec2f anchor, ofVec2f size, CalcType sizeCalc):pos(position),zIndex(zIndex),pType(positionCalc),anchor(anchor),
-			size(size),sType(sizeCalc){
+			size(size),sType(sizeCalc), rotation(0){
 		}
 
 		ofVec2f pos;
@@ -35,14 +36,14 @@ namespace Cog {
 		ofVec2f anchor;
 		ofVec2f size;
 		CalcType sType;
+		float rotation;
 
-
-		void LoadFromXml(spt<ofxXml> xml) {
+		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
 			this->name = xml->getAttributex("name", "");
 
 			// =================== get positions
 			if (xml->attributeExists("pos")) {
-				float posF = xml->getAttributex("pos", 0.0);
+				float posF = xml->getAttributex("pos", defaultSettings.GetItemValFloat("pos",0));
 				pos = ofVec2f(posF, posF);
 			}
 			else {
@@ -50,17 +51,17 @@ namespace Cog {
 				float posX = 0;
 				float posY = 0;
 
-				posX = xml->getAttributex("pos_x", 0.0);
-				posY = xml->getAttributex("pos_y", 0.0);
+				posX = xml->getAttributex("pos_x", defaultSettings.GetItemValFloat("pos_x", 0));
+				posY = xml->getAttributex("pos_y", defaultSettings.GetItemValFloat("pos_y", 0));
 				pos = ofVec2f(posX, posY);
 			}
 
 
-			zIndex = xml->getAttributex("z_index", 0);
-			pType = StrToCalcType(xml->getAttributex("ptype", ""));
+			zIndex = xml->getAttributex("z_index", defaultSettings.GetItemValFloat("z_index", 0));
+			pType = StrToCalcType(xml->getAttributex("ptype", defaultSettings.GetItemVal("ptype", "per")));
 
 			// =================== get size
-			sType = StrToCalcType(xml->getAttributex("stype", ""));
+			sType = StrToCalcType(xml->getAttributex("stype", defaultSettings.GetItemVal("stype", "loc")));
 
 			float width = 0;
 			float height = 0;
@@ -69,8 +70,8 @@ namespace Cog {
 				width = height = xml->getAttributex("size", 0.0);
 			}
 			else {
-				width = xml->getAttributex("width", 0.0);
-				height = xml->getAttributex("height", 0.0);
+				width = xml->getAttributex("width", defaultSettings.GetItemValFloat("width", 1));
+				height = xml->getAttributex("height", defaultSettings.GetItemValFloat("height", 1));
 			}
 
 			size = ofVec2f(width, height);
@@ -81,9 +82,11 @@ namespace Cog {
 				anchor = ofVec2f(anchorFlt);
 			}
 			else {
-				anchor.x = xml->getAttributex("anchor_x", 0.0);
-				anchor.y = xml->getAttributex("anchor_y", 0.0);
+				anchor.x = xml->getAttributex("anchor_x", defaultSettings.GetItemValFloat("anchor_x", 0));
+				anchor.y = xml->getAttributex("anchor_y", defaultSettings.GetItemValFloat("anchor_y", 0));
 			}
+
+			rotation = xml->getAttributex("rotation", defaultSettings.GetItemValFloat("rotation", 0));
 		}
 
 	private:

@@ -2,6 +2,7 @@
 
 #include "Behavior.h"
 #include "Node.h"
+#include "BehaviorEnt.h"
 
 namespace Cog {
 
@@ -9,13 +10,28 @@ namespace Cog {
 	* Behavior for animation sequence; can store a collection of animations
 	*/
 	class MultiAnim : public Behavior {
-		OBJECT_PROTOTYPE(MultiAnim)
+		OBJECT_PROTOTYPE_INIT(MultiAnim)
 	private:
 		Behavior* actual = nullptr;
 		vector<Behavior*> animations;
 
 	public:
 
+		MultiAnim(Setting setting) {
+			auto animations = setting.GetItemVals("animations");
+			
+			auto resourceCache = GETCOMPONENT(ResourceCache);
+
+			for (string anim : animations) {
+				spt<BehaviorEnt> ent = resourceCache->GetEntityC<BehaviorEnt>(anim);
+				Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(ent->type);
+				Behavior* behavior;
+				if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);
+				else behavior = prototype->CreatePrototype();
+
+				AddAnimation(behavior);
+			}
+		}
 
 		void AddAnimation(Behavior* anim) {
 			animations.push_back(anim);
@@ -23,31 +39,31 @@ namespace Cog {
 		}
 
 		void Init() {
-			RegisterListening(owner->GetScene(), ACT_BEHAVIOR_FINISHED);
-			if (actual != nullptr)actual->Init();
-			SetOwner(actual, owner);
+			if (actual != nullptr) {
+				SetOwner(actual, owner);
+				actual->Init();
+			}
 		}
 
+
 		void OnMessage(Msg& msg) {
-
 			if (actual != nullptr) actual->OnMessage(msg);
-
-			if (msg.GetAction() == ACT_BEHAVIOR_FINISHED && msg.GetBehaviorId() == actual->GetId()) {
-				// get next behavior
-				auto it = std::find(animations.begin(), animations.end(), actual);
-
-				if ((it + 1) != animations.end()) {
-					actual = *(++it);
-					actual->Init();
-					SetOwner(actual, owner);
-				}
-				else Finish();
-			}
 		}
 
 		void Update(const uint64 delta, const uint64 absolute) {
 
 			if (actual != nullptr) actual->Update(delta, absolute);
+			if (actual->Ended()) {
+				// get next behavior
+				auto it = std::find(animations.begin(), animations.end(), actual);
+
+				if ((it + 1) != animations.end()) {
+					actual = *(++it);
+					SetOwner(actual, owner);
+					actual->Init();
+				}
+				else Finish();
+			}
 		}
 
 	protected:

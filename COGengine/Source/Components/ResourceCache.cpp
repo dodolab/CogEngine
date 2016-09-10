@@ -6,6 +6,7 @@
 #include "AnimationLoader.h"
 #include "TransformEnt.h"
 #include "NodeBuilder.h"
+#include "BehaviorEnt.h"
 
 namespace Cog {
 
@@ -77,20 +78,44 @@ namespace Cog {
 				xml->popTag();
 			}
 
+
 			if (xml->pushTagIfExists("transforms")) {
 				int transNum = xml->getNumTags("transform");
 
 				for (int i = 0; i < transNum; i++) {
 					xml->pushTag("transform", i);
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
-					trans->LoadFromXml(xml);
-
+					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
 					MASSERT(!trans->name.empty(),"RESOURCE","Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
 				}
+				xml->popTag();
+			}
+
+			if (xml->pushTagIfExists("behaviors")) {
+				int behNum = xml->getNumTags("behavior");
+
+				for (int i = 0; i < behNum; i++) {
+					xml->pushTag("behavior", i);
+					spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
+					Setting setting = Setting();
+
+					if (xml->pushTagIfExists("setting")) {
+						setting = this->LoadSettingFromXml(xml);
+						xml->popTag();
+					}
+
+					ent->LoadFromXml(xml, setting);
+
+					MASSERT(!ent->name.empty(), "RESOURCE", "Behavior entity on index %d in configuration file must have a name!", i);
+
+					StoreEntity(ent->name, ent);
+					xml->popTag();
+				}
+
 				xml->popTag();
 			}
 

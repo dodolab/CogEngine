@@ -219,25 +219,23 @@ namespace Cog {
 
 	void Renderer::RenderSprite(Node* owner) {
 
-
 		spt<SpriteShape> shape = static_cast<spt<SpriteShape>>(owner->GetShape());
 		spt<Sprite> sprite = shape->GetSprite();
 		Trans& trans = owner->GetTransform();
 		renderer->setActualBuffer(shape->GetSheetName());
 
+		drawingTile.width = sprite->GetWidth();
 		drawingTile.height = sprite->GetHeight();
 		drawingTile.offsetX = sprite->GetPosX();
 		drawingTile.offsetY = sprite->GetPosY();
 
-		drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
-		drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;
+		drawingTile.posX = trans.absPos.x +trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
+		drawingTile.posY = trans.absPos.y +trans.absScale.y*drawingTile.height / 2.0f;
 		drawingTile.posZ = trans.absPos.z;
-		drawingTile.rotation = trans.rotation / 360;
+		drawingTile.rotation = trans.rotation*DEG_TO_RAD;
 		drawingTile.scaleX = trans.absScale.x;
 		drawingTile.scaleY = trans.absScale.y;
-		drawingTile.width = sprite->GetWidth();
-
-
+		
 		renderer->addTile(drawingTile);
 	}
 
@@ -254,6 +252,7 @@ namespace Cog {
 			Trans& trans = crate.second;
 			trans.CalcAbsTransform(owner->GetTransform());
 
+			drawingTile.width = sprite->GetWidth();
 			drawingTile.height = sprite->GetHeight();
 			drawingTile.offsetX = sprite->GetPosX();
 			drawingTile.offsetY = sprite->GetPosY();
@@ -261,10 +260,10 @@ namespace Cog {
 			drawingTile.posX = trans.absPos.x + trans.absScale.x*drawingTile.width / 2.0f;  // [0,0] is topleft corner
 			drawingTile.posY = trans.absPos.y + trans.absScale.y*drawingTile.height / 2.0f;
 			drawingTile.posZ = trans.absPos.z;
-			drawingTile.rotation = trans.rotation / 360;
+			drawingTile.rotation = trans.rotation*DEG_TO_RAD;
 			drawingTile.scaleX = trans.absScale.x;
 			drawingTile.scaleY = trans.absScale.y;
-			drawingTile.width = sprite->GetWidth();
+			
 
 			renderer->addTile(drawingTile);
 		}

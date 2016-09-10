@@ -1,5 +1,6 @@
 #include "NodeBuilder.h"
 #include "CogEngine.h"
+#include "BehaviorEnt.h"
 
 namespace Cog {
 
@@ -43,6 +44,8 @@ namespace Cog {
 		int refWidth = settings.GetSettingValInt("transform", "ref_width");
 		int refHeight = settings.GetSettingValInt("transform", "ref_height");
 
+		if (refWidth == 0) refWidth = CogGetScreenWidth();
+		if (refHeight == 0) refHeight = CogGetScreenHeight();
 
 		Node* node = new Node(ObjType::OBJECT, 0, name);
 		// set default shape
@@ -51,6 +54,7 @@ namespace Cog {
 		if (!img.empty()) {
 			SetImageNode(node, img);
 		}
+
 
 		if (xml->attributeExists("img_click")) {
 			// set image on click
@@ -82,7 +86,7 @@ namespace Cog {
 		if (xml->pushTagIfExists("transform")) {
 
 			TransformEnt transformEnt = TransformEnt();
-			transformEnt.LoadFromXml(xml);
+			transformEnt.LoadFromXml(xml, settings.GetSetting("transform"));
 
 			// =================== get grid size (if specified)
 			int gridWidth = settings.GetSettingValInt("transform", "grid_width");
@@ -149,22 +153,35 @@ namespace Cog {
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
 		
+		string type = xml->getAttributex("type", "");
 		string name = xml->getAttributex("name", "");
-		
-		Behavior* behavior = nullptr;
-		Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(name);
+		auto resourceCache = GETCOMPONENT(ResourceCache);
 
-		if (xml->pushTagIfExists("setting")) {
-			auto resourceCache = GETCOMPONENT(ResourceCache);
-			auto setting = resourceCache->LoadSettingFromXml(xml);
-			behavior = prototype->CreatePrototype(setting);
-			xml->popTag();
+		Behavior* behavior = nullptr;
+
+		if (!type.empty()) {
+			// load directly
+			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(type);
+
+			if (xml->pushTagIfExists("setting")) {
+				auto setting = resourceCache->LoadSettingFromXml(xml);
+				behavior = prototype->CreatePrototype(setting);
+				xml->popTag();
+			}
+			else {
+				behavior = prototype->CreatePrototype();
+			}
 		}
 		else {
-			behavior = prototype->CreatePrototype();
+			// load from reference
+			spt<BehaviorEnt> ent = resourceCache->GetEntityC<BehaviorEnt>(name);
+			Behavior* prototype = COGEngine.entityStorage->GetBehaviorPrototype(ent->type);
+
+			if (!ent->setting.Empty()) behavior = prototype->CreatePrototype(ent->setting);
+			else behavior = prototype->CreatePrototype();
 		}
 
-		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found",name.c_str()));
+		if (behavior == nullptr) throw new ConfigErrorException(string_format("Error while parsing %s behavior; no prototype found", type.c_str()));
 
 		node->AddBehavior(behavior);
 	}

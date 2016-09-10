@@ -324,6 +324,9 @@
     <ClInclude Include="Source\Tests\SQLTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Entities\BehaviorEnt.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdParty\duktape\duktape.c">

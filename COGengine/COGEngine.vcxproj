@@ -246,6 +246,7 @@
     <ClInclude Include="Source\Engine\MsgListener.h" />
     <ClInclude Include="Source\Engine\Node.h" />
     <ClInclude Include="Source\Engine\Scene.h" />
+    <ClInclude Include="Source\Entities\BehaviorEnt.h" />
     <ClInclude Include="Source\Entities\DEntity.h" />
     <ClInclude Include="Source\Entities\LayerEnt.h" />
     <ClInclude Include="Source\Entities\TransformEnt.h" />
