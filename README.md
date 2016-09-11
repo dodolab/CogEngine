@@ -21,8 +21,8 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 
 
 ## How to use it
-* [Tutorial](docs/tutorial.md) - getting started
-* [Architecture](docs/architecture.md) - brief description of the architecture
+* [Tutorial](Docs/tutorial.md) - getting started
+* [Architecture](Docs/architecture.md) - brief description of the architecture
 
 ## Compatibility
 
