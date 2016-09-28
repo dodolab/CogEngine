@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <ClCompile>
-<AdditionalIncludeDirectories>../COGEngine/3rdParty/catch;../COGengine/3rdParty/ofxNetwork;../COGengine/3rdParty/lua;../COGEngine/3rdParty/sqlite;../COGEngine/3rdParty/ofxSQLite;../COGEngine/3rdParty/tinyxml;../COGEngine/3rdParty/ofxXmlSettings;../COGEngine/3rdParty/ofxTextLabel;../COGEngine/3rdParty/luabridge;../COGengine/Source;../COGEngine/Source/Attributes;../COGEngine/Source/Entities;../COGEngine/Source/Behaviors;../COGEngine/Source/Components;../COGEngine/Source/Communication;../COGEngine/Source/Core;../COGEngine/Source/AI;../COGEngine/Source/Misc;../COGEngine/Source/Math;../COGEngine/Source/Graphics;../COGEngine/Source/Scripting;../COGEngine/Source/Tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+<AdditionalIncludeDirectories>$(COGENGINE_ROOT)/3rdParty/catch;$(COGENGINE_ROOT)/3rdParty/ofxNetwork;$(COGENGINE_ROOT)/3rdParty/lua;$(COGENGINE_ROOT)/3rdParty/sqlite;$(COGENGINE_ROOT)/3rdParty/ofxSQLite;$(COGENGINE_ROOT)/3rdParty/tinyxml;$(COGENGINE_ROOT)/3rdParty/ofxXmlSettings;$(COGENGINE_ROOT)/3rdParty/ofxTextLabel;$(COGENGINE_ROOT)/3rdParty/luabridge;$(COGENGINE_ROOT)/Source;$(COGENGINE_ROOT)/Source/Attributes;$(COGENGINE_ROOT)/Source/Entities;$(COGENGINE_ROOT)/Source/Behaviors;$(COGENGINE_ROOT)/Source/Components;$(COGENGINE_ROOT)/Source/Communication;$(COGENGINE_ROOT)/Source/Core;$(COGENGINE_ROOT)/Source/AI;$(COGENGINE_ROOT)/Source/Misc;$(COGENGINE_ROOT)/Source/Math;$(COGENGINE_ROOT)/Source/Graphics;$(COGENGINE_ROOT)/Source/Scripting;$(COGENGINE_ROOT)/Source/Tests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>../COGengine/bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(COGENGINE_ROOT)/bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>COGengine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

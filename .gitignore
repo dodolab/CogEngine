@@ -24,3 +24,6 @@ Docs/design/menu.svg
 COGenginelab/msys_libs/
 COGengine/COGengine.VC.db
 COGenginelab/libs/
+COGengine/bin/
+COGengine/obj/
+COGengine/COGengine.sdf

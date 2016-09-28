@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksCommon.props" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -47,24 +48,29 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+   <PropertyGroup Label="UserMacros" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+    <Import Project="$(ProjectDir)\COGengine_common.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="$(OF_ROOT)\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+	<Import Project="$(ProjectDir)\COGengine_release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+	<Import Project="$(ProjectDir)\COGengine_release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+	<Import Project="$(ProjectDir)\COGengine_debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+	<Import Project="$(ProjectDir)\COGengine_debug.props" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
@@ -96,7 +102,7 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/ofxNetwork;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/ofxSQLite;$(ProjectDir)/3rdParty/tinyxml;$(ProjectDir)/3rdParty/ofxXmlSettings;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -134,7 +140,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(ProjectDir)/Source;$(ProjectDir)/Source/Attributes;$(ProjectDir)/Source/Communication;$(ProjectDir)/Source/Entities;$(ProjectDir)/Source/Behaviors;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/Core;$(ProjectDir)/Source/Components;$(ProjectDir)/Source/AI;$(ProjectDir)/Source/Graphics;$(ProjectDir)/Source/Scripting;$(ProjectDir)/Source/Math;$(ProjectDir)/Source/Misc;$(ProjectDir)/3rdParty/catch;$(ProjectDir)/3rdParty/ofxNetwork;$(ProjectDir)/3rdParty/sqlite;$(ProjectDir)/3rdParty/ofxSQLite;$(ProjectDir)/3rdParty/tinyxml;$(ProjectDir)/3rdParty/ofxXmlSettings;$(ProjectDir)/3rdParty/ofxTextLabel;$(ProjectDir)/3rdParty/lua;$(ProjectDir)/3rdParty/luabridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
