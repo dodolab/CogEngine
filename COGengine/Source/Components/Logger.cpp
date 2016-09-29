@@ -18,7 +18,7 @@ namespace Cog {
 		cout << "[" << module << "]";
 		cout << message << endl;
 #else
-		ofLogNotice("OpenFrameworks") << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]" << "[" << module << "]" << message << endl;
+		ofLogNotice("COGEngine") << "[" << ofGetTimestampString("%H:%M:%S.%i") << "]" << "[" << module << "]" << message << endl;
 #endif
 	}
 

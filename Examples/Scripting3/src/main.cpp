@@ -19,6 +19,7 @@ class ExampleApp : public ofxCogApp {
 
 	void InitEngine() {
 		ofxCogEngine::GetInstance().Init("config.xml");
+
 		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
 	}
 

@@ -137,6 +137,16 @@ namespace Cog {
 		// clears resources
 		void Clear();
 
+		/**
+		* Checks if assets of this library are presented
+		*/
+		void CheckCOGAssets();
+
+		/**
+		* Loads assets of this library
+		*/
+		void LoadCOGAssets();
+
 		// ================================= SINGLETON PART ==========================
 	public:
 		static ofxCogEngine& GetInstance()

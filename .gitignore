@@ -27,3 +27,8 @@ COGenginelab/libs/
 COGengine/bin/
 COGengine/obj/
 COGengine/COGengine.sdf
+Examples/Scripting3/obj/
+Examples/Scripting3/bin/
+Examples/Scripting3/Scripting3.VC.db
+Examples/Scripting3/Scripting3.VC.VC.opendb
+*.sdf

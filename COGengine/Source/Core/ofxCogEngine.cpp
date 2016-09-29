@@ -37,11 +37,13 @@ namespace Cog {
 
 	void ofxCogEngine::Init() {
 
+		CheckCOGAssets();
+
 		RegisterComponents();
 
 		vector<Component*> components;
 		compStorage->GetAllComponents(components);
-	
+
 		// sort by priority
 		sort(components.begin(), components.end(),
 			[this](const Component* a, const Component* b) -> bool
@@ -53,6 +55,8 @@ namespace Cog {
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->OnInit();
 		}
+
+		LoadCOGAssets();
 	}
 
 	void ofxCogEngine::Init(string xmlPath) {
@@ -63,12 +67,14 @@ namespace Cog {
 	}
 
 	void ofxCogEngine::Init(spt<ofxXml> config) {
-		
+
 		this->config = config;
+
+		CheckCOGAssets();
 
 		RegisterComponents();
 
-		vector<Component*> components;  
+		vector<Component*> components;
 		compStorage->GetAllComponents(components);
 
 		// sort by priority
@@ -85,6 +91,8 @@ namespace Cog {
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->OnInit(config);
 		}
+
+		LoadCOGAssets();
 	}
 
 	void ofxCogEngine::LoadStageFromXml(spt<ofxXml> config) {
@@ -207,6 +215,23 @@ namespace Cog {
 		REGISTER_BEHAVIOR(AttribAnimator);
 		REGISTER_BEHAVIOR(Selection);
 		REGISTER_BEHAVIOR(Slider);
+	}
+
+	void ofxCogEngine::CheckCOGAssets() {
+		string manifestPath = ofToDataPath("COGAssets/Manifest.xml");
+
+		if (!ofFile(manifestPath.c_str()).exists()) {
+#ifdef WIN32
+			cout << "Fatal error! File COGAssets/Manifest.xml not found. Did you forget to copy the content of the Data folder into your project?" << endl;
+#else
+			ofLogNotice("COGEngine") << "Fatal error! File COGAssets/Manifest.xml not found. Did you forget to copy the content of the Data folder into your project?" << endl;
+#endif
+			exit(1);
+		}
+	}
+
+	void ofxCogEngine::LoadCOGAssets() {
+		// TODO
 	}
 
 	void ofxCogEngine::Clear() {
