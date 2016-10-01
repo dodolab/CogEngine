@@ -48,28 +48,28 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
-   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-    <Import Project="$(ProjectDir)\COGengine_common.props" />
+  <Import Project="$(ProjectDir)\COGengine_common.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(OF_ROOT)\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
-	<Import Project="$(ProjectDir)\COGengine_release.props" />
+    <Import Project="$(ProjectDir)\COGengine_release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
-	<Import Project="$(ProjectDir)\COGengine_release.props" />
+    <Import Project="$(ProjectDir)\COGengine_release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
-	<Import Project="$(ProjectDir)\COGengine_debug.props" />
+    <Import Project="$(ProjectDir)\COGengine_debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
-	<Import Project="$(ProjectDir)\COGengine_debug.props" />
+    <Import Project="$(ProjectDir)\COGengine_debug.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>bin\</OutDir>
@@ -280,11 +280,12 @@
     <ClInclude Include="Source\Components\Interpolator.h" />
     <ClInclude Include="Source\Components\LuaScripting.h" />
     <ClInclude Include="Source\Components\NetworkCommunicator.h" />
-    <ClInclude Include="Source\Components\ResourceCache.h" />
+    <ClInclude Include="Source\Components\Resources.h" />
     <ClInclude Include="Source\Components\Environment.h" />
     <ClInclude Include="Source\Components\Renderer.h" />
     <ClInclude Include="Source\Components\Stage.h" />
     <ClInclude Include="Source\Components\SceneSwitchManager.h" />
+    <ClInclude Include="Source\Core\AssetsManager.h" />
     <ClInclude Include="Source\Core\AsyncProcess.h" />
     <ClInclude Include="Source\Core\Attr.h" />
     <ClInclude Include="Source\Core\Behavior.h" />
@@ -542,10 +543,11 @@
     <ClCompile Include="Source\Components\LuaScripting.cpp" />
     <ClCompile Include="Source\Components\NetworkCommunicator.cpp" />
     <ClCompile Include="Source\Components\Renderer.cpp" />
-    <ClCompile Include="Source\Components\ResourceCache.cpp" />
+    <ClCompile Include="Source\Components\Resources.cpp" />
     <ClCompile Include="Source\Components\Environment.cpp" />
     <ClCompile Include="Source\Components\Stage.cpp" />
     <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
+    <ClCompile Include="Source\Core\AssetsManager.cpp" />
     <ClCompile Include="Source\Core\AsyncProcess.cpp" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
     <ClCompile Include="Source\Core\ofxCogApp.cpp" />

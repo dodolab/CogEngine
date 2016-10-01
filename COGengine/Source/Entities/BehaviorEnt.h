@@ -1,8 +1,7 @@
 #pragma once
 
 #include "DEntity.h"
-#include "Settings.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 
 namespace Cog {
 
@@ -19,7 +18,7 @@ namespace Cog {
 
 		/**
 		* Creates a new behavior entity
-		* @param ref reference to existing behavior entity stored in ResourceCache
+		* @param ref reference to existing behavior entity stored in Resources
 		* @param setting behavior key-value settings
 		*/
 		BehaviorEnt(string ref, Setting setting) : setting(setting){

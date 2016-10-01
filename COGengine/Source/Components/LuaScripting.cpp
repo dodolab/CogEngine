@@ -7,7 +7,7 @@
 #include "SceneLua.h"
 #include "FacadeLua.h"
 #include "ComponentStorage.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 
 namespace Cog {
 
@@ -208,7 +208,7 @@ namespace Cog {
 	}
 
 	void LuaScripting::LoadAllScripts() {
-		auto cache = GETCOMPONENT(ResourceCache);
+		auto cache = GETCOMPONENT(Resources);
 		auto& scripts = cache->GetScripts();
 
 

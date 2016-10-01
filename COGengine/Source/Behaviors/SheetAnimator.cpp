@@ -1,7 +1,7 @@
 #include "SheetAnimator.h"
 #include "ofxCogEngine.h"
 #include "Node.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "ComponentStorage.h"
 
 namespace Cog {
@@ -10,7 +10,7 @@ namespace Cog {
 	void SheetAnimator::Load(Setting& setting) {
 		// load animation by name
 		string animation = setting.GetItemVal("animation");
-		auto resCache = GETCOMPONENT(ResourceCache);
+		auto resCache = GETCOMPONENT(Resources);
 		contextStack.SetRootNode(resCache->GetAnimation(animation));
 	}
 

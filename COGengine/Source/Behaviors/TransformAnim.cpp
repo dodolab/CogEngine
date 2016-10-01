@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "EnumConverter.h"
 #include "Node.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "TransformMath.h"
 #include "Definitions.h"
 #include "TransformEnt.h"
@@ -21,7 +21,7 @@ namespace Cog {
 		this->delayAfter = setting.GetItem("delayAfter").GetValFloat();
 		this->repeat = setting.GetItemValBool("repeat");
 
-		auto resCache = GETCOMPONENT(ResourceCache);
+		auto resCache = GETCOMPONENT(Resources);
 		this->from = resCache->GetEntity<TransformEnt>(from);
 		this->to = resCache->GetEntity<TransformEnt>(to);
 		this->blend = EnumConverter::StrToAnimBlend(setting.GetItemVal("blend"));

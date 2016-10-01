@@ -1,5 +1,5 @@
 #include "ofxCogEngine.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "Logger.h"
 #include "Node.h"
 #include "Stage.h"
@@ -9,7 +9,7 @@
 #include "Environment.h"
 #include "ComponentStorage.h"
 #include "InputHandler.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "ofSoundPlayer.h"
 #include "Button.h"
 #include "DelayAction.h"
@@ -185,7 +185,7 @@ namespace Cog {
 	void ofxCogEngine::RegisterComponents() {
 
 		environment = new Environment();
-		resourceCache = new ResourceCache();
+		resources = new Resources();
 		logger = new Logger();
 		stage = new Stage();
 		renderer = new Renderer();
@@ -193,7 +193,7 @@ namespace Cog {
 
 		REGISTER_COMPONENT(logger);
 		REGISTER_COMPONENT(environment);
-		REGISTER_COMPONENT(resourceCache);
+		REGISTER_COMPONENT(resources);
 		REGISTER_COMPONENT(stage);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);

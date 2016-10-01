@@ -94,7 +94,7 @@ namespace Cog {
 		LayerEnt layerEntity = scene->FindLayerSettings(layer);
 		string spriteSheetName = layerEntity.spriteSheetName;
 
-		auto cache = GETCOMPONENT(ResourceCache);
+		auto cache = GETCOMPONENT(Resources);
 		auto spriteSheet = cache->GetSpriteSheet(spriteSheetName);
 
 		if (!spriteSheet) CogLogError("NodeBuilder", "Error while loading sprite sheet. SpriteSheet %s not found!", spriteSheetName.c_str());
@@ -131,7 +131,7 @@ namespace Cog {
 	Behavior* NodeBuilder::CreateBehavior(spt<BehaviorEnt> entity) {
 		Behavior* behavior = nullptr;
 
-		auto resourceCache = GETCOMPONENT(ResourceCache);
+		auto resources = GETCOMPONENT(Resources);
 
 		// entity has two attributes: ref and type. If the type is filled,
 		// behavior is created directly by its type. If the ref is filled,
@@ -148,7 +148,7 @@ namespace Cog {
 		}
 		else {
 			// load from reference behavior descriptor
-			spt<BehaviorEnt> refent = resourceCache->GetEntity<BehaviorEnt>(entity->ref);
+			spt<BehaviorEnt> refent = resources->GetEntity<BehaviorEnt>(entity->ref);
 			
 			behavior = CogGetComponentStorage()->CreateBehaviorPrototype(refent->type);
 			if (!refent->setting.Empty()) behavior->Load(refent->setting);
@@ -302,7 +302,6 @@ namespace Cog {
 	}
 
 	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
-		auto resourceCache = GETCOMPONENT(ResourceCache);
 		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 		auto dummySet = Setting();
 		ent->LoadFromXml(xml, dummySet);

@@ -2,7 +2,7 @@
 #include "Facade.h"
 #include "ofxCogEngine.h"
 #include "Logger.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "TimeMeasure.h"
 #include "Scene.h"
 #include "Environment.h"
@@ -170,54 +170,54 @@ namespace Cog {
 		ofxCogEngine::GetInstance().renderer->PushNode(node);
 	}
 
-	// =================== ResourceCache =======================
+	// =================== Resources =======================
 
 	spt<ofImage> CogGet2DImage(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->Get2DImage(path);
+		return ofxCogEngine::GetInstance().resources->Get2DImage(path);
 	}
 
 	spt<ofImage> CogPreload2DImage(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->Preload2DImage(path);
+		return ofxCogEngine::GetInstance().resources->Preload2DImage(path);
 	}
 
 	spt<ofVboMesh> CogGetVboMesh(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->GetVboMesh(path);
+		return ofxCogEngine::GetInstance().resources->GetVboMesh(path);
 	}
 
 	spt<ofTrueTypeFont> CogGetFont(string path, int size) {
-		return ofxCogEngine::GetInstance().resourceCache->GetFont(path, size);
+		return ofxCogEngine::GetInstance().resources->GetFont(path, size);
 	}
 
 	Soundfx* CogGetSound(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->GetSound(path);
+		return ofxCogEngine::GetInstance().resources->GetSound(path);
 	}
 
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->PreloadXMLFile(path);
+		return ofxCogEngine::GetInstance().resources->PreloadXMLFile(path);
 	}
 
 	spt<ofxXmlSettings> CogLoadXMLFile(string path) {
-		return ofxCogEngine::GetInstance().resourceCache->LoadXMLFile(path);
+		return ofxCogEngine::GetInstance().resources->LoadXMLFile(path);
 	}
 
 	spt<SheetAnim> CogGetAnimation(string name) {
-		return static_pointer_cast<SheetAnim>(ofxCogEngine::GetInstance().resourceCache->GetAnimation(name));
+		return static_pointer_cast<SheetAnim>(ofxCogEngine::GetInstance().resources->GetAnimation(name));
 	}
 
 	void CogStoreAnimation(spt<SheetAnim> anim) {
-		ofxCogEngine::GetInstance().resourceCache->StoreAnimation(anim);
+		ofxCogEngine::GetInstance().resources->StoreAnimation(anim);
 	}
 
 	Settings& CogGetGlobalSettings() {
-		return ofxCogEngine::GetInstance().resourceCache->GetGlobalSettings();
+		return ofxCogEngine::GetInstance().resources->GetGlobalSettings();
 	}
 
 	Settings& CogGetDefaultSettings() {
-		return ofxCogEngine::GetInstance().resourceCache->GetGlobalSettings();
+		return ofxCogEngine::GetInstance().resources->GetGlobalSettings();
 	}
 
 	Settings& CogGetProjectSettings() {
-		return ofxCogEngine::GetInstance().resourceCache->GetProjectSettings();
+		return ofxCogEngine::GetInstance().resources->GetProjectSettings();
 	}
 
 }// namespace

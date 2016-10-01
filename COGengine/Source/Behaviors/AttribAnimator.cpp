@@ -3,7 +3,7 @@
 #include "ofxCogEngine.h"
 #include "ComponentStorage.h"
 #include "TransformMath.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 
 namespace Cog {
 
@@ -14,7 +14,7 @@ namespace Cog {
 
 		if (animation.empty()) CogLogError("AttribAnimator", "Error while loading AttribAnimator, animation attribute not specified");
 
-		auto resCache = GETCOMPONENT(ResourceCache);
+		auto resCache = GETCOMPONENT(Resources);
 		contextStack.SetRootNode(resCache->GetAnimation(animation));
 	}
 

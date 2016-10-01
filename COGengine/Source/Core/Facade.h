@@ -76,7 +76,7 @@ namespace Cog {
 	
 	void CogPushNodeForRendering(Node* node);
 
-	// =================== ResourceCache =======================
+	// =================== Resources =======================
 
 	spt<ofImage> CogGet2DImage(string path);
 	spt<ofImage> CogPreload2DImage(string path);

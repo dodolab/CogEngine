@@ -5,6 +5,7 @@
 #include "DEntity.h"
 #include "TransformEnt.h"
 #include "GeneralAnim.h"
+#include "AssetsManager.h"
 
 namespace Cog {
 
@@ -15,9 +16,11 @@ namespace Cog {
 	/**
 	* Resource controller that contains media and configuration files
 	*/
-	class ResourceCache : public Component {
+	class Resources : public Component {
 
 	private:
+		AssetsManager assetsMgr;
+
 		// cached images
 		map<string, spt<ofImage>> loadedImages;
 		// cached meshes
@@ -43,12 +46,12 @@ namespace Cog {
 
 	public:
 
-		ResourceCache() {
+		Resources() {
 			// resource cache should be initialized with higher priority
 			this->initPriority = InitPriority::HIGH;
 		}
 
-		~ResourceCache() {
+		~Resources() {
 
 		}
 
@@ -129,7 +132,7 @@ namespace Cog {
 			if (!entity) return spt<T>();
 
 			DEntity* entityPtr = entity.get();
-			COGASSERT(typeid(*entityPtr) == typeid(T), "Resource", "Entity %s is of the wrong type!", name.c_str());
+			COGASSERT(typeid(*entityPtr) == typeid(T), "Resources", "Entity %s is of the wrong type!", name.c_str());
 
 			// never create another shared pointer of the same object, because one of them may be destroyed when the
 			// second one still works with the object

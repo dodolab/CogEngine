@@ -2,7 +2,7 @@
 #include "Settings.h"
 #include "BehaviorEnt.h"
 #include "Error.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "ComponentStorage.h"
 #include "Facade.h"
 
@@ -11,12 +11,12 @@ namespace Cog {
 	void MultiAnim::Load(Setting& setting) {
 		auto animations = setting.GetItemVals("animations");
 		this->repeat = setting.GetItemValBool("repeat");
-		auto resourceCache = GETCOMPONENT(ResourceCache);
+		auto resources = GETCOMPONENT(Resources);
 
 		// load animations one by one
 		for (string anim : animations) {
 			// load behavior description entity
-			spt<BehaviorEnt> ent = resourceCache->GetEntity<BehaviorEnt>(anim);
+			spt<BehaviorEnt> ent = resources->GetEntity<BehaviorEnt>(anim);
 
 			if (!ent) CogLogError("MultiAnim","Animation %s not found", anim.c_str());
 

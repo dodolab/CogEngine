@@ -1,7 +1,7 @@
 #include "Logger.h"
 #include "ofxCogEngine.h"
 #include "Settings.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "ComponentStorage.h"
 #include "Facade.h"
 
@@ -50,7 +50,7 @@ namespace Cog {
 		delete logOutput;
 		logOutput = nullptr;
 
-		auto resCache = GETCOMPONENT(ResourceCache);
+		auto resCache = GETCOMPONENT(Resources);
 		Setting set = resCache->GetGlobalSettings("logger");
 
 		if (!set.name.empty()) {

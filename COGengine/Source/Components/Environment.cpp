@@ -7,7 +7,7 @@
 #include "MsgPayloads.h"
 #include "Settings.h"
 #include "ComponentStorage.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "Stage.h"
 #include "Scene.h"
 #include "AsyncProcess.h"
@@ -23,7 +23,7 @@ namespace Cog {
 	void Environment::OnInit(spt<ofxXml> xml) {
 		this->OnInit();
 
-		auto resCache = GETCOMPONENT(ResourceCache);
+		auto resCache = GETCOMPONENT(Resources);
 		Setting set = resCache->GetGlobalSettings("display");
 
 		if (!set.name.empty()) {

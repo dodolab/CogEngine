@@ -20,7 +20,7 @@ namespace Cog {
 
 	void Scene::Init() {
 		auto renderer = GETCOMPONENT(Renderer);
-		auto cache = GETCOMPONENT(ResourceCache);
+		auto cache = GETCOMPONENT(Resources);
 
 		// notify renderer that we will use specific layers
 		for (auto layer : layers) {
@@ -31,7 +31,7 @@ namespace Cog {
 
 	void Scene::Dispose() {
 		auto renderer = GETCOMPONENT(Renderer);
-		auto cache = GETCOMPONENT(ResourceCache);
+		auto cache = GETCOMPONENT(Resources);
 
 		// remove layers from renderer
 		for (auto layer : layers) {
@@ -69,7 +69,7 @@ namespace Cog {
 
 		this->settings = Settings();
 
-		auto cache = GETCOMPONENT(ResourceCache);
+		auto cache = GETCOMPONENT(Resources);
 		// always merge from default settings that is stored in the resource cache
 		auto defaultSettings = cache->GetDefaultSettings();
 		this->settings.MergeSettings(defaultSettings);

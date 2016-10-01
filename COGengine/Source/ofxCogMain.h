@@ -51,7 +51,7 @@ using namespace std;
 #include "Scene.h"
 #include "HitEvent.h"
 #include "ofxCogEngine.h"
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "Logger.h"
 #include "Stage.h"
 #include "Tween.h"

@@ -108,9 +108,6 @@
     <ClInclude Include="Source\Core\Facade.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\ResourceCache.h">
-      <Filter>Source\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Components\Logger.h">
       <Filter>Source\Components</Filter>
     </ClInclude>
@@ -624,6 +621,12 @@
     <ClInclude Include="Source\AI\ActionFilter.h">
       <Filter>Source\AI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\Resources.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\AssetsManager.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -631,9 +634,6 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Facade.cpp">
       <Filter>Source\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Components\ResourceCache.cpp">
-      <Filter>Source\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\NodeBuilder.cpp">
       <Filter>Source\Core</Filter>
@@ -988,6 +988,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scripting\SceneLua.cpp">
       <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Resources.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\AssetsManager.cpp">
+      <Filter>Source\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

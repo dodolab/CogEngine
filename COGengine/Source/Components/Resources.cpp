@@ -1,4 +1,4 @@
-#include "ResourceCache.h"
+#include "Resources.h"
 #include "Soundfx.h"
 #include "SheetAnim.h"
 #include "SpriteSheet.h"
@@ -12,13 +12,13 @@
 
 namespace Cog {
 
-	void ResourceCache::OnInit() {
+	void Resources::OnInit() {
 		// set global dpi and therefore fonts will have the same pixel size on each display
 		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
 	}
 
 
-	void ResourceCache::OnInit(spt<ofxXml> xml) {
+	void Resources::OnInit(spt<ofxXml> xml) {
 		xml->popAll();
 
 		if (xml->tagExists("app_config")) {
@@ -126,7 +126,7 @@ namespace Cog {
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
-					COGASSERT(!trans->name.empty(),"Resource","Transform entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!trans->name.empty(),"Resources","Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
@@ -145,7 +145,7 @@ namespace Cog {
 					auto dummySet = Setting();
 					ent->LoadFromXml(xml, dummySet);
 
-					COGASSERT(!ent->name.empty(), "Resource", "Behavior entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!ent->name.empty(), "Resources", "Behavior entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(ent->name, ent);
 					xml->popTag();
@@ -169,9 +169,12 @@ namespace Cog {
 				xml->popTag();
 			}
 		}
+
+		// initialize assets manager
+		assetsMgr.OnInit();
 	}
 
-	spt<ofImage> ResourceCache::Get2DImage(string path) {
+	spt<ofImage> Resources::Get2DImage(string path) {
 
 		auto found = loadedImages.find(path);
 		if (found != loadedImages.end()) {
@@ -184,7 +187,7 @@ namespace Cog {
 			return existing;
 		}
 
-		COGLOGDEBUG("Resource","Loading image %s",path.c_str());
+		COGLOGDEBUG("Resources","Loading image %s",path.c_str());
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -218,18 +221,18 @@ namespace Cog {
 		return image;
 	}
 
-	spt<ofImage> ResourceCache::Preload2DImage(string path) {
+	spt<ofImage> Resources::Preload2DImage(string path) {
 		auto found = loadedImages.find(path);
 		if (found != loadedImages.end()) {
 			return (found->second);
 		}
 
-		COGLOGDEBUG("Resource", "Preloading image %s", path.c_str());
+		COGLOGDEBUG("Resources", "Preloading image %s", path.c_str());
 		ofImage* img = new ofImage();
 		// don't use texture because images are loaded in separate thread
 		img->setUseTexture(false);
 		bool loaded = img->load(path);
-		if (!loaded) CogLogError("Resource", "Image couldn't be loaded: %s", path.c_str());
+		if (!loaded) CogLogError("Resources", "Image couldn't be loaded: %s", path.c_str());
 
 		auto image = spt<ofImage>(img);
 		loadedImages[path] = image;
@@ -237,7 +240,7 @@ namespace Cog {
 		return image;
 	}
 
-	spt<ofVboMesh> ResourceCache::GetVboMesh(string path) {
+	spt<ofVboMesh> Resources::GetVboMesh(string path) {
 		auto found = loadedVboMeshes.find(path);
 		if (found != loadedVboMeshes.end()) {
 			return (found->second);
@@ -245,7 +248,7 @@ namespace Cog {
 		return spt<ofVboMesh>();
 	}
 
-	spt<ofTrueTypeFont> ResourceCache::GetFont(string path, int size) {
+	spt<ofTrueTypeFont> Resources::GetFont(string path, int size) {
 
 		auto fontSetIt = loadedFonts.find(path);
 		map<int, spt<ofTrueTypeFont>> fontSet;
@@ -257,7 +260,7 @@ namespace Cog {
 			fontSet = fontSetIt->second;
 		}
 
-		COGLOGDEBUG("ResourceCache", "Loading font %s", path.c_str());
+		COGLOGDEBUG("Resources", "Loading font %s", path.c_str());
 
 		map<int, spt<ofTrueTypeFont>>& fs = loadedFonts.find(path)->second;
 
@@ -275,17 +278,17 @@ namespace Cog {
 		}
 	}
 
-	Soundfx* ResourceCache::GetSound(string path) {
+	Soundfx* Resources::GetSound(string path) {
 		auto found = loadedSounds.find(path);
 		if (found != loadedSounds.end()) {
 			return (found->second);
 		}
 
-		COGLOGDEBUG("Resource", "Loading sound %s", path.c_str());
+		COGLOGDEBUG("Resources", "Loading sound %s", path.c_str());
 		return new Soundfx(path);
 	}
 
-	spt<ofxXmlSettings> ResourceCache::PreloadXMLFile(string path) {
+	spt<ofxXmlSettings> Resources::PreloadXMLFile(string path) {
 		auto found = loadedXMLs.find(path);
 		if (found != loadedXMLs.end()) {
 			return (found->second);
@@ -298,22 +301,22 @@ namespace Cog {
 		return xmlPtr;
 	}
 
-	spt<ofxXmlSettings> ResourceCache::LoadXMLFile(string path) {
+	spt<ofxXmlSettings> Resources::LoadXMLFile(string path) {
 		ofxXmlSettings* xml = new ofxXmlSettings();
 		xml->loadFile(path);
 		auto xmlPtr = spt<ofxXmlSettings>(xml);
 		return xmlPtr;
 	}
 
-	spt<GeneralAnim> ResourceCache::GetAnimation(string name) {
+	spt<GeneralAnim> Resources::GetAnimation(string name) {
 		auto found = loadedAnimations.find(name);
 		if (found != loadedAnimations.end()) return found->second;
 		else return spt<GeneralAnim>();
 	}
 
-	void ResourceCache::StoreAnimation(spt<GeneralAnim> anim) {
+	void Resources::StoreAnimation(spt<GeneralAnim> anim) {
 
-		COGASSERT(anim->GetName().compare("") != 0, "Resource", "Attempt to store animation without a name!");
+		COGASSERT(anim->GetName().compare("") != 0, "Resources", "Attempt to store animation without a name!");
 
 		auto found = loadedAnimations.find(anim->GetName());
 		if (found == loadedAnimations.end()) {
@@ -321,7 +324,7 @@ namespace Cog {
 		}
 	}
 
-	spt<DEntity> ResourceCache::GetEntity(string name) {
+	spt<DEntity> Resources::GetEntity(string name) {
 		auto found = loadedEntities.find(name);
 		if (found != loadedEntities.end()) {
 			return found->second;
@@ -331,28 +334,28 @@ namespace Cog {
 		}
 	}
 
-	void ResourceCache::StoreEntity(spt<DEntity> entity) {
+	void Resources::StoreEntity(spt<DEntity> entity) {
 		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
-			"Resource", "Different type of entity %s is already in the cache!", entity->name.c_str());
+			"Resources", "Different type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[entity->name] = entity;
 	}
 
-	void ResourceCache::StoreEntity(string name, spt<DEntity> entity) {
+	void Resources::StoreEntity(string name, spt<DEntity> entity) {
 		COGASSERT(loadedEntities.count(entity->name) == 0 || typeid(loadedEntities[entity->name]) == typeid(entity.get),
-			"Resource", "Different type of entity %s is already in the cache!", entity->name.c_str());
+			"Resources", "Different type of entity %s is already in the cache!", entity->name.c_str());
 
 		loadedEntities[name] = entity;
 	}
 
-	spt<SpriteSheet> ResourceCache::GetSpriteSheet(string name) {
+	spt<SpriteSheet> Resources::GetSpriteSheet(string name) {
 		auto found = loadedSpriteSheets.find(name);
 		if (found != loadedSpriteSheets.end()) return found->second;
 		else return spt<SpriteSheet>();
 	}
 
-	void ResourceCache::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
-		COGASSERT(spriteSheet->GetName().compare("") != 0, "Resource", "Attempt to store spritesheet without a name!");
+	void Resources::StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
+		COGASSERT(spriteSheet->GetName().compare("") != 0, "Resources", "Attempt to store spritesheet without a name!");
 
 		auto found = loadedSpriteSheets.find(spriteSheet->GetName());
 		if (found == loadedSpriteSheets.end()) {
@@ -360,15 +363,15 @@ namespace Cog {
 		}
 	}
 
-	Setting ResourceCache::GetDefaultSettings(string name) {
+	Setting Resources::GetDefaultSettings(string name) {
 		return loadedDefaultSettings.GetSetting(name);
 	}
 
-	Setting ResourceCache::GetGlobalSettings(string name) {
+	Setting Resources::GetGlobalSettings(string name) {
 		return loadedGlobalSettings.GetSetting(name);
 	}
 
-	Setting ResourceCache::GetProjectSettings(string name) {
+	Setting Resources::GetProjectSettings(string name) {
 		return loadedProjectSettings.GetSetting(name);
 	}
 

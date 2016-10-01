@@ -17,7 +17,7 @@ namespace Cog {
 	class ComponentStorage;
 	class Environment;
 	class Logger;
-	class ResourceCache;
+	class Resources;
 	class Renderer;
 	class InputHandler;
 	class Stage;
@@ -49,7 +49,7 @@ namespace Cog {
 
 		// important components that are simply accessible from this object
 		Environment* environment = nullptr;
-		ResourceCache* resourceCache = nullptr;
+		Resources* resources = nullptr;
 		Logger* logger = nullptr;
 		Renderer* renderer = nullptr;
 		Stage* stage = nullptr;

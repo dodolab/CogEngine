@@ -32,3 +32,5 @@ Examples/Scripting3/bin/
 Examples/Scripting3/Scripting3.VC.db
 Examples/Scripting3/Scripting3.VC.VC.opendb
 *.sdf
+COGenginelab/obj/
+COGenginelab/COGenginelab.VC.db
