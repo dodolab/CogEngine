@@ -80,5 +80,6 @@ namespace Cog {
 #define PATH_DEFAULT_SETTINGS "Assets/default_settings.xml"
 #define PATH_GLOBAL_SETTINGS "Assets/global_settings.xml"
 #define PATH_PROJECT_SETTINGS "Assets/project_settings.xml"
+#define PATH_SCRIPTS "Assets/Scripts"
 
 }// namespace

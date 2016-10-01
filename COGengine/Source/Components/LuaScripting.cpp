@@ -208,22 +208,31 @@ namespace Cog {
 	}
 
 	void LuaScripting::LoadAllScripts() {
-		auto cache = GETCOMPONENT(Resources);
-		auto& scripts = cache->GetScripts();
+		// preload scripts
+		string scriptsPath = ofToDataPath(PATH_SCRIPTS);
 
+		ofDirectory dir(scriptsPath);
 
-		for (auto script : scripts) {
-			COGLOGDEBUG("Lua", "Loading script %s",script.second.c_str());
+		if (dir.exists()) {
+			auto files = dir.getFiles();
 
-			int status = luaL_loadfile(L, ofToDataPath(script.second).c_str());
-			if (status != 0) {
-				CogLogError("Lua",lua_tostring(L, -1));
-			}
-			else {
-				// run script
-				status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			for (auto file : files) {
+
+				string name = file.getFileName();
+				
+				COGLOGDEBUG("Lua", "Loading script %s", name.c_str());
+
+				int status = luaL_loadfile(L, file.getAbsolutePath().c_str());
+
 				if (status != 0) {
 					CogLogError("Lua", lua_tostring(L, -1));
+				}
+				else {
+					// run script
+					status = lua_pcall(L, 0, LUA_MULTRET, 0);
+					if (status != 0) {
+						CogLogError("Lua", lua_tostring(L, -1));
+					}
 				}
 			}
 		}

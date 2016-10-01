@@ -39,20 +39,6 @@ namespace Cog {
 				xml->popTag();
 			}
 
-			// preload scripts
-			if (xml->pushTagIfExists("scripts")) {
-				int scriptNum = xml->getNumTags("script");
-
-				for (int i = 0; i < scriptNum; i++) {
-					xml->pushTag("script", i);
-					string name = xml->getAttributex("name", "");
-					string path = xml->getAttributex("path", "");
-					this->scripts[name] = path;
-					xml->popTag();
-				}
-				xml->popTag();
-			}
-
 			// load sheet animations
 			if (xml->pushTagIfExists("animations")) {
 
