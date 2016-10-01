@@ -5,15 +5,18 @@
 
 namespace Cog {
 
-	SceneLoader::SceneLoader(spt<ofxXml> config, Scene* scene, TweenDirection tweenDir)
-		: config(config), scene(scene), tweenDir(tweenDir) {
+	SceneLoader::SceneLoader(Scene* scene, TweenDirection tweenDir)
+		: scene(scene), tweenDir(tweenDir) {
 
 	}
 
 	void SceneLoader::DoJob() {
+		
+		spt<ofxXml> config = spt<ofxXml>(new ofxXml());
+		config->loadFile(ofToDataPath(PATH_SCENES));
+
 		config->popAll();
-		config->pushTag("app_config");
-		config->pushTag("scenes");
+		config->pushTag("resources");
 
 		for (int i = 0; i < config->getNumTags("scene"); i++) {
 			config->pushTag("scene", i);

@@ -18,10 +18,6 @@ namespace Cog {
 		virtualAspectRatio = ((float)ofGetWindowSize().x) / ofGetWindowSize().y;
 		OnScreenSizeChanged((int)ofGetWindowSize().x, (int)ofGetWindowSize().y);
 		screenSizeChanged = false;
-	}
-
-	void Environment::OnInit(spt<ofxXml> xml) {
-		this->OnInit();
 
 		auto resCache = GETCOMPONENT(Resources);
 		Setting set = resCache->GetGlobalSettings("display");

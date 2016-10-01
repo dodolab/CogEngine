@@ -105,9 +105,9 @@ namespace Cog {
 		bool SwitchBackToScene(TweenDirection tweenDir);
 
 		/**
-		* Loads scene from xml
+		* Loads scenes from resources
 		*/
-		void LoadScenesFromXml(spt<ofxXml> xml);
+		void LoadScenes();
 
 		/**
 		* Writes info about all scenes and their nodes into the console

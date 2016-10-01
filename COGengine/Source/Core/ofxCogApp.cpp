@@ -10,12 +10,7 @@
 namespace Cog {
 
 	void ofxCogApp::InitEngine() {
-		if (!xmlConfig) {
-			ofxCogEngine::GetInstance().Init();
-		}
-		else {
-			ofxCogEngine::GetInstance().Init(xmlConfig);
-		}
+		ofxCogEngine::GetInstance().Init();
 	}
 
 	void ofxCogApp::InitStage(Stage* stage) {

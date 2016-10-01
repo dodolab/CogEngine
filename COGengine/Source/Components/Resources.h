@@ -29,14 +29,6 @@ namespace Cog {
 		map<string, Soundfx*> loadedSounds;
 		// cached xml files
 		map<string, spt<ofxXmlSettings>> loadedXMLs;
-		// cached animation
-		map<string, spt<GeneralAnim>> loadedAnimations;
-		// cached description entities
-		map<string, spt<DEntity>> loadedEntities;
-		// cached sprite sheets
-		map<string, spt<SpriteSheet>> loadedSpriteSheets;
-		// cached fonts (one for each dpi)
-		map<string, map<int, spt<ofTrueTypeFont>>> loadedFonts;
 
 	public:
 
@@ -50,8 +42,6 @@ namespace Cog {
 		}
 
 		void OnInit();
-
-		void OnInit(spt<ofxXml> xml);
 
 		/**
 		* Loads 2D image from file
@@ -79,7 +69,9 @@ namespace Cog {
 		* @param path path to file
 		* @size font size in dpi
 		*/
-		spt<ofTrueTypeFont> GetFont(string path, int size);
+		spt<ofTrueTypeFont> GetFont(string path, int size) {
+			return assetsMgr.GetFont(path, size);
+		}
 
 		/**
 		* Loads either sound or music from file
@@ -103,18 +95,24 @@ namespace Cog {
 		* Gets animation by name
 		* @param name animation name
 		*/
-		spt<GeneralAnim> GetAnimation(string name);
+		spt<GeneralAnim> GetAnimation(string name) {
+			return assetsMgr.GetAnimation(name);
+		}
 
 		/**
 		* Stores animation
 		* @param anim animation to store
 		*/
-		void StoreAnimation(spt<GeneralAnim> anim);
+		void StoreAnimation(spt<GeneralAnim> anim) {
+			assetsMgr.StoreAnimation(anim);
+		}
 
 		/**
 		* Gets stored entity by name
 		*/
-		spt<DEntity> GetEntity(string name);
+		spt<DEntity> GetEntity(string name) {
+			return assetsMgr.GetEntity(name);
+		}
 
 		/**
 		* Gets stored entity by name
@@ -138,26 +136,34 @@ namespace Cog {
 		* Stores entity under its name
 		* @param entity entity to store
 		*/
-		void StoreEntity(spt<DEntity> entity);
+		void StoreEntity(spt<DEntity> entity) {
+			assetsMgr.StoreEntity(entity);
+		}
 
 		/**
 		* Stores entity
 		* @param name entity name, has to be unique
 		* @entity entity to store
 		*/
-		void StoreEntity(string name, spt<DEntity> entity);
+		void StoreEntity(string name, spt<DEntity> entity) {
+			assetsMgr.StoreEntity(name, entity);
+		}
 
 		/**
 		* Gets spritesheet by name
 		* @param name name of spritesheet
 		*/
-		spt<SpriteSheet> GetSpriteSheet(string name);
+		spt<SpriteSheet> GetSpriteSheet(string name) {
+			return assetsMgr.GetSpriteSheet(name);
+		}
 
 		/**
 		* Stores spritesheet
 		* @param spriteSheet spritesheet to store
 		*/
-		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet);
+		void StoreSpriteSheet(spt<SpriteSheet> spriteSheet) {
+			assetsMgr.StoreSpriteSheet(spriteSheet);
+		}
 
 		/**
 		* Gets default settings that contains default values

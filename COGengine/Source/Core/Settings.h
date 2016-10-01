@@ -207,6 +207,15 @@ namespace Cog {
 		Settings(const Settings& copy);
 
 		/**
+		* Gets value of a setting with given name as a string.
+		* If there is no such Setting or key-value pair, it returns empty string
+		*/
+		string GetSettingVal(string setName) {
+			if (settings.count(setName) == 0) return "";
+			else return GetSetting(setName).GetItemVal("value");
+		}
+
+		/**
 		* Gets value of a setting with given name and given key as a string.
 		* If there is no such Setting or key-value pair, it returns empty string
 		*/

@@ -39,14 +39,6 @@ namespace Cog {
 		}
 
 		/**
-		* Initialization procedure that loads configuration from xml
-		*/
-		virtual void OnInit(spt<ofxXml> config) {
-			// call the general init method if not overridden
-			OnInit();
-		}
-
-		/**
 		* Gets initialization priority
 		*/
 		InitPriority GetPriority() const {

@@ -51,7 +51,10 @@ namespace Cog {
 			return a->GetPriority() > b->GetPriority();
 		});
 
-		// init all components
+		// init logger twice, because it should be always initialized by default at first
+		this->logger->OnInit();
+
+		// init all components, using xml file
 		for (auto it = components.begin(); it != components.end(); ++it) {
 			(*it)->OnInit();
 		}
@@ -59,50 +62,9 @@ namespace Cog {
 		LoadCOGAssets();
 	}
 
-	void ofxCogEngine::Init(string xmlPath) {
-		ofxXml* xml = new ofxXml();
-		xml->loadFile(xmlPath.c_str());
-		auto xmlPtr = spt<ofxXml>(xml);
-		Init(xmlPtr);
-	}
-
-	void ofxCogEngine::Init(spt<ofxXml> config) {
-
-		this->config = config;
-
-		CheckCOGAssets();
-
-		RegisterComponents();
-
-		vector<Component*> components;
-		compStorage->GetAllComponents(components);
-
-		// sort by priority
-		sort(components.begin(), components.end(),
-			[this](const Component* a, const Component* b) -> bool
-		{
-			return a->GetPriority() > b->GetPriority();
-		});
-
-		// init logger twice, because it should be always initialized by default at first
-		this->logger->OnInit();
-
-		// init all components, using xml file
-		for (auto it = components.begin(); it != components.end(); ++it) {
-			(*it)->OnInit(config);
-		}
-
-		LoadCOGAssets();
-	}
-
-	void ofxCogEngine::LoadStageFromXml(spt<ofxXml> config) {
-		config->popAll();
-
-		if (config->pushTagIfExists("app_config") && config->pushTagIfExists("scenes")) {
-			// load scenes
-			auto context = GETCOMPONENT(Stage);
-			stage->LoadScenesFromXml(config);
-		}
+	void ofxCogEngine::LoadStage() {
+		auto stage = GETCOMPONENT(Stage);
+		stage->LoadScenes();
 	}
 
 	void ofxCogEngine::Update(uint64 delta, uint64 absolute) {

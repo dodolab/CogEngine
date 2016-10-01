@@ -68,10 +68,6 @@ namespace Cog {
 		*/
 		void OnInit();
 
-		/**
-		* Initializes environment controller, using xml
-		*/
-		void OnInit(spt<ofxXml> xml);
 
 		/**
 		* Adds a new sound

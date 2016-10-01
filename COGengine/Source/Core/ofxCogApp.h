@@ -30,10 +30,6 @@ namespace Cog {
 		uint64 delta;
 		// frames per second
 		uint64 fps;
-		// path to config file
-		string configFile;
-		// xml configuration
-		spt<ofxXml> xmlConfig;
 		// indicator whether the engine was initialized
 		bool engineInitialized = false;
 
@@ -42,16 +38,7 @@ namespace Cog {
 		/**
 		* Creates a new application wrapper
 		*/
-		ofxCogApp() : configFile(""), fps(DEFAULT_APP_SPEED){
-		}
-
-		/**
-		* Creates a new application wrapper with configuration file
-		*/
-		ofxCogApp(string configFile) : configFile(configFile), fps(DEFAULT_APP_SPEED) {
-			ofxXml* xml = new ofxXml();
-			xml->loadFile(configFile);
-			this->xmlConfig = spt<ofxXml>(xml);
+		ofxCogApp() : fps(DEFAULT_APP_SPEED){
 		}
 
 		/**

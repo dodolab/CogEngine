@@ -24,12 +24,11 @@ namespace Cog {
 	class SceneLoader : public Job {
 
 	private:
-		spt<ofxXml> config;
 		Scene* scene;
 		TweenDirection tweenDir;
 	public:
 
-		SceneLoader(spt<ofxXml> config, Scene* scene, TweenDirection tweenDir);
+		SceneLoader(Scene* scene, TweenDirection tweenDir);
 
 		void DoJob();
 	};

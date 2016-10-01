@@ -152,7 +152,7 @@ namespace Cog {
 			{
 				// scene is lazy loaded -> run asynchronous loading process
 				// note that this makes sense only if the scene is loaded via XML
-				auto async = new AsyncProcess(new SceneLoader(ofxCogEngine::GetInstance().config, scene, tweenDir));
+				auto async = new AsyncProcess(new SceneLoader(scene, tweenDir));
 
 				COGLOGDEBUG("Stage", "Scene is lazy loaded!");
 
@@ -207,48 +207,59 @@ namespace Cog {
 	}
 
 
-	void Stage::LoadScenesFromXml(spt<ofxXml> xml) {
+	void Stage::LoadScenes() {
 
 		COGLOGDEBUG("Stage", "Loading scenes from XML");
 
-		// initial scene must be specified
-		string initialScene = xml->getAttributex("initial", "");
-		string loading = xml->getAttributex("loading", "");
+		string initialScene = CogGetGlobalSettings().GetSettingVal("initial_scene");
+		string loading = CogGetDefaultSettings().GetSettingVal("loading_scene");
 
 		if (initialScene.empty()) CogLogError("Stage", "Initial scene is not specified!");
 
-		int scenesNum = xml->getNumTags("scene");
+		string spriteSheets = ofToDataPath(PATH_SCENES);
 
-		for (int i = 0; i < scenesNum; i++) {
-			xml->pushTag("scene", i);
-			
-			string name = xml->getAttributex("name", "");
-			
-			if (name.empty()) CogLogError("Stage", "Scene has no name!");
+		if (!ofFile(spriteSheets.c_str()).exists()) {
+			CogLogError("Stage", "Scenes.xml not found!");
+		}
+		else {
+			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
+			xml->loadFile(spriteSheets);
 
-			bool isLazy = xml->getBoolAttributex("lazy", false);
-			
-			Scene* sc = new Scene(name, isLazy);
+			if (xml->pushTag("resources")) {
+				int scenesNum = xml->getNumTags("scene");
 
-			if (!sc->IsLazyLoad()) {
-				// load complete scene only if it isn't lazy loaded
-				sc->LoadFromXml(xml);
+				for (int i = 0; i < scenesNum; i++) {
+					xml->pushTag("scene", i);
+
+					string name = xml->getAttributex("name", "");
+
+					if (name.empty()) CogLogError("Stage", "Scene has no name!");
+
+					bool isLazy = xml->getBoolAttributex("lazy", false);
+
+					Scene* sc = new Scene(name, isLazy);
+
+					if (!sc->IsLazyLoad()) {
+						// load complete scene only if it isn't lazy loaded
+						sc->LoadFromXml(xml);
+					}
+
+					if (sc->GetName().compare(initialScene) == 0) {
+						// set as initial
+						AddScene(sc, true);
+					}
+					else {
+						AddScene(sc, false);
+					}
+
+					if (!loading.empty() && sc->GetName().compare(loading) == 0) {
+						// set as loading scene
+						this->loadingScene = sc;
+					}
+
+					xml->popTag();
+				}
 			}
-
-			if (sc->GetName().compare(initialScene) == 0) {
-				// set as initial
-				AddScene(sc, true);
-			}
-			else {
-				AddScene(sc, false);
-			}
-				
-			if (!loading.empty() && sc->GetName().compare(loading) == 0) {
-				// set as loading scene
-				this->loadingScene = sc;
-			}
-
-			xml->popTag();
 		}
 
 		if (actualScene == nullptr && this->scenes.size() != 0) {

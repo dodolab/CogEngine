@@ -81,5 +81,13 @@ namespace Cog {
 #define PATH_GLOBAL_SETTINGS "Assets/global_settings.xml"
 #define PATH_PROJECT_SETTINGS "Assets/project_settings.xml"
 #define PATH_SCRIPTS "Assets/Scripts"
+#define PATH_FONTS "Assets/fonts.xml"
+#define PATH_SPRITESHEETS "Assets/spritesheets.xml"
+#define PATH_SCENES "Assets/scenes.xml"
+#define PATH_ANIMATIONS "Assets/animations.xml"
+#define PATH_ATTRANIMATIONS "Assets/attranimations.xml"
+#define PATH_TRANSFORMS "Assets/transforms.xml"
+#define PATH_BEHAVIORS "Assets/behaviors.xml"
+
 
 }// namespace

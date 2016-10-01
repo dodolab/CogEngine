@@ -41,9 +41,6 @@ namespace Cog {
 		void RegisterComponents();
 	
 	public:
-		// global configuration file
-		spt<ofxXml> config;
-
 		// component storage
 		ComponentStorage* compStorage;
 
@@ -67,21 +64,9 @@ namespace Cog {
 		void Init();
 
 		/**
-		* Initializes engine from XML file
-		* @param xmlPath path to configuration file
+		* Loads stage from resources
 		*/
-		void Init(string xmlPath);
-
-		/**
-		* Initializes engine from XML file
-		* @param config configuration xml
-		*/
-		void Init(spt<ofxXml> config);
-
-		/**
-		* Loads stage from xml
-		*/
-		void LoadStageFromXml(spt<ofxXml> config);
+		void LoadStage();
 
 		/**
 		* Executes one update cycle; this method is called by ofxCogApp
