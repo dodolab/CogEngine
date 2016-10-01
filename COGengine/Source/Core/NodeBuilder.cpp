@@ -84,7 +84,7 @@ namespace Cog {
 		if (refHeight == 0) refHeight = CogGetScreenHeight();
 
 		// create bounding box
-		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight,margin,renderable));
+		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight, margin, renderable));
 		bbox->SetColor(color);
 		node->SetMesh(bbox);
 	}
@@ -149,7 +149,7 @@ namespace Cog {
 		else {
 			// load from reference behavior descriptor
 			spt<BehaviorEnt> refent = resources->GetEntity<BehaviorEnt>(entity->ref);
-			
+
 			behavior = CogGetComponentStorage()->CreateBehaviorPrototype(refent->type);
 			if (!refent->setting.Empty()) behavior->Load(refent->setting);
 		}
@@ -239,13 +239,13 @@ namespace Cog {
 			// =================== get grid size (if specified)
 			int gridWidth = settings.GetSettingValInt("transform", "grid_width");
 			int gridHeight = settings.GetSettingValInt("transform", "grid_height");
-			
+
 			TransformMath math = TransformMath();
 			// set transform according to the parsed values
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
 			xml->popTag();
 		}
-		
+
 		if (xml->tagExists("behavior")) {
 			int behaviors = xml->getNumTags("behavior");
 			// load behaviors
@@ -283,7 +283,7 @@ namespace Cog {
 	void NodeBuilder::LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
 		string font = xml->getAttributex("font", "");
 		float size = xml->getAttributex("size", 1.0);
-		string value = xml->getValuex("");
+		string value = checkResource(xml->getValuex(""));
 		string colorStr = xml->getAttributex("color", "0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
@@ -294,7 +294,7 @@ namespace Cog {
 		string font = xml->getAttributex("font", "");
 		float width = xml->getAttributex("width", 640);
 		float size = xml->getAttributex("font_size", 1.0);
-		string value = xml->getValuex("");
+		string value = checkResource(xml->getValuex(""));
 		string colorStr = xml->getAttributex("color", "0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
@@ -313,7 +313,7 @@ namespace Cog {
 
 	void NodeBuilder::LoadMeshFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
 		string type = xml->getAttributex("type", "");
-		
+
 		// get type of the mesh
 		MeshType renderType = EnumConverter::StrToMeshType(type);
 
@@ -364,7 +364,27 @@ namespace Cog {
 			bool renderable = xml->getBoolAttributex("renderable", false);
 			float margin = xml->getAttributex("margin", 0.0f);
 
-			CreateBoundingBoxNode(scene, node, color, margin,renderable);
+			CreateBoundingBoxNode(scene, node, color, margin, renderable);
+		}
+	}
+
+	string NodeBuilder::checkResource(string value) {
+		if (!value.empty() && value.at(0) == '@') {
+			int slashIndex = value.find('/');
+
+			if (slashIndex != -1) {
+				string resourceType = value.substr(1, slashIndex - 1);
+				string resourceKey = value.substr(slashIndex + 1);
+				auto resources = GETCOMPONENT(Resources);
+				string realValue = resources->GetResourceStr(resourceType, resourceKey);
+				return realValue;
+			}
+			else {
+				return value;
+			}
+		}
+		else {
+			return value;
 		}
 	}
 

@@ -218,13 +218,13 @@ namespace Cog {
 	}
 
 	void ofxCogEngine::CheckCOGAssets() {
-		string manifestPath = ofToDataPath("COGAssets/Manifest.xml");
+		string manifestPath = ofToDataPath(PATH_MAIN_MANIFEST);
 
 		if (!ofFile(manifestPath.c_str()).exists()) {
 #ifdef WIN32
-			cout << "Fatal error! File COGAssets/Manifest.xml not found. Did you forget to copy the content of the Data folder into your project?" << endl;
+			cout << "Fatal error! File " << PATH_MAIN_MANIFEST << " not found. Did you forget to copy the content of the Data folder into your project?" << endl;
 #else
-			ofLogNotice("COGEngine") << "Fatal error! File COGAssets/Manifest.xml not found. Did you forget to copy the content of the Data folder into your project?" << endl;
+			ofLogNotice("COGEngine") << "Fatal error! File " << PATH_MAIN_MANIFEST << " not found. Did you forget to copy the content of the Data folder into your project?" << endl;
 #endif
 			exit(1);
 		}

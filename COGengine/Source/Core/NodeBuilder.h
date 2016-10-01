@@ -22,7 +22,7 @@ namespace Cog {
 
 	public:
 
-		
+
 		/**
 		* Fills given node with button behavior
 		* @param node node to fill
@@ -114,7 +114,7 @@ namespace Cog {
 		* @param color bounding box color
 		* @param margin box margin (percentage size of its children)
 		* @param renderable indicator whether the boudning box should be rendered
-		* 
+		*
 		*/
 		void CreateBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable);
 
@@ -192,6 +192,12 @@ namespace Cog {
 		* @param scene actual scene
 		*/
 		void LoadMeshFromXml(spt<ofxXml> xml, Node* node, Scene* scene);
+
+	private:
+		/**
+		* Checks if the string serves as a reference to a resource (starts with @ character)
+		*/
+		string checkResource(string value);
 	};
 
 }// namespace

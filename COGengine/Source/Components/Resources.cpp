@@ -43,7 +43,7 @@ namespace Cog {
 					loadedProjectSettings.LoadFromXml(xml);
 					xml->popTag();
 				}
-			
+
 				xml->popTag();
 			}
 
@@ -126,7 +126,7 @@ namespace Cog {
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
 
-					COGASSERT(!trans->name.empty(),"Resources","Transform entity on index %d in configuration file must have a name!", i);
+					COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
 
 					StoreEntity(trans->name, trans);
 					xml->popTag();
@@ -187,7 +187,7 @@ namespace Cog {
 			return existing;
 		}
 
-		COGLOGDEBUG("Resources","Loading image %s",path.c_str());
+		COGLOGDEBUG("Resources", "Loading image %s", path.c_str());
 
 		ofImage* img = new ofImage(path);
 		ofVboMesh* mesh = new ofVboMesh();
@@ -208,10 +208,10 @@ namespace Cog {
 		mesh->addTexCoord(ofVec2f(0, 0));
 		mesh->addTexCoord(ofVec2f(1, 0));
 		mesh->addTexCoord(ofVec2f(0, 1));
-		mesh->addTexCoord(ofVec2f(1,1));
+		mesh->addTexCoord(ofVec2f(1, 1));
 
 #endif
-		
+
 		auto image = spt<ofImage>(img);
 		auto meshPtr = spt<ofVboMesh>(mesh);
 
@@ -373,6 +373,19 @@ namespace Cog {
 
 	Setting Resources::GetProjectSettings(string name) {
 		return loadedProjectSettings.GetSetting(name);
+	}
+
+	string Resources::GetResourceStr(string resourceType, string resourceKey) {
+		if (resourceType.compare("string") == 0) {
+			return assetsMgr.GetString(resourceKey);
+		}
+		else if (resourceType.compare("dimen") == 0) {
+			return assetsMgr.GetDimension(resourceKey);
+		}
+
+		CogLogError("Resources", "Resource of type %s with key %s not found", resourceType.c_str(), resourceKey.c_str());
+
+		return string();
 	}
 
 }// namespace

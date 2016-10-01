@@ -219,6 +219,13 @@ namespace Cog {
 		*/
 		Setting GetProjectSettings(string name);
 
+		/**
+		* Gets resource value from assets
+		* @param resourceType type of the resource (string, dimen etc.)
+		* @param resourceKey key of the resource
+		*/
+		string GetResourceStr(string resourceType, string resourceKey);
+
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 		}
 	};
