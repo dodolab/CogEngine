@@ -24,29 +24,6 @@ namespace Cog {
 		if (xml->tagExists("app_config")) {
 			xml->pushTag("app_config");
 
-			if (xml->pushTagIfExists("settings")) {
-
-				// load default settings
-				if (xml->pushTagIfExists("default_settings")) {
-					loadedDefaultSettings.LoadFromXml(xml);
-					xml->popTag();
-				}
-
-				// load global settings
-				if (xml->pushTagIfExists("global_settings")) {
-					loadedGlobalSettings.LoadFromXml(xml);
-					xml->popTag();
-				}
-
-				// load project settings
-				if (xml->pushTagIfExists("project_settings")) {
-					loadedProjectSettings.LoadFromXml(xml);
-					xml->popTag();
-				}
-
-				xml->popTag();
-			}
-
 			// preload fonts
 			if (xml->pushTagIfExists("fonts")) {
 				int fontNums = xml->getNumTags("font");
@@ -124,7 +101,7 @@ namespace Cog {
 				for (int i = 0; i < transNum; i++) {
 					xml->pushTag("transform", i);
 					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
-					trans->LoadFromXml(xml, loadedDefaultSettings.GetSetting("transform"));
+					trans->LoadFromXml(xml, assetsMgr.GetDefaultSettings("transform"));
 
 					COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
 
@@ -361,18 +338,6 @@ namespace Cog {
 		if (found == loadedSpriteSheets.end()) {
 			loadedSpriteSheets[spriteSheet->GetName()] = spriteSheet;
 		}
-	}
-
-	Setting Resources::GetDefaultSettings(string name) {
-		return loadedDefaultSettings.GetSetting(name);
-	}
-
-	Setting Resources::GetGlobalSettings(string name) {
-		return loadedGlobalSettings.GetSetting(name);
-	}
-
-	Setting Resources::GetProjectSettings(string name) {
-		return loadedProjectSettings.GetSetting(name);
 	}
 
 	string Resources::GetResourceStr(string resourceType, string resourceKey) {

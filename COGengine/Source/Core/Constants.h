@@ -77,5 +77,8 @@ namespace Cog {
 #define PATH_STRINGS "Assets/strings.xml"
 #define PATH_DIMENSIONS "Assets/dimens.xml"
 #define PATH_INTEGERS "Assets/integers.xml"
+#define PATH_DEFAULT_SETTINGS "Assets/default_settings.xml"
+#define PATH_GLOBAL_SETTINGS "Assets/global_settings.xml"
+#define PATH_PROJECT_SETTINGS "Assets/project_settings.xml"
 
 }// namespace

@@ -54,29 +54,37 @@ namespace Cog {
 			delete xml;
 		}
 
-		string integersPath = ofToDataPath(PATH_INTEGERS);
+		string globalSettings = ofToDataPath(PATH_GLOBAL_SETTINGS);
 
-		if (ofFile(integersPath.c_str()).exists()) {
-			ofxXml* xml = new ofxXml();
-			xml->loadFile(integersPath);
+		if (ofFile(globalSettings.c_str()).exists()) {
+			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
+			xml->loadFile(globalSettings);
 
 			if (xml->pushTag("resources")) {
-				int stringsNum = xml->getNumTags("integer");
-
-				for (int i = 0; i < stringsNum; i++) {
-					xml->pushTag("integer", i);
-					string key = xml->getAttributex("name", "");
-					int value = xml->getValuex(0);
-
-					if (!key.empty()) {
-						integers[key] = value;
-					}
-
-					xml->popTag();
-				}
+				loadedGlobalSettings.LoadFromXml(xml);
 			}
+		}
 
-			delete xml;
+		string defaultSettings = ofToDataPath(PATH_DEFAULT_SETTINGS);
+
+		if (ofFile(defaultSettings.c_str()).exists()) {
+			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
+			xml->loadFile(defaultSettings);
+
+			if (xml->pushTag("resources")) {
+				loadedDefaultSettings.LoadFromXml(xml);
+			}
+		}
+
+		string projectSettings = ofToDataPath(PATH_PROJECT_SETTINGS);
+
+		if (ofFile(projectSettings.c_str()).exists()) {
+			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
+			xml->loadFile(projectSettings);
+
+			if (xml->pushTag("resources")) {
+				loadedProjectSettings.LoadFromXml(xml);
+			}
 		}
 	}
 
@@ -112,4 +120,17 @@ namespace Cog {
 
 		return 0;
 	}
+
+	Setting AssetsManager::GetDefaultSettings(string name) {
+		return loadedDefaultSettings.GetSetting(name);
+	}
+
+	Setting AssetsManager::GetGlobalSettings(string name) {
+		return loadedGlobalSettings.GetSetting(name);
+	}
+
+	Setting AssetsManager::GetProjectSettings(string name) {
+		return loadedProjectSettings.GetSetting(name);
+	}
+
 }

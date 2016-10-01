@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Settings.h"
 
 namespace Cog {
 
@@ -12,6 +13,10 @@ namespace Cog {
 		map<string, string> strings;
 		map<string, string> dimensions;
 		map<string, int> integers;
+
+		Settings loadedDefaultSettings;
+		Settings loadedGlobalSettings;
+		Settings loadedProjectSettings;
 	public:
 
 		void OnInit();
@@ -30,6 +35,46 @@ namespace Cog {
 		* Gets integer by its key
 		*/
 		int GetInteger(string key);
+
+		/**
+		* Gets default settings that contains default values
+		* for any component
+		*/
+		Settings& GetDefaultSettings() {
+			return loadedDefaultSettings;
+		}
+
+		/**
+		* Gets global settings that contains initialization
+		* configuration such as logger settings, aspect ratio etc.
+		*/
+		Settings& GetGlobalSettings() {
+			return loadedGlobalSettings;
+		}
+
+		/**
+		* Gets custom project settings that may contain anything
+		*/
+		Settings& GetProjectSettings() {
+			return loadedProjectSettings;
+		}
+
+		/**
+		* Gets default setting by name of the parent group,
+		* for example "transform"
+		*/
+		Setting GetDefaultSettings(string name);
+
+		/**
+		* Gets global setting by name of the parent group,
+		* for example "logger"
+		*/
+		Setting GetGlobalSettings(string name);
+
+		/**
+		* Gets project setting by name of the parent group
+		*/
+		Setting GetProjectSettings(string name);
 	};
 
 } // namespace

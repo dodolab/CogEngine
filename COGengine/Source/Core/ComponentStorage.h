@@ -176,6 +176,7 @@ namespace Cog {
 			auto it = behaviorBuilders.find(key);
 
 			if (it == behaviorBuilders.end()) {
+				// if the behavior couldn't be found in C++ objects, try to find it in Lua script
 				auto luaBeh = FindLuaBehavior(key);
 				if (luaBeh == nullptr) COGLOGDEBUG("ComponentStorage", "Behavior prototype %s doesn't exists", key.GetStringValue().c_str());
 				else return luaBeh;

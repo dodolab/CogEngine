@@ -36,13 +36,9 @@ namespace Cog {
 		// cached sprite sheets
 		map<string, spt<SpriteSheet>> loadedSpriteSheets;
 		// cached fonts (one for each dpi)
-		map<string, map<int,spt<ofTrueTypeFont>>> loadedFonts;
+		map<string, map<int, spt<ofTrueTypeFont>>> loadedFonts;
 		// names and paths to loaded scripts
 		map<string, string> scripts;
-		
-		Settings loadedDefaultSettings;
-		Settings loadedGlobalSettings;
-		Settings loadedProjectSettings;
 
 	public:
 
@@ -66,7 +62,7 @@ namespace Cog {
 		spt<ofImage> Get2DImage(string path);
 
 		/**
-		* Preloads 2D image from file; doesn't use texture so the image 
+		* Preloads 2D image from file; doesn't use texture so the image
 		* must be copied before the first render, but this is done
 		* automatically; this method is useful for loading from separate
 		* thread since the access to textures is problematic
@@ -184,7 +180,7 @@ namespace Cog {
 		* for any component
 		*/
 		Settings& GetDefaultSettings() {
-			return loadedDefaultSettings;
+			return assetsMgr.GetDefaultSettings();
 		}
 
 		/**
@@ -192,32 +188,38 @@ namespace Cog {
 		* configuration such as logger settings, aspect ratio etc.
 		*/
 		Settings& GetGlobalSettings() {
-			return loadedGlobalSettings;
+			return assetsMgr.GetGlobalSettings();
 		}
 
 		/**
 		* Gets custom project settings that may contain anything
 		*/
 		Settings& GetProjectSettings() {
-			return loadedProjectSettings;
+			return assetsMgr.GetProjectSettings();
 		}
 
 		/**
 		* Gets default setting by name of the parent group,
 		* for example "transform"
 		*/
-		Setting GetDefaultSettings(string name);
+		Setting GetDefaultSettings(string name) {
+			return assetsMgr.GetDefaultSettings(name);
+		}
 
 		/**
 		* Gets global setting by name of the parent group,
 		* for example "logger"
 		*/
-		Setting GetGlobalSettings(string name);
+		Setting GetGlobalSettings(string name) {
+			return assetsMgr.GetGlobalSettings(name);
+		}
 
 		/**
 		* Gets project setting by name of the parent group
 		*/
-		Setting GetProjectSettings(string name);
+		Setting GetProjectSettings(string name) {
+			return assetsMgr.GetProjectSettings(name);
+		}
 
 		/**
 		* Gets resource value from assets
