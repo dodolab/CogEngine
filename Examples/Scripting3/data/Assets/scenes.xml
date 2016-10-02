@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<app_config>
-	<settings>
-		<!-- global settings -->
-		<global_settings>
-			<!-- debug logger, output into the console -->
-			<setting name="logger" level="DEBUG">
-				<item key="channel" value="console" />
-				<item key="module_include">
-					<value>Lua</value> <!-- Print scripting log -->
-				</item>
-			</setting>
-		</global_settings>
-	</settings>
-
-	<scripts>
-		<script name="ScriptExample" path="script1.lua" />
-		<script name="ScriptExample2" path="script2.lua" />
-    </scripts>
-	
-	<!-- scene definition -->
-	<scenes initial="main">
+<resources>
 		<scene name="main">
 			<!-- background image -->
 			<node img="bgr.jpg" />
@@ -36,5 +16,4 @@
 			</node>
 			<!-- ============================================================================ -->
 		</scene>
-	</scenes>
-</app_config>
+</resources>	

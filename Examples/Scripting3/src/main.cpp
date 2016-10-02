@@ -17,10 +17,10 @@ class ExampleApp : public ofxCogApp {
 		REGISTER_COMPONENT(new LuaScripting());
 	}
 
-	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
 
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+	void InitEngine() {
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 
 	void InitStage(Stage* stage) {

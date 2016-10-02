@@ -81,10 +81,10 @@ namespace Cog {
 
 		// Behavior proxy
 		getGlobalNamespace(L)
-			.beginClass<BehaviorLua>("Behavior")
+			.beginClass<BehaviorLua>("BehaviorProxy")
 			.addConstructor<void(*)(void)>()
 			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
-			.addCFunction("Register", &BehaviorLua::RegisterCt)
+			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
 			.addFunction("SendMessage", &BehaviorLua::SendMessage)
 			.addFunction("GetScene", &BehaviorLua::GetScene)
 			.addData("owner", &BehaviorLua::ownerLua)
@@ -208,6 +208,22 @@ namespace Cog {
 	}
 
 	void LuaScripting::LoadAllScripts() {
+		
+		COGLOGDEBUG("Lua", "Loading baseScripts");
+		string baseScriptPath = ofToDataPath(PATH_BASE_SCRIPT);
+		int status = luaL_loadfile(L, baseScriptPath.c_str());
+		
+		if (status != 0) {
+			CogLogError("Lua", lua_tostring(L, -1));
+		}
+
+		// run script
+		status = lua_pcall(L, 0, LUA_MULTRET, 0);
+		if (status != 0) {
+			CogLogError("Lua", lua_tostring(L, -1));
+		}
+		
+		
 		// preload scripts
 		string scriptsPath = ofToDataPath(PATH_SCRIPTS);
 

@@ -23,17 +23,20 @@ namespace Cog {
 	}
 
 	void BehaviorLua::OnInit() {
-		if (this->ownerLua == nullptr) this->ownerLua = new NodeLua(owner);
+		if (this->ownerLua == nullptr) {
+			this->ownerLua = new NodeLua(owner);
+			SetOwnerLua(ownerLua);
+		}
 
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto init = ref["OnInit"];
 		COGASSERT(!init.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
-		init();
+		init(ref);
 	}
 
-	int BehaviorLua::RegisterCt(luabridge::lua_State* L) {
+	int BehaviorLua::RegisterDelegateCt(luabridge::lua_State* L) {
 		COGASSERT(lua_gettop(L) == 3, "BehaviorLua", "Wrong registration call! Expected two parameters: registered object and its name");
 		
 		// get behavior name and register this object
@@ -69,7 +72,7 @@ namespace Cog {
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto method = ref["OnMessage"];
 		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method OnMessage");
-		method(MsgLua(&msg));
+		method(ref, MsgLua(&msg));
 	}
 
 	void BehaviorLua::Update(const uint64 delta, const uint64 absolute) {
@@ -79,7 +82,7 @@ namespace Cog {
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto method = ref["Update"];
 		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method Update");
-		method((int)delta, (int)absolute);
+		method(ref, (int)delta, (int)absolute);
 	}
 
 	void BehaviorLua::SubscribeForMessagesLua(StrId action) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<!-- debug logger, output into the console -->
+	<setting name="logger" level="DEBUG">
+		<item key="channel" value="console" />
+		<item key="module_include">
+			<value>Lua</value> <!-- Print scripting log -->
+		</item>
+	</setting>
+			
+  <setting name="initial_scene" value="main" />
+ 
+</resources>	

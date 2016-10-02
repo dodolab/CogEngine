@@ -29,7 +29,7 @@ namespace Cog {
 
 		void OnInit();
 
-		int RegisterCt(luabridge::lua_State* L);
+		int RegisterDelegateCt(luabridge::lua_State* L);
 
 		void SendMessage(StrId msg);
 
