@@ -9,207 +9,147 @@
 namespace Cog {
 
 	void AssetsManager::OnInit() {
+
 		string stringsPath = ofToDataPath(PATH_STRINGS);
+		spt<ofxXml> xml = LoadResourcesXml(stringsPath);
+		if (xml) {
+			int stringsNum = xml->getNumTags("string");
 
-		if (ofFile(stringsPath.c_str()).exists()) {
-			ofxXml* xml = new ofxXml();
-			xml->loadFile(stringsPath);
+			for (int i = 0; i < stringsNum; i++) {
+				xml->pushTag("string", i);
+				string key = xml->getAttributex("name", "");
+				string value = xml->getValuex("");
 
-			if (xml->pushTag("resources")) {
-				int stringsNum = xml->getNumTags("string");
-
-				for (int i = 0; i < stringsNum; i++) {
-					xml->pushTag("string", i);
-					string key = xml->getAttributex("name", "");
-					string value = xml->getValuex("");
-
-					if (!key.empty() && !value.empty()) {
-						strings[key] = value;
-					}
-
-					xml->popTag();
+				if (!key.empty() && !value.empty()) {
+					strings[key] = value;
 				}
-			}
 
-			delete xml;
+				xml->popTag();
+			}
 		}
 
 		string dimensionsPath = ofToDataPath(PATH_DIMENSIONS);
+		xml = LoadResourcesXml(dimensionsPath);
+		if (xml) {
+			int stringsNum = xml->getNumTags("dimen");
 
-		if (ofFile(dimensionsPath.c_str()).exists()) {
-			ofxXml* xml = new ofxXml();
-			xml->loadFile(dimensionsPath);
+			for (int i = 0; i < stringsNum; i++) {
+				xml->pushTag("dimen", i);
+				string key = xml->getAttributex("name", "");
+				string value = xml->getValuex("");
 
-			if (xml->pushTag("resources")) {
-				int stringsNum = xml->getNumTags("dimen");
-
-				for (int i = 0; i < stringsNum; i++) {
-					xml->pushTag("dimen", i);
-					string key = xml->getAttributex("name", "");
-					string value = xml->getValuex("");
-
-					if (!key.empty() && !value.empty()) {
-						dimensions[key] = value;
-					}
-
-					xml->popTag();
+				if (!key.empty() && !value.empty()) {
+					dimensions[key] = value;
 				}
-			}
 
-			delete xml;
+				xml->popTag();
+			}
 		}
 
 		string globalSettings = ofToDataPath(PATH_GLOBAL_SETTINGS);
-
-		if (ofFile(globalSettings.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(globalSettings);
-
-			if (xml->pushTag("resources")) {
-				loadedGlobalSettings.LoadFromXml(xml);
-			}
+		xml = LoadResourcesXml(globalSettings);
+		if (xml) {
+			loadedGlobalSettings.LoadFromXml(xml);
 		}
 
 		string defaultSettings = ofToDataPath(PATH_DEFAULT_SETTINGS);
-
-		if (ofFile(defaultSettings.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(defaultSettings);
-
-			if (xml->pushTag("resources")) {
-				loadedDefaultSettings.LoadFromXml(xml);
-			}
+		xml = LoadResourcesXml(defaultSettings);
+		if (xml) {
+			loadedDefaultSettings.LoadFromXml(xml);
 		}
 
 		string projectSettings = ofToDataPath(PATH_PROJECT_SETTINGS);
-
-		if (ofFile(projectSettings.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(projectSettings);
-
-			if (xml->pushTag("resources")) {
-				loadedProjectSettings.LoadFromXml(xml);
-			}
+		xml = LoadResourcesXml(projectSettings);
+		if (xml) {
+			loadedProjectSettings.LoadFromXml(xml);
 		}
 
 		string fonts = ofToDataPath(PATH_FONTS);
+		xml = LoadResourcesXml(fonts);
+		if (xml) {
+			int fontNums = xml->getNumTags("font");
 
-		if (ofFile(fonts.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(fonts);
-
-			if (xml->pushTag("resources")) {
-				int fontNums = xml->getNumTags("font");
-
-				for (int i = 0; i < fontNums; i++) {
-					xml->pushTag("font", i);
-					string name = xml->getAttributex("name", "");
-					int size = xml->getAttributex("size", 1);
-					GetFont(name, size);
-					xml->popTag();
-				}
+			for (int i = 0; i < fontNums; i++) {
+				xml->pushTag("font", i);
+				string name = xml->getAttributex("name", "");
+				int size = xml->getAttributex("size", 1);
+				GetFont(name, size);
+				xml->popTag();
 			}
 		}
 
-
 		string animationsPath = ofToDataPath(PATH_ANIMATIONS);
+		xml = LoadResourcesXml(animationsPath);
+		if (xml) {
+			auto animLoader = AnimLoader();
+			auto rootAnims = vector<spt<GeneralAnim>>();
 
-		if (ofFile(animationsPath.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(animationsPath);
+			auto builder = [](void) {
+				return new SheetAnim();
+			};
 
-			if (xml->pushTag("resources")) {
-				auto animLoader = AnimLoader();
-				auto rootAnims = vector<spt<GeneralAnim>>();
+			animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
-				auto builder = [](void) {
-					return new SheetAnim();
-				};
-
-				animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
-
-				// store animation
-				for (spt<GeneralAnim> anim : rootAnims) {
-					anim = static_pointer_cast<SheetAnim>(anim);
-					StoreAnimation(anim);
-				}
+			// store animation
+			for (spt<GeneralAnim> anim : rootAnims) {
+				anim = static_pointer_cast<SheetAnim>(anim);
+				StoreAnimation(anim);
 			}
 		}
 
 		string attrAnimationsPath = ofToDataPath(PATH_ATTRANIMATIONS);
+		xml = LoadResourcesXml(attrAnimationsPath);
+		if (xml) {
+			int transNum = xml->getNumTags("transform");
 
-		if (ofFile(attrAnimationsPath.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(attrAnimationsPath);
+			for (int i = 0; i < transNum; i++) {
+				xml->pushTag("transform", i);
+				spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
+				trans->LoadFromXml(xml, GetDefaultSettings("transform"));
 
-			if (xml->pushTag("resources")) {
-				int transNum = xml->getNumTags("transform");
+				COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
 
-				for (int i = 0; i < transNum; i++) {
-					xml->pushTag("transform", i);
-					spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
-					trans->LoadFromXml(xml, GetDefaultSettings("transform"));
-
-					COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
-
-					StoreEntity(trans->name, trans);
-					xml->popTag();
-				}
+				StoreEntity(trans->name, trans);
+				xml->popTag();
 			}
 		}
 
 		string transformsPath = ofToDataPath(PATH_TRANSFORMS);
-
-		if (ofFile(transformsPath.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(transformsPath);
-
-			if (xml->pushTag("resources")) {
-
-			}
+		xml = LoadResourcesXml(transformsPath);
+		if (xml) {
+			CogLogError("Resources", "Tohle neni implementovane!!!");
 		}
 
 		string behaviorsPath = ofToDataPath(PATH_BEHAVIORS);
+		xml = LoadResourcesXml(behaviorsPath);
+		if (xml) {
+			int behNum = xml->getNumTags("behavior");
 
-		if (ofFile(behaviorsPath.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(behaviorsPath);
+			for (int i = 0; i < behNum; i++) {
+				xml->pushTag("behavior", i);
+				spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 
-			if (xml->pushTag("resources")) {
-				int behNum = xml->getNumTags("behavior");
+				auto dummySet = Setting();
+				ent->LoadFromXml(xml, dummySet);
 
-				for (int i = 0; i < behNum; i++) {
-					xml->pushTag("behavior", i);
-					spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
+				COGASSERT(!ent->name.empty(), "Resources", "Behavior entity on index %d in configuration file must have a name!", i);
 
-					auto dummySet = Setting();
-					ent->LoadFromXml(xml, dummySet);
-
-					COGASSERT(!ent->name.empty(), "Resources", "Behavior entity on index %d in configuration file must have a name!", i);
-
-					StoreEntity(ent->name, ent);
-					xml->popTag();
-				}
+				StoreEntity(ent->name, ent);
+				xml->popTag();
 			}
 		}
 
-
 		string spriteSheetsPath = ofToDataPath(PATH_SPRITESHEETS);
+		xml = LoadResourcesXml(spriteSheetsPath);
+		if (xml) {
+			int sheetsNum = xml->getNumTags("spritesheet");
 
-		if (ofFile(spriteSheetsPath.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(spriteSheetsPath);
-
-			if (xml->pushTag("resources")) {
-				int sheetsNum = xml->getNumTags("spritesheet");
-
-				for (int i = 0; i < sheetsNum; i++) {
-					xml->pushTag("spritesheet", i);
-					spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
-					spriteSheet->LoadFromXml(xml);
-					this->StoreSpriteSheet(spriteSheet);
-					xml->popTag();
-				}
+			for (int i = 0; i < sheetsNum; i++) {
+				xml->pushTag("spritesheet", i);
+				spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
+				spriteSheet->LoadFromXml(xml);
+				this->StoreSpriteSheet(spriteSheet);
+				xml->popTag();
 			}
 		}
 	}
@@ -343,4 +283,17 @@ namespace Cog {
 		return loadedProjectSettings.GetSetting(name);
 	}
 
+
+	spt<ofxXml> AssetsManager::LoadResourcesXml(string path) {
+		if (ofFile(path.c_str()).exists()) {
+			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
+			xml->loadFile(path);
+
+			if (xml->pushTag("resources")) {
+				return xml;
+			}
+		}
+
+		return spt<ofxXml>();
+	}
 }

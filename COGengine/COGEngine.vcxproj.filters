@@ -627,6 +627,9 @@
     <ClInclude Include="Source\Core\AssetsManager.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripting\LuaMapper.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -997,6 +1000,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\ComponentStorage.cpp">
       <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\LuaMapper.cpp">
+      <Filter>Source\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

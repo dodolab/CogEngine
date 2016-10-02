@@ -29,4 +29,3 @@ end
 
 -- create instance (not needed anymore)
 --scriptExampleInst = ScriptExample:New()
-

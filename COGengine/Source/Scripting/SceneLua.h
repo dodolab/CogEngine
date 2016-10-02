@@ -6,6 +6,11 @@ using namespace std;
 #include "Definitions.h"
 #include "MsgLua.h"
 
+namespace luabridge {
+	struct lua_State;
+}
+
+
 namespace Cog {
 
 	class Scene;
@@ -46,6 +51,8 @@ namespace Cog {
 
 		NodeLua* FindNodeBySecondaryId(int secondaryId) const;
 
+
+		static void InitMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

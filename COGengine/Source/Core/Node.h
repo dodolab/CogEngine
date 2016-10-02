@@ -126,6 +126,13 @@ namespace Cog {
 		}
 
 		/**
+		* Returns true, if the node has given tag
+		*/
+		bool HasTag(string tag) {
+			return this->tag.compare(tag) == 0;
+		}
+
+		/**
 		* Gets type {ROOT, SCENE, OBJECT}
 		*/
 		NodeType GetType() const {

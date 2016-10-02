@@ -1,24 +1,18 @@
 #pragma once
 
-#include "ofUtils.h"
 #include "Component.h"
+#include "LuaMapper.h"
 
-#include <LuaBridge.h>
-#include <iostream>
-
-extern "C" {
-# include "lua.h"
-# include "lauxlib.h"
-# include "lualib.h"
+namespace luabridge {
+	struct lua_State;
 }
-
-using namespace luabridge;
 
 namespace Cog {
 
+
 	class BehaviorLua;
 	class NodeLua;
-	
+
 	/**
 	* Component that within the initialization registers all lua binding classes
 	*/
@@ -35,7 +29,7 @@ namespace Cog {
 
 	public:
 
-		LuaScripting()  {
+		LuaScripting() {
 			this->initPriority = InitPriority::MEDIUM;
 		}
 
@@ -61,7 +55,7 @@ namespace Cog {
 		}
 
 		void OnInit();
-	
+
 
 		/**
 		* Stores created lua behavior proxy into collection
@@ -93,6 +87,8 @@ namespace Cog {
 
 	protected:
 		void LoadAllScripts();
+
+		void LoadScript(ofFile file);
 	};
 
 }// namespace

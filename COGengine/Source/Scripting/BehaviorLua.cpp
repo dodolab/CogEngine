@@ -5,8 +5,8 @@
 #include "LuaScripting.h"
 #include "ComponentStorage.h"
 #include "NodeLua.h"
-#include "LuaBridge.h"
 #include "SceneLua.h"
+#include <LuaBridge.h>
 
 using namespace luabridge;
 
@@ -84,6 +84,18 @@ namespace Cog {
 
 	SceneLua BehaviorLua::GetScene() {
 		return SceneLua(this->owner->GetScene());
+	}
+
+	void BehaviorLua::InitMapping(luabridge::lua_State* L) {
+		luabridge::getGlobalNamespace(L)
+			.beginClass<BehaviorLua>("BehaviorProxy")
+			.addConstructor<void(*)(void)>()
+			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
+			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
+			.addFunction("SendMessage", &BehaviorLua::SendMessage)
+			.addFunction("GetScene", &BehaviorLua::GetScene)
+			.addData("owner", &BehaviorLua::ownerLua)
+			.endClass();
 	}
 
 } // namespace

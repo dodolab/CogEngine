@@ -1,6 +1,7 @@
 #include "MsgLua.h"
 #include "Msg.h"
 #include "NodeLua.h"
+#include <LuaBridge.h>
 
 namespace Cog {
 
@@ -22,6 +23,18 @@ namespace Cog {
 
 	NodeLua* MsgLua::GetContextNode() const {
 		return new NodeLua(msg->GetContextNode());
+	}
+
+	void MsgLua::InitMapping(luabridge::lua_State* L) {
+		// Msg proxy
+		luabridge::getGlobalNamespace(L)
+			.beginClass<MsgLua>("Msg")
+			.addProperty("action", &MsgLua::GetAction)
+			.addProperty("senderId", &MsgLua::GetSenderId)
+			.addProperty("contextNode", &MsgLua::GetContextNode)
+			.addProperty("parameter", &MsgLua::GetParameter)
+			.addFunction("HasAction", &MsgLua::HasAction)
+			.endClass();
 	}
 
 } // namespace

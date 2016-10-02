@@ -2,6 +2,11 @@
 
 #include "StrId.h"
 
+namespace luabridge {
+	struct lua_State;
+}
+
+
 namespace Cog {
 
 	class Msg;
@@ -22,6 +27,8 @@ namespace Cog {
 		int GetParameter() const;
 		int GetSenderId() const;
 		NodeLua* GetContextNode() const;
+
+		static void InitMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

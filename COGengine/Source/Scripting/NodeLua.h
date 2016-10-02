@@ -7,6 +7,11 @@
 #include "Transform.h"
 #include "Vec2i.h"
 
+namespace luabridge {
+	struct lua_State;
+}
+
+
 namespace Cog {
 
 	class Node;
@@ -123,6 +128,8 @@ namespace Cog {
 		Node* GetRawNode() {
 			return node;
 		}
+
+		static void InitMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

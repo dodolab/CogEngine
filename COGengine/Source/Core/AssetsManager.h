@@ -140,6 +140,9 @@ namespace Cog {
 		* Gets project setting by name of the parent group
 		*/
 		Setting GetProjectSettings(string name);
+
+	private:
+		spt<ofxXml> LoadResourcesXml(string path);
 	};
 
 } // namespace

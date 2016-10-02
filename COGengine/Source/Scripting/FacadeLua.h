@@ -47,6 +47,18 @@ namespace Cog {
 		static void CogLogDebug(string module, string message);
 		
 		static void CogStopAllSounds();
+
+		// =================== Raw functions =========================
+
+		/**
+		* Registers behavior prototype that is called from Extend() function
+		*/
+		static int CogRegisterBehaviorPrototypeCt(luabridge::lua_State* L);
+
+
+
+
+		static void InitMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

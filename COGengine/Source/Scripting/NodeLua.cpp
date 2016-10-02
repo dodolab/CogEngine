@@ -7,6 +7,7 @@
 #include "ComponentStorage.h"
 #include "BehaviorLua.h"
 #include "Mesh.h"
+#include <LuaBridge.h>
 
 namespace Cog {
 
@@ -206,5 +207,52 @@ namespace Cog {
 		}
 	}
 
+	void NodeLua::InitMapping(luabridge::lua_State* L) {
+		luabridge::getGlobalNamespace(L)
+			.beginClass<NodeLua>("Node")
+			.addConstructor<void(*)(string)>()
+			.addProperty("id", &NodeLua::GetId)
+			.addProperty("parent", &NodeLua::GetParent, &NodeLua::SetParent)
+			.addProperty("tag", &NodeLua::GetTag)
+			.addProperty("transform", &NodeLua::GetTransform, &NodeLua::SetTransform)
+			.addFunction("AddBehavior", &NodeLua::AddBehavior)
+			.addFunction("AddChild", &NodeLua::AddChild)
+			.addFunction("Draw", &NodeLua::Draw)
+			.addFunction("HasAttr", &NodeLua::HasAttr)
+			.addFunction("RemoveAttr", &NodeLua::RemoveAttr)
+			.addFunction("RemoveBehavior", &NodeLua::RemoveBehavior)
+			.addFunction("RemoveChild", &NodeLua::RemoveChild)
+			.addFunction("SubmitChanges", &NodeLua::SubmitChanges)
+			.addFunction("Update", &NodeLua::Update)
+			.addFunction("UpdateTransform", &NodeLua::UpdateTransform)
+			.addFunction("HasGroups", &NodeLua::HasGroups)
+			.addProperty("groups", &NodeLua::GetGroups, &NodeLua::SetGroups)
+			.addFunction("IsInGroup", &NodeLua::IsInGroup)
+			.addFunction("SetGroup", &NodeLua::SetGroup)
+			.addFunction("UnsetGroup", &NodeLua::UnsetGroup)
+			.addFunction("HasStates", &NodeLua::HasStates)
+			.addProperty("states", &NodeLua::GetStates, &NodeLua::SetStates)
+			.addFunction("HasState", &NodeLua::HasState)
+			.addFunction("SetState", &NodeLua::SetState)
+			.addFunction("ResetState", &NodeLua::ResetState)
+			.addFunction("SwitchState", &NodeLua::SwitchState)
+			.addFunction("AddAttrString", &NodeLua::AddAttrString)
+			.addFunction("AddAttrInt", &NodeLua::AddAttrInt)
+			.addFunction("AddAttrFloat", &NodeLua::AddAttrFloat)
+			.addFunction("AddAttrVector2f", &NodeLua::AddAttrVector2f)
+			.addFunction("AddAttrVector3f", &NodeLua::AddAttrVector3f)
+			.addFunction("AddAttrVec2i", &NodeLua::AddAttrVec2i)
+			.addFunction("GetAttrString", &NodeLua::GetAttrString)
+			.addFunction("GetAttrInt", &NodeLua::GetAttrInt)
+			.addFunction("GetAttrFloat", &NodeLua::GetAttrFloat)
+			.addFunction("GetAttrVector2f", &NodeLua::GetAttrVector2f)
+			.addFunction("GetAttrVector3f", &NodeLua::GetAttrVector3f)
+			.addFunction("GetAttrVec2i", &NodeLua::GetAttrVec2i)
+			.addFunction("AddToActualScene", &NodeLua::AddToActualScene)
+			.addFunction("GetTextMesh", &NodeLua::GetTextMesh)
+			.addFunction("GetImageMesh", &NodeLua::GetImageMesh)
+			.addFunction("SetImageMesh", &NodeLua::SetImageMesh)
+			.endClass();
+	}
 
 } // namespace
