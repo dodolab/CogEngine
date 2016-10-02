@@ -19,9 +19,6 @@
 /** Registers behavior prototype by its type */
 #define REGISTER_BEHAVIOR(className) ofxCogEngine::GetInstance().compStorage->RegisterBehaviorBuilder<className>(#className)
 
-/** Registers lua behavior and its name */
-#define REGISTER_LUABEHAVIOR(className, object) ofxCogEngine::GetInstance().compStorage->RegisterLuaBehavior(className, object);
-
 /** Registers lua function */
 #define LUA_REGFUNC(className, funcName) addFunction(#funcName, &className::funcName)
 

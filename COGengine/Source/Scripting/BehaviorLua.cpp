@@ -15,7 +15,7 @@ namespace Cog {
 	BehaviorLua::BehaviorLua() {
 		// objects allocated in lua always have to be 
 		//external (they aren't deallocated in Node's destructor)
-		this->isExternal = true; 
+		this->isExternal = true;
 
 		auto scr = GETCOMPONENT(LuaScripting);
 		L = scr->GetLua();
@@ -37,15 +37,8 @@ namespace Cog {
 	}
 
 	int BehaviorLua::RegisterDelegateCt(luabridge::lua_State* L) {
-		COGASSERT(lua_gettop(L) == 3, "BehaviorLua", "Wrong registration call! Expected two parameters: registered object and its name");
-		
-		// get behavior name and register this object
-		string name = lua_tostring(L, 3);
-		REGISTER_LUABEHAVIOR(name, this);
-		
-		// remove string parameter and save only the object
-		lua_pop(L, 1);
-
+		COGASSERT(lua_gettop(L) == 2, "BehaviorLua", "Wrong registration call! Expected one parameter: registered object");
+				
 		int r = luaL_ref(L, LUA_REGISTRYINDEX);
 		lua_rawgeti(L, LUA_REGISTRYINDEX, r);
 		this->reference = r;
@@ -62,7 +55,7 @@ namespace Cog {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
-		auto owner = ref["owner"];
+		auto owner = ref["owner"]; 
 		owner.rawset(ownerLua);
 	}
 

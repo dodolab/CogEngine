@@ -30,6 +30,9 @@ namespace Cog {
 		vector<BehaviorLua*> behs;
 		// lua nodes
 		vector<NodeLua*> nodes;
+		// references to behavior prototypes
+		map<StrId, int> behaviorPrototypes;
+
 	public:
 
 		LuaScripting()  {
@@ -74,9 +77,19 @@ namespace Cog {
 			this->nodes.push_back(node);
 		}
 
+		/**
+		* Creates instance of lua behavior based on its key
+		*/
+		BehaviorLua* CreateLuaBehavior(StrId key);
+
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 		}
+
+		/**
+		* Registers behavior prototype that is called from Extend() function
+		*/
+		int RegisterBehaviorPrototypeCt(luabridge::lua_State* L);
 
 	protected:
 		void LoadAllScripts();

@@ -995,5 +995,8 @@
     <ClCompile Include="Source\Core\AssetsManager.cpp">
       <Filter>Source\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\ComponentStorage.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

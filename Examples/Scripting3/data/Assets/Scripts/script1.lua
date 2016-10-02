@@ -27,6 +27,6 @@ function ScriptExample:Update(delta, absolute)
 end
 
 
--- create instance
-scriptExampleInst = ScriptExample:New()
+-- create instance (not needed anymore)
+--scriptExampleInst = ScriptExample:New()
 

@@ -19,6 +19,7 @@ class ExampleApp : public ofxCogApp {
 
 
 	void InitEngine() {
+
 		ofxCogEngine::GetInstance().Init();
 		ofxCogEngine::GetInstance().LoadStage();
 	}

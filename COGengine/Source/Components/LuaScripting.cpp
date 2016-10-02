@@ -203,8 +203,51 @@ namespace Cog {
 			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
 			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds);
 
+		// workaround to access this instance as static
+		auto registerWrapper = [](luabridge::lua_State* L) -> int { return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototypeCt(L); };
+
+		// System functions
+		getGlobalNamespace(L)
+			.addCFunction("CogRegisterBehaviorPrototype", registerWrapper);
 
 		LoadAllScripts();
+	}
+
+	BehaviorLua* LuaScripting::CreateLuaBehavior(StrId key) {
+
+		if (behaviorPrototypes.find(key) == behaviorPrototypes.end()) {
+			return nullptr;
+		}
+
+		int reference = behaviorPrototypes.find(key)->second;
+
+		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
+		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
+		COGASSERT(!ref.isNil(), "Lua", "Wrong lua object; expected reference");
+		auto newCpp = ref["NewCpp"];
+		COGASSERT(!newCpp.isNil(), "Lua", "Wrong lua object; expected reference to method NewCpp");
+		
+		auto behLua = new BehaviorLua();
+		newCpp(ref, behLua);
+
+
+		return behLua;
+	}
+
+	int LuaScripting::RegisterBehaviorPrototypeCt(luabridge::lua_State* L) {
+		COGASSERT(lua_gettop(L) == 2, "Lua", "Wrong registration call! Expected two parameters: registered object and its name");
+
+		// get behavior name and register this object
+		string name = lua_tostring(L, 2);
+
+		// remove string parameter and save only the object
+		lua_pop(L, 1);
+
+		int r = luaL_ref(L, LUA_REGISTRYINDEX);
+
+		// store reference
+		behaviorPrototypes[StrId(name)] = r;
+		return 0; // number of return values
 	}
 
 	void LuaScripting::LoadAllScripts() {

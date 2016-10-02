@@ -550,6 +550,7 @@
     <ClCompile Include="Source\Core\AssetsManager.cpp" />
     <ClCompile Include="Source\Core\AsyncProcess.cpp" />
     <ClCompile Include="Source\Core\Behavior.cpp" />
+    <ClCompile Include="Source\Core\ComponentStorage.cpp" />
     <ClCompile Include="Source\Core\ofxCogApp.cpp" />
     <ClCompile Include="Source\Core\ofxCogEngine.cpp" />
     <ClCompile Include="Source\Core\Component.cpp" />

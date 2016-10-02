@@ -18,12 +18,20 @@ end
 
 -- create behavior base object
 Behavior =  {
+    -- function for creating instances from C++ code
+    NewCpp = function(self, bproxy)
+	    local meta = self.CreateMeta(self)
+		self:Constructor()
+		bproxy:RegisterDelegate(meta)
+		meta.proxy = bproxy
+		return meta
+	end,
     -- function for creating instances
     New = function(self, ...)
 	    local meta = self.CreateMeta(self)
 		self:Constructor(...)
 		local beh = BehaviorProxy()
-		beh:RegisterDelegate(meta, self.classname)
+		beh:RegisterDelegate(meta)
 		meta.proxy = beh
 		
 		return meta
@@ -36,7 +44,7 @@ Behavior =  {
 		
 		local meta = self.CreateMeta(self)
 		meta.classname = classname
-		--CogRegisterBehaviorPrototype(meta)   not implemented yet
+		CogRegisterBehaviorPrototype(meta, classname)
 		return meta
     end,
 	-- create metatable
