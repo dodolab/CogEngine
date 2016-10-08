@@ -8,8 +8,21 @@
 #include "Stage.h"
 #include "EnumConverter.h"
 #include "LuaScripting.h"
+#include "ComponentLua.h"
+#include "ResourcesLua.h"
 
 namespace Cog {
+
+	ResourcesLua* FacadeLua::resLua = new ResourcesLua();
+
+	ComponentLua* FacadeLua::CogGetComponent(string name) {
+		if (name.compare("Resources") == 0) {
+			return resLua;
+		}
+
+		return nullptr;
+	}
+
 	void FacadeLua::CogSwitchToScene(string name, string tweenDirection) {
 		TweenDirection twDir = EnumConverter::StrToTweenDirection(tweenDirection);
 		
@@ -98,7 +111,7 @@ namespace Cog {
 		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototypeCt(L);
 	}
 
-	void FacadeLua::InitMapping(luabridge::lua_State* L) {
+	void FacadeLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.addFunction("CogGetAbsoluteTime", &FacadeLua::CogGetAbsoluteTime)
 			.addFunction("CogGetFrameCounter", &FacadeLua::CogGetFrameCounter)
@@ -119,6 +132,9 @@ namespace Cog {
 			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
 			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
 			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
+			.addFunction("CogGetComponent", &FacadeLua::CogGetComponent)
+			.addFunction("CogGetComponent", static_cast<ComponentLua*(*)(string)> (&FacadeLua::CogGetComponent))
+			.addFunction("CogGetComponent", reinterpret_cast<ResourcesLua*(*)(string)> (&FacadeLua::CogGetComponent))
 			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
 	}
 }

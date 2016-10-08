@@ -86,7 +86,7 @@ namespace Cog {
 		return SceneLua(this->owner->GetScene());
 	}
 
-	void BehaviorLua::InitMapping(luabridge::lua_State* L) {
+	void BehaviorLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<BehaviorLua>("BehaviorProxy")
 			.addConstructor<void(*)(void)>()

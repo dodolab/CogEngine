@@ -633,6 +633,12 @@
     <ClInclude Include="Source\Scripting\LuaMapper.h">
       <Filter>Source\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripting\ResourcesLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\ComponentLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -1005,6 +1011,12 @@
       <Filter>Source\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripting\LuaMapper.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\ResourcesLua.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\ComponentLua.cpp">
       <Filter>Source\Scripting</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,7 +26,7 @@ namespace Cog {
 	*/
 	class LuaMapper {
 	public:
-		void InitMapping(luabridge::lua_State* L);
+		void InitLuaMapping(luabridge::lua_State* L);
 	private:
 	};
 

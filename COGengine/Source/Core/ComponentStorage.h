@@ -17,6 +17,8 @@ namespace Cog {
 	protected:
 		// components, mapped by their types
 		map<type_index, Component*> components;
+		// components, mapped by their ids
+		map<StrId, Component*> componentsStrs;
 		// behaviors, mapped by their hashed names
 		map<StrId, BehaviorCreator*> behaviorBuilders;
 
@@ -55,7 +57,7 @@ namespace Cog {
 		* @tparam type of the component
 		*/
 		template<class T>
-		void RegisterComponent(T* value) {
+		void RegisterComponent(T* value, string name) {
 			
 			if (ExistsComponent<T>()) {
 				COGLOGDEBUG("ComponentStorage", "Warning, attempt to insert already inserted component %s ",typeid(T).name());
@@ -63,6 +65,7 @@ namespace Cog {
 			}
 
 			components[typeid(T)] = value;
+			componentsStrs[name] = value;
 		}
 
 
@@ -102,10 +105,26 @@ namespace Cog {
 			return attr;
 		}
 
+		/**
+		* Gets component by its real identifier
+		*/
 		Component* GetComponentById(int id) {
 			for (auto& cmp : components) {
 				if (cmp.second->GetId() == id) return cmp.second;
 			}
+			return nullptr;
+		}
+
+		/**
+		* Gets component by its string identifier
+		*/
+		Component* GetComponentByStrId(StrId id) {
+			auto found = componentsStrs.find(id);
+
+			if (found != componentsStrs.end()) {
+				return found->second;
+			}
+
 			return nullptr;
 		}
 

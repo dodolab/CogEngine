@@ -207,7 +207,7 @@ namespace Cog {
 		}
 	}
 
-	void NodeLua::InitMapping(luabridge::lua_State* L) {
+	void NodeLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<NodeLua>("Node")
 			.addConstructor<void(*)(string)>()

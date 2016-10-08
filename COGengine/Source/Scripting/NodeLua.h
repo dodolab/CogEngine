@@ -129,7 +129,7 @@ namespace Cog {
 			return node;
 		}
 
-		static void InitMapping(luabridge::lua_State* L);
+		static void InitLuaMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

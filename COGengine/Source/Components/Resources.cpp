@@ -22,7 +22,6 @@ namespace Cog {
 	}
 
 	spt<ofImage> Resources::Get2DImage(string path) {
-
 		auto found = loadedImages.find(path);
 		if (found != loadedImages.end()) {
 			spt<ofImage> existing = (found->second);

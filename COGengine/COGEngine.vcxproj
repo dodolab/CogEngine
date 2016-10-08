@@ -341,10 +341,12 @@
     <ClInclude Include="Source\Misc\Utils.h" />
     <ClInclude Include="Source\ofxCogMain.h" />
     <ClInclude Include="Source\Scripting\BehaviorLua.h" />
+    <ClInclude Include="Source\Scripting\ComponentLua.h" />
     <ClInclude Include="Source\Scripting\FacadeLua.h" />
     <ClInclude Include="Source\Scripting\LuaMapper.h" />
     <ClInclude Include="Source\Scripting\MsgLua.h" />
     <ClInclude Include="Source\Scripting\NodeLua.h" />
+    <ClInclude Include="Source\Scripting\ResourcesLua.h" />
     <ClInclude Include="Source\Scripting\SceneLua.h" />
     <ClInclude Include="Source\Tests\CoroutineTest.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
@@ -589,10 +591,12 @@
     <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
     <ClCompile Include="Source\Misc\Utils.cpp" />
     <ClCompile Include="Source\Scripting\BehaviorLua.cpp" />
+    <ClCompile Include="Source\Scripting\ComponentLua.cpp" />
     <ClCompile Include="Source\Scripting\FacadeLua.cpp" />
     <ClCompile Include="Source\Scripting\LuaMapper.cpp" />
     <ClCompile Include="Source\Scripting\MsgLua.cpp" />
     <ClCompile Include="Source\Scripting\NodeLua.cpp" />
+    <ClCompile Include="Source\Scripting\ResourcesLua.cpp" />
     <ClCompile Include="Source\Scripting\SceneLua.cpp" />
   </ItemGroup>
   <ItemGroup>

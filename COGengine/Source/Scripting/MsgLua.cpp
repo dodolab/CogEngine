@@ -25,7 +25,7 @@ namespace Cog {
 		return new NodeLua(msg->GetContextNode());
 	}
 
-	void MsgLua::InitMapping(luabridge::lua_State* L) {
+	void MsgLua::InitLuaMapping(luabridge::lua_State* L) {
 		// Msg proxy
 		luabridge::getGlobalNamespace(L)
 			.beginClass<MsgLua>("Msg")

@@ -1,13 +1,9 @@
 #include "LuaScripting.h"
 
 #include "Definitions.h"
-#include "MsgLua.h"
-#include "BehaviorLua.h"
-#include "NodeLua.h"
-#include "SceneLua.h"
-#include "FacadeLua.h"
 #include "ComponentStorage.h"
 #include "Resources.h"
+#include "BehaviorLua.h"
 #include <LuaBridge.h>
 
 using namespace luabridge;
@@ -22,13 +18,7 @@ namespace Cog {
 		luaL_openlibs(L);
 
 		LuaMapper mapper;
-		mapper.InitMapping(L);
-
-		BehaviorLua::InitMapping(L);
-		MsgLua::InitMapping(L);
-		NodeLua::InitMapping(L);
-		SceneLua::InitMapping(L);
-		FacadeLua::InitMapping(L);
+		mapper.InitLuaMapping(L);
 
 		LoadAllScripts();
 	}

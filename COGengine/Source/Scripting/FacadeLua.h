@@ -12,12 +12,21 @@ namespace luabridge {
 
 namespace Cog {
 
+	class ComponentLua;
+	class ResourcesLua;
+
 	/**
 	* Facade for Lua scripts
 	*/
 	class FacadeLua {
 	public:
-		
+		// singletons
+		static ResourcesLua* resLua;
+
+
+		// =================== Components ======================
+		static ComponentLua* CogGetComponent(string name);
+
 		static void CogSwitchToScene(string name, string tweenDirection);
 		static void CogSwitchBackToScene(string tweenDirection);
 		// =================== ofxCogEngine ====================
@@ -58,7 +67,7 @@ namespace Cog {
 
 
 
-		static void InitMapping(luabridge::lua_State* L);
+		static void InitLuaMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

@@ -54,7 +54,7 @@ namespace Cog {
 		else return nullptr;
 	}
 
-	void SceneLua::InitMapping(luabridge::lua_State* L) {
+	void SceneLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<SceneLua>("Scene")
 			.addFunction("FindBehaviorById", &SceneLua::FindBehaviorById)

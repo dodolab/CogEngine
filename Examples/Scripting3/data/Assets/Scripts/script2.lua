@@ -1,5 +1,4 @@
 
-
 -- inline initializer
 ScriptExample2 = Behavior:Extend("ScriptExample2", {
 	Constructor = function(self) self.animate = true end,

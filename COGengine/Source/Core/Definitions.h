@@ -14,7 +14,7 @@
 #define GETCOMPONENT(className) CogGetComponentStorage()->GetComponent<className>()
 
 /** Registers an instance of a component*/
-#define REGISTER_COMPONENT(object) ofxCogEngine::GetInstance().compStorage->RegisterComponent(object)
+#define REGISTER_COMPONENT(object) ofxCogEngine::GetInstance().compStorage->RegisterComponent(object, #object)
 
 /** Registers behavior prototype by its type */
 #define REGISTER_BEHAVIOR(className) ofxCogEngine::GetInstance().compStorage->RegisterBehaviorBuilder<className>(#className)
