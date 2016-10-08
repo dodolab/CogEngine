@@ -10,6 +10,8 @@
 namespace Cog {
 
 	MeshType EnumConverter::StrToMeshType(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("image") == 0) {
 			return MeshType::IMAGE;
 		}
@@ -39,6 +41,8 @@ namespace Cog {
 	}
 
 	TransformType EnumConverter::StrToMeasureType(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("direct") == 0) return TransformType::DIRECT;
 		else if (val.compare("diff") == 0) return TransformType::DIFF;
 
@@ -46,6 +50,8 @@ namespace Cog {
 	}
 
 	AttributeType EnumConverter::StrToAttributeType(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("pos_x") == 0) return AttributeType::POS_X;
 		else if (val.compare("pos_y") == 0) return AttributeType::POS_Y;
 		else if (val.compare("rotation") == 0) return AttributeType::ROTATION;
@@ -59,6 +65,8 @@ namespace Cog {
 	}
 
 	CalcType EnumConverter::StrToCalcType(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("r") == 0) return CalcType::PER;
 		else if (val.compare("gr") == 0) return CalcType::GRID;
 		else if (val.compare("rp") == 0) return CalcType::ABS_PER;
@@ -71,6 +79,8 @@ namespace Cog {
 	}
 
 	FadeFunction EnumConverter::StrToFadeFunction(string name) {
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
 		if (name.compare("linear") == 0) {
 			return EasingFunc::linear;
 		}
@@ -125,6 +135,8 @@ namespace Cog {
 	}
 
 	CalcType EnumConverter::GetUnitValue(string val, float& floatVal) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		stringstream ss;
 		unsigned i;
 		for (i = 0; i < val.length(); i++) {
@@ -137,6 +149,8 @@ namespace Cog {
 	}
 
 	ofColor EnumConverter::StrToColor(string col) {
+		std::transform(col.begin(), col.end(), col.begin(), ::tolower);
+
 		int hexColor = ofHexToInt(col.substr(2));
 		float alpha = 255;
 
@@ -150,6 +164,8 @@ namespace Cog {
 	}
 
 	AnimBlend EnumConverter::StrToAnimBlend(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("additive") == 0) return AnimBlend::ADDITIVE;
 		else if (val.compare("overlay") == 0) return AnimBlend::OVERLAY;
 
@@ -157,6 +173,8 @@ namespace Cog {
 	}
 
 	TweenDirection EnumConverter::StrToTweenDirection(string val) {
+		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+
 		if (val.compare("none") == 0) return TweenDirection::NONE;
 		else if (val.compare("left") == 0) return TweenDirection::LEFT;
 		else if (val.compare("right") == 0) return TweenDirection::RIGHT;

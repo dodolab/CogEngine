@@ -10,16 +10,24 @@
 #include "LuaScripting.h"
 #include "ComponentLua.h"
 #include "ResourcesLua.h"
+#include "StageLua.h"
 
 namespace Cog {
 
-	ResourcesLua* FacadeLua::resLua = new ResourcesLua();
+	ResourcesLua* FacadeLua::resLua = nullptr;
+	StageLua* FacadeLua::stageLua = nullptr;
 
 	ComponentLua* FacadeLua::CogGetComponent(string name) {
 		if (name.compare("Resources") == 0) {
+			if (resLua == nullptr) resLua = new ResourcesLua();
 			return resLua;
 		}
+		else if (name.compare("Stage") == 0) {
+			if (stageLua == nullptr) stageLua = new StageLua();
+			return stageLua;
+		}
 
+		CogLogError("Lua", string_format("Component %s not found!", name.c_str()));
 		return nullptr;
 	}
 
@@ -135,6 +143,7 @@ namespace Cog {
 			.addFunction("CogGetComponent", &FacadeLua::CogGetComponent)
 			.addFunction("CogGetComponent", static_cast<ComponentLua*(*)(string)> (&FacadeLua::CogGetComponent))
 			.addFunction("CogGetComponent", reinterpret_cast<ResourcesLua*(*)(string)> (&FacadeLua::CogGetComponent))
+			.addFunction("CogGetComponent", reinterpret_cast<StageLua*(*)(string)> (&FacadeLua::CogGetComponent))
 			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
 	}
 }

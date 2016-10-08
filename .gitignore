@@ -34,3 +34,7 @@ Examples/Scripting3/Scripting3.VC.VC.opendb
 *.sdf
 COGenginelab/obj/
 COGenginelab/COGenginelab.VC.db
+Examples/SceneSwitch/bin/
+Examples/SceneSwitch/obj/
+Examples/SceneSwitch/SceneSwitch.VC.db
+Examples/SceneSwitch/SceneSwitch.VC.VC.opendb

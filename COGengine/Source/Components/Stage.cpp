@@ -214,7 +214,9 @@ namespace Cog {
 		string initialScene = CogGetGlobalSettings().GetSettingVal("initial_scene");
 		string loading = CogGetDefaultSettings().GetSettingVal("loading_scene");
 
-		if (initialScene.empty()) CogLogError("Stage", "Initial scene is not specified!");
+		if (initialScene.empty()) {
+			CogLogInfo("Stage", "Initial scene not specified Using the first one!");
+		}
 
 		string spriteSheets = ofToDataPath(PATH_SCENES);
 
@@ -224,6 +226,8 @@ namespace Cog {
 		else {
 			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
 			xml->loadFile(spriteSheets);
+
+			bool initLoaded = false;
 
 			if (xml->pushTag("resources")) {
 				int scenesNum = xml->getNumTags("scene");
@@ -244,9 +248,10 @@ namespace Cog {
 						sc->LoadFromXml(xml);
 					}
 
-					if (sc->GetName().compare(initialScene) == 0) {
+					if (!initLoaded && (initialScene.empty() || sc->GetName().compare(initialScene) == 0)) {
 						// set as initial
 						AddScene(sc, true);
+						initLoaded = true;
 					}
 					else {
 						AddScene(sc, false);

@@ -31,7 +31,6 @@ namespace Cog {
 	void ResourcesLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.deriveClass<ResourcesLua, ComponentLua>("Resources")
-			.addConstructor<void(*)()>()
 			.addFunction("Get2DImage", &ResourcesLua::Get2DImage)
 			.addFunction("GetDefaultSettings", &ResourcesLua::GetDefaultSettings)
 			.addFunction("GetGlobalSettings", &ResourcesLua::GetGlobalSettings)

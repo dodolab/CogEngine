@@ -639,6 +639,9 @@
     <ClInclude Include="Source\Scripting\ComponentLua.h">
       <Filter>Source\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripting\StageLua.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -1017,6 +1020,9 @@
       <Filter>Source\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripting\ComponentLua.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\StageLua.cpp">
       <Filter>Source\Scripting</Filter>
     </ClCompile>
   </ItemGroup>

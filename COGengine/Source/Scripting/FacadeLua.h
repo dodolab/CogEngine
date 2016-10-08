@@ -14,6 +14,7 @@ namespace Cog {
 
 	class ComponentLua;
 	class ResourcesLua;
+	class StageLua;
 
 	/**
 	* Facade for Lua scripts
@@ -22,7 +23,7 @@ namespace Cog {
 	public:
 		// singletons
 		static ResourcesLua* resLua;
-
+		static StageLua* stageLua;
 
 		// =================== Components ======================
 		static ComponentLua* CogGetComponent(string name);
@@ -63,9 +64,6 @@ namespace Cog {
 		* Registers behavior prototype that is called from Extend() function
 		*/
 		static int CogRegisterBehaviorPrototypeCt(luabridge::lua_State* L);
-
-
-
 
 		static void InitLuaMapping(luabridge::lua_State* L);
 	};

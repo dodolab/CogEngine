@@ -81,7 +81,7 @@ namespace Cog {
 #define PATH_GLOBAL_SETTINGS "Assets/global_settings.xml"
 #define PATH_PROJECT_SETTINGS "Assets/project_settings.xml"
 #define PATH_SCRIPTS "Assets/Scripts"
-#define PATH_BASE_SCRIPT "COGAssets/lua_base.lua"
+#define PATH_BASE_SCRIPTS "COGAssets/Scripts"
 #define PATH_FONTS "Assets/fonts.xml"
 #define PATH_SPRITESHEETS "Assets/spritesheets.xml"
 #define PATH_SCENES "Assets/scenes.xml"

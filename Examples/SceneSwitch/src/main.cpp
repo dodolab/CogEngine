@@ -10,7 +10,9 @@
 #include "AttribAnimator.h"
 #include "UpdateMessage.h"
 #include "Stage.h"
+#include "LuaScripting.h"
 
+/*
 class SceneSwitcher : public Behavior {
 public:
 	SceneSwitcher() {
@@ -39,18 +41,20 @@ public:
 	void Update(uint64 delta, uint64 absolute) {
 
 	}
-};
+};*/
 
 class ExampleApp : public ofxCogApp {
 
 	void RegisterComponents() {
-		REGISTER_BEHAVIOR(SceneSwitcher);
+		REGISTER_COMPONENT(new LuaScripting());
+		//REGISTER_BEHAVIOR(SceneSwitcher);
 	}
+
 
 	void InitEngine() {
 		ofxCogEngine::GetInstance().SetFps(100);
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 
 	void InitStage(Stage* stage) {

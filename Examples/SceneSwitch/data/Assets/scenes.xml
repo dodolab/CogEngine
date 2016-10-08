@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<app_config>
-
-	<!-- scene definition -->
-	<scenes initial="scene1">
+<resources>
 		<scene name="scene1">
 			<!-- background image -->
 			<node img="scene1.png">
@@ -50,5 +47,4 @@
 				</node>
 			</node>
 		</scene>
-	</scenes>
-</app_config>
+</resources>	

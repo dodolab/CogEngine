@@ -348,6 +348,7 @@
     <ClInclude Include="Source\Scripting\NodeLua.h" />
     <ClInclude Include="Source\Scripting\ResourcesLua.h" />
     <ClInclude Include="Source\Scripting\SceneLua.h" />
+    <ClInclude Include="Source\Scripting\StageLua.h" />
     <ClInclude Include="Source\Tests\CoroutineTest.h" />
     <ClInclude Include="Source\Tests\EngineTest.h" />
     <ClInclude Include="Source\Tests\EngineTestAssets.h" />
@@ -598,6 +599,7 @@
     <ClCompile Include="Source\Scripting\NodeLua.cpp" />
     <ClCompile Include="Source\Scripting\ResourcesLua.cpp" />
     <ClCompile Include="Source\Scripting\SceneLua.cpp" />
+    <ClCompile Include="Source\Scripting\StageLua.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Data\COGAssets\Manifest.xml" />

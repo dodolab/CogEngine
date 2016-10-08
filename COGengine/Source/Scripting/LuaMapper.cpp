@@ -15,6 +15,7 @@
 #include "ResourcesLua.h"
 #include "Settings.h""
 #include "ComponentLua.h"
+#include "StageLua.h"
 
 using namespace luabridge;
 
@@ -165,6 +166,7 @@ namespace Cog {
 		FacadeLua::InitLuaMapping(L);
 		ComponentLua::InitLuaMapping(L);
 		ResourcesLua::InitLuaMapping(L);
+		StageLua::InitLuaMapping(L);
 	}
 
 } // namespace

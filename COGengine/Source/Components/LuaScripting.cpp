@@ -62,14 +62,18 @@ namespace Cog {
 
 	void LuaScripting::LoadAllScripts() {
 		
-		COGLOGDEBUG("Lua", "Loading baseScripts");
-		auto baseScript = ofFile(PATH_BASE_SCRIPT);
-		LoadScript(baseScript);
+		COGLOGDEBUG("Lua", "Loading scripts");
 
-		// preload scripts
-		string scriptsPath = ofToDataPath(PATH_SCRIPTS);
+		ofDirectory baseDir(PATH_BASE_SCRIPTS);
 
-		ofDirectory dir(scriptsPath);
+		if (baseDir.exists()) {
+			auto files = baseDir.getFiles();
+			for (auto file : files) {
+				LoadScript(file);
+			}
+		}
+
+		ofDirectory dir(PATH_SCRIPTS);
 
 		if (dir.exists()) {
 			auto files = dir.getFiles();
