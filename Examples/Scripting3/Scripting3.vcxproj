@@ -208,6 +208,26 @@ if errorlevel 1 exit 0 else exit %errorlevel</Command>
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\bgr.jpg" />
+    <Image Include="data\but_def.png" />
+    <Image Include="data\but_disable.png" />
+    <Image Include="data\but_press.png" />
+    <Image Include="data\square1.png" />
+    <Image Include="data\square2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\MotionControl-Bold.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="data\Assets\default_settings.xml" />
+    <Xml Include="data\Assets\global_settings.xml" />
+    <Xml Include="data\Assets\scenes.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\Assets\Scripts\script1.lua" />
+    <None Include="data\Assets\Scripts\script2.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
     <VisualStudio>

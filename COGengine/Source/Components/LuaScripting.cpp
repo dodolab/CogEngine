@@ -100,8 +100,7 @@ namespace Cog {
 
 		if (status != 0) {
 			CogLogError("Lua", lua_tostring(L, -1));
-		}
-		else {
+		} else {
 			// run script
 			status = lua_pcall(L, 0, LUA_MULTRET, 0);
 			if (status != 0) {

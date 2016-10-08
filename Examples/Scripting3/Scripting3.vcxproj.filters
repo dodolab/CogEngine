@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Data">
+      <UniqueIdentifier>{95dbaa61-3c8b-4c7e-a2d2-98a951322f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Assets">
+      <UniqueIdentifier>{5c6badef-af41-4224-8023-ecb0dafdce61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Assets\Scripts">
+      <UniqueIdentifier>{02cb8972-8664-43b0-bcce-39cbfb4b0edf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\square2.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\bgr.jpg">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\but_def.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\but_disable.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\but_press.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\square1.png">
+      <Filter>Data</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\MotionControl-Bold.otf">
+      <Filter>Data</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="data\Assets\default_settings.xml">
+      <Filter>Data\Assets</Filter>
+    </Xml>
+    <Xml Include="data\Assets\global_settings.xml">
+      <Filter>Data\Assets</Filter>
+    </Xml>
+    <Xml Include="data\Assets\scenes.xml">
+      <Filter>Data\Assets</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\Assets\Scripts\script1.lua">
+      <Filter>Data\Assets\Scripts</Filter>
+    </None>
+    <None Include="data\Assets\Scripts\script2.lua">
+      <Filter>Data\Assets\Scripts</Filter>
+    </None>
+  </ItemGroup>
+</Project>

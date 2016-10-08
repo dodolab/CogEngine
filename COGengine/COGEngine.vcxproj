@@ -595,6 +595,12 @@
     <ClCompile Include="Source\Scripting\NodeLua.cpp" />
     <ClCompile Include="Source\Scripting\SceneLua.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Data\COGAssets\Manifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\COGAssets\lua_base.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>
     <VisualStudio>

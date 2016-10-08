@@ -70,6 +70,9 @@
     <Filter Include="3rdParty\tinyxml">
       <UniqueIdentifier>{e8af1a09-b76b-45f9-bcd1-a0a580f9116e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{a5ebd339-aa16-4da3-8221-0f7c351e69da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -1004,5 +1007,15 @@
     <ClCompile Include="Source\Scripting\LuaMapper.cpp">
       <Filter>Source\Scripting</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Data\COGAssets\Manifest.xml">
+      <Filter>Assets</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\COGAssets\lua_base.lua">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

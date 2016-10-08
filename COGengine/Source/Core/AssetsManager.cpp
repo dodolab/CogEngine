@@ -124,6 +124,7 @@ namespace Cog {
 		xml = LoadResourcesXml(behaviorsPath);
 		if (xml) {
 			int behNum = xml->getNumTags("behavior");
+			
 
 			for (int i = 0; i < behNum; i++) {
 				xml->pushTag("behavior", i);
