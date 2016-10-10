@@ -78,6 +78,7 @@ namespace Cog {
 		return CalcType::LOC;
 	}
 
+
 	FadeFunction EnumConverter::StrToFadeFunction(string name) {
 		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 

@@ -5,6 +5,7 @@
 #include "AnimLoader.h"
 #include "TransformEnt.h"
 #include "BehaviorEnt.h"
+#include "AttribAnim.h"
 
 namespace Cog {
 
@@ -90,6 +91,7 @@ namespace Cog {
 
 			animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
 
+
 			// store animation
 			for (spt<GeneralAnim> anim : rootAnims) {
 				anim = static_pointer_cast<SheetAnim>(anim);
@@ -97,8 +99,28 @@ namespace Cog {
 			}
 		}
 
+		
 		string attrAnimationsPath = ofToDataPath(PATH_ATTRANIMATIONS);
 		xml = LoadResourcesXml(attrAnimationsPath);
+		if (xml) {
+			auto animLoader = AnimLoader();
+			auto rootAnims = vector<spt<GeneralAnim>>();
+
+			auto builder = [](void) {
+				return new AttribAnim();
+			};
+
+			animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
+
+			// store animation
+			for (spt<GeneralAnim> anim : rootAnims) {
+				anim = static_pointer_cast<AttribAnim>(anim);
+				StoreAnimation(anim);
+			}
+		}
+
+		string transformsPath = ofToDataPath(PATH_TRANSFORMS);
+		xml = LoadResourcesXml(transformsPath);
 		if (xml) {
 			int transNum = xml->getNumTags("transform");
 
@@ -114,18 +136,12 @@ namespace Cog {
 			}
 		}
 
-		string transformsPath = ofToDataPath(PATH_TRANSFORMS);
-		xml = LoadResourcesXml(transformsPath);
-		if (xml) {
-			CogLogError("Resources", "Tohle neni implementovane!!!");
-		}
 
 		string behaviorsPath = ofToDataPath(PATH_BEHAVIORS);
 		xml = LoadResourcesXml(behaviorsPath);
 		if (xml) {
 			int behNum = xml->getNumTags("behavior");
 			
-
 			for (int i = 0; i < behNum; i++) {
 				xml->pushTag("behavior", i);
 				spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());

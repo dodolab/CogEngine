@@ -38,7 +38,7 @@ namespace Cog {
 	* Note that some structures couldn't be loaded asynchronously (fonts, for instance)
 	*/
 	class AsyncProcess : public ofThread {
-	private:
+	protected:
 		Job* job;
 	public:
 

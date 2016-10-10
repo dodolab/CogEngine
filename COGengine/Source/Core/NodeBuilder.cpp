@@ -12,7 +12,7 @@
 #include "Scene.h"
 #include "EnumConverter.h"
 #include "SpriteSheet.h"
-
+#include "SheetAnimator.h"
 
 namespace Cog {
 
@@ -35,6 +35,11 @@ namespace Cog {
 
 	void NodeBuilder::CreateSelectionNode(Node* node, string defaultImg, string selectImg) {
 		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg)));
+	}
+
+	void NodeBuilder::CreateAnimationNode(Node* node, string animName) {
+		spt<SheetAnim> animation = CogGetAnimation(animName);
+		node->AddBehavior(new SheetAnimator(animation));
 	}
 
 	void NodeBuilder::CreateImageNode(Node* node, string path) {
@@ -207,6 +212,12 @@ namespace Cog {
 			// set image on selection
 			string imgSelect = xml->getAttributex("img_select", "");
 			CreateSelectionNode(node, img, imgSelect);
+		}
+
+		if (xml->attributeExists("animation")) {
+			// set animation
+			string animName = xml->getAttributex("animation", "");
+			CreateAnimationNode(node, animName);
 		}
 
 		// scene node will always fit to screen size

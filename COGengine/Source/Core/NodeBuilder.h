@@ -50,6 +50,13 @@ namespace Cog {
 		void CreateSelectionNode(Node* node, string defaultImg, string selectImg);
 
 		/**
+		* Fills given node with animation
+		* @param node node to fill
+		* @param animName name of the animation
+		*/
+		void CreateAnimationNode(Node* node, string animName);
+
+		/**
 		* Fills given node with image mesh
 		* @param node node to fill
 		* @param path path to image

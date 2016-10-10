@@ -125,9 +125,6 @@ namespace Cog {
 			break;
 		case CalcType::PER:
 			// relative percentage scale ->1.0 x 1.0 will fit the whole parent
-			//if (width == 0) width = height*(node->GetMesh()->GetWidth() / ((float)node->GetMesh()->GetHeight()));
-			//if (height == 0) height = width*(((float)node->GetMesh()->GetHeight())/ node->GetMesh()->GetWidth());
-
 			scaleX = (width * parent->GetMesh()->GetWidth() / node->GetMesh()->GetWidth());
 			scaleY = (height * parent->GetMesh()->GetHeight() / node->GetMesh()->GetHeight());
 			break;

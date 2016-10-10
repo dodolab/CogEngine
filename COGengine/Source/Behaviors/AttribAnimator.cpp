@@ -10,7 +10,6 @@ namespace Cog {
 
 	void AttribAnimator::Load(Setting& setting) {
 		string animation = setting.GetItemVal("animation");
-		string renderTypeStr = setting.GetItemVal("render_type");
 
 		if (animation.empty()) CogLogError("AttribAnimator", "Error while loading AttribAnimator, animation attribute not specified");
 

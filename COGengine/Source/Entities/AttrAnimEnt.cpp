@@ -29,7 +29,6 @@ namespace Cog {
 		this->begin = xml->getAttributex("begin", 0);
 		this->end = xml->getAttributex("end", 0);
 
-		
 		this->transType = EnumConverter::StrToMeasureType(xml->getAttributex("mtype", "direct"));
 		this->attributeType = EnumConverter::StrToAttributeType(xml->getAttributex("attr", ""));
 

@@ -1,13 +1,12 @@
 
 
 SceneSwitcher = Behavior:Extend("SceneSwitcher", {
-	OnInit = function(self) print("hovno") self:SubscribeForMessages(StrId("BUTTON_CLICKED")) end,
+	OnInit = function(self) self:SubscribeForMessages(StrId("BUTTON_CLICKED")) end,
 	OnMessage = function(self, msg)
 		if (msg:HasAction(StrId("BUTTON_CLICKED")))
 		then
 			stage = CogGetComponent("Stage")	
-		actualScene = stage.actualScene.name
-			print(actualScene)
+		    actualScene = stage.actualScene.name
 			newScene = (actualScene == "scene1" and  "scene2" or "scene1")
 			
 			if(msg.contextNode.tag == "previous_but") then
