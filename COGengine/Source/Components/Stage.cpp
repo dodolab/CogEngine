@@ -42,7 +42,7 @@ namespace Cog {
 			if (actualScene != nullptr) {
 				auto environment = GETCOMPONENT(Environment);
 				// set scale according to the new ratio
-				auto changeEvent = msg.GetData<ValueChangeEvent<Vec2i>>();
+				auto changeEvent = msg.GetDataPtr<ValueChangeEvent<Vec2i>>();
 				
 				auto virtuals = CogGetVirtualScreenSize();
 				auto scSize = CogGetScreenSize();

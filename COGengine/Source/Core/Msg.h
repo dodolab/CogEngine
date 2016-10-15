@@ -21,7 +21,8 @@ namespace Cog {
 		COMPONENT = 4,				 /** component */
 		BEHAVIOR = 5,				 /** behavior */	
 		SUBSCRIBERS = 6,			 /** all objects that subscribed the action */
-		OTHER = 7					 /** other objects */
+		PROCESSES = 7,			     /** asynchronous processes  */
+		OTHER = 8					 /** other objects */
 	};
 
 	/**
@@ -275,7 +276,7 @@ namespace Cog {
 		* Gets data payload
 		*/
 		template <class T>
-		spt<T> GetData() {
+		spt<T> GetDataPtr() {
 			return static_pointer_cast<T>(data);
 		}
 	};

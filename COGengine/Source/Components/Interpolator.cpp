@@ -23,7 +23,7 @@ namespace Cog {
 		if (acceptAutomatically) {
 			if (msg.HasAction(ACT_UPDATE_MESSAGE_RECEIVED)) {
 				// received update message
-				spt<CommonEvent<UpdateInfo>> msgEvent = msg.GetData<CommonEvent<UpdateInfo>>();
+				spt<CommonEvent<spt<UpdateInfo>>> msgEvent = msg.GetDataPtr<CommonEvent<spt<UpdateInfo>>>();
 				spt<UpdateInfo> netMsg = msgEvent->value;
 				AcceptUpdateMessage(netMsg);
 			}

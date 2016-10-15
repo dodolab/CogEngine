@@ -115,9 +115,9 @@ namespace Cog {
 	template <class  T>
 	class CommonEvent : public MsgPayload {
 	public:
-		spt<T> value;
+		T value;
 
-		CommonEvent(spt<T> value) :value(value) {
+		CommonEvent(T value) :value(value) {
 
 		}
 	};

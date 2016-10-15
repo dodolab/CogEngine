@@ -149,7 +149,7 @@ namespace Cog {
 		}
 		else if (recType == MsgObjectType::BEHAVIOR) {
 			auto beh = FindBehaviorById(msg.GetRecipientId());
-			if (beh != nullptr) beh->OnMessage(msg);
+			if (beh != nullptr && !beh->HasFinished()) beh->OnMessage(msg);
 		}
 		else if (recType == MsgObjectType::COMPONENT) {
 			auto cmp = CogGetComponentStorage()->GetComponentById(msg.GetRecipientId());
