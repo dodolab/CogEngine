@@ -144,3 +144,5 @@ PROJECT_CFLAGS =-w
 ################################################################################
 # PROJECT_CXX = 
 # PROJECT_CC = 
+
+PROJECT_ASSETS = data ../CogEngine/data

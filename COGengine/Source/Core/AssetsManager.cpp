@@ -127,7 +127,8 @@ namespace Cog {
 			for (int i = 0; i < transNum; i++) {
 				xml->pushTag("transform", i);
 				spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
-				trans->LoadFromXml(xml, GetDefaultSettings("transform"));
+				Setting defaultSet = GetDefaultSettings("transform");
+				trans->LoadFromXml(xml, defaultSet);
 
 				COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
 

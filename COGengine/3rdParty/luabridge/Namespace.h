@@ -124,7 +124,7 @@ private:
     {
       int result = 0;
 
-      assert (lua_isuserdata (L, 1));               // warn on security bypass
+      // DISABLED because of Decoda debugger assert (lua_isuserdata (L, 1));               // warn on security bypass
       lua_getmetatable (L, 1);                      // get metatable for object
       for (;;)
       {

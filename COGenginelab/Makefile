@@ -18,6 +18,13 @@ ifndef OF_ROOT
 endif
 endif
 
+copydep:
+	@echo "Copying all dependencies"
+	@mkdir -p bin
+	@$(foreach asset,$(PROJECT_ASSETS),cp -a $(asset) bin &&) echo DONE
+
+all:
+
 
 # call the project makefile!
 include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk

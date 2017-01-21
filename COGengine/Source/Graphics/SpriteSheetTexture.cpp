@@ -122,12 +122,12 @@ namespace Cog {
 		ofImage loader;
 		loader.setUseTexture(false);
 		loader.loadImage(texturePath);
-		PasteImage(x, y, loader.getWidth(), loader.getHeight(), loader.getPixels(), glType);
+		PasteImage(x, y, loader.getWidth(), loader.getHeight(), loader.getPixels().getData(), glType);
 		loader.clear();
 	}
 
 	void SpriteSheetTexture::PasteImage(int x, int y, int w, int h, ofImage* image) {
-		PasteImage(x, y, w, h, image->getPixels(), this->texData.glInternalFormat);
+		PasteImage(x, y, w, h, image->getPixels().getData(), this->texData.glInternalFormat);
 	}
 
 	void SpriteSheetTexture::PasteImage(int x, int y, int w, int h, unsigned char * pxls, int glType)

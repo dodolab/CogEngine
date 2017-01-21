@@ -75,7 +75,7 @@ namespace Cog {
 		* Gets animation by name
 		* @param name animation name
 		*/
-		spt<GeneralAnim> AssetsManager::GetAnimation(string name);
+		spt<GeneralAnim> GetAnimation(string name);
 
 		/**
 		* Stores animation
