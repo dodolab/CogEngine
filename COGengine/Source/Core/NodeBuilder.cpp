@@ -79,7 +79,7 @@ namespace Cog {
 
 
 	void NodeBuilder::CreateBoundingBoxNode(Scene* scene, Node* node, ofColor color, float margin, bool renderable) {
-		Settings& settings = scene->GetSettings();
+		Settings& settings = scene->GetSceneSettings();
 
 		// get reference width and height from scene settings
 		int refWidth = settings.GetSettingValInt("transform", "ref_width");
@@ -163,7 +163,7 @@ namespace Cog {
 	}
 
 	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
-		Settings& settings = scene->GetSettings();
+		Settings& settings = scene->GetSceneSettings();
 
 		// get reference width and height
 		int refWidth = settings.GetSettingValInt("transform", "ref_width");
@@ -182,7 +182,7 @@ namespace Cog {
 	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene) {
 
 		TransformMath math = TransformMath();
-		Settings& settings = scene->GetSettings();
+		Settings& settings = scene->GetSceneSettings();
 
 		string name = xml->getAttributex("name", "");
 		string img = xml->getAttributex("img", "");

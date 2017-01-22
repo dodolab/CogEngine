@@ -8,8 +8,8 @@
 
 namespace Cog {
 
-	Scene::Scene(string name, bool isLazyLoaded)
-		: name(name), lazyLoad(isLazyLoaded) {
+	Scene::Scene(string name, bool preloaded)
+		: name(name), preloaded(preloaded) {
 		this->CreateSceneNode();
 	}
 
@@ -27,6 +27,8 @@ namespace Cog {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
 		}
+
+		initialized = true;
 	}
 
 	void Scene::Dispose() {
@@ -38,6 +40,8 @@ namespace Cog {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
 			renderer->RemoveTileLayer(layer.name);
 		}
+
+		initialized = false;
 	}
 
 	void Scene::Finish() {
@@ -54,15 +58,33 @@ namespace Cog {
 		auto stage = GETCOMPONENT(Stage);
 		stage->CopyGlobalListenersToScene(this);
 
-		// delete scene node
-		auto sceneNodePtr = this->sceneNode;
+		// add new scene node to the parent
+		auto parent = sceneNode->GetParent();
 		this->sceneNode->RemoveFromParent(true);
 		CreateSceneNode();
+		parent->AddChild(this->sceneNode);
 
-		// stop this scene
-		sceneNode->SetRunningMode(RunningMode::DISABLED);
-		// add new scene node into root object
-		stage->GetRootObject()->AddChild(sceneNode);
+		this->settings = Settings();
+	}
+
+	void Scene::Reload() {
+		if (!loadedFromXml) {
+			CogLogError("Scene", "Scene %s cant' be reloaded since it isn't XML-scene", name.c_str());
+		}
+		else {
+			string scenes = ofToDataPath(PATH_SCENES);
+			spt<ofxXml> xml = CogPreloadXMLFile(scenes);
+			xml->popAll();
+			xml->pushTag("resources");
+			if (xml->pushTagWithAttributeIfExists("scene", "name", name)) {
+				LoadFromXml(xml);
+				sceneNode->SubmitChanges(true);
+			}
+			else {
+				CogLogError("Scene", "Scene %s couldn't be found in xml file", name.c_str());
+			}
+			xml->popAll();
+		}
 	}
 
 	void Scene::SetSceneSettings(Settings& settings) {
@@ -91,11 +113,11 @@ namespace Cog {
 		}
 
 		vector<BaseComponent*>& listeners = msgListeners[action];
-		
+
 		if (find(listeners.begin(), listeners.end(), listener) == listeners.end()) {
 			listeners.push_back(listener);
 		}
-		
+
 		auto& msgAction = msgListenerActions[listener->GetId()];
 
 		if (find(msgAction.begin(), msgAction.end(), action) == msgAction.end()) {
@@ -137,11 +159,11 @@ namespace Cog {
 
 	void Scene::SendMessage(Msg& msg) {
 
-		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), msg.GetContextNode()  ? msg.GetContextNode()->GetTag().c_str() : "");
+		COGLOGDEBUG("Messaging", "Message %s:%s", msg.GetAction().GetStringValue().c_str(), msg.GetContextNode() ? msg.GetContextNode()->GetTag().c_str() : "");
 
 		// skip if there is no such subscriber
 		if (!IsRegisteredListener(msg.GetAction())) return;
-		
+
 		auto recType = msg.GetRecipientType();
 
 		if (recType == MsgObjectType::SUBSCRIBERS) {
@@ -240,7 +262,7 @@ namespace Cog {
 	}
 
 	void Scene::FindNodesByGroup(StrId group, vector<Node*>& output) const {
-		
+
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
 			Node* nd = (*it);
 
@@ -254,6 +276,7 @@ namespace Cog {
 
 		COGLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
 
+		loadedFromXml = true;
 		string type = xml->getAttributex("type", "scene");
 
 		// load scene type
@@ -267,7 +290,7 @@ namespace Cog {
 			this->SetSceneSettings(set);
 			xml->popTag();
 		}
-		
+
 		// load layers
 		if (xml->pushTagIfExists("scene_layers")) {
 			int layersNum = xml->getNumTags("layer");
@@ -379,14 +402,14 @@ namespace Cog {
 
 	bool Scene::AddNode(Node* node) {
 		COGLOGDEBUG("Scene", "Adding node %s to scene %s", node->GetTag().c_str(), this->name.c_str());
-	
+
 		auto found = find(allNodes.begin(), allNodes.end(), node);
 		if (found == allNodes.end()) {
 			allNodes.push_back(node);
 			allNodes_id[node->GetId()] = node;
 
 			if (!node->GetTag().empty()) allNodes_tag[StrId(node->GetTag())] = node;
-			
+
 			node->SetScene(this);
 			return true;
 		}
@@ -425,28 +448,28 @@ namespace Cog {
 	}
 
 	void Scene::WriteInfo(int logLevel) {
-		
+
 		CogLogTree("INFO_SCENE", logLevel, "Scene %s info:", this->name.c_str());
 
 #if DEBUG
 
-		if(msgListeners.size() > 0) CogLogTree("INFO_SCENE", logLevel+1, "Message listeners: %d",msgListeners.size());
+		if (msgListeners.size() > 0) CogLogTree("INFO_SCENE", logLevel + 1, "Message listeners: %d", msgListeners.size());
 
 		for (auto it = msgListeners.begin(); it != msgListeners.end(); ++it) {
 			StrId key = (*it).first;
 			int listeners = (*it).second.size();
 
 			if (listeners > 0) {
-				string str = key.GetStringValue ()+":"+ofToString(listeners);
-				CogLogTree("INFO_SCENE", logLevel+2, str.c_str());
+				string str = key.GetStringValue() + ":" + ofToString(listeners);
+				CogLogTree("INFO_SCENE", logLevel + 2, str.c_str());
 			}
 		}
 #endif
 
-		CogLogTree("INFO_SCENE", logLevel+1, "Nodes: %d",allNodes.size());
-		CogLogTree("INFO_SCENE", logLevel+1, "Behaviors: %d", allBehaviors.size());
+		CogLogTree("INFO_SCENE", logLevel + 1, "Nodes: %d", allNodes.size());
+		CogLogTree("INFO_SCENE", logLevel + 1, "Behaviors: %d", allBehaviors.size());
 
-		CogLogTree("INFO_SCENE_NODES", logLevel+1, "Nodes::");
+		CogLogTree("INFO_SCENE_NODES", logLevel + 1, "Nodes::");
 
 		this->sceneNode->WriteInfo(logLevel + 2);
 	}

@@ -267,6 +267,19 @@ bool ofxXmlSettings::pushTagIfExists(const string& tag, int which) {
 	else return false;
 }
 
+bool ofxXmlSettings::pushTagWithAttributeIfExists(const string& tag, string attrName, string attrVal) {
+	int tagsNum = getNumTags(tag);
+
+	for (int i = 0; i < tagsNum; i++) {
+		if (getAttribute(tag, attrName, "", i).compare(attrVal) == 0) {
+			pushTag(tag, i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 //---------------------------------------------------------
 int ofxXmlSettings::popTag(){
 

@@ -23,9 +23,6 @@ namespace Cog {
 
 		// actual scene
 		Scene* actualScene = nullptr;
-		// loading scene, used only when there are some scenes that
-		// need asynchronous loading. Its just a fancy feature
-		Scene* loadingScene = nullptr;
 		// list of all scenes
 		vector<Scene*> scenes;
 		// root object, holds reference to all scene nodes
@@ -95,14 +92,17 @@ namespace Cog {
 		* Switches to selected scene
 		* @param scene scene to switch
 		* @param tweenDir tween direction; if none, scene will be switched automatically
+		* @param finishOld if true, the old scene will be finished
 		*/
-		void SwitchToScene(Scene* scene, TweenDirection tweenDir);
+		void SwitchToScene(Scene* scene, TweenDirection tweenDir, bool finishOld = false);
+
 
 		/**
 		* Switches actual scene back to previous scene; very similar to 
 		* back-press buttton in Android
+		* @param finishOld if true, the old scene will be finished
 		*/
-		bool SwitchBackToScene(TweenDirection tweenDir);
+		bool SwitchBackToScene(TweenDirection tweenDir, bool finishOld = false);
 
 		/**
 		* Loads scenes from resources

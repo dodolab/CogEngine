@@ -19,7 +19,7 @@ namespace Cog {
 
 			// resume actual scene
 			to->GetSceneNode()->SetRunningMode(RUNNING);
-		
+
 			waitingForTween = false;
 
 			StopPreviousSceneAndNotify();
@@ -27,11 +27,12 @@ namespace Cog {
 		}
 	}
 
-	void SceneSwitchManager::PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch) {
+	void SceneSwitchManager::PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch, bool finishOld) {
 		TweenContext context = TweenContext();
 		context.to = to;
 		context.dir = tweenDir;
 		context.readyToGo = autoSwitch;
+		context.finishOld = finishOld;
 		waitingTweens.push(context);
 	}
 
@@ -50,43 +51,50 @@ namespace Cog {
 			ctx.readyToGo = true;
 
 			// switch from the last "to" scene
-			this->ExecuteSwitch(to, ctx.to, ctx.dir);
+			this->ExecuteSwitch(to, ctx.to, ctx.dir, ctx.finishOld);
 		}
 
 		return true;
 	}
 
-	void SceneSwitchManager::SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir) {
+	void SceneSwitchManager::SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld) {
 		COGLOGDEBUG("SceneSwitch", "Switching from %s to %s", from->GetName().c_str(), to->GetName().c_str());
 
 		if (waitingForTween) {
 			COGLOGDEBUG("SceneSwitch", "-another switch in progress; pushing context");
-			PushSceneSwitch(from, to, tweenDir, true);
+			PushSceneSwitch(from, to, tweenDir, true, finishOld);
 		}
 		else if (!waitingTweens.empty()) {
 			COGLOGDEBUG("SceneSwitch", "-another switch on the stack; pushing context");
-			PushSceneSwitch(from, to, tweenDir, true);
+			PushSceneSwitch(from, to, tweenDir, true, finishOld);
 		}
 		else {
-			ExecuteSwitch(from, to, tweenDir);
+			ExecuteSwitch(from, to, tweenDir, finishOld);
 		}
 	}
 
-	void SceneSwitchManager::ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir) {
+	void SceneSwitchManager::ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld) {
 		this->from = from;
 		this->to = to;
+		this->finishOld = finishOld;
 
 		// pause the scene which moves back
 		from->GetSceneNode()->SetRunningMode(PAUSED_ALL);
 
 		// initialize new scene
-		to->Init();
+		if (!to->Loaded()) {
+			to->Reload();
+		}
+
+		if (!to->Initialized()) {
+			to->Init();
+		}
 
 		bool isDialog = to->GetSceneType() == SceneType::DIALOG;
 
 		if (tweenDir == TweenDirection::NONE) {
 			// switch immediately
-			
+
 			to->GetSceneNode()->SetRunningMode(RUNNING);
 			// set viewport to the topleft corner
 			to->GetViewPortOffset().x = 0;
@@ -110,7 +118,7 @@ namespace Cog {
 				slide->SetRemoveWhenFinish(true);
 				to->GetSceneNode()->AddBehavior(slide);
 			}
-			
+
 			// node will be set as visible at first update of
 			// the tween behavior (it prevents flashing)
 			to->GetSceneNode()->SetRunningMode(INVISIBLE);
@@ -124,16 +132,21 @@ namespace Cog {
 		// set the moved scene as running just for a while because a message has to be sent
 		from->GetSceneNode()->SetRunningMode(RUNNING);
 		// send message to both scenes
-		auto msg = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(), spt<MsgPayload>());
-		to->SendMessage(msg);
-		from->SendMessage(msg);
+		auto msgFrom = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(), 
+			spt<CommonEvent<SceneSwitchInfo>>(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(finishOld))));
+
+		auto msgTo = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(),
+			spt<CommonEvent<SceneSwitchInfo>>(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(false)))); // always false
+
+		to->SendMessage(msgTo);
+		from->SendMessage(msgFrom);
 
 		if (to->GetSceneType() != SceneType::DIALOG) {
 			// disable and dispose moved scene
 			from->GetSceneNode()->SetRunningMode(DISABLED);
 			from->Dispose();
 
-			if (!from->IsCached() && from->IsLazyLoad()) {
+			if (finishOld) {
 				from->Finish();
 			}
 		}

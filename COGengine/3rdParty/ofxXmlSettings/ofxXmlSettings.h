@@ -69,6 +69,7 @@ class ofxXmlSettings: public ofBaseFileSerializer{
 
 		bool	pushTag(const string&  tag, int which = 0);
 		bool    pushTagIfExists(const string& tag, int which = 0);
+		bool	pushTagWithAttributeIfExists(const string& tag, string attrName, string attrVal);
 		int		popTag();
 		void    popAll();
 		int		getPushLevel();

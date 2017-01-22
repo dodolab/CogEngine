@@ -13,7 +13,7 @@ namespace Cog {
 			finished = true;
 			OnFinish();
 			this->SetComponentState(ComponentState::DISABLED);
-			SendMessage(ACT_BEHAVIOR_FINISHED, owner);
+			SendMessage(ACT_BEHAVIOR_FINISHED);
 			if (removeWhenFinish) owner->RemoveBehavior(this, true);
 		}
 	}

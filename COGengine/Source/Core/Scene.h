@@ -33,8 +33,10 @@ namespace Cog
 	private:
 		// scene unique name
 		string name;
-		// settings
+		// static settings, declared when the scene is built
 		Settings settings;
+		// bundle settings, declared when the scene is switched
+		Setting bundle;
 		// scene root node
 		Node* sceneNode = nullptr;
 		// layers presented in this scene
@@ -48,25 +50,25 @@ namespace Cog
 		// list of all nodes in the tree
 		vector<Node*> allNodes;
 		// all nodes mapped by their hashed tag
-		map<StrId, Node*> allNodes_tag; 
+		map<StrId, Node*> allNodes_tag;
 		// all nodes mapped by their id
-		map<int, Node*> allNodes_id; 
+		map<int, Node*> allNodes_id;
 		// list of all behaviors
 		vector<Behavior*> allBehaviors;
 		// type of the scene
 		SceneType sceneType = SceneType::SCENE;
 
-		// indicator whether lazy loading should be used
-		bool lazyLoad = false;
+		// indicator whether the scene is preloaded
+		bool preloaded = false;
 		// indicator whether this scene has been loaded
 		bool loaded = false;
 		// indicator wheter this scene has been initialized (and therefore it can be displayed)
 		bool initialized = false;
-		// indicator whether this scene should be cached when it is switched
-		bool isCached = false;
+		// indicator whether this scene has been loaded from xml
+		bool loadedFromXml = false;
 
 		// viewport offset of the scene, used while switching
-		ofVec2f viewPortOffset = ofVec2f(0,0);
+		ofVec2f viewPortOffset = ofVec2f(0, 0);
 
 	public:
 
@@ -91,6 +93,11 @@ namespace Cog
 		void Finish();
 
 		/**
+		* Reload this scene completely (usable only when loaded from xml)
+		*/
+		void Reload();
+
+		/**
 		* Gets root node of the scene
 		*/
 		Node* GetSceneNode() {
@@ -113,35 +120,18 @@ namespace Cog
 		}
 
 		/**
-		* Gets indicator whether the scene is lazy loaded (only for scenes loaded from XML)
-		* If so, everything is loaded via asynchronous thread
+		* Gets indicator whether the scene is preloaded (only for scenes loaded from XML)
+		* If so, everything is loaded when the application starts
 		*/
-		bool IsLazyLoad() const {
-			return lazyLoad;
+		bool IsPreloaded() const {
+			return preloaded;
 		}
 
 		/**
-		* Sets indicator whether the scene is lazy loaded
+		* Sets indicator whether the scene is preloaded
 		*/
-		void SetLazyLoad(bool lazyLoad) {
-			this->lazyLoad = lazyLoad;
-		}
-
-		/**
-		* Gets indicator whether the scene is cached and therefore it wont' be
-		* disposed when switching to another scene
-		* 
-		*/
-		bool IsCached() const {
-			return isCached;
-		}
-
-		/**
-		* Sets indicator whether the scene is cached and therefore it won't be 
-		* disposed when switching to another scene
-		*/
-		void SetIsCached(bool isCached) {
-			this->isCached = isCached;
+		void SetPreloaded(bool preloaded) {
+			this->preloaded = preloaded;
 		}
 
 		/**
@@ -159,6 +149,20 @@ namespace Cog
 		}
 
 		/**
+		* Gets indicator whether this scene has been loaded from xml
+		*/
+		bool LoadedFromXml() const {
+			return loadedFromXml;
+		}
+
+		/**
+		* Sets indicator whether this scene has been loaded from xml
+		*/
+		void SetLoadedFromXml(bool loadedFromXml) {
+			this->loadedFromXml = loadedFromXml;
+		}
+
+		/**
 		* Gets viewport offset, used while switching
 		*/
 		ofVec2f& GetViewPortOffset() {
@@ -168,7 +172,7 @@ namespace Cog
 		/**
 		* Gets settings of this scene
 		*/
-		Settings& GetSettings() {
+		Settings& GetSceneSettings() {
 			return settings;
 		}
 
@@ -176,6 +180,20 @@ namespace Cog
 		* Sets settings, usually from XML
 		*/
 		void SetSceneSettings(Settings& settings);
+
+		/**
+		* Gets bundle setting for this scene
+		*/
+		Setting& GetBundleSetting() {
+			return bundle;
+		}
+
+		/**
+		* Sets bundle setting for this scene
+		*/
+		void SetBundleSetting(Setting& setting) {
+			this->bundle = setting;
+		}
 
 		/**
 		* Gets layer, describing spritesheet used in the scene
@@ -337,70 +355,70 @@ namespace Cog
 			return other.GetName().compare(name) != 0;
 		}
 
-		private:
+	private:
 
-			/**
-			* Creates scene node with default parameters
-			*/
-			void CreateSceneNode();
+		/**
+		* Creates scene node with default parameters
+		*/
+		void CreateSceneNode();
 
 
-			/**
-			* Sends message to behaviors
-			* @param msg message to send
-			* @param actualNode actual node in traversal
-			*/
-			void SendMessageToBehaviors(Msg& msg, Node* actualNode);
+		/**
+		* Sends message to behaviors
+		* @param msg message to send
+		* @param actualNode actual node in traversal
+		*/
+		void SendMessageToBehaviors(Msg& msg, Node* actualNode);
 
-			/**
-			* Sends message to children of actual node
-			* @param msg message to send
-			* @param actualNode actual node in traversal
-			*/
-			void SendTunnelingMessageToChildren(Msg& msg, Node* actualNode);
+		/**
+		* Sends message to children of actual node
+		* @param msg message to send
+		* @param actualNode actual node in traversal
+		*/
+		void SendTunnelingMessageToChildren(Msg& msg, Node* actualNode);
 
-			/**
-			* Sends message that will go down from actualNode
-			* @param msg message to send
-			* @param actualNode actual node in traversal
-			*/
-			void SendTunnelingMessage(Msg& msg, Node* actualNode);
+		/**
+		* Sends message that will go down from actualNode
+		* @param msg message to send
+		* @param actualNode actual node in traversal
+		*/
+		void SendTunnelingMessage(Msg& msg, Node* actualNode);
 
-			/**
-			* Sends direct message to all subscribers
-			* @param msg message  to send
-			*/
-			void SendDirectMessage(Msg& msg);
+		/**
+		* Sends direct message to all subscribers
+		* @param msg message  to send
+		*/
+		void SendDirectMessage(Msg& msg);
 
-			/**
-			* Adds a new node to the collection
-			* @return true, if node was added
-			*/
-			bool AddNode(Node* node);
+		/**
+		* Adds a new node to the collection
+		* @return true, if node was added
+		*/
+		bool AddNode(Node* node);
 
-			/**
-			* Removes node from collection
-			*/
-			void RemoveNode(Node* node);
+		/**
+		* Removes node from collection
+		*/
+		void RemoveNode(Node* node);
 
-			/**
-			* Adds a new behavior
-			* @return true if behavior was added
-			*/
-			bool AddBehavior(Behavior* beh);
+		/**
+		* Adds a new behavior
+		* @return true if behavior was added
+		*/
+		bool AddBehavior(Behavior* beh);
 
-			/**
-			* Removes behavior from collection
-			*/
-			void RemoveBehavior(Behavior* beh);
+		/**
+		* Removes behavior from collection
+		*/
+		void RemoveBehavior(Behavior* beh);
 
-			friend class Node;
+		friend class Node;
 
-		public:
-			/**
-			* Writes info about hierarchy of the whole scene tree into console
-			*/
-			void WriteInfo(int logLevel = 0);
+	public:
+		/**
+		* Writes info about hierarchy of the whole scene tree into console
+		*/
+		void WriteInfo(int logLevel = 0);
 	};
 
 } // namespace

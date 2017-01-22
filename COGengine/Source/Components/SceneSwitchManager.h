@@ -11,6 +11,15 @@ namespace Cog {
 	class Tween;
 	enum class TweenDirection;
 
+	class SceneSwitchInfo {
+	public:
+		SceneSwitchInfo(bool finishedOld) : finishedOld(finishedOld) {
+		}
+
+		// if true, the old scene will be finished
+		bool finishedOld;
+	};
+
 	/**
 	* Context of the tween action
 	*/
@@ -21,7 +30,9 @@ namespace Cog {
 		// tween direction
 		TweenDirection dir;
 		// if true, scene is switched automatically
-		bool readyToGo; 
+		bool readyToGo;
+		// if true, the old scene will be finished
+		bool finishOld;
 	};
 
 	/**
@@ -38,6 +49,8 @@ namespace Cog {
 		bool waitingForTween = false;
 		// queue of waiting tweens
 		queue<TweenContext> waitingTweens;
+		// inidicator whether old scene should be finished
+		bool finishOld = false;
 
 		void OnInit();
 
@@ -49,8 +62,9 @@ namespace Cog {
 		* @param to scene to switch to
 		* @param tweenDir tween direction
 		* @param autoSwitch if true, scenes are switched automatically
+		* @param finishOld if true, the old scene will be finished
 		*/
-		void PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch);
+		void PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch, bool finishOld = false);
 
 		/**
 		* Pops scene switch action from the stack
@@ -63,8 +77,9 @@ namespace Cog {
 		* @param from scene to switch from
 		* @param to scene to switch to
 		* @param tweenDir tween direction
+		* @param finishOld if true, the old scene will be finished
 		*/
-		void SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir);
+		void SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld = false);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 		}
@@ -77,7 +92,7 @@ namespace Cog {
 		* @param to scene to switch to
 		* @param tweenDir tween direction
 		*/
-		void ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir);
+		void ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld);
 
 		/**
 		* Stops the previous scene and notifies behaviors about it

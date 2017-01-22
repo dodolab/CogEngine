@@ -14,7 +14,9 @@ namespace Cog {
 		if (animation.empty()) CogLogError("AttribAnimator", "Error while loading AttribAnimator, animation attribute not specified");
 
 		auto resCache = GETCOMPONENT(Resources);
-		contextStack.SetRootNode(resCache->GetAnimation(animation));
+		auto animNode = resCache->GetAnimation(animation);
+		auto clonedNode = static_pointer_cast<SheetAnim>(animNode->Clone());
+		contextStack.SetRootNode(clonedNode);
 	}
 
 	void AttribAnimator::OnStart() {

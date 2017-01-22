@@ -37,7 +37,7 @@ namespace Cog {
 		TransformMath math;
 
 		// get scene settings and calculate transformations 
-		Settings& sceneSettings = owner->GetScene()->GetSettings();
+		Settings& sceneSettings = owner->GetScene()->GetSceneSettings();
 		int gridWidth = sceneSettings.GetSettingValInt("transform", "grid_width");
 		int gridHeight = sceneSettings.GetSettingValInt("transform", "grid_height");
 

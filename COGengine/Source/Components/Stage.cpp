@@ -34,7 +34,17 @@ namespace Cog {
 
 	void Stage::OnMessage(Msg& msg) {
 		if (msg.HasAction(ACT_SCENE_SWITCHED)) {
-			Node* scene =  (Node*)msg.GetContextNode();
+			Node* scene = (Node*)msg.GetContextNode();
+			auto info = msg.GetDataPtr<CommonEvent<SceneSwitchInfo>>();
+
+			if (info->value.finishedOld) {
+				// previous scene has been finished -> remove it from the stack
+				if (!sceneStack.empty() 
+					&& sceneStack.top()->GetSceneNode()->GetId() != scene->GetId()) { // check if it is a forward switch (not backward)
+					sceneStack.pop();
+				}
+			}
+
 			actualScene = scene->GetScene();
 		}
 		else if (msg.HasAction(ACT_SCREEN_CHANGED)) {
@@ -43,14 +53,14 @@ namespace Cog {
 				auto environment = GETCOMPONENT(Environment);
 				// set scale according to the new ratio
 				auto changeEvent = msg.GetDataPtr<ValueChangeEvent<Vec2i>>();
-				
+
 				auto virtuals = CogGetVirtualScreenSize();
 				auto scSize = CogGetScreenSize();
 
 				float absoluteRatio = (environment->GetScreenAspectRatio() / environment->GetVirtualAspectRatio());
 				float heightRatio = scSize.y / (float)virtuals.y;
 				float widthRatio = scSize.x / (float)virtuals.x;
-				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x/((float)environment->GetInitialWidth()));
+				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x / ((float)environment->GetInitialWidth()));
 			}
 		}
 	}
@@ -90,7 +100,7 @@ namespace Cog {
 
 	void Stage::RegisterGlobalListener(StrId action, BaseComponent* listener) {
 		msgListeners[action].push_back(listener);
-		
+
 		for (Scene* sc : this->scenes) {
 			sc->RegisterListener(action, listener);
 		}
@@ -124,7 +134,7 @@ namespace Cog {
 		return nullptr;
 	}
 
-	void Stage::SwitchToScene(Scene* scene, TweenDirection tweenDir) {
+	void Stage::SwitchToScene(Scene* scene, TweenDirection tweenDir, bool finishOld) {
 
 		if (actualScene == nullptr) {
 			// if there is no running scene yet -> switch immediately
@@ -135,7 +145,7 @@ namespace Cog {
 		else {
 			// use switch manager
 			auto manager = GETCOMPONENT(SceneSwitchManager);
-			
+
 			// if actual scene is a dialog, close the dialog first
 			if (actualScene->GetSceneType() == SceneType::DIALOG) {
 				this->SwitchBackToScene(TweenDirection::NONE);
@@ -147,45 +157,19 @@ namespace Cog {
 			}
 
 			Scene* from = actualScene;
-			
-			if (scene->IsLazyLoad() && !scene->Loaded()) 
-			{
-				// scene is lazy loaded -> run asynchronous loading process
-				// note that this makes sense only if the scene is loaded via XML
-				auto async = new AsyncProcess(new SceneLoader(scene, tweenDir));
 
-				COGLOGDEBUG("Stage", "Scene is lazy loaded!");
-
-				// lazy load the scene
-				if (this->loadingScene != nullptr) {
-					// load loading scene first
-					COGLOGDEBUG("Stage", "Switching to loading scene");
-
-					Scene* to = loadingScene;
-					sceneStack.push(actualScene);
-					actualScene = loadingScene;
-
-					// switch to loading window
-					manager->SwitchToScene(from, to, tweenDir);
-				}
-
-				// run asynchronous process
-				CogRunProcess(async);
+			// switch scene using the switch manager
+			if (actualScene != nullptr) {
+				sceneStack.push(actualScene);
 			}
-			else {
-				// switch scene using the switch manager
-				if (actualScene != nullptr && (loadingScene == nullptr ||
-						(actualScene->GetName().compare(loadingScene->GetName()) != 0))) {
-					sceneStack.push(actualScene);
-				}
 
-				actualScene = scene;
-				manager->SwitchToScene(from, actualScene, tweenDir);
-			}
+			actualScene = scene;
+			manager->SwitchToScene(from, actualScene, tweenDir, finishOld);
+
 		}
 	}
 
-	bool Stage::SwitchBackToScene(TweenDirection tweenDir) {
+	bool Stage::SwitchBackToScene(TweenDirection tweenDir, bool finishOld) {
 		if (!sceneStack.empty()) {
 
 			auto manager = GETCOMPONENT(SceneSwitchManager);
@@ -193,12 +177,12 @@ namespace Cog {
 
 			Scene* from = actualScene;
 			Scene* to = scene;
-			
+
 			actualScene = scene;
 
 			COGLOGDEBUG("Stage", "Switching to previous scene");
 
-			manager->SwitchToScene(from, to, tweenDir);
+			manager->SwitchToScene(from, to, tweenDir, finishOld);
 			sceneStack.pop();
 
 			return true;
@@ -212,20 +196,18 @@ namespace Cog {
 		COGLOGDEBUG("Stage", "Loading scenes from XML");
 
 		string initialScene = CogGetGlobalSettings().GetSettingVal("initial_scene");
-		string loading = CogGetDefaultSettings().GetSettingVal("loading_scene");
 
 		if (initialScene.empty()) {
 			CogLogInfo("Stage", "Initial scene not specified Using the first one!");
 		}
 
-		string spriteSheets = ofToDataPath(PATH_SCENES);
+		string scenes = ofToDataPath(PATH_SCENES);
 
-		if (!ofFile(spriteSheets.c_str()).exists()) {
+		if (!ofFile(scenes.c_str()).exists()) {
 			CogLogError("Stage", "Scenes.xml not found!");
 		}
 		else {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(spriteSheets);
+			spt<ofxXml> xml = CogPreloadXMLFile(scenes);
 
 			bool initLoaded = false;
 
@@ -239,27 +221,29 @@ namespace Cog {
 
 					if (name.empty()) CogLogError("Stage", "Scene has no name!");
 
-					bool isLazy = xml->getBoolAttributex("lazy", false);
+					bool isPreloaded = xml->getBoolAttributex("preload", false);
+					Scene* sc = new Scene(name, isPreloaded);
 
-					Scene* sc = new Scene(name, isLazy);
+					bool isInitial = (initialScene.empty() || sc->GetName().compare(initialScene) == 0);
 
-					if (!sc->IsLazyLoad()) {
+
+					if (sc->IsPreloaded() || (!initLoaded && isInitial)) {
 						// load complete scene only if it isn't lazy loaded
+						// the initial scene will always be preloaded
 						sc->LoadFromXml(xml);
 					}
+					else {
+						// just set the indicator
+						sc->SetLoadedFromXml(true);
+					}
 
-					if (!initLoaded && (initialScene.empty() || sc->GetName().compare(initialScene) == 0)) {
+					if (!initLoaded && isInitial) {
 						// set as initial
 						AddScene(sc, true);
 						initLoaded = true;
 					}
 					else {
 						AddScene(sc, false);
-					}
-
-					if (!loading.empty() && sc->GetName().compare(loading) == 0) {
-						// set as loading scene
-						this->loadingScene = sc;
 					}
 
 					xml->popTag();
@@ -275,8 +259,8 @@ namespace Cog {
 	}
 
 	void Stage::WriteInfo(int logLevel) {
-		
-		if(actualScene != nullptr) CogLogTree("INFO_STAGE", logLevel, "Actual scene: ", actualScene->GetName().c_str());
+
+		if (actualScene != nullptr) CogLogTree("INFO_STAGE", logLevel, "Actual scene: ", actualScene->GetName().c_str());
 
 		if (this->scenes.size() > 0) {
 			CogLogTree("INFO_STAGE_SCENES", logLevel, "Scenes: %d", scenes.size());
