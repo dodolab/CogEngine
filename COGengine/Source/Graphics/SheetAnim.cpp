@@ -82,5 +82,9 @@ namespace Cog {
 		sheetInit = true;
 	}
 
+	spt<GeneralAnim> SheetAnim::Clone() {
+		auto output = spt<SheetAnim>(new SheetAnim(*this));
+		return output;
+	}
 
 } // namespace

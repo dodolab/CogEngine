@@ -13,7 +13,7 @@ namespace Cog {
 	/**
 	* General entity for animations
 	*/
-	class GeneralAnim : public enable_shared_from_this<GeneralAnim>{
+	class GeneralAnim : public enable_shared_from_this<GeneralAnim> {
 	protected:
 		// name of animation
 		string name = "";
@@ -34,9 +34,21 @@ namespace Cog {
 
 		}
 
-		GeneralAnim(string name, string ref, float speed, int repeat, bool isRevert) 
+		GeneralAnim(string name, string ref, float speed, int repeat, bool isRevert)
 			: name(name), ref(ref), speed(speed), repeat(repeat), isRevert(isRevert) {
 
+		}
+
+		GeneralAnim(const GeneralAnim& copy) {
+			for (auto child : copy.children) {
+				children.push_back(child->Clone());
+			}
+
+			name = copy.name;
+			ref = copy.ref;
+			speed = copy.speed;
+			repeat = copy.repeat;
+			isRevert = copy.isRevert;
 		}
 
 		virtual ~GeneralAnim() {
@@ -54,14 +66,14 @@ namespace Cog {
 		* @param output output collection
 		*/
 		void GetAllNodes(vector<GeneralAnim*> &output);
-		
+
 		/**
 		* Finds a child by name recursively
 		* @param name child name
 		*/
 		spt<GeneralAnim> FindChild(string name);
 
-	
+
 		/**
 		* Adds a new animation child
 		* @param child child to add
@@ -178,6 +190,7 @@ namespace Cog {
 			return children;
 		}
 
+		virtual spt<GeneralAnim> Clone() = 0;
 	};
 
 

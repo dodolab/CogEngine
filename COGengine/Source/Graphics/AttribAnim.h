@@ -27,6 +27,13 @@ namespace Cog {
 
 		}
 
+		AttribAnimContext(const AttribAnimContext& copy) {
+			entity = copy.entity;
+			fromVal = copy.fromVal;
+			toVal = copy.toVal;
+			initialized = copy.initialized;
+		}
+
 		/**
 		* Initializes the context
 		*/
@@ -95,6 +102,14 @@ namespace Cog {
 		*/
 		AttribAnim(string name, string ref, float speed, int repeat, bool isRevert, vector<AttribAnimContext>& animEntities);
 
+		AttribAnim(const AttribAnim& copy) {
+			for (auto entity : copy.animEntities) {
+				animEntities.push_back(AttribAnimContext(entity));
+			}
+
+			duration = copy.duration;
+		}
+
 		virtual ~AttribAnim() {
 		}
 
@@ -142,6 +157,8 @@ namespace Cog {
 		vector<AttribAnimContext>& GetAnimEntities() {
 			return this->animEntities;
 		}
+
+		virtual spt<GeneralAnim> Clone();
 	};
 
 

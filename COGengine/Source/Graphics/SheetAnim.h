@@ -48,6 +48,16 @@ namespace Cog {
 		SheetAnim(string name, string sheetPath, string ref, int frames, int lines, int start,
 			int end, int increment, float speed, int repeat, bool isRevert);
 
+		SheetAnim(const SheetAnim& copy) {
+			sheetPath = copy.sheetPath;
+			frames = copy.frames;
+			lines = copy.lines;
+			start = copy.start;
+			end = copy.end;
+			increment = copy.increment;
+			sheets = copy.sheets;
+			sheetInit = copy.sheetInit;
+		}
 
 		/**
 		* Copies all parameters from other animation
@@ -189,6 +199,8 @@ namespace Cog {
 			if (!sheetInit) InitSheets();
 			return sheets;
 		}
+
+		virtual spt<GeneralAnim> Clone();
 	};
 
 

@@ -59,5 +59,10 @@ namespace Cog {
 		RecalcDuration();
 	}
 
+	spt<GeneralAnim> AttribAnim::Clone() {
+		auto output = spt<AttribAnim>(new AttribAnim(*this));
+		return output;
+	}
+
 
 } // namespace
