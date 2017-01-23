@@ -4,7 +4,7 @@
 namespace Cog {
 
 	void TransformEnt::LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
-		
+
 		this->name = xml->getAttributex("name", "");
 
 		// calculation type is LOCAL by default
@@ -49,17 +49,26 @@ namespace Cog {
 			string widthStr = xml->getAttributex("width", "");
 			string heightStr = xml->getAttributex("height", "");
 
-			width = defaultSettings.GetItemValFloat("width", 1.0);
-			height = defaultSettings.GetItemValFloat("height", 1.0);
+			width = defaultSettings.GetItemValFloat("width", 0.0);
+			height = defaultSettings.GetItemValFloat("height", 0.0);
 
 			// calc width and height
 			if (!widthStr.empty()) sType = EnumConverter::GetUnitValue(widthStr, width);
-			if (!heightStr.empty()) sType = EnumConverter::GetUnitValue(heightStr, height);
+			// 0 means that the other value will be taken from aspect ratio multiplied by the width
+			if (!heightStr.empty()) {
+				if (heightStr.compare("0") != 0) {
+					// calculate scaleType from height (it may be different)
+					sType = EnumConverter::GetUnitValue(heightStr, height);
+				}
+				else {
+					height = 0;
+				}
+			}
 
 			// set the other property to 0 so that we know that it should have the same value
 			if (width != height) {
-				if (width != 1 && height == 1) height = 0;
-				else if (height != 1 && width == 1) width = 0;
+				if (width != 0 && height == 1) height = 0;
+				else if (height != 0 && width == 1) width = 0;
 			}
 
 		}

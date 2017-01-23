@@ -158,8 +158,11 @@ namespace Cog {
 
 		/**
 		* Creates node and assigns it to the given scene
+		* @param name node name
+		* @param scene scene this node belongs to
+		* @param addDefaultShape if true, a default rectangle with a size of the display will be assigned
 		*/
-		Node* CreateNode(string name, Scene* scene);
+		Node* CreateNode(string name, Scene* scene, bool addDefaultShape);
 
 		/**
 		* Loads node from XML

@@ -162,22 +162,27 @@ namespace Cog {
 		return behavior;
 	}
 
-	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
-		Settings& settings = scene->GetSceneSettings();
-
-		// get reference width and height
-		int refWidth = settings.GetSettingValInt("transform", "ref_width");
-		int refHeight = settings.GetSettingValInt("transform", "ref_height");
-
-		if (refWidth == 0) refWidth = CogGetScreenWidth();
-		if (refHeight == 0) refHeight = CogGetScreenHeight();
-
+	Node* NodeBuilder::CreateNode(string name, Scene* scene, bool addDefaultShape) {
+		
 		Node* node = new Node(NodeType::OBJECT, 0, name);
-		// set default shape
-		node->SetMesh(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
+
+		if (addDefaultShape) {
+			Settings& settings = scene->GetSceneSettings();
+
+			// get reference width and height
+			int refWidth = settings.GetSettingValInt("transform", "ref_width");
+			int refHeight = settings.GetSettingValInt("transform", "ref_height");
+
+			if (refWidth == 0) refWidth = CogGetScreenWidth();
+			if (refHeight == 0) refHeight = CogGetScreenHeight();
+
+			// set default shape
+			node->SetMesh(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
+		}
 
 		return node;
 	}
+
 
 	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene) {
 
@@ -187,7 +192,9 @@ namespace Cog {
 		string name = xml->getAttributex("name", "");
 		string img = xml->getAttributex("img", "");
 
-		Node* node = CreateNode(name, scene);
+		bool noShape = xml->getBoolAttributex("nomesh", false);
+
+		Node* node = CreateNode(name, scene, !noShape);
 
 		if (!img.empty()) {
 			CreateImageNode(node, img);

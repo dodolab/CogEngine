@@ -53,7 +53,7 @@
   <Import Project="$(ProjectDir)\COGengine_common.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(OF_ROOT)\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
     <Import Project="$(ProjectDir)\COGengine_release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">

@@ -141,7 +141,7 @@ namespace Cog {
 		// correct auto size
 		if (width != 0 && height != 0) return ofVec3f(scaleX, scaleY, 1);
 		else if (width == 0) return ofVec3f(scaleY, scaleY, 1);
-		else return ofVec3f(scaleX, scaleX, 1);
+		else return ofVec3f(scaleX, scaleX, 1); // height = 0
 
 	}
 
