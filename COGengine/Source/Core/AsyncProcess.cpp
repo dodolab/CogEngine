@@ -12,27 +12,27 @@ namespace Cog {
 
 	void SceneLoader::DoJob() {
 		
-		spt<ofxXml> config = spt<ofxXml>(new ofxXml());
-		config->loadFile(ofToDataPath(PATH_SCENES));
+		spt<ofxXml> scenes = spt<ofxXml>(new ofxXml());
+		scenes->loadFile(ofToDataPath(PATH_SCENES));
 
-		config->popAll();
-		config->pushTag("resources");
+		scenes->popAll();
+		scenes->pushTag("resources");
 
-		for (int i = 0; i < config->getNumTags("scene"); i++) {
-			config->pushTag("scene", i);
+		for (int i = 0; i < scenes->getNumTags("scene"); i++) {
+			scenes->pushTag("scene", i);
 
 			// just load scene from XML and switch to it
-			string name = config->getAttributex("name", "");
+			string name = scenes->getAttributex("name", "");
 			if (name.compare(scene->GetName()) == 0) {
-				scene->LoadFromXml(config);
-				config->popTag();
+				scene->LoadFromXml(scenes);
+				scenes->popTag();
 				break;
 			}
 
-			config->popTag();
+			scenes->popTag();
 		}
 
-		config->popAll();
+		scenes->popAll();
 
 		// switch to scene
 		auto stage = GETCOMPONENT(Stage);

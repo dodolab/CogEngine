@@ -166,11 +166,20 @@ namespace Cog {
 
 		/**
 		* Loads node from XML
-		* @param xml xml object
+		* @param xml xml object that holds scenes
 		* @param parent parent of the node
 		* @param scene actual scene
 		*/
 		Node* LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene);
+
+		/**
+		* Loads referenced node from XML, must be located in nodes.xml file
+		* @param contextXml xml object that holds context
+		* @param nodeName name of the node
+		* @param parent parent of the node
+		* @param scene actual scene
+		*/
+		Node* LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, Node* parent, Scene* scene);
 
 		/**
 		* Loads text node from XML

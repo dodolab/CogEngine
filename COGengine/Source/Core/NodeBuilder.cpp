@@ -19,22 +19,22 @@ namespace Cog {
 
 	void NodeBuilder::CreateButtonNode(Node* node, string defaultImg, string clickedImg, string disabledImg) {
 
-		spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogPreload2DImage(disabledImg);
+		spt<ofImage> disabledImgPtr = disabledImg.empty() ? spt<ofImage>() : CogGet2DImage(disabledImg);
 
 		node->AddBehavior(new HitEvent(-1, false, false));
-		node->AddBehavior(new Button(CogPreload2DImage(defaultImg), CogPreload2DImage(clickedImg), disabledImgPtr));
+		node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
 		node->GetStates().SetState(StrId(STATES_HITTABLE));
 	}
 
 
 	void NodeBuilder::CreateMultiSelectionNode(Node* node, string defaultImg, string selectImg, string selectionGroup) {
 		node->AddBehavior(new HitEvent(-1, false, false));
-		node->AddBehavior(new MultiSelection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg), StrId(selectionGroup)));
+		node->AddBehavior(new MultiSelection(CogGet2DImage(defaultImg), CogGet2DImage(selectImg), StrId(selectionGroup)));
 		node->GetGroups().SetState(StrId(selectionGroup));
 	}
 
 	void NodeBuilder::CreateSelectionNode(Node* node, string defaultImg, string selectImg) {
-		node->AddBehavior(new Selection(CogPreload2DImage(defaultImg), CogPreload2DImage(selectImg)));
+		node->AddBehavior(new Selection(CogGet2DImage(defaultImg), CogGet2DImage(selectImg)));
 	}
 
 	void NodeBuilder::CreateAnimationNode(Node* node, string animName) {
@@ -43,7 +43,7 @@ namespace Cog {
 	}
 
 	void NodeBuilder::CreateImageNode(Node* node, string path) {
-		spt<ofImage> image = CogPreload2DImage(path);
+		spt<ofImage> image = CogGet2DImage(path);
 		node->SetMesh(spt<Image>(new Image(image)));
 	}
 
@@ -163,7 +163,7 @@ namespace Cog {
 	}
 
 	Node* NodeBuilder::CreateNode(string name, Scene* scene, bool addDefaultShape) {
-		
+
 		Node* node = new Node(NodeType::OBJECT, 0, name);
 
 		if (addDefaultShape) {
@@ -185,6 +185,12 @@ namespace Cog {
 
 
 	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene) {
+
+		if (xml->getAttributex("ref", "").length() != 0) {
+			// load referenced node
+			Node* nodeToReturn = LoadRefNodeFromXml(xml, xml->getAttributex("ref", ""), parent, scene);
+			return nodeToReturn;
+		}
 
 		TransformMath math = TransformMath();
 		Settings& settings = scene->GetSceneSettings();
@@ -288,14 +294,41 @@ namespace Cog {
 			// load children
 			for (int i = 0; i < children; i++) {
 				xml->pushTag("node", i);
-
 				Node* child = LoadNodeFromXml(xml, node, scene);
-				node->AddChild(child);
-
+				if (child != nullptr) {
+					node->AddChild(child);
+				}
 				xml->popTag();
 			}
 		}
 		return node;
+	}
+
+	Node* NodeBuilder::LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, Node* parent, Scene* scene) {
+		string nodes = ofToDataPath(PATH_NODES);
+
+		if (ofFile(nodes.c_str()).exists()) {
+			// load the file from scratch
+			spt<ofxXml> nodesXml = spt<ofxXml>(new ofxXml());
+			nodesXml->loadFile(nodes);
+
+			nodesXml->pushTag("resources");
+			int nodes = nodesXml->getNumTags("node");
+
+			for (int i = 0; i < nodes; i++) {
+				nodesXml->pushTag("node", i);
+				string name = nodesXml->getAttributex("name", "");
+				if (name.compare(nodeName) == 0) {
+					// use nodesXml to load its child 
+					Node* nodeToReturn = LoadNodeFromXml(nodesXml, parent, scene);
+					return nodeToReturn;
+				}
+				nodesXml->popTag();
+			}
+		}
+
+		CogLogError("NodeBuilder", "Error while loading referenced node %s. All referenced nodes must be located in nodes.xml file!", nodeName.c_str());
+		return nullptr;
 	}
 
 	void NodeBuilder::LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent) {

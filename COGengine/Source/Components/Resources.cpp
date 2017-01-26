@@ -28,6 +28,7 @@ namespace Cog {
 			if (!existing->isUsingTexture()) {
 				// for preloaded images, they need to be copied to the texture
 				existing->setUseTexture(true);
+				existing->update();
 			}
 
 			return existing;
@@ -35,7 +36,7 @@ namespace Cog {
 
 		COGLOGDEBUG("Resources", "Loading image %s", path.c_str());
 
-		ofImage* img = new ofImage(path);
+		ofImage* img = new ofImage(path); 
 		ofVboMesh* mesh = new ofVboMesh();
 		mesh->setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 		mesh->addVertex(ofVec3f(-img->getWidth() / 2, -img->getHeight() / 2, 1));

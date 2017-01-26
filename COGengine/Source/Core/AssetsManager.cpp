@@ -65,20 +65,6 @@ namespace Cog {
 			loadedProjectSettings.LoadFromXml(xml);
 		}
 
-		string fonts = ofToDataPath(PATH_FONTS);
-		xml = LoadResourcesXml(fonts);
-		if (xml) {
-			int fontNums = xml->getNumTags("font");
-
-			for (int i = 0; i < fontNums; i++) {
-				xml->pushTag("font", i);
-				string name = xml->getAttributex("name", "");
-				int size = xml->getAttributex("size", 1);
-				GetFont(name, size);
-				xml->popTag();
-			}
-		}
-
 		string animationsPath = ofToDataPath(PATH_ANIMATIONS);
 		xml = LoadResourcesXml(animationsPath);
 		if (xml) {
