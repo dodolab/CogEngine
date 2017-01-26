@@ -21,7 +21,7 @@ namespace Cog {
 		auto shape = node->GetMesh();
 
 		// for rectangles, width and height are set directly instead of scale
-		if (entity.sType == CalcType::PER && (shape->GetMeshType() == MeshType::RECTANGLE) || shape->GetMeshType() == MeshType::BOUNDING_BOX) {
+		if ((shape->GetMeshType() == MeshType::RECTANGLE) || shape->GetMeshType() == MeshType::BOUNDING_BOX) {
 			auto rectShape = node->GetMesh<Rectangle>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);

@@ -40,6 +40,7 @@ namespace Cog {
 			this->name = name;
 		}
 
+
 		/**
 		* Creates a new transformation entity
 		* @param name entity name
@@ -185,6 +186,81 @@ namespace Cog {
 
 		~TransformEnt() {
 
+		}
+
+		TransformEnt& SetPosition(ofVec2f pos, CalcType pType) {
+			this->pos = pos;
+			this->pType = pType;
+			return *this;
+		}
+
+		TransformEnt& SetLocalPosition(ofVec2f pos) {
+			return SetPosition(pos, CalcType::LOC);
+		}
+
+		TransformEnt& SetRelPosition(ofVec2f pos) {
+			return SetPosition(pos, CalcType::PER);
+		}
+
+		TransformEnt& SetAbsPosition(ofVec2f pos) {
+			return SetPosition(pos, CalcType::ABS);
+		}
+
+		TransformEnt& SetGridPosition(ofVec2f pos) {
+			return SetPosition(pos, CalcType::GRID);
+		}
+
+
+		TransformEnt& SetZIndex(int zIndex) {
+			this->zIndex = zIndex;
+			return *this;
+		}
+
+		TransformEnt& SetAnchor(ofVec2f anchor) {
+			this->anchor = anchor;
+			return *this;
+		}
+
+		TransformEnt& SetAnchorCenter() {
+			this->anchor = ofVec2f(0.5f);
+			return *this;
+		}
+
+		TransformEnt& SetAnchorBottomRight() {
+			this->anchor = ofVec2f(1);
+			return *this;
+		}
+
+		TransformEnt& SetScale(ofVec2f scale, CalcType sType) {
+			this->size = scale;
+			this->sType = sType;
+			return *this;
+		}
+
+		TransformEnt& SetLocalScale(ofVec2f scale) {
+			return SetScale(scale, CalcType::LOC);
+		}
+
+		TransformEnt& SetRelScale(ofVec2f scale) {
+			return SetScale(scale, CalcType::PER);
+		}
+
+		TransformEnt& SetAbsScale(ofVec2f scale) {
+			return SetScale(scale, CalcType::ABS);
+		}
+
+		TransformEnt& SetGridScale(ofVec2f scale) {
+			return SetScale(scale, CalcType::GRID);
+		}
+
+		TransformEnt& SetRotation(float rotation) {
+			this->rotation = rotation;
+			return *this;
+		}
+
+		TransformEnt& SetRotCentroid(ofVec2f centroid) {
+			this->rotationCentroid = centroid;
+			return *this;
 		}
 
 		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings);

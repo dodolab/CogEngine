@@ -265,13 +265,13 @@ namespace Cog {
 				break;
 			case ScreenOrient::PORTRAIT:
 
-				if (aspectRatio < virtualAspectRatio) {
-					virtualWidth = (int)(screenHeight / virtualAspectRatio);
+				if (aspectRatio > virtualAspectRatio) {
+					virtualWidth = (int)(screenHeight * virtualAspectRatio);
 					virtualHeight = screenHeight;
 				}
 				else {
 					virtualWidth = screenWidth;
-					virtualHeight = (int)(screenHeight*virtualAspectRatio);
+					virtualHeight = (int)(screenWidth / virtualAspectRatio);
 				}
 
 				break;

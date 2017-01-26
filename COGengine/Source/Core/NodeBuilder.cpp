@@ -162,23 +162,11 @@ namespace Cog {
 		return behavior;
 	}
 
-	Node* NodeBuilder::CreateNode(string name, Scene* scene, bool addDefaultShape) {
+	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
 
 		Node* node = new Node(NodeType::OBJECT, 0, name);
-
-		if (addDefaultShape) {
-			Settings& settings = scene->GetSceneSettings();
-
-			// get reference width and height
-			int refWidth = settings.GetSettingValInt("transform", "ref_width");
-			int refHeight = settings.GetSettingValInt("transform", "ref_height");
-
-			if (refWidth == 0) refWidth = CogGetScreenWidth();
-			if (refHeight == 0) refHeight = CogGetScreenHeight();
-
-			// set default shape
-			node->SetMesh(spt<Rectangle>(new Rectangle((float)refWidth, (float)refHeight)));
-		}
+		// set default shape as 1x1 rectangle; its size will be specified during transformation
+		node->SetMesh(spt<Rectangle>(new Rectangle(1,1)));
 
 		return node;
 	}
@@ -198,9 +186,7 @@ namespace Cog {
 		string name = xml->getAttributex("name", "");
 		string img = xml->getAttributex("img", "");
 
-		bool noShape = xml->getBoolAttributex("nomesh", false);
-
-		Node* node = CreateNode(name, scene, !noShape);
+		Node* node = CreateNode(name, scene);
 
 		if (!img.empty()) {
 			CreateImageNode(node, img);
@@ -233,11 +219,6 @@ namespace Cog {
 			CreateAnimationNode(node, animName);
 		}
 
-		// scene node will always fit to screen size
-		if (parent->GetType() == NodeType::SCENE) {
-			math.SetSizeToScreen(node, parent);
-		}
-
 		if (xml->pushTagIfExists("mesh")) {
 			// load mesh
 			LoadMeshFromXml(xml, node, scene);
@@ -268,6 +249,11 @@ namespace Cog {
 			// set transform according to the parsed values
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
 			xml->popTag();
+		}
+		else {
+			// set transform to match the whole scene
+			TransformMath math = TransformMath();
+			math.SetSizeToScreen(node, parent);
 		}
 
 		if (xml->tagExists("behavior")) {
