@@ -15,9 +15,10 @@ namespace luabridge {
 namespace Cog {
 
 	class Node;
-	class BehaviorLua;
+	class Behavior;
 	class Text;
 	class Image;
+	class SceneLua;
 
 	/**
 	* Node wrapper for Lua script
@@ -43,9 +44,9 @@ namespace Cog {
 
 		void Draw(const uint64 delta, const uint64 absolute);
 
-		bool AddBehavior(BehaviorLua* beh);
+		bool AddBehavior(Behavior* beh);
 
-		bool RemoveBehavior(BehaviorLua* beh, bool erase);
+		bool RemoveBehavior(Behavior* beh, bool erase);
 
 		bool RemoveAttr(StrId key, bool erase);
 
@@ -60,6 +61,8 @@ namespace Cog {
 		NodeLua* GetParent() const;
 
 		void SetParent(NodeLua* val);
+
+		SceneLua* GetScene() const;
 
 		int GetId() const;
 

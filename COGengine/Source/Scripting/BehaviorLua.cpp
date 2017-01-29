@@ -7,6 +7,7 @@
 #include "NodeLua.h"
 #include "SceneLua.h"
 #include <LuaBridge.h>
+#include "AttribAnimator.h"
 
 using namespace luabridge;
 
@@ -96,6 +97,13 @@ namespace Cog {
 			.addFunction("GetScene", &BehaviorLua::GetScene)
 			.addData("owner", &BehaviorLua::ownerLua)
 			.endClass();
+
+		luabridge::getGlobalNamespace(L)
+			.beginClass<AttribAnimator>("AttribAnimator")
+			.addConstructor<void(*)()>()
+			.addFunction("Load", &AttribAnimator::Load)
+			.endClass();
+
 	}
 
 } // namespace

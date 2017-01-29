@@ -84,6 +84,7 @@ namespace Cog {
 		}
 	}
 
+
 	void LuaScripting::LoadScript(ofFile file) {
 		
 		string name = file.getFileName();

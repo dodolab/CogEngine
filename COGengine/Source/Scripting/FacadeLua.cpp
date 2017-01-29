@@ -1,7 +1,6 @@
 #include <LuaBridge.h>
 
 #include "FacadeLua.h"
-#include "Definitions.h"
 #include "Node.h"
 #include "ComponentStorage.h"
 #include "Tween.h"
@@ -11,6 +10,7 @@
 #include "ComponentLua.h"
 #include "ResourcesLua.h"
 #include "StageLua.h"
+#include "ofxXmlSettings.h"
 
 namespace Cog {
 
@@ -115,6 +115,10 @@ namespace Cog {
 		Cog::CogStopAllSounds();
 	}
 
+	spt<ofxXmlSettings> FacadeLua::CogPreloadXMLFile(string path) {
+		return Cog::CogPreloadXMLFile(path);
+	}
+
 	int FacadeLua::CogRegisterBehaviorPrototypeCt(luabridge::lua_State* L) {
 		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototypeCt(L);
 	}
@@ -140,6 +144,7 @@ namespace Cog {
 			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
 			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
 			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
+			.addFunction("CogPreloadXMLFile", &FacadeLua::CogPreloadXMLFile)
 			.addFunction("CogGetComponent", &FacadeLua::CogGetComponent)
 			.addFunction("CogGetComponent", static_cast<ComponentLua*(*)(string)> (&FacadeLua::CogGetComponent))
 			.addFunction("CogGetComponent", reinterpret_cast<ResourcesLua*(*)(string)> (&FacadeLua::CogGetComponent))

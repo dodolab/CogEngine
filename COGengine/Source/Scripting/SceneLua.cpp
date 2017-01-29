@@ -54,6 +54,10 @@ namespace Cog {
 		else return nullptr;
 	}
 
+	void SceneLua::Reload() {
+		scene->Reload();
+	}
+
 	void SceneLua::InitLuaMapping(luabridge::lua_State* L) {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<SceneLua>("Scene")
@@ -66,6 +70,7 @@ namespace Cog {
 			.addFunction("Initialized", &SceneLua::Initialized)
 			.addFunction("Loaded", &SceneLua::Loaded)
 			.addFunction("SendMessage", &SceneLua::SendMessage)
+			.addFunction("Reload", &SceneLua::Reload)
 			.endClass();
 	}
 

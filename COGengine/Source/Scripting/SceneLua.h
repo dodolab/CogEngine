@@ -51,6 +51,7 @@ namespace Cog {
 
 		NodeLua* FindNodeBySecondaryId(int secondaryId) const;
 
+		void Reload();
 
 		static void InitLuaMapping(luabridge::lua_State* L);
 	};

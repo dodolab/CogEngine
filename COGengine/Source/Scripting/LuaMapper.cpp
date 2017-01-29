@@ -16,6 +16,8 @@
 #include "Settings.h""
 #include "ComponentLua.h"
 #include "StageLua.h"
+#include "TransformMath.h"
+#include "NodeBuilderLua.h"
 
 using namespace luabridge;
 
@@ -23,6 +25,11 @@ using namespace luabridge;
 namespace Cog {
 
 	void LuaMapper::InitLuaMapping(lua_State* L) {
+
+		// static functions
+		luabridge::getGlobalNamespace(L)
+			.addFunction("ofRandom", static_cast<float(*)(float, float)>(&ofRandom))
+			.addFunction("floor", static_cast<double(*)(double)>(&floor));
 
 		// ofVec2f
 		luabridge::getGlobalNamespace(L)
@@ -102,6 +109,29 @@ namespace Cog {
 			.LUA_REGFUNC(Trans, SetRotationAsAngleToPosition)
 			.endClass();
 
+		// TransformEnt
+		luabridge::getGlobalNamespace(L)
+			.beginClass<TransformEnt>("TransformEnt")
+			.addConstructor <void(*) (ofVec2f, CalcType, float)>()
+			.LUA_REGDATA(TransformEnt, anchor)
+			.LUA_REGDATA(TransformEnt, name)
+			.LUA_REGDATA(TransformEnt, pos)
+			.LUA_REGDATA(TransformEnt, pType)
+			.LUA_REGDATA(TransformEnt, rotation)
+			.LUA_REGDATA(TransformEnt, rotationCentroid)
+			.LUA_REGDATA(TransformEnt, size)
+			.LUA_REGDATA(TransformEnt, sType)
+			.LUA_REGDATA(TransformEnt, zIndex)
+			.endClass();
+
+		// TransformMath
+		luabridge::getGlobalNamespace(L)
+			.beginClass<TransformMath>("TransformMath")
+			.addConstructor <void(*) (void)>()
+			.addFunction("SetTransform", static_cast<void(TransformMath::*)(Node*, Node*, TransformEnt, int, int)>(&TransformMath::SetTransform))
+			.addFunction("SetTransform", reinterpret_cast<void(TransformMath::*)(NodeLua*, NodeLua*, TransformEnt, int, int)>(&TransformMath::SetTransform))
+			.endClass();
+
 		// StrId
 		luabridge::getGlobalNamespace(L)
 			.beginClass<StrId>("StrId")
@@ -124,7 +154,7 @@ namespace Cog {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Settings>("Settings")
 			.addConstructor<void(*)()>()
-			.addFunction("GetSettingVal", static_cast<string (Settings::*)(string, string)> (&Settings::GetSettingVal))
+			.addFunction("GetSettingVal", static_cast<string(Settings::*)(string, string)> (&Settings::GetSettingVal))
 			.addFunction("GetSettingValInt", &Settings::GetSettingValInt)
 			.addFunction("GetSettingValFloat", &Settings::GetSettingValFloat)
 			.addFunction("GetSettingValBool", &Settings::GetSettingValBool)
@@ -132,7 +162,7 @@ namespace Cog {
 			.addFunction("SetSetting", &Settings::SetSetting)
 			.endClass();
 
-
+		// Setting
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Setting>("Setting")
 			.addConstructor<void(*)(string)>()
@@ -159,6 +189,13 @@ namespace Cog {
 			.addFunction("GetValBool", &SettingItem::GetValBool)
 			.endClass();
 
+
+		// xmlSettings
+		luabridge::getGlobalNamespace(L)
+			.beginClass<spt<ofxXml>>("ofxXml")
+			.addConstructor<void(*)()>()
+			.endClass();
+
 		BehaviorLua::InitLuaMapping(L);
 		MsgLua::InitLuaMapping(L);
 		NodeLua::InitLuaMapping(L);
@@ -167,6 +204,7 @@ namespace Cog {
 		ComponentLua::InitLuaMapping(L);
 		ResourcesLua::InitLuaMapping(L);
 		StageLua::InitLuaMapping(L);
+		NodeBuilderLua::InitLuaMapping(L);
 	}
 
 } // namespace

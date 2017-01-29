@@ -8,6 +8,10 @@
 #include "BehaviorLua.h"
 #include "Mesh.h"
 #include <LuaBridge.h>
+#include "AttribAnimator.h"
+#include "Scene.h"
+
+using namespace luabridge;
 
 namespace Cog {
 
@@ -34,12 +38,14 @@ namespace Cog {
 		node->Draw(delta, absolute);
 	}
 
-	bool NodeLua::AddBehavior(BehaviorLua* beh) {
-		beh->SetOwnerLua(this);
+	bool NodeLua::AddBehavior(Behavior* beh) {
+		if (beh->IsExternal()) {
+			static_cast<BehaviorLua*>(beh)->SetOwnerLua(this);
+		}
 		return node->AddBehavior(beh);
 	}
 
-	bool NodeLua::RemoveBehavior(BehaviorLua* beh, bool erase) {
+	bool NodeLua::RemoveBehavior(Behavior* beh, bool erase) {
 		return node->RemoveBehavior(beh, erase);
 	}
 
@@ -69,6 +75,10 @@ namespace Cog {
 
 	void NodeLua::SetParent(NodeLua* val) {
 		node->SetParent(val->node);
+	}
+
+	SceneLua* NodeLua::GetScene() const {
+		return new SceneLua(node->GetScene());
 	}
 
 	int NodeLua::GetId() const {
@@ -208,14 +218,23 @@ namespace Cog {
 	}
 
 	void NodeLua::InitLuaMapping(luabridge::lua_State* L) {
+
 		luabridge::getGlobalNamespace(L)
 			.beginClass<NodeLua>("Node")
 			.addConstructor<void(*)(string)>()
 			.addProperty("id", &NodeLua::GetId)
 			.addProperty("parent", &NodeLua::GetParent, &NodeLua::SetParent)
+			.addProperty("scene", &NodeLua::GetScene)
 			.addProperty("tag", &NodeLua::GetTag)
 			.addProperty("transform", &NodeLua::GetTransform, &NodeLua::SetTransform)
 			.addFunction("AddBehavior", &NodeLua::AddBehavior)
+
+			// specify all polymorphic objects here!
+			.addFunction("AddBehavior", static_cast<bool(NodeLua::*)(Behavior*)> (&NodeLua::AddBehavior))
+			.addFunction("AddBehavior", reinterpret_cast<bool(NodeLua::*)(BehaviorLua*)> (&NodeLua::AddBehavior))
+			.addFunction("AddBehavior", reinterpret_cast<bool(NodeLua::*)(AttribAnimator*)> (&NodeLua::AddBehavior))
+
+
 			.addFunction("AddChild", &NodeLua::AddChild)
 			.addFunction("Draw", &NodeLua::Draw)
 			.addFunction("HasAttr", &NodeLua::HasAttr)

@@ -18,7 +18,7 @@ namespace Cog {
 		int reference = 0;
 		luabridge::lua_State* L;
 	public:
-		
+
 		NodeLua* ownerLua = nullptr;
 
 		BehaviorLua();

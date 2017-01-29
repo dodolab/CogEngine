@@ -5,6 +5,8 @@ using namespace std;
 
 #include "StrId.h"
 #include "Vec2i.h"
+#include "Definitions.h"
+#include "Settings.h"
 
 namespace luabridge {
 	struct lua_State;
@@ -57,6 +59,10 @@ namespace Cog {
 		static void CogLogDebug(string module, string message);
 		
 		static void CogStopAllSounds();
+
+		// =================== Resources =========================
+		static spt<ofxXmlSettings> CogPreloadXMLFile(string path);
+
 
 		// =================== Raw functions =========================
 
