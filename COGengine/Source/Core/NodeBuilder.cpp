@@ -38,7 +38,7 @@ namespace Cog {
 	}
 
 	void NodeBuilder::CreateAnimationNode(Node* node, string animName) {
-		spt<SheetAnim> animation = CogGetAnimation(animName);
+		spt<SheetAnim> animation = CogGetSheetAnimation(animName);
 		node->AddBehavior(new SheetAnimator(animation));
 	}
 
@@ -370,8 +370,9 @@ namespace Cog {
 				width = height = xml->getAttributex("size", 1.0);
 			}
 			else {
-				width = xml->getAttributex("width", 0);
-				height = xml->getAttributex("height", 0);
+				// default size 1x1
+				width = xml->getAttributex("width", 1);
+				height = xml->getAttributex("height", 1);
 			}
 
 			ofVec2f size = ofVec2f(width, height);

@@ -1,6 +1,7 @@
 #include "SheetAnim.h"
 #include "Utils.h"
 #include "Error.h"
+#include "Facade.h"
 
 namespace Cog {
 
@@ -80,6 +81,14 @@ namespace Cog {
 		}
 
 		sheetInit = true;
+	}
+
+	void SheetAnim::PreloadImages() {
+		auto& sheetPaths = GetSheetPaths();
+		// preload images
+		for (auto sheet : sheetPaths) {
+			CogGet2DImage(sheet);
+		}
 	}
 
 	spt<GeneralAnim> SheetAnim::Clone() {

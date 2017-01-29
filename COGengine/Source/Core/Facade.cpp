@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "ComponentStorage.h"
 #include "AsyncProcess.h"
+#include "AttribAnim.h"
 
 namespace Cog {
 
@@ -200,8 +201,16 @@ namespace Cog {
 		return ofxCogEngine::GetInstance().resources->LoadXMLFile(path);
 	}
 
-	spt<SheetAnim> CogGetAnimation(string name) {
-		return static_pointer_cast<SheetAnim>(ofxCogEngine::GetInstance().resources->GetAnimation(name));
+	spt<GeneralAnim> CogGetAnimation(string name) {
+		return ofxCogEngine::GetInstance().resources->GetAnimation(name);
+	}
+
+	spt<SheetAnim> CogGetSheetAnimation(string name) {
+		return static_pointer_cast<SheetAnim>(CogGetAnimation(name));
+	}
+
+	spt<AttribAnim> CogGetAttribAnimation(string name) {
+		return static_pointer_cast<AttribAnim>(CogGetAnimation(name));
 	}
 
 	void CogStoreAnimation(spt<SheetAnim> anim) {

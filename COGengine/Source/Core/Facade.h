@@ -19,6 +19,8 @@ namespace Cog {
 	class MsgPayload;
 	class InputAct;
 	class SheetAnim;
+	class GeneralAnim;
+	class AttribAnim;
 	class AsyncProcess;
 
 	ComponentStorage* CogGetComponentStorage();
@@ -85,8 +87,10 @@ namespace Cog {
 	Soundfx* CogGetSound(string path);
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
-	spt<SheetAnim> CogGetAnimation(string name);
-
+	spt<GeneralAnim> CogGetAnimation(string name);
+	spt<SheetAnim> CogGetSheetAnimation(string name);
+	spt<AttribAnim> CogGetAttribAnimation(string name);
+		
 	void CogStoreAnimation(spt<SheetAnim> anim);
 	Settings& CogGetGlobalSettings();
 	Settings& CogGetDefaultSettings();

@@ -200,9 +200,12 @@ namespace Cog {
 			return sheets;
 		}
 
+		/**
+		* Preloads all images
+		*/
+		void PreloadImages();
+
 		virtual spt<GeneralAnim> Clone();
 	};
-
-
 
 }// namespace
