@@ -71,10 +71,16 @@ namespace Cog {
 		AttributeType attributeType = AttributeType::NONE;
 		// initial value of the animation
 		float fromVal = 0;
+		// multiplier value of initial animation (used when the initial value is taken from object)
+		float fromValMult = 0;
 		// final value of the animation
 		float toVal = 0;
+		// multiplier value of final animation (used when the final value is taken from object)
+		float toValMult = 0;
 		// if true, fromVal attribute is taken from actual state of the object
 		bool takeInitialFromObject = false;
+		// if true. toVal attribute is taken from actual state of the object
+		bool takeFinalFromObject = false;
 		// duration in ms
 		int duration = 0;
 		// start time of the animation in ms (needed when there is more than one animation at a time)

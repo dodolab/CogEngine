@@ -71,8 +71,8 @@ namespace Cog {
 		node->SetMesh(spriteShape);
 	}
 
-	void NodeBuilder::CreatePlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
-		auto planeShape = CreatePlaneMesh(size, color);
+	void NodeBuilder::CreateRectangleNode(Node* node, ofVec2f size, ofColor color, bool noFill) {
+		auto planeShape = CreateRectangleMesh(size, color);
 		planeShape->SetNoFill(noFill);
 		node->SetMesh(planeShape);
 	}
@@ -126,8 +126,8 @@ namespace Cog {
 		return CreateSpriteMesh(scene, layer, "", row, column);
 	}
 
-	spt<Plane> NodeBuilder::CreatePlaneMesh(ofVec2f size, ofColor color) {
-		spt<Plane> plane = spt<Plane>(new Plane(size.x, size.y));
+	spt<Rectangle> NodeBuilder::CreateRectangleMesh(ofVec2f size, ofColor color) {
+		spt<Rectangle> plane = spt<Rectangle>(new Rectangle(size.x, size.y));
 		plane->SetColor(color);
 		return plane;
 	}
@@ -165,9 +165,6 @@ namespace Cog {
 	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
 
 		Node* node = new Node(NodeType::OBJECT, 0, name);
-		// set default shape as 1x1 rectangle; its size will be specified during transformation
-		node->SetMesh(spt<Rectangle>(new Rectangle(1,1)));
-
 		return node;
 	}
 
@@ -364,7 +361,7 @@ namespace Cog {
 		else if (renderType == MeshType::LABEL) {
 			this->LoadLabelFromXml(xml, node, node->GetParent());
 		}
-		else if (renderType == MeshType::PLANE) {
+		else if (renderType == MeshType::RECTANGLE) {
 			float width = 0;
 			float height = 0;
 
@@ -381,7 +378,7 @@ namespace Cog {
 			string colorStr = xml->getAttributex("color", "0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
 			bool noFill = xml->getBoolAttributex("no_fill", false);
-			CreatePlaneNode(node, size, color, noFill);
+			CreateRectangleNode(node, size, color, noFill);
 		}
 		else if (renderType == MeshType::SPRITE) {
 			string layer = xml->getAttributex("layer", "");
@@ -403,6 +400,7 @@ namespace Cog {
 
 			CreateBoundingBoxNode(scene, node, color, margin, renderable);
 		}
+
 	}
 
 	string NodeBuilder::checkResource(string value) {

@@ -29,7 +29,7 @@ namespace Cog {
 				// aspect ratio is defined in form xxx/yyy
 				int dividerIndex = aspectRatio.find("/");
 
-				if (dividerIndex == -1) {
+				if (dividerIndex == string::npos) {
 					CogLogError("Environment","Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str());
 				}
 

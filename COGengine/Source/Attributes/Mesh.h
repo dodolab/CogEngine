@@ -17,10 +17,9 @@ namespace Cog {
 	* Type of a mesh
 	*/
 	enum class MeshType {
-		NONE,				/** Undefined */
+		NONE,				/** Without mesh */
 		IMAGE,				/** 2D image */
-		RECTANGLE,			/** Unrenderable rectangle */
-		PLANE,				/** Renderable rectangle */
+		RECTANGLE,			/** rectangle */
 		TEXT,				/** 2D text */
 		LABEL,				/** Text not affected by transformations */
 		SPRITE,				/** 2D sprite */
@@ -29,6 +28,7 @@ namespace Cog {
 	};
 
 	class Node;
+	void CogLogError(const char* module, const char* format, ...);
 
 	/**
 	* Base class for meshes
@@ -37,12 +37,18 @@ namespace Cog {
 	protected:
 		MeshType meshType = MeshType::NONE;
 		ofColor color;
+		float width = 1;
+		float height = 1;
 	public:
 
 		Mesh() {
 		}
 
 		Mesh(MeshType meshType) : meshType(meshType) {
+
+		}
+
+		Mesh(MeshType meshType, float width, float height) : meshType(meshType), width(width), height(height) {
 
 		}
 
@@ -65,51 +71,19 @@ namespace Cog {
 			this->color = color;
 		}
 
-		/**
-		* Gets width of the mesh
-		* If undefined, it returns 1
-		*/
 		virtual float GetWidth() const {
-			return 1; 
-		}
-
-		/**
-		* Gets height of the mesh
-		* If undefined, it returns 1
-		*/
-		virtual float GetHeight() const {
-			return 1; 
-		}
-	};
-
-
-	/**
-	* Nonrenderable rectangle, used primarily for 
-	* transformation calculations
-	*/
-	class Rectangle : public Mesh {
-	private:
-		float width = 0;
-		float height = 0;
-
-	public:
-		Rectangle(float width, float height) 
-			: width(width), height(height), Mesh(MeshType::RECTANGLE) {
-		}
-
-		float GetWidth() const{
 			return width;
 		}
 
-		void SetWidth(float width) {
+		virtual void SetWidth(float width) {
 			this->width = width;
 		}
 
-		float GetHeight() const {
+		virtual float GetHeight() const {
 			return height;
 		}
 
-		void SetHeight(float height)  {
+		virtual void SetHeight(float height) {
 			this->height = height;
 		}
 	};
@@ -117,32 +91,15 @@ namespace Cog {
 	/**
 	* Renderable rectangle
 	*/
-	class Plane : public Mesh {
+	class Rectangle : public Mesh {
 	private:
-		float width = 0;
-		float height = 0;
 		// indicator, if only borders should be drawn
 		bool noFill = false;
-
+		// indicator, if the rectangle is renderable at all
+		bool renderable = true;
 	public:
-		Plane(float width, float height) 
-			: width(width), height(height), Mesh(MeshType::PLANE) {
-		}
-
-		float GetWidth() const {
-			return width;
-		}
-
-		void SetWidth(float width) {
-			this->width = width;
-		}
-
-		float GetHeight() const {
-			return height;
-		}
-
-		void SetHeight(float height) {
-			this->height = height;
+		Rectangle(float width, float height)
+			: Mesh(MeshType::RECTANGLE, width, height) {
 		}
 
 		/**
@@ -158,6 +115,20 @@ namespace Cog {
 		void SetNoFill(bool noFill) {
 			this->noFill = noFill;
 		}
+
+		/**
+		* Gets indicator whether the rectangle is renderable
+		*/
+		bool IsRenderable() const {
+			return renderable;
+		}
+
+		/**
+		* Sets indicator whether the rectangle is renderable
+		*/
+		void SetIsRenderable(bool isRenderable) {
+			this->renderable = isRenderable;
+		}
 	};
 
 	/**
@@ -169,10 +140,10 @@ namespace Cog {
 	public:
 
 		Image(spt<ofImage> img) : Mesh(MeshType::IMAGE) {
-			this->image = img; 
+			this->image = img;
 		}
 
-		spt<ofImage> GetImage(){
+		spt<ofImage> GetImage() {
 			if (!image->isUsingTexture()) {
 				// preloaded images must be updated before the first use
 				image->setUseTexture(true);
@@ -191,6 +162,14 @@ namespace Cog {
 
 		float GetHeight() const {
 			return image->getHeight();
+		}
+
+		void SetWidth(float width) {
+			CogLogError("Mesh", "Width of mesh of type Image can't be changed!");
+		}
+
+		void SetHeight(float height) {
+			CogLogError("Mesh", "Height of mesh of type Image can't be changed!");
 		}
 	};
 
@@ -222,7 +201,14 @@ namespace Cog {
 
 		float GetHeight() const {
 			return GetTextHeight();
-		
+		}
+
+		void SetWidth(float width) {
+			CogLogError("Mesh", "Width of mesh of type Text can't be changed!");
+		}
+
+		void SetHeight(float height) {
+			CogLogError("Mesh", "Height of mesh of type Text can't be changed!");
 		}
 
 		/**
@@ -247,7 +233,7 @@ namespace Cog {
 		}
 
 		void SetText(string text) {
-			stream.str(""); 
+			stream.str("");
 			stream << text;
 		}
 
@@ -267,7 +253,7 @@ namespace Cog {
 	protected:
 		int labelWidth;
 	public:
-		
+
 		/**
 		* Creates a new label
 		* @param font font of the label
@@ -299,6 +285,22 @@ namespace Cog {
 
 		void SetFont(spt<ofTrueTypeFont> font) {
 			this->font = font;
+		}
+
+		float GetWidth() const {
+			return 1;
+		}
+
+		float GetHeight() const {
+			return 1;
+		}
+
+		void SetWidth(float width) {
+			CogLogError("Mesh", "Width of mesh of type Label can't be changed!");
+		}
+
+		void SetHeight(float height) {
+			CogLogError("Mesh", "Height of mesh of type Label can't be changed!");
 		}
 	};
 
@@ -335,10 +337,26 @@ namespace Cog {
 			this->sprite = sprite;
 		}
 
-		spt<SpriteSet> GetSpriteSet(){
+		spt<SpriteSet> GetSpriteSet() {
 			return spriteSet;
 		}
 
+
+		float GetWidth() const {
+			return sprite.GetWidth();
+		}
+
+		float GetHeight() const {
+			return sprite.GetHeight();
+		}
+
+		void SetWidth(float width) {
+			CogLogError("Mesh", "Width of mesh of type Sprite can't be changed!");
+		}
+
+		void SetHeight(float height) {
+			CogLogError("Mesh", "Height of mesh of type Sprite can't be changed!");
+		}
 	};
 
 	/**
@@ -347,21 +365,20 @@ namespace Cog {
 	class MultiSpriteMesh : public Mesh {
 	private:
 		vector<spt<SpriteInst>> sprites;
-		
-		// width that is recalculated with each new sprite
-		int width = 1;
-		// height that is recalculated with each new sprite
-		int height = 1;
 		// name of the layer or sprite sheet this sprites is made of
 		string layerName;
-		
+
 	public:
 		MultiSpriteMesh(string layerName)
 			: Mesh(MeshType::MULTISPRITE), layerName(layerName) {
+			width = 1;
+			height = 1;
 		}
 
 		MultiSpriteMesh(string layerName, vector<spt<SpriteInst>>& sprites)
 			: Mesh(MeshType::MULTISPRITE), layerName(layerName), sprites(sprites) {
+			width = 1;
+			height = 1;
 			Recalc();
 		}
 
@@ -380,8 +397,8 @@ namespace Cog {
 		void RefreshZIndex();
 
 		/**
-		* Adds a new sprite 
-		* Note: don't forget to call RefreshZIndex when finish 
+		* Adds a new sprite
+		* Note: don't forget to call RefreshZIndex when finish
 		*/
 		void AddSprite(spt<SpriteInst> entity) {
 			sprites.push_back(entity);
@@ -414,6 +431,14 @@ namespace Cog {
 		float GetHeight() const {
 			return (float)height;
 		}
+
+		void SetWidth(float width) {
+			CogLogError("Mesh", "Width of mesh of type MultiSprite can't be changed!");
+		}
+
+		void SetHeight(float height) {
+			CogLogError("Mesh", "Height of mesh of type MultiSprite can't be changed!");
+		}
 	};
 
 	/**
@@ -422,8 +447,6 @@ namespace Cog {
 	*/
 	class BoundingBox : public Mesh {
 	private:
-		float width = 0;
-		float height = 0;
 		// indicator, if the box should be rendered
 		bool renderable = true;
 		ofRectangle boundingBox;
@@ -438,26 +461,11 @@ namespace Cog {
 		* @param margin margin in percentage size of the inner box
 		* @param renderable indicator whether this box should be rendered
 		*/
-		BoundingBox(float width, float height, float margin, bool renderable) 
-			: width(width), height(height), margin(margin), renderable(renderable),
-			Mesh(MeshType::BOUNDING_BOX) {
+		BoundingBox(float width, float height, float margin, bool renderable)
+			: margin(margin), renderable(renderable),
+			Mesh(MeshType::BOUNDING_BOX, width, height) {
 		}
 
-		float GetWidth() const {
-			return width;
-		}
-
-		void SetWidth(float width) {
-			this->width = width;
-		}
-
-		float GetHeight() const {
-			return height;
-		}
-
-		void SetHeight(float height) {
-			this->height = height;
-		}
 
 		/**
 		* Gets indicator whether this box should be rendered

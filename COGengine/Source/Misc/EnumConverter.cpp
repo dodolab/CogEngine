@@ -21,9 +21,6 @@ namespace Cog {
 		else if (val.compare("text") == 0) {
 			return MeshType::TEXT;
 		}
-		else if (val.compare("plane") == 0) {
-			return MeshType::PLANE;
-		}
 		else if (val.compare("sprite") == 0) {
 			return MeshType::SPRITE;
 		}

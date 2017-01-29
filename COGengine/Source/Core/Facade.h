@@ -86,6 +86,7 @@ namespace Cog {
 	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
 	spt<ofxXmlSettings> CogLoadXMLFile(string path);
 	spt<SheetAnim> CogGetAnimation(string name);
+
 	void CogStoreAnimation(spt<SheetAnim> anim);
 	Settings& CogGetGlobalSettings();
 	Settings& CogGetDefaultSettings();

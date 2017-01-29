@@ -124,9 +124,6 @@ namespace Cog {
 		else if (owner->HasMeshType(MeshType::RECTANGLE)) {
 			hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
 		}
-		else if (owner->HasMeshType(MeshType::PLANE)) {
-			hasHitTest = CShapeHitTest(owner->GetMesh<Plane>(), touchTrans);
-		}
 		else if (owner->HasMeshType(MeshType::BOUNDING_BOX)) {
 			hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
 		}

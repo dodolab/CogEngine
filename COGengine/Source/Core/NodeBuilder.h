@@ -106,13 +106,13 @@ namespace Cog {
 		void CreateSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column);
 
 		/**
-		* Fills given node with plane mesh (visible rectangle)
+		* Fills given node with rectangle mesh
 		* @param node node to fill
 		* @param size rectangle size in pixels
 		* @param color rectangle color
 		* @param noFill indicator whether the rectangle should be filled
 		*/
-		void CreatePlaneNode(Node* node, ofVec2f size, ofColor color, bool noFill);
+		void CreateRectangleNode(Node* node, ofVec2f size, ofColor color, bool noFill);
 
 		/**
 		* Fills given node with bounding box (a box whose size is set according to its children)
@@ -145,11 +145,11 @@ namespace Cog {
 		spt<SpriteMesh> CreateSpriteMesh(Scene* scene, string layer, string spriteSet, int row, int column);
 
 		/**
-		* Creates a plane mesh (renderable rectangle)
-		* @param size plane size
-		* @param color plane color
+		* Creates a rectangle mesh 
+		* @param size rectangle size
+		* @param color rectangle color
 		*/
-		spt<Plane> CreatePlaneMesh(ofVec2f size, ofColor color);
+		spt<Rectangle> CreateRectangleMesh(ofVec2f size, ofColor color);
 
 		/**
 		* Creates a behavior from given description entity (usually loaded from xml)

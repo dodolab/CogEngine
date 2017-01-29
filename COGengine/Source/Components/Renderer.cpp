@@ -130,7 +130,6 @@ namespace Cog {
 					switch (node->GetMesh()->GetMeshType()) {
 					case MeshType::IMAGE:
 					case MeshType::RECTANGLE:
-					case MeshType::PLANE:
 					case MeshType::TEXT:
 					case MeshType::LABEL:
 					case MeshType::BOUNDING_BOX:
@@ -166,8 +165,8 @@ namespace Cog {
 				case MeshType::IMAGE:
 					RenderImage(node);
 					break;
-				case MeshType::PLANE:
-					RenderPlane(node);
+				case MeshType::RECTANGLE:
+					RenderRectangle(node);
 					break;
 				case MeshType::TEXT:
 					RenderText(node);
@@ -208,29 +207,34 @@ namespace Cog {
 		}
 	}
 
-	void Renderer::RenderPlane(Node* owner) {
+	void Renderer::RenderRectangle(Node* owner) {
 		auto trans = owner->GetTransform();
-		// load absolute matrix
-		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
-		ofLoadMatrix(absM);
+		spt<Rectangle> rect = static_pointer_cast<Rectangle>(owner->GetMesh());
 
-		ofSetColor(0x000000ff);
-		spt<Plane> rect = static_pointer_cast<Plane>(owner->GetMesh());
+		if (rect->IsRenderable()) {
+			// load absolute matrix
+			ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
+			ofLoadMatrix(absM);
 
-		ofColor color = rect->GetColor();
-		ofSetColor(color);
-		
-		if (rect->IsNoFill()) {
-			// render just border
-			ofNoFill();
-			ofSetLineWidth(1);
+			ofSetColor(0x000000ff);
+
+
+			ofColor color = rect->GetColor();
+			ofSetColor(color);
+
+
+			if (rect->IsNoFill()) {
+				// render just border
+				ofNoFill();
+				ofSetLineWidth(1);
+			}
+			else {
+				ofFill();
+				ofSetLineWidth(0);
+			}
+
+			ofRect(0, 0, 0, rect->GetWidth(), rect->GetHeight());
 		}
-		else {
-			ofFill();
-			ofSetLineWidth(0);
-		}
-		
-		ofRect(0, 0, 0, rect->GetWidth(), rect->GetHeight());
 	}
 
 	void Renderer::RenderText(Node* owner) {

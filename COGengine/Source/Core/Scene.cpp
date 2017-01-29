@@ -323,8 +323,8 @@ namespace Cog {
 	void Scene::CreateSceneNode() {
 		sceneNode = new Node(NodeType::SCENE, 0, name);
 		sceneNode->SetScene(this);
-		// default mesh is a rectangle with the size of the window
-		sceneNode->SetMesh(spt<Mesh>(new Rectangle((float)CogGetScreenWidth(), (float)CogGetScreenHeight())));
+		sceneNode->GetMesh()->SetWidth((float)CogGetScreenWidth());
+		sceneNode->GetMesh()->SetWidth((float)CogGetScreenHeight());
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {

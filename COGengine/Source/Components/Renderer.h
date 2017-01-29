@@ -91,10 +91,10 @@ namespace Cog {
 		void RenderImage(Node* owner);
 
 		/**
-		* Renders a plane
-		* @param owner node with plane shape
+		* Renders a rectangle
+		* @param owner node with rectangle shape
 		*/
-		void RenderPlane(Node* owner);
+		void RenderRectangle(Node* owner);
 
 		/**
 		* Renders a text

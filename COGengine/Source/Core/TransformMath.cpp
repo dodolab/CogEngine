@@ -5,11 +5,11 @@
 namespace Cog {
 
 	void TransformMath::SetSizeToScreen(Node* node, Node* parent) {
-		SetTransform(node, parent, TransformEnt("",ofVec2f(0, 0), 1, 
-			CalcType::PER, 
-			ofVec2f(0, 0), 
+		SetTransform(node, parent, TransformEnt("", ofVec2f(0, 0), 1,
+			CalcType::PER,
+			ofVec2f(0, 0),
 			ofVec2f(1, 0), // zero because we want to scale according to the x axis
-			CalcType::ABS_PER,0), 0, 0);
+			CalcType::ABS_PER, 0), 0, 0);
 	}
 
 	void TransformMath::SetTransform(Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
@@ -21,11 +21,15 @@ namespace Cog {
 		auto shape = node->GetMesh();
 
 		// for rectangles, width and height are set directly instead of scale
-		if ((shape->GetMeshType() == MeshType::RECTANGLE) || shape->GetMeshType() == MeshType::BOUNDING_BOX) {
+		switch (shape->GetMeshType()) {
+		case MeshType::NONE:
+		case MeshType::RECTANGLE:
+		case MeshType::BOUNDING_BOX:
 			auto rectShape = node->GetMesh<Rectangle>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
 			nodeTransform.scale = ofVec3f(1);
+			break;
 		}
 
 		// refresh transform (recalculate from parent)
