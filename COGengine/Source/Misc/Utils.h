@@ -23,6 +23,14 @@ namespace Cog {
 		return fabs(a - b) < 1E-12;
 	}
 
+	inline bool isEqualOrGreater(float a, float b) {
+		return a > b || isEqual(a, b);
+	}
+
+	inline bool isEqualOrLower(float a, float b) {
+		return a < b || isEqual(a, b);
+	}
+
 	/**
 	* Creates formatted string
 	*/

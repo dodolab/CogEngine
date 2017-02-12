@@ -73,6 +73,9 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{a5ebd339-aa16-4da3-8221-0f7c351e69da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Builders">
+      <UniqueIdentifier>{f7983e9e-9d71-4c9d-ada8-754171c9507a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -645,6 +648,12 @@
     <ClInclude Include="Source\Scripting\NodeBuilderLua.h">
       <Filter>Source\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Entities\TimeLine.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Builders\TimeLineBuilder.h">
+      <Filter>Source\Builders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -1030,6 +1039,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scripting\NodeBuilderLua.cpp">
       <Filter>Source\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities\TimeLine.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Builders\TimeLineBuilder.cpp">
+      <Filter>Source\Builders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

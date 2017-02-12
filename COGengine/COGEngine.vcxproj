@@ -268,6 +268,7 @@
     <ClInclude Include="Source\Behaviors\SteeringBehavior.h" />
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
+    <ClInclude Include="Source\Builders\TimeLineBuilder.h" />
     <ClInclude Include="Source\Communication\UpdateInfo.h" />
     <ClInclude Include="Source\Communication\UpdateMessage.h" />
     <ClInclude Include="Source\Communication\NetMessage.h" />
@@ -312,6 +313,7 @@
     <ClInclude Include="Source\Entities\DEntity.h" />
     <ClInclude Include="Source\Entities\LayerEnt.h" />
     <ClInclude Include="Source\Entities\AttrAnimEnt.h" />
+    <ClInclude Include="Source\Entities\TimeLine.h" />
     <ClInclude Include="Source\Entities\TransformEnt.h" />
     <ClInclude Include="Source\Graphics\AnimContextStack.h" />
     <ClInclude Include="Source\Graphics\AttribAnim.h" />
@@ -537,6 +539,7 @@
     <ClCompile Include="Source\Behaviors\SteeringBehavior.cpp" />
     <ClCompile Include="Source\Behaviors\TransformAnim.cpp" />
     <ClCompile Include="Source\Behaviors\Tween.cpp" />
+    <ClCompile Include="Source\Builders\TimeLineBuilder.cpp" />
     <ClCompile Include="Source\Communication\UpdateMessage.cpp" />
     <ClCompile Include="Source\Communication\NetMessage.cpp" />
     <ClCompile Include="Source\Communication\NetReader.cpp" />
@@ -570,6 +573,7 @@
     <ClCompile Include="Source\Entities\AttrAnimEnt.cpp" />
     <ClCompile Include="Source\Entities\BehaviorEnt.cpp" />
     <ClCompile Include="Source\Entities\LayerEnt.cpp" />
+    <ClCompile Include="Source\Entities\TimeLine.cpp" />
     <ClCompile Include="Source\Entities\TransformEnt.cpp" />
     <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
     <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
