@@ -42,3 +42,7 @@ COGenginelab/gen/
 Examples/Scenes/obj/
 Examples/Scenes/bin/
 Examples/Scenes/Scenes.VC.db
+Tests/obj/
+Tests/bin/
+Tests/Tests.VC.VC.opendb
+Tests/Tests.VC.db

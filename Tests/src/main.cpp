@@ -3,6 +3,7 @@
 // tests can run only in debug mode
 #ifdef _DEBUG
 
+/*
 #include "FlagsTest.h"
 #include "TransformTest.h"
 #include "SQLTest.h"
@@ -17,6 +18,9 @@
 #include "MonteCarloTest.h"	
 #include "CoroutineTest.h"
 #include "MathTest.h"
+*/
+
+#include "TimelineTest.h"
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

@@ -373,6 +373,7 @@
     <ClInclude Include="Source\Tests\StateMachineTest.h" />
     <ClInclude Include="Source\Tests\StateMachineTestAssets.h" />
     <ClInclude Include="Source\Tests\StrIdTest.h" />
+    <ClInclude Include="Source\Tests\TimelineTest.h" />
     <ClInclude Include="Source\Tests\TransformTest.h" />
     <ClInclude Include="Source\Tests\TransformTestAssets.h" />
   </ItemGroup>

@@ -18,7 +18,7 @@ namespace Cog {
 
 		}
 
-		KeyFrame(StrId valueId, float time) : valueId(valueId), time(time) {
+		KeyFrame(StrId valueId, int time) : valueId(valueId), time(time) {
 
 		}
 
@@ -26,7 +26,7 @@ namespace Cog {
 		StrId valueId;
 		FadeFunction interpolation = EasingFunc::linear;
 		// the time the keyframe is located
-		float time;
+		int time;
 
 		bool operator==(const KeyFrame& other) {
 			return valueId == other.valueId && isEqual(time, other.time);
@@ -60,36 +60,53 @@ namespace Cog {
 		map<int, vector<KeyFrame>> keyframeBlocksRight;
 		vector<StaticAnim> staticAnimations;
 
-		float length = 1;
-		float speed = 1;
+		int length = 1;
+		int speed = 1;
+		int blocks = TIMELINE_BLOCKS;
 
 	public:
+
+		TimeLine() {
+
+		}
+
+		/**
+		* Creates a new timeline
+		* @param blocksPerMinute number of caching blocks within one minute
+		*/
+		TimeLine(int blocksPerMinute) {
+			this->blocks = blocksPerMinute;
+		}
+
+		int GetBlocksPerMinute() {
+			return blocks;
+		}
 
 		/**
 		* Gets length of the time line, defined as a portion of duration and speed
 		*/
-		float GetLength() const {
+		int GetLength() const {
 			return length;
 		}
 
 		/**
 		* Sets length of the time line, defined as a portion of duration and speed
 		*/
-		void SetLength(float length) {
+		void SetLength(int length) {
 			this->length = length;
 		}
 
 		/**
 		* Gets speed of the timeline
 		*/
-		float GetSpeed() const {
+		int GetSpeed() const {
 			return speed;
 		}
 
 		/**
 		* Sets speed of the timeline
 		*/
-		void SetSpeed(float speed) {
+		void SetSpeed(int speed) {
 			this->speed = speed;
 		}
 
@@ -97,11 +114,21 @@ namespace Cog {
 		* Gets duration in milliseconds
 		*/
 		int GetDuration() const {
-			return (int)(speed * length);
+			return speed * length;
 		}
 
 		bool ContainsKeyFrames(StrId valueId) const {
 			return keyframes.find(valueId) != keyframes.end();
+		}
+
+		int GetKeyFramesCount(StrId valueId) const {
+			auto found = keyframes.find(valueId);
+			if (found != keyframes.end()) {
+				return found->second.size();
+			}
+			else {
+				return 0;
+			}
 		}
 
 		vector<StaticAnim>& GetStaticAnims() {
@@ -114,18 +141,28 @@ namespace Cog {
 		}
 
 		/**
-		* Finds all keyframes that lie to the left on timeline
+		* Finds nearest keyframes of all types that lie to the left on timeline
 		*/
-		void GetKeyFramesToTheLeft(float time, vector<KeyFrame>& output) {
-			GetKeyFrames(time, true, output);
+		void GetNearestKeyFramesToTheLeft(int time, vector<KeyFrame>& output) {
+			GetNearestKeyFrames(time, true, output);
 		}
 
 		/**
-		* Finds all keyframes that lie to the right on timeline
+		* Finds nearest keyframes of all types that lie to the right on timeline
 		*/
-		void GetKeyFramesToTheRight(float time, vector<KeyFrame>& output) {
-			GetKeyFrames(time, false, output);
+		void GetNearestKeyFramesToTheRight(int time, vector<KeyFrame>& output) {
+			GetNearestKeyFrames(time, false, output);
 		}
+
+		/**
+		* Gets the first key frame of the selected action
+		*/
+		KeyFrame GetFirstKeyFrame(StrId action);
+
+		/**
+		* Gets the last key frame of the selected action
+		*/
+		KeyFrame GetLastKeyFrame(StrId action);
 
 		/**
 		* Gets the next keyframe from the selected keyframe
@@ -140,7 +177,7 @@ namespace Cog {
 		/**
 		* Inserts data from another timeline
 		*/
-		void InsertTimeLine(float timeFrom, TimeLine& innerTimeline);
+		void InsertTimeLine(int timeFrom, TimeLine& innerTimeline);
 
 		/**
 		* Inserts keyframe into timeline
@@ -149,13 +186,15 @@ namespace Cog {
 
 	protected:
 		inline int CalcTotalBlocks() {
-			return (int)((TIMELINE_BLOCKS / 60.0f) * ((speed * length) / 1000));
+			int total = (int)((blocks / 60.0f) * ((speed * length) / 1000.0f));
+			return total != 0 ? total : 1;
 		}
 
-		inline int CalcBlock(float time) {
-			return (int)((time / (speed * length)) * CalcTotalBlocks());
+		inline int CalcBlock(int time) {
+			return (int)((time / (1.0f * speed * length)) * CalcTotalBlocks());
 		}
-		void GetKeyFrames(float time, bool toTheLeft, vector<KeyFrame>& output);
+
+		void GetNearestKeyFrames(int time, bool toTheLeft, vector<KeyFrame>& output);
 
 		void RemoveKeyFrameFromBlock(int block, bool leftBlocks, KeyFrame& keyFrame);
 	};

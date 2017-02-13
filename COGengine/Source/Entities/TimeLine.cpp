@@ -2,6 +2,15 @@
 
 namespace Cog {
 
+
+	KeyFrame TimeLine::GetFirstKeyFrame(StrId action) {
+		return keyframes[action].at(0);
+	}
+
+	KeyFrame TimeLine::GetLastKeyFrame(StrId action) {
+		return keyframes[action].back();
+	}
+
 	KeyFrame TimeLine::GetNextKeyFrame(KeyFrame& frame) {
 		auto& frames = keyframes[frame.valueId];
 
@@ -29,7 +38,7 @@ namespace Cog {
 	}
 
 
-	void TimeLine::InsertTimeLine(float timeFrom, TimeLine& innerTimeline) {
+	void TimeLine::InsertTimeLine(int timeFrom, TimeLine& innerTimeline) {
 
 		// copy static animations
 		this->staticAnimations = innerTimeline.staticAnimations;
@@ -101,51 +110,55 @@ namespace Cog {
 		}
 		else {
 			// fill all other blocks
-			for (int i = actualBlock; i < CalcTotalBlocks(); i++) {
+			for (int i = actualBlock; i <= CalcTotalBlocks(); i++) {
 				keyframeBlocksRight[i].push_back(keyFrame);
 			}
 		}
 	}
 
-	void TimeLine::GetKeyFrames(float time, bool toTheLeft, vector<KeyFrame>& output) {
+	void TimeLine::GetNearestKeyFrames(int time, bool toTheLeft, vector<KeyFrame>& output) {
+		
+		// if the time is out of range of the time line, don't return anything
 		int actualBlock = CalcBlock(time);
+
 
 		map<StrId, KeyFrame> foundFrames;
 
-		auto& keyFramesLeft = keyframeBlocksLeft.find(actualBlock);
-		auto& keyFramesRight = keyframeBlocksRight.find(actualBlock);
+		if (toTheLeft) {
+			auto& keyFramesRight = keyframeBlocksRight.find(actualBlock);
 
-		if (keyFramesLeft != keyframeBlocksLeft.end()) {
-			for (auto& keyFrame : keyFramesLeft->second) {
-				if ((toTheLeft && isEqualOrLower(keyFrame.time, time)) || (!toTheLeft && isEqualOrGreater(keyFrame.time, time))) {
+			if (keyFramesRight != keyframeBlocksRight.end()) {
+				for (auto& keyFrame : keyFramesRight->second) {
+					if (isEqualOrLower(keyFrame.time, time)) {
 
-					auto foundFrame = foundFrames.find(keyFrame.valueId);
+						auto foundFrame = foundFrames.find(keyFrame.valueId);
 
-					if (foundFrame == foundFrames.end()
-						|| (toTheLeft && isEqualOrGreater(foundFrame->second.time, keyFrame.time))
-						|| (!toTheLeft && isEqualOrLower(foundFrame->second.time, keyFrame.time))) {
-						// keep only the nearest frame that has the same id
-						foundFrames[keyFrame.valueId] = keyFrame;
+						if (foundFrame == foundFrames.end() || (isEqualOrGreater(keyFrame.time, foundFrame->second.time))) {
+							// keep only the nearest frame that has the same id
+							foundFrames[keyFrame.valueId] = keyFrame;
+						}
+					}
+				}
+			}
+		}
+		else {
+			auto& keyFramesLeft = keyframeBlocksLeft.find(actualBlock);
+
+			if (keyFramesLeft != keyframeBlocksLeft.end()) {
+				for (auto& keyFrame : keyFramesLeft->second) {
+					if (isEqualOrGreater(keyFrame.time, time)) {
+
+						auto foundFrame = foundFrames.find(keyFrame.valueId);
+
+						if (foundFrame == foundFrames.end() || (isEqualOrLower(keyFrame.time, foundFrame->second.time))) {
+							// keep only the nearest frame that has the same id
+							foundFrames[keyFrame.valueId] = keyFrame;
+						}
 					}
 				}
 			}
 		}
 
-		if (keyFramesRight != keyframeBlocksRight.end()) {
-			for (auto& keyFrame : keyFramesRight->second) {
-				if ((toTheLeft && isEqualOrLower(keyFrame.time, time)) || (!toTheLeft && isEqualOrGreater(keyFrame.time, time))) {
-
-					auto foundFrame = foundFrames.find(keyFrame.valueId);
-
-					if (foundFrame == foundFrames.end()
-						|| (toTheLeft && isEqualOrGreater(foundFrame->second.time, keyFrame.time))
-						|| (!toTheLeft && isEqualOrLower(foundFrame->second.time, keyFrame.time))) {
-						// keep only the nearest frame that has the same id
-						foundFrames[keyFrame.valueId] = keyFrame;
-					}
-				}
-			}
-		}
 
 		for (auto& pair : foundFrames) {
 			output.push_back(pair.second);

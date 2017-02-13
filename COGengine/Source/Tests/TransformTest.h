@@ -20,6 +20,7 @@ using namespace Cog;
 
 
 
+
 TEST_CASE("Transformation test")
 {
 	ofxCogEngine::GetInstance().SetFps(20);
