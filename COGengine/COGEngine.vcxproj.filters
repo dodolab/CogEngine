@@ -76,6 +76,12 @@
     <Filter Include="Source\Builders">
       <UniqueIdentifier>{f7983e9e-9d71-4c9d-ada8-754171c9507a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdParty\jsonxx">
+      <UniqueIdentifier>{8ff98543-fc0f-482e-b240-c901bf0098e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdParty\pugixml">
+      <UniqueIdentifier>{cb91bc75-9ba5-4899-8090-9aae3fe6258e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -657,6 +663,15 @@
     <ClInclude Include="Source\Tests\TimelineTest.h">
       <Filter>Source\Tests</Filter>
     </ClInclude>
+    <ClInclude Include="3rdParty\jsonxx\jsonxx.h">
+      <Filter>3rdParty\jsonxx</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\pugixml\pugiconfig.h">
+      <Filter>3rdParty\pugixml</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdParty\pugixml\pugixml.h">
+      <Filter>3rdParty\pugixml</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">
@@ -1048,6 +1063,12 @@
     </ClCompile>
     <ClCompile Include="Source\Builders\TimeLineBuilder.cpp">
       <Filter>Source\Builders</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\jsonxx\jsonxx.cpp">
+      <Filter>3rdParty\jsonxx</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdParty\pugixml\pugixml.cpp">
+      <Filter>3rdParty\pugixml</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

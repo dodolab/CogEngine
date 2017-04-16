@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="F:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksCommon.props" />
+  <Import Project="H:\OF\OpenFrameworks\Win32\libs\openFrameworksCompiled\project\vs\openFrameworksCommon.props" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -184,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdParty\catch\catch.hpp" />
+    <ClInclude Include="3rdParty\jsonxx\jsonxx.h" />
     <ClInclude Include="3rdParty\luabridge\CFunctions.h" />
     <ClInclude Include="3rdParty\luabridge\ClassInfo.h" />
     <ClInclude Include="3rdParty\luabridge\Constructor.h" />
@@ -233,6 +234,8 @@
     <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h" />
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h" />
     <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h" />
+    <ClInclude Include="3rdParty\pugixml\pugiconfig.h" />
+    <ClInclude Include="3rdParty\pugixml\pugixml.h" />
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
     <ClInclude Include="3rdParty\tinyxml\tinyxml.h" />
     <ClInclude Include="Source\AI\ActionFilter.h" />
@@ -378,6 +381,7 @@
     <ClInclude Include="Source\Tests\TransformTestAssets.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="3rdParty\jsonxx\jsonxx.cpp" />
     <ClCompile Include="3rdParty\lua\lapi.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
@@ -513,6 +517,7 @@
     <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp" />
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp" />
     <ClCompile Include="3rdParty\ofxXmlSettings\ofxXmlSettings.cpp" />
+    <ClCompile Include="3rdParty\pugixml\pugixml.cpp" />
     <ClCompile Include="3rdParty\sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>

@@ -31,7 +31,6 @@ using namespace std;
 #include "ofxXmlSettings.h"
 #include "ofGraphics.h"
 #include "ofAppRunner.h"
-
 #pragma warning(pop)
 
 // include CogEngine
