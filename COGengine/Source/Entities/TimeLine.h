@@ -18,29 +18,35 @@ namespace Cog {
 
 		}
 
-		KeyFrame(StrId valueId, int time) : valueId(valueId), time(time) {
+		KeyFrame(StrId valueId, int time, float value) : valueId(valueId), time(time), value(value) {
 
 		}
 
 		// id of animated value
 		StrId valueId;
+		// interpolation function
 		FadeFunction interpolation = EasingFunc::linear;
+		// the point the interpolation should end <0,1>
+		float interpolationPoint = 1.0f;
 		// the time the keyframe is located
 		int time;
+		// actual value the object should have at given time
+		float value;
 
 		bool operator==(const KeyFrame& other) {
 			return valueId == other.valueId && isEqual(time, other.time);
 		}
+
 		bool operator!=(const KeyFrame& other) {
 			return valueId != other.valueId || !isEqual(time, other.time);
 		}
-	};
 
-	/**
-	* Static animation
-	*/
-	struct StaticAnim {
-
+		/**
+		* Calculates the actual value at given time
+		* @param next the next keyframe
+		* @param actualTime the actual time
+		*/
+		float CalcValue(const KeyFrame& next, int actualTime);
 	};
 
 
@@ -58,7 +64,6 @@ namespace Cog {
 		// keyframes ordered in blocks; each block contains list of all keyframes that can affect the block
 		// from their right border
 		map<int, vector<KeyFrame>> keyframeBlocksRight;
-		vector<StaticAnim> staticAnimations;
 
 		int length = 1;
 		int speed = 1;
@@ -131,11 +136,6 @@ namespace Cog {
 			}
 		}
 
-		vector<StaticAnim>& GetStaticAnims() {
-			return staticAnimations;
-		}
-
-
 		vector<KeyFrame>& GetKeyFramesById(StrId valueId) {
 			return keyframes[valueId];
 		}
@@ -157,22 +157,22 @@ namespace Cog {
 		/**
 		* Gets the first key frame of the selected action
 		*/
-		KeyFrame GetFirstKeyFrame(StrId action);
+		KeyFrame& GetFirstKeyFrame(StrId action);
 
 		/**
 		* Gets the last key frame of the selected action
 		*/
-		KeyFrame GetLastKeyFrame(StrId action);
+		KeyFrame& GetLastKeyFrame(StrId action);
 
 		/**
 		* Gets the next keyframe from the selected keyframe
 		*/
-		KeyFrame GetNextKeyFrame(KeyFrame& frame);
+		KeyFrame& GetNextKeyFrame(KeyFrame& frame);
 
 		/**
 		* Gets the previous keyframe from the selected keyframe
 		*/
-		KeyFrame GetPreviousKeyFrame(KeyFrame& frame);
+		KeyFrame& GetPreviousKeyFrame(KeyFrame& frame);
 
 		/**
 		* Inserts data from another timeline

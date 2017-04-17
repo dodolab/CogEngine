@@ -1,5 +1,4 @@
 #include "LuaScripting.h"
-
 #include "Definitions.h"
 #include "ComponentStorage.h"
 #include "Resources.h"

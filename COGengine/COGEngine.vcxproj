@@ -272,6 +272,7 @@
     <ClInclude Include="Source\Behaviors\TransformAnim.h" />
     <ClInclude Include="Source\Behaviors\Tween.h" />
     <ClInclude Include="Source\Builders\TimeLineBuilder.h" />
+    <ClInclude Include="Source\CogConfig.h" />
     <ClInclude Include="Source\Communication\UpdateInfo.h" />
     <ClInclude Include="Source\Communication\UpdateMessage.h" />
     <ClInclude Include="Source\Communication\NetMessage.h" />

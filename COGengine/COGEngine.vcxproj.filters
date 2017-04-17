@@ -672,6 +672,9 @@
     <ClInclude Include="3rdParty\pugixml\pugixml.h">
       <Filter>3rdParty\pugixml</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CogConfig.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Components\Environment.cpp">

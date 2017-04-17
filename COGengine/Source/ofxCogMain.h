@@ -35,6 +35,8 @@ using namespace std;
 
 // include CogEngine
 
+#include "CogConfig.h"
+
 #include "Constants.h"
 #include "Error.h"
 #include "TimeMeasure.h"

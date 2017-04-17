@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CogConfig.h"
 #include "Definitions.h"
 #include <vector>
 #include "ofxXmlSettings.h"

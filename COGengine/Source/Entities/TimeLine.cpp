@@ -1,17 +1,34 @@
 #include "TimeLine.h"
+#include "Facade.h"
+#include "Definitions.h"
+
 
 namespace Cog {
 
+	float KeyFrame::CalcValue(const KeyFrame& next, int actualTime) {
+		COGASSERT(valueId == next.valueId, "Timeline", "Incompatible keyframes. Value ids don't match!");
 
-	KeyFrame TimeLine::GetFirstKeyFrame(StrId action) {
+		if (actualTime < time) {
+			return value;
+		}
+
+		if (actualTime > next.time) {
+			return next.value;
+		}
+
+		// take interpolation configuration from the second keyframe
+		return value + (next.value - value) * next.interpolation(((float)(actualTime - time)) / (next.time - time) * next.interpolationPoint) / next.interpolationPoint;
+	}
+
+	KeyFrame& TimeLine::GetFirstKeyFrame(StrId action) {
 		return keyframes[action].at(0);
 	}
 
-	KeyFrame TimeLine::GetLastKeyFrame(StrId action) {
+	KeyFrame& TimeLine::GetLastKeyFrame(StrId action) {
 		return keyframes[action].back();
 	}
 
-	KeyFrame TimeLine::GetNextKeyFrame(KeyFrame& frame) {
+	KeyFrame& TimeLine::GetNextKeyFrame(KeyFrame& frame) {
 		auto& frames = keyframes[frame.valueId];
 
 		for (int i = 0; i < (frames.size() - 1); i++) {
@@ -24,7 +41,7 @@ namespace Cog {
 		return frame;
 	}
 
-	KeyFrame TimeLine::GetPreviousKeyFrame(KeyFrame& frame) {
+	KeyFrame& TimeLine::GetPreviousKeyFrame(KeyFrame& frame) {
 		auto& frames = keyframes[frame.valueId];
 
 		for (int i = 1; i < frames.size(); i++) {
@@ -39,10 +56,6 @@ namespace Cog {
 
 
 	void TimeLine::InsertTimeLine(int timeFrom, TimeLine& innerTimeline) {
-
-		// copy static animations
-		this->staticAnimations = innerTimeline.staticAnimations;
-
 		// insert keyFrames
 		for (auto& keyframePairs : innerTimeline.keyframes) {
 			for (auto& keyframe : keyframePairs.second) {
@@ -73,8 +86,8 @@ namespace Cog {
 		int actualBlock = CalcBlock(keyFrame.time);
 
 
-		KeyFrame previous = GetPreviousKeyFrame(keyFrame);
-		KeyFrame next = GetNextKeyFrame(keyFrame);
+		KeyFrame& previous = GetPreviousKeyFrame(keyFrame);
+		KeyFrame& next = GetNextKeyFrame(keyFrame);
 
 		int blockOfPrevious = CalcBlock(previous.time);
 		int blockOfNext = CalcBlock(next.time);
@@ -117,7 +130,7 @@ namespace Cog {
 	}
 
 	void TimeLine::GetNearestKeyFrames(int time, bool toTheLeft, vector<KeyFrame>& output) {
-		
+
 		// if the time is out of range of the time line, don't return anything
 		int actualBlock = CalcBlock(time);
 

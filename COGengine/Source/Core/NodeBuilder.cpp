@@ -180,7 +180,8 @@ namespace Cog {
 		TransformMath math = TransformMath();
 		Settings& settings = scene->GetSceneSettings();
 
-		string name = xml->getAttributex("name", "");
+		// in xml the tag can be under either tag or name attribute
+		string name = xml->getAttributex("tag", xml->getAttributex("name",""));
 		string img = xml->getAttributex("img", "");
 
 		Node* node = CreateNode(name, scene);
@@ -300,7 +301,7 @@ namespace Cog {
 
 			for (int i = 0; i < nodes; i++) {
 				nodesXml->pushTag("node", i);
-				string name = nodesXml->getAttributex("name", "");
+				string name = nodesXml->getAttributex("tag", nodesXml->getAttributex("name",""));
 				if (name.compare(nodeName) == 0) {
 					// use nodesXml to load its child 
 					Node* nodeToReturn = LoadNodeFromXml(nodesXml, parent, scene);

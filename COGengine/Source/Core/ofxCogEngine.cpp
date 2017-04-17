@@ -29,6 +29,10 @@
 #include "ofEvents.h"
 #include "ofAppRunner.h"
 
+#ifdef LUA_SCRIPTING
+#include "LuaScripting.h"
+#endif;
+
 namespace Cog {
 
 	ofxCogEngine::ofxCogEngine() {
@@ -159,6 +163,10 @@ namespace Cog {
 		REGISTER_COMPONENT(stage);
 		REGISTER_COMPONENT(renderer);
 		REGISTER_COMPONENT(inputHandler);
+
+#ifdef LUA_SCRIPTING
+		REGISTER_COMPONENT(new LuaScripting());
+#endif
 
 		auto sceneMgr = new SceneSwitchManager();
 		REGISTER_COMPONENT(sceneMgr);
