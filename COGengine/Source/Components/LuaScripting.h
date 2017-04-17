@@ -85,10 +85,12 @@ namespace Cog {
 		*/
 		int RegisterBehaviorPrototypeCt(luabridge::lua_State* L);
 
+		void LoadScript(ofFile file);
+
+		void LoadScript(string str);
+
 	protected:
 		void LoadAllScripts();
-
-		void LoadScript(ofFile file);
 	};
 
 }// namespace

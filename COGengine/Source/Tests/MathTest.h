@@ -12,15 +12,6 @@ using namespace Cog;
 
 
 
-
-
-
-
-
-
-
-
-
 TEST_CASE("MathTest")
 {
 	SECTION("AStarSearch simple path test")

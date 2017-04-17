@@ -82,6 +82,9 @@
     <Filter Include="3rdParty\pugixml">
       <UniqueIdentifier>{cb91bc75-9ba5-4899-8090-9aae3fe6258e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scripts">
+      <UniqueIdentifier>{4f7b120f-1263-4eff-8bfa-e2f21e65743c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Misc\SQLiteEntity.h">
@@ -1080,8 +1083,11 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\COGAssets\lua_base.lua">
-      <Filter>Assets</Filter>
+    <None Include="Data\COGAssets\Scripts\base.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Data\COGAssets\Scripts\enums.lua">
+      <Filter>Assets\Scripts</Filter>
     </None>
   </ItemGroup>
 </Project>

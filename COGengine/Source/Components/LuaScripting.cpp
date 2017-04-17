@@ -59,6 +59,43 @@ namespace Cog {
 		return 0; // number of return values
 	}
 
+	void LuaScripting::LoadScript(ofFile file) {
+
+		string name = file.getFileName();
+
+		COGLOGDEBUG("Lua", "Loading script %s", name.c_str());
+
+		int status = luaL_loadfile(L, file.getAbsolutePath().c_str());
+
+		if (status != 0) {
+			CogLogError("Lua", lua_tostring(L, -1));
+		}
+		else {
+			// run script
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				CogLogError("Lua", lua_tostring(L, -1));
+			}
+		}
+	}
+
+	void LuaScripting::LoadScript(string str) {
+
+		COGLOGDEBUG("Lua", "Loading script from string");
+
+		int status = luaL_loadstring(L, str.c_str());
+		if (status != 0) {
+			CogLogError("Lua", lua_tostring(L, -1));
+		}
+		else {
+			// execute program
+			status = lua_pcall(L, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				CogLogError("Lua", lua_tostring(L, -1));
+			}
+		}
+	}
+
 	void LuaScripting::LoadAllScripts() {
 		
 		COGLOGDEBUG("Lua", "Loading scripts");
@@ -79,26 +116,6 @@ namespace Cog {
 
 			for (auto file : files) {
 				LoadScript(file);
-			}
-		}
-	}
-
-
-	void LuaScripting::LoadScript(ofFile file) {
-		
-		string name = file.getFileName();
-
-		COGLOGDEBUG("Lua", "Loading script %s", name.c_str());
-
-		int status = luaL_loadfile(L, file.getAbsolutePath().c_str());
-
-		if (status != 0) {
-			CogLogError("Lua", lua_tostring(L, -1));
-		} else {
-			// run script
-			status = lua_pcall(L, 0, LUA_MULTRET, 0);
-			if (status != 0) {
-				CogLogError("Lua", lua_tostring(L, -1));
 			}
 		}
 	}

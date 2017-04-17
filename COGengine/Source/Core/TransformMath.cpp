@@ -5,14 +5,16 @@
 namespace Cog {
 
 	void TransformMath::SetSizeToScreen(Node* node, Node* parent) {
-		SetTransform(node, parent, TransformEnt("", ofVec2f(0, 0), 1,
+		auto trans = TransformEnt("", ofVec2f(0, 0), 1,
 			CalcType::PER,
 			ofVec2f(0, 0),
 			ofVec2f(1, 0), // zero because we want to scale according to the x axis
-			CalcType::ABS_PER, 0), 0, 0);
+			CalcType::ABS_PER, 0);
+
+		SetTransform(node, parent, trans, 0, 0);
 	}
 
-	void TransformMath::SetTransform(Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
+	void TransformMath::SetTransform(Node* node, Node* parent, TransformEnt& entity, int gridWidth, int gridHeight) {
 
 		Trans nodeTransform = Trans(0, 0);
 
@@ -37,7 +39,7 @@ namespace Cog {
 		node->SetTransform(nodeTransform);
 	}
 
-	void TransformMath::CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt entity, int gridWidth, int gridHeight) {
+	void TransformMath::CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt& entity, int gridWidth, int gridHeight) {
 
 		Trans& parentTrans = parent->GetTransform();
 

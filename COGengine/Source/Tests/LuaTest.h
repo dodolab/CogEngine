@@ -2,16 +2,15 @@
 
 #include "ofMain.h"
 #include "ofxCogEngine.h"
-
-
+#include "Scene.h"
+#include "Stage.h"
 #include "catch.hpp"
 using namespace Cog;
-
+#include "LuaScripting.h"
 #include "LuaTestAssets.h"
+#include "CogConfig.h"
 
-
-
-
+#ifdef LUA_SCRIPTING
 TEST_CASE("Lua tests")
 {
 
@@ -309,4 +308,42 @@ ghost = { \
 		REQUIRE(testVec.x == 60);
 	}
 	
+
+	SECTION("Lua testing behavior")
+	{
+		// init engine
+		ofxCogEngine::GetInstance().SetFps(20);
+		ofxCogEngine::GetInstance().Init();
+		// create scene
+		Scene* scene = new Scene("main", false);
+		ofxCogEngine::GetInstance().stage->AddScene(scene, true);
+		// define node
+		Node* node = new Node("node");
+		// load testing behavior into lua
+		auto luaScripting = ofxCogEngine::GetInstance().compStorage->GetComponent<LuaScripting>();
+		luaScripting->LoadScript(LUA_TESTING_BEHAVIOR);
+		// create prototype of this behavior
+		auto behaviorPrototype = ofxCogEngine::GetInstance().compStorage->CreateBehaviorPrototype(StrId("TestBehavior"));
+		REQUIRE(behaviorPrototype != nullptr);
+		// add behavior to the node
+		node->AddBehavior(behaviorPrototype);
+		// create another behavior that will accept a message
+		auto testBeh = new TestBehavior2();
+		node->AddBehavior(testBeh);
+		// add main node to the scene
+		scene->GetSceneNode()->AddChild(node);
+		// submit changes
+		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
+		// simulate update
+		ofxCogEngine::GetInstance().Update(16, 16);
+		// send message into lua behavior
+		auto msg = Msg(StrId("VARIABLE_CHANGE"), MsgObjectType::BEHAVIOR, 1, MsgObjectType::SUBSCRIBERS, nullptr, spt<MsgPayload>());
+		scene->SendMessage(msg);
+		// update engine
+		ofxCogEngine::GetInstance().Update(16, 16);
+		// check the second behavior if it has accepted message from the lua behavior
+		REQUIRE(testBeh->acceptedMessage);
+	}
 }
+
+#endif

@@ -324,7 +324,7 @@ namespace Cog {
 		sceneNode = new Node(NodeType::SCENE, 0, name);
 		sceneNode->SetScene(this);
 		sceneNode->GetMesh()->SetWidth((float)CogGetScreenWidth());
-		sceneNode->GetMesh()->SetWidth((float)CogGetScreenHeight());
+		sceneNode->GetMesh()->SetHeight((float)CogGetScreenHeight());
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {

@@ -31,7 +31,7 @@ namespace Cog {
 		* @param gridWidth width of the scene grid (if specified)
 		* @param gridHeight height of the scene grid (if specified)
 		*/
-		void SetTransform(Node* node, Node* parent, TransformEnt entity, int gridWidth = 0, int gridHeight = 0);
+		void SetTransform(Node* node, Node* parent, TransformEnt& entity, int gridWidth = 0, int gridHeight = 0);
 
 		/**
 		* Calculates transform of given node, with the accordance of configured TransformEnt entity
@@ -42,7 +42,7 @@ namespace Cog {
 		* @param gridWidth width of the scene grid (if specified)
 		* @param gridHeight height of the scene grid (if specified)
 		*/
-		void CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt entity, int gridWidth = 0, int gridHeight = 0);
+		void CalcTransform(Trans& outputTrans, Node* node, Node* parent, TransformEnt& entity, int gridWidth = 0, int gridHeight = 0);
 
 		/**
 		* Calculates position of given node, according to the parameters

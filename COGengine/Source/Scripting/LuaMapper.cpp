@@ -128,8 +128,8 @@ namespace Cog {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<TransformMath>("TransformMath")
 			.addConstructor <void(*) (void)>()
-			.addFunction("SetTransform", static_cast<void(TransformMath::*)(Node*, Node*, TransformEnt, int, int)>(&TransformMath::SetTransform))
-			.addFunction("SetTransform", reinterpret_cast<void(TransformMath::*)(NodeLua*, NodeLua*, TransformEnt, int, int)>(&TransformMath::SetTransform))
+			.addFunction("SetTransform", static_cast<void(TransformMath::*)(Node*, Node*, TransformEnt&, int, int)>(&TransformMath::SetTransform))
+			.addFunction("SetTransform", reinterpret_cast<void(TransformMath::*)(NodeLua*, NodeLua*, TransformEnt&, int, int)>(&TransformMath::SetTransform))
 			.endClass();
 
 		// StrId
