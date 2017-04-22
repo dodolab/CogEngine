@@ -29,3 +29,9 @@ function ScriptExample:Update(delta, absolute)
 		end
 	end
 end
+
+
+test = "{\"mojo\" : 12345}"
+
+jsonTxt = JSON:decode(test)
+print(jsonTxt.mojo)

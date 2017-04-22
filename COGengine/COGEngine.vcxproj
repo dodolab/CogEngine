@@ -620,6 +620,8 @@
   <ItemGroup>
     <None Include="Data\COGAssets\Scripts\base.lua" />
     <None Include="Data\COGAssets\Scripts\enums.lua" />
+    <None Include="Data\COGAssets\Scripts\extensions.lua" />
+    <None Include="Data\COGAssets\Scripts\json.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

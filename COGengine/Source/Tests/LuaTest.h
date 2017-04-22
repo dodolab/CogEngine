@@ -90,22 +90,8 @@ param = LuaGlobalFunction(param)"
 		lua_State* pl = luaL_newstate();
 		luaL_openlibs(pl);
 
-#define lua_sample " \
-function Person(salary) \
- local person = { \
-  salary = salary; \
-  GetSalary = function() \
-  return salary; \
-  end; \
-  SetSalary = function(howMuch) \
-  salary = howMuch; \
-  end; \
-  } \
-  return person; \
-end \
-thomas = Person(12000)  "
 
-		int status = luaL_loadstring(pl, lua_sample);
+		int status = luaL_loadstring(pl, LUA_CLASSES_SAMPLE);
 		if (status != 0) {
 			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
 		}
@@ -133,14 +119,7 @@ thomas = Person(12000)  "
 		lua_State* pl = luaL_newstate();
 		luaL_openlibs(pl);
 
-#define lua_sample " \
-ghost = { \
-  name = \"LittleGhost\", \
-  sprite = \"ghost_sprite.png\", \
-  size = 12 \
-}"
-
-		int status = luaL_loadstring(pl, lua_sample);
+		int status = luaL_loadstring(pl, LUABRIDGE_ARRAYS_SAMPLE);
 		if (status != 0) {
 			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
 		}
@@ -180,14 +159,8 @@ ghost = { \
 			.addProperty("intProp", &BindObject::GetIntProp, &BindObject::SetIntProp)
 			.endClass();
 
-#define lua_sample " \
- bind = BindObject() \
- bind.floatProp = 85 \
- bind.intProp = BindObject.Add(1,4) \
- BindObject.staticInt = 120 \
- BindObject.staticFloat = 7 "
 
-		int status = luaL_loadstring(pl, lua_sample);
+		int status = luaL_loadstring(pl, LUACTOLUA_SAMPLE);
 		if (status != 0) {
 			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
 		}
@@ -237,16 +210,8 @@ ghost = { \
 			.addFunction("SetRotationAsAngleToPosition", &Trans::SetRotationAsAngleToPosition)
 			.endClass();
 
-#define lua_sample " \
- trans = Trans() \
- trans.absPos = ofVec3f(1,1,1) \
- trans.absRotation = 30 \
- trans.absScale = ofVec3f(20,20,20) \
- trans.rotation = 50 \
- rotPos = trans:CalcAngle(ofVec2f(10,10))"
-
 		
-		int status = luaL_loadstring(pl, lua_sample);
+		int status = luaL_loadstring(pl, LUATRANS_SAMPLE);
 		if (status != 0) {
 			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
 		}
@@ -308,6 +273,43 @@ ghost = { \
 		REQUIRE(testVec.x == 60);
 	}
 	
+	SECTION("Lua pure JSON")
+	{
+		// load scripts
+		auto luaScripting = new LuaScripting();
+		luaScripting->OnInit();
+		lua_State* pl = luaScripting->GetLua();
+
+
+		int status = luaL_loadstring(pl, LUAJSON_SAMPLE);
+		REQUIRE(status == 0);
+		if (status != 0) {
+			std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+		}
+		else {
+			status = lua_pcall(pl, 0, LUA_MULTRET, 0);
+			if (status != 0) {
+				std::cerr << "-- " << lua_tostring(pl, -1) << std::endl;
+			}
+
+			// jsonTable.data contains an array of two items
+			LuaRef table = getGlobal(pl, "jsonTable");
+			REQUIRE(!table.isNil());
+			LuaRef data = table["data"];
+			// starting at 1
+			LuaRef firstItem = data[1];
+			LuaRef secondItem = data[2];
+			REQUIRE(!firstItem.isNil());
+			REQUIRE(!secondItem.isNil());
+
+			string firstName = firstItem["name"].cast<string>();
+			REQUIRE(firstName.compare("item1") == 0);
+			int firstVal = firstItem["val"].cast<int>();
+			REQUIRE(firstVal == 12345);
+			bool secondVal = secondItem["val"].cast<bool>();
+			REQUIRE(secondVal);
+		}
+	}
 
 	SECTION("Lua testing behavior")
 	{

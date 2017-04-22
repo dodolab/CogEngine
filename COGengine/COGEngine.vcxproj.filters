@@ -1089,5 +1089,11 @@
     <None Include="Data\COGAssets\Scripts\enums.lua">
       <Filter>Assets\Scripts</Filter>
     </None>
+    <None Include="Data\COGAssets\Scripts\extensions.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
+    <None Include="Data\COGAssets\Scripts\json.lua">
+      <Filter>Assets\Scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>

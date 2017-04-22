@@ -66,6 +66,47 @@ void LuaGlobalFunction2(int param) {
 	lastGlobalFuncClsParam = param;
 }
 
+#define LUA_CLASSES_SAMPLE " \
+function Person(salary) \
+ local person = { \
+  salary = salary; \
+  GetSalary = function() \
+  return salary; \
+  end; \
+  SetSalary = function(howMuch) \
+  salary = howMuch; \
+  end; \
+  } \
+  return person; \
+end \
+thomas = Person(12000)  "
+
+#define LUABRIDGE_ARRAYS_SAMPLE " \
+ghost = { \
+  name = \"LittleGhost\", \
+  sprite = \"ghost_sprite.png\", \
+  size = 12 \
+}"
+
+#define LUACTOLUA_SAMPLE " \
+ bind = BindObject() \
+ bind.floatProp = 85 \
+ bind.intProp = BindObject.Add(1,4) \
+ BindObject.staticInt = 120 \
+ BindObject.staticFloat = 7 "
+
+#define LUATRANS_SAMPLE " \
+ trans = Trans() \
+ trans.absPos = ofVec3f(1,1,1) \
+ trans.absRotation = 30 \
+ trans.absScale = ofVec3f(20,20,20) \
+ trans.rotation = 50 \
+ rotPos = trans:CalcAngle(ofVec2f(10,10))"
+
+#define LUAJSON_SAMPLE " \
+ jsonString = \"{ \\\"data\\\" : [{\\\"name\\\" : \\\"item1\\\", \\\"val\\\" : 12345},{\\\"name\\\" : \\\"item2\\\", \\\"val\\\" : true}]}\" \
+ jsonTable = JSON:decode(jsonString)"
+
 
 #define LUA_TESTING_BEHAVIOR  "TestBehavior = Behavior:Extend(\"TestBehavior\")\n\
 \
