@@ -8,24 +8,11 @@
 #include "Definitions.h"
 #include "Sprite.h"
 #include "SpriteInst.h"
+#include "Constants.h"
 
 using namespace std;
 
 namespace Cog {
-
-	/**
-	* Type of a mesh
-	*/
-	enum class MeshType {
-		NONE,				/** Without mesh */
-		IMAGE,				/** 2D image */
-		RECTANGLE,			/** rectangle */
-		TEXT,				/** 2D text */
-		LABEL,				/** Text not affected by transformations */
-		SPRITE,				/** 2D sprite */
-		MULTISPRITE,		/** Collection of sprites */
-		BOUNDING_BOX		/** Box sizeable due to children nodes */
-	};
 
 	class Node;
 	void CogLogError(const char* module, const char* format, ...);
@@ -35,7 +22,7 @@ namespace Cog {
 	*/
 	class Mesh {
 	protected:
-		MeshType meshType = MeshType::NONE;
+		stenum meshType = MESH_NONE;
 		ofColor color;
 		float width = 1;
 		float height = 1;
@@ -44,11 +31,11 @@ namespace Cog {
 		Mesh() {
 		}
 
-		Mesh(MeshType meshType) : meshType(meshType) {
+		Mesh(stenum meshType) : meshType(meshType) {
 
 		}
 
-		Mesh(MeshType meshType, float width, float height) : meshType(meshType), width(width), height(height) {
+		Mesh(stenum meshType, float width, float height) : meshType(meshType), width(width), height(height) {
 
 		}
 
@@ -59,7 +46,7 @@ namespace Cog {
 		/**
 		* Gets type of the mesh
 		*/
-		MeshType GetMeshType() const {
+		stenum GetMeshType() const {
 			return meshType;
 		}
 
@@ -99,7 +86,7 @@ namespace Cog {
 		bool renderable = true;
 	public:
 		Rectangle(float width, float height)
-			: Mesh(MeshType::RECTANGLE, width, height) {
+			: Mesh(MESH_RECTANGLE, width, height) {
 		}
 
 		/**
@@ -139,7 +126,7 @@ namespace Cog {
 		spt<ofImage> image;
 	public:
 
-		Image(spt<ofImage> img) : Mesh(MeshType::IMAGE) {
+		Image(spt<ofImage> img) : Mesh(MESH_IMAGE) {
 			this->image = img;
 		}
 
@@ -182,7 +169,7 @@ namespace Cog {
 		stringstream stream;
 	public:
 
-		Text(spt<ofTrueTypeFont> font, string text) : Mesh(MeshType::TEXT) {
+		Text(spt<ofTrueTypeFont> font, string text) : Mesh(MESH_TEXT) {
 			this->font = font;
 			stream << text;
 		}
@@ -261,7 +248,7 @@ namespace Cog {
 		* @param labelWidth absolute width of the label in pixels
 		*/
 		Label(spt<ofTrueTypeFont> font, string text, int labelWidth) : Text(font, text) {
-			this->meshType = MeshType::LABEL;
+			this->meshType = MESH_LABEL;
 			this->labelWidth = labelWidth;
 		}
 
@@ -318,7 +305,7 @@ namespace Cog {
 	public:
 
 		SpriteMesh(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
-			: Mesh(MeshType::SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
+			: Mesh(MESH_SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
 		}
 
 		/**
@@ -370,13 +357,13 @@ namespace Cog {
 
 	public:
 		MultiSpriteMesh(string layerName)
-			: Mesh(MeshType::MULTISPRITE), layerName(layerName) {
+			: Mesh(MESH_MULTISPRITE), layerName(layerName) {
 			width = 1;
 			height = 1;
 		}
 
 		MultiSpriteMesh(string layerName, vector<spt<SpriteInst>>& sprites)
-			: Mesh(MeshType::MULTISPRITE), layerName(layerName), sprites(sprites) {
+			: Mesh(MESH_MULTISPRITE), layerName(layerName), sprites(sprites) {
 			width = 1;
 			height = 1;
 			Recalc();
@@ -463,7 +450,7 @@ namespace Cog {
 		*/
 		BoundingBox(float width, float height, float margin, bool renderable)
 			: margin(margin), renderable(renderable),
-			Mesh(MeshType::BOUNDING_BOX, width, height) {
+			Mesh(MESH_BOUNDING_BOX, width, height) {
 		}
 
 

@@ -13,7 +13,7 @@ namespace Cog {
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> pressedImg = spt<ofImage>();
 		spt<ofImage> disabledImg = spt<ofImage>();
-		StrId stateDisabled = StrId(STATES_DISABLED);
+		StrId stateDisabled = StrId(STATE_DISABLED);
 
 	public:
 		Button() {

@@ -55,7 +55,7 @@ namespace Cog {
 		* @param end end of the animation in ms (used when more than one animation run simultaneously), by default 0
 		* @param duration duration of the animation in ms
 		*/
-		AttrAnimEnt(string name, AttributeType attrType, float fromVal, float toVal, CalcType calcType, int begin, int end, int duration)
+		AttrAnimEnt(string name, AttributeType attrType, float fromVal, float toVal, stenum calcType, int begin, int end, int duration)
 			:attributeType(attrType), fromVal(fromVal), toVal(toVal), calcType(calcType), begin(begin), end(end), duration(duration)
 		{
 			RecalcDuration();
@@ -88,7 +88,7 @@ namespace Cog {
 		// end time of the animation in ms (needed when there is more than one animation at a time)
 		int end = 0;
 		// calculation type (local, relative etc.)
-		CalcType calcType = CalcType::LOC;
+		stenum calcType = CALCTYPE_LOC;
 		// transformation type 
 		TransformType transType = TransformType::DIRECT;
 		// fade function of the animation

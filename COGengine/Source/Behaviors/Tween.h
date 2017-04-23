@@ -4,14 +4,6 @@
 
 namespace Cog {
 
-	/** Tweening direction */
-	enum class TweenDirection {
-		NONE,			/** direct tween */ 
-		LEFT,			/** move to the left*/
-		RIGHT,			/** move to the right */
-		UP,				/** move up*/
-		DOWN			/** move down */
-	};
 
 	/**
 	* Behavior for scene tweening
@@ -55,7 +47,7 @@ namespace Cog {
 	class OverrideTween : public Tween {
 	private:
 		// tween direction
-		TweenDirection direction;
+		stenum direction;
 
 	public:
 
@@ -65,7 +57,7 @@ namespace Cog {
 		* @param to scene node that will come up
 		* @param speed tweening speed (1 is for 1s, 2 for 0.5s and so on)
 		*/
-		OverrideTween(TweenDirection direction, Node* to, float speed) 
+		OverrideTween(stenum direction, Node* to, float speed)
 			: Tween(nullptr, to, speed), direction(direction) {
 
 		}
@@ -84,7 +76,7 @@ namespace Cog {
 	class SlideTween : public Tween {
 	private:
 		// tween direction
-		TweenDirection direction;
+		stenum direction;
 
 	public:
 		SlideTween() {
@@ -98,7 +90,7 @@ namespace Cog {
 		* @param to scene that will come up
 		* @param speed tweening speed
 		*/
-		SlideTween(TweenDirection direction, Node* from, Node* to, float speed) 
+		SlideTween(stenum direction, Node* from, Node* to, float speed)
 			: Tween(from, to, speed), direction(direction) {
 
 		}

@@ -105,6 +105,9 @@ typedef unsigned long long uint64;
 template<typename T>
 using spt = std::shared_ptr<T>;
 
+// enumerator defined as a preprocessor directive integer
+typedef int stenum;
+
 // aliases for data types for networking
 namespace Cog {
 	typedef unsigned char tBYTE;

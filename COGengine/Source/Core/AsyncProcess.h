@@ -5,7 +5,6 @@
 
 namespace Cog {
 
-	enum class TweenDirection;
 	class Scene;
 
 	/**
@@ -24,10 +23,10 @@ namespace Cog {
 
 	private:
 		Scene* scene;
-		TweenDirection tweenDir;
+		stenum tweenDir;
 	public:
 
-		SceneLoader(Scene* scene, TweenDirection tweenDir);
+		SceneLoader(Scene* scene, stenum tweenDir);
 
 		void DoJob();
 	};

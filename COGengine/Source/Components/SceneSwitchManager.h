@@ -9,7 +9,6 @@ namespace Cog {
 	class Scene;
 	class Msg;
 	class Tween;
-	enum class TweenDirection;
 
 	class SceneSwitchInfo {
 	public:
@@ -28,7 +27,7 @@ namespace Cog {
 		// scene to tween to
 		Scene* to;
 		// tween direction
-		TweenDirection dir;
+		stenum dir;
 		// if true, scene is switched automatically
 		bool readyToGo;
 		// if true, the old scene will be finished
@@ -64,7 +63,7 @@ namespace Cog {
 		* @param autoSwitch if true, scenes are switched automatically
 		* @param finishOld if true, the old scene will be finished
 		*/
-		void PushSceneSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool autoSwitch, bool finishOld = false);
+		void PushSceneSwitch(Scene* from, Scene* to, stenum tweenDir, bool autoSwitch, bool finishOld = false);
 
 		/**
 		* Pops scene switch action from the stack
@@ -79,7 +78,7 @@ namespace Cog {
 		* @param tweenDir tween direction
 		* @param finishOld if true, the old scene will be finished
 		*/
-		void SwitchToScene(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld = false);
+		void SwitchToScene(Scene* from, Scene* to, stenum tweenDir, bool finishOld = false);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 		}
@@ -92,7 +91,7 @@ namespace Cog {
 		* @param to scene to switch to
 		* @param tweenDir tween direction
 		*/
-		void ExecuteSwitch(Scene* from, Scene* to, TweenDirection tweenDir, bool finishOld);
+		void ExecuteSwitch(Scene* from, Scene* to, stenum tweenDir, bool finishOld);
 
 		/**
 		* Stops the previous scene and notifies behaviors about it

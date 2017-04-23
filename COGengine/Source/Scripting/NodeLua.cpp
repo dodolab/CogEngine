@@ -209,7 +209,7 @@ namespace Cog {
 
 	void NodeLua::SetImageMesh(string image) {
 		auto img = CogGet2DImage(image);
-		if (node->HasMeshType(MeshType::IMAGE)) {
+		if (node->HasMeshType(MESH_IMAGE)) {
 			node->GetMesh<Image>()->SetImage(img);
 		}
 		else {

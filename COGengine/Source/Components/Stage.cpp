@@ -26,7 +26,7 @@ namespace Cog {
 
 	void Stage::OnInit() {
 		// create root object
-		this->rootObject = new Node(NodeType::ROOT, 0, "root");
+		this->rootObject = new Node(NODETYPE_ROOT, 0, "root");
 		RegisterGlobalListener(ACT_SCENE_SWITCHED, this);
 		CogRegisterGlobalListener(ACT_SCREEN_CHANGED, this);
 
@@ -72,11 +72,11 @@ namespace Cog {
 		if (setAsActual) {
 			this->actualScene = scene;
 			scene->Init();
-			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
+			scene->GetSceneNode()->SetRunningMode(RUNMODE_RUNNING);
 		}
 		else {
 			// disable all scenes that are not visible in the beginning
-			scene->GetSceneNode()->SetRunningMode(RunningMode::DISABLED);
+			scene->GetSceneNode()->SetRunningMode(RUNMODE_DISABLED);
 		}
 
 		CopyGlobalListenersToScene(scene);
@@ -134,13 +134,13 @@ namespace Cog {
 		return nullptr;
 	}
 
-	void Stage::SwitchToScene(Scene* scene, TweenDirection tweenDir, bool finishOld) {
+	void Stage::SwitchToScene(Scene* scene, stenum tweenDir, bool finishOld) {
 
 		if (actualScene == nullptr) {
 			// if there is no running scene yet -> switch immediately
 			this->actualScene = scene;
 			scene->Init();
-			scene->GetSceneNode()->SetRunningMode(RunningMode::RUNNING);
+			scene->GetSceneNode()->SetRunningMode(RUNMODE_RUNNING);
 		}
 		else {
 			// use switch manager
@@ -148,7 +148,7 @@ namespace Cog {
 
 			// if actual scene is a dialog, close the dialog first
 			if (actualScene->GetSceneType() == SceneType::DIALOG) {
-				this->SwitchBackToScene(TweenDirection::NONE);
+				this->SwitchBackToScene(TWEEN_NONE);
 			}
 
 			// set parent scene for dialog
@@ -169,7 +169,7 @@ namespace Cog {
 		}
 	}
 
-	bool Stage::SwitchBackToScene(TweenDirection tweenDir, bool finishOld) {
+	bool Stage::SwitchBackToScene(stenum tweenDir, bool finishOld) {
 		if (!sceneStack.empty()) {
 
 			auto manager = GETCOMPONENT(SceneSwitchManager);
@@ -252,7 +252,7 @@ namespace Cog {
 		if (actualScene == nullptr && this->scenes.size() != 0) {
 			// if no actual scene specified, use the first one
 			auto firstScene = this->scenes[0];
-			SwitchToScene(firstScene, TweenDirection::NONE);
+			SwitchToScene(firstScene, TWEEN_NONE);
 		}
 	}
 

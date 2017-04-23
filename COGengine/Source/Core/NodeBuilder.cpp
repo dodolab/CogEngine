@@ -23,7 +23,7 @@ namespace Cog {
 
 		node->AddBehavior(new HitEvent(-1, false, false));
 		node->AddBehavior(new Button(CogGet2DImage(defaultImg), CogGet2DImage(clickedImg), disabledImgPtr));
-		node->GetStates().SetState(StrId(STATES_HITTABLE));
+		node->GetStates().SetState(StrId(STATE_HITTABLE));
 	}
 
 
@@ -164,7 +164,7 @@ namespace Cog {
 
 	Node* NodeBuilder::CreateNode(string name, Scene* scene) {
 
-		Node* node = new Node(NodeType::OBJECT, 0, name);
+		Node* node = new Node(NODETYPE_OBJECT, 0, name);
 		return node;
 	}
 
@@ -337,19 +337,19 @@ namespace Cog {
 		string type = xml.attribute("type").as_string();
 
 		// get type of the mesh
-		MeshType renderType = EnumConverter::StrToMeshType(type);
+		int renderType = EnumConverter::StrToMeshType(type);
 
-		if (renderType == MeshType::IMAGE) {
+		if (renderType == MESH_IMAGE) {
 			string img = xml.attribute("img").as_string();
 			this->CreateImageNode(node, img);
 		}
-		else if (renderType == MeshType::TEXT) {
+		else if (renderType == MESH_TEXT) {
 			this->LoadTextFromXml(xml, node, node->GetParent());
 		}
-		else if (renderType == MeshType::LABEL) {
+		else if (renderType == MESH_LABEL) {
 			this->LoadLabelFromXml(xml, node, node->GetParent());
 		}
-		else if (renderType == MeshType::RECTANGLE) {
+		else if (renderType == MESH_RECTANGLE) {
 			float width = 0;
 			float height = 0;
 
@@ -370,7 +370,7 @@ namespace Cog {
 			bool noFill = xml.attribute("no_fill").as_bool(false);
 			CreateRectangleNode(node, size, color, noFill);
 		}
-		else if (renderType == MeshType::SPRITE) {
+		else if (renderType == MESH_SPRITE) {
 			string layer = xml.attribute("layer").as_string();
 
 			if (layer.empty()) CogLogError("NodeBuilder", "Error while loading sprite sheet. Layer not specified (node %s)", node->GetTag().c_str());
@@ -381,7 +381,7 @@ namespace Cog {
 
 			CreateSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
-		else if (renderType == MeshType::BOUNDING_BOX) {
+		else if (renderType == MESH_BOUNDING_BOX) {
 			string colorStr = xml.attribute("color").as_string("0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
 

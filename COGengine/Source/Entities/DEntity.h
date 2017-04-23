@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "Definitions.h"
+#include "Constants.h"
 #include "pugixml.h"
 
 using namespace pugi;

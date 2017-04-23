@@ -31,7 +31,7 @@ namespace Cog {
 	}
 
 	void FacadeLua::CogSwitchToScene(string name, string tweenDirection) {
-		TweenDirection twDir = EnumConverter::StrToTweenDirection(tweenDirection);
+		stenum twDir = EnumConverter::StrToTweenDirection(tweenDirection);
 		
 		auto sceneContext = GETCOMPONENT(Stage);
 		auto scene = sceneContext->FindSceneByName(name);
@@ -39,7 +39,7 @@ namespace Cog {
 	}
 
 	void FacadeLua::CogSwitchBackToScene(string tweenDirection) {
-		TweenDirection twDir = EnumConverter::StrToTweenDirection(tweenDirection);
+		stenum twDir = EnumConverter::StrToTweenDirection(tweenDirection);
 
 		auto sceneContext = GETCOMPONENT(Stage);
 		sceneContext->SwitchBackToScene(twDir);

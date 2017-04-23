@@ -21,7 +21,7 @@ namespace Cog {
 		ofColor defaultColor;
 		// id of group all selected nodes belong to (similar to radiogroup in HTML)
 		StrId selectionGroup;
-		StrId selectedState = StrId(STATES_SELECTED);
+		StrId selectedState = StrId(STATE_SELECTED);
 	public:
 
 		MultiSelection() {

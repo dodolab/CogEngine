@@ -112,7 +112,7 @@ namespace Cog {
 		// TransformEnt
 		luabridge::getGlobalNamespace(L)
 			.beginClass<TransformEnt>("TransformEnt")
-			.addConstructor <void(*) (ofVec2f, CalcType, float)>()
+			.addConstructor <void(*) (ofVec2f, stenum, float)>()
 			.LUA_REGDATA(TransformEnt, anchor)
 			.LUA_REGDATA(TransformEnt, name)
 			.LUA_REGDATA(TransformEnt, pos)

@@ -6,17 +6,6 @@
 namespace Cog {
 
 	/**
-	* Type of the transformation calculation
-	*/
-	enum class CalcType {
-		ABS,	/** absolute (un) */
-		LOC,	/** local (-) */
-		PER,	/** percentage <0..1> (r) */
-		GRID,	/** grid positioning (gr) */
-		ABS_PER /** absolute percentage (rp) */
-	};
-
-	/**
 	* Transformation entity that holds attributes required for transformation calculation such as position vectors, size vectors,
 	* rotation, calculation types (local, absolute, percentage) etc.
 	*/
@@ -25,15 +14,15 @@ namespace Cog {
 
 		ofVec2f pos;
 		int zIndex;
-		CalcType pType;
+		stenum pType;
 		ofVec2f anchor;
 		ofVec2f size;
 		ofVec2f rotationCentroid;
-		CalcType sType;
+		stenum sType;
 		float rotation;
 
-		TransformEnt() : pos(0), zIndex(0), pType(CalcType::PER), anchor(0), 
-			size(1), sType(CalcType::LOC), rotation(0), rotationCentroid(0.5f){
+		TransformEnt() : pos(0), zIndex(0), pType(CALCTYPE_PER), anchor(0), 
+			size(1), sType(CALCTYPE_LOC), rotation(0), rotationCentroid(0.5f){
 		}
 
 		TransformEnt(string name) : TransformEnt() {
@@ -48,7 +37,7 @@ namespace Cog {
 		* @param positionCalc type of position calculation (local, absolute, percentage,...)
 		* @param rotation local rotation in degrees
 		*/
-		TransformEnt(string name, ofVec2f position, CalcType positionCalc, float rotation) : TransformEnt(){
+		TransformEnt(string name, ofVec2f position, stenum positionCalc, float rotation) : TransformEnt(){
 			this->name = name;
 			this->pos = position;
 			this->pType = positionCalc;
@@ -61,7 +50,7 @@ namespace Cog {
 		* @param positionCalc type of position calculation (local, absolute, percentage,...)
 		* @param rotation local rotation in degrees
 		*/
-		TransformEnt(ofVec2f position, CalcType positionCalc, float rotation) : TransformEnt() {
+		TransformEnt(ofVec2f position, int positionCalc, float rotation) : TransformEnt() {
 			this->pos = position;
 			this->pType = positionCalc;
 			this->rotation = rotation;
@@ -77,8 +66,8 @@ namespace Cog {
 		* @param size local size
 		* @param sizeCalc type of size calculation (local, absolute, percentage, ...)
 		*/
-		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc) :pos(position), 
+		TransformEnt(string name, ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc) :pos(position),
 			zIndex(zIndex), pType(positionCalc), anchor(anchor),
 			size(size), sType(sizeCalc), rotation(0), rotationCentroid(0.5f){
 			this->name = name;
@@ -93,8 +82,8 @@ namespace Cog {
 		* @param size local size
 		* @param sizeCalc type of size calculation (local, absolute, percentage, ...)
 		*/
-		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc) :pos(position),
+		TransformEnt(ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc) :pos(position),
 			zIndex(zIndex), pType(positionCalc), anchor(anchor),
 			size(size), sType(sizeCalc), rotation(0), rotationCentroid(0.5f) {
 			this->name = name;
@@ -111,8 +100,8 @@ namespace Cog {
 		* @param sizeCalc type of size calculation (local, absolute, percentage, ...)
 		* @param rotation local rotation in degrees
 		*/
-		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation):pos(position),
+		TransformEnt(string name, ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc, float rotation):pos(position),
 			zIndex(zIndex),pType(positionCalc),anchor(anchor),
 			size(size),sType(sizeCalc), rotation(rotation), rotationCentroid(0.5f){
 			this->name = name;
@@ -128,8 +117,8 @@ namespace Cog {
 		* @param sizeCalc type of size calculation (local, absolute, percentage, ...)
 		* @param rotation local rotation in degrees
 		*/
-		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation) :pos(position),
+		TransformEnt(ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc, float rotation) :pos(position),
 			zIndex(zIndex), pType(positionCalc), anchor(anchor),
 			size(size), sType(sizeCalc), rotation(rotation), rotationCentroid(0.5f) {
 			this->name = name;
@@ -147,8 +136,8 @@ namespace Cog {
 		* @param rotation local rotation in degrees
 		* @param rotationCentroid local center of rotation 
 		*/
-		TransformEnt(string name, ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation, ofVec2f rotationCentroid)
+		TransformEnt(string name, ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc, float rotation, ofVec2f rotationCentroid)
 			:pos(position), zIndex(zIndex), pType(positionCalc), anchor(anchor),
 			size(size), sType(sizeCalc), rotation(rotation), rotationCentroid(rotationCentroid) {
 			this->name = name;
@@ -165,8 +154,8 @@ namespace Cog {
 		* @param rotation local rotation in degrees
 		* @param rotationCentroid local center of rotation
 		*/
-		TransformEnt(ofVec2f position, int zIndex, CalcType positionCalc,
-			ofVec2f anchor, ofVec2f size, CalcType sizeCalc, float rotation, ofVec2f rotationCentroid)
+		TransformEnt(ofVec2f position, int zIndex, stenum positionCalc,
+			ofVec2f anchor, ofVec2f size, stenum sizeCalc, float rotation, ofVec2f rotationCentroid)
 			:pos(position), zIndex(zIndex), pType(positionCalc), anchor(anchor),
 			size(size), sType(sizeCalc), rotation(rotation), rotationCentroid(rotationCentroid) {
 			this->name = name;
@@ -188,26 +177,26 @@ namespace Cog {
 
 		}
 
-		TransformEnt& SetPosition(ofVec2f pos, CalcType pType) {
+		TransformEnt& SetPosition(ofVec2f pos, stenum pType) {
 			this->pos = pos;
 			this->pType = pType;
 			return *this;
 		}
 
 		TransformEnt& SetLocalPosition(ofVec2f pos) {
-			return SetPosition(pos, CalcType::LOC);
+			return SetPosition(pos, CALCTYPE_LOC);
 		}
 
 		TransformEnt& SetRelPosition(ofVec2f pos) {
-			return SetPosition(pos, CalcType::PER);
+			return SetPosition(pos, CALCTYPE_PER);
 		}
 
 		TransformEnt& SetAbsPosition(ofVec2f pos) {
-			return SetPosition(pos, CalcType::ABS);
+			return SetPosition(pos, CALCTYPE_ABS);
 		}
 
 		TransformEnt& SetGridPosition(ofVec2f pos) {
-			return SetPosition(pos, CalcType::GRID);
+			return SetPosition(pos, CALCTYPE_GRID);
 		}
 
 
@@ -231,26 +220,26 @@ namespace Cog {
 			return *this;
 		}
 
-		TransformEnt& SetScale(ofVec2f scale, CalcType sType) {
+		TransformEnt& SetScale(ofVec2f scale, stenum sType) {
 			this->size = scale;
 			this->sType = sType;
 			return *this;
 		}
 
 		TransformEnt& SetLocalScale(ofVec2f scale) {
-			return SetScale(scale, CalcType::LOC);
+			return SetScale(scale, CALCTYPE_LOC);
 		}
 
 		TransformEnt& SetRelScale(ofVec2f scale) {
-			return SetScale(scale, CalcType::PER);
+			return SetScale(scale, CALCTYPE_PER);
 		}
 
 		TransformEnt& SetAbsScale(ofVec2f scale) {
-			return SetScale(scale, CalcType::ABS);
+			return SetScale(scale, CALCTYPE_ABS);
 		}
 
 		TransformEnt& SetGridScale(ofVec2f scale) {
-			return SetScale(scale, CalcType::GRID);
+			return SetScale(scale, CALCTYPE_GRID);
 		}
 
 		TransformEnt& SetRotation(float rotation) {

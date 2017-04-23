@@ -53,7 +53,7 @@ namespace Cog {
 		* @param gridWidth width of the scene grid (if specified)
 		* @param gridHeight height of the scene grid (if specified)
 		*/
-		ofVec2f CalcPosition(Node* node, Node* parent, ofVec2f pos, CalcType posCalc, int gridWidth = 0, int gridHeight = 0);
+		ofVec2f CalcPosition(Node* node, Node* parent, ofVec2f pos, stenum posCalc, int gridWidth = 0, int gridHeight = 0);
 
 		/**
 		* Calculates scale of given node, according to the parameters
@@ -65,7 +65,7 @@ namespace Cog {
 		* @param gridWidth width of the scene grid (if specified)
 		* @param gridHeight height of the scene grid (if specified)
 		*/
-		ofVec3f CalcScale(Node* node, Node* parent, float width, float height, CalcType scaleCalc, int gridWidth = 0, int gridHeight = 0);
+		ofVec3f CalcScale(Node* node, Node* parent, float width, float height, stenum scaleCalc, int gridWidth = 0, int gridHeight = 0);
 		
 		/**
 		* Gets center of the screen

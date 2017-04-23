@@ -8,12 +8,9 @@ using namespace std;
 
 namespace Cog {
 
-	enum class MeshType;
 	enum class TransformType;
 	enum class AttributeType;
-	enum class CalcType;
 	enum class AnimBlend;
-	enum class TweenDirection;
 
 	/**
 	* Library class for converting between enumerated types and strings
@@ -23,7 +20,7 @@ namespace Cog {
 		/**
 		* Converts string to MeshType
 		*/
-		static MeshType StrToMeshType(string val);
+		static stenum StrToMeshType(string val);
 
 		/**
 		* Converts string to MeasureType
@@ -38,7 +35,7 @@ namespace Cog {
 		/**
 		* Converts string to CalcType
 		*/
-		static CalcType StrToCalcType(string val);
+		static stenum StrToCalcType(string val);
 
 		/**
 		* Converts string to FadeFunction
@@ -49,7 +46,7 @@ namespace Cog {
 		* Converts position into float value and calculation type
 		* e.g. 150r is 150.0 with calculation type of PER
 		*/
-		static CalcType GetUnitValue(string val, float& floatVal);
+		static stenum GetUnitValue(string val, float& floatVal);
 
 		/**
 		* Converts string to Color
@@ -64,7 +61,7 @@ namespace Cog {
 		/**
 		* Converts string to TweenDirection
 		*/
-		static TweenDirection StrToTweenDirection(string val);
+		static stenum StrToTweenDirection(string val);
 
 	};
 

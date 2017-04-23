@@ -35,7 +35,7 @@ namespace Cog {
 	void Renderer::PushNode(Node* node) {
 
 		auto renderType = node->GetMesh()->GetMeshType();
-		auto& buffer = (renderType == MeshType::SPRITE || renderType == MeshType::MULTISPRITE)
+		auto& buffer = (renderType == MESH_SPRITE || renderType == MESH_MULTISPRITE)
 			? zIndexSheetBuffer : zIndexImageBuffer;
 
 
@@ -128,16 +128,16 @@ namespace Cog {
 					Node* node = (*it2);
 
 					switch (node->GetMesh()->GetMeshType()) {
-					case MeshType::IMAGE:
-					case MeshType::RECTANGLE:
-					case MeshType::TEXT:
-					case MeshType::LABEL:
-					case MeshType::BOUNDING_BOX:
+					case MESH_IMAGE:
+					case MESH_RECTANGLE:
+					case MESH_TEXT:
+					case MESH_LABEL:
+					case MESH_BOUNDING_BOX:
 						throw IllegalOperationException("Trying to render non-sprite node with sprite sheet renderer!");
-					case MeshType::SPRITE:
+					case MESH_SPRITE:
 						RenderSprite(node);
 						break;
-					case MeshType::MULTISPRITE:
+					case MESH_MULTISPRITE:
 						RenderMultiSprite(node);
 						break;
 					}
@@ -162,23 +162,23 @@ namespace Cog {
 				Node* node = (*it2);
 
 				switch (node->GetMesh()->GetMeshType()) { 
-				case MeshType::IMAGE:
+				case MESH_IMAGE:
 					RenderImage(node);
 					break;
-				case MeshType::RECTANGLE:
+				case MESH_RECTANGLE:
 					RenderRectangle(node);
 					break;
-				case MeshType::TEXT:
+				case MESH_TEXT:
 					RenderText(node);
 					break;
-				case MeshType::LABEL:
+				case MESH_LABEL:
 					RenderLabel(node);
 					break;
-				case MeshType::BOUNDING_BOX:
+				case MESH_BOUNDING_BOX:
 					RenderBoundingBox(node);
 					break;
-				case MeshType::SPRITE:
-				case MeshType::MULTISPRITE:
+				case MESH_SPRITE:
+				case MESH_MULTISPRITE:
 					throw IllegalOperationException("Trying to render sprite node with default renderer!");
 				}
 			}

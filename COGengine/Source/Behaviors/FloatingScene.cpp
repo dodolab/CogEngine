@@ -131,7 +131,7 @@ namespace Cog {
 		CheckNewPosition(transform, newAbsPos);
 
 		// calc new local position from absolute position
-		auto newLocalPos = math.CalcPosition(owner, owner->GetParent(), newAbsPos, CalcType::ABS, 0, 0);
+		auto newLocalPos = math.CalcPosition(owner, owner->GetParent(), newAbsPos, CALCTYPE_ABS, 0, 0);
 
 		// set new local position
 		transform.localPos.x = newLocalPos.x;
@@ -163,7 +163,7 @@ namespace Cog {
 		CheckNewPosition(transform, newAbsPos);
 
 		// calculate local position from absolute position
-		ofVec2f newLocalPos = math.CalcPosition(owner, owner->GetParent(), ofVec2f(newAbsPos.x, newAbsPos.y), CalcType::ABS, 0, 0);
+		ofVec2f newLocalPos = math.CalcPosition(owner, owner->GetParent(), ofVec2f(newAbsPos.x, newAbsPos.y), CALCTYPE_ABS, 0, 0);
 		transform.localPos.x = newLocalPos.x;
 		transform.localPos.y = newLocalPos.y;
 	}

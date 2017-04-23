@@ -8,7 +8,7 @@ namespace Cog {
 		this->name = xml.attribute("name").as_string();
 
 		// calculation type is LOCAL by default
-		pType = sType = CalcType::LOC;
+		pType = sType = CALCTYPE_LOC;
 
 		// =================== get positions
 		auto posAttrib = xml.attribute("pos");

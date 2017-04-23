@@ -9,32 +9,32 @@
 
 namespace Cog {
 
-	MeshType EnumConverter::StrToMeshType(string val) {
+	stenum EnumConverter::StrToMeshType(string val) {
 		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
 
 		if (val.compare("image") == 0) {
-			return MeshType::IMAGE;
+			return MESH_IMAGE;
 		}
 		else if (val.compare("rectangle") == 0) {
-			return MeshType::RECTANGLE;
+			return MESH_RECTANGLE;
 		}
 		else if (val.compare("text") == 0) {
-			return MeshType::TEXT;
+			return MESH_TEXT;
 		}
 		else if (val.compare("sprite") == 0) {
-			return MeshType::SPRITE;
+			return MESH_SPRITE;
 		}
 		else if (val.compare("multisprite") == 0) {
-			return MeshType::MULTISPRITE;
+			return MESH_MULTISPRITE;
 		}
 		else if (val.compare("label") == 0) {
-			return MeshType::LABEL;
+			return MESH_LABEL;
 		}
 		else if (val.compare("bounding_box") == 0) {
-			return MeshType::BOUNDING_BOX;
+			return MESH_BOUNDING_BOX;
 		}
 
-		return MeshType::NONE;
+		return MESH_NONE;
 	}
 
 	TransformType EnumConverter::StrToMeasureType(string val) {
@@ -61,18 +61,18 @@ namespace Cog {
 		return AttributeType::NONE;
 	}
 
-	CalcType EnumConverter::StrToCalcType(string val) {
+	stenum EnumConverter::StrToCalcType(string val) {
 		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
 
-		if (val.compare("r") == 0) return CalcType::PER;
-		else if (val.compare("gr") == 0) return CalcType::GRID;
-		else if (val.compare("rp") == 0) return CalcType::ABS_PER;
-		else if (val.compare("un") == 0) return CalcType::ABS;
-		else if (val.empty()) return CalcType::LOC;
+		if (val.compare("r") == 0) return CALCTYPE_PER;
+		else if (val.compare("gr") == 0) return CALCTYPE_GRID;
+		else if (val.compare("rp") == 0) return CALCTYPE_ABS_PER;
+		else if (val.compare("un") == 0) return CALCTYPE_ABS;
+		else if (val.empty()) return CALCTYPE_LOC;
 
 		CogLogError("EnumConverter", "Error! %s is not valid unit, expected [r, gr, rp, un] or empty", val.c_str());
 
-		return CalcType::LOC;
+		return CALCTYPE_LOC;
 	}
 
 
@@ -132,7 +132,7 @@ namespace Cog {
 		return EasingFunc::linear;
 	}
 
-	CalcType EnumConverter::GetUnitValue(string val, float& floatVal) {
+	stenum EnumConverter::GetUnitValue(string val, float& floatVal) {
 		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
 
 		stringstream ss;
@@ -170,16 +170,16 @@ namespace Cog {
 		return AnimBlend::ADDITIVE;
 	}
 
-	TweenDirection EnumConverter::StrToTweenDirection(string val) {
+	stenum EnumConverter::StrToTweenDirection(string val) {
 		std::transform(val.begin(), val.end(), val.begin(), ::tolower);
 
-		if (val.compare("none") == 0) return TweenDirection::NONE;
-		else if (val.compare("left") == 0) return TweenDirection::LEFT;
-		else if (val.compare("right") == 0) return TweenDirection::RIGHT;
-		else if (val.compare("up") == 0) return TweenDirection::UP;
-		else if (val.compare("down") == 0) return TweenDirection::DOWN;
+		if (val.compare("none") == 0) return TWEEN_NONE;
+		else if (val.compare("left") == 0) return TWEEN_LEFT;
+		else if (val.compare("right") == 0) return TWEEN_RIGHT;
+		else if (val.compare("up") == 0) return TWEEN_UP;
+		else if (val.compare("down") == 0) return TWEEN_DOWN;
 
-		return TweenDirection::NONE;
+		return TWEEN_NONE;
 	}
 
 } // namespace

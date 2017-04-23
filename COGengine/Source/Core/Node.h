@@ -12,23 +12,6 @@ namespace Cog {
 
 	class Scene;
 
-	/** Node running mode */
-	enum RunningMode {
-		RUNNING,			/** active for update and draw loops */
-		PAUSED_ALL,			/** active for draw loop */
-		PAUSED_CHILDREN,	/** active itself but children are inactive */
-		PAUSED_ITSELF,		/** inactive but children are active */
-		INVISIBLE,			/** active for update, inactive for draw */
-		DISABLED			/** inactive for both update and draw */
-	};
-
-	/** Node type */
-	enum class NodeType {
-		ROOT,				/** root object, usually the topmost parent */
-		SCENE,				/** scene root object, the root object of each scene */
-		OBJECT,				/** general node  */
-	};
-
 	/**
 	* Scene object; the most important entity in the whole ofxCogEngine
 	*
@@ -50,7 +33,7 @@ namespace Cog {
 		// tag or name
 		string tag = "";
 		// object type {ROOT, SCENE, OBJECT}
-		NodeType type;
+		stenum type;
 		// secondary identifier (customizable, doesn't need to be unique)
 		int secondaryId;
 		// groups this objects belongs to
@@ -59,10 +42,10 @@ namespace Cog {
 		Flags* states = nullptr;
 		// transformation
 		Trans  transform;
-		// mash object
-		spt<Mesh> mesh = spt<Mesh>(new Mesh(MeshType::NONE));
+		// mesh object
+		spt<Mesh> mesh = spt<Mesh>(new Mesh(MESH_NONE));
 		// running mode
-		RunningMode runMode = RunningMode::RUNNING;
+		stenum runMode = RUNMODE_RUNNING;
 		// indicator, if this node is external and therefore it shouldn't be deleted
 		bool isExternal = false;
 
@@ -98,7 +81,7 @@ namespace Cog {
 		* @param secondaryId secondary id
 		* @param tag tag/name
 		*/
-		Node(NodeType type, int secondaryId, string tag);
+		Node(stenum type, int secondaryId, string tag);
 
 		Node(const Node& copy);
 
@@ -135,7 +118,7 @@ namespace Cog {
 		/**
 		* Gets type {ROOT, SCENE, OBJECT}
 		*/
-		NodeType GetType() const {
+		stenum GetType() const {
 			return this->type;
 		}
 
@@ -290,7 +273,7 @@ namespace Cog {
 		/**
 		* Returns true, if the shape is of the selected type
 		*/
-		bool HasMeshType(MeshType type) {
+		bool HasMeshType(stenum type) {
 			return mesh->GetMeshType() == type;
 		}
 
@@ -298,20 +281,20 @@ namespace Cog {
 		* Gets indicator whether this entity is renderable
 		*/
 		bool IsRenderable() {
-			return mesh->GetMeshType() != MeshType::NONE;
+			return mesh->GetMeshType() != MESH_NONE;
 		}
 
 		/**
 		* Gets running mode
 		*/
-		RunningMode GetRunningMode() {
+		stenum GetRunningMode() {
 			return this->runMode;
 		}
 
 		/**
 		* Sets running mode
 		*/
-		void SetRunningMode(RunningMode runMode) {
+		void SetRunningMode(stenum runMode) {
 			this->runMode = runMode;
 		}
 
@@ -440,22 +423,22 @@ namespace Cog {
 		* Finds the first predecessor of given object type
 		* @param type predecessor type {ROOT, SCENE, OBJECT}
 		*/
-		Node* FindPredecessor(NodeType type);
+		Node* FindPredecessor(stenum type);
 
 		/**
 		* Gets the nearest parent which is a scene root (if exists)
 		*/
 		Node* GetSceneRoot() {
-			if (type == NodeType::SCENE) return this;
-			else return FindPredecessor(NodeType::SCENE);
+			if (type == NODETYPE_SCENE) return this;
+			else return FindPredecessor(NODETYPE_SCENE);
 		}
 
 		/**
 		* Gets the root of the whole stage
 		*/
 		Node* GetRoot() {
-			if (type == NodeType::ROOT) return this;
-			else return FindPredecessor(NodeType::ROOT);
+			if (type == NODETYPE_ROOT) return this;
+			else return FindPredecessor(NODETYPE_ROOT);
 		}
 
 		/**

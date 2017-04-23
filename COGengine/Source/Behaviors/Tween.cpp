@@ -7,8 +7,8 @@ namespace Cog {
 
 	void OverrideTween::Update(const uint64 delta, const uint64 absolute) {
 
-		if (to->GetRunningMode() == INVISIBLE) {
-			to->SetRunningMode(RUNNING);
+		if (to->GetRunningMode() == RUNMODE_INVISIBLE) {
+			to->SetRunningMode(RUNMODE_RUNNING);
 		}
 
 		int width = CogGetVirtualWidth();
@@ -32,17 +32,17 @@ namespace Cog {
 		float heightActual = height*fadeValue;
 
 		// change position according to the tweening direction
-		if (direction == TweenDirection::RIGHT) {
+		if (direction == TWEEN_RIGHT) {
 			to->GetScene()->GetViewPortOffset().x = -width + widthActual;
 		}
-		else if (direction == TweenDirection::LEFT) {
+		else if (direction == TWEEN_LEFT) {
 			to->GetScene()->GetViewPortOffset().x = width - widthActual;
 		}
-		else if (direction == TweenDirection::UP) {
+		else if (direction == TWEEN_UP) {
 			to->GetScene()->GetViewPortOffset().x = 0;
 			to->GetScene()->GetViewPortOffset().y = (float)(height - heightActual);
 		}
-		else if (direction == TweenDirection::DOWN) {
+		else if (direction == TWEEN_DOWN) {
 			to->GetScene()->GetViewPortOffset().x = (float)(0);
 			to->GetScene()->GetViewPortOffset().y = (float)(-height + heightActual);
 		}
@@ -56,8 +56,8 @@ namespace Cog {
 
 	void SlideTween::Update(const uint64 delta, const uint64 absolute) {
 
-		if (to->GetRunningMode() == INVISIBLE) {
-			to->SetRunningMode(RUNNING);
+		if (to->GetRunningMode() == RUNMODE_INVISIBLE) {
+			to->SetRunningMode(RUNMODE_RUNNING);
 		}
 
 		int width = CogGetVirtualWidth();
@@ -81,20 +81,20 @@ namespace Cog {
 		float heightActual = height*fadeValue;
 
 		// change position according to the tweening direction
-		if (direction == TweenDirection::RIGHT) {
+		if (direction == TWEEN_RIGHT) {
 			from->GetScene()->GetViewPortOffset().x = (widthActual);
 			to->GetScene()->GetViewPortOffset().x = -width + widthActual;
 		}
-		else if (direction == TweenDirection::LEFT) {
+		else if (direction == TWEEN_LEFT) {
 			from->GetScene()->GetViewPortOffset().x = (-widthActual);
 			to->GetScene()->GetViewPortOffset().x = width - widthActual;
 		}
-		else if (direction == TweenDirection::UP) {
+		else if (direction == TWEEN_UP) {
 			to->GetScene()->GetViewPortOffset().x = 0;
 			from->GetScene()->GetViewPortOffset().y = (float)((-heightActual));
 			to->GetScene()->GetViewPortOffset().y = (float)(height - heightActual);
 		}
-		else if (direction == TweenDirection::DOWN) {
+		else if (direction == TWEEN_DOWN) {
 			to->GetScene()->GetViewPortOffset().x = (float)(0);
 			from->GetScene()->GetViewPortOffset().y = (float)((heightActual));
 			to->GetScene()->GetViewPortOffset().y = (float)(-height + heightActual);

@@ -53,7 +53,7 @@ namespace Cog {
 		}
 
 		void OnStart() {
-			owner->SetState(StrId(STATES_HITTABLE));
+			owner->SetState(StrId(STATE_HITTABLE));
 		}
 
 	protected:

@@ -5,7 +5,7 @@
 
 namespace Cog {
 
-	SceneLoader::SceneLoader(Scene* scene, TweenDirection tweenDir)
+	SceneLoader::SceneLoader(Scene* scene, stenum tweenDir)
 		: scene(scene), tweenDir(tweenDir) {
 
 	}

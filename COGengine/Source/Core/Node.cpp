@@ -9,11 +9,11 @@ namespace Cog {
 	// first id is always 1
 	int Node::idCounter = 1;
 
-	Node::Node(string tag) : type(NodeType::OBJECT), secondaryId(0), id(idCounter++), transform(0, 0) {
+	Node::Node(string tag) : type(NODETYPE_OBJECT), secondaryId(0), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(NodeType type, int secondaryId, string tag) : type(type), secondaryId(secondaryId), id(idCounter++), transform(0, 0) {
+	Node::Node(stenum type, int secondaryId, string tag) : type(type), secondaryId(secondaryId), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
@@ -48,7 +48,7 @@ namespace Cog {
 		behaviors.clear();
 
 		// root node doesn't deallocate its children
-		if (this->type != NodeType::ROOT) {
+		if (this->type != NODETYPE_ROOT) {
 			// delete all children
 			for (auto it = children.begin(); it != children.end(); ++it)
 			{
@@ -88,9 +88,9 @@ namespace Cog {
 
 	void Node::Update(const uint64 delta, const uint64 absolute) {
 
-		if (runMode == RunningMode::PAUSED_ALL || runMode == RunningMode::DISABLED) return;
+		if (runMode == RUNMODE_PAUSED_ALL || runMode == RUNMODE_DISABLED) return;
 
-		if (runMode != RunningMode::PAUSED_ITSELF) {
+		if (runMode != RUNMODE_PAUSED_ITSELF) {
 
 			COGMEASURE_BEGIN("NODE_UPDATE_BEHAVIORS");
 			// update behaviors
@@ -105,7 +105,7 @@ namespace Cog {
 			COGMEASURE_END("NODE_UPDATE_BEHAVIORS");
 		}
 
-		if (runMode != RunningMode::PAUSED_CHILDREN) {
+		if (runMode != RUNMODE_PAUSED_CHILDREN) {
 			// update children
 			int childrenCount = children.size();
 			int childrenCounter = 0;
@@ -124,7 +124,7 @@ namespace Cog {
 
 	void Node::Draw(const uint64 delta, const uint64 absolute) {
 
-		if (runMode == RunningMode::INVISIBLE || runMode == RunningMode::DISABLED) return;
+		if (runMode == RUNMODE_INVISIBLE || runMode == RUNMODE_DISABLED) return;
 
 		if (this->IsRenderable()) {
 			// push node into renderer component
@@ -226,7 +226,7 @@ namespace Cog {
 	}
 
 
-	Node* Node::FindPredecessor(NodeType type) {
+	Node* Node::FindPredecessor(stenum type) {
 		Node* parent = this->parent;
 
 		while (parent != nullptr && parent->type != type) parent = parent->parent;
@@ -255,7 +255,7 @@ namespace Cog {
 		for (auto it = childrenToAdd.begin(); it != childrenToAdd.end(); ++it) {
 			Node* child = (*it);
 
-			if (this->type == NodeType::ROOT && child->scene->sceneType != SceneType::DIALOG) {
+			if (this->type == NODETYPE_ROOT && child->scene->sceneType != SceneType::DIALOG) {
 				children.push_front(child); // scenes always on front
 			}
 			else {
@@ -265,7 +265,7 @@ namespace Cog {
 			child->parent = this;
 			
 			// root has no scene
-			if (this->type != NodeType::ROOT) {
+			if (this->type != NODETYPE_ROOT) {
 				child->scene = this->scene;
 				scene->AddNode(child);
 			}
@@ -299,7 +299,7 @@ namespace Cog {
 			behaviors.push_back(beh);
 
 			// root node can't have its behaviors stored in the scene
-			if (this->type != NodeType::ROOT) {
+			if (this->type != NODETYPE_ROOT) {
 				scene->AddBehavior(beh);
 			}
 

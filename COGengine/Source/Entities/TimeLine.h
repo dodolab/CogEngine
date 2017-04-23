@@ -191,7 +191,7 @@ namespace Cog {
 		}
 
 		inline int CalcBlock(int time) {
-			return (int)((time / (1.0f * speed * length)) * CalcTotalBlocks());
+			return (time / (1.0f * speed * length)) * CalcTotalBlocks();
 		}
 
 		void GetNearestKeyFrames(int time, bool toTheLeft, vector<KeyFrame>& output);

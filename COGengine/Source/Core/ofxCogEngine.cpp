@@ -120,8 +120,8 @@ namespace Cog {
 			// render scene nodes one by one
 			Node* sceneNode = (*it);
 
-			if (sceneNode->GetRunningMode() != RunningMode::INVISIBLE &&
-				sceneNode->GetRunningMode() != RunningMode::DISABLED) {
+			if (sceneNode->GetRunningMode() != RUNMODE_INVISIBLE &&
+				sceneNode->GetRunningMode() != RUNMODE_DISABLED) {
 				// set viewports first since the virtual aspect ratio may differ from the real one
 				renderer->InitViewPort(sceneNode->GetScene());
 				renderer->ClearBuffers();

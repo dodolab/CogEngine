@@ -8,7 +8,6 @@ namespace Cog {
 	class Behavior;
 	class Scene;
 	class Tween;
-	enum class TweenDirection;
 
 	/**
 	* Stage, the parent of all scenes and the complete node-tree at all,
@@ -94,7 +93,7 @@ namespace Cog {
 		* @param tweenDir tween direction; if none, scene will be switched automatically
 		* @param finishOld if true, the old scene will be finished
 		*/
-		void SwitchToScene(Scene* scene, TweenDirection tweenDir, bool finishOld = false);
+		void SwitchToScene(Scene* scene, stenum tweenDir, bool finishOld = false);
 
 
 		/**
@@ -102,7 +101,7 @@ namespace Cog {
 		* back-press buttton in Android
 		* @param finishOld if true, the old scene will be finished
 		*/
-		bool SwitchBackToScene(TweenDirection tweenDir, bool finishOld = false);
+		bool SwitchBackToScene(stenum tweenDir, bool finishOld = false);
 
 		/**
 		* Loads scenes from resources

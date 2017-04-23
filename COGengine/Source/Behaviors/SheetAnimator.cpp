@@ -43,13 +43,13 @@ namespace Cog {
 				// calculate image offset
 				int frameIndex = actualIndex + actualNode->GetStart();
 
-				if (owner->HasMeshType(MeshType::SPRITE)) {
+				if (owner->HasMeshType(MESH_SPRITE)) {
 					// render as a SpriteMesh (better performance than Image, because of using the SpriteSheetManager)
 					auto spriteSet = owner->GetMesh<SpriteMesh>()->GetSpriteSet();
 					owner->GetMesh<SpriteMesh>()->SetSprite(Sprite(spriteSet, frameIndex));
 				}
 				else {
-					if (!owner->HasMeshType(MeshType::IMAGE)) {
+					if (!owner->HasMeshType(MESH_IMAGE)) {
 						owner->SetMesh(spt<Image>(new Image(spriteSheet)));
 					}
 
@@ -71,7 +71,7 @@ namespace Cog {
 
 				string imagePath = actualNode->GetSheet(actualIndex);
 				spt<ofImage> image = CogGet2DImage(imagePath);
-				if (owner->HasMeshType(MeshType::IMAGE)) {
+				if (owner->HasMeshType(MESH_IMAGE)) {
 					owner->GetMesh<Image>()->SetImage(image);
 				}
 				else {

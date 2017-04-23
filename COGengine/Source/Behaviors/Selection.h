@@ -13,7 +13,7 @@ namespace Cog {
 	protected:
 		spt<ofImage> defaultImg = spt<ofImage>();
 		spt<ofImage> selectedImg = spt<ofImage>();
-		StrId selectedState = StrId(STATES_SELECTED);
+		StrId selectedState = StrId(STATE_SELECTED);
 		// indicator whether the object has the selected state set
 		bool hasSelectedState = false;
 	public:

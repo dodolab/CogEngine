@@ -11,7 +11,7 @@ namespace Cog {
 
 	void HitEvent::Update(const uint64 delta, const uint64 absolute) {
 
-		if (owner->HasState(StrId(STATES_HITTABLE))) {
+		if (owner->HasState(StrId(STATE_HITTABLE))) {
 
 			// get inverse matrix
 			ofMatrix4x4 inverse = owner->GetTransform().CalcAbsMatrix().getInverse();
@@ -45,7 +45,7 @@ namespace Cog {
 					}
 					else if (touch->ended) {
 
-						owner->ResetState(StrId(STATES_HIT));
+						owner->ResetState(StrId(STATE_HIT));
 						
 						// send messages according to actual state
 
@@ -66,12 +66,12 @@ namespace Cog {
 					}
 					else {
 						atLeastOneTouch = true;
-						if (!owner->HasState(StrId(STATES_HIT))) {
+						if (!owner->HasState(StrId(STATE_HIT))) {
 #ifdef ANDROID
 							if (vibrate) ofxAndroidVibrator::vibrate(50);
 #endif
 							// this object hasn't been hit
-							owner->SetState(StrId(STATES_HIT));
+							owner->SetState(StrId(STATE_HIT));
 						}
 						// hit started and goes on
 						if (hitLost) {
@@ -97,8 +97,8 @@ namespace Cog {
 
 			if (!atLeastOneTouch) {
 				// object has probably lost its hit
-				if (owner->HasState(StrId(STATES_HIT))) {
-					owner->ResetState(StrId(STATES_HIT));
+				if (owner->HasState(StrId(STATE_HIT))) {
+					owner->ResetState(StrId(STATE_HIT));
 					hitLost = true;
 					if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_LOST);
 					else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, handlerBehId);
@@ -111,20 +111,20 @@ namespace Cog {
 		bool hasHitTest = false;
 
 		// check hit according to the type of the mesh
-		if (owner->HasMeshType(MeshType::IMAGE)) {
+		if (owner->HasMeshType(MESH_IMAGE)) {
 			if (preciseTest) hasHitTest = ImagePreciseHitTest(owner->GetMesh<Image>()->GetImage(), touchTrans);
 			else hasHitTest = CShapeHitTest(owner->GetMesh<Image>(), touchTrans);
 		}
-		else if (owner->HasMeshType(MeshType::MULTISPRITE)) {
+		else if (owner->HasMeshType(MESH_MULTISPRITE)) {
 			hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
 		}
-		else if (owner->HasMeshType(MeshType::SPRITE)) {
+		else if (owner->HasMeshType(MESH_SPRITE)) {
 			hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
 		}
-		else if (owner->HasMeshType(MeshType::RECTANGLE)) {
+		else if (owner->HasMeshType(MESH_RECTANGLE)) {
 			hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
 		}
-		else if (owner->HasMeshType(MeshType::BOUNDING_BOX)) {
+		else if (owner->HasMeshType(MESH_BOUNDING_BOX)) {
 			hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
 		}
 		return hasHitTest;
