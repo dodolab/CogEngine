@@ -2,7 +2,6 @@
 
 #include "ofBaseApp.h"
 #include "Definitions.h"
-#include "ofxXmlSettings.h"
 
 
 #ifdef ANDROID

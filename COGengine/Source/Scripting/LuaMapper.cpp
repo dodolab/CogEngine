@@ -190,11 +190,6 @@ namespace Cog {
 			.endClass();
 
 
-		// xmlSettings
-		luabridge::getGlobalNamespace(L)
-			.beginClass<spt<ofxXml>>("ofxXml")
-			.addConstructor<void(*)()>()
-			.endClass();
 
 		BehaviorLua::InitLuaMapping(L);
 		MsgLua::InitLuaMapping(L);

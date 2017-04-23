@@ -39,37 +39,33 @@ namespace Cog {
 		else return false;
 	}
 
-	void SpriteSheet::LoadFromXml(spt<ofxXml> xml) {
-		int spriteSets = xml->getNumTags("spriteset");
+	void SpriteSheet::LoadFromXml(xml_node& xml) {
+		auto spriteSets = xml.children("spriteset");
 
-		string name = xml->getAttributex("name", "");
+		string name = xml.attribute("name").as_string();
 		if (name.empty()) throw new IllegalArgumentException("SpriteSheet must have name specified!");
-		string img = xml->getAttributex("img", "");
+		string img = xml.attribute("img").as_string();
 		if (img.empty()) throw new IllegalArgumentException("SpriteSheet must have img specified!");
 
 		this->name = name;
 		// todo: maybe lazy load ?
 		this->spriteImage = CogGet2DImage(img);
 
-		if (spriteSets == 0) {
+		if (spriteSets.begin() == spriteSets.end()) {
 			// 0 spritesets -> attributes are directly in spritesheet node
-			int frames = xml->getAttributex("frames", 0);
-			int spriteWidth = xml->getAttributex("sprite_width", 0);
-			int spriteHeight = xml->getAttributex("sprite_height", 0);
+			int frames = xml.attribute("frames").as_int(0);
+			int spriteWidth = xml.attribute("sprite_width").as_int(0);
+			int spriteHeight = xml.attribute("sprite_height").as_int(0);
 			AddSpriteSet("default", frames, spriteWidth, spriteHeight);
 		}
 		else {
-			for (int i = 0; i < spriteSets; i++) {
-				xml->pushTag("spriteset", i);
-
-				string name = xml->getAttributex("name", "");
-				int frames = xml->getAttributex("frames", 0);
-				int spriteWidth = xml->getAttributex("sprite_width", 0);
-				int spriteHeight = xml->getAttributex("sprite_height", 0);
+			for (auto spriteSetNode : spriteSets) {
+				string name = spriteSetNode.attribute("name").as_string();
+				int frames = spriteSetNode.attribute("frames").as_int(0);
+				int spriteWidth = spriteSetNode.attribute("sprite_width").as_int(0);
+				int spriteHeight = spriteSetNode.attribute("sprite_height").as_int(0);
 
 				AddSpriteSet(name, frames, spriteWidth, spriteHeight);
-
-				xml->popTag();
 			}
 		}
 	}

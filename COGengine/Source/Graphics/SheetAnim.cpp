@@ -25,20 +25,20 @@ namespace Cog {
 	}
 
 
-	void SheetAnim::LoadAttributesFromXml(spt<ofxXml> xml) {
+	void SheetAnim::LoadAttributesFromXml(xml_node& xml) {
 
 		// check all values
-		this->SetSheetPath(xml->getAttribute(":", "sheet", this->GetSheetPath()));
-		this->SetFrames(xml->getAttribute(":", "frames", this->GetFrames()));
+		this->SetSheetPath(xml.attribute("sheet").as_string(this->GetSheetPath().c_str()));
+		this->SetFrames(xml.attribute("frames").as_int(this->GetFrames()));
 		if (this->GetFrames() < 0) throw IllegalArgumentException(string_format("Error in animation %s; frames bust be greater or equal to 0", this->GetName().c_str()));
-		this->SetLines(xml->getAttribute(":", "lines", this->GetLines()));
+		this->SetLines(xml.attribute("lines").as_int(this->GetLines()));
 		if (this->GetLines() < 0) throw IllegalArgumentException(string_format("Error in animation %s; lines bust be greater or equal to 0", this->GetName().c_str()));
-		this->SetStart(xml->getAttribute(":", "start", this->GetStart()));
+		this->SetStart(xml.attribute("start").as_int(this->GetStart()));
 		if (this->GetStart() < 0) throw IllegalArgumentException(string_format("Error in animation %s; start bust be greater or equal to 0", this->GetName().c_str()));
-		this->SetEnd(xml->getAttribute(":", "end", this->GetEnd()));
+		this->SetEnd(xml.attribute("end").as_int(this->GetEnd()));
 		if (this->GetEnd() < 0) throw IllegalArgumentException(string_format("Error in animation %s; end bust be greater or equal to 0", this->GetName().c_str()));
 		if (this->GetStart() > this->GetEnd()) throw IllegalArgumentException(string_format("Error in animation %s; start frame must be lower or equal to end frame", this->GetName().c_str()));
-		this->SetIncrement(xml->getAttribute(":", "increment", this->GetIncrement()));
+		this->SetIncrement(xml.attribute("increment").as_int(this->GetIncrement()));
 		if (this->GetIncrement() <= 0) throw IllegalArgumentException(string_format("Error in animation %s; increment must be greater than 0", this->GetName().c_str()));
 
 		// load other attributes

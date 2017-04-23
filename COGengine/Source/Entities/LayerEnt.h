@@ -40,7 +40,7 @@ namespace Cog {
 		/**
 		* Loads entity from XML
 		*/
-		void LoadFromXml(spt<ofxXml> xml);
+		void LoadFromXml(xml_node& node);
 
 	};
 }// namespace

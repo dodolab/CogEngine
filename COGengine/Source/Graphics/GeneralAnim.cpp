@@ -61,17 +61,17 @@ namespace Cog {
 		else return false;
 	}
 
-	void GeneralAnim::LoadBaseAttributesFromXml(spt<ofxXml> xml) {
-		this->SetRef(xml->getAttribute(":", "ref", this->GetRef()));
-		this->SetName(xml->getAttribute(":", "name", this->GetName()));
+	void GeneralAnim::LoadBaseAttributesFromXml(xml_node& xml) {
+		this->SetRef(xml.attribute("ref").as_string(this->GetRef().c_str()));
+		this->SetName(xml.attribute("name").as_string(this->GetName().c_str()));
 	}
 
-	void GeneralAnim::LoadAttributesFromXml(spt<ofxXml> xml) {
-		this->SetSpeed(xml->getAttribute(":", "speed", this->GetSpeed()));
+	void GeneralAnim::LoadAttributesFromXml(xml_node& xml) {
+		this->SetSpeed(xml.attribute("speed").as_float(this->GetSpeed()));
 		if (this->GetSpeed() < 0) throw IllegalArgumentException(string_format("Error in animation %s; speed bust be greater than 0", this->GetName().c_str()));
-		this->SetRepeat(xml->getAttribute(":", "repeat", this->GetRepeat()));
+		this->SetRepeat(xml.attribute("repeat").as_int(this->GetRepeat()));
 		if (this->GetRepeat() < 0) throw IllegalArgumentException(string_format("Error in animation %s; number of repetitions must be greater or equal to 0", this->GetName().c_str()));
-		this->SetIsRevert(xml->getBoolAttribute(":", "revert", this->GetIsRevert()));
+		this->SetIsRevert(xml.attribute("revert").as_bool(this->GetIsRevert()));
 	}
 
 } // namespace

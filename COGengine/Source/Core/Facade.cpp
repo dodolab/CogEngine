@@ -193,11 +193,11 @@ namespace Cog {
 		return ofxCogEngine::GetInstance().resources->GetSound(path);
 	}
 
-	spt<ofxXmlSettings> CogPreloadXMLFile(string path) {
+	spt<xml_document> CogPreloadXMLFile(string path) {
 		return ofxCogEngine::GetInstance().resources->PreloadXMLFile(path);
 	}
 
-	spt<ofxXmlSettings> CogLoadXMLFile(string path) {
+	spt<xml_document> CogLoadXMLFile(string path) {
 		return ofxCogEngine::GetInstance().resources->LoadXMLFile(path);
 	}
 

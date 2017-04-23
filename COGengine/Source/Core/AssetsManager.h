@@ -142,7 +142,7 @@ namespace Cog {
 		Setting GetProjectSettings(string name);
 
 	private:
-		spt<ofxXml> LoadResourcesXml(string path);
+		spt<xml_document> LoadResourcesXml(string path);
 	};
 
 } // namespace

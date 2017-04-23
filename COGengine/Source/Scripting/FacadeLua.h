@@ -61,7 +61,7 @@ namespace Cog {
 		static void CogStopAllSounds();
 
 		// =================== Resources =========================
-		static spt<ofxXmlSettings> CogPreloadXMLFile(string path);
+		static spt<xml_document> CogPreloadXMLFile(string path);
 
 
 		// =================== Raw functions =========================

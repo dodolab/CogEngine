@@ -73,17 +73,16 @@ namespace Cog {
 		}
 		else {
 			string scenes = ofToDataPath(PATH_SCENES);
-			spt<ofxXml> xml = CogPreloadXMLFile(scenes);
-			xml->popAll();
-			xml->pushTag("resources");
-			if (xml->pushTagWithAttributeIfExists("scene", "name", name)) {
-				LoadFromXml(xml);
+			spt<xml_document> xml = CogPreloadXMLFile(scenes);
+			auto sceneXml = xml->select_node(string_format("//scene[@name=\"%s\"]",name.c_str()).c_str());
+
+			if (sceneXml) {
+				LoadFromXml(sceneXml.node());
 				sceneNode->SubmitChanges(true);
 			}
 			else {
 				CogLogError("Scene", "Scene %s couldn't be found in xml file", name.c_str());
 			}
-			xml->popAll();
 		}
 	}
 
@@ -272,49 +271,41 @@ namespace Cog {
 		}
 	}
 
-	void Scene::LoadFromXml(spt<ofxXml> xml) {
+	void Scene::LoadFromXml(xml_node& node) {
 
 		COGLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
 
 		loadedFromXml = true;
-		string type = xml->getAttributex("type", "scene");
+		string type = node.attribute("type").as_string("scene");
 
 		// load scene type
 		if (type.compare("scene") == 0) this->sceneType = SceneType::SCENE;
 		else if (type.compare("dialog") == 0) this->sceneType = SceneType::DIALOG;
 
 		// load settings
-		if (xml->pushTagIfExists("scene_settings")) {
+		auto settings = node.child("scene_settings");
+		if (settings) {
 			Settings set = Settings();
-			set.LoadFromXml(xml);
+			set.LoadFromXml(settings);
 			this->SetSceneSettings(set);
-			xml->popTag();
 		}
 
 		// load layers
-		if (xml->pushTagIfExists("scene_layers")) {
-			int layersNum = xml->getNumTags("layer");
-
-			for (int i = 0; i < layersNum; i++) {
-				xml->pushTag("layer", i);
+		auto layersNode = node.child("scene_layers");
+		if (layersNode) {
+			for (auto layerNode : layersNode.children("layer")) {
 				LayerEnt layer = LayerEnt();
-				layer.LoadFromXml(xml);
+				layer.LoadFromXml(layerNode);
 				layers.push_back(layer);
-				xml->popTag();
 			}
-
-			xml->popTag();
 		}
 
-		int nodes = xml->getNumTags("node");
 		NodeBuilder bld = NodeBuilder();
 
 		// load nodes
-		for (int i = 0; i < nodes; i++) {
-			xml->pushTag("node", i);
-			Node* node = bld.LoadNodeFromXml(xml, sceneNode, this);
+		for (auto nodeNode : node.children("node")) {
+			Node* node = bld.LoadNodeFromXml(nodeNode, sceneNode, this);
 			sceneNode->AddChild(node);
-			xml->popTag();
 		}
 
 		loaded = true;

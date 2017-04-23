@@ -4,9 +4,7 @@
 
 namespace Cog {
 
-		void AnimLoader::LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder) {
-
-			int numberOfAnims = xml->getNumTags("anim");
+		void AnimLoader::LoadAnimationsFromXml(xml_node& xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder) {
 
 			// referenced anims (those with ref attribute) will be processed in second phase
 			map<int, GeneralAnim*> referencedAnims;
@@ -14,31 +12,26 @@ namespace Cog {
 			int actualAnimIndex = 0;
 
 			// phase 1: load direct animations (not referenced)
-			for (int i = 0; i < numberOfAnims; i++) {
-
-				xml->pushTag("anim", i);
+			for (auto animNode : xml.children("anim")) {
 				// load
-				spt<GeneralAnim> anim = spt<GeneralAnim>(CreateAnimationFromXml(xml, referencedAnims, actualAnimIndex, builder));
+				spt<GeneralAnim> anim = spt<GeneralAnim>(CreateAnimationFromXml(animNode, referencedAnims, actualAnimIndex, builder));
 				if (anim->GetName().length() == 0) throw ConfigErrorException("All root animations must have a name!");
 
 				rootAnims.push_back(anim);
-				xml->popTag();
 			}
 
 			actualAnimIndex = 0;
 			// phase 2: load referenced animations
-			for (int i = 0; i < numberOfAnims; i++) {
-
-				xml->pushTag("anim", i);
-				ProcessRefAnimationFromXml(xml, referencedAnims, i, rootAnims, actualAnimIndex);
-				xml->popTag();
+			int indexCounter = 0;
+			for (auto animNode : xml.children("anim")) {
+				ProcessRefAnimationFromXml(animNode, referencedAnims, indexCounter++, rootAnims, actualAnimIndex);
 			}
 		}
 
-		GeneralAnim* AnimLoader::CreateAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims, int& actualAnimIndex, SheetAnimBuilder builder) {
+		GeneralAnim* AnimLoader::CreateAnimationFromXml(xml_node& xml, map<int, GeneralAnim*>& referencedAnims, int& actualAnimIndex, SheetAnimBuilder builder) {
 
-			int innerAnimations = xml->getNumTags("anim");
-
+			auto innerAnimations = xml.children("anim");
+			
 			GeneralAnim* anim = builder();
 
 			// fill ref and name attribute
@@ -47,18 +40,16 @@ namespace Cog {
 			if (anim->GetRef().length() != 0) {
 				// animation is referenced -> push it to the referencedAnims collection and do nothing (it will be loaded during the second phase)
 				referencedAnims[actualAnimIndex] = anim;
-				if (innerAnimations != 0) throw ConfigErrorException("Referenced animations mustn't have inner animations!");
+				if (innerAnimations.begin() != innerAnimations.end()) throw ConfigErrorException("Referenced animations mustn't have inner animations!");
 
 				return anim;
 			}
 			else {
 				// children will be taken from referenced animation
-				for (int i = 0; i < innerAnimations; i++) {
-					xml->pushTag("anim", i);
+				for (auto innerAnim : innerAnimations) {
 					// process recursively
-					spt<GeneralAnim> newAnim = spt<GeneralAnim>(CreateAnimationFromXml(xml, referencedAnims, ++actualAnimIndex, builder));
+					spt<GeneralAnim> newAnim = spt<GeneralAnim>(CreateAnimationFromXml(innerAnim, referencedAnims, ++actualAnimIndex, builder));
 					anim->GetChildren().push_back(newAnim);
-					xml->popTag();
 				}
 			}
 
@@ -77,14 +68,12 @@ namespace Cog {
 			return spt<GeneralAnim>();
 		}
 
-		void AnimLoader::ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims,
+		void AnimLoader::ProcessRefAnimationFromXml(xml_node& xml, map<int, GeneralAnim*>& referencedAnims,
 			int rootAnimIndex, vector<spt<GeneralAnim>>& rootAnims, int& actualAnimIndex) {
 
-			// get number of animations under this element
-			int innerAnimations = xml->getNumTags("anim");
-
-			string ref = (xml->getAttribute(":", "ref", ""));
-			string name = (xml->getAttribute(":", "name", ""));
+		
+			string ref = xml.attribute("ref").as_string();
+			string name = xml.attribute("name").as_string();
 
 			if (ref.length() != 0) {
 				// got referenced animation
@@ -125,11 +114,9 @@ namespace Cog {
 			}
 			else {
 				// animation doesn't have ref attribute -> lets scan its children
-				for (int i = 0; i < innerAnimations; i++) {
-					xml->pushTag("anim", i);
+				for (auto innerAnim : xml.children("anim")) {
 					// recursion
-					ProcessRefAnimationFromXml(xml, referencedAnims, rootAnimIndex, rootAnims, ++actualAnimIndex);
-					xml->popTag();
+					ProcessRefAnimationFromXml(innerAnim, referencedAnims, rootAnimIndex, rootAnims, ++actualAnimIndex);
 				}
 			}
 		}

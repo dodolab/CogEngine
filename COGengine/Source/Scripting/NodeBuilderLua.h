@@ -27,9 +27,9 @@ namespace Cog {
 
 		NodeLua* CreateNode(string name, SceneLua* scene);
 
-		NodeLua* LoadNodeFromXml(spt<ofxXml> xml, NodeLua* parent, SceneLua* scene);
+		NodeLua* LoadNodeFromXml(xml_node& xml, NodeLua* parent, SceneLua* scene);
 
-		NodeLua* LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, NodeLua* parent, SceneLua* scene);
+		NodeLua* LoadRefNodeFromXml(xml_node& contextXml, string nodeName, NodeLua* parent, SceneLua* scene);
 
 		static void InitLuaMapping(luabridge::lua_State* L);
 	};

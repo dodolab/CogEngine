@@ -46,7 +46,7 @@ namespace Cog {
 		}
 	}
 
-	void Logger::OnInit(spt<ofxXmlSettings> config) {
+	void Logger::OnInit(xml_node& config) {
 		delete logOutput;
 		logOutput = nullptr;
 

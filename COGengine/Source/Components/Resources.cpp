@@ -105,23 +105,23 @@ namespace Cog {
 		return new Soundfx(path);
 	}
 
-	spt<ofxXmlSettings> Resources::PreloadXMLFile(string path) {
+	spt<xml_document> Resources::PreloadXMLFile(string path) {
 		auto found = loadedXMLs.find(path);
 		if (found != loadedXMLs.end()) {
 			return (found->second);
 		}
 
-		ofxXmlSettings* xml = new ofxXmlSettings();
-		xml->loadFile(path);
-		auto xmlPtr = spt<ofxXmlSettings>(xml);
+		xml_document* xml = new xml_document();
+		xml->load_file(path.c_str());
+		auto xmlPtr = spt<xml_document>(xml);
 		loadedXMLs[path] = xmlPtr;
 		return xmlPtr;
 	}
 
-	spt<ofxXmlSettings> Resources::LoadXMLFile(string path) {
-		ofxXmlSettings* xml = new ofxXmlSettings();
-		xml->loadFile(path);
-		auto xmlPtr = spt<ofxXmlSettings>(xml);
+	spt<xml_document> Resources::LoadXMLFile(string path) {
+		xml_document* xml = new xml_document();
+		xml->load_file(path.c_str());
+		auto xmlPtr = spt<xml_document>(xml);
 		return xmlPtr;
 	}
 

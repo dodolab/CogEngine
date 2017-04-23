@@ -28,10 +28,15 @@ using namespace std;
 
 #include "ofUtils.h"
 #include "ofBaseTypes.h"
-#include "ofxXmlSettings.h"
+#include "pugixml.h"
 #include "ofGraphics.h"
 #include "ofAppRunner.h"
+
+using namespace pugi; // xml library
+
 #pragma warning(pop)
+
+
 
 // include CogEngine
 
@@ -63,5 +68,4 @@ using namespace std;
 #include "InputHandler.h"
 
 using namespace Cog;
-
 

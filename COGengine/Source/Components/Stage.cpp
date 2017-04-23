@@ -207,21 +207,21 @@ namespace Cog {
 			CogLogError("Stage", "Scenes.xml not found!");
 		}
 		else {
-			spt<ofxXml> xml = CogPreloadXMLFile(scenes);
+			spt<xml_document> xml = CogPreloadXMLFile(scenes);
 
 			bool initLoaded = false;
 
-			if (xml->pushTag("resources")) {
-				int scenesNum = xml->getNumTags("scene");
+			auto resources = xml->child("resources");
 
-				for (int i = 0; i < scenesNum; i++) {
-					xml->pushTag("scene", i);
-
-					string name = xml->getAttributex("name", "");
+			if (resources) {
+				
+				for (auto sceneNode : resources.children("scene")) {
+					
+					string name = sceneNode.attribute("name").as_string("");
 
 					if (name.empty()) CogLogError("Stage", "Scene has no name!");
 
-					bool isPreloaded = xml->getBoolAttributex("preload", false);
+					bool isPreloaded = sceneNode.attribute("preload").as_bool(false);
 					Scene* sc = new Scene(name, isPreloaded);
 
 					bool isInitial = (initialScene.empty() || sc->GetName().compare(initialScene) == 0);
@@ -230,7 +230,7 @@ namespace Cog {
 					if (sc->IsPreloaded() || (!initLoaded && isInitial)) {
 						// load complete scene only if it isn't lazy loaded
 						// the initial scene will always be preloaded
-						sc->LoadFromXml(xml);
+						sc->LoadFromXml(sceneNode);
 					}
 					else {
 						// just set the indicator
@@ -245,8 +245,6 @@ namespace Cog {
 					else {
 						AddScene(sc, false);
 					}
-
-					xml->popTag();
 				}
 			}
 		}

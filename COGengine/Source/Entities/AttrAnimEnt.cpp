@@ -3,14 +3,14 @@
 
 namespace Cog {
 
-	void AttrAnimEnt::LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
-		this->name = xml->getAttributex("name", "");
-		this->attribute = xml->getAttributex("attr", "");
+	void AttrAnimEnt::LoadFromXml(xml_node& xml, Setting& defaultSettings) {
+		this->name = xml.attribute("name").as_string();
+		this->attribute = xml.attribute("attr").as_string();
 
 		if (this->attribute.empty()) throw IllegalArgumentException("Argument must be specified!");
 
-		string fromStr = xml->getAttributex("from", "x");
-		string toStr = xml->getAttributex("to", "x");
+		string fromStr = xml.attribute("from").as_string("x");
+		string toStr = xml.attribute("to").as_string("x");
 
 		// if the "from" attribute contains "x", the value will be taken from animted object 
 		if (fromStr.find("x") != string::npos) {
@@ -55,17 +55,17 @@ namespace Cog {
 			else toVal = 0;
 		}
 
-		this->duration = xml->getAttributex("duration", 0);
-		this->begin = xml->getAttributex("begin", 0);
-		this->end = xml->getAttributex("end", 0);
+		this->duration = xml.attribute("duration").as_int(0);
+		this->begin = xml.attribute("begin").as_int(0);
+		this->end = xml.attribute("end").as_int(0);
 
-		this->transType = EnumConverter::StrToMeasureType(xml->getAttributex("mtype", "direct"));
-		this->attributeType = EnumConverter::StrToAttributeType(xml->getAttributex("attr", ""));
+		this->transType = EnumConverter::StrToMeasureType(xml.attribute("mtype").as_string("direct"));
+		this->attributeType = EnumConverter::StrToAttributeType(xml.attribute("attr").as_string(""));
 
 		RecalcDuration();
 
 		// get easing function
-		string easing = xml->getAttributex("easefunc", "");
+		string easing = xml.attribute("easefunc").as_string();
 		if (!easing.empty()) {
 			this->fadeFunction = EnumConverter::StrToFadeFunction(easing);
 		}

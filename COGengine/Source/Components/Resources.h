@@ -6,6 +6,9 @@
 #include "TransformEnt.h"
 #include "GeneralAnim.h"
 #include "AssetsManager.h"
+#include "pugixml.h"
+
+using namespace pugi;
 
 namespace Cog {
 
@@ -28,7 +31,7 @@ namespace Cog {
 		// cached sounds and music
 		map<string, Soundfx*> loadedSounds;
 		// cached xml files
-		map<string, spt<ofxXmlSettings>> loadedXMLs;
+		map<string, spt<xml_document>> loadedXMLs;
 
 	public:
 
@@ -83,13 +86,13 @@ namespace Cog {
 		* Preloads xml file; if the file is in the cache, returns cached xml
 		* @param path path to file
 		*/
-		spt<ofxXmlSettings> PreloadXMLFile(string path);
+		spt<xml_document> PreloadXMLFile(string path);
 
 		/**
 		* Loads xml file without caching
 		* @param path path to file
 		*/
-		spt<ofxXmlSettings> LoadXMLFile(string path);
+		spt<xml_document> LoadXMLFile(string path);
 
 		/**
 		* Gets animation by name

@@ -76,20 +76,19 @@ namespace Cog {
 		}
 	}
 
-	void Setting::LoadFromXml(spt<ofxXml> xml) {
-		name = xml->getAttribute(":", "name", "");;
+	void Setting::LoadFromXml(xml_node& node) {
+		name = node.attribute("name").as_string("");
 
-		int itemsNum = xml->getNumTags("item");
-
-		for (int j = 0; j < itemsNum; j++) {
-			xml->pushTag("item", j);
-
+		for (auto itemNode : node.children("item")) {
+			
 			SettingItem item = SettingItem();
-			item.key = xml->getAttribute(":", "key", "");
+			item.key = itemNode.attribute("key").as_string("");
 
-			if (xml->attributeExists("value")) {
+			auto value = itemNode.attribute("value");
+
+			if (value) {
 				// single string  <item key="abc" value="def" />
-				item.AddValues(xml->getAttributex("value", ""));
+				item.AddValues(value.as_string(""));
 			}
 			else {
 				/* more xml elements:
@@ -98,27 +97,21 @@ namespace Cog {
 				<value>val2</value>
 				</item>
 				*/
-				int values = xml->getNumTags("value");
-				for (int m = 0; m < values; m++) {
-					xml->pushTag("value", m);
-					string val = xml->getValuex("");
+				for (auto valueNode : itemNode.children("value")) {
+					string val = valueNode.value();
 					item.AddValues(val);
-					xml->popTag();
 				}
 			}
 
 			items[item.key] = item;
-			xml->popTag();
 		}
 
 		// items may be declared as attributes, e.g. <setting name="myset" key1="value1" key2="value2" />
-		vector<string> allAttributes;
-		xml->getAttributeNames(":", allAttributes);
-
-		for (string attr : allAttributes) {
-			if (attr.compare("name") != 0) {
-				string val = xml->getAttributex(attr, "");
-				items[attr] = SettingItem(attr, val);
+		for (auto attrNode : node.attributes()) {
+			auto attrName = attrNode.name();
+			if (string(attrName).compare("name") != 0) {
+				string val = attrNode.value();
+				items[attrName] = SettingItem(attrName, val);
 			}
 		}
 	}
@@ -155,18 +148,14 @@ namespace Cog {
 		MergeSettings(newSet.settings);
 	}
 
-	void Settings::LoadFromXml(spt<ofxXml> xml) {
+	void Settings::LoadFromXml(xml_node& node) {
 
 		settings = map<string, Setting>();
 
-		int numOfSettings = xml->getNumTags("setting");
-
-		for (int i = 0; i < numOfSettings; i++) {
-			xml->pushTag("setting", i);
+		for (auto settingNode : node.children("setting")) {
 			auto set = Setting();
-			set.LoadFromXml(xml);
+			set.LoadFromXml(settingNode);
 			settings[set.name] = set;
-			xml->popTag();
 		}
 	}
 

@@ -40,20 +40,16 @@ namespace Cog {
 		GeneralAnim::GetParametersFromReference(reference);
 	}
 
-	void AttribAnim::LoadAttributesFromXml(spt<ofxXml> xml) {
+	void AttribAnim::LoadAttributesFromXml(xml_node& xml) {
 
 		GeneralAnim::LoadAttributesFromXml(xml);
 
 		// load attranim nodes
-		int attrAnims = xml->getNumTags("attranim");
-
-		for (int i = 0; i < attrAnims; i++) {
-			xml->pushTag("attranim", i);
+		for (auto attribAnimNode : xml.children("attranim")) {
 			spt<AttrAnimEnt> trans = spt<AttrAnimEnt>(new AttrAnimEnt());
 			auto dummySet = Setting();
-			trans->LoadFromXml(xml, dummySet);
+			trans->LoadFromXml(attribAnimNode, dummySet);
 			this->animEntities.push_back(AttribAnimContext(trans));
-			xml->popTag();
 		}
 
 		RecalcDuration();

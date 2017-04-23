@@ -6,9 +6,12 @@
 using std::map;
 using std::string;
 
+#include "ofBaseTypes.h"
 #include "Definitions.h"
-#include "ofxXmlSettings.h"
+#include "pugixml.h"
 #include "Utils.h"
+
+using namespace pugi;
 
 namespace Cog {
 
@@ -183,7 +186,7 @@ namespace Cog {
 		/**
 		* Loads collection key-value pairs from xml
 		*/
-		void LoadFromXml(spt<ofxXml> xml);
+		void LoadFromXml(xml_node& node);
 	};
 
 	/**
@@ -275,7 +278,7 @@ namespace Cog {
 		/**
 		* Loads settings from XML
 		*/
-		void LoadFromXml(spt<ofxXml> xml);
+		void LoadFromXml(xml_node& node);
 	};
 
 

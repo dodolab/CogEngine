@@ -5,8 +5,9 @@
 using namespace std;
 
 #include "Definitions.h"
-#include "ofxXmlSettings.h"
+#include "pugixml.h"
 
+using namespace pugi;
 
 namespace Cog {
 
@@ -91,12 +92,12 @@ namespace Cog {
 		/**
 		* Loads base attributes such as ref and name from XML
 		*/
-		virtual void LoadBaseAttributesFromXml(spt<ofxXml> xml);
+		virtual void LoadBaseAttributesFromXml(xml_node& xml);
 
 		/**
 		* Loads other attributes from XML
 		*/
-		virtual void LoadAttributesFromXml(spt<ofxXml> xml);
+		virtual void LoadAttributesFromXml(xml_node& xml);
 
 		/**
 		* Returns true, if this animation is animatable (has animation content)

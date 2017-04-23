@@ -2,6 +2,7 @@
 
 #include "Msg.h"
 #include "Definitions.h"
+#include "ofBaseTypes.h"
 
 namespace Cog {
 

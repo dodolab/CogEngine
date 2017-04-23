@@ -233,11 +233,9 @@
     <ClInclude Include="3rdParty\ofxNetwork\ofxUDPManager.h" />
     <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h" />
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h" />
-    <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h" />
     <ClInclude Include="3rdParty\pugixml\pugiconfig.h" />
     <ClInclude Include="3rdParty\pugixml\pugixml.h" />
     <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
-    <ClInclude Include="3rdParty\tinyxml\tinyxml.h" />
     <ClInclude Include="Source\AI\ActionFilter.h" />
     <ClInclude Include="Source\AI\AgentsReward.h" />
     <ClInclude Include="Source\AI\AIAgent.h" />
@@ -517,14 +515,11 @@
     <ClCompile Include="3rdParty\ofxNetwork\ofxUDPManager.cpp" />
     <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp" />
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp" />
-    <ClCompile Include="3rdParty\ofxXmlSettings\ofxXmlSettings.cpp" />
     <ClCompile Include="3rdParty\pugixml\pugixml.cpp" />
     <ClCompile Include="3rdParty\sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\tinyxml\tinyxml.cpp" />
-    <ClCompile Include="3rdParty\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="Source\Attributes\Flags.cpp" />
     <ClCompile Include="Source\Attributes\Mesh.cpp" />
     <ClCompile Include="Source\Attributes\StrId.cpp" />

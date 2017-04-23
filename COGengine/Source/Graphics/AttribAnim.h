@@ -2,7 +2,6 @@
 
 #include "Definitions.h"
 #include "AttrAnimEnt.h"
-#include "ofxXmlSettings.h"
 #include "GeneralAnim.h"
 
 namespace Cog {
@@ -126,7 +125,7 @@ namespace Cog {
 		/**
 		* Loads attributes from xml
 		*/
-		virtual void LoadAttributesFromXml(spt<ofxXml> xml);
+		virtual void LoadAttributesFromXml(xml_node& xml);
 
 		virtual bool IsAnimatable() {
 			return HasAnimEntities();

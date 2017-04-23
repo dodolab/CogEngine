@@ -3,7 +3,6 @@
 #include <sstream>
 
 #include "ofUtils.h"
-#include "ofxXmlSettings.h"
 #include "Definitions.h"
 #include "Component.h"
 
@@ -116,7 +115,7 @@ namespace Cog {
 	protected:
 		LoggerOutput* logOutput = nullptr;
 		LogLevel logLevel;
-		spt<ofxXmlSettings> config;
+		xml_node config;
 		// collection of modules to include
 		vector<string> includes;
 		// collection of modules to exclude
@@ -165,7 +164,7 @@ namespace Cog {
 			logLevel = LogLevel::LINFO;
 		}
 
-		void OnInit(spt<ofxXmlSettings> config);
+		void OnInit(xml_node& config);
 	
 
 		/**

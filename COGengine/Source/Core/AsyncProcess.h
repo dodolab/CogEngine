@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Definitions.h"
-#include "ofxXmlSettings.h"
 #include "ofThread.h"
 
 namespace Cog {

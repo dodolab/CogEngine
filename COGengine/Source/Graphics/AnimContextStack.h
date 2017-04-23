@@ -2,7 +2,7 @@
 
 #include "Definitions.h"
 #include "GeneralAnim.h"
-
+#include <stack>
 
 
 namespace Cog {

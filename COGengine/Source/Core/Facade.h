@@ -6,6 +6,9 @@
 #include "SheetAnim.h"
 #include "Definitions.h"
 #include "Settings.h"
+#include "pugixml.h"
+
+using namespace pugi;
 
 namespace Cog {
 
@@ -85,8 +88,8 @@ namespace Cog {
 	spt<ofVboMesh> CogGetVboMesh(string path);
 	spt<ofTrueTypeFont> CogGetFont(string path, int size);
 	Soundfx* CogGetSound(string path);
-	spt<ofxXmlSettings> CogPreloadXMLFile(string path);
-	spt<ofxXmlSettings> CogLoadXMLFile(string path);
+	spt<xml_document> CogPreloadXMLFile(string path);
+	spt<xml_document> CogLoadXMLFile(string path);
 	spt<GeneralAnim> CogGetAnimation(string name);
 	spt<SheetAnim> CogGetSheetAnimation(string name);
 	spt<AttribAnim> CogGetAttribAnimation(string name);

@@ -3,7 +3,7 @@
 #include "CogConfig.h"
 #include "Definitions.h"
 #include <vector>
-#include "ofxXmlSettings.h"
+#include <functional>
 
 namespace Cog {
 

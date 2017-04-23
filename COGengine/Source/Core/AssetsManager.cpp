@@ -12,62 +12,56 @@ namespace Cog {
 	void AssetsManager::OnInit() {
 
 		string stringsPath = ofToDataPath(PATH_STRINGS);
-		spt<ofxXml> xml = LoadResourcesXml(stringsPath);
-		if (xml) {
-			int stringsNum = xml->getNumTags("string");
+		auto xmlDoc = LoadResourcesXml(stringsPath);
 
-			for (int i = 0; i < stringsNum; i++) {
-				xml->pushTag("string", i);
-				string key = xml->getAttributex("name", "");
-				string value = xml->getValuex("");
+		if (xmlDoc) {
+			for (auto stringNode : xmlDoc->child("resources").children("string")) {
+				string key = stringNode.attribute("name").as_string();
+				string value = stringNode.value();
 
 				if (!key.empty() && !value.empty()) {
 					strings[key] = value;
 				}
-
-				xml->popTag();
 			}
 		}
 
 		string dimensionsPath = ofToDataPath(PATH_DIMENSIONS);
-		xml = LoadResourcesXml(dimensionsPath);
-		if (xml) {
-			int stringsNum = xml->getNumTags("dimen");
-
-			for (int i = 0; i < stringsNum; i++) {
-				xml->pushTag("dimen", i);
-				string key = xml->getAttributex("name", "");
-				string value = xml->getValuex("");
+		xmlDoc = LoadResourcesXml(dimensionsPath);
+		if (xmlDoc) {
+			for (auto dimenNode : xmlDoc->child("resources").children("string")) {
+				string key = dimenNode.attribute("name").as_string();
+				string value = dimenNode.value();
 
 				if (!key.empty() && !value.empty()) {
 					dimensions[key] = value;
 				}
-
-				xml->popTag();
 			}
 		}
 
 		string globalSettings = ofToDataPath(PATH_GLOBAL_SETTINGS);
-		xml = LoadResourcesXml(globalSettings);
-		if (xml) {
-			loadedGlobalSettings.LoadFromXml(xml);
+		xmlDoc = LoadResourcesXml(globalSettings);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
+			loadedGlobalSettings.LoadFromXml(resources);
 		}
 
 		string defaultSettings = ofToDataPath(PATH_DEFAULT_SETTINGS);
-		xml = LoadResourcesXml(defaultSettings);
-		if (xml) {
-			loadedDefaultSettings.LoadFromXml(xml);
+		xmlDoc = LoadResourcesXml(defaultSettings);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
+			loadedDefaultSettings.LoadFromXml(resources);
 		}
 
 		string projectSettings = ofToDataPath(PATH_PROJECT_SETTINGS);
-		xml = LoadResourcesXml(projectSettings);
-		if (xml) {
-			loadedProjectSettings.LoadFromXml(xml);
+		xmlDoc = LoadResourcesXml(projectSettings);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
+			loadedProjectSettings.LoadFromXml(resources);
 		}
 
 		string animationsPath = ofToDataPath(PATH_ANIMATIONS);
-		xml = LoadResourcesXml(animationsPath);
-		if (xml) {
+		xmlDoc = LoadResourcesXml(animationsPath);
+		if (xmlDoc) {
 			auto animLoader = AnimLoader();
 			auto rootAnims = vector<spt<GeneralAnim>>();
 
@@ -75,7 +69,8 @@ namespace Cog {
 				return new SheetAnim();
 			};
 
-			animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
+			auto resources = xmlDoc->child("resources");
+			animLoader.LoadAnimationsFromXml(resources, rootAnims, builder);
 
 
 			// store animation
@@ -85,10 +80,10 @@ namespace Cog {
 			}
 		}
 
-		
+
 		string attrAnimationsPath = ofToDataPath(PATH_ATTRANIMATIONS);
-		xml = LoadResourcesXml(attrAnimationsPath);
-		if (xml) {
+		xmlDoc = LoadResourcesXml(attrAnimationsPath);
+		if (xmlDoc) {
 			auto animLoader = AnimLoader();
 			auto rootAnims = vector<spt<GeneralAnim>>();
 
@@ -96,7 +91,8 @@ namespace Cog {
 				return new AttribAnim();
 			};
 
-			animLoader.LoadAnimationsFromXml(xml, rootAnims, builder);
+			auto resources = xmlDoc->child("resources");
+			animLoader.LoadAnimationsFromXml(resources, rootAnims, builder);
 
 			// store animation
 			for (spt<GeneralAnim> anim : rootAnims) {
@@ -106,54 +102,50 @@ namespace Cog {
 		}
 
 		string transformsPath = ofToDataPath(PATH_TRANSFORMS);
-		xml = LoadResourcesXml(transformsPath);
-		if (xml) {
-			int transNum = xml->getNumTags("transform");
-
-			for (int i = 0; i < transNum; i++) {
-				xml->pushTag("transform", i);
+		xmlDoc = LoadResourcesXml(transformsPath);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
+			int indexCtr = 0;
+			for (auto transNode : resources.children("transform")) {
 				spt<TransformEnt> trans = spt<TransformEnt>(new TransformEnt());
 				Setting defaultSet = GetDefaultSettings("transform");
-				trans->LoadFromXml(xml, defaultSet);
+				trans->LoadFromXml(transNode, defaultSet);
 
-				COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", i);
+				COGASSERT(!trans->name.empty(), "Resources", "Transform entity on index %d in configuration file must have a name!", indexCtr);
 
 				StoreEntity(trans->name, trans);
-				xml->popTag();
+				indexCtr++;
 			}
 		}
 
 
 		string behaviorsPath = ofToDataPath(PATH_BEHAVIORS);
-		xml = LoadResourcesXml(behaviorsPath);
-		if (xml) {
-			int behNum = xml->getNumTags("behavior");
-			
-			for (int i = 0; i < behNum; i++) {
-				xml->pushTag("behavior", i);
+		xmlDoc = LoadResourcesXml(behaviorsPath);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
+			int indexCtr = 0;
+			for (auto behNode : resources.children("behavior")) {
 				spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 
 				auto dummySet = Setting();
-				ent->LoadFromXml(xml, dummySet);
+				ent->LoadFromXml(behNode, dummySet);
 
-				COGASSERT(!ent->name.empty(), "Resources", "Behavior entity on index %d in configuration file must have a name!", i);
+				COGASSERT(!ent->name.empty(), "Resources", "Behavior entity on index %d in configuration file must have a name!", indexCtr);
 
 				StoreEntity(ent->name, ent);
-				xml->popTag();
+				indexCtr++;
 			}
 		}
 
 		string spriteSheetsPath = ofToDataPath(PATH_SPRITESHEETS);
-		xml = LoadResourcesXml(spriteSheetsPath);
-		if (xml) {
-			int sheetsNum = xml->getNumTags("spritesheet");
+		xmlDoc = LoadResourcesXml(spriteSheetsPath);
+		if (xmlDoc) {
+			auto resources = xmlDoc->child("resources");
 
-			for (int i = 0; i < sheetsNum; i++) {
-				xml->pushTag("spritesheet", i);
+			for (auto sheetNode : resources.children("spritesheet")) {
 				spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
-				spriteSheet->LoadFromXml(xml);
+				spriteSheet->LoadFromXml(sheetNode);
 				this->StoreSpriteSheet(spriteSheet);
-				xml->popTag();
 			}
 		}
 	}
@@ -288,16 +280,13 @@ namespace Cog {
 	}
 
 
-	spt<ofxXml> AssetsManager::LoadResourcesXml(string path) {
+	spt<xml_document> AssetsManager::LoadResourcesXml(string path) {
 		if (ofFile(path.c_str()).exists()) {
-			spt<ofxXml> xml = spt<ofxXml>(new ofxXml());
-			xml->loadFile(path);
-
-			if (xml->pushTag("resources")) {
-				return xml;
-			}
+			spt<xml_document> xml = spt<xml_document>(new xml_document());
+			xml->load_file(path.c_str());
+			return xml;
 		}
 
-		return spt<ofxXml>();
+		return spt<xml_document>();
 	}
 }

@@ -3,23 +3,24 @@
 
 namespace Cog {
 
-	void TransformEnt::LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings) {
+	void TransformEnt::LoadFromXml(xml_node& xml, Setting& defaultSettings) {
 
-		this->name = xml->getAttributex("name", "");
+		this->name = xml.attribute("name").as_string();
 
 		// calculation type is LOCAL by default
 		pType = sType = CalcType::LOC;
 
 		// =================== get positions
-		if (xml->attributeExists("pos")) {
-			string posString = xml->getAttributex("pos", "");
+		auto posAttrib = xml.attribute("pos");
+		if (posAttrib) {
+			string posString = posAttrib.as_string();
 			float posF = defaultSettings.GetItemValFloat("pos", 0.0);
 			pType = EnumConverter::GetUnitValue(posString, posF);
 			pos = ofVec2f(posF, posF);
 		}
 		else {
-			string posXStr = xml->getAttributex("pos_x", "");
-			string posYStr = xml->getAttributex("pos_y", "");
+			string posXStr = xml.attribute("pos_x").as_string();
+			string posYStr = xml.attribute("pos_y").as_string();
 
 			float posX = defaultSettings.GetItemValFloat("pos_x", 0.0);
 			float posY = defaultSettings.GetItemValFloat("pos_y", 0.0);
@@ -31,23 +32,24 @@ namespace Cog {
 		}
 
 
-		zIndex = xml->getAttributex("z_index", defaultSettings.GetItemValFloat("z_index", 0));
+		zIndex = xml.attribute("z_index").as_int(defaultSettings.GetItemValFloat("z_index", 0));
 
 		// =================== get size
 
 		float width = 0;
 		float height = 0;
 
-		if (xml->attributeExists("size")) {
-			string sizeStr = xml->getAttributex("size", "1.0");
+		auto sizeAttr = xml.attribute("size");
+		if (sizeAttr) {
+			string sizeStr = sizeAttr.as_string("1.0");
 			float size = defaultSettings.GetItemValFloat("size", 1.0);
 			sType = EnumConverter::GetUnitValue(sizeStr, size);
 
 			width = height = size;
 		}
 		else {
-			string widthStr = xml->getAttributex("width", "");
-			string heightStr = xml->getAttributex("height", "");
+			string widthStr = xml.attribute("width").as_string();
+			string heightStr = xml.attribute("height").as_string();
 
 			width = defaultSettings.GetItemValFloat("width", 0.0);
 			height = defaultSettings.GetItemValFloat("height", 0.0);
@@ -76,26 +78,28 @@ namespace Cog {
 		size = ofVec2f(width, height);
 
 		// =================== get anchor
-		if (xml->attributeExists("anchor")) {
-			float anchorFlt = xml->getAttributex("anchor", 0.0);
+		auto anchorAttr = xml.attribute("anchor");
+		if (anchorAttr) {
+			float anchorFlt = anchorAttr.as_float(0.0f);
 			anchor = ofVec2f(anchorFlt);
 		}
 		else {
-			anchor.x = xml->getAttributex("anchor_x", defaultSettings.GetItemValFloat("anchor_x", 0.0));
-			anchor.y = xml->getAttributex("anchor_y", defaultSettings.GetItemValFloat("anchor_y", 0.0));
+			anchor.x = xml.attribute("anchor_x").as_float(defaultSettings.GetItemValFloat("anchor_x", 0.0));
+			anchor.y = xml.attribute("anchor_y").as_float(defaultSettings.GetItemValFloat("anchor_y", 0.0));
 		}
 
 		// get rotation and centroid
 
-		rotation = xml->getAttributex("rotation", defaultSettings.GetItemValFloat("rotation", 0.0));
+		rotation = xml.attribute("rotation").as_float(defaultSettings.GetItemValFloat("rotation", 0.0));
 
-		if (xml->attributeExists("rotation_origin")) {
-			float rotOrigin = xml->getAttributex("rotation_origin", 0.5);
+		auto rotOrigAttr = xml.attribute("rotation_origin");
+		if (rotOrigAttr) {
+			float rotOrigin = rotOrigAttr.as_float(0.5f);
 			rotationCentroid = ofVec2f(rotOrigin);
 		}
 		else {
-			rotationCentroid.x = xml->getAttributex("rotation_origin_x", defaultSettings.GetItemValFloat("rotation_origin_x", 0.0));
-			rotationCentroid.y = xml->getAttributex("rotation_origin_y", defaultSettings.GetItemValFloat("rotation_origin_y", 0.0));
+			rotationCentroid.x = xml.attribute("rotation_origin_x").as_float(defaultSettings.GetItemValFloat("rotation_origin_x", 0.0));
+			rotationCentroid.y = xml.attribute("rotation_origin_y").as_float(defaultSettings.GetItemValFloat("rotation_origin_y", 0.0));
 		}
 	}
 

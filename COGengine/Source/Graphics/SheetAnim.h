@@ -65,7 +65,7 @@ namespace Cog {
 		void GetParametersFromReference(spt<GeneralAnim> reference);
 
 
-		virtual void LoadAttributesFromXml(spt<ofxXml> xml);
+		virtual void LoadAttributesFromXml(xml_node& xml);
 
 
 		/**

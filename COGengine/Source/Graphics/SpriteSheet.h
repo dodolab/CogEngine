@@ -4,8 +4,8 @@
 #include <vector>
 using namespace std;
 #include "ofImage.h"
-#include "ofxXmlSettings.h"
-
+#include "pugixml.h"
+using namespace pugi;
 #include "Definitions.h"
 #include "SpriteSet.h"
 
@@ -100,7 +100,7 @@ namespace Cog {
 		bool RemoveSprite(spt<SpriteSet> sprite);
 
 
-		void LoadFromXml(spt<ofxXml> xml);
+		void LoadFromXml(xml_node& xml);
 	};
 
 }// namespace

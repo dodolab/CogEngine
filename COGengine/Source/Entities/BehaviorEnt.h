@@ -53,7 +53,7 @@ namespace Cog {
 		/**
 		* Loads entity from xml
 		*/
-		void LoadFromXml(spt<ofxXml> xml, Setting& set);
+		void LoadFromXml(xml_node& xml, Setting& set);
 
 	};
 }// namespace

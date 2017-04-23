@@ -2,26 +2,26 @@
 
 namespace Cog {
 
-	void BehaviorEnt::LoadFromXml(spt<ofxXml> xml, Setting& set) {
+	void BehaviorEnt::LoadFromXml(xml_node& xml, Setting& set) {
 
 		// get reference (not mandatory)
-		this->ref = xml->getAttributex("ref", "");
+		this->ref = xml.attribute("ref").as_string();
 
 		if (this->ref.empty()) {
-			this->name = xml->getAttributex("name", "");
+			this->name = xml.attribute("name").as_string();
 		}
 		else this->name = this->ref;
 
 		// get type
-		this->type = xml->getAttributex("type", "");
+		this->type = xml.attribute("type").as_string();
 
 		// load settings
 		this->setting = Setting();
 
-		if (xml->pushTagIfExists("setting")) {
+		auto settingNode = xml.child("setting");
+		if (settingNode) {
 			this->setting = Setting();
 			this->setting.LoadFromXml(xml);
-			xml->popTag();
 		}
 
 		// there are two ways how to specify settings: as a setting tag or 
@@ -30,15 +30,14 @@ namespace Cog {
 		// case 1:  <behavior type="MyBehavior"> <setting><item key="myKey" value="myValue"/></setting> </behavior>
 		// case 2:  <behavior type="MyBehavior" myKey="myValue" />   -> easier
 
-		vector<string> allAttributes;
-		xml->getAttributeNames(":", allAttributes);
-
-		for (string attr : allAttributes) {
-			if (attr.compare("name") != 0 && attr.compare("type") != 0 && attr.compare("ref") != 0) {
+	
+		for (auto attr : xml.attributes()) {
+			auto attrName = string(attr.name());
+			if (attrName.compare("name") != 0 && attrName.compare("type") != 0 && attrName.compare("ref") != 0) {
 				// settings could be specified even as attributes of the behavior tag!
-				string val = xml->getAttributex(attr, "");
+				string val = attr.value();
 
-				this->setting.AddItem(attr, val);
+				this->setting.AddItem(attr.name(), val);
 			}
 		}
 	}

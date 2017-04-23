@@ -263,7 +263,7 @@ namespace Cog {
 			return *this;
 		}
 
-		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings);
+		void LoadFromXml(xml_node& xml, Setting& defaultSettings);
 
 	};
 

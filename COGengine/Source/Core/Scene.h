@@ -337,7 +337,7 @@ namespace Cog
 		/**
 		* Loads scene from xml
 		*/
-		void LoadFromXml(spt<ofxXml> xml);
+		void LoadFromXml(xml_node& node);
 
 		bool operator==(string name) {
 			return this->name.compare(name) == 0;

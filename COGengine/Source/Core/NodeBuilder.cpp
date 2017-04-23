@@ -169,11 +169,12 @@ namespace Cog {
 	}
 
 
-	Node* NodeBuilder::LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene) {
+	Node* NodeBuilder::LoadNodeFromXml(xml_node& xml, Node* parent, Scene* scene) {
 
-		if (xml->getAttributex("ref", "").length() != 0) {
+		auto refAttrib = xml.attribute("ref");
+		if (refAttrib) {
 			// load referenced node
-			Node* nodeToReturn = LoadRefNodeFromXml(xml, xml->getAttributex("ref", ""), parent, scene);
+			Node* nodeToReturn = LoadRefNodeFromXml(xml, refAttrib.as_string(""), parent, scene);
 			return nodeToReturn;
 		}
 
@@ -181,8 +182,8 @@ namespace Cog {
 		Settings& settings = scene->GetSceneSettings();
 
 		// in xml the tag can be under either tag or name attribute
-		string name = xml->getAttributex("tag", xml->getAttributex("name",""));
-		string img = xml->getAttributex("img", "");
+		string name = xml.attribute("tag").as_string(xml.attribute("name").as_string());
+		string img = xml.attribute("img").as_string();
 
 		Node* node = CreateNode(name, scene);
 
@@ -190,54 +191,59 @@ namespace Cog {
 			CreateImageNode(node, img);
 		}
 
-		if (xml->attributeExists("img_click")) {
+		auto clickAttrib = xml.attribute("img_click");
+		if (clickAttrib) {
 			// set image on click
-			string imgClick = xml->getAttributex("img_click", "");
-			string imgDisabled = xml->getAttributex("img_disabled", "");
+			string imgClick = clickAttrib.as_string();
+			string imgDisabled = xml.attribute("img_disabled").as_string();
 
 			CreateButtonNode(node, img, imgClick, imgDisabled);
 		}
 
-		if (xml->attributeExists("img_multiselect")) {
+		auto multiSelAttrib = xml.attribute("img_multiselect");
+		if (multiSelAttrib) {
 			// set image on selection
-			string imgSelect = xml->getAttributex("img_multiselect", "");
-			string selectGroup = xml->getAttributex("select_group", "");
+			string imgSelect = multiSelAttrib.as_string();
+			string selectGroup = xml.attribute("select_group").as_string();
 			CreateMultiSelectionNode(node, img, imgSelect, selectGroup);
 		}
 
-		if (xml->attributeExists("img_select")) {
+		auto selectAttrib = xml.attribute("img_select");
+		if (selectAttrib) {
 			// set image on selection
-			string imgSelect = xml->getAttributex("img_select", "");
+			string imgSelect = selectAttrib.as_string();
 			CreateSelectionNode(node, img, imgSelect);
 		}
 
-		if (xml->attributeExists("animation")) {
+		auto animAttrib = xml.attribute("animation");
+		if (animAttrib) {
 			// set animation
-			string animName = xml->getAttributex("animation", "");
+			string animName = animAttrib.as_string();
 			CreateAnimationNode(node, animName);
 		}
 
-		if (xml->pushTagIfExists("mesh")) {
+		auto meshXml = xml.child("mesh");
+		if (meshXml) {
 			// load mesh
-			LoadMeshFromXml(xml, node, scene);
-			xml->popTag();
+			LoadMeshFromXml(meshXml, node, scene);
 		}
 
 		// text must be loaded before transform
-		if (xml->pushTagIfExists("text")) {
-			LoadTextFromXml(xml, node, parent);
-			xml->popTag();
+		auto textXml = xml.child("text");
+		if (textXml) {
+			LoadTextFromXml(textXml, node, parent);
 		}
 
-		if (xml->pushTagIfExists("label")) {
-			LoadLabelFromXml(xml, node, parent);
-			xml->popTag();
+		auto labelXml = xml.child("label");
+		if (labelXml) {
+			LoadLabelFromXml(labelXml, node, parent);
 		}
 
-		if (xml->pushTagIfExists("transform")) {
+		auto transXml = xml.child("transform");
+		if (transXml) {
 			// load transformation
 			TransformEnt transformEnt = TransformEnt();
-			transformEnt.LoadFromXml(xml, settings.GetSetting("transform"));
+			transformEnt.LoadFromXml(transXml, settings.GetSetting("transform"));
 
 			// =================== get grid size (if specified)
 			int gridWidth = settings.GetSettingValInt("transform", "grid_width");
@@ -246,7 +252,6 @@ namespace Cog {
 			TransformMath math = TransformMath();
 			// set transform according to the parsed values
 			math.SetTransform(node, parent, transformEnt, gridWidth, gridHeight);
-			xml->popTag();
 		}
 		else {
 			// set transform to match the whole scene
@@ -254,89 +259,71 @@ namespace Cog {
 			math.SetSizeToScreen(node, parent);
 		}
 
-		if (xml->tagExists("behavior")) {
-			int behaviors = xml->getNumTags("behavior");
-			// load behaviors
-			for (int i = 0; i < behaviors; i++) {
-				xml->pushTag("behavior", i);
-				LoadBehaviorFromXml(xml, node);
-				xml->popTag();
-			}
+		// load behaviors
+		for (auto behavior : xml.children("behavior")) {
+			LoadBehaviorFromXml(behavior, node);
 		}
 
-		if (xml->tagExists("state")) {
-			int states = xml->getNumTags("state");
-			// load states
-			for (int i = 0; i < states; i++) {
-				string stateName = xml->getValue("state", "", i);
-				node->GetStates().SetState(StrId(stateName));
-			}
+
+		// load states
+		for (auto stateNode : xml.children("state")) {
+			string stateName = stateNode.value();
+			node->GetStates().SetState(StrId(stateName));
 		}
 
-		if (xml->tagExists("node")) {
-			int children = xml->getNumTags("node");
-			// load children
-			for (int i = 0; i < children; i++) {
-				xml->pushTag("node", i);
-				Node* child = LoadNodeFromXml(xml, node, scene);
-				if (child != nullptr) {
-					node->AddChild(child);
-				}
-				xml->popTag();
+		// load children
+		for (auto nodeXml : xml.children("node")) {
+			Node* child = LoadNodeFromXml(nodeXml, node, scene);
+			if (child != nullptr) {
+				node->AddChild(child);
 			}
 		}
 		return node;
 	}
 
-	Node* NodeBuilder::LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, Node* parent, Scene* scene) {
+	Node* NodeBuilder::LoadRefNodeFromXml(xml_node& contextXml, string nodeName, Node* parent, Scene* scene) {
 		string nodes = ofToDataPath(PATH_NODES);
 
-		if (ofFile(nodes.c_str()).exists()) {
-			// load the file from scratch
-			spt<ofxXml> nodesXml = spt<ofxXml>(new ofxXml());
-			nodesXml->loadFile(nodes);
+		// load the file from scratch
+		auto nodesXml = CogPreloadXMLFile(nodes);
 
-			nodesXml->pushTag("resources");
-			int nodes = nodesXml->getNumTags("node");
-
-			for (int i = 0; i < nodes; i++) {
-				nodesXml->pushTag("node", i);
-				string name = nodesXml->getAttributex("tag", nodesXml->getAttributex("name",""));
-				if (name.compare(nodeName) == 0) {
-					// use nodesXml to load its child 
-					Node* nodeToReturn = LoadNodeFromXml(nodesXml, parent, scene);
-					return nodeToReturn;
-				}
-				nodesXml->popTag();
+		for (auto nodeXmlPath : nodesXml->select_nodes("/resources/node")) {
+			auto nodeXml = nodeXmlPath.node();
+			string name = nodeXml.attribute("tag").as_string(nodeXml.attribute("name").as_string());
+			if (name.compare(nodeName) == 0) {
+				// use nodesXml to load its child 
+				Node* nodeToReturn = LoadNodeFromXml(nodeXml, parent, scene);
+				return nodeToReturn;
 			}
 		}
+
 
 		CogLogError("NodeBuilder", "Error while loading referenced node %s. All referenced nodes must be located in nodes.xml file!", nodeName.c_str());
 		return nullptr;
 	}
 
-	void NodeBuilder::LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
-		string font = xml->getAttributex("font", "");
-		float size = xml->getAttributex("size", 1.0);
-		string value = checkResource(xml->getValuex(""));
-		string colorStr = xml->getAttributex("color", "0x000000");
+	void NodeBuilder::LoadTextFromXml(xml_node& xml, Node* node, Node* parent) {
+		string font = xml.attribute("font").as_string();
+		float size = xml.attribute("size").as_float(1.0f);
+		string value = checkResource(xml.value());
+		string colorStr = xml.attribute("color").as_string("0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
 		CreateTextNode(node, font, size, color, value);
 	}
 
-	void NodeBuilder::LoadLabelFromXml(spt<ofxXml> xml, Node* node, Node* parent) {
-		string font = xml->getAttributex("font", "");
-		float width = xml->getAttributex("width", 640);
-		float size = xml->getAttributex("font_size", 1.0);
-		string value = checkResource(xml->getValuex(""));
-		string colorStr = xml->getAttributex("color", "0x000000");
+	void NodeBuilder::LoadLabelFromXml(xml_node& xml, Node* node, Node* parent) {
+		string font = xml.attribute("font").as_string();
+		float width = xml.attribute("width").as_float(640);
+		float size = xml.attribute("font_size").as_float(1.0);
+		string value = checkResource(xml.value());
+		string colorStr = xml.attribute("color").as_string("0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
 		CreateLabelNode(node, font, width, size, color, value);
 	}
 
-	void NodeBuilder::LoadBehaviorFromXml(spt<ofxXml> xml, Node* node) {
+	void NodeBuilder::LoadBehaviorFromXml(xml_node& xml, Node* node) {
 		spt<BehaviorEnt> ent = spt<BehaviorEnt>(new BehaviorEnt());
 		auto dummySet = Setting();
 		ent->LoadFromXml(xml, dummySet);
@@ -346,14 +333,14 @@ namespace Cog {
 		node->AddBehavior(behavior);
 	}
 
-	void NodeBuilder::LoadMeshFromXml(spt<ofxXml> xml, Node* node, Scene* scene) {
-		string type = xml->getAttributex("type", "");
+	void NodeBuilder::LoadMeshFromXml(xml_node& xml, Node* node, Scene* scene) {
+		string type = xml.attribute("type").as_string();
 
 		// get type of the mesh
 		MeshType renderType = EnumConverter::StrToMeshType(type);
 
 		if (renderType == MeshType::IMAGE) {
-			string img = xml->getAttributex("img", "");
+			string img = xml.attribute("img").as_string();
 			this->CreateImageNode(node, img);
 		}
 		else if (renderType == MeshType::TEXT) {
@@ -367,38 +354,39 @@ namespace Cog {
 			float height = 0;
 
 			// load other attributes
-			if (xml->attributeExists("size")) {
-				width = height = xml->getAttributex("size", 1.0);
+			auto sizeAttr = xml.attribute("size");
+			if (sizeAttr) {
+				width = height = sizeAttr.as_float(1.0f);
 			}
 			else {
 				// default size 1x1
-				width = xml->getAttributex("width", 1);
-				height = xml->getAttributex("height", 1);
+				width = xml.attribute("width").as_float(1);
+				height = xml.attribute("height").as_float(1);
 			}
 
 			ofVec2f size = ofVec2f(width, height);
-			string colorStr = xml->getAttributex("color", "0x000000");
+			string colorStr = xml.attribute("color").as_string("0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
-			bool noFill = xml->getBoolAttributex("no_fill", false);
+			bool noFill = xml.attribute("no_fill").as_bool(false);
 			CreateRectangleNode(node, size, color, noFill);
 		}
 		else if (renderType == MeshType::SPRITE) {
-			string layer = xml->getAttributex("layer", "");
+			string layer = xml.attribute("layer").as_string();
 
 			if (layer.empty()) CogLogError("NodeBuilder", "Error while loading sprite sheet. Layer not specified (node %s)", node->GetTag().c_str());
 
-			string spriteSet = xml->getAttributex("spriteset", "");
-			int row = xml->getAttributex("row", 0);
-			int column = xml->getAttributex("column", 0);
+			string spriteSet = xml.attribute("spriteset").as_string();
+			int row = xml.attribute("row").as_int(0);
+			int column = xml.attribute("column").as_int(0);
 
 			CreateSpriteNode(scene, node, layer, spriteSet, row, column);
 		}
 		else if (renderType == MeshType::BOUNDING_BOX) {
-			string colorStr = xml->getAttributex("color", "0x000000");
+			string colorStr = xml.attribute("color").as_string("0x000000");
 			ofColor color = EnumConverter::StrToColor(colorStr);
 
-			bool renderable = xml->getBoolAttributex("renderable", false);
-			float margin = xml->getAttributex("margin", 0.0f);
+			bool renderable = xml.attribute("renderable").as_bool(false);
+			float margin = xml.attribute("margin").as_float(0.0f);
 
 			CreateBoundingBoxNode(scene, node, color, margin, renderable);
 		}

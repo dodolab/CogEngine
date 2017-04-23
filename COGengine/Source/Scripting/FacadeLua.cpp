@@ -10,7 +10,6 @@
 #include "ComponentLua.h"
 #include "ResourcesLua.h"
 #include "StageLua.h"
-#include "ofxXmlSettings.h"
 
 namespace Cog {
 
@@ -115,7 +114,7 @@ namespace Cog {
 		Cog::CogStopAllSounds();
 	}
 
-	spt<ofxXmlSettings> FacadeLua::CogPreloadXMLFile(string path) {
+	spt<xml_document> FacadeLua::CogPreloadXMLFile(string path) {
 		return Cog::CogPreloadXMLFile(path);
 	}
 

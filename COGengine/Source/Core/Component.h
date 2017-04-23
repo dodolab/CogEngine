@@ -2,7 +2,9 @@
 
 #include "BaseComponent.h"
 #include "Definitions.h"
-#include "ofxXmlSettings.h"
+#include "pugixml.h"
+
+using namespace pugi;
 
 namespace Cog {
 

@@ -4,7 +4,9 @@
 #include "ofColor.h"
 #include "Mesh.h"
 #include "BehaviorEnt.h"
-#include "ofxXmlSettings.h"
+#include "pugixml.h"
+
+using namespace pugi;
 
 namespace Cog {
 
@@ -169,7 +171,7 @@ namespace Cog {
 		* @param parent parent of the node
 		* @param scene actual scene
 		*/
-		Node* LoadNodeFromXml(spt<ofxXml> xml, Node* parent, Scene* scene);
+		Node* LoadNodeFromXml(xml_node& xml, Node* parent, Scene* scene);
 
 		/**
 		* Loads referenced node from XML, must be located in nodes.xml file
@@ -178,7 +180,7 @@ namespace Cog {
 		* @param parent parent of the node
 		* @param scene actual scene
 		*/
-		Node* LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, Node* parent, Scene* scene);
+		Node* LoadRefNodeFromXml(xml_node& contextXml, string nodeName, Node* parent, Scene* scene);
 
 		/**
 		* Loads text node from XML
@@ -186,7 +188,7 @@ namespace Cog {
 		* @param node node to fill
 		* @param parent parent of the node
 		*/
-		void LoadTextFromXml(spt<ofxXml> xml, Node* node, Node* parent);
+		void LoadTextFromXml(xml_node& xml, Node* node, Node* parent);
 
 		/**
 		* Loads label node from XML
@@ -194,14 +196,14 @@ namespace Cog {
 		* @param node node to fill
 		* @param parent parent of the node
 		*/
-		void LoadLabelFromXml(spt<ofxXml> xml, Node* node, Node* parent);
+		void LoadLabelFromXml(xml_node& xml, Node* node, Node* parent);
 
 		/**
 		* Loads behavior from XML
 		* @param xml xml object
 		* @param node node to fill
 		*/
-		void LoadBehaviorFromXml(spt<ofxXml> xml, Node* node);
+		void LoadBehaviorFromXml(xml_node& xml, Node* node);
 
 		/**
 		* Loads mesh from xml
@@ -209,7 +211,7 @@ namespace Cog {
 		* @param node node to fill
 		* @param scene actual scene
 		*/
-		void LoadMeshFromXml(spt<ofxXml> xml, Node* node, Scene* scene);
+		void LoadMeshFromXml(xml_node& xml, Node* node, Scene* scene);
 
 	private:
 		/**

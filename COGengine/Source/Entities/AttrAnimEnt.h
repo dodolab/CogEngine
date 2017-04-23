@@ -97,7 +97,7 @@ namespace Cog {
 		/**
 		* Loads entity from xml
 		*/
-		void LoadFromXml(spt<ofxXml> xml, Setting& defaultSettings);
+		void LoadFromXml(xml_node& xml, Setting& defaultSettings);
 
 	private:
 

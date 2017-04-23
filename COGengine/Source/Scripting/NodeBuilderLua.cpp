@@ -10,11 +10,11 @@ namespace Cog {
 		return new NodeLua(bld.CreateNode(name, scene->scene));
 	}
 
-	NodeLua* NodeBuilderLua::LoadNodeFromXml(spt<ofxXml> xml, NodeLua* parent, SceneLua* scene) {
+	NodeLua* NodeBuilderLua::LoadNodeFromXml(xml_node& xml, NodeLua* parent, SceneLua* scene) {
 		return new NodeLua(bld.LoadNodeFromXml(xml, parent->node, scene->scene));
 	}
 
-	NodeLua* NodeBuilderLua::LoadRefNodeFromXml(spt<ofxXml> contextXml, string nodeName, NodeLua* parent, SceneLua* scene) {
+	NodeLua* NodeBuilderLua::LoadRefNodeFromXml(xml_node& contextXml, string nodeName, NodeLua* parent, SceneLua* scene) {
 		return new NodeLua(bld.LoadRefNodeFromXml(contextXml, nodeName, parent->node, scene->scene));
 	}
 

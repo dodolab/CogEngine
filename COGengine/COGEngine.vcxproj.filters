@@ -61,14 +61,8 @@
     <Filter Include="3rdParty\ofxTextLabel">
       <UniqueIdentifier>{1c82a6dc-651e-4585-b094-db20e557ad5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\ofxXmlSettings">
-      <UniqueIdentifier>{043069f4-6a8b-4821-aa3e-7c712bc3edc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rdParty\sqlite">
       <UniqueIdentifier>{02282119-d13d-4234-928f-9d8062ecbf44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3rdParty\tinyxml">
-      <UniqueIdentifier>{e8af1a09-b76b-45f9-bcd1-a0a580f9116e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{a5ebd339-aa16-4da3-8221-0f7c351e69da}</UniqueIdentifier>
@@ -522,14 +516,8 @@
     <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
       <Filter>3rdParty\ofxTextLabel</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxXmlSettings\ofxXmlSettings.h">
-      <Filter>3rdParty\ofxXmlSettings</Filter>
-    </ClInclude>
     <ClInclude Include="3rdParty\sqlite\sqlite3.h">
       <Filter>3rdParty\sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\tinyxml\tinyxml.h">
-      <Filter>3rdParty\tinyxml</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\ComponentStorage.h">
       <Filter>Source\Core</Filter>
@@ -911,17 +899,8 @@
     <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
       <Filter>3rdParty\ofxTextLabel</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxXmlSettings\ofxXmlSettings.cpp">
-      <Filter>3rdParty\ofxXmlSettings</Filter>
-    </ClCompile>
     <ClCompile Include="3rdParty\sqlite\sqlite3.c">
       <Filter>3rdParty\sqlite</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\tinyxml\tinyxmlparser.cpp">
-      <Filter>3rdParty\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdParty\tinyxml\tinyxml.cpp">
-      <Filter>3rdParty\tinyxml</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\ofxCogApp.cpp">
       <Filter>Source\Core</Filter>

@@ -3,6 +3,10 @@
 #include <vector>
 #include "Definitions.h"
 #include "GeneralAnim.h"
+#include "pugixml.h"
+#include <functional>
+
+using namespace pugi;
 
 namespace Cog {
 
@@ -21,7 +25,7 @@ namespace Cog {
 		* @param rootAnims output collection that will contain all animations on the top of the tree
 		* @param builder builder that creates new instances of the animation object
 		*/
-		void LoadAnimationsFromXml(spt<ofxXml> xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder);
+		void LoadAnimationsFromXml(xml_node& xml, vector<spt<GeneralAnim>>& rootAnims, SheetAnimBuilder builder);
 
 	private:
 
@@ -32,7 +36,7 @@ namespace Cog {
 		* @param actualAnimIndex index of actual animation being processed
 		* @param builder builder that creates new instances of the animation object
 		*/
-		GeneralAnim* CreateAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims, 
+		GeneralAnim* CreateAnimationFromXml(xml_node& xml, map<int, GeneralAnim*>& referencedAnims,
 			int& actualAnimIndex, SheetAnimBuilder builder);
 
 		/**
@@ -48,7 +52,7 @@ namespace Cog {
 		* @rootAnims list of all root animations found during the first phase
 		* @actualAnimIndex index of actual animation being processed
 		*/
-		void ProcessRefAnimationFromXml(spt<ofxXml> xml, map<int, GeneralAnim*>& referencedAnims,
+		void ProcessRefAnimationFromXml(xml_node& xml, map<int, GeneralAnim*>& referencedAnims,
 			int rootAnimIndex, vector<spt<GeneralAnim>>& rootAnims, int& actualAnimIndex);
 
 	};
