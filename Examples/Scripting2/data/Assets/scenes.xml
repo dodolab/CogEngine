@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+		<scene name="main">
+			<!-- background image -->
+			<node img="bgr.jpg" />
+
+			<!-- ============================================================================ -->
+			<!-- Square -->
+			<node name="square" img="square.png">
+				<transform pos_x="0.5r" pos_y="0.5r" z_index="2" anchor="0.5" rotation_origin="0.5" />
+				<behavior type="ScriptExample" />
+			</node>
+			<!-- ============================================================================ -->
+		</scene>
+</resources>	

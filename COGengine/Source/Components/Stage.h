@@ -88,6 +88,13 @@ namespace Cog {
 		Scene* FindSceneByName(string name) const;
 	
 		/**
+		 * Gets all scenes
+		 */
+		vector<Scene*>& GetScenes() {
+			return scenes;
+		}
+
+		/**
 		* Switches to selected scene
 		* @param scene scene to switch
 		* @param tweenDir tween direction; if none, scene will be switched automatically

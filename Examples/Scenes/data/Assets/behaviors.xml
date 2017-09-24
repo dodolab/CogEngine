@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<!-- SCENE 2-->
+    <behavior name="bt01" type="TransformAnim" from="t01" to="t02" duration="1000" repeat="false" blend="additive" easefunc="expo" />
+	<behavior name="bt02" type="TransformAnim" from="t02" to="t03" duration="1000" repeat="false" blend="additive" easefunc="expo"/>
+	<behavior name="bt03" type="TransformAnim" from="t03" to="t04" duration="1000" repeat="false" blend="additive" easefunc="expo"/>
+	<behavior name="bt04" type="TransformAnim" from="t04" to="t01" duration="1000" repeat="false" blend="additive" easefunc="expo"/>
+	<behavior name="rt01" type="TransformAnim" from="r01" to="r02" duration="4000" repeat="true" blend="additive" />
+	
+	<!-- SCENE 4 -->
+	<behavior name="transform1" type="TransformAnim" from="rot_begin" to="rot_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="transform2" type="TransformAnim" from="scale_begin" to="scale_end" duration="4000" repeat="false" blend="additive" />
+	<behavior name="squareanim" type="SheetAnimator" animation="square_anim" />
+</resources>	

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<setting name="scene_settings">
+		<item key="units" value="100" />
+	</setting>
+			
+  <setting name="initial_scene" value="main" />
+ 
+</resources>	

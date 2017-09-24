@@ -1,10 +1,17 @@
+SceneSwitcher = Behavior:Extend("SceneSwitcher")
+
+function SceneSwitcher:Constructor()
+	self.animate = false
+end
 
 
-SceneSwitcher = Behavior:Extend("SceneSwitcher", {
-	OnInit = function(self) self:SubscribeForMessages(StrId("BUTTON_CLICKED")) end,
-	OnMessage = function(self, msg)
-		if (msg:HasAction(StrId("BUTTON_CLICKED")))
-		then
+function SceneSwitcher:OnInit()
+	self:SubscribeForMessages(StrId("ACT_BUTTON_CLICKED"))
+end
+
+function SceneSwitcher:OnMessage(msg)
+	if (msg:HasAction(StrId("ACT_BUTTON_CLICKED")))
+	then
 			stage = CogGetComponent("Stage")	
 		    actualScene = stage.actualScene.name
 			newScene = (actualScene == "scene1" and  "scene2" or "scene1")
@@ -16,7 +23,5 @@ SceneSwitcher = Behavior:Extend("SceneSwitcher", {
 			if(msg.contextNode.tag == "next_but") then
 			  stage:SwitchToScene(stage:FindSceneByName(newScene), TweenDirection_LEFT)
 			end
-			
-		end
 	end
-} )
+end

@@ -82,8 +82,8 @@ namespace Cog {
 		Settings& settings = scene->GetSceneSettings();
 
 		// get reference width and height from scene settings
-		int refWidth = settings.GetSettingValInt("transform", "ref_width");
-		int refHeight = settings.GetSettingValInt("transform", "ref_height");
+		int refWidth = settings.GetSettingVal<int>("transform", "ref_width");
+		int refHeight = settings.GetSettingVal<int>("transform", "ref_height");
 
 		if (refWidth == 0) refWidth = CogGetScreenWidth();
 		if (refHeight == 0) refHeight = CogGetScreenHeight();
@@ -246,8 +246,8 @@ namespace Cog {
 			transformEnt.LoadFromXml(transXml, settings.GetSetting("transform"));
 
 			// =================== get grid size (if specified)
-			int gridWidth = settings.GetSettingValInt("transform", "grid_width");
-			int gridHeight = settings.GetSettingValInt("transform", "grid_height");
+			int gridWidth = settings.GetSettingVal<int>("transform", "grid_width");
+			int gridHeight = settings.GetSettingVal<int>("transform", "grid_height");
 
 			TransformMath math = TransformMath();
 			// set transform according to the parsed values
@@ -305,7 +305,7 @@ namespace Cog {
 	void NodeBuilder::LoadTextFromXml(xml_node& xml, Node* node, Node* parent) {
 		string font = xml.attribute("font").as_string();
 		float size = xml.attribute("size").as_float(1.0f);
-		string value = checkResource(xml.value());
+		string value = checkResource(xml.text().as_string());
 		string colorStr = xml.attribute("color").as_string("0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 
@@ -316,7 +316,7 @@ namespace Cog {
 		string font = xml.attribute("font").as_string();
 		float width = xml.attribute("width").as_float(640);
 		float size = xml.attribute("font_size").as_float(1.0);
-		string value = checkResource(xml.value());
+		string value = checkResource(xml.text().as_string());
 		string colorStr = xml.attribute("color").as_string("0x000000");
 		ofColor color = EnumConverter::StrToColor(colorStr);
 

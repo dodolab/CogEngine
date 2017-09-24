@@ -39,10 +39,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::ABS,	// pos type
+				CALCTYPE_ABS,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::ABS),	// scale type
+				CALCTYPE_ABS),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		REQUIRE(((int)tr.absPos.x) == 0);
@@ -61,10 +61,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::ABS_PER,	// pos type
+				CALCTYPE_ABS_PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		REQUIRE(((int)tr.absPos.x) == 200);
@@ -83,10 +83,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::ABS_PER,	// pos type
+				CALCTYPE_ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(0, 0),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		REQUIRE(((int)tr.absPos.x) == 100);
@@ -105,10 +105,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::ABS_PER,	// pos type
+				CALCTYPE_ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		REQUIRE(((int)tr.absPos.x) == 0);
@@ -127,10 +127,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(100, 50),  // position
 				0,
-				CalcType::GRID,	// pos type
+				CALCTYPE_GRID,	// pos type
 				ofVec2f(1.0f, 1.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			100, 50);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		REQUIRE(((int)tr.absPos.x) == 0);
@@ -151,10 +151,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -163,10 +163,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr.absPos.x) == 0);
@@ -190,10 +190,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -202,10 +202,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
-				CalcType::ABS,	// pos type
+				CALCTYPE_ABS,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 200);
@@ -227,10 +227,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -239,10 +239,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 200);
@@ -264,10 +264,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -276,10 +276,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 200);
@@ -301,10 +301,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -313,10 +313,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::ABS_PER,	// pos type
+				CALCTYPE_ABS_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 200);
@@ -338,10 +338,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -350,10 +350,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 400);
@@ -375,10 +375,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -387,10 +387,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(200, 200),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		REQUIRE(((int)tr2.absPos.x) == 400);
@@ -414,10 +414,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -426,10 +426,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -438,10 +438,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 0);
@@ -466,10 +466,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -478,10 +478,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -490,10 +490,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 200);
@@ -518,10 +518,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::LOC,	// pos type
+				CALCTYPE_LOC,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -530,10 +530,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -542,10 +542,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0.5f, 0.5f),  // position
 				0,
-				CalcType::ABS_PER,	// pos type
+				CALCTYPE_ABS_PER,	// pos type
 				ofVec2f(0.5f, 0.5f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 100);
@@ -570,10 +570,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::LOC),	// scale type
+				CALCTYPE_LOC),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -582,10 +582,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::PER),	// scale type
+				CALCTYPE_PER),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -594,10 +594,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::PER),	// scale type
+				CALCTYPE_PER),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 400);
@@ -622,10 +622,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(0.5f, 0.5f),	// size 
-				CalcType::ABS_PER),	// scale type
+				CALCTYPE_ABS_PER),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -634,10 +634,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(0.5f, 0.5f),	// size 
-				CalcType::ABS_PER),	// scale type
+				CALCTYPE_ABS_PER),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -646,10 +646,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(0.5f, 0.5f),	// size 
-				CalcType::ABS_PER),	// scale type
+				CALCTYPE_ABS_PER),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 400);
@@ -674,10 +674,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(0, 0),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(1, 1),	// size 
-				CalcType::ABS),	// scale type
+				CALCTYPE_ABS),	// scale type
 			0, 0);			// grid size
 		tr.CalcAbsTransform(root->GetTransform());
 		first->SetTransform(tr);
@@ -686,10 +686,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0.0f, 0.0f),  // anchor
 				ofVec2f(2, 2),	// size 
-				CalcType::ABS),	// scale type
+				CALCTYPE_ABS),	// scale type
 			0, 0);			// grid size
 		tr2.CalcAbsTransform(tr);
 		second->SetTransform(tr2);
@@ -698,10 +698,10 @@ TEST_CASE("Transformation test")
 			TransformEnt(
 				ofVec2f(1, 1),  // position
 				0,
-				CalcType::PER,	// pos type
+				CALCTYPE_PER,	// pos type
 				ofVec2f(0, 0),  // anchor
 				ofVec2f(4, 4),	// size 
-				CalcType::ABS),	// scale type
+				CALCTYPE_ABS),	// scale type
 			0, 0);			// grid size
 		tr3.CalcAbsTransform(tr2);
 		REQUIRE(((int)tr3.absPos.x) == 400);
@@ -725,10 +725,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				0,						// rotation
 				ofVec2f(0.5f)),			// rotation origin
 			0, 0);
@@ -739,10 +739,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0, 0),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 0.0f),	// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.5f)),			// rotation origin
 			0, 0);	// grid size
@@ -767,10 +767,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				0,						// rotation
 				ofVec2f(0.0f)),			// rotation origin
 			0, 0);
@@ -781,10 +781,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0, 0),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 0.0f),	// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.0f)),			// rotation origin
 			0, 0);	// grid size
@@ -812,10 +812,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.5f)),			// rotation origin
 			0, 0);
@@ -826,10 +826,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.25f),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.5f, 0.5f),	// anchor
 				ofVec2f(0.5f),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.5f)),			// rotation origin
 			0, 0);	// grid size
@@ -855,10 +855,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.5f)),			// rotation origin
 			0, 0);
@@ -869,10 +869,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.25),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.5f, 0.5f),	// anchor
 				ofVec2f(0.5f, 0.5f),	// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				45,						// rotation
 				ofVec2f(0.0f)),			// rotation origin
 			0, 0);	// grid size
@@ -901,10 +901,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				10,						// rotation
 				ofVec2f(1, 0)),			// rotation origin
 			0, 0);
@@ -915,10 +915,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0, 1),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 1.0f),	// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				10,						// rotation
 				ofVec2f(1, 0)),			// rotation origin
 			0, 0);	// grid size
@@ -929,10 +929,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0, 1),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 1.0f),	// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				10,						// rotation
 				ofVec2f(1, 0)),			// rotation origin
 			0, 0);	// grid size
@@ -968,10 +968,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(0.5f),			// position
 				0,
-				CalcType::ABS_PER,		// pos type
+				CALCTYPE_ABS_PER,		// pos type
 				ofVec2f(0.5f),			// anchor
 				ofVec2f(1, 1),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				0,						// rotation
 				ofVec2f(0, 0)),			// rotation origin
 			0, 0);
@@ -982,10 +982,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(1, 1),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 0.0f),	// anchor
 				ofVec2f(0.5f),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				-45,					// rotation
 				ofVec2f(0, 0)),			// rotation origin
 			0, 0);	// grid size
@@ -996,10 +996,10 @@ TEST_CASE("Transformation test")
 			TransformEnt("",
 				ofVec2f(1, 1),			// position
 				0,
-				CalcType::PER,			// pos type
+				CALCTYPE_PER,			// pos type
 				ofVec2f(0.0f, 0.0f),	// anchor
 				ofVec2f(0.5f),			// size 
-				CalcType::LOC,			// scale type
+				CALCTYPE_LOC,			// scale type
 				-45,					// rotation
 				ofVec2f(0, 0)),			// rotation origin
 			0, 0);	// grid size

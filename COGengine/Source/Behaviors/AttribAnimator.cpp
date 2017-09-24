@@ -15,8 +15,9 @@ namespace Cog {
 
 		auto resCache = GETCOMPONENT(Resources);
 		auto animNode = resCache->GetAnimation(animation);
-		auto clonedNode = static_pointer_cast<SheetAnim>(animNode->Clone());
-		contextStack.SetRootNode(clonedNode);
+		// TODO cloning is not working for animations with children 
+		//auto clonedNode = static_pointer_cast<SheetAnim>(animNode->Clone());
+		contextStack.SetRootNode(animNode);
 	}
 
 	void AttribAnimator::OnStart() {

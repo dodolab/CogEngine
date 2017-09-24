@@ -77,6 +77,7 @@ namespace Cog {
 			auto sceneXml = xml->select_node(string_format("//scene[@name=\"%s\"]",name.c_str()).c_str());
 
 			if (sceneXml) {
+				Finish();
 				LoadFromXml(sceneXml.node());
 				sceneNode->SubmitChanges(true);
 			}

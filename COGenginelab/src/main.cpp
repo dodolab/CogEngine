@@ -30,7 +30,7 @@ class ExampleApp : public ofxCogApp {
 	}
 };
 
-#ifndef WIN32
+#ifdef ANDROID
 #include <jni.h>
 #endif
 
@@ -40,7 +40,7 @@ int main() {
 	return 0;
 }
 
-#ifndef WIN32
+#ifdef ANDROID
 
 //========================================================================
 extern "C" {

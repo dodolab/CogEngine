@@ -61,13 +61,13 @@ public:
 			}
 
 			// disable buttons
-			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
-			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATE_DISABLED));
+			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATE_DISABLED));
 		}
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {
 			// push received message to Interpolator
-			auto msgEvent = msg.GetData<NetworkMsgEvent>();
+			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
 			auto netMsg = msgEvent->msg;
 			if (netMsg->GetAction() == NET_MSG_UPDATE) {
 
@@ -130,11 +130,8 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
-	}
-
-	void InitStage(Stage* stage) {
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 };
 

@@ -38,8 +38,8 @@ namespace Cog {
 
 		// get scene settings and calculate transformations 
 		Settings& sceneSettings = owner->GetScene()->GetSceneSettings();
-		int gridWidth = sceneSettings.GetSettingValInt("transform", "grid_width");
-		int gridHeight = sceneSettings.GetSettingValInt("transform", "grid_height");
+		int gridWidth = sceneSettings.GetSettingVal<int>("transform", "grid_width");
+		int gridHeight = sceneSettings.GetSettingVal<int>("transform", "grid_height");
 
 		fromTrans = Trans();
 		toTrans = Trans();

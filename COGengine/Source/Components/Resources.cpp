@@ -13,9 +13,8 @@
 namespace Cog {
 
 	void Resources::OnInit() {
-
-		// set global dpi and therefore fonts will have the same pixel size on each display
-		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 72 * 0.001f));
+		// set global dpi and therefore fonts will have the same relative size on each display
+		ofTrueTypeFont::setGlobalDpi((int)(CogGetScreenWidth() * 120 * 0.001f));
 
 		// initialize assets manager
 		assetsMgr.OnInit();

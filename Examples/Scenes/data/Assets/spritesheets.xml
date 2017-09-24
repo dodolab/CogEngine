@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<spritesheet name="squares" img="sheet_squares.png" frames="4" sprite_width="128" sprite_height="128" />
+	<spritesheet name="bgr" img="bgr2.jpg" frames="1" sprite_width="800" sprite_height="450" />
+</resources>	

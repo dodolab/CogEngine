@@ -149,6 +149,10 @@ namespace Cog {
 			}
 			else throw IllegalOperationException("ManagerType can must be either 0 or 1");
 
+			if(bytesBuff == -1) {
+				// error, return an empty messge
+				return spt<NetInputMessage>();
+			}
 
 			if (bytesBuff > 0 && bufferStream->ReadByte() == applicationId) {
 

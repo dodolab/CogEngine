@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<!-- SCENE 3 -->
+	<anim name="mario_anim_sheet" sheet="mario_all.png" frames="5" lines="1"  start="0" end="4"  repeat="0" increment="1" speed="0.2"></anim>
+	<!-- SCENE 4 -->
+	<anim name="square_anim" sheet="sheet_squares.png" frames="4" lines="2"  start="0" end="3"  repeat="0" increment="1" speed="0.05"></anim>
+	
+	<!-- SCENE 5 -->
+	<anim name="action1" repeat="1" sheet="sheetanim02.png" frames="8" lines="4" start="0" end="31" increment="1" />
+    
+  <!-- already declared animations can be reused: -->
+	<anim name="sampleAnim" speed="0.5">
+		<anim ref="action1" revert="true" speed="0.1" />		<!-- 31 - 0 slowly-->
+		<anim ref="action1" revert="false" speed="0.1" />       <!-- 0 - 31 slowly-->
+	
+		<anim speed="2">
+			<anim ref="action1" /> <!-- 2x 0-31 quickly-->
+			<anim ref="action1" />
+	  
+			<anim speed="2">
+				<anim ref="action1" /> <!-- 2x 0-31 more quickly-->
+				<anim ref="action1" />
+			</anim>
+		</anim>
+	</anim>
+</resources>	

@@ -55,11 +55,6 @@ namespace Cog {
 				auto changeEvent = msg.GetDataPtr<ValueChangeEvent<Vec2i>>();
 
 				auto virtuals = CogGetVirtualScreenSize();
-				auto scSize = CogGetScreenSize();
-
-				float absoluteRatio = (environment->GetScreenAspectRatio() / environment->GetVirtualAspectRatio());
-				float heightRatio = scSize.y / (float)virtuals.y;
-				float widthRatio = scSize.x / (float)virtuals.x;
 				this->GetRootObject()->GetTransform().scale = ofVec3f(virtuals.x / ((float)environment->GetInitialWidth()));
 			}
 		}
@@ -195,7 +190,7 @@ namespace Cog {
 
 		COGLOGDEBUG("Stage", "Loading scenes from XML");
 
-		string initialScene = CogGetGlobalSettings().GetSettingVal("initial_scene");
+		string initialScene = CogGetGlobalSettings().GetSettingVal<string>("initial_scene");
 
 		if (initialScene.empty()) {
 			CogLogInfo("Stage", "Initial scene not specified Using the first one!");
@@ -204,7 +199,7 @@ namespace Cog {
 		string scenes = ofToDataPath(PATH_SCENES);
 
 		if (!ofFile(scenes.c_str()).exists()) {
-			CogLogError("Stage", "Scenes.xml not found!");
+			CogLogError("Stage", "%s not found!", PATH_SCENES);
 		}
 		else {
 			spt<xml_document> xml = CogPreloadXMLFile(scenes);

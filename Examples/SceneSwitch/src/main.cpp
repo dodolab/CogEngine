@@ -13,6 +13,9 @@
 #include "LuaScripting.h"
 
 /*
+ *
+ * The code below is implemented in lua script
+ *
 class SceneSwitcher : public Behavior {
 public:
 	SceneSwitcher() {
@@ -49,7 +52,6 @@ class ExampleApp : public ofxCogApp {
 		REGISTER_COMPONENT(new LuaScripting());
 		//REGISTER_BEHAVIOR(SceneSwitcher);
 	}
-
 
 	void InitEngine() {
 		ofxCogEngine::GetInstance().SetFps(100);

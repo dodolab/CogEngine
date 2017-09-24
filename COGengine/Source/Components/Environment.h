@@ -57,6 +57,11 @@ namespace Cog {
 		bool muteSounds = false;
 	public:
 
+		Environment() {
+			// this should be initialized first
+			this->initPriority = InitPriority::HIGHEST;
+		}
+
 		~Environment() {
 			for (auto snd : playedSounds) {
 				delete snd;
@@ -145,6 +150,7 @@ namespace Cog {
 		* Gets width of the screen
 		*/
 		int GetScreenWidth() const {
+			assert(screenWidth != 0);
 			return screenWidth;
 		}
 
@@ -153,6 +159,7 @@ namespace Cog {
 		* by the custom ratio
 		*/
 		int GetVirtualWidth() const {
+			assert(virtualWidth != 0);
 			return virtualWidth;
 		}
 
@@ -160,6 +167,7 @@ namespace Cog {
 		* Gets height of the screen
 		*/
 		int GetScreenHeight() const {
+			assert(screenHeight != 0);
 			return screenHeight;
 		}
 
@@ -168,6 +176,7 @@ namespace Cog {
 		* by the custom ratio
 		*/
 		int GetVirtualHeight() const {
+			assert(virtualHeight != 0);
 			return virtualHeight;
 		}
 

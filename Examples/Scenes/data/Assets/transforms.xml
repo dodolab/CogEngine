@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+	<!-- SCENE 2 -->
+    <transform name="t01" pos_x="0.3r" pos_y="0.3r" anchor="0" size="1" rotation_origin="0.5" />
+    <transform name="t02" pos_x="1r" pos_y="0.3r" anchor="0" size="1" rotation_origin="0.5" />
+	<transform name="t03" pos_x="1r" pos_y="1r" anchor="0" size="1" rotation_origin="0.5" />
+	<transform name="t04" pos_x="0.3r" pos_y="1r" anchor="0" size="1" rotation_origin="0.5" />
+
+	<transform name="r01" rotation="0"/>
+	<transform name="r02" rotation="360"/>
+	
+	<!-- SCENE 3 -->
+	<transform name="mario_from" pos_x="0r" pos_y="0.48r" z_index="2" anchor_x="1"  />
+	<transform name="mario_to" pos_x="1r" pos_y="0.48r" z_index="2" anchor="0"  />
+	
+	<!-- SCENE 4 -->
+	<transform name="rot_begin" rotation="0" />
+    <transform name="rot_end" rotation="360" />
+	<transform name="scale_begin" size="1" />
+	<transform name="scale_end" size="-1" />
+</resources>	

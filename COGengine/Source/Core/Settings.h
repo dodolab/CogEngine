@@ -210,19 +210,33 @@ namespace Cog {
 		Settings(const Settings& copy);
 
 		/**
+		 * Gets desired value
+		 */
+		template<class T>
+		T GetSettingVal(string setName);
+
+		/**
+		 * Gets desired value of given name and key
+		 */
+		template<class T>
+		T GetSettingVal(string setName, string itemKey);
+
+		/**
 		* Gets value of a setting with given name as a string.
 		* If there is no such Setting or key-value pair, it returns empty string
 		*/
-		string GetSettingVal(string setName) {
+		template<>
+		string GetSettingVal<string>(string setName) {
 			if (settings.count(setName) == 0) return "";
 			else return GetSetting(setName).GetItemVal("value");
 		}
 
 		/**
-		* Gets value of a setting with given name and given key as a string.
+		* Gets value of a setting of given name and given key as a string.
 		* If there is no such Setting or key-value pair, it returns empty string
 		*/
-		string GetSettingVal(string setName, string itemKey) {
+		template<>
+		string GetSettingVal<string>(string setName, string itemKey) {
 			if (settings.count(setName) == 0) return "";
 			else return GetSetting(setName).GetItemVal(itemKey);
 		}
@@ -231,7 +245,8 @@ namespace Cog {
 		* Gets value of a setting with given name and given key as an integer.
 		* If there is no such Setting or key-value pair, it returns 0
 		*/
-		int GetSettingValInt(string setName, string itemKey) {
+		template<>
+		int GetSettingVal<int>(string setName, string itemKey) {
 			if (settings.count(setName) == 0) return 0;
 			else return GetSetting(setName).GetItem(itemKey).GetValInt();
 		}
@@ -240,7 +255,8 @@ namespace Cog {
 		* Gets value of a setting with given name and given key as a float.
 		* If there is no such Setting or key-value pair, it returns 0
 		*/
-		float GetSettingValFloat(string setName, string itemKey) {
+		template<>
+		float GetSettingVal<float>(string setName, string itemKey) {
 			if (settings.count(setName) == 0) return 0;
 			else return GetSetting(setName).GetItem(itemKey).GetValFloat();
 		}
@@ -249,7 +265,8 @@ namespace Cog {
 		* Gets value of a setting with given name and given key as a boolean.
 		* If there is no such Setting or key-value pair, it returns false
 		*/
-		bool GetSettingValBool(string setName, string itemKey) {
+		template<>
+		bool GetSettingVal<bool>(string setName, string itemKey) {
 			if (settings.count(setName) == 0) return 0;
 			else return GetSetting(setName).GetItem(itemKey).GetValBool();
 		}

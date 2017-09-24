@@ -18,12 +18,10 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 
-	void InitStage(Stage* stage) {
-	}
 };
 
 int main() {

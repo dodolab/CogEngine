@@ -83,15 +83,15 @@ public:
 				// click on server button
 				InitNetwork(NetworkType::SERVER);
 				// disable buttons
-				this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
-				this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+				this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATE_DISABLED));
+				this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATE_DISABLED));
 			}
 			else if (msg.GetContextNode()->GetTag().compare("client_but") == 0) {
 				// click on client button
 				InitNetwork(NetworkType::CLIENT);
 				// disable buttons
-				this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
-				this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+				this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATE_DISABLED));
+				this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATE_DISABLED));
 			}
 			else if (msg.GetContextNode()->GetTag().compare("incr_but") == 0) {
 				// increase value
@@ -119,7 +119,7 @@ public:
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED)) {
 			// set text according to the received value
-			auto msgEvent = msg.GetData<NetworkMsgEvent>();
+			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
 			auto netMsg = msgEvent->msg;
 			if (netMsg->GetAction() == StrId("VALUE_MESSAGE")) {
 				auto payload = netMsg->GetData<ValueMsg>();
@@ -152,8 +152,8 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 };
 

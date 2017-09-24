@@ -31,7 +31,7 @@ function ScriptExample:Update(delta, absolute)
 end
 
 
-test = "{\"mojo\" : 12345}"
+test = "{\"json test\" : 12345}"
 
 jsonTxt = JSON:decode(test)
 print(jsonTxt.mojo)

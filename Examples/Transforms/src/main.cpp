@@ -12,68 +12,48 @@
 */
 class SwitchBehavior : public Behavior {
 private:
-	// index of actual configuration file
-	int actualConfig = 0;
-	// path to config files
-	vector<string> configFiles;
+
+	int actualSceneIndex = 0;
+	int sceneNum = 0;
 public:
 
-	SwitchBehavior(vector<string> configFiles, int fileIndex) : actualConfig(fileIndex) {
-		this->configFiles = configFiles;
-	}
-
 	void OnInit() {
-
+		sceneNum = GETCOMPONENT(Stage)->GetScenes().size();
 	}
 
-	vector<string> GetConfigFiles() {
-		return configFiles;
-	}
-
-	int GetActualConfigIndex() {
-		return actualConfig;
-	}
 
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 		for (auto key : CogGetPressedKeys()) {
-			if (!key->IsHandled()) {
+			if (!key->IsProcessed()) {
 				string newConfig = "";
 
 				if (key->key == (int)(OF_KEY_END)) {
-					// restarts actual config file
-					newConfig = configFiles[actualConfig];
+					// restarts actual scene
+					GETCOMPONENT(Stage)->GetActualScene()->Reload();
 				}
 				else if (key->key == OF_KEY_PAGE_UP) {
-					// goes to previous config file
-					actualConfig = (actualConfig == 0 ? (configFiles.size() - 1) : (actualConfig - 1)) % configFiles.size();
-					newConfig = configFiles[actualConfig];
+					// goes to previous scene
+					if (actualSceneIndex == 0) {
+						actualSceneIndex = sceneNum - 1;
+					}
+					else {
+						actualSceneIndex = (actualSceneIndex - 1) % sceneNum;
+					}
+					auto scene = GETCOMPONENT(Stage)->GetScenes()[actualSceneIndex];
+					GETCOMPONENT(Stage)->SwitchToScene(scene, TWEEN_RIGHT, false);
 				}
 				else if (key->key == OF_KEY_PAGE_DOWN) {
-					// goes to next config file
-					actualConfig = (actualConfig + 1) % configFiles.size();
-					newConfig = configFiles[actualConfig];
+					// go to next scene
+					actualSceneIndex = (actualSceneIndex + 1) % sceneNum;
+					auto scene = GETCOMPONENT(Stage)->GetScenes()[actualSceneIndex];
+					GETCOMPONENT(Stage)->SwitchToScene(scene, TWEEN_LEFT, false);
 				}
 
-				if (!newConfig.empty()) {
-					// insert action that resets the engine
-					auto action = [newConfig, this]() {
-						CogLogInfo("Main", "Loading config %s", newConfig.c_str());
-						// this will be deallocated, we need to keep path to files:
-						vector<string> configFiles = this->GetConfigFiles();
-						int actualConfig = this->GetActualConfigIndex();
-
-						ofxCogEngine::GetInstance().Init(newConfig);
-						ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(newConfig)));
-						ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, actualConfig));
-					};
-
-					ofxCogEngine::GetInstance().AddPostUpdateAction(action);
-				}
+				key->SetIsProcessed(true);
 			}
 		}
 	}
 };
-
 
 class ExampleApp : public ofxCogApp {
 public:
@@ -84,33 +64,17 @@ public:
 	}
 
 	void InitEngine() {
-		// find all configuration files
-		ofDirectory dir = ofDirectory(".");
-		auto files = dir.getFiles();
-		auto configFiles = vector<string>();
-
-		for (auto& file : files) {
-			if (ofToLower(file.getExtension()).compare("xml") == 0) {
-				configFiles.push_back(file.getFileName());
-			}
-		}
-
-		if (configFiles.size() == 0) {
-			throw ConfigErrorException("No configuration file found!");
-		}
 
 		// load first config file
-		ofxCogEngine::GetInstance().Init(configFiles[0]);
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml(configFiles[0])));
-		ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior(configFiles, 0));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
+		ofxCogEngine::GetInstance().stage->GetRootObject()->AddBehavior(new SwitchBehavior());
 
 	}
 
 	void InitStage(Stage* stage) {
 	}
 };
-
-
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

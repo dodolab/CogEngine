@@ -79,7 +79,8 @@ public:
   template <class Exception>
   static void Throw (Exception e)
   {
-    throw e;
+	  cout << "[LuaError] " << e.what() << endl;
+	  // throw e;  don't throw anything, use logger instead!
   }
 
   //----------------------------------------------------------------------------

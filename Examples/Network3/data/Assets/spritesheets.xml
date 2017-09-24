@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+      <spritesheet name="pawn" img="pawn.png">
+	    <spriteset frames="1" sprite_width="64" sprite_height="64"  />
+	  </spritesheet>
+	  <spritesheet name="background" img="bgr2.jpg"> <!-- sprite sheet for background -->
+	    <spriteset frames="1" sprite_width="800" sprite_height="450"  />
+	  </spritesheet>
+</resources>	

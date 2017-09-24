@@ -18,14 +18,10 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
-	}
-
-	void InitStage(Stage* stage) {
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 };
-
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

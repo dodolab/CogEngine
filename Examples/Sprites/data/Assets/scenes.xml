@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<app_config>
-	<settings>
-	    <!-- size of cars -->
-		<project_settings>
-		    <setting name="scene_settings">
-			    <item key="cars_size" value="8"/>
-			</setting>
-		</project_settings>
-	</settings>
-
-
-	<spritesheets>
-      <spritesheet name="cars" img="cars.png">
-	    <spriteset frames="16" sprite_width="128" sprite_height="128"  />
-	  </spritesheet>
-	  <spritesheet name="background" img="bgr2.jpg"> <!-- sprite sheet for background -->
-	    <spriteset frames="1" sprite_width="800" sprite_height="450"  />
-	  </spritesheet>
-    </spritesheets>
-
-	<!-- scene definition -->
-	<scenes initial="main">
+<resources>
 		<scene name="main">
 			<scene_layers>
 				<!-- scene layers refers to spritesheets they use -->
@@ -61,5 +40,4 @@
 			</node>
 			
 		</scene>
-	</scenes>
-</app_config>
+</resources>	

@@ -36,11 +36,11 @@ public:
 		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_NET_DISCONNECTED, ACT_BUTTON_CLICKED);
 		communicator = new NetworkCommunicator();
 		REGISTER_COMPONENT(communicator);
-		unitsNum = GETCOMPONENT(ResourceCache)->GetProjectSettings().GetSettingValInt("scene_settings", "units");
+		unitsNum = CogGetProjectSettings().GetSettingVal<int>("scene_settings", "units");
 	}
 
-	void LoadUnits() {
 
+	void LoadUnits() {
 		auto backgroundNode = owner->GetScene()->FindNodeByTag("bgr");
 		// load view
 		viewNode = owner->GetScene()->FindNodeByTag("unit_view");
@@ -92,8 +92,8 @@ public:
 			}
 
 			// disable buttons
-			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATES_DISABLED));
-			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATES_DISABLED));
+			this->owner->GetScene()->FindNodeByTag("server_but")->SetState(StrId(STATE_DISABLED));
+			this->owner->GetScene()->FindNodeByTag("client_but")->SetState(StrId(STATE_DISABLED));
 		}
 
 		if (msg.HasAction(ACT_NET_DISCONNECTED)) {
@@ -102,7 +102,7 @@ public:
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {
 			// push received message to Interpolator
-			auto msgEvent = msg.GetData<NetworkMsgEvent>();
+			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
 			auto netMsg = msgEvent->msg;
 			if (netMsg->GetAction() == NET_MSG_UPDATE) {
 
@@ -207,8 +207,8 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 
 	void InitStage(Stage* stage) {
@@ -218,10 +218,10 @@ class ExampleApp : public ofxCogApp {
 
 		NodeBuilder bld = NodeBuilder();
 		// get number of units defined in xml
-		int units = GETCOMPONENT(ResourceCache)->GetProjectSettings().GetSettingValInt("scene_settings", "units");
+		int units = CogGetProjectSettings().GetSettingVal<int>("scene_settings", "units");
 
 		// create sprite sheet
-		auto spriteSheet = GETCOMPONENT(ResourceCache)->GetSpriteSheet("pawn");
+		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("pawn");
 		auto spriteSet = spriteSheet->GetDefaultSpriteSet();
 
 		// all units will be displayed as sprites -> therefore they must be defined twice
@@ -242,17 +242,17 @@ class ExampleApp : public ofxCogApp {
 			// each unit will have separate node (and its own movement behavior)
 			Node* unitModel = new Node("unit_model");
 			background->AddChild(unitModel);
-			// rectangles are not rendered (instead of planes) and can be used for size calculations
 			auto rectangle = spt<Cog::Rectangle>(new Cog::Rectangle(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
+			rectangle->SetIsRenderable(false);
 			unitModel->SetMesh(rectangle);
 
 			// set transformation of the unit (center of the screen)
 			TransformEnt node2trans = TransformEnt();
 			node2trans.pos = ofVec2f(0.5f, 0.5f);
 			node2trans.anchor = ofVec2f(0.5f, 0.5f);
-			node2trans.pType = CalcType::PER;
+			node2trans.pType = CALCTYPE_PER;
 			node2trans.zIndex = 100;
-			node2trans.sType = CalcType::GRID;
+			node2trans.sType = CALCTYPE_GRID;
 			node2trans.size = ofVec2f(3);
 
 			// calculate transform with grid 100x50 units

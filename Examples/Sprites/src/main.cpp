@@ -35,7 +35,7 @@ public:
 	void OnInit() {
 		SubscribeForMessages(ACT_BUTTON_CLICKED);
 		
-		carsSize = GETCOMPONENT(ResourceCache)->GetProjectSettings().GetSettingValFloat("scene_settings", "cars_size");
+		carsSize = GETCOMPONENT(Resources)->GetProjectSettings().GetSettingVal<float>("scene_settings", "cars_size");
 
 		infoNode = owner->GetScene()->FindNodeByTag("info");
 		viewNode = owner->GetScene()->FindNodeByTag("cars");
@@ -44,7 +44,7 @@ public:
 		viewNode->SetMesh(mesh);
 
 		// fill sprite storage
-		auto spriteSheet = GETCOMPONENT(ResourceCache)->GetSpriteSheet("cars");
+		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("cars");
 		spriteSet = spriteSheet->GetDefaultSpriteSet();
 
 		for (int i = 0; i < 8; i++) {
@@ -100,7 +100,7 @@ public:
 
 	void AddCars(int num) {
 		TransformMath math;
-		auto spriteSheet = GETCOMPONENT(ResourceCache)->GetSpriteSheet("cars");
+		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("cars");
 		auto spriteSet = spriteSheet->GetDefaultSpriteSet();
 
 
@@ -111,15 +111,16 @@ public:
 
 			// rectangles are not rendered (instead of planes) and can be used for size calculations
 			auto rectangle = spt<Cog::Rectangle>(new Cog::Rectangle(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
+			rectangle->SetIsRenderable(false);
 			car->SetMesh(rectangle);
 
 			// top left corner of the screen
 			TransformEnt transEntity = TransformEnt();
 			transEntity.pos = ofVec2f(0);
 			transEntity.anchor = ofVec2f(0.5f);
-			transEntity.pType = CalcType::ABS_PER;
+			transEntity.pType = CALCTYPE_ABS_PER;
 			transEntity.zIndex = 100;
-			transEntity.sType = CalcType::ABS_PER;
+			transEntity.sType = CALCTYPE_ABS_PER;
 			transEntity.size = ofVec2f(0.01f*carsSize,0); // size of screen %
 
 			Trans trans;
@@ -154,6 +155,7 @@ public:
 			}
 		}
 	}
+
 
 	uint64 lastAbsolute;
 	uint64 lastFrequencyRefresh;
@@ -190,8 +192,8 @@ class ExampleApp : public ofxCogApp {
 	}
 
 	void InitEngine() {
-		ofxCogEngine::GetInstance().Init("config.xml");
-		ofxCogEngine::GetInstance().LoadStageFromXml(spt<ofxXml>(new ofxXml("config.xml")));
+		ofxCogEngine::GetInstance().Init();
+		ofxCogEngine::GetInstance().LoadStage();
 	}
 
 	void InitStage(Stage* stage) {

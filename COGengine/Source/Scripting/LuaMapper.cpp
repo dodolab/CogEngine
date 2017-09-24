@@ -155,9 +155,9 @@ namespace Cog {
 			.beginClass<Settings>("Settings")
 			.addConstructor<void(*)()>()
 			.addFunction("GetSettingVal", static_cast<string(Settings::*)(string, string)> (&Settings::GetSettingVal))
-			.addFunction("GetSettingValInt", &Settings::GetSettingValInt)
-			.addFunction("GetSettingValFloat", &Settings::GetSettingValFloat)
-			.addFunction("GetSettingValBool", &Settings::GetSettingValBool)
+			.addFunction("GetSettingValInt", static_cast<int(Settings::*)(string, string)> (&Settings::GetSettingVal))
+			.addFunction("GetSettingValFloat", static_cast<float(Settings::*)(string, string)> (&Settings::GetSettingVal))
+			.addFunction("GetSettingValBool", static_cast<bool(Settings::*)(string, string)> (&Settings::GetSettingVal))
 			.addFunction("GetSetting", &Settings::GetSetting)
 			.addFunction("SetSetting", &Settings::SetSetting)
 			.endClass();

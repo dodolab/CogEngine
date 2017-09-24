@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+      <spritesheet name="cars" img="cars.png">
+	    <spriteset frames="16" sprite_width="128" sprite_height="128"  />
+	  </spritesheet>
+	  <spritesheet name="background" img="bgr2.jpg"> <!-- sprite sheet for background -->
+	    <spriteset frames="1" sprite_width="800" sprite_height="450"  />
+	  </spritesheet>
+</resources>	

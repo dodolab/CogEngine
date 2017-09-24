@@ -21,7 +21,7 @@ namespace Cog {
 		auto settingNode = xml.child("setting");
 		if (settingNode) {
 			this->setting = Setting();
-			this->setting.LoadFromXml(xml);
+			this->setting.LoadFromXml(settingNode);
 		}
 
 		// there are two ways how to specify settings: as a setting tag or 

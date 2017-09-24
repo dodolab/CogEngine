@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+		<!-- attribute animation -> position and rotation -->
+		<anim name="anim" repeat="1">
+			<attranim attr="pos_x" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+			<attranim attr="pos_y" from="0r" to="1r" mtype="direct" duration="5000"  easefunc="cosine_in" />
+			<attranim attr="rotation" from="0" to="360" mtype="direct" duration="5000"  />
+
+			<!-- invert and repeat recursively (little tricky) -->
+			<anim name="recursive" ref="anim" revert="true" /> <!-- ref="anim" means that animation with the name "anim" is referenced -->
+		</anim>
+</resources>

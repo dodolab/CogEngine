@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <scene name="scene1">
+      <node img="bgr2.jpg" /> <!-- background -->
+      <node name="anim" img="sheet_squares.png">
+	    <transform pos_x="0" pos_y="0" z_index="2" anchor="0.5" rotation_origin="0.5" />
+		<behavior type="AttribAnimator" animation="anim_1" />
+	  </node>
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </scene>
+	
+	<scene name="scene2">
+	  <node name="bgr" img="bgr2.jpg">
+	  </node>
+	  
+	  <node name="square" img="sheet_squares.png">
+	  <transform size="0.5" z_index="10" rotation_origin="0.5"/>
+	    <!-- reference to behaviors (| is divider for values) -->
+		<behavior type="MultiAnim" animations="bt01|bt02|bt03|bt04" repeat="true" />
+		
+		<!-- reference to rotation animation -->
+		<behavior ref="rt01" />
+		
+		 <!-- second group of squares -->
+		 <node name="square2" img="sheet_squares.png">
+	      <transform pos="0.5" anchor="0.5" size="0.5" z_index="12" rotation_origin="0.5" /> 
+		   <behavior ref="rt01" />
+	     
+		   <!-- third group of squares-->
+		   <node name="square3" img="sheet_squares.png">
+	           <transform pos="0.5" anchor="0.5" size="0.5" z_index="12" rotation_origin="0.5" /> 
+		       <behavior ref="rt01" />
+	       </node>
+		 </node>
+	  </node>
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+      </node>
+    </scene>
+	
+	<scene name="scene3">
+      <node img="bgr.jpg" />
+      <node name="mario" img="mario_0.png">
+	    <transform pos_x="0r" pos_y="0.5r" z_index="2" anchor_x="1" width="0.1r" />
+		
+		<!-- define sheet animation behavior -->
+		<behavior type="SheetAnimator">
+		  <setting>
+		    <item key="animation" value="mario_anim_sheet" />
+		  </setting>
+		</behavior> 
+		
+		<!-- define transformation animation behavior -->
+	    <behavior type="TransformAnim">
+		  <setting>
+		    <item key="from" value="mario_from" />
+			<item key="to" value="mario_to" />
+			<item key="duration" value="4000" />
+			<item key="repeat" value="true" />
+			<item key="blend" value="overlay" />
+		  </setting>
+		</behavior>
+	  </node>
+	  
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	  </node>
+    </scene>
+	
+	<scene name="scene4">
+	  <scene_layers>
+	    <layer name="bgr" spritesheet="bgr" buffer_size="100" z_index="30" />
+		<layer name="squares" spritesheet="squares" buffer_size="100" z_index="30" />
+	  </scene_layers>
+
+	  <node name="bgr" img="bgr.jpg">
+	    <mesh type="sprite" layer="bgr" />
+	  </node>
+	  
+	  <node name="square_2">
+        <mesh type="sprite" layer="squares" row="0" column="1" />
+		<transform pos_x="0.4r" pos_y="0.4r" anchor="0.5" rotation_origin="0.5"  z_index="10" />
+		
+		<!-- multianimation behavior that uses both transformation behaviors  -->
+		<behavior type="MultiAnim" animations="transform1|transform2" />
+		<!-- squareanim switches between frames in the sprite-sheet -->
+		<behavior ref="squareanim" />
+	  </node>
+	  
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	 </node>
+    </scene>
+	
+	<scene name="scene5">
+      <node img="bgr2.jpg" />
+      <node name="anim" >
+	    <transform pos_x="0.4r" pos_y="0.4r" z_index="2" />
+		<mesh type="plane" width="1" height="1" />
+		<behavior type="SheetAnimator">
+		  <setting>
+		    <item key="animation" value="sampleAnim" />
+		  </setting>
+		</behavior> 
+		
+	  </node>
+	  
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	  </node>
+    </scene>
+	
+	<scene name="scene6">
+	   <scene_settings>
+        <setting name="transform">
+          <!-- grid sizing -->
+          <item key="grid_width" value="100" />
+          <item key="grid_height" value="53" />
+		  <item key="ref_width" value="800" /> <!-- everything will be scaled for 800x450, this makes the scene invariant against device resolution -->
+		  <item key="ref_height" value="450" />
+        </setting>
+      </scene_settings>
+	
+      <node img="bgr2.jpg" />
+	  <node>
+	     <node name="anim" img="cog.png">
+	      <transform pos_x="0.5r" pos_y="0.5r" z_index="2" anchor="0.5" width="0.5r" rotation_origin="0.5" />
+		  <behavior type="AttribAnimator" animation="rotation" />
+	    </node>
+	    <node name="anim2" img="cog.png">
+	     <transform pos_x="0.15r" pos_y="0.7r" z_index="2" anchor="0.5" width="0.35r" rotation_origin="0.5" />
+		  <behavior type="AttribAnimator" animation="rotation2" />
+	    </node>
+	    <node name="anim3" img="cog.png">
+	      <transform pos_x="0.85r" pos_y="0.7r" z_index="2" anchor="0.5" width="0.35r" rotation_origin="0.5" />
+		  <behavior type="AttribAnimator" animation="rotation2" />
+	    </node>
+	  </node>
+	  
+	  <!-- info -->
+	  <node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	  </node>
+    </scene>
+</resources>	

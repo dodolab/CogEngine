@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+  <scene name="scene01">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- center of the screen, size 25% of screen size -->
+	    <transform pos_x="0.5r" pos_y="0.5r" z_index="100" anchor="0.5" size="0.25r" rotation_origin="0.5" />
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene02">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- by setting anchor to 1, plane will be positioned according to its bottom-right corner -->
+		<!-- if only width is specified, height is set according to the aspect ratio of the screen -->
+	    <transform pos="1r" z_index="100" anchor="1" width="0.25r" rotation_origin="0.5" />
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene03">
+      <scene_settings>
+        <setting name="transform">
+          <!-- grid sizing -->
+          <item key="grid_width" value="100" />
+          <item key="grid_height" value="50" />
+        </setting>
+      </scene_settings>
+  
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- if grid size in scene settings is specified, positions and scales can be set according to this size (100x50) -->
+	    <transform pos_x="30gr" pos_y="30gr" z_index="100" anchor="0.5" size="20gr" rotation_origin="0.5" />
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene04">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- absolute positioning -->
+	    <transform pos="200un" z_index="100" anchor="0" size="200un" rotation_origin="0.5" />
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene05">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos_x="0.5r" pos_y="0.5r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle will have 50%  size of the size of the parent -->
+	      <transform pos_x="0.5r" pos_y="0.5r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene06">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0r"  z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle will have 50%  size of the size of the screen (rp is for absolute percentage) -->
+	      <transform pos="1rp" z_index="100" anchor="1" size="0.5rp" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene07">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0r"  z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		 <!-- same as config06.xml, but with relative percentage positioning -->
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x000099" />
+		  <!-- green rectangle will have 50%  size of the size of the screen (rp is for absolute percentage) -->
+	      <transform pos="1r" z_index="100" anchor="0" size="1r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+    <scene name="scene08">
+        <scene_settings>
+        <setting name="transform">
+          <!-- grid sizing -->
+          <item key="grid_width" value="100" />
+          <item key="grid_height" value="50" />
+        </setting>
+      </scene_settings>
+	  
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0gr"  z_index="100" anchor="0" width="50gr" height="25gr" rotation_origin="0.5" />
+		 <!-- same as config06.xml, but with grid-based positioning -->
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x659928" />
+		  <!-- green rectangle will have 50%  size of the size of the screen (rp is for absolute percentage) -->
+	      <transform pos_x="50gr" pos_y="25gr" z_index="100" anchor="0" size="1r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+    <scene name="scene09">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle will have 50%  size of the size of the parent -->
+	      <transform pos_x="1r" pos_y="0r" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene10">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- bottom right of the parent's corner, centered -->
+	      <transform pos="1r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene11">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+	      <transform pos="1r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+	        <transform pos="1r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene12">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle on the right of the red -->
+	      <transform pos_x="1r"  z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+			<!-- blue rectangle below the green -->
+	        <transform pos_x="1r" pos_y="1r" z_index="100" anchor_x="1" anchor_y="0" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene13">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos="0" z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle on the right of the red -->
+	      <transform pos_x="1r"  z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+			<!-- anchor can be used to translate multiple of its length -->
+	        <transform pos_x="1r" pos_y="1r" z_index="100" anchor_x="2" anchor_y="0" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene14">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- width="0.25r" will create a square; anchor and origin are set to allow the red square to rotate around center -->
+	    <transform pos="0.5r" z_index="100" anchor="0.5" width="0.25r" rotation_origin="0.5" rotation="45" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+		  <!-- green rectangle on the right of the red -->
+	      <transform pos_x="1r"  z_index="100" anchor="0" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+			<!-- anchor can be used to translate multiple of its length -->
+	        <transform pos_x="1r" pos_y="1r" z_index="100" anchor_x="2" anchor_y="0" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene15">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- width="0.25r" will create a square; anchor and origin are set to allow the red square to rotate around center -->
+	    <transform pos="0.5r" z_index="100" anchor="0.5" width="0.25r" rotation_origin="0.5" rotation="45" />
+		
+		 <!-- both squares are at the center of the red square -->
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+	      <transform pos="0.5r"  z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+	        <transform pos="0.5r" z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene16">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- width="0.25r" will create a square; anchor and origin are set to allow the red square to rotate around center -->
+	    <transform pos="0.5r" z_index="100" anchor="0.5" width="0.25r" rotation_origin="0.5" rotation="45" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+	      <transform pos_x="1r" pos_y="0"  z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+	        <transform pos_x="1r" pos_y="0"  z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene17">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+		<!-- each squre is rotated about 30 degrees -->
+	    <transform pos="0.5r" z_index="100" anchor="0.5" width="0.25r" rotation_origin="0.5" rotation="30" />
+		
+		 <node name="trans">
+	      <mesh type="rectangle" size="1" color="0x009900" />
+	      <transform pos_x="1r" pos_y="0"  z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" rotation="30" />
+		  
+		  	<node name="trans">
+	        <mesh type="rectangle" size="1" color="0x000099" />
+	        <transform pos_x="1r" pos_y="0"  z_index="100" anchor="0.5" size="0.5r" rotation_origin="0.5" rotation="30" />
+	      </node>
+	    </node>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene18">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  
+	  <!-- all rectangles are at the same level (their parent is background image) and therefore they are independent -->
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x990000" />
+	    <transform pos_x="0r" pos_y="0r" z_index="100" anchor="0" width="0.999r" height="0.25r" rotation_origin="0.5" />
+	  </node>
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x009900" />
+	    <transform pos_x="0r" pos_y="0.3r" z_index="100" anchor="0" width="0.999r" height="0.25r" rotation_origin="0.5" />
+	  </node>
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x000099" />
+	    <transform pos_x="0r" pos_y="0.6r" z_index="100" anchor="0" width="0.999r" height="0.25r" rotation_origin="0.5" />
+	  </node>
+	  
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene19">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x000000" />
+	    <transform pos_x="0.5r" pos_y="0.7r" z_index="100" anchor="0.5" width="0.2r" height="0.05r" rotation_origin="0.5" />
+	  </node>
+
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x000000" />
+	    <transform pos_x="0.4r" pos_y="0.7r" z_index="100" anchor_x="0" anchor_y="1" width="0.03r" height="0.4r"  />
+	  </node>
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" size="1" color="0x000000" />
+	    <transform pos_x="0.57r" pos_y="0.7r" z_index="100" anchor_x="0" anchor_y="1" width="0.03r" height="0.4r"  />
+	  </node>
+	  
+	  
+	  <node name="trans">
+	    <!-- width and height can be set for plane too -> in this case the rotation won't skew it with uniform scale  -->
+	    <mesh type="rectangle" width="8" height="1" color="0x000000" />
+	    <transform pos_x="0.48r" pos_y="0.26r" z_index="100" anchor_x="0" anchor_y="1" width="0.2r"  rotation="45" rotation_origin="0.5" />
+	  </node>
+	  
+	  <node name="trans">
+	    <mesh type="rectangle" width="8" height="1" color="0x000000" />
+	    <transform pos_x="0.32r" pos_y="0.26r" z_index="100" anchor_x="0" anchor_y="1" width="0.2r"  rotation="135" rotation_origin="0.5" />
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+  <scene name="scene20">
+    <node img="bgr.jpg"> <!-- background -->
+      
+	  
+	  <!-- ============== TRANSFORMATIONS ================= -->
+	  <node name="trans">
+	    <transform pos_x="0.6r" pos_y="0.5r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="50" color="0x000000">A</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.6r" pos_y="0.7r" z_index="20"  anchor_x="0" anchor_y="1" rotation="43" />
+		<text font="MotionControl-Bold.otf" size="100" color="0xFF0000">B</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.3r" pos_y="0.7r" z_index="20"  anchor_x="0" anchor_y="1" rotation="80" />
+		<text font="MotionControl-Bold.otf" size="80" color="0x008523">C</text>
+	  </node>
+	  
+	  <node name="trans">
+	    <transform pos_x="0.4r" pos_y="0.3r" z_index="20"  anchor_x="0" anchor_y="1" rotation="164" />
+		<text font="MotionControl-Bold.otf" size="60" color="0x0000FF">D</text>
+	  </node>
+	  <!-- ================================================ -->
+	  
+	 <!-- info -->
+	<node name="info">
+		<transform pos_x="0r" pos_y="1r" z_index="20"  anchor_x="0" anchor_y="1" />
+		<text font="MotionControl-Bold.otf" size="16" color="0x000000">Use keys 'page up' and 'page down' to switch between scenes</text>
+	</node>
+    </node>
+  </scene>
+</resources>	

@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<app_config>
-	<settings>
-		<!-- global settings -->
-		<global_settings>
-			<!-- debug logger, output into the console -->
-			<setting name="logger" level="DEBUG">
-				<item key="channel" value="console" />
-				<item key="module_include">
-					<value>Network</value> <!-- Print networking log -->
-				</item>
-			</setting>
-		</global_settings>
-	</settings>
-
-	<!-- scene definition -->
-	<scenes initial="main">
+<resources>
 		<scene name="main">
 			<!-- background image -->
 			<node img="bgr.jpg">
@@ -76,5 +61,4 @@
 				<text font="MotionControl-Bold.otf" size="20" >??</text>
 			</node>
 		</scene>
-	</scenes>
-</app_config>
+</resources>	
