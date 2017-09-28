@@ -55,7 +55,7 @@ namespace Cog {
 	{
 		// measured scopes
 		map<string, MeasureScope> blocks;
-		unsigned long startTime;
+		unsigned long startTime = 0;
 		unsigned long endTime;
 	public:
 
