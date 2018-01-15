@@ -5,7 +5,7 @@
 
 #include "catch.hpp"
 using namespace Cog;
-
+#ifdef SQLITE_DB
 #include "SQLTestAssets.h"
 
 
@@ -64,3 +64,4 @@ TEST_CASE("SQL test")
 	file.removeFile("test.db");
 	delete sql;
 }
+#endif

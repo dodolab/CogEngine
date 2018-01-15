@@ -1,7 +1,7 @@
 #include "Logger.h"
 #include "ofxCogEngine.h"
 #include "Settings.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "ComponentStorage.h"
 #include "Facade.h"
 

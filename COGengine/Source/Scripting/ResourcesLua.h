@@ -7,6 +7,7 @@ using namespace std;
 #include "MsgLua.h"
 #include "Settings.h"
 #include "ComponentLua.h"
+#include "ResourcesMgr.h"
 
 namespace luabridge {
 	struct lua_State;
@@ -15,7 +16,6 @@ namespace luabridge {
 
 namespace Cog {
 
-	class Resources;
 	class GeneralAnim;
 	class SpriteSheet;
 

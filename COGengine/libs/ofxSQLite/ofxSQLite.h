@@ -6,6 +6,7 @@
  * Or you can use a build define like: SQLITE_DEBUG 0
  *
  */
+#ifdef SQLITE_DB
 #ifndef OFXSQLITEH
 #define OFXSQLITEH
 #define DSQLITE_ENABLE_UPDATE_DELETE_LIMIT 1
@@ -816,4 +817,4 @@ private:
 };
 
 #endif
-
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef SQLITE_DB
+
 #include "ofxSQLite.h"
 #include "SQLiteEntity.h"
 
@@ -76,3 +78,5 @@ public:
 			.add("boolv", SQLColumnType::SQLITE_COLUMN_BOOLEAN).execute();
 	}
 };
+
+#endif

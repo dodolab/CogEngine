@@ -1,6 +1,6 @@
 #include "Node.h"
 #include "Behavior.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "ofxCogEngine.h"
 #include "Scene.h"
 

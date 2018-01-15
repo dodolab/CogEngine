@@ -32,6 +32,7 @@
 **
 ** @(#) $Id: sqlite.h.in,v 1.458 2009/06/19 22:50:31 drh Exp $
 */
+#ifdef SQLITE_DB
 #ifndef _SQLITE3_H_
 #define _SQLITE3_H_
 #include <stdarg.h>     /* Needed for the definition of va_list */
@@ -5624,5 +5625,6 @@ int sqlite3_unlock_notify(
 
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */
+#endif
 #endif
 #endif

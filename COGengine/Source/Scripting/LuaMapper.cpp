@@ -6,7 +6,7 @@
 #include "Transform.h"
 #include "StrId.h"
 #include "Flags.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "MsgLua.h"
 #include "BehaviorLua.h"
 #include "NodeLua.h"

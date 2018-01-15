@@ -159,4 +159,55 @@ namespace Cog {
 		}
 	}
 
+
+	/**
+	* Gets value of a setting with given name as a string.
+	* If there is no such Setting or key-value pair, it returns empty string
+	*/
+	template<>
+	string Settings::GetSettingVal<string>(string setName) {
+		if (settings.count(setName) == 0) return "";
+		else return GetSetting(setName).GetItemVal("value");
+	}
+
+	/**
+	* Gets value of a setting of given name and given key as a string.
+	* If there is no such Setting or key-value pair, it returns empty string
+	*/
+	template<>
+	string Settings::GetSettingVal<string>(string setName, string itemKey) {
+		if (settings.count(setName) == 0) return "";
+		else return GetSetting(setName).GetItemVal(itemKey);
+	}
+
+	/**
+	* Gets value of a setting with given name and given key as an integer.
+	* If there is no such Setting or key-value pair, it returns 0
+	*/
+	template<>
+	int Settings::GetSettingVal<int>(string setName, string itemKey) {
+		if (settings.count(setName) == 0) return 0;
+		else return GetSetting(setName).GetItem(itemKey).GetValInt();
+	}
+
+	/**
+	* Gets value of a setting with given name and given key as a float.
+	* If there is no such Setting or key-value pair, it returns 0
+	*/
+	template<>
+	float Settings::GetSettingVal<float>(string setName, string itemKey) {
+		if (settings.count(setName) == 0) return 0;
+		else return GetSetting(setName).GetItem(itemKey).GetValFloat();
+	}
+
+	/**
+	* Gets value of a setting with given name and given key as a boolean.
+	* If there is no such Setting or key-value pair, it returns false
+	*/
+	template<>
+	bool Settings::GetSettingVal<bool>(string setName, string itemKey) {
+		if (settings.count(setName) == 0) return 0;
+		else return GetSetting(setName).GetItem(itemKey).GetValBool();
+	}
+
 } // namespace

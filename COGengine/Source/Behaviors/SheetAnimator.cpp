@@ -1,7 +1,7 @@
 #include "SheetAnimator.h"
 #include "ofxCogEngine.h"
 #include "Node.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "ComponentStorage.h"
 
 namespace Cog {

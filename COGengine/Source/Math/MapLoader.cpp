@@ -66,7 +66,7 @@ namespace Cog {
 				// in android, channels b and r are swapped
 #if ANDROID
 				int hexa = (((int)(color.b * 255) & 0xff) << 16) + ((((int)(color.g * 255)) & 0xff) << 8) + (((int)(color.r * 255)) & 0xff);
-#elif WIN32
+#else
 				int hexa = (((int)(color.r * 255) & 0xff) << 16) + ((((int)(color.g * 255)) & 0xff) << 8) + (((int)(color.b * 255)) & 0xff);
 #endif
 				std::stringstream stream;

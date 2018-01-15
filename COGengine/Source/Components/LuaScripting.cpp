@@ -1,7 +1,7 @@
 #include "LuaScripting.h"
 #include "Definitions.h"
 #include "ComponentStorage.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "BehaviorLua.h"
 #include <LuaBridge.h>
 

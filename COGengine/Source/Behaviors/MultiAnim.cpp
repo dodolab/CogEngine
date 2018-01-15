@@ -2,7 +2,7 @@
 #include "Settings.h"
 #include "BehaviorEnt.h"
 #include "Error.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "ComponentStorage.h"
 #include "Facade.h"
 

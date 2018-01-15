@@ -1,4 +1,3 @@
-#include "CogConfig.h"
 #include "ComponentStorage.h"
 #ifdef LUA_SCRIPTING
 #include "LuaScripting.h"

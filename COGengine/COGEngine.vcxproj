@@ -99,7 +99,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -137,7 +137,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -183,440 +183,439 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3rdParty\catch\catch.hpp" />
-    <ClInclude Include="3rdParty\jsonxx\jsonxx.h" />
-    <ClInclude Include="3rdParty\luabridge\CFunctions.h" />
-    <ClInclude Include="3rdParty\luabridge\ClassInfo.h" />
-    <ClInclude Include="3rdParty\luabridge\Constructor.h" />
-    <ClInclude Include="3rdParty\luabridge\dump.h" />
-    <ClInclude Include="3rdParty\luabridge\FuncTraits.h" />
-    <ClInclude Include="3rdParty\luabridge\Iterator.h" />
-    <ClInclude Include="3rdParty\luabridge\LuaBridge.h" />
-    <ClInclude Include="3rdParty\luabridge\LuaException.h" />
-    <ClInclude Include="3rdParty\luabridge\LuaHelpers.h" />
-    <ClInclude Include="3rdParty\luabridge\LuaRef.h" />
-    <ClInclude Include="3rdParty\luabridge\Namespace.h" />
-    <ClInclude Include="3rdParty\luabridge\RefCountedObject.h" />
-    <ClInclude Include="3rdParty\luabridge\RefCountedPtr.h" />
-    <ClInclude Include="3rdParty\luabridge\Stack.h" />
-    <ClInclude Include="3rdParty\luabridge\TypeList.h" />
-    <ClInclude Include="3rdParty\luabridge\TypeTraits.h" />
-    <ClInclude Include="3rdParty\luabridge\Userdata.h" />
-    <ClInclude Include="3rdParty\lua\lapi.h" />
-    <ClInclude Include="3rdParty\lua\lauxlib.h" />
-    <ClInclude Include="3rdParty\lua\lcode.h" />
-    <ClInclude Include="3rdParty\lua\ldebug.h" />
-    <ClInclude Include="3rdParty\lua\ldo.h" />
-    <ClInclude Include="3rdParty\lua\lfunc.h" />
-    <ClInclude Include="3rdParty\lua\lgc.h" />
-    <ClInclude Include="3rdParty\lua\llex.h" />
-    <ClInclude Include="3rdParty\lua\llimits.h" />
-    <ClInclude Include="3rdParty\lua\lmem.h" />
-    <ClInclude Include="3rdParty\lua\lobject.h" />
-    <ClInclude Include="3rdParty\lua\lopcodes.h" />
-    <ClInclude Include="3rdParty\lua\lparser.h" />
-    <ClInclude Include="3rdParty\lua\lstate.h" />
-    <ClInclude Include="3rdParty\lua\lstring.h" />
-    <ClInclude Include="3rdParty\lua\ltable.h" />
-    <ClInclude Include="3rdParty\lua\ltm.h" />
-    <ClInclude Include="3rdParty\lua\lua.h" />
-    <ClInclude Include="3rdParty\lua\luaconf.h" />
-    <ClInclude Include="3rdParty\lua\lualib.h" />
-    <ClInclude Include="3rdParty\lua\lundump.h" />
-    <ClInclude Include="3rdParty\lua\lvm.h" />
-    <ClInclude Include="3rdParty\lua\lzio.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxNetwork.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxNetworkUtils.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPClient.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPManager.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPServer.h" />
-    <ClInclude Include="3rdParty\ofxNetwork\ofxUDPManager.h" />
-    <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h" />
-    <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h" />
-    <ClInclude Include="3rdParty\pugixml\pugiconfig.h" />
-    <ClInclude Include="3rdParty\pugixml\pugixml.h" />
-    <ClInclude Include="3rdParty\sqlite\sqlite3.h" />
-    <ClInclude Include="Source\AI\ActionFilter.h" />
-    <ClInclude Include="Source\AI\AgentsReward.h" />
-    <ClInclude Include="Source\AI\AIAgent.h" />
-    <ClInclude Include="Source\AI\AIState.h" />
-    <ClInclude Include="Source\AI\GameSimulator.h" />
-    <ClInclude Include="Source\AI\BestOnlyAgent.h" />
-    <ClInclude Include="Source\AI\RandomAgent.h" />
-    <ClInclude Include="Source\AI\Simulator.h" />
-    <ClInclude Include="Source\AI\UCTAgent.h" />
-    <ClInclude Include="Source\Attributes\Flags.h" />
-    <ClInclude Include="Source\Attributes\Movement.h" />
-    <ClInclude Include="Source\Attributes\Mesh.h" />
-    <ClInclude Include="Source\Attributes\StrId.h" />
-    <ClInclude Include="Source\Attributes\Transform.h" />
-    <ClInclude Include="Source\Attributes\Vec2i.h" />
-    <ClInclude Include="Source\Behaviors\AttribAnimator.h" />
-    <ClInclude Include="Source\Behaviors\CompositeBehavior.h" />
-    <ClInclude Include="Source\Behaviors\Goal.h" />
-    <ClInclude Include="Source\Behaviors\Selection.h" />
-    <ClInclude Include="Source\Behaviors\SheetAnimator.h" />
-    <ClInclude Include="Source\Behaviors\Button.h" />
-    <ClInclude Include="Source\Behaviors\DelayAction.h" />
-    <ClInclude Include="Source\Behaviors\FloatingScene.h" />
-    <ClInclude Include="Source\Behaviors\HitEvent.h" />
-    <ClInclude Include="Source\Behaviors\Move.h" />
-    <ClInclude Include="Source\Behaviors\MultiAnim.h" />
-    <ClInclude Include="Source\Behaviors\MultiSelection.h" />
-    <ClInclude Include="Source\Behaviors\Slider.h" />
-    <ClInclude Include="Source\Behaviors\State.h" />
-    <ClInclude Include="Source\Behaviors\StateMachine.h" />
-    <ClInclude Include="Source\Behaviors\SteeringBehavior.h" />
-    <ClInclude Include="Source\Behaviors\TransformAnim.h" />
-    <ClInclude Include="Source\Behaviors\Tween.h" />
-    <ClInclude Include="Source\Builders\TimeLineBuilder.h" />
-    <ClInclude Include="Source\CogConfig.h" />
-    <ClInclude Include="Source\Communication\UpdateInfo.h" />
-    <ClInclude Include="Source\Communication\UpdateMessage.h" />
-    <ClInclude Include="Source\Communication\NetMessage.h" />
-    <ClInclude Include="Source\Communication\NetReader.h" />
-    <ClInclude Include="Source\Communication\NetworkManager.h" />
-    <ClInclude Include="Source\Communication\NetWriter.h" />
-    <ClInclude Include="Source\Components\CogDatabase.h" />
-    <ClInclude Include="Source\Components\InputHandler.h" />
-    <ClInclude Include="Source\Components\Logger.h" />
-    <ClInclude Include="Source\Components\Interpolator.h" />
-    <ClInclude Include="Source\Components\LuaScripting.h" />
-    <ClInclude Include="Source\Components\NetworkCommunicator.h" />
-    <ClInclude Include="Source\Components\Resources.h" />
-    <ClInclude Include="Source\Components\Environment.h" />
-    <ClInclude Include="Source\Components\Renderer.h" />
-    <ClInclude Include="Source\Components\Stage.h" />
-    <ClInclude Include="Source\Components\SceneSwitchManager.h" />
-    <ClInclude Include="Source\Core\AssetsManager.h" />
-    <ClInclude Include="Source\Core\AsyncProcess.h" />
-    <ClInclude Include="Source\Core\Attr.h" />
-    <ClInclude Include="Source\Core\Behavior.h" />
-    <ClInclude Include="Source\Core\BehaviorCreator.h" />
-    <ClInclude Include="Source\Core\ofxCogApp.h" />
-    <ClInclude Include="Source\Core\ofxCogEngine.h" />
-    <ClInclude Include="Source\Core\Component.h" />
-    <ClInclude Include="Source\Core\Definitions.h" />
-    <ClInclude Include="Source\Core\ComponentStorage.h" />
-    <ClInclude Include="Source\Core\MsgPayloads.h" />
-    <ClInclude Include="Source\Core\Facade.h" />
-    <ClInclude Include="Source\Core\Constants.h" />
-    <ClInclude Include="Source\Core\Error.h" />
-    <ClInclude Include="Source\Core\InputAct.h" />
-    <ClInclude Include="Source\Core\Msg.h" />
-    <ClInclude Include="Source\Core\BaseComponent.h" />
-    <ClInclude Include="Source\Core\Node.h" />
-    <ClInclude Include="Source\Core\NodeBuilder.h" />
-    <ClInclude Include="Source\Core\Scene.h" />
-    <ClInclude Include="Source\Core\Settings.h" />
-    <ClInclude Include="Source\Core\Soundfx.h" />
-    <ClInclude Include="Source\Core\TransformMath.h" />
-    <ClInclude Include="Source\Entities\BehaviorEnt.h" />
-    <ClInclude Include="Source\Entities\DEntity.h" />
-    <ClInclude Include="Source\Entities\LayerEnt.h" />
-    <ClInclude Include="Source\Entities\AttrAnimEnt.h" />
-    <ClInclude Include="Source\Entities\TimeLine.h" />
-    <ClInclude Include="Source\Entities\TransformEnt.h" />
-    <ClInclude Include="Source\Graphics\AnimContextStack.h" />
-    <ClInclude Include="Source\Graphics\AttribAnim.h" />
-    <ClInclude Include="Source\Graphics\SpriteSheetTexture.h" />
-    <ClInclude Include="Source\Graphics\GeneralAnim.h" />
-    <ClInclude Include="Source\Graphics\SheetAnim.h" />
-    <ClInclude Include="Source\Graphics\AnimLoader.h" />
-    <ClInclude Include="Source\Graphics\Sprite.h" />
-    <ClInclude Include="Source\Graphics\SpriteInst.h" />
-    <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h" />
-    <ClInclude Include="Source\Graphics\SpriteSet.h" />
-    <ClInclude Include="Source\Graphics\SpriteSheet.h" />
-    <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h" />
-    <ClInclude Include="Source\Math\AStarSearch.h" />
-    <ClInclude Include="Source\Math\GridSpace.h" />
-    <ClInclude Include="Source\Math\EasingFunc.h" />
-    <ClInclude Include="Source\Math\GridGraph.h" />
-    <ClInclude Include="Source\Math\MapLoader.h" />
-    <ClInclude Include="Source\Math\NodeCellObject.h" />
-    <ClInclude Include="Source\Math\Path.h" />
-    <ClInclude Include="Source\Math\SteeringMath.h" />
-    <ClInclude Include="Source\Math\Tile.h" />
-    <ClInclude Include="Source\Misc\CoroutineContext.h" />
-    <ClInclude Include="Source\Misc\EnumConverter.h" />
-    <ClInclude Include="Source\Misc\SQLiteEntity.h" />
-    <ClInclude Include="Source\Misc\TimeMeasure.h" />
-    <ClInclude Include="Source\Misc\Utils.h" />
-    <ClInclude Include="Source\ofxCogMain.h" />
-    <ClInclude Include="Source\Scripting\BehaviorLua.h" />
-    <ClInclude Include="Source\Scripting\ComponentLua.h" />
-    <ClInclude Include="Source\Scripting\FacadeLua.h" />
-    <ClInclude Include="Source\Scripting\LuaMapper.h" />
-    <ClInclude Include="Source\Scripting\MsgLua.h" />
-    <ClInclude Include="Source\Scripting\NodeBuilderLua.h" />
-    <ClInclude Include="Source\Scripting\NodeLua.h" />
-    <ClInclude Include="Source\Scripting\ResourcesLua.h" />
-    <ClInclude Include="Source\Scripting\SceneLua.h" />
-    <ClInclude Include="Source\Scripting\StageLua.h" />
-    <ClInclude Include="Source\Tests\CoroutineTest.h" />
-    <ClInclude Include="Source\Tests\EngineTest.h" />
-    <ClInclude Include="Source\Tests\EngineTestAssets.h" />
-    <ClInclude Include="Source\Tests\FlagsTest.h" />
-    <ClInclude Include="Source\Tests\GoalTest.h" />
-    <ClInclude Include="Source\Tests\GoalTestAssets.h" />
-    <ClInclude Include="Source\Tests\LuaTest.h" />
-    <ClInclude Include="Source\Tests\LuaTestAssets.h" />
-    <ClInclude Include="Source\Tests\MathTest.h" />
-    <ClInclude Include="Source\Tests\MathTestAssets.h" />
-    <ClInclude Include="Source\Tests\MeasureTest.h" />
-    <ClInclude Include="Source\Tests\MonteCarloTest.h" />
-    <ClInclude Include="Source\Tests\MonteCarloTestAssets.h" />
-    <ClInclude Include="Source\Tests\NetworkTest.h" />
-    <ClInclude Include="Source\Tests\NetworkTestAssets.h" />
-    <ClInclude Include="Source\Tests\SettingsTest.h" />
-    <ClInclude Include="Source\Tests\SQLTest.h" />
-    <ClInclude Include="Source\Tests\SQLTestAssets.h" />
-    <ClInclude Include="Source\Tests\StateMachineTest.h" />
-    <ClInclude Include="Source\Tests\StateMachineTestAssets.h" />
-    <ClInclude Include="Source\Tests\StrIdTest.h" />
-    <ClInclude Include="Source\Tests\TimelineTest.h" />
-    <ClInclude Include="Source\Tests\TransformTest.h" />
-    <ClInclude Include="Source\Tests\TransformTestAssets.h" />
+    <ClInclude Include="libs\catch\catch.hpp" />
+    <ClInclude Include="libs\jsonxx\jsonxx.h" />
+    <ClInclude Include="libs\luabridge\CFunctions.h" />
+    <ClInclude Include="libs\luabridge\ClassInfo.h" />
+    <ClInclude Include="libs\luabridge\Constructor.h" />
+    <ClInclude Include="libs\luabridge\dump.h" />
+    <ClInclude Include="libs\luabridge\FuncTraits.h" />
+    <ClInclude Include="libs\luabridge\Iterator.h" />
+    <ClInclude Include="libs\luabridge\LuaBridge.h" />
+    <ClInclude Include="libs\luabridge\LuaException.h" />
+    <ClInclude Include="libs\luabridge\LuaHelpers.h" />
+    <ClInclude Include="libs\luabridge\LuaRef.h" />
+    <ClInclude Include="libs\luabridge\Namespace.h" />
+    <ClInclude Include="libs\luabridge\RefCountedObject.h" />
+    <ClInclude Include="libs\luabridge\RefCountedPtr.h" />
+    <ClInclude Include="libs\luabridge\Stack.h" />
+    <ClInclude Include="libs\luabridge\TypeList.h" />
+    <ClInclude Include="libs\luabridge\TypeTraits.h" />
+    <ClInclude Include="libs\luabridge\Userdata.h" />
+    <ClInclude Include="libs\lua\lapi.h" />
+    <ClInclude Include="libs\lua\lauxlib.h" />
+    <ClInclude Include="libs\lua\lcode.h" />
+    <ClInclude Include="libs\lua\ldebug.h" />
+    <ClInclude Include="libs\lua\ldo.h" />
+    <ClInclude Include="libs\lua\lfunc.h" />
+    <ClInclude Include="libs\lua\lgc.h" />
+    <ClInclude Include="libs\lua\llex.h" />
+    <ClInclude Include="libs\lua\llimits.h" />
+    <ClInclude Include="libs\lua\lmem.h" />
+    <ClInclude Include="libs\lua\lobject.h" />
+    <ClInclude Include="libs\lua\lopcodes.h" />
+    <ClInclude Include="libs\lua\lparser.h" />
+    <ClInclude Include="libs\lua\lstate.h" />
+    <ClInclude Include="libs\lua\lstring.h" />
+    <ClInclude Include="libs\lua\ltable.h" />
+    <ClInclude Include="libs\lua\ltm.h" />
+    <ClInclude Include="libs\lua\lua.h" />
+    <ClInclude Include="libs\lua\luaconf.h" />
+    <ClInclude Include="libs\lua\lualib.h" />
+    <ClInclude Include="libs\lua\lundump.h" />
+    <ClInclude Include="libs\lua\lvm.h" />
+    <ClInclude Include="libs\lua\lzio.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxNetwork.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxNetworkUtils.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxTCPClient.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxTCPManager.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxTCPServer.h" />
+    <ClInclude Include="libs\ofxNetwork\ofxUDPManager.h" />
+    <ClInclude Include="libs\ofxSQLite\ofxSQLite.h" />
+    <ClInclude Include="libs\ofxTextLabel\ofxTextLabel.h" />
+    <ClInclude Include="libs\pugixml\pugiconfig.h" />
+    <ClInclude Include="libs\pugixml\pugixml.h" />
+    <ClInclude Include="libs\sqlite\sqlite3.h" />
+    <ClInclude Include="src\AI\ActionFilter.h" />
+    <ClInclude Include="src\AI\AgentsReward.h" />
+    <ClInclude Include="src\AI\AIAgent.h" />
+    <ClInclude Include="src\AI\AIState.h" />
+    <ClInclude Include="src\AI\GameSimulator.h" />
+    <ClInclude Include="src\AI\BestOnlyAgent.h" />
+    <ClInclude Include="src\AI\RandomAgent.h" />
+    <ClInclude Include="src\AI\Simulator.h" />
+    <ClInclude Include="src\AI\UCTAgent.h" />
+    <ClInclude Include="src\Attributes\Flags.h" />
+    <ClInclude Include="src\Attributes\Movement.h" />
+    <ClInclude Include="src\Attributes\Mesh.h" />
+    <ClInclude Include="src\Attributes\StrId.h" />
+    <ClInclude Include="src\Attributes\Transform.h" />
+    <ClInclude Include="src\Attributes\Vec2i.h" />
+    <ClInclude Include="src\Behaviors\AttribAnimator.h" />
+    <ClInclude Include="src\Behaviors\CompositeBehavior.h" />
+    <ClInclude Include="src\Behaviors\Goal.h" />
+    <ClInclude Include="src\Behaviors\Selection.h" />
+    <ClInclude Include="src\Behaviors\SheetAnimator.h" />
+    <ClInclude Include="src\Behaviors\Button.h" />
+    <ClInclude Include="src\Behaviors\DelayAction.h" />
+    <ClInclude Include="src\Behaviors\FloatingScene.h" />
+    <ClInclude Include="src\Behaviors\HitEvent.h" />
+    <ClInclude Include="src\Behaviors\Move.h" />
+    <ClInclude Include="src\Behaviors\MultiAnim.h" />
+    <ClInclude Include="src\Behaviors\MultiSelection.h" />
+    <ClInclude Include="src\Behaviors\Slider.h" />
+    <ClInclude Include="src\Behaviors\State.h" />
+    <ClInclude Include="src\Behaviors\StateMachine.h" />
+    <ClInclude Include="src\Behaviors\SteeringBehavior.h" />
+    <ClInclude Include="src\Behaviors\TransformAnim.h" />
+    <ClInclude Include="src\Behaviors\Tween.h" />
+    <ClInclude Include="src\Builders\TimeLineBuilder.h" />
+    <ClInclude Include="src\Communication\UpdateInfo.h" />
+    <ClInclude Include="src\Communication\UpdateMessage.h" />
+    <ClInclude Include="src\Communication\NetMessage.h" />
+    <ClInclude Include="src\Communication\NetReader.h" />
+    <ClInclude Include="src\Communication\NetworkManager.h" />
+    <ClInclude Include="src\Communication\NetWriter.h" />
+    <ClInclude Include="src\Components\CogDatabase.h" />
+    <ClInclude Include="src\Components\InputHandler.h" />
+    <ClInclude Include="src\Components\Logger.h" />
+    <ClInclude Include="src\Components\Interpolator.h" />
+    <ClInclude Include="src\Components\LuaScripting.h" />
+    <ClInclude Include="src\Components\NetworkCommunicator.h" />
+    <ClInclude Include="src\Components\ResourcesMgr.h" />
+    <ClInclude Include="src\Components\Environment.h" />
+    <ClInclude Include="src\Components\Renderer.h" />
+    <ClInclude Include="src\Components\Stage.h" />
+    <ClInclude Include="src\Components\SceneSwitchManager.h" />
+    <ClInclude Include="src\Core\AssetsManager.h" />
+    <ClInclude Include="src\Core\AsyncProcess.h" />
+    <ClInclude Include="src\Core\Attr.h" />
+    <ClInclude Include="src\Core\Behavior.h" />
+    <ClInclude Include="src\Core\BehaviorCreator.h" />
+    <ClInclude Include="src\Core\ofxCogApp.h" />
+    <ClInclude Include="src\Core\ofxCogEngine.h" />
+    <ClInclude Include="src\Core\Component.h" />
+    <ClInclude Include="src\Core\Definitions.h" />
+    <ClInclude Include="src\Core\ComponentStorage.h" />
+    <ClInclude Include="src\Core\MsgPayloads.h" />
+    <ClInclude Include="src\Core\Facade.h" />
+    <ClInclude Include="src\Core\Constants.h" />
+    <ClInclude Include="src\Core\Error.h" />
+    <ClInclude Include="src\Core\InputAct.h" />
+    <ClInclude Include="src\Core\Msg.h" />
+    <ClInclude Include="src\Core\BaseComponent.h" />
+    <ClInclude Include="src\Core\Node.h" />
+    <ClInclude Include="src\Core\NodeBuilder.h" />
+    <ClInclude Include="src\Core\Scene.h" />
+    <ClInclude Include="src\Core\Settings.h" />
+    <ClInclude Include="src\Core\Soundfx.h" />
+    <ClInclude Include="src\Core\TransformMath.h" />
+    <ClInclude Include="src\Entities\BehaviorEnt.h" />
+    <ClInclude Include="src\Entities\DEntity.h" />
+    <ClInclude Include="src\Entities\LayerEnt.h" />
+    <ClInclude Include="src\Entities\AttrAnimEnt.h" />
+    <ClInclude Include="src\Entities\TimeLine.h" />
+    <ClInclude Include="src\Entities\TransformEnt.h" />
+    <ClInclude Include="src\Graphics\AnimContextStack.h" />
+    <ClInclude Include="src\Graphics\AttribAnim.h" />
+    <ClInclude Include="src\Graphics\SpriteSheetTexture.h" />
+    <ClInclude Include="src\Graphics\GeneralAnim.h" />
+    <ClInclude Include="src\Graphics\SheetAnim.h" />
+    <ClInclude Include="src\Graphics\AnimLoader.h" />
+    <ClInclude Include="src\Graphics\Sprite.h" />
+    <ClInclude Include="src\Graphics\SpriteInst.h" />
+    <ClInclude Include="src\Graphics\SpriteSheetGenerator.h" />
+    <ClInclude Include="src\Graphics\SpriteSet.h" />
+    <ClInclude Include="src\Graphics\SpriteSheet.h" />
+    <ClInclude Include="src\Graphics\SpriteSheetRenderer.h" />
+    <ClInclude Include="src\Math\AStarSearch.h" />
+    <ClInclude Include="src\Math\GridSpace.h" />
+    <ClInclude Include="src\Math\EasingFunc.h" />
+    <ClInclude Include="src\Math\GridGraph.h" />
+    <ClInclude Include="src\Math\MapLoader.h" />
+    <ClInclude Include="src\Math\NodeCellObject.h" />
+    <ClInclude Include="src\Math\Path.h" />
+    <ClInclude Include="src\Math\SteeringMath.h" />
+    <ClInclude Include="src\Math\Tile.h" />
+    <ClInclude Include="src\Misc\CoroutineContext.h" />
+    <ClInclude Include="src\Misc\EnumConverter.h" />
+    <ClInclude Include="src\Misc\SQLiteEntity.h" />
+    <ClInclude Include="src\Misc\TimeMeasure.h" />
+    <ClInclude Include="src\Misc\Utils.h" />
+    <ClInclude Include="src\ofxCogMain.h" />
+    <ClInclude Include="src\Scripting\BehaviorLua.h" />
+    <ClInclude Include="src\Scripting\ComponentLua.h" />
+    <ClInclude Include="src\Scripting\FacadeLua.h" />
+    <ClInclude Include="src\Scripting\LuaMapper.h" />
+    <ClInclude Include="src\Scripting\MsgLua.h" />
+    <ClInclude Include="src\Scripting\NodeBuilderLua.h" />
+    <ClInclude Include="src\Scripting\NodeLua.h" />
+    <ClInclude Include="src\Scripting\ResourcesLua.h" />
+    <ClInclude Include="src\Scripting\SceneLua.h" />
+    <ClInclude Include="src\Scripting\StageLua.h" />
+    <ClInclude Include="src\Tests\CoroutineTest.h" />
+    <ClInclude Include="src\Tests\EngineTest.h" />
+    <ClInclude Include="src\Tests\EngineTestAssets.h" />
+    <ClInclude Include="src\Tests\FlagsTest.h" />
+    <ClInclude Include="src\Tests\GoalTest.h" />
+    <ClInclude Include="src\Tests\GoalTestAssets.h" />
+    <ClInclude Include="src\Tests\LuaTest.h" />
+    <ClInclude Include="src\Tests\LuaTestAssets.h" />
+    <ClInclude Include="src\Tests\MathTest.h" />
+    <ClInclude Include="src\Tests\MathTestAssets.h" />
+    <ClInclude Include="src\Tests\MeasureTest.h" />
+    <ClInclude Include="src\Tests\MonteCarloTest.h" />
+    <ClInclude Include="src\Tests\MonteCarloTestAssets.h" />
+    <ClInclude Include="src\Tests\NetworkTest.h" />
+    <ClInclude Include="src\Tests\NetworkTestAssets.h" />
+    <ClInclude Include="src\Tests\SettingsTest.h" />
+    <ClInclude Include="src\Tests\SQLTest.h" />
+    <ClInclude Include="src\Tests\SQLTestAssets.h" />
+    <ClInclude Include="src\Tests\StateMachineTest.h" />
+    <ClInclude Include="src\Tests\StateMachineTestAssets.h" />
+    <ClInclude Include="src\Tests\StrIdTest.h" />
+    <ClInclude Include="src\Tests\TimelineTest.h" />
+    <ClInclude Include="src\Tests\TransformTest.h" />
+    <ClInclude Include="src\Tests\TransformTestAssets.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3rdParty\jsonxx\jsonxx.cpp" />
-    <ClCompile Include="3rdParty\lua\lapi.c">
+    <ClCompile Include="libs\jsonxx\jsonxx.cpp" />
+    <ClCompile Include="libs\lua\lapi.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lauxlib.c">
+    <ClCompile Include="libs\lua\lauxlib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lbaselib.c">
+    <ClCompile Include="libs\lua\lbaselib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lcode.c">
+    <ClCompile Include="libs\lua\lcode.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldblib.c">
+    <ClCompile Include="libs\lua\ldblib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldebug.c">
+    <ClCompile Include="libs\lua\ldebug.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldo.c">
+    <ClCompile Include="libs\lua\ldo.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldump.c">
+    <ClCompile Include="libs\lua\ldump.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lfunc.c">
+    <ClCompile Include="libs\lua\lfunc.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lgc.c">
+    <ClCompile Include="libs\lua\lgc.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\linit.c">
+    <ClCompile Include="libs\lua\linit.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\liolib.c">
+    <ClCompile Include="libs\lua\liolib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\llex.c">
+    <ClCompile Include="libs\lua\llex.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmathlib.c">
+    <ClCompile Include="libs\lua\lmathlib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmem.c">
+    <ClCompile Include="libs\lua\lmem.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\loadlib.c">
+    <ClCompile Include="libs\lua\loadlib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lobject.c">
+    <ClCompile Include="libs\lua\lobject.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lopcodes.c">
+    <ClCompile Include="libs\lua\lopcodes.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\loslib.c">
+    <ClCompile Include="libs\lua\loslib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lparser.c">
+    <ClCompile Include="libs\lua\lparser.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstate.c">
+    <ClCompile Include="libs\lua\lstate.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstring.c">
+    <ClCompile Include="libs\lua\lstring.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstrlib.c">
+    <ClCompile Include="libs\lua\lstrlib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltable.c">
+    <ClCompile Include="libs\lua\ltable.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltablib.c">
+    <ClCompile Include="libs\lua\ltablib.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltm.c">
+    <ClCompile Include="libs\lua\ltm.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lua.c">
+    <ClCompile Include="libs\lua\lua.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\luac.c">
+    <ClCompile Include="libs\lua\luac.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lundump.c">
+    <ClCompile Include="libs\lua\lundump.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lvm.c">
+    <ClCompile Include="libs\lua\lvm.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lzio.c">
+    <ClCompile Include="libs\lua\lzio.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\print.c">
+    <ClCompile Include="libs\lua\print.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPClient.cpp" />
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPManager.cpp" />
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPServer.cpp" />
-    <ClCompile Include="3rdParty\ofxNetwork\ofxUDPManager.cpp" />
-    <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp" />
-    <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp" />
-    <ClCompile Include="3rdParty\pugixml\pugixml.cpp" />
-    <ClCompile Include="3rdParty\sqlite\sqlite3.c">
+    <ClCompile Include="libs\ofxNetwork\ofxTCPClient.cpp" />
+    <ClCompile Include="libs\ofxNetwork\ofxTCPManager.cpp" />
+    <ClCompile Include="libs\ofxNetwork\ofxTCPServer.cpp" />
+    <ClCompile Include="libs\ofxNetwork\ofxUDPManager.cpp" />
+    <ClCompile Include="libs\ofxSQLite\ofxSQLite.cpp" />
+    <ClCompile Include="libs\ofxTextLabel\ofxTextLabel.cpp" />
+    <ClCompile Include="libs\pugixml\pugixml.cpp" />
+    <ClCompile Include="libs\sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="Source\Attributes\Flags.cpp" />
-    <ClCompile Include="Source\Attributes\Mesh.cpp" />
-    <ClCompile Include="Source\Attributes\StrId.cpp" />
-    <ClCompile Include="Source\Attributes\Transform.cpp" />
-    <ClCompile Include="Source\Behaviors\AttribAnimator.cpp" />
-    <ClCompile Include="Source\Behaviors\Button.cpp" />
-    <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp" />
-    <ClCompile Include="Source\Behaviors\DelayAction.cpp" />
-    <ClCompile Include="Source\Behaviors\FloatingScene.cpp" />
-    <ClCompile Include="Source\Behaviors\Goal.cpp" />
-    <ClCompile Include="Source\Behaviors\HitEvent.cpp" />
-    <ClCompile Include="Source\Behaviors\Move.cpp" />
-    <ClCompile Include="Source\Behaviors\MultiAnim.cpp" />
-    <ClCompile Include="Source\Behaviors\MultiSelection.cpp" />
-    <ClCompile Include="Source\Behaviors\Selection.cpp" />
-    <ClCompile Include="Source\Behaviors\SheetAnimator.cpp" />
-    <ClCompile Include="Source\Behaviors\Slider.cpp" />
-    <ClCompile Include="Source\Behaviors\StateMachine.cpp" />
-    <ClCompile Include="Source\Behaviors\SteeringBehavior.cpp" />
-    <ClCompile Include="Source\Behaviors\TransformAnim.cpp" />
-    <ClCompile Include="Source\Behaviors\Tween.cpp" />
-    <ClCompile Include="Source\Builders\TimeLineBuilder.cpp" />
-    <ClCompile Include="Source\Communication\UpdateMessage.cpp" />
-    <ClCompile Include="Source\Communication\NetMessage.cpp" />
-    <ClCompile Include="Source\Communication\NetReader.cpp" />
-    <ClCompile Include="Source\Communication\NetworkManager.cpp" />
-    <ClCompile Include="Source\Communication\NetWriter.cpp" />
-    <ClCompile Include="Source\Components\InputHandler.cpp" />
-    <ClCompile Include="Source\Components\Logger.cpp" />
-    <ClCompile Include="Source\Components\Interpolator.cpp" />
-    <ClCompile Include="Source\Components\LuaScripting.cpp" />
-    <ClCompile Include="Source\Components\NetworkCommunicator.cpp" />
-    <ClCompile Include="Source\Components\Renderer.cpp" />
-    <ClCompile Include="Source\Components\Resources.cpp" />
-    <ClCompile Include="Source\Components\Environment.cpp" />
-    <ClCompile Include="Source\Components\Stage.cpp" />
-    <ClCompile Include="Source\Components\SceneSwitchManager.cpp" />
-    <ClCompile Include="Source\Core\AssetsManager.cpp" />
-    <ClCompile Include="Source\Core\AsyncProcess.cpp" />
-    <ClCompile Include="Source\Core\Behavior.cpp" />
-    <ClCompile Include="Source\Core\ComponentStorage.cpp" />
-    <ClCompile Include="Source\Core\ofxCogApp.cpp" />
-    <ClCompile Include="Source\Core\ofxCogEngine.cpp" />
-    <ClCompile Include="Source\Core\Component.cpp" />
-    <ClCompile Include="Source\Core\Facade.cpp" />
-    <ClCompile Include="Source\Core\Msg.cpp" />
-    <ClCompile Include="Source\Core\BaseComponent.cpp" />
-    <ClCompile Include="Source\Core\Node.cpp" />
-    <ClCompile Include="Source\Core\NodeBuilder.cpp" />
-    <ClCompile Include="Source\Core\Scene.cpp" />
-    <ClCompile Include="Source\Core\Settings.cpp" />
-    <ClCompile Include="Source\Core\TransformMath.cpp" />
-    <ClCompile Include="Source\Entities\AttrAnimEnt.cpp" />
-    <ClCompile Include="Source\Entities\BehaviorEnt.cpp" />
-    <ClCompile Include="Source\Entities\LayerEnt.cpp" />
-    <ClCompile Include="Source\Entities\TimeLine.cpp" />
-    <ClCompile Include="Source\Entities\TransformEnt.cpp" />
-    <ClCompile Include="Source\Graphics\AnimContextStack.cpp" />
-    <ClCompile Include="Source\Graphics\AnimLoader.cpp" />
-    <ClCompile Include="Source\Graphics\AttribAnim.cpp" />
-    <ClCompile Include="Source\Graphics\GeneralAnim.cpp" />
-    <ClCompile Include="Source\Graphics\SheetAnim.cpp" />
-    <ClCompile Include="Source\Graphics\Sprite.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteSheet.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteSheetGenerator.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteSheetTexture.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteInst.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteSet.cpp" />
-    <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp" />
-    <ClCompile Include="Source\Math\AStarSearch.cpp" />
-    <ClCompile Include="Source\Math\EasingFunc.cpp" />
-    <ClCompile Include="Source\Math\GridGraph.cpp" />
-    <ClCompile Include="Source\Math\MapLoader.cpp" />
-    <ClCompile Include="Source\Math\Path.cpp" />
-    <ClCompile Include="Source\Math\SteeringMath.cpp" />
-    <ClCompile Include="Source\Misc\EnumConverter.cpp" />
-    <ClCompile Include="Source\Misc\TimeMeasure.cpp" />
-    <ClCompile Include="Source\Misc\Utils.cpp" />
-    <ClCompile Include="Source\Scripting\BehaviorLua.cpp" />
-    <ClCompile Include="Source\Scripting\ComponentLua.cpp" />
-    <ClCompile Include="Source\Scripting\FacadeLua.cpp" />
-    <ClCompile Include="Source\Scripting\LuaMapper.cpp" />
-    <ClCompile Include="Source\Scripting\MsgLua.cpp" />
-    <ClCompile Include="Source\Scripting\NodeBuilderLua.cpp" />
-    <ClCompile Include="Source\Scripting\NodeLua.cpp" />
-    <ClCompile Include="Source\Scripting\ResourcesLua.cpp" />
-    <ClCompile Include="Source\Scripting\SceneLua.cpp" />
-    <ClCompile Include="Source\Scripting\StageLua.cpp" />
+    <ClCompile Include="src\Attributes\Flags.cpp" />
+    <ClCompile Include="src\Attributes\Mesh.cpp" />
+    <ClCompile Include="src\Attributes\StrId.cpp" />
+    <ClCompile Include="src\Attributes\Transform.cpp" />
+    <ClCompile Include="src\Behaviors\AttribAnimator.cpp" />
+    <ClCompile Include="src\Behaviors\Button.cpp" />
+    <ClCompile Include="src\Behaviors\CompositeBehavior.cpp" />
+    <ClCompile Include="src\Behaviors\DelayAction.cpp" />
+    <ClCompile Include="src\Behaviors\FloatingScene.cpp" />
+    <ClCompile Include="src\Behaviors\Goal.cpp" />
+    <ClCompile Include="src\Behaviors\HitEvent.cpp" />
+    <ClCompile Include="src\Behaviors\Move.cpp" />
+    <ClCompile Include="src\Behaviors\MultiAnim.cpp" />
+    <ClCompile Include="src\Behaviors\MultiSelection.cpp" />
+    <ClCompile Include="src\Behaviors\Selection.cpp" />
+    <ClCompile Include="src\Behaviors\SheetAnimator.cpp" />
+    <ClCompile Include="src\Behaviors\Slider.cpp" />
+    <ClCompile Include="src\Behaviors\StateMachine.cpp" />
+    <ClCompile Include="src\Behaviors\SteeringBehavior.cpp" />
+    <ClCompile Include="src\Behaviors\TransformAnim.cpp" />
+    <ClCompile Include="src\Behaviors\Tween.cpp" />
+    <ClCompile Include="src\Builders\TimeLineBuilder.cpp" />
+    <ClCompile Include="src\Communication\UpdateMessage.cpp" />
+    <ClCompile Include="src\Communication\NetMessage.cpp" />
+    <ClCompile Include="src\Communication\NetReader.cpp" />
+    <ClCompile Include="src\Communication\NetworkManager.cpp" />
+    <ClCompile Include="src\Communication\NetWriter.cpp" />
+    <ClCompile Include="src\Components\InputHandler.cpp" />
+    <ClCompile Include="src\Components\Logger.cpp" />
+    <ClCompile Include="src\Components\Interpolator.cpp" />
+    <ClCompile Include="src\Components\LuaScripting.cpp" />
+    <ClCompile Include="src\Components\NetworkCommunicator.cpp" />
+    <ClCompile Include="src\Components\Renderer.cpp" />
+    <ClCompile Include="src\Components\ResourcesMgr.cpp" />
+    <ClCompile Include="src\Components\Environment.cpp" />
+    <ClCompile Include="src\Components\Stage.cpp" />
+    <ClCompile Include="src\Components\SceneSwitchManager.cpp" />
+    <ClCompile Include="src\Core\AssetsManager.cpp" />
+    <ClCompile Include="src\Core\AsyncProcess.cpp" />
+    <ClCompile Include="src\Core\Behavior.cpp" />
+    <ClCompile Include="src\Core\ComponentStorage.cpp" />
+    <ClCompile Include="src\Core\ofxCogApp.cpp" />
+    <ClCompile Include="src\Core\ofxCogEngine.cpp" />
+    <ClCompile Include="src\Core\Component.cpp" />
+    <ClCompile Include="src\Core\Facade.cpp" />
+    <ClCompile Include="src\Core\Msg.cpp" />
+    <ClCompile Include="src\Core\BaseComponent.cpp" />
+    <ClCompile Include="src\Core\Node.cpp" />
+    <ClCompile Include="src\Core\NodeBuilder.cpp" />
+    <ClCompile Include="src\Core\Scene.cpp" />
+    <ClCompile Include="src\Core\Settings.cpp" />
+    <ClCompile Include="src\Core\TransformMath.cpp" />
+    <ClCompile Include="src\Entities\AttrAnimEnt.cpp" />
+    <ClCompile Include="src\Entities\BehaviorEnt.cpp" />
+    <ClCompile Include="src\Entities\LayerEnt.cpp" />
+    <ClCompile Include="src\Entities\TimeLine.cpp" />
+    <ClCompile Include="src\Entities\TransformEnt.cpp" />
+    <ClCompile Include="src\Graphics\AnimContextStack.cpp" />
+    <ClCompile Include="src\Graphics\AnimLoader.cpp" />
+    <ClCompile Include="src\Graphics\AttribAnim.cpp" />
+    <ClCompile Include="src\Graphics\GeneralAnim.cpp" />
+    <ClCompile Include="src\Graphics\SheetAnim.cpp" />
+    <ClCompile Include="src\Graphics\Sprite.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSheet.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSheetGenerator.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSheetTexture.cpp" />
+    <ClCompile Include="src\Graphics\SpriteInst.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSet.cpp" />
+    <ClCompile Include="src\Graphics\SpriteSheetRenderer.cpp" />
+    <ClCompile Include="src\Math\AStarSearch.cpp" />
+    <ClCompile Include="src\Math\EasingFunc.cpp" />
+    <ClCompile Include="src\Math\GridGraph.cpp" />
+    <ClCompile Include="src\Math\MapLoader.cpp" />
+    <ClCompile Include="src\Math\Path.cpp" />
+    <ClCompile Include="src\Math\SteeringMath.cpp" />
+    <ClCompile Include="src\Misc\EnumConverter.cpp" />
+    <ClCompile Include="src\Misc\TimeMeasure.cpp" />
+    <ClCompile Include="src\Misc\Utils.cpp" />
+    <ClCompile Include="src\Scripting\BehaviorLua.cpp" />
+    <ClCompile Include="src\Scripting\ComponentLua.cpp" />
+    <ClCompile Include="src\Scripting\FacadeLua.cpp" />
+    <ClCompile Include="src\Scripting\LuaMapper.cpp" />
+    <ClCompile Include="src\Scripting\MsgLua.cpp" />
+    <ClCompile Include="src\Scripting\NodeBuilderLua.cpp" />
+    <ClCompile Include="src\Scripting\NodeLua.cpp" />
+    <ClCompile Include="src\Scripting\ResourcesLua.cpp" />
+    <ClCompile Include="src\Scripting\SceneLua.cpp" />
+    <ClCompile Include="src\Scripting\StageLua.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Data\COGAssets\Manifest.xml" />
+    <Xml Include="data\COGAssets\Manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\COGAssets\Scripts\base.lua" />
-    <None Include="Data\COGAssets\Scripts\enums.lua" />
-    <None Include="Data\COGAssets\Scripts\extensions.lua" />
-    <None Include="Data\COGAssets\Scripts\json.lua" />
+    <None Include="data\COGAssets\Scripts\base.lua" />
+    <None Include="data\COGAssets\Scripts\enums.lua" />
+    <None Include="data\COGAssets\Scripts\extensions.lua" />
+    <None Include="data\COGAssets\Scripts\json.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

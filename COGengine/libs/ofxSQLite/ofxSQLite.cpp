@@ -1,3 +1,4 @@
+#ifdef SQLITE_DB
 #include "ofxSQLite.h"
 #include "ofUtils.h"
 
@@ -565,3 +566,5 @@ ofxSQLiteSimpler ofxSQLite::operator[](const std::string sKeyValue)  {
 void ofxSQLite::printTable(std::string sTable) {
 	cout << select("*").from(sTable).execute().getResultAsAsciiTable();
 }
+
+#endif

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "DEntity.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
+#include "Settings.h"
 
 namespace Cog {
 

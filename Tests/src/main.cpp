@@ -2,8 +2,6 @@
 
 // tests can run only in debug mode
 #ifdef _DEBUG
-
-
 #include "FlagsTest.h"
 #include "TransformTest.h"
 #include "SQLTest.h"

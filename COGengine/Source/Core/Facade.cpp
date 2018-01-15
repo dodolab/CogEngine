@@ -2,7 +2,7 @@
 #include "Facade.h"
 #include "ofxCogEngine.h"
 #include "Logger.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "TimeMeasure.h"
 #include "Scene.h"
 #include "Environment.h"

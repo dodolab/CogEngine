@@ -7,7 +7,7 @@
 #include "MsgPayloads.h"
 #include "Settings.h"
 #include "ComponentStorage.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "Stage.h"
 #include "Scene.h"
 #include "AsyncProcess.h"

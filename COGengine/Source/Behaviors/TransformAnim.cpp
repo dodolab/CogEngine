@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "EnumConverter.h"
 #include "Node.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "TransformMath.h"
 #include "Definitions.h"
 #include "TransformEnt.h"

@@ -40,7 +40,6 @@ using namespace pugi; // xml library
 
 // include CogEngine
 
-#include "CogConfig.h"
 
 #include "Constants.h"
 #include "Error.h"
@@ -57,7 +56,7 @@ using namespace pugi; // xml library
 #include "Scene.h"
 #include "HitEvent.h"
 #include "ofxCogEngine.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "Logger.h"
 #include "Stage.h"
 #include "Tween.h"

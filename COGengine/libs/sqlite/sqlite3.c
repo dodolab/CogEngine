@@ -19,6 +19,7 @@
 **
 ** This amalgamation was generated on 2009-06-27 14:10:06 UTC.
 */
+#ifdef SQLITE_DB
 #define SQLITE_CORE 1
 #define SQLITE_AMALGAMATION 1
 #ifndef SQLITE_PRIVATE
@@ -106727,3 +106728,4 @@ SQLITE_PRIVATE void sqlite3Fts3IcuTokenizerModule(
 #endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_FTS3) */
 
 /************** End of fts3_icu.c ********************************************/
+#endif

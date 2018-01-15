@@ -221,56 +221,6 @@ namespace Cog {
 		template<class T>
 		T GetSettingVal(string setName, string itemKey);
 
-		/**
-		* Gets value of a setting with given name as a string.
-		* If there is no such Setting or key-value pair, it returns empty string
-		*/
-		template<>
-		string GetSettingVal<string>(string setName) {
-			if (settings.count(setName) == 0) return "";
-			else return GetSetting(setName).GetItemVal("value");
-		}
-
-		/**
-		* Gets value of a setting of given name and given key as a string.
-		* If there is no such Setting or key-value pair, it returns empty string
-		*/
-		template<>
-		string GetSettingVal<string>(string setName, string itemKey) {
-			if (settings.count(setName) == 0) return "";
-			else return GetSetting(setName).GetItemVal(itemKey);
-		}
-
-		/**
-		* Gets value of a setting with given name and given key as an integer.
-		* If there is no such Setting or key-value pair, it returns 0
-		*/
-		template<>
-		int GetSettingVal<int>(string setName, string itemKey) {
-			if (settings.count(setName) == 0) return 0;
-			else return GetSetting(setName).GetItem(itemKey).GetValInt();
-		}
-
-		/**
-		* Gets value of a setting with given name and given key as a float.
-		* If there is no such Setting or key-value pair, it returns 0
-		*/
-		template<>
-		float GetSettingVal<float>(string setName, string itemKey) {
-			if (settings.count(setName) == 0) return 0;
-			else return GetSetting(setName).GetItem(itemKey).GetValFloat();
-		}
-
-		/**
-		* Gets value of a setting with given name and given key as a boolean.
-		* If there is no such Setting or key-value pair, it returns false
-		*/
-		template<>
-		bool GetSettingVal<bool>(string setName, string itemKey) {
-			if (settings.count(setName) == 0) return 0;
-			else return GetSetting(setName).GetItem(itemKey).GetValBool();
-		}
-
 		Setting& GetSetting(string name) {
 			return settings[name];
 		}
@@ -297,7 +247,5 @@ namespace Cog {
 		*/
 		void LoadFromXml(xml_node& node);
 	};
-
-
 
 } // namespace

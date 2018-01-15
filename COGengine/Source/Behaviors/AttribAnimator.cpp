@@ -3,7 +3,7 @@
 #include "ofxCogEngine.h"
 #include "ComponentStorage.h"
 #include "TransformMath.h"
-#include "Resources.h"
+#include "ResourcesMgr.h"
 
 namespace Cog {
 

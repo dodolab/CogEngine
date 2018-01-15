@@ -1,4 +1,4 @@
-#include "Resources.h"
+#include "ResourcesMgr.h"
 #include "ResourcesLua.h"
 #include "Facade.h"
 #include "ComponentStorage.h"

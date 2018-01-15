@@ -8,7 +8,6 @@
 using namespace Cog;
 #include "LuaScripting.h"
 #include "LuaTestAssets.h"
-#include "CogConfig.h"
 
 #ifdef LUA_SCRIPTING
 TEST_CASE("Lua tests")

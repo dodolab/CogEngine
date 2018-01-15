@@ -1,79 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source">
+    <Filter Include="src">
       <UniqueIdentifier>{53145cd3-aa44-4015-b00b-917b812f24b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Behaviors">
+    <Filter Include="src\Behaviors">
       <UniqueIdentifier>{f1d24ab6-97a3-4954-92a0-192a005adaf3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Components">
+    <Filter Include="src\Components">
       <UniqueIdentifier>{1bae0724-33fb-473c-a5c9-fbd64403b282}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Core">
+    <Filter Include="src\Core">
       <UniqueIdentifier>{92418f27-8df7-4d4c-8e6e-6f29c4199572}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Graphics">
+    <Filter Include="src\Graphics">
       <UniqueIdentifier>{079526f4-8b2e-46de-886e-24eadae596cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Math">
+    <Filter Include="src\Math">
       <UniqueIdentifier>{f4b4bdd5-8994-442c-8f46-575ac193e43c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Misc">
+    <Filter Include="src\Misc">
       <UniqueIdentifier>{c8638d57-2ba7-4acc-b2f1-85d75cb97470}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Entities">
+    <Filter Include="src\Entities">
       <UniqueIdentifier>{6ba6d7d2-4245-4910-b5db-1085bee33925}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Tests">
+    <Filter Include="src\Tests">
       <UniqueIdentifier>{344811c4-1bf8-47bc-b46e-f3c25b3b73ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Attributes">
+    <Filter Include="src\Attributes">
       <UniqueIdentifier>{193eb7c2-d057-4a2f-ba26-ab9428e9e728}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Communication">
+    <Filter Include="src\Communication">
       <UniqueIdentifier>{77bdc192-ae4b-45a3-9f3d-f0874a7870d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Scripting">
+    <Filter Include="src\Scripting">
       <UniqueIdentifier>{339fca49-afb3-4ab6-85da-0c6166dfa15c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\AI">
+    <Filter Include="src\AI">
       <UniqueIdentifier>{4f952ff0-d6f7-4af6-a59c-4a762233773f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty">
+    <Filter Include="libs">
       <UniqueIdentifier>{f431bb8e-e4ec-4904-90c4-59e61699e7b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\lua">
+    <Filter Include="libs\lua">
       <UniqueIdentifier>{0b4f15c3-55d7-420e-b3b9-d8a6d53f113e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\catch">
+    <Filter Include="libs\catch">
       <UniqueIdentifier>{573c98a6-ad76-4134-af27-cb4e163e4de1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\luabridge">
+    <Filter Include="libs\luabridge">
       <UniqueIdentifier>{6be49a1a-a8b5-4420-9a2c-fe6a59f46f22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\ofxNetwork">
+    <Filter Include="libs\ofxNetwork">
       <UniqueIdentifier>{ffb422c1-8842-4076-a3d5-41d67b18b21d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\ofxSQLite">
+    <Filter Include="libs\ofxSQLite">
       <UniqueIdentifier>{e4b2685b-f239-464e-9895-7672a35a9110}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\ofxTextLabel">
+    <Filter Include="libs\ofxTextLabel">
       <UniqueIdentifier>{1c82a6dc-651e-4585-b094-db20e557ad5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\sqlite">
+    <Filter Include="libs\sqlite">
       <UniqueIdentifier>{02282119-d13d-4234-928f-9d8062ecbf44}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{a5ebd339-aa16-4da3-8221-0f7c351e69da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Builders">
+    <Filter Include="src\Builders">
       <UniqueIdentifier>{f7983e9e-9d71-4c9d-ada8-754171c9507a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\jsonxx">
+    <Filter Include="libs\jsonxx">
       <UniqueIdentifier>{8ff98543-fc0f-482e-b240-c901bf0098e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdParty\pugixml">
+    <Filter Include="libs\pugixml">
       <UniqueIdentifier>{cb91bc75-9ba5-4899-8090-9aae3fe6258e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets\Scripts">
@@ -81,979 +81,974 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Misc\SQLiteEntity.h">
-      <Filter>Source\Misc</Filter>
+    <ClInclude Include="src\Misc\SQLiteEntity.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Button.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\Button.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\DelayAction.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\DelayAction.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\HitEvent.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\HitEvent.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Move.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\Move.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\MultiAnim.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\MultiAnim.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\TransformAnim.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\TransformAnim.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Tween.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\Tween.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Environment.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Components\Environment.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Renderer.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Components\Renderer.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Error.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Error.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Facade.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Facade.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Logger.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Components\Logger.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\TransformMath.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\TransformMath.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\NodeBuilder.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\NodeBuilder.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\FloatingScene.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\FloatingScene.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\TransformTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\TransformTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\FlagsTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\FlagsTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\InputHandler.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Components\InputHandler.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Definitions.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Definitions.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ofxCogMain.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="src\Core\Component.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Component.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Math\AStarSearch.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\AStarSearch.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Graphics\SpriteSheetRenderer.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteSheetRenderer.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Misc\Utils.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Misc\Utils.h">
-      <Filter>Source\Misc</Filter>
+    <ClInclude Include="src\Graphics\Sprite.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\Sprite.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Graphics\SpriteSet.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteSet.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Graphics\SpriteSheet.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteSheet.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Core\Msg.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Msg.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Tests\SettingsTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\SettingsTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Entities\TransformEnt.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\TransformEnt.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Entities\DEntity.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\DEntity.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Core\InputAct.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\InputAct.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Settings.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Settings.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Attr.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Attr.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Entities\LayerEnt.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\LayerEnt.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Components\SceneSwitchManager.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\SceneSwitchManager.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Tests\SQLTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\SQLTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Entities\BehaviorEnt.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\BehaviorEnt.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Components\Stage.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Stage.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Components\CogDatabase.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\CogDatabase.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Misc\TimeMeasure.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Misc\TimeMeasure.h">
-      <Filter>Source\Misc</Filter>
+    <ClInclude Include="src\Tests\MeasureTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\MeasureTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\EngineTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\EngineTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\NetworkTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\NetworkTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Math\EasingFunc.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\EasingFunc.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Core\Constants.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Constants.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Entities\AttrAnimEnt.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\AttrAnimEnt.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Graphics\SheetAnim.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SheetAnim.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Graphics\AnimLoader.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\AnimLoader.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Graphics\AttribAnim.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\AttribAnim.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Behaviors\AttribAnimator.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\AttribAnimator.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Graphics\AnimContextStack.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\AnimContextStack.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Behaviors\SheetAnimator.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\SheetAnimator.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\StateMachine.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\StateMachine.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\State.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\State.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Attributes\Movement.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Movement.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Behaviors\SteeringBehavior.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\SteeringBehavior.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Math\Path.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Path.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Tests\StateMachineTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\StateMachineTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Math\SteeringMath.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\SteeringMath.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Behaviors\Goal.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Goal.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Tests\GoalTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\GoalTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Communication\NetReader.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\NetReader.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Communication\NetWriter.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\NetWriter.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Behaviors\MultiSelection.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\MultiSelection.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Behaviors\Selection.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Selection.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Communication\NetMessage.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\NetMessage.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Components\NetworkCommunicator.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\NetworkCommunicator.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Tests\LuaTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\LuaTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Scripting\MsgLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\MsgLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\NodeLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\NodeLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\BehaviorLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\BehaviorLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Components\LuaScripting.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\LuaScripting.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Behaviors\Slider.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\Slider.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\AI\AIState.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\AIState.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\Simulator.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\Simulator.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\AIAgent.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\AIAgent.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\AgentsReward.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\AgentsReward.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\RandomAgent.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\RandomAgent.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\UCTAgent.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\UCTAgent.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\Tests\MonteCarloTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\MonteCarloTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Graphics\SpriteSheetGenerator.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteSheetGenerator.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Tests\CoroutineTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\CoroutineTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\StrIdTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\StrIdTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Core\BehaviorCreator.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\BehaviorCreator.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Node.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Node.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Scene.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Scene.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\AsyncProcess.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\AsyncProcess.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\Behavior.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Behavior.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Behaviors\CompositeBehavior.h">
+      <Filter>src\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Behaviors\CompositeBehavior.h">
-      <Filter>Source\Behaviors</Filter>
+    <ClInclude Include="src\Tests\EngineTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\EngineTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\GoalTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\GoalTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\LuaTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\LuaTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\MonteCarloTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\MonteCarloTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\NetworkTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\NetworkTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\SQLTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\SQLTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\StateMachineTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\StateMachineTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\TransformTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\TransformTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\AI\GameSimulator.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\GameSimulator.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\Core\Soundfx.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Soundfx.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Attributes\StrId.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\StrId.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Attributes\Transform.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Transform.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Attributes\Vec2i.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Vec2i.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Attributes\Flags.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Flags.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Misc\EnumConverter.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Misc\EnumConverter.h">
-      <Filter>Source\Misc</Filter>
+    <ClInclude Include="src\Math\GridGraph.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\GridGraph.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Math\GridSpace.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\GridSpace.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Math\NodeCellObject.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\NodeCellObject.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Tests\MathTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\MathTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Tests\MathTestAssets.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\MathTestAssets.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="src\Graphics\SpriteSheetTexture.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteSheetTexture.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Graphics\GeneralAnim.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\GeneralAnim.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Math\MapLoader.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\MapLoader.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Math\Tile.h">
+      <Filter>src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Tile.h">
-      <Filter>Source\Math</Filter>
+    <ClInclude Include="src\Graphics\SpriteInst.h">
+      <Filter>src\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\SpriteInst.h">
-      <Filter>Source\Graphics</Filter>
+    <ClInclude Include="src\Attributes\Mesh.h">
+      <Filter>src\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Attributes\Mesh.h">
-      <Filter>Source\Attributes</Filter>
+    <ClInclude Include="src\Misc\CoroutineContext.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Misc\CoroutineContext.h">
-      <Filter>Source\Misc</Filter>
+    <ClInclude Include="src\Core\BaseComponent.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\BaseComponent.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="libs\catch\catch.hpp">
+      <Filter>libs\catch</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\catch\catch.hpp">
-      <Filter>3rdParty\catch</Filter>
+    <ClInclude Include="libs\luabridge\FuncTraits.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\FuncTraits.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\Iterator.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Iterator.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\LuaBridge.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaBridge.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\LuaException.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaException.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\LuaHelpers.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaHelpers.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\LuaRef.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\LuaRef.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\Namespace.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Namespace.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\RefCountedObject.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\RefCountedObject.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\RefCountedPtr.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\RefCountedPtr.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\Stack.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Stack.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\TypeList.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\TypeList.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\TypeTraits.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\TypeTraits.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\Userdata.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Userdata.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\CFunctions.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\CFunctions.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\ClassInfo.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\ClassInfo.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\Constructor.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\Constructor.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\luabridge\dump.h">
+      <Filter>libs\luabridge</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\luabridge\dump.h">
-      <Filter>3rdParty\luabridge</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxTCPClient.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPClient.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxTCPManager.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPManager.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxTCPServer.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxTCPServer.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxUDPManager.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxUDPManager.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxNetwork.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxNetwork.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxNetwork\ofxNetworkUtils.h">
+      <Filter>libs\ofxNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxNetwork\ofxNetworkUtils.h">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClInclude Include="libs\ofxSQLite\ofxSQLite.h">
+      <Filter>libs\ofxSQLite</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxSQLite\ofxSQLite.h">
-      <Filter>3rdParty\ofxSQLite</Filter>
+    <ClInclude Include="libs\ofxTextLabel\ofxTextLabel.h">
+      <Filter>libs\ofxTextLabel</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\ofxTextLabel\ofxTextLabel.h">
-      <Filter>3rdParty\ofxTextLabel</Filter>
+    <ClInclude Include="libs\sqlite\sqlite3.h">
+      <Filter>libs\sqlite</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\sqlite\sqlite3.h">
-      <Filter>3rdParty\sqlite</Filter>
+    <ClInclude Include="src\Core\ComponentStorage.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\ComponentStorage.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\MsgPayloads.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\MsgPayloads.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\ofxCogApp.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\ofxCogApp.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Core\ofxCogEngine.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\ofxCogEngine.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Communication\UpdateInfo.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\UpdateInfo.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Components\Interpolator.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Interpolator.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Communication\UpdateMessage.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\UpdateMessage.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Communication\NetworkManager.h">
+      <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\NetworkManager.h">
-      <Filter>Source\Communication</Filter>
+    <ClInclude Include="src\Scripting\FacadeLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\FacadeLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\SceneLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\SceneLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\AI\BestOnlyAgent.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\BestOnlyAgent.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\AI\ActionFilter.h">
+      <Filter>src\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AI\ActionFilter.h">
-      <Filter>Source\AI</Filter>
+    <ClInclude Include="src\Components\ResourcesMgr.h">
+      <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Resources.h">
-      <Filter>Source\Components</Filter>
+    <ClInclude Include="src\Core\AssetsManager.h">
+      <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\AssetsManager.h">
-      <Filter>Source\Core</Filter>
+    <ClInclude Include="src\Scripting\LuaMapper.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\LuaMapper.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\ResourcesLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\ResourcesLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\ComponentLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\ComponentLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\StageLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\StageLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Scripting\NodeBuilderLua.h">
+      <Filter>src\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\NodeBuilderLua.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="src\Entities\TimeLine.h">
+      <Filter>src\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities\TimeLine.h">
-      <Filter>Source\Entities</Filter>
+    <ClInclude Include="src\Builders\TimeLineBuilder.h">
+      <Filter>src\Builders</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Builders\TimeLineBuilder.h">
-      <Filter>Source\Builders</Filter>
+    <ClInclude Include="src\Tests\TimelineTest.h">
+      <Filter>src\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tests\TimelineTest.h">
-      <Filter>Source\Tests</Filter>
+    <ClInclude Include="libs\jsonxx\jsonxx.h">
+      <Filter>libs\jsonxx</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\jsonxx\jsonxx.h">
-      <Filter>3rdParty\jsonxx</Filter>
+    <ClInclude Include="libs\pugixml\pugiconfig.h">
+      <Filter>libs\pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\pugixml\pugiconfig.h">
-      <Filter>3rdParty\pugixml</Filter>
+    <ClInclude Include="libs\pugixml\pugixml.h">
+      <Filter>libs\pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\pugixml\pugixml.h">
-      <Filter>3rdParty\pugixml</Filter>
+    <ClInclude Include="libs\lua\lauxlib.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CogConfig.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="libs\lua\lcode.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lauxlib.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\ldebug.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lcode.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\ldo.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\ldebug.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lfunc.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\ldo.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lgc.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lfunc.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\llex.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lgc.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\llimits.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\llex.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lmem.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\llimits.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lobject.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lmem.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lopcodes.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lobject.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lparser.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lopcodes.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lstate.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lparser.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lstring.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lstate.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\ltable.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lstring.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\ltm.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltable.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lua.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\ltm.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\luaconf.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lua.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lualib.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\luaconf.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lundump.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lualib.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lvm.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lundump.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lzio.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lvm.h">
-      <Filter>3rdParty\lua</Filter>
+    <ClInclude Include="libs\lua\lapi.h">
+      <Filter>libs\lua</Filter>
     </ClInclude>
-    <ClInclude Include="3rdParty\lua\lzio.h">
-      <Filter>3rdParty\lua</Filter>
-    </ClInclude>
-    <ClInclude Include="3rdParty\lua\lapi.h">
-      <Filter>3rdParty\lua</Filter>
-    </ClInclude>
+    <ClInclude Include="src\ofxCogMain.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Components\Environment.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\Environment.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Facade.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Facade.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\NodeBuilder.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\NodeBuilder.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Logger.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\Logger.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Renderer.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\Renderer.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteSheetRenderer.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteSheetRenderer.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Misc\Utils.cpp">
-      <Filter>Source\Misc</Filter>
+    <ClCompile Include="src\Misc\Utils.cpp">
+      <Filter>src\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Msg.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Msg.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\TransformMath.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\TransformMath.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteSet.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteSet.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\SceneSwitchManager.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\SceneSwitchManager.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Stage.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\Stage.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Misc\TimeMeasure.cpp">
-      <Filter>Source\Misc</Filter>
+    <ClCompile Include="src\Misc\TimeMeasure.cpp">
+      <Filter>src\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\EasingFunc.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\EasingFunc.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\AnimContextStack.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\AnimContextStack.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\AnimLoader.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\AnimLoader.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Path.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\Path.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\NetWriter.cpp">
-      <Filter>Source\Communication</Filter>
+    <ClCompile Include="src\Communication\NetWriter.cpp">
+      <Filter>src\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\NetReader.cpp">
-      <Filter>Source\Communication</Filter>
+    <ClCompile Include="src\Communication\NetReader.cpp">
+      <Filter>src\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\NetMessage.cpp">
-      <Filter>Source\Communication</Filter>
+    <ClCompile Include="src\Communication\NetMessage.cpp">
+      <Filter>src\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\NetworkCommunicator.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\NetworkCommunicator.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\BehaviorLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\BehaviorLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\NodeLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\NodeLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\MsgLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\MsgLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\FloatingScene.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\FloatingScene.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Goal.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Goal.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\HitEvent.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\HitEvent.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Move.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Move.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\MultiAnim.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\MultiAnim.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\MultiSelection.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\MultiSelection.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Selection.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Selection.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\SheetAnimator.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\SheetAnimator.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\StateMachine.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\StateMachine.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\SteeringBehavior.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\SteeringBehavior.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\TransformAnim.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\TransformAnim.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Tween.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Tween.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\AttribAnimator.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\AttribAnimator.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Button.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Button.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\DelayAction.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\DelayAction.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\Slider.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\Slider.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Node.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Node.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Scene.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Scene.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Behavior.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Behavior.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Component.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Core\Component.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Behaviors\CompositeBehavior.cpp">
-      <Filter>Source\Behaviors</Filter>
+    <ClCompile Include="src\Behaviors\CompositeBehavior.cpp">
+      <Filter>src\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Attributes\Transform.cpp">
-      <Filter>Source\Attributes</Filter>
+    <ClCompile Include="src\Attributes\Transform.cpp">
+      <Filter>src\Attributes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Attributes\Flags.cpp">
-      <Filter>Source\Attributes</Filter>
+    <ClCompile Include="src\Attributes\Flags.cpp">
+      <Filter>src\Attributes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Attributes\StrId.cpp">
-      <Filter>Source\Attributes</Filter>
+    <ClCompile Include="src\Attributes\StrId.cpp">
+      <Filter>src\Attributes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\AttrAnimEnt.cpp">
-      <Filter>Source\Entities</Filter>
+    <ClCompile Include="src\Entities\AttrAnimEnt.cpp">
+      <Filter>src\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\BehaviorEnt.cpp">
-      <Filter>Source\Entities</Filter>
+    <ClCompile Include="src\Entities\BehaviorEnt.cpp">
+      <Filter>src\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\LayerEnt.cpp">
-      <Filter>Source\Entities</Filter>
+    <ClCompile Include="src\Entities\LayerEnt.cpp">
+      <Filter>src\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\TransformEnt.cpp">
-      <Filter>Source\Entities</Filter>
+    <ClCompile Include="src\Entities\TransformEnt.cpp">
+      <Filter>src\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Misc\EnumConverter.cpp">
-      <Filter>Source\Misc</Filter>
+    <ClCompile Include="src\Misc\EnumConverter.cpp">
+      <Filter>src\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\SteeringMath.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\SteeringMath.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\AStarSearch.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\AStarSearch.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\GridGraph.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\GridGraph.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\AttribAnim.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\AttribAnim.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteSheetTexture.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteSheetTexture.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SheetAnim.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SheetAnim.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\Sprite.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\Sprite.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteSheet.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteSheet.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteSheetGenerator.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteSheetGenerator.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Settings.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\Settings.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\GeneralAnim.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\GeneralAnim.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\MapLoader.cpp">
-      <Filter>Source\Math</Filter>
+    <ClCompile Include="src\Math\MapLoader.cpp">
+      <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\SpriteInst.cpp">
-      <Filter>Source\Graphics</Filter>
+    <ClCompile Include="src\Graphics\SpriteInst.cpp">
+      <Filter>src\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Attributes\Mesh.cpp">
-      <Filter>Source\Attributes</Filter>
+    <ClCompile Include="src\Attributes\Mesh.cpp">
+      <Filter>src\Attributes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\AsyncProcess.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\AsyncProcess.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\BaseComponent.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\BaseComponent.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\InputHandler.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\InputHandler.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\LuaScripting.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\LuaScripting.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPClient.cpp">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClCompile Include="libs\ofxNetwork\ofxTCPClient.cpp">
+      <Filter>libs\ofxNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPManager.cpp">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClCompile Include="libs\ofxNetwork\ofxTCPManager.cpp">
+      <Filter>libs\ofxNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxNetwork\ofxTCPServer.cpp">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClCompile Include="libs\ofxNetwork\ofxTCPServer.cpp">
+      <Filter>libs\ofxNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxNetwork\ofxUDPManager.cpp">
-      <Filter>3rdParty\ofxNetwork</Filter>
+    <ClCompile Include="libs\ofxNetwork\ofxUDPManager.cpp">
+      <Filter>libs\ofxNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxSQLite\ofxSQLite.cpp">
-      <Filter>3rdParty\ofxSQLite</Filter>
+    <ClCompile Include="libs\ofxSQLite\ofxSQLite.cpp">
+      <Filter>libs\ofxSQLite</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\ofxTextLabel\ofxTextLabel.cpp">
-      <Filter>3rdParty\ofxTextLabel</Filter>
+    <ClCompile Include="libs\ofxTextLabel\ofxTextLabel.cpp">
+      <Filter>libs\ofxTextLabel</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\sqlite\sqlite3.c">
-      <Filter>3rdParty\sqlite</Filter>
+    <ClCompile Include="libs\sqlite\sqlite3.c">
+      <Filter>libs\sqlite</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\ofxCogApp.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\ofxCogApp.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\ofxCogEngine.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\ofxCogEngine.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Interpolator.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\Interpolator.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\UpdateMessage.cpp">
-      <Filter>Source\Communication</Filter>
+    <ClCompile Include="src\Communication\UpdateMessage.cpp">
+      <Filter>src\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\NetworkManager.cpp">
-      <Filter>Source\Communication</Filter>
+    <ClCompile Include="src\Communication\NetworkManager.cpp">
+      <Filter>src\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\FacadeLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\FacadeLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\SceneLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\SceneLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Resources.cpp">
-      <Filter>Source\Components</Filter>
+    <ClCompile Include="src\Components\ResourcesMgr.cpp">
+      <Filter>src\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\AssetsManager.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\AssetsManager.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\ComponentStorage.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="src\Core\ComponentStorage.cpp">
+      <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\LuaMapper.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\LuaMapper.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\ResourcesLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\ResourcesLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\ComponentLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\ComponentLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\StageLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\StageLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\NodeBuilderLua.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="src\Scripting\NodeBuilderLua.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entities\TimeLine.cpp">
-      <Filter>Source\Entities</Filter>
+    <ClCompile Include="src\Entities\TimeLine.cpp">
+      <Filter>src\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Builders\TimeLineBuilder.cpp">
-      <Filter>Source\Builders</Filter>
+    <ClCompile Include="src\Builders\TimeLineBuilder.cpp">
+      <Filter>src\Builders</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\jsonxx\jsonxx.cpp">
-      <Filter>3rdParty\jsonxx</Filter>
+    <ClCompile Include="libs\jsonxx\jsonxx.cpp">
+      <Filter>libs\jsonxx</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\pugixml\pugixml.cpp">
-      <Filter>3rdParty\pugixml</Filter>
+    <ClCompile Include="libs\pugixml\pugixml.cpp">
+      <Filter>libs\pugixml</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lbaselib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lbaselib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lcode.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lcode.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldblib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ldblib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldebug.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ldebug.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldo.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ldo.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ldump.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ldump.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lfunc.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lfunc.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lgc.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lgc.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\linit.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\linit.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\liolib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\liolib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\llex.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\llex.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmathlib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lmathlib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lmem.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lmem.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\loadlib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\loadlib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lobject.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lobject.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lopcodes.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lopcodes.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\loslib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\loslib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lparser.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lparser.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstate.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lstate.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstring.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lstring.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lstrlib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lstrlib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltable.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ltable.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltablib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ltablib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\ltm.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\ltm.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lua.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lua.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\luac.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\luac.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lundump.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lundump.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lvm.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lvm.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lzio.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lzio.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lapi.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lapi.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\lauxlib.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\lauxlib.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
-    <ClCompile Include="3rdParty\lua\print.c">
-      <Filter>3rdParty\lua</Filter>
+    <ClCompile Include="libs\lua\print.c">
+      <Filter>libs\lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
