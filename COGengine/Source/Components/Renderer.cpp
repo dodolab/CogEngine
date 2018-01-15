@@ -189,7 +189,6 @@ namespace Cog {
 	}
 
 	void Renderer::RenderImage(Node* owner) {
-		auto trans = owner->GetTransform();
 		// load absolute matrix
 		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
 		ofLoadMatrix(absM);
@@ -208,7 +207,6 @@ namespace Cog {
 	}
 
 	void Renderer::RenderRectangle(Node* owner) {
-		auto trans = owner->GetTransform();
 		spt<Rectangle> rect = static_pointer_cast<Rectangle>(owner->GetMesh());
 
 		if (rect->IsRenderable()) {

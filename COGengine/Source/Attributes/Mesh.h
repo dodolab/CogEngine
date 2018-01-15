@@ -130,7 +130,7 @@ namespace Cog {
 			this->image = img;
 		}
 
-		spt<ofImage> GetImage() {
+		spt<ofImage> GetImage() const {
 			if (!image->isUsingTexture()) {
 				// preloaded images must be updated before the first use
 				image->setUseTexture(true);
@@ -143,19 +143,19 @@ namespace Cog {
 			this->image = img;
 		}
 
-		float GetWidth() const {
+		float GetWidth() const override {
 			return image->getWidth();
 		}
 
-		float GetHeight() const {
+		float GetHeight() const override {
 			return image->getHeight();
 		}
 
-		void SetWidth(float width) {
+		void SetWidth(float width) override {
 			CogLogError("Mesh", "Width of mesh of type Image can't be changed!");
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height) override {
 			CogLogError("Mesh", "Height of mesh of type Image can't be changed!");
 		}
 	};
@@ -182,19 +182,19 @@ namespace Cog {
 			this->font = font;
 		}
 
-		float GetWidth() const {
+		float GetWidth() const override {
 			return GetTextWidth();
 		}
 
-		float GetHeight() const {
+		float GetHeight() const override {
 			return GetTextHeight();
 		}
 
-		void SetWidth(float width) {
+		void SetWidth(float width) override {
 			CogLogError("Mesh", "Width of mesh of type Text can't be changed!");
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height) override {
 			CogLogError("Mesh", "Height of mesh of type Text can't be changed!");
 		}
 
@@ -215,7 +215,7 @@ namespace Cog {
 			return font->stringHeight("Ay");
 		}
 
-		string GetText() {
+		string GetText() const {
 			return stream.str();
 		}
 
@@ -274,19 +274,19 @@ namespace Cog {
 			this->font = font;
 		}
 
-		float GetWidth() const {
+		float GetWidth() const override {
 			return 1;
 		}
 
-		float GetHeight() const {
+		float GetHeight() const override {
 			return 1;
 		}
 
-		void SetWidth(float width) {
+		void SetWidth(float width) override {
 			CogLogError("Mesh", "Width of mesh of type Label can't be changed!");
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height) override {
 			CogLogError("Mesh", "Height of mesh of type Label can't be changed!");
 		}
 	};
@@ -324,24 +324,24 @@ namespace Cog {
 			this->sprite = sprite;
 		}
 
-		spt<SpriteSet> GetSpriteSet() {
+		spt<SpriteSet> GetSpriteSet() const {
 			return spriteSet;
 		}
 
 
-		float GetWidth() const {
+		float GetWidth() const override  {
 			return sprite.GetWidth();
 		}
 
-		float GetHeight() const {
+		float GetHeight() const override  {
 			return sprite.GetHeight();
 		}
 
-		void SetWidth(float width) {
+		void SetWidth(float width) override {
 			CogLogError("Mesh", "Width of mesh of type Sprite can't be changed!");
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height) override {
 			CogLogError("Mesh", "Height of mesh of type Sprite can't be changed!");
 		}
 	};
@@ -401,29 +401,29 @@ namespace Cog {
 			}
 		}
 
-		string GetLayerName() {
+		string GetLayerName() const {
 			return layerName;
 		}
 
 		/**
 		* Gets width of the whole sprite set
 		*/
-		float GetWidth() const {
-			return (float)width;
+		float GetWidth() const override {
+			return static_cast<float>(width);
 		}
 
 		/**
 		* Gets height of the whole sprite set
 		*/
-		float GetHeight() const {
-			return (float)height;
+		float GetHeight() const override {
+			return static_cast<float>(height);
 		}
 
-		void SetWidth(float width) {
+		void SetWidth(float width) override {
 			CogLogError("Mesh", "Width of mesh of type MultiSprite can't be changed!");
 		}
 
-		void SetHeight(float height) {
+		void SetHeight(float height) override {
 			CogLogError("Mesh", "Height of mesh of type MultiSprite can't be changed!");
 		}
 	};

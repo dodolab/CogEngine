@@ -63,7 +63,7 @@ namespace Cog {
 			for (int j = 0; j < pix.getWidth(); j++) {
 				ofFloatColor color = pix.getColor(j, i);
 
-				// bug in android: channels b and r are swapped
+				// in android, channels b and r are swapped
 #if ANDROID
 				int hexa = (((int)(color.b * 255) & 0xff) << 16) + ((((int)(color.g * 255)) & 0xff) << 8) + (((int)(color.r * 255)) & 0xff);
 #elif WIN32

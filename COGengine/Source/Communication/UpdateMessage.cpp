@@ -15,7 +15,7 @@ namespace Cog {
 			continuousValues[key] = val;
 		}
 
-		for (int i = 0; i < discreteValues.size(); i++) {
+		for (int i = 0; i < discrSize; i++) {
 			unsigned key = reader->ReadDWord();
 			float val = reader->ReadFloat();
 
