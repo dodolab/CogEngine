@@ -22,8 +22,6 @@ namespace Cog {
 		luabridge::lua_State* L;
 		// lua behaviors
 		vector<BehaviorLua*> behs;
-		// lua nodes
-		vector<NodeLua*> nodes;
 		// references to behavior prototypes
 		map<StrId, int> behaviorPrototypes;
 
@@ -47,13 +45,6 @@ namespace Cog {
 			return behs;
 		}
 
-		/**
-		* Gets collection of registered lua nodes
-		*/
-		vector<NodeLua*>& GetNodes() {
-			return nodes;
-		}
-
 		void OnInit();
 
 
@@ -65,25 +56,18 @@ namespace Cog {
 		}
 
 		/**
-		* Stores created lua node proxy into collection
-		*/
-		void StoreNode(NodeLua* node) {
-			this->nodes.push_back(node);
-		}
-
-		/**
 		* Creates instance of lua behavior based on its key
 		*/
 		BehaviorLua* CreateLuaBehavior(StrId key);
 
+		/**
+		* Registers component prototype that is called from Extend() function
+		*/
+		static int RegisterBehaviorPrototype(luabridge::lua_State* L);
+
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
 		}
-
-		/**
-		* Registers behavior prototype that is called from Extend() function
-		*/
-		int RegisterBehaviorPrototypeCt(luabridge::lua_State* L);
 
 		void LoadScript(ofFile file);
 
@@ -91,6 +75,7 @@ namespace Cog {
 
 	protected:
 		void LoadAllScripts();
+		int RegisterBehaviorPrototypeCtInternal(luabridge::lua_State* L);
 	};
 
 }// namespace

@@ -272,6 +272,14 @@ namespace Cog {
 		}
 	}
 
+	void Scene::FindNodesByFlag(unsigned flag, vector<Node*>& output) const {
+		for (auto gameObj : allNodes) {
+			if (gameObj->HasState(flag)) {
+				output.push_back(gameObj);
+			}
+		}
+	}
+
 	void Scene::LoadFromXml(xml_node& node) {
 
 		COGLOGDEBUG("Scene", "Loading scene %s from xml", this->name.c_str());
@@ -403,6 +411,9 @@ namespace Cog {
 			if (!node->GetTag().empty()) allNodes_tag[StrId(node->GetTag())] = node;
 
 			node->SetScene(this);
+			Msg msg(ACT_OBJECT_CREATED, MsgObjectType::NODE_ACTUAL, node->GetId(), MsgObjectType::SUBSCRIBERS, node, nullptr);
+			SendMessage(msg);
+
 			return true;
 		}
 		else return false;
@@ -411,7 +422,11 @@ namespace Cog {
 	void Scene::RemoveNode(Node* node) {
 		COGLOGDEBUG("Scene", "Removing node %s from scene %s", node->GetTag().c_str(), this->name.c_str());
 		auto found = find(allNodes.begin(), allNodes.end(), node);
-		if (found != allNodes.end()) allNodes.erase(found);
+		if (found != allNodes.end()) {
+			allNodes.erase(found);
+			Msg msg(ACT_OBJECT_REMOVED, MsgObjectType::NODE_ACTUAL, node->GetId(), MsgObjectType::SUBSCRIBERS, node, nullptr);
+			SendMessage(msg);
+		}
 
 		if (allNodes_id.count(node->GetId()) != 0) allNodes_id.erase(node->GetId());
 		if (!node->GetTag().empty() && allNodes_tag.count(StrId(node->GetTag())) != 0) allNodes_tag.erase(StrId(node->GetTag()));

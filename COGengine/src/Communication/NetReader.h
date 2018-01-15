@@ -16,9 +16,9 @@ namespace Cog {
 	*/
 	class NetReader {
 	private:
-		tBYTE* buffer;
+		ABYTE* buffer;
 		// pointer to current byte in buffer
-		tBYTE* current;
+		ABYTE* current;
 		// length of the buffer
 		unsigned bufferLength;
 		// offset of bit in actual byte
@@ -39,7 +39,7 @@ namespace Cog {
 		* @param data data to read
 		* @param capacity (size of data to read) in bytes
 		*/
-		NetReader(tBYTE* data, unsigned capacity);
+		NetReader(ABYTE* data, unsigned capacity);
 
 		~NetReader() {
 			if(!external) delete[] buffer;
@@ -62,13 +62,13 @@ namespace Cog {
 		/**
 		* Reads byte into output value
 		*/
-		void ReadByte(tBYTE& value);
+		void ReadByte(ABYTE& value);
 
 		/**
 		* Reads byte
 		*/
-		inline tBYTE ReadByte() {
-			tBYTE output = 0;
+		inline ABYTE ReadByte() {
+			ABYTE output = 0;
 			ReadByte(output);
 			return output;
 		}
@@ -76,13 +76,13 @@ namespace Cog {
 		/**
 		* Reads word into output value
 		*/
-		void ReadWord(tWORD& value);
+		void ReadWord(AWORD& value);
 
 		/**
 		* Reads word
 		*/
-		inline tWORD ReadWord() {
-			tWORD output = 0;
+		inline AWORD ReadWord() {
+			AWORD output = 0;
 			ReadWord(output);
 			return output;
 		}
@@ -90,13 +90,13 @@ namespace Cog {
 		/**
 		* Reads double word into output value
 		*/
-		void ReadDWord(tDWORD& value);
+		void ReadDWord(ADWORD& value);
 
 		/**
 		* Reads double word
 		*/
-		inline tDWORD ReadDWord() {
-			tDWORD output = 0;
+		inline ADWORD ReadDWord() {
+			ADWORD output = 0;
 			ReadDWord(output);
 			return output;
 		}
@@ -120,14 +120,14 @@ namespace Cog {
 		* @param data array of bytes to read
 		* @param size size of array in bytes
 		*/
-		void ReadBytes(tBYTE* data, unsigned size);
+		void ReadBytes(ABYTE* data, unsigned size);
 
 		/**
 		* Reads array of bytes and returns pointer to the first byte
 		* @param size size of array in bytes
 		*/
-		tBYTE* ReadBytes(unsigned size) {
-			tBYTE* output = new tBYTE[size];
+		ABYTE* ReadBytes(unsigned size) {
+			ABYTE* output = new ABYTE[size];
 			ReadBytes(output, size);
 			return output;
 		}
@@ -137,14 +137,14 @@ namespace Cog {
 		* @param data array of double words to read
 		* @param size size of array in bytes
 		*/
-		void ReadDWords(tDWORD* data, unsigned size);
+		void ReadDWords(ADWORD* data, unsigned size);
 
 		/**
 		* Reads array of double words and returns pointer to the first one
 		* @param size size of array in bytes
 		*/
-		tDWORD* ReadDWords(unsigned size) {
-			tDWORD* output = new tDWORD[size];
+		ADWORD* ReadDWords(unsigned size) {
+			ADWORD* output = new ADWORD[size];
 			ReadDWords(output, size);
 			return output;
 		}
@@ -174,14 +174,14 @@ namespace Cog {
 		/**
 		* Gets pointer to the buffer
 		*/
-		tBYTE* GetBuffer() {
+		ABYTE* GetBuffer() {
 			return buffer;
 		}
 
 		/**
 		* Gets pointer to the actual position in buffer
 		*/
-		tBYTE* GetActualPointer() {
+		ABYTE* GetActualPointer() {
 			return current;
 		}
 

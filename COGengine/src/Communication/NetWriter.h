@@ -13,9 +13,9 @@ namespace Cog {
 	*/
 	class NetWriter {
 	private:
-		tBYTE* buffer;
+		ABYTE* buffer;
 		// pointer to current byte in buffer
-		tBYTE* current;
+		ABYTE* current;
 		// length of the buffer
 		unsigned bufferLength;
 		// offset of bit in actual byte
@@ -37,17 +37,17 @@ namespace Cog {
 		/**
 		* Writes a byte into the buffer
 		*/
-		void WriteByte(tBYTE value);
+		void WriteByte(ABYTE value);
 
 		/**
 		* Writes a word into the buffer
 		*/
-		void WriteWord(tWORD value);
+		void WriteWord(AWORD value);
 
 		/**
 		* Writes a double word into the buffer
 		*/
-		void WriteDWord(tDWORD value);
+		void WriteDWord(ADWORD value);
 
 		/**
 		* Writes a float into the buffer
@@ -59,14 +59,14 @@ namespace Cog {
 		* @param data byte array
 		* @param size size of the array in bytes
 		*/
-		void WriteBytes(tBYTE* data, unsigned size);
+		void WriteBytes(ABYTE* data, unsigned size);
 
 		/**
 		* Writes array of double words into the buffer
 		* @param data array
 		* @param size size of the array in bytes
 		*/
-		void WriteDWords(tDWORD* data, unsigned size);
+		void WriteDWords(ADWORD* data, unsigned size);
 
 		/**
 		* Writes array of floats into the buffer
@@ -83,14 +83,14 @@ namespace Cog {
 		/**
 		* Gets pointer to the buffer
 		*/
-		tBYTE* GetBuffer() {
+		ABYTE* GetBuffer() {
 			return buffer;
 		}
 
 		/**
 		* Copies data into a byte array and returns a pointer to it
 		*/
-		tBYTE* CopyData(unsigned& size);
+		ABYTE* CopyData(unsigned& size);
 
 		/**
 		* Gets capacity of the buffer in bits

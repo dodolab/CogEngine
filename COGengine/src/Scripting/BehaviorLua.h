@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Behavior.h"
-#include "MsgLua.h"
-#include "SceneLua.h"
 
 namespace luabridge {
 	struct lua_State;
@@ -19,7 +17,7 @@ namespace Cog {
 		luabridge::lua_State* L;
 	public:
 
-		NodeLua* ownerLua = nullptr;
+		Node* ownerLua = nullptr;
 
 		BehaviorLua();
 
@@ -33,7 +31,7 @@ namespace Cog {
 
 		void SendMessage(StrId msg);
 
-		void SetOwnerLua(NodeLua* ownerLua);
+		void SetOwnerLua();
 
 		virtual void OnMessage(Msg& msg);
 

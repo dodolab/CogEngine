@@ -110,11 +110,11 @@ typedef int stenum;
 
 // aliases for data types for networking
 namespace Cog {
-	typedef unsigned char tBYTE;
-	typedef unsigned int tDWORD;
-	typedef unsigned short tWORD;
+	typedef unsigned char ABYTE;
+	typedef unsigned int ADWORD;
+	typedef unsigned short AWORD;
 }
 
 // macro for calculating size of a string used in networking
 // when a string is seralized, the size of a string goes with it
-#define SIZE_STR(str) sizeof(tBYTE)*str.size()+sizeof(tDWORD)
+#define SIZE_STR(str) sizeof(ABYTE)*str.size()+sizeof(ADWORD)

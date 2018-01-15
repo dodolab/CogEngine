@@ -4,14 +4,14 @@
 namespace Cog {
 
 	NetReader::NetReader(unsigned capacity) {
-		this->buffer = new tBYTE[capacity];
+		this->buffer = new ABYTE[capacity];
 		this->bufferLength = capacity * 8;
 		this->bitOffset = 0;
 		this->current = buffer;
 		this->external = false;
 	}
 
-	NetReader::NetReader(tBYTE* data, unsigned capacity) {
+	NetReader::NetReader(ABYTE* data, unsigned capacity) {
 		this->buffer = data;
 		this->bufferLength = capacity * 8;
 		this->bitOffset = 0;
@@ -32,7 +32,7 @@ namespace Cog {
 		}
 	}
 
-	void NetReader::ReadByte(tBYTE& value) {
+	void NetReader::ReadByte(ABYTE& value) {
 		COGASSERT(FreeSpace(8), "NetReader", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
@@ -48,14 +48,14 @@ namespace Cog {
 
 	}
 
-	void NetReader::ReadWord(tWORD& value) {
+	void NetReader::ReadWord(AWORD& value) {
 		COGASSERT(FreeSpace(16), "NetReader", "Buffer length exceeded");
 		value = 0;
 		value |= ReadByte() << 8;
 		value |= ReadByte();
 	}
 
-	void NetReader::ReadDWord(tDWORD& value) {
+	void NetReader::ReadDWord(ADWORD& value) {
 		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
 		value = 0;
 		value |= ReadByte() << 24;
@@ -67,12 +67,12 @@ namespace Cog {
 	void NetReader::ReadFloat(float& value) {
 		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
 
-		tDWORD iVal = ReadDWord();
+		ADWORD iVal = ReadDWord();
 		
 		value = *((float*)(&iVal));
 	}
 
-	void NetReader::ReadBytes(tBYTE* data, unsigned size) {
+	void NetReader::ReadBytes(ABYTE* data, unsigned size) {
 		COGASSERT(FreeSpace(size*8), "NetReader", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
@@ -88,7 +88,7 @@ namespace Cog {
 		}
 	}
 
-	void NetReader::ReadDWords(tDWORD* data, unsigned size) {
+	void NetReader::ReadDWords(ADWORD* data, unsigned size) {
 		for (unsigned i = 0; i < size; i++) {
 			ReadDWord(data[i]);
 		}
@@ -101,10 +101,10 @@ namespace Cog {
 	}
 
 	string NetReader::ReadString() {
-		tDWORD size = ReadDWord();
+		ADWORD size = ReadDWord();
 		COGASSERT(size < STR_MAX_SIZE, "NetReader", "Unexpected string size in byte array");
 
-		tBYTE* bytes = ReadBytes(size);
+		ABYTE* bytes = ReadBytes(size);
 		string output = string((char*)bytes, (int)size);
 		delete bytes;
 		return output;

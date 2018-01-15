@@ -12,7 +12,7 @@ namespace Cog {
 		this->msgTime = reader->ReadDWord();
 
 		if (this->dataLength != 0) {
-			this->data = new tBYTE[this->dataLength];
+			this->data = new ABYTE[this->dataLength];
 			reader->ReadBytes(this->data, this->dataLength);
 		}
 	}
@@ -21,7 +21,7 @@ namespace Cog {
 		
 		writer->WriteByte(this->syncId);
 		writer->WriteByte(this->acceptedId);
-		writer->WriteByte((tBYTE)this->msgType);
+		writer->WriteByte((ABYTE)this->msgType);
 		writer->WriteDWord(this->action.GetValue());
 		writer->WriteDWord(this->msgTime);
 

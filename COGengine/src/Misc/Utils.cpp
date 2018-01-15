@@ -32,12 +32,21 @@ namespace Cog {
 	}
 
 
-	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency) {
-		if (lastTime > actualTime) return false;
+	bool CheckTime(uint64 lastTime, uint64 currentTime, float frequency) {
+		if (lastTime > currentTime) return false;
 
 		float period = 1000 / frequency;
-		return (actualTime - lastTime) >= period;
+		return (currentTime - lastTime) >= period;
 	}
 
+	bool CheckTimeUnsigned(unsigned lastTime, unsigned currentTime, float frequency) {
+		if (lastTime > currentTime) return false;
 
+		float period = 1000 / frequency;
+		return (currentTime - lastTime) >= period;
+	}
+
+	int Modulo(int minValue, int maxValue, int currentValue) {
+		return (((int)ofClamp(currentValue, minValue, maxValue)) - minValue + 1) % (maxValue - minValue + 1) + minValue;
+	}
 }// namespace

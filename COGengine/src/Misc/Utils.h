@@ -47,13 +47,14 @@ namespace Cog {
 	void split_string(string str, string delimiter, vector<string>& output);
 
 	/**
-	* Returns true, if it is proper time to execute an action according to the frequency 
-	* the action should be executed
-	* @param lastTime the last time the action has been executed
-	* @param actualTime current time
-	* @param frequency the frequency the action should be executed
+	* Returns true, if an event, executed at lastTime, with given frequency,
+	* should be executed now
 	*/
-	bool IsProperTime(uint64 lastTime, uint64 actualTime, float frequency);
+	bool CheckTime(uint64 lastTime, uint64 currentTime, float frequency);
+
+	bool CheckTimeUnsigned(unsigned lastTime, unsigned currentTime, float frequency);
+
+	int Modulo(int minValue, int maxValue, int currentValue);
 
 	/**
 	* Combines values into the hash

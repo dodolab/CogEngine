@@ -7,17 +7,12 @@
 #include "StrId.h"
 #include "Flags.h"
 #include "ResourcesMgr.h"
-#include "MsgLua.h"
 #include "BehaviorLua.h"
-#include "NodeLua.h"
-#include "SceneLua.h"
 #include "FacadeLua.h"
-#include "ResourcesLua.h"
-#include "Settings.h""
-#include "ComponentLua.h"
-#include "StageLua.h"
+#include "Settings.h"
 #include "TransformMath.h"
-#include "NodeBuilderLua.h"
+#include "Scene.h"
+#include "Stage.h"
 
 using namespace luabridge;
 
@@ -124,14 +119,6 @@ namespace Cog {
 			.LUA_REGDATA(TransformEnt, zIndex)
 			.endClass();
 
-		// TransformMath
-		luabridge::getGlobalNamespace(L)
-			.beginClass<TransformMath>("TransformMath")
-			.addConstructor <void(*) (void)>()
-			.addFunction("SetTransform", static_cast<void(TransformMath::*)(Node*, Node*, TransformEnt&, int, int)>(&TransformMath::SetTransform))
-			.addFunction("SetTransform", reinterpret_cast<void(TransformMath::*)(NodeLua*, NodeLua*, TransformEnt&, int, int)>(&TransformMath::SetTransform))
-			.endClass();
-
 		// StrId
 		luabridge::getGlobalNamespace(L)
 			.beginClass<StrId>("StrId")
@@ -191,17 +178,21 @@ namespace Cog {
 
 
 		luabridge::getGlobalNamespace(L)
-			.beginClass<SceneLua>("Scene")
-			.addFunction("FindBehaviorById", &SceneLua::FindBehaviorById)
-			.addFunction("FindNodeById", &SceneLua::FindNodeById)
-			.addFunction("FindNodeByNetworkId", &SceneLua::FindNodeByNetworkId)
-			.addFunction("FindNodeByTag", &SceneLua::FindNodeByTag)
-			.addProperty("name", &SceneLua::GetName, &SceneLua::SetName)
-			.addFunction("GetSceneNode", &SceneLua::GetSceneNode)
-			.addFunction("Initialized", &SceneLua::Initialized)
-			.addFunction("Loaded", &SceneLua::Loaded)
-			.addFunction("SendMessage", &SceneLua::SendMessage)
-			.addFunction("Reload", &SceneLua::Reload)
+			.beginClass<Scene>("Scene")
+			.addFunction("FindBehaviorById", &Scene::FindBehaviorById)
+			.addFunction("FindNodeById", &Scene::FindNodeById)
+			.addFunction("FindNodeByNetworkId", &Scene::FindNodeByNetworkId)
+			.addFunction("FindNodeByTag", &Scene::FindNodeByTag)
+			.addProperty("name", &Scene::GetName, &Scene::SetName)
+			.addFunction("GetSceneNode", &Scene::GetSceneNode)
+			.addFunction("Initialized", &Scene::Initialized)
+			.addFunction("Loaded", &Scene::Loaded)
+			.addFunction("SendMessage", &Scene::SendMessage)
+			.addFunction("Reload", &Scene::Reload)
+			.endClass();
+
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Component>("Component")
 			.endClass();
 
 		luabridge::getGlobalNamespace(L)
@@ -221,13 +212,25 @@ namespace Cog {
 			.endClass();
 			*/
 
-		MsgLua::InitLuaMapping(L);
-		NodeLua::InitLuaMapping(L);
+		luabridge::getGlobalNamespace(L)
+			.deriveClass<Stage, Component>("Stage")
+			.addProperty("rootObject", &Stage::GetRootObject)
+			.addProperty("actualScene", &Stage::GetActualScene)
+			.addFunction("FindSceneByName", &Stage::FindSceneByName)
+			.addFunction("SwitchToScene", &Stage::SwitchToScene)
+			.addFunction("SwitchBackToScene", &Stage::SwitchBackToScene)
+			.endClass();
+
+		luabridge::getGlobalNamespace(L)
+			.deriveClass<Resources, Component>("Resources")
+			.addFunction("Get2DImage", &Resources::Get2DImage)
+			.addFunction<Settings&(Resources::*)()>("GetDefaultSettings", &Resources::GetDefaultSettings)
+			.addFunction<Settings&(Resources::*)()>("GetGlobalSettings", &Resources::GetGlobalSettings)
+			.addFunction<Settings&(Resources::*)()>("GetProjectSettings", &Resources::GetProjectSettings)
+			.addFunction("GetResourceStr", &Resources::GetResourceStr)
+			.endClass();
+
 		FacadeLua::InitLuaMapping(L);
-		ComponentLua::InitLuaMapping(L);
-		ResourcesLua::InitLuaMapping(L);
-		StageLua::InitLuaMapping(L);
-		NodeBuilderLua::InitLuaMapping(L);
 	}
 
 } // namespace

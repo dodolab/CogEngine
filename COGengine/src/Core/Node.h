@@ -398,6 +398,8 @@ namespace Cog {
 		*/
 		bool RemoveChild(Node* child, bool erase);
 
+		void RemoveAllChildren(bool erase);
+
 		/**
 		* Removes this node from its parent (if it exists)
 		* @param erase if true, node will be destroyed
@@ -537,6 +539,48 @@ namespace Cog {
 				AddAttr(key, value);
 				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
 			}
+		}
+
+		// these methods are primarily for Lua mapping
+
+		void AddAttrString(StrId key, string val);
+
+		void AddAttrInt(StrId key, int val);
+
+		void AddAttrFloat(StrId key, float val);
+
+		void AddAttrVector2f(StrId key, ofVec2f val);
+
+		void AddAttrVector3f(StrId key, ofVec3f val);
+
+		void AddAttrVec2i(StrId key, Vec2i val);
+
+		void AddAttrPtr(StrId key, void* pointer);
+
+		string GetAttrString(StrId key);
+
+		int GetAttrInt(StrId key);
+
+		float GetAttrFloat(StrId key);
+
+		ofVec2f GetAttrVector2f(StrId key);
+
+		ofVec3f GetAttrVector3f(StrId key);
+
+		Vec2i GetAttrVec2i(StrId key);
+
+
+		/**
+		* Gets a pointer attribute by its key
+		*/
+		void* GetAttrPtr(StrId key);
+
+		/**
+		* Gets a pointer attribute using a static template parameter (used for Lua mapping)
+		*/
+		template <char const *str>
+		void* GetAttrPtrStatic() {
+			return GetAttrPtr(StrId(str));
 		}
 
 		bool operator==(int id) {

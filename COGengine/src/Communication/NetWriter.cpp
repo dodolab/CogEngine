@@ -4,7 +4,7 @@
 namespace Cog {
 
 	NetWriter::NetWriter(unsigned capacity) {
-		this->buffer = new tBYTE[capacity];
+		this->buffer = new ABYTE[capacity];
 		this->bufferLength = capacity * 8;
 		this->current = buffer;
 		this->bitOffset = 0;
@@ -24,7 +24,7 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteByte(tBYTE value) {
+	void NetWriter::WriteByte(ABYTE value) {
 		COGASSERT(FreeSpace(8), "NetWriter", "Buffer length exceeded");
 		if (bitOffset <= 0) {
 			// no offset
@@ -39,13 +39,13 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteWord(tWORD value) {
+	void NetWriter::WriteWord(AWORD value) {
 		COGASSERT(FreeSpace(16), "NetWriter", "Buffer length exceeded");
 		WriteByte(value >> 8);
 		WriteByte(value);
 	}
 
-	void NetWriter::WriteDWord(tDWORD value) {
+	void NetWriter::WriteDWord(ADWORD value) {
 		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		WriteByte(value >> 24);
 		WriteByte(value >> 16);
@@ -56,11 +56,11 @@ namespace Cog {
 	void NetWriter::WriteFloat(float value) {
 		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
 		
-		tDWORD ivalue = *((tDWORD*)&value);
+		ADWORD ivalue = *((ADWORD*)&value);
 		WriteDWord(ivalue);
 	}
 
-	void NetWriter::WriteBytes(tBYTE* data, unsigned size) {
+	void NetWriter::WriteBytes(ABYTE* data, unsigned size) {
 		COGASSERT(FreeSpace(size * 8), "NetWriter", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
@@ -77,7 +77,7 @@ namespace Cog {
 		}
 	}
 
-	void NetWriter::WriteDWords(tDWORD* data, unsigned size) {
+	void NetWriter::WriteDWords(ADWORD* data, unsigned size) {
 		COGASSERT(FreeSpace(size * 32), "NetWriter", "Buffer length exceeded");
 
 		for (unsigned i = 0; i < size; i++) {
@@ -99,13 +99,13 @@ namespace Cog {
 
 		// write info about size separately
 		WriteDWord(str.size());
-		WriteBytes((tBYTE*)str.c_str(),str.size());
+		WriteBytes((ABYTE*)str.c_str(),str.size());
 	}
 
-	tBYTE* NetWriter::CopyData(unsigned& size) {
+	ABYTE* NetWriter::CopyData(unsigned& size) {
 		size = current - buffer;
 		if (bitOffset > 0) size++;
-		tBYTE* data = new tBYTE[size];
+		ABYTE* data = new ABYTE[size];
 		memcpy(data, buffer, size);
 		return data;
 	}

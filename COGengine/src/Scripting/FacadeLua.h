@@ -14,22 +14,17 @@ namespace luabridge {
 
 namespace Cog {
 
-	class ComponentLua;
-	class ResourcesLua;
-	class StageLua;
-
 	/**
 	* Facade for Lua scripts
 	*/
 	class FacadeLua {
 	public:
-		// singletons
-		static ResourcesLua* resLua;
-		static StageLua* stageLua;
 
 		// =================== Components ======================
-		static ComponentLua* CogGetComponent(string name);
-
+		
+		// implemented in CPP file for certain components
+		template<typename T>
+		static T* CogGetComponent();
 		static void CogSwitchToScene(string name, string tweenDirection);
 		static void CogSwitchBackToScene(string tweenDirection);
 		// =================== ofxCogEngine ====================

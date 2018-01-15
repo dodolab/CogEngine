@@ -36,8 +36,7 @@ namespace Cog {
 
 
 		// delete all behaviors
-		for (auto& beh : behaviors)
-		{
+		for (auto& beh : behaviors) {
 			if (scene != nullptr) {
 				this->scene->RemoveBehavior(beh);
 			}
@@ -47,24 +46,41 @@ namespace Cog {
 		}
 		behaviors.clear();
 
-		// root node doesn't deallocate its children
-		if (this->type != NODETYPE_ROOT) {
-			// delete all children
-			for (auto it = children.begin(); it != children.end(); ++it)
-			{
-				if (scene != nullptr) {
-					scene->RemoveNode(*it);
-				}
 
-				if (!(*it)->IsExternal()) {
-					delete (*it);
-				}
+		// delete all children
+		for (auto it = children.begin(); it != children.end(); ++it) {
+			if (scene != nullptr) {
+				scene->RemoveNode(*it);
 			}
-			children.clear();
+
+			if (!(*it)->IsExternal()) {
+				delete (*it);
+			}
+		}
+		children.clear();
+
+		for (auto childToAdd : childrenToAdd) {
+			if (!childToAdd->IsExternal()) {
+				delete childToAdd;
+			}
+		}
+
+		for (auto childToRemove : childrenToRemove) {
+			if (!childToRemove.first->IsExternal()) {
+				delete childToRemove.first;
+			}
+		}
+
+		// delete not shared attributes
+		for (auto attr : attributes) {
+			if (!attr.second->IsShared()) {
+				delete attr.second;
+			}
 		}
 
 		delete groups;
 		delete states;
+
 	}
 
 	void Node::UpdateTransform(bool deep) {
@@ -186,7 +202,7 @@ namespace Cog {
 
 	bool Node::AddChild(Node* child) {
 
-		COGLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)",child->id, child->tag.c_str(), id, tag.c_str());
+		COGLOGDEBUG("Node", "Adding child %d (%s) into node %d (%s)", child->id, child->tag.c_str(), id, tag.c_str());
 		auto existing = std::find(children.begin(), children.end(), child);
 		if (existing != children.end()) {
 			CogLogError("Attempt to add already existing child: %s into %s", child->tag.c_str(), tag.c_str());
@@ -213,6 +229,13 @@ namespace Cog {
 		}
 		return result;
 	}
+
+	void Node::RemoveAllChildren(bool erase) {
+		for (auto child : children) {
+			RemoveChild(child, erase);
+		}
+	}
+
 
 	bool Node::RemoveFromParent(bool erase) {
 		Node* parent = GetParent();
@@ -247,6 +270,73 @@ namespace Cog {
 		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SWITCH, state1, state2)));
 	}
 
+	void Node::AddAttrString(StrId key, string val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrInt(StrId key, int val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrFloat(StrId key, float val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrVector2f(StrId key, ofVec2f val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrVector3f(StrId key, ofVec3f val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrVec2i(StrId key, Vec2i val) {
+		AddAttr(key, val);
+	}
+
+	void Node::AddAttrPtr(StrId key, void* pointer) {
+		AddAttr(key, pointer);
+	}
+
+	string Node::GetAttrString(StrId key) {
+		return GetAttr<string>(key);
+	}
+
+	int Node::GetAttrInt(StrId key) {
+		return GetAttr<int>(key);
+	}
+
+	float Node::GetAttrFloat(StrId key) {
+		return GetAttr<float>(key);
+	}
+
+	ofVec2f Node::GetAttrVector2f(StrId key) {
+		return GetAttr<ofVec2f>(key);
+	}
+
+	ofVec3f Node::GetAttrVector3f(StrId key) {
+		return GetAttr<ofVec3f>(key);
+	}
+
+	Vec2i Node::GetAttrVec2i(StrId key) {
+		return GetAttr<Vec2i>(key);
+	}
+
+	void* Node::GetAttrPtr(StrId key) {
+		auto it = attributes.find(key);
+		if (it != attributes.end()) {
+			if (it->second->IsPointer()) {
+				// address of a pointer
+				return *(void**)(it->second->RawVal());
+			}
+			else {
+				// address of a value
+				return it->second->RawVal();
+			}
+		}
+		return nullptr;
+	}
+
 
 	void Node::InsertElementsForAdding(bool applyToChildren, bool init) {
 
@@ -262,7 +352,7 @@ namespace Cog {
 			}
 
 			child->parent = this;
-			
+
 			// root has no scene
 			if (this->type != NODETYPE_ROOT) {
 				child->scene = this->scene;
@@ -318,7 +408,7 @@ namespace Cog {
 			std::pair<Behavior*, bool> item = (*it);
 			Behavior* beh = item.first;
 			behaviors.remove(beh);
-			if(scene != nullptr) scene->RemoveBehavior(beh);
+			if (scene != nullptr) scene->RemoveBehavior(beh);
 			beh->owner = nullptr;
 			// item.second holds ERASE indicator
 			if (item.second) delete item.first;
@@ -342,7 +432,7 @@ namespace Cog {
 
 	void Node::SendMessage(StrId action, spt<MsgPayload> data) {
 		if (scene != nullptr) {
-			auto msg = Msg(action, MsgObjectType::NODE_ACTUAL, this->id, MsgObjectType::SUBSCRIBERS,this, data);
+			auto msg = Msg(action, MsgObjectType::NODE_ACTUAL, this->id, MsgObjectType::SUBSCRIBERS, this, data);
 			scene->SendMessage(msg);
 		}
 	}
@@ -352,7 +442,7 @@ namespace Cog {
 
 #if DEBUG
 
-		if(attributes.size() > 0) CogLogTree("INFO_NODE", logLevel+1, "Attributes:");
+		if (attributes.size() > 0) CogLogTree("INFO_NODE", logLevel + 1, "Attributes:");
 
 		for (auto it = attributes.begin(); it != attributes.end(); ++it) {
 			StrId key = (*it).first;
@@ -360,8 +450,8 @@ namespace Cog {
 		}
 #endif
 
-		CogLogTree("INFO_TRANSFORM", logLevel+1, "Transform: ");
-		CogLogTree("INFO_TRANSFORM", logLevel + 2, "LPos: [%f,%f]",transform.localPos.x, transform.localPos.y);
+		CogLogTree("INFO_TRANSFORM", logLevel + 1, "Transform: ");
+		CogLogTree("INFO_TRANSFORM", logLevel + 2, "LPos: [%f,%f]", transform.localPos.x, transform.localPos.y);
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "LScal: [%f,%f]", transform.scale.x, transform.scale.y);
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "ZIndex: %d", transform.scale.z);
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "Rotation: %f", transform.rotation);
@@ -369,13 +459,13 @@ namespace Cog {
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsScal: [%f,%f]", transform.absScale.x, transform.absScale.y);
 		CogLogTree("INFO_TRANSFORM", logLevel + 2, "AbsRotation: %f", transform.absRotation);
 
-		CogLogTree("INFO_SHAPE", logLevel+1, "Shape: %s", typeid(*this->mesh).name());
-		CogLogTree("INFO_SHAPE", logLevel+2, "Size: [%f x %f]", this->mesh->GetWidth(), this->mesh->GetHeight());
-		
+		CogLogTree("INFO_SHAPE", logLevel + 1, "Shape: %s", typeid(*this->mesh).name());
+		CogLogTree("INFO_SHAPE", logLevel + 2, "Size: [%f x %f]", this->mesh->GetWidth(), this->mesh->GetHeight());
+
 		if (states != nullptr) {
 			vector<unsigned> allStates = states->GetAllStates();
 			if (allStates.size() > 0) {
-				CogLogTree("INFO_FLAGS", logLevel+1, "Flags: %d", allStates.size());
+				CogLogTree("INFO_FLAGS", logLevel + 1, "Flags: %d", allStates.size());
 
 				for (unsigned un : allStates) {
 					CogLogTree("INFO_FLAGS", logLevel + 2, StrId(un).GetStringValue().c_str());
@@ -384,7 +474,7 @@ namespace Cog {
 		}
 
 		if (behaviors.size() > 0) {
-			CogLogTree("INFO_BEHAVIOR", logLevel+1, "Behaviors: %d",behaviors.size());
+			CogLogTree("INFO_BEHAVIOR", logLevel + 1, "Behaviors: %d", behaviors.size());
 
 			for (Behavior* beh : behaviors) {
 				CogLogTree("INFO_BEHAVIOR", logLevel + 2, typeid(*beh).name());
@@ -392,7 +482,7 @@ namespace Cog {
 		}
 
 		if (children.size() > 0) {
-			CogLogTree("INFO_NODE_CHILDREN", logLevel+1, "Children: %d", children.size());
+			CogLogTree("INFO_NODE_CHILDREN", logLevel + 1, "Children: %d", children.size());
 			for (Node* child : children) {
 				child->WriteInfo(logLevel + 3);
 			}

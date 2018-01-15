@@ -344,15 +344,8 @@
     <ClInclude Include="src\Misc\Utils.h" />
     <ClInclude Include="src\ofxCogMain.h" />
     <ClInclude Include="src\Scripting\BehaviorLua.h" />
-    <ClInclude Include="src\Scripting\ComponentLua.h" />
     <ClInclude Include="src\Scripting\FacadeLua.h" />
     <ClInclude Include="src\Scripting\LuaMapper.h" />
-    <ClInclude Include="src\Scripting\MsgLua.h" />
-    <ClInclude Include="src\Scripting\NodeBuilderLua.h" />
-    <ClInclude Include="src\Scripting\NodeLua.h" />
-    <ClInclude Include="src\Scripting\ResourcesLua.h" />
-    <ClInclude Include="src\Scripting\SceneLua.h" />
-    <ClInclude Include="src\Scripting\StageLua.h" />
     <ClInclude Include="src\Tests\CoroutineTest.h" />
     <ClInclude Include="src\Tests\EngineTest.h" />
     <ClInclude Include="src\Tests\EngineTestAssets.h" />
@@ -599,15 +592,8 @@
     <ClCompile Include="src\Misc\TimeMeasure.cpp" />
     <ClCompile Include="src\Misc\Utils.cpp" />
     <ClCompile Include="src\Scripting\BehaviorLua.cpp" />
-    <ClCompile Include="src\Scripting\ComponentLua.cpp" />
     <ClCompile Include="src\Scripting\FacadeLua.cpp" />
     <ClCompile Include="src\Scripting\LuaMapper.cpp" />
-    <ClCompile Include="src\Scripting\MsgLua.cpp" />
-    <ClCompile Include="src\Scripting\NodeBuilderLua.cpp" />
-    <ClCompile Include="src\Scripting\NodeLua.cpp" />
-    <ClCompile Include="src\Scripting\ResourcesLua.cpp" />
-    <ClCompile Include="src\Scripting\SceneLua.cpp" />
-    <ClCompile Include="src\Scripting\StageLua.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data\COGAssets\Manifest.xml" />

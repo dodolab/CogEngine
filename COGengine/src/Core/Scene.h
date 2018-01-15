@@ -325,6 +325,11 @@ namespace Cog
 		void FindNodesByGroup(StrId group, vector<Node*>& output) const;
 
 		/**
+		* Finds all nodes by flag
+		*/
+		void FindNodesByFlag(unsigned flag, vector<Node*>& output) const;
+
+		/**
 		* Gets behavior of the scene node by its type
 		* Note: use this method only if you know what you are doing;
 		* in component oriented approach there shouldn't be any direct communication

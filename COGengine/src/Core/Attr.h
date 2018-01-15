@@ -52,6 +52,10 @@ namespace Cog {
 		void* RawVal() const {
 			return rawVal;
 		}
+
+		bool IsShared() {
+			return isShared;
+		}
 	};
 
 

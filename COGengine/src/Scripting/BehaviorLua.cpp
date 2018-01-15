@@ -1,11 +1,8 @@
 #include "BehaviorLua.h"
-#include "MsgLua.h"
 #include "Node.h"
 #include "ofxCogEngine.h"
 #include "LuaScripting.h"
 #include "ComponentStorage.h"
-#include "NodeLua.h"
-#include "SceneLua.h"
 #include <LuaBridge.h>
 #include "AttribAnimator.h"
 
@@ -24,10 +21,7 @@ namespace Cog {
 	}
 
 	void BehaviorLua::OnInit() {
-		if (this->ownerLua == nullptr) {
-			this->ownerLua = new NodeLua(owner);
-			SetOwnerLua(ownerLua);
-		}
+		SetOwnerLua();
 
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
@@ -53,14 +47,14 @@ namespace Cog {
 		Behavior::SendMessage(msg);
 	}
 
-	void BehaviorLua::SetOwnerLua(NodeLua* ownerLua) {
-		this->ownerLua = ownerLua;
-		this->owner = ownerLua->node;
+	void BehaviorLua::SetOwnerLua() {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
-		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
-		auto owner = ref["owner"]; 
-		owner.rawset(ownerLua);
+		if (ref.isNil()) {
+			ofLogError("Lua", "Wrong lua object; expected reference!");
+		}
+		auto ownerLua = ref["owner"];
+		ownerLua.rawset(owner);
 	}
 
 	void BehaviorLua::OnMessage(Msg& msg) {
@@ -69,7 +63,7 @@ namespace Cog {
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto method = ref["OnMessage"];
 		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method OnMessage");
-		method(ref, MsgLua(&msg));
+		method(ref, msg);
 	}
 
 	void BehaviorLua::Update(const uint64 delta, const uint64 absolute) {

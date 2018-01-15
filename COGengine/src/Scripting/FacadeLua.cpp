@@ -5,29 +5,20 @@
 #include "ComponentStorage.h"
 #include "Tween.h"
 #include "Stage.h"
+#include "ResourcesMgr.h"
 #include "EnumConverter.h"
 #include "LuaScripting.h"
-#include "ComponentLua.h"
-#include "ResourcesLua.h"
-#include "StageLua.h"
 
 namespace Cog {
 
-	ResourcesLua* FacadeLua::resLua = nullptr;
-	StageLua* FacadeLua::stageLua = nullptr;
+	template<>
+	static Stage* FacadeLua::CogGetComponent() {
+		return GETCOMPONENT(Stage);
+	}
 
-	ComponentLua* FacadeLua::CogGetComponent(string name) {
-		if (name.compare("Resources") == 0) {
-			if (resLua == nullptr) resLua = new ResourcesLua();
-			return resLua;
-		}
-		else if (name.compare("Stage") == 0) {
-			if (stageLua == nullptr) stageLua = new StageLua();
-			return stageLua;
-		}
-
-		CogLogError("Lua", string_format("Component %s not found!", name.c_str()));
-		return nullptr;
+	template<>
+	static Resources* FacadeLua::CogGetComponent() {
+		return GETCOMPONENT(Resources);
 	}
 
 	void FacadeLua::CogSwitchToScene(string name, string tweenDirection) {
@@ -119,7 +110,7 @@ namespace Cog {
 	}
 
 	int FacadeLua::CogRegisterBehaviorPrototypeCt(luabridge::lua_State* L) {
-		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototypeCt(L);
+		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototype(L);
 	}
 
 	void FacadeLua::InitLuaMapping(luabridge::lua_State* L) {
@@ -144,10 +135,8 @@ namespace Cog {
 			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
 			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
 			.addFunction("CogPreloadXMLFile", &FacadeLua::CogPreloadXMLFile)
-			.addFunction("CogGetComponent", &FacadeLua::CogGetComponent)
-			.addFunction("CogGetComponent", static_cast<ComponentLua*(*)(string)> (&FacadeLua::CogGetComponent))
-			.addFunction("CogGetComponent", reinterpret_cast<ResourcesLua*(*)(string)> (&FacadeLua::CogGetComponent))
-			.addFunction("CogGetComponent", reinterpret_cast<StageLua*(*)(string)> (&FacadeLua::CogGetComponent))
+			.addFunction("CogGetComponent_Stage", &FacadeLua::CogGetComponent<Stage>)
+			.addFunction("CogGetComponent_Resources", &FacadeLua::CogGetComponent<Resources>)
 			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
 	}
 }

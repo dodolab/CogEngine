@@ -20,25 +20,25 @@ namespace Cog {
 		tcpBufferStream = new NetReader(bufferSize);
 	}
 
-	void NetworkManager::SendTCPMessage(tBYTE applicationId, spt<NetOutputMessage> msg) {
+	void NetworkManager::SendTCPMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
 		NetWriter* writer = PrepareMessage(applicationId, msg);
 		auto buffer = writer->GetBuffer();
 		tcpManager.Send((char*)buffer, writer->GetUsedBites() / 8);
 		delete writer;
 	}
 
-	void NetworkManager::SendTCPMessage(tBYTE applicationId, NetWriter* writer) {
+	void NetworkManager::SendTCPMessage(ABYTE applicationId, NetWriter* writer) {
 		NetWriter* writer2 = PrepareMessage(applicationId, writer);
 		auto buffer = writer2->GetBuffer();
 		tcpManager.Send((char*)buffer, writer2->GetUsedBites() / 8);
 		delete writer2;
 	}
 
-	NetReader* NetworkManager::ReceiveTCPMessage(tBYTE applicationId, int timeoutSec) {
+	NetReader* NetworkManager::ReceiveTCPMessage(ABYTE applicationId, int timeoutSec) {
 		return ReceiveMessage(applicationId, timeoutSec, MANAGER_TCP);
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveTCPMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer) {
+	spt<NetInputMessage> NetworkManager::ReceiveTCPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
 		return ReceiveMessage(applicationId, timeoutSec, emptyBuffer, MANAGER_TCP);
 	}
 
@@ -55,29 +55,29 @@ namespace Cog {
 		udpBufferStream = new NetReader(bufferSize);
 	}
 
-	void NetworkManager::SendUDPMessage(tBYTE applicationId, spt<NetOutputMessage> msg) {
+	void NetworkManager::SendUDPMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
 		NetWriter* writer = PrepareMessage(applicationId, msg);
 		auto buffer = writer->GetBuffer();
 		udpManager.Send((char*)buffer, writer->GetUsedBites() / 8);
 		delete writer;
 	}
 
-	void NetworkManager::SendUDPMessage(tBYTE applicationId, NetWriter* writer) {
+	void NetworkManager::SendUDPMessage(ABYTE applicationId, NetWriter* writer) {
 		NetWriter* writer2 = PrepareMessage(applicationId, writer);
 		auto buffer = writer2->GetBuffer();
 		udpManager.Send((char*)buffer, writer2->GetUsedBites() / 8);
 		delete writer2;
 	}
 
-	NetReader* NetworkManager::ReceiveUDPMessage(tBYTE applicationId, int timeoutSec) {
+	NetReader* NetworkManager::ReceiveUDPMessage(ABYTE applicationId, int timeoutSec) {
 		return ReceiveMessage(applicationId, timeoutSec, MANAGER_UDP);
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveUDPMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer) {
+	spt<NetInputMessage> NetworkManager::ReceiveUDPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
 		return ReceiveMessage(applicationId, timeoutSec, emptyBuffer, MANAGER_UDP);
 	}
 
-	NetWriter* NetworkManager::PrepareMessage(tBYTE applicationId, spt<NetOutputMessage> msg) {
+	NetWriter* NetworkManager::PrepareMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
 		NetWriter* writer = new NetWriter(msg->GetMessageLength() + 1);
 		// write application id and the content
 		writer->WriteByte(applicationId);
@@ -85,7 +85,7 @@ namespace Cog {
 		return writer;
 	}
 
-	NetWriter* NetworkManager::PrepareMessage(tBYTE applicationId, NetWriter* writer) {
+	NetWriter* NetworkManager::PrepareMessage(ABYTE applicationId, NetWriter* writer) {
 		NetWriter* writer2 = new NetWriter(writer->GetUsedBites() * 8 + 1);
 		// write application id and the content
 		writer2->WriteByte(applicationId);
@@ -93,7 +93,7 @@ namespace Cog {
 		return writer2;
 	}
 
-	NetReader* NetworkManager::ReceiveMessage(tBYTE applicationId, int timeoutSec, int managerType) {
+	NetReader* NetworkManager::ReceiveMessage(ABYTE applicationId, int timeoutSec, int managerType) {
 		auto bufferStream = managerType == MANAGER_TCP ? tcpBufferStream : udpBufferStream;
 		
 		auto time = ofGetElapsedTimeMillis();
@@ -128,7 +128,7 @@ namespace Cog {
 		}
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveMessage(tBYTE applicationId, int timeoutSec, bool emptyBuffer, int managerType) {
+	spt<NetInputMessage> NetworkManager::ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, int managerType) {
 		auto bufferStream = managerType == MANAGER_TCP ? tcpBufferStream : udpBufferStream;
 
 		auto time = ofGetElapsedTimeMillis();

@@ -43,7 +43,11 @@ namespace Cog {
 		return behLua;
 	}
 
-	int LuaScripting::RegisterBehaviorPrototypeCt(luabridge::lua_State* L) {
+	int LuaScripting::RegisterBehaviorPrototype(luabridge::lua_State* L) {
+		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototypeCtInternal(L);
+	}
+
+	int LuaScripting::RegisterBehaviorPrototypeCtInternal(luabridge::lua_State* L) {
 		COGASSERT(lua_gettop(L) == 2, "Lua", "Wrong registration call! Expected two parameters: registered object and its name");
 
 		// get behavior name and register this object
@@ -119,5 +123,6 @@ namespace Cog {
 			}
 		}
 	}
+
 
 } // namespace

@@ -37,27 +37,27 @@ namespace Cog {
 	private:
 		NetworkManager* network = nullptr;
 		NetworkComState networkState = NetworkComState::NONE;
-		tBYTE applicationId;
+		ABYTE applicationId;
 		int myPort;
 		int peerPort;
 		string peerIp = "";
 
 		// collection of ids of messages for acceptation
-		set<tBYTE> forAcceptationMessageIds;
+		set<ABYTE> forAcceptationMessageIds;
 		// collection of times of messages for acceptation
 		set<uint64> forAcceptationMessageTimes;
 		// identifier of last received message
-		tBYTE lastReceivedMsgId = -1;
+		ABYTE lastReceivedMsgId = -1;
 		// time of last received message
 		uint64 lastReceivedMsgTime = 0;
 		// identifier of last sent message
-		tBYTE lastSentMsgId = 0;
+		ABYTE lastSentMsgId = 0;
 		// collection of messages that will be sent in the next update
 		vector<spt<NetOutputMessage>> messagesToSend;
 		// collection of discovered peers, mapped by their ips
 		map<string, uint64> discoveredPeers;
 		// collection of not confirmed messages that will be re-sent repeatedly
-		map<tBYTE, spt<NetOutputMessage>> unconfirmedMessages;
+		map<ABYTE, spt<NetOutputMessage>> unconfirmedMessages;
 		
 		// number of broadcasts per second
 		float broadcastingFrequency = 1;
@@ -93,7 +93,7 @@ namespace Cog {
 		/**
 		* Gets id of application that is checked with each incomming message
 		*/
-		tBYTE GetApplicationId() const {
+		ABYTE GetApplicationId() const {
 			return applicationId;
 		}
 
@@ -226,7 +226,7 @@ namespace Cog {
 		* @param myPort port this communicator will listen on
 		* @param peerPort port of the peer
 		*/
-		void InitBroadcast(tBYTE applicationId, int myPort, int peerPort);
+		void InitBroadcast(ABYTE applicationId, int myPort, int peerPort);
 
 		/**
 		* Initializes listening mode, waiting for other peers to connect
@@ -234,7 +234,7 @@ namespace Cog {
 		* checked in every received message
 		* @param myPort port this communicator will listen on
 		*/
-		void InitListening(tBYTE applicationId, int myPort);
+		void InitListening(ABYTE applicationId, int myPort);
 
 		/**
 		* Pushes message that will be sent with the next update

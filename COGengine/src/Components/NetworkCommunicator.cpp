@@ -9,7 +9,7 @@
 
 namespace Cog {
 
-	void NetworkCommunicator::InitBroadcast(tBYTE applicationId, int myPort, int peerPort) {
+	void NetworkCommunicator::InitBroadcast(ABYTE applicationId, int myPort, int peerPort) {
 		Close();
 
 		this->applicationId = applicationId;
@@ -22,7 +22,7 @@ namespace Cog {
 		networkState = NetworkComState::DISCOVERING;
 	}
 
-	void NetworkCommunicator::InitListening(tBYTE applicationId, int port) {
+	void NetworkCommunicator::InitListening(ABYTE applicationId, int port) {
 		Close();
 
 		this->applicationId = applicationId;
@@ -137,7 +137,7 @@ namespace Cog {
 
 	void NetworkCommunicator::UpdateDiscovering(const uint64 absolute) {
 		// check if it is time to broadcast
-		if (IsProperTime(lastBroadcastTime, absolute, broadcastingFrequency)) {
+		if (CheckTime(lastBroadcastTime, absolute, broadcastingFrequency)) {
 			lastBroadcastTime = absolute;
 
 			spt<NetOutputMessage> msg = spt<NetOutputMessage>(new NetOutputMessage(lastReceivedMsgId, NetMsgType::DISCOVER_REQUEST));
@@ -151,7 +151,7 @@ namespace Cog {
 			network->SetupUDPSender("127.0.0.1", peerPort, true);
 			network->SendUDPMessage(applicationId, msg);
 		}
-		else if (IsProperTime(lastDiscoveringTime, absolute, connectingFrequency)) {
+		else if (CheckTime(lastDiscoveringTime, absolute, connectingFrequency)) {
 
 			lastDiscoveringTime = absolute;
 
@@ -175,7 +175,7 @@ namespace Cog {
 
 	void NetworkCommunicator::UpdateConnecting(const uint64 absolute) {
 
-		if (IsProperTime(lastConnectingTime, absolute, connectingFrequency)) {
+		if (CheckTime(lastConnectingTime, absolute, connectingFrequency)) {
 			lastConnectingTime = absolute;
 			// send connection request
 			auto msg = spt<NetOutputMessage>(new NetOutputMessage(0, NetMsgType::CONNECT_REQUEST));
@@ -234,7 +234,7 @@ namespace Cog {
 
 			if ((type == NetMsgType::UPDATE || type == NetMsgType::ACCEPT)) {
 
-				tBYTE acceptedMsgId = message->GetAcceptedId();
+				ABYTE acceptedMsgId = message->GetAcceptedId();
 				if (acceptedMsgId != 0) {
 					// got id of accepted message
 					COGLOGDEBUG("Network_sync", "received acceptation of %d ", (int)acceptedMsgId);
@@ -305,7 +305,7 @@ namespace Cog {
 			}
 		}
 
-		if (IsProperTime(lastSendingTime, absolute, sendingFrequency)) {
+		if (CheckTime(lastSendingTime, absolute, sendingFrequency)) {
 			lastSendingTime = absolute;
 
 			// send all messages

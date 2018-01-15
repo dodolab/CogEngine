@@ -53,17 +53,17 @@ namespace Cog {
 		// source port
 		int sourcePort;
 		// synchronization id
-		tBYTE syncId = 0;
+		ABYTE syncId = 0;
 		// acceptation id (only for messages sent from clients to host)
-		tBYTE acceptedId = 0;
+		ABYTE acceptedId = 0;
 		// type of message
 		NetMsgType msgType = NetMsgType::UPDATE;
 		// type of action
 		StrId action = StrId();
 		// the time at which the message was created
-		tDWORD msgTime = 0;
+		ADWORD msgTime = 0;
 		// data payload
-		tBYTE* data = nullptr;
+		ABYTE* data = nullptr;
 		// length of data payload
 		int dataLength = 0;
 
@@ -81,7 +81,7 @@ namespace Cog {
 		* @param messageLength length of the data payload
 		* @param syncId synchronization id
 		*/
-		NetInputMessage(int messageLength, tBYTE syncId) : NetInputMessage(messageLength) {
+		NetInputMessage(int messageLength, ABYTE syncId) : NetInputMessage(messageLength) {
 			this->syncId = syncId;
 		}
 
@@ -91,7 +91,7 @@ namespace Cog {
 		* @param syncId synchronization id
 		* @param msgType type of the message
 		*/
-		NetInputMessage(int messageLength, tBYTE syncId, NetMsgType msgType)
+		NetInputMessage(int messageLength, ABYTE syncId, NetMsgType msgType)
 			: NetInputMessage(messageLength, syncId) {
 			this->msgType = msgType;
 		}
@@ -117,14 +117,14 @@ namespace Cog {
 		/**
 		* Gets synchronization id
 		*/
-		tBYTE GetSyncId() const {
+		ABYTE GetSyncId() const {
 			return syncId;
 		}
 
 		/**
 		* Gets acceptation id
 		*/
-		tBYTE GetAcceptedId() const {
+		ABYTE GetAcceptedId() const {
 			return acceptedId;
 		}
 
@@ -138,7 +138,7 @@ namespace Cog {
 		/**
 		* Gets message time
 		*/
-		tDWORD GetMsgTime() const {
+		ADWORD GetMsgTime() const {
 			return msgTime;
 		}
 
@@ -152,7 +152,7 @@ namespace Cog {
 		/**
 		* Gets data payload
 		*/
-		tBYTE* GetData() const {
+		ABYTE* GetData() const {
 			return data;
 		}
 
@@ -211,15 +211,15 @@ namespace Cog {
 	class NetOutputMessage {
 	private:
 		// synchronization id
-		tBYTE syncId = 0;
+		ABYTE syncId = 0;
 		// acceptation id
-		tBYTE acceptedId = 0;
+		ABYTE acceptedId = 0;
 		// type of message
 		NetMsgType msgType = NetMsgType::UPDATE;
 		// type of action
 		StrId action = StrId();
 		// time in which the message was sent
-		tDWORD msgTime = 0;
+		ADWORD msgTime = 0;
 		// data payload
 		NetData* data = nullptr;
 
@@ -229,7 +229,7 @@ namespace Cog {
 		* Creates a new output message
 		* @param syncId synchronization id
 		*/
-		NetOutputMessage(tBYTE syncId) : syncId(syncId) {
+		NetOutputMessage(ABYTE syncId) : syncId(syncId) {
 
 		}
 
@@ -238,7 +238,7 @@ namespace Cog {
 		* @param syncId synchronization id
 		* @param msgType type of the message
 		*/
-		NetOutputMessage(tBYTE syncId, NetMsgType msgType) 
+		NetOutputMessage(ABYTE syncId, NetMsgType msgType) 
 			: syncId(syncId), msgType(msgType) {
 
 		}
@@ -250,28 +250,28 @@ namespace Cog {
 		/**
 		* Gets synchronization id
 		*/
-		tBYTE GetSyncId() const {
+		ABYTE GetSyncId() const {
 			return syncId;
 		}
 
 		/**
 		* Sets synchronization id
 		*/
-		void SetSyncId(tBYTE syncId) {
+		void SetSyncId(ABYTE syncId) {
 			this->syncId = syncId;
 		}
 
 		/**
 		* Gets acceptation id
 		*/
-		tBYTE GetAcceptedId() const {
+		ABYTE GetAcceptedId() const {
 			return acceptedId;
 		}
 
 		/**
 		* Sets acceptation id
 		*/
-		void SetAcceptedId(tBYTE id) {
+		void SetAcceptedId(ABYTE id) {
 			this->acceptedId = id;
 		}
 
@@ -292,14 +292,14 @@ namespace Cog {
 		/**
 		* Gets the time in which the message was sent
 		*/
-		tDWORD GetMsgTime() const {
+		ADWORD GetMsgTime() const {
 			return msgTime;
 		}
 
 		/**
 		* Sets the time in which the message will be sent
 		*/
-		void SetMsgTime(tDWORD time) {
+		void SetMsgTime(ADWORD time) {
 			this->msgTime = time;
 		}
 
