@@ -1050,6 +1050,9 @@
     <ClCompile Include="libs\lua\print.c">
       <Filter>libs\lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Constants.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Data\COGAssets\Manifest.xml">

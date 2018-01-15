@@ -305,19 +305,19 @@ namespace Cog
 		void FindNodesByTag(char* tag, vector<Node*>& output) const;
 
 		/**
-		* Gets number of nodes with given secondary id
+		* Gets number of nodes with given network id
 		*/
-		int GetNodesCountBySecondaryId(int secondaryID) const;
+		int GetNodesCountByNetworkId(int networkId) const;
 
 		/**
-		* Finds the first node with given secondary id
+		* Finds the first node with given network id
 		*/
-		Node* FindNodeBySecondaryId(int secondaryId) const;
+		Node* FindNodeByNetworkId(int networkId) const;
 
 		/**
-		* Finds all nodes by secondary id
+		* Finds all nodes by network id
 		*/
-		void FindNodesBySecondaryId(int secondaryId, vector<Node*>& output) const;
+		void FindNodesByNetworkId(int networkId, vector<Node*>& output) const;
 
 		/**
 		* Finds all nodes by group

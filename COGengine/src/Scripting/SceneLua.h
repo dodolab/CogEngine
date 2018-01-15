@@ -49,11 +49,9 @@ namespace Cog {
 
 		NodeLua* FindNodeByTag(string tag) const;
 
-		NodeLua* FindNodeBySecondaryId(int secondaryId) const;
+		NodeLua* FindNodeByNetworkId(int networkId) const;
 
 		void Reload();
-
-		static void InitLuaMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

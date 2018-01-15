@@ -482,6 +482,7 @@ private:
       }
       else
       {
+		lua_getmetatable(L, -1);
         rawgetfield (L, -1, "__class");
         rawgetfield (L, -1, "__const");
 

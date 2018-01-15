@@ -99,7 +99,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -137,7 +137,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUA_SCRIPTING;SQLITE_DB;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -560,6 +560,7 @@
     <ClCompile Include="src\Core\AsyncProcess.cpp" />
     <ClCompile Include="src\Core\Behavior.cpp" />
     <ClCompile Include="src\Core\ComponentStorage.cpp" />
+    <ClCompile Include="src\Core\Constants.cpp" />
     <ClCompile Include="src\Core\ofxCogApp.cpp" />
     <ClCompile Include="src\Core\ofxCogEngine.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />

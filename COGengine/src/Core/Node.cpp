@@ -9,15 +9,15 @@ namespace Cog {
 	// first id is always 1
 	int Node::idCounter = 1;
 
-	Node::Node(string tag) : type(NODETYPE_OBJECT), secondaryId(0), id(idCounter++), transform(0, 0) {
+	Node::Node(string tag) : type(NODETYPE_OBJECT), networkId(0), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(stenum type, int secondaryId, string tag) : type(type), secondaryId(secondaryId), id(idCounter++), transform(0, 0) {
+	Node::Node(stenum type, int networkId, string tag) : type(type), networkId(networkId), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
 
-	Node::Node(const Node& copy) : type(copy.type), secondaryId(copy.secondaryId), id(idCounter++), transform(0, 0) {
+	Node::Node(const Node& copy) : type(copy.type), networkId(copy.networkId), id(idCounter++), transform(0, 0) {
 		tag = copy.tag;
 		attributes = copy.attributes;
 		behaviors = copy.behaviors;
@@ -208,7 +208,6 @@ namespace Cog {
 			for (auto it = childrenToRemove.begin(); it != childrenToRemove.end(); ++it) {
 				if ((*it).first->GetId() == child->GetId()) return true;
 			}
-
 			childrenToRemove.push_back(std::make_pair(child, erase));
 
 		}

@@ -34,8 +34,8 @@ namespace Cog {
 		string tag = "";
 		// object type {ROOT, SCENE, OBJECT}
 		stenum type;
-		// secondary identifier (customizable, doesn't need to be unique)
-		int secondaryId;
+		// network identifier
+		int networkId;
 		// groups this objects belongs to
 		Flags* groups = nullptr;
 		// states of this object
@@ -46,7 +46,7 @@ namespace Cog {
 		spt<Mesh> mesh = spt<Mesh>(new Mesh(MESH_NONE));
 		// running mode
 		stenum runMode = RUNMODE_RUNNING;
-		// indicator, if this node is external and therefore it shouldn't be deleted
+		// indicator, if this node is allocated via a custom allocator and therefore it shouldn't be deleted
 		bool isExternal = false;
 
 		// attributes, mapped by their keys
@@ -123,17 +123,17 @@ namespace Cog {
 		}
 
 		/**
-		* Gets secondary id
+		* Gets network id
 		*/
-		int GetSecondaryId() const {
-			return secondaryId;
+		int GetNewtorkId() const {
+			return networkId;
 		}
 
 		/**
 		* Sets secondary id
 		*/
-		void SetSecondaryId(int val) {
-			this->secondaryId = val;
+		void SetNetworkId(int val) {
+			this->networkId = val;
 		}
 
 
@@ -341,7 +341,7 @@ namespace Cog {
 		bool AddBehavior(Behavior* beh);
 
 		/**
-		* Removes existing behavior
+		* Removes an existing behavior
 		* @param beh behavior to remove
 		* @param erase if true, behavior will be destroyed
 		* @return true, if behavior has added to the collection for removal

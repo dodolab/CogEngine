@@ -48,8 +48,8 @@ namespace Cog {
 		else return nullptr;
 	}
 
-	NodeLua* SceneLua::FindNodeBySecondaryId(int secondaryId) const {
-		auto node = scene->FindNodeBySecondaryId(secondaryId);
+	NodeLua* SceneLua::FindNodeByNetworkId(int networkId) const {
+		auto node = scene->FindNodeByNetworkId(networkId);
 		if (node != nullptr) return new NodeLua(node);
 		else return nullptr;
 	}
@@ -58,20 +58,5 @@ namespace Cog {
 		scene->Reload();
 	}
 
-	void SceneLua::InitLuaMapping(luabridge::lua_State* L) {
-		luabridge::getGlobalNamespace(L)
-			.beginClass<SceneLua>("Scene")
-			.addFunction("FindBehaviorById", &SceneLua::FindBehaviorById)
-			.addFunction("FindNodeById", &SceneLua::FindNodeById)
-			.addFunction("FindNodeBySecondaryId", &SceneLua::FindNodeBySecondaryId)
-			.addFunction("FindNodeByTag", &SceneLua::FindNodeByTag)
-			.addProperty("name", &SceneLua::GetName, &SceneLua::SetName)
-			.addFunction("GetSceneNode", &SceneLua::GetSceneNode)
-			.addFunction("Initialized", &SceneLua::Initialized)
-			.addFunction("Loaded", &SceneLua::Loaded)
-			.addFunction("SendMessage", &SceneLua::SendMessage)
-			.addFunction("Reload", &SceneLua::Reload)
-			.endClass();
-	}
 
 } // namespace

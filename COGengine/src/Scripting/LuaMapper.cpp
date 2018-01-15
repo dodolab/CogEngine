@@ -190,11 +190,39 @@ namespace Cog {
 			.endClass();
 
 
+		luabridge::getGlobalNamespace(L)
+			.beginClass<SceneLua>("Scene")
+			.addFunction("FindBehaviorById", &SceneLua::FindBehaviorById)
+			.addFunction("FindNodeById", &SceneLua::FindNodeById)
+			.addFunction("FindNodeByNetworkId", &SceneLua::FindNodeByNetworkId)
+			.addFunction("FindNodeByTag", &SceneLua::FindNodeByTag)
+			.addProperty("name", &SceneLua::GetName, &SceneLua::SetName)
+			.addFunction("GetSceneNode", &SceneLua::GetSceneNode)
+			.addFunction("Initialized", &SceneLua::Initialized)
+			.addFunction("Loaded", &SceneLua::Loaded)
+			.addFunction("SendMessage", &SceneLua::SendMessage)
+			.addFunction("Reload", &SceneLua::Reload)
+			.endClass();
 
-		BehaviorLua::InitLuaMapping(L);
+		luabridge::getGlobalNamespace(L)
+			.beginClass<BehaviorLua>("BehaviorProxy")
+			.addConstructor<void(*)(void)>()
+			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
+			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
+			.addFunction("SendMessage", &BehaviorLua::SendMessage)
+			.addData("owner", &BehaviorLua::ownerLua)
+			.endClass();
+
+		/*
+		luabridge::getGlobalNamespace(L)
+			.beginClass<AttribAnimator>("AttribAnimator")
+			.addConstructor<void(*)()>()
+			.addFunction("Load", &AttribAnimator::Load)
+			.endClass();
+			*/
+
 		MsgLua::InitLuaMapping(L);
 		NodeLua::InitLuaMapping(L);
-		SceneLua::InitLuaMapping(L);
 		FacadeLua::InitLuaMapping(L);
 		ComponentLua::InitLuaMapping(L);
 		ResourcesLua::InitLuaMapping(L);

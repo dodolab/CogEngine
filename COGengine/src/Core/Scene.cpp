@@ -239,25 +239,25 @@ namespace Cog {
 		}
 	}
 
-	int Scene::GetNodesCountBySecondaryId(int secondaryId) const {
+	int Scene::GetNodesCountByNetworkId(int networkId) const {
 		int counter = 0;
 
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSecondaryId() == secondaryId) counter++;
+			if ((*it)->GetNewtorkId() == networkId) counter++;
 		}
 		return counter;
 	}
 
-	Node* Scene::FindNodeBySecondaryId(int secondaryId) const {
+	Node* Scene::FindNodeByNetworkId(int networkId) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSecondaryId() == secondaryId) return (*it);
+			if ((*it)->GetNewtorkId() == networkId) return (*it);
 		}
 		return nullptr;
 	}
 
-	void Scene::FindNodesBySecondaryId(int subtype, vector<Node*>&output) const {
+	void Scene::FindNodesByNetworkId(int subtype, vector<Node*>&output) const {
 		for (auto it = allNodes.begin(); it != allNodes.end(); ++it) {
-			if ((*it)->GetSecondaryId() == subtype) output.push_back(*it);
+			if ((*it)->GetNewtorkId() == subtype) output.push_back(*it);
 		}
 	}
 

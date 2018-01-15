@@ -41,8 +41,6 @@ namespace Cog {
 
 		void SubscribeForMessagesLua(StrId action);
 
-		SceneLua GetScene();
-
 		static void InitLuaMapping(luabridge::lua_State* L);
 	};
 

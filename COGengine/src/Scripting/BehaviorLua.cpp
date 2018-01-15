@@ -32,6 +32,8 @@ namespace Cog {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
+		
+		// call OnInit function
 		auto init = ref["OnInit"];
 		COGASSERT(!init.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		init(ref);
@@ -40,6 +42,7 @@ namespace Cog {
 	int BehaviorLua::RegisterDelegateCt(luabridge::lua_State* L) {
 		COGASSERT(lua_gettop(L) == 2, "BehaviorLua", "Wrong registration call! Expected one parameter: registered object");
 				
+		// get reference from Lua stack
 		int r = luaL_ref(L, LUA_REGISTRYINDEX);
 		lua_rawgeti(L, LUA_REGISTRYINDEX, r);
 		this->reference = r;
@@ -76,34 +79,13 @@ namespace Cog {
 		COGASSERT(!ref.isNil(), "BehaviorLua", "Wrong lua object; expected reference");
 		auto method = ref["Update"];
 		COGASSERT(!method.isNil(), "BehaviorLua", "Wrong lua object; expected method Update");
-		method(ref, (int)delta, (int)absolute);
+
+		// uint64_t doesn't work here 
+		method(ref, (unsigned)delta, (unsigned)absolute);
 	}
 
 	void BehaviorLua::SubscribeForMessagesLua(StrId action) {
 		SubscribeForMessages(action);
-	}
-
-	SceneLua BehaviorLua::GetScene() {
-		return SceneLua(this->owner->GetScene());
-	}
-
-	void BehaviorLua::InitLuaMapping(luabridge::lua_State* L) {
-		luabridge::getGlobalNamespace(L)
-			.beginClass<BehaviorLua>("BehaviorProxy")
-			.addConstructor<void(*)(void)>()
-			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
-			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
-			.addFunction("SendMessage", &BehaviorLua::SendMessage)
-			.addFunction("GetScene", &BehaviorLua::GetScene)
-			.addData("owner", &BehaviorLua::ownerLua)
-			.endClass();
-
-		luabridge::getGlobalNamespace(L)
-			.beginClass<AttribAnimator>("AttribAnimator")
-			.addConstructor<void(*)()>()
-			.addFunction("Load", &AttribAnimator::Load)
-			.endClass();
-
 	}
 
 } // namespace
