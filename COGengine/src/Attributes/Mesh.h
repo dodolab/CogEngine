@@ -7,8 +7,8 @@
 #include "ofImage.h"
 #include "Definitions.h"
 #include "Sprite.h"
-#include "SpriteInst.h"
 #include "Constants.h"
+#include "BoundingBox.h"
 
 using namespace std;
 
@@ -26,6 +26,8 @@ namespace Cog {
 		ofColor color;
 		float width = 1;
 		float height = 1;
+		BoundingBox boundingBox = BoundingBox();
+		bool isVisible = true;
 	public:
 
 		Mesh() {
@@ -58,6 +60,11 @@ namespace Cog {
 			this->color = color;
 		}
 
+		BoundingBox& GetBoundingBox() {
+			return boundingBox;
+		}
+
+
 		virtual float GetWidth() const {
 			return width;
 		}
@@ -73,19 +80,29 @@ namespace Cog {
 		virtual void SetHeight(float height) {
 			this->height = height;
 		}
+
+		bool IsVisible() const {
+			return isVisible;
+		}
+
+		void SetIsVisible(bool isVisible) {
+			this->isVisible = isVisible;
+		}
+
+		void UpdateBoundingBox(Trans& ownerTransform);
 	};
 
 	/**
 	* Renderable rectangle
 	*/
-	class Rectangle : public Mesh {
+	class FRect : public Mesh {
 	private:
 		// indicator, if only borders should be drawn
 		bool noFill = false;
 		// indicator, if the rectangle is renderable at all
 		bool renderable = true;
 	public:
-		Rectangle(float width, float height)
+		FRect(float width, float height)
 			: Mesh(MESH_RECTANGLE, width, height) {
 		}
 
@@ -115,6 +132,52 @@ namespace Cog {
 		*/
 		void SetIsRenderable(bool isRenderable) {
 			this->renderable = isRenderable;
+		}
+	};
+
+	/**
+	* Node circle
+	*/
+	class FCircle : public Mesh {
+	private:
+		// indicator, if only borders should be drawn
+		bool noFill = false;
+	public:
+		FCircle(float radius)
+			: Mesh(MESH_CIRCLE, radius * 2, radius * 2) {
+		}
+
+		FCircle(float radius, ofColor color)
+			: Mesh(MESH_CIRCLE, radius * 2, radius * 2) {
+			this->color = color;
+		}
+
+		FCircle(float radius, ofColor color, bool noFill)
+			: Mesh(MESH_CIRCLE, radius * 2, radius * 2) {
+			this->color = color;
+			this->noFill = noFill;
+		}
+
+		/**
+		* Gets indicator whether only borders should be drawn
+		*/
+		bool IsNoFill() const {
+			return noFill;
+		}
+
+		/**
+		* Sets the indicator whether only borders should be drawn
+		*/
+		void SetNoFill(bool noFill) {
+			this->noFill = noFill;
+		}
+
+		float GetRadius() const {
+			return width / 2;
+		}
+
+		void SetRadius(float radius) {
+			this->width = this->height = radius * 2;
 		}
 	};
 
@@ -298,14 +361,12 @@ namespace Cog {
 	private:
 		// sprite entity
 		Sprite sprite;
-		// sprite set this sprite makes a part
-		spt<SpriteSet> spriteSet;
-		// name of layer or sprite sheet this shape belongs to
+		// name of layer or sprite sheet this sprite belongs to
 		string layerName;
 	public:
 
-		SpriteMesh(Sprite& sprite, spt<SpriteSet> spriteSet, string layerName)
-			: Mesh(MESH_SPRITE), sprite(sprite), spriteSet(spriteSet), layerName(layerName) {
+		SpriteMesh(const Sprite& sprite, string layerName)
+			: Mesh(MESH_SPRITE), sprite(sprite), layerName(layerName) {
 		}
 
 		/**
@@ -324,25 +385,21 @@ namespace Cog {
 			this->sprite = sprite;
 		}
 
-		spt<SpriteSet> GetSpriteSet() const {
-			return spriteSet;
-		}
 
-
-		float GetWidth() const override  {
+		float GetWidth() const override {
 			return sprite.GetWidth();
 		}
 
-		float GetHeight() const override  {
+		float GetHeight() const override {
 			return sprite.GetHeight();
 		}
 
 		void SetWidth(float width) override {
-			CogLogError("Mesh", "Width of mesh of type Sprite can't be changed!");
+			ofLogError("Mesh", "Width of mesh of type Sprite can't be changed!");
 		}
 
 		void SetHeight(float height) override {
-			CogLogError("Mesh", "Height of mesh of type Sprite can't be changed!");
+			ofLogError("Mesh", "Height of mesh of type Sprite can't be changed!");
 		}
 	};
 
@@ -351,8 +408,8 @@ namespace Cog {
 	*/
 	class MultiSpriteMesh : public Mesh {
 	private:
-		vector<spt<SpriteInst>> sprites;
-		// name of the layer or sprite sheet this sprites is made of
+		vector<Sprite*> sprites;
+		// name of the layer or sprite sheet this sprites belong to
 		string layerName;
 
 	public:
@@ -362,46 +419,65 @@ namespace Cog {
 			height = 1;
 		}
 
-		MultiSpriteMesh(string layerName, vector<spt<SpriteInst>>& sprites)
+		MultiSpriteMesh(string layerName, vector<Sprite*>& sprites)
 			: Mesh(MESH_MULTISPRITE), layerName(layerName), sprites(sprites) {
 			width = 1;
 			height = 1;
 			Recalc();
 		}
 
-		vector<spt<SpriteInst>>& GetSprites() {
+		vector<Sprite*>& GetSprites() {
 			return sprites;
 		}
 
+		Sprite* GetSprite(int index) {
+			return sprites[index];
+		}
+
+		int GetSpritesNum() const {
+			return sprites.size();
+		}
+
 		/**
-		* Recalculates size of this shape, according to collection of sprites
+		* Recalculates size of this shape, according to the collection of sprites
 		*/
 		void Recalc();
 
 		/**
-		* Sorts all sprites by their z-index, starting at the furthest
+		* Sorts all sprites by their z-index, starting with the furthest
 		*/
 		void RefreshZIndex();
 
 		/**
-		* Adds a new sprite
-		* Note: don't forget to call RefreshZIndex when finish
-		*/
-		void AddSprite(spt<SpriteInst> entity) {
-			sprites.push_back(entity);
+		* Adds a new sprite	*/
+		void AddSprite(Sprite* sprite) {
+			sprites.push_back(sprite);
 		}
 
 		/**
 		* Removes sprite
 		*/
-		void RemoveSprite(spt<SpriteInst> entity) {
-			auto found = find(sprites.begin(), sprites.end(), entity);
+		void RemoveSprite(Sprite* sprite, bool erase = true) {
+			auto found = find(sprites.begin(), sprites.end(), sprite);
 			if (found != sprites.end()) {
 				sprites.erase(found);
 			}
+
+			if (erase) {
+				delete sprite;
+			}
 		}
 
-		string GetLayerName() const {
+		void RemoveAllSprites(bool erase = true) {
+			if (erase) {
+				for (auto& spr : sprites) {
+					delete spr;
+				}
+			}
+			sprites.clear();
+		}
+
+		string& GetLayerName() {
 			return layerName;
 		}
 
@@ -420,11 +496,11 @@ namespace Cog {
 		}
 
 		void SetWidth(float width) override {
-			CogLogError("Mesh", "Width of mesh of type MultiSprite can't be changed!");
+			ofLogError("Mesh", "Width of mesh of type MultiSprite can't be changed!");
 		}
 
 		void SetHeight(float height) override {
-			CogLogError("Mesh", "Height of mesh of type MultiSprite can't be changed!");
+			ofLogError("Mesh", "Height of mesh of type MultiSprite can't be changed!");
 		}
 	};
 
@@ -432,7 +508,7 @@ namespace Cog {
 	* Renderable bounding box that sets its size according to children
 	* of the selected node
 	*/
-	class BoundingBox : public Mesh {
+	class BoundingBoxMesh : public Mesh {
 	private:
 		// indicator, if the box should be rendered
 		bool renderable = true;
@@ -448,7 +524,7 @@ namespace Cog {
 		* @param margin margin in percentage size of the inner box
 		* @param renderable indicator whether this box should be rendered
 		*/
-		BoundingBox(float width, float height, float margin, bool renderable)
+		BoundingBoxMesh(float width, float height, float margin, bool renderable)
 			: margin(margin), renderable(renderable),
 			Mesh(MESH_BOUNDING_BOX, width, height) {
 		}
@@ -496,4 +572,5 @@ namespace Cog {
 		}
 
 	};
+
 }// namespace

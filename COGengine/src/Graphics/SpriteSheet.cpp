@@ -1,73 +1,43 @@
 #include "SpriteSheet.h"
-#include "Error.h"
 #include "Facade.h"
 
 namespace Cog {
 
-	SpriteSheet::SpriteSheet(string name, spt<ofImage> spriteImage) : name(name), spriteImage(spriteImage) {
-		sprites = vector<spt<SpriteSet>>();
+	SpriteSheet::SpriteSheet(spt<ofImage> spriteAtlas, string spriteAtlasName, string sheetName, int totalFrames,
+		int spriteWidth, int spriteHeight)
+		: SpriteSheet(spriteAtlas, spriteAtlasName, sheetName, 0, 0, totalFrames, spriteWidth, spriteHeight, 0, 0) {
+
+		spriteSheetWidth = spriteAtlas->getWidth();
+		spriteSheetHeight = spriteAtlas->getHeight();
 	}
 
-	SpriteSheet::SpriteSheet(string name, spt<ofImage> spriteImage, int totalFrames, int spriteWidth, int spriteHeight) : SpriteSheet(name, spriteImage) {
-		AddSpriteSet(name, totalFrames, spriteWidth, spriteHeight);
+	SpriteSheet::SpriteSheet(spt<ofImage> spriteAtlas, string spriteAtlasName, string sheetName, int totalFrames,
+		int spriteWidth, int spriteHeight, int spriteSheetWidth, int spriteSheetHeight)
+		: SpriteSheet(spriteAtlas, spriteAtlasName, sheetName, 0, 0, totalFrames, spriteWidth, spriteHeight, spriteSheetWidth, spriteSheetHeight) {
+
 	}
 
-	spt<SpriteSet> SpriteSheet::AddSpriteSet(string name, int totalFrames, int spriteWidth, int spriteHeight) {
-		return AddSpriteSet(name, 0, 0, totalFrames, spriteWidth, spriteHeight, (int)spriteImage->getWidth(), (int)spriteImage->getHeight());
+	SpriteSheet::SpriteSheet(spt<ofImage> spriteAtlas, string spriteAtlasName, string sheetName, int offsetX, int offsetY, int totalFrames,
+		int spriteWidth, int spriteHeight, int spriteSheetWidth, int spriteSheetHeight)
+		: spriteAtlas(spriteAtlas), spriteAtlasName(spriteAtlasName), name(sheetName), offsetX(offsetX), offsetY(offsetY), totalFrames(totalFrames), spriteWidth(spriteWidth),
+		spriteHeight(spriteHeight), spriteSheetWidth(spriteSheetWidth), spriteSheetHeight(spriteSheetHeight) {
+
+		spriteAtlasWidth = spriteAtlas->getWidth();
+		spriteAtlasHeight = spriteAtlas->getHeight();
 	}
 
-	spt<SpriteSet> SpriteSheet::AddSpriteSet(string name, int totalFrames, int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight) {
-		return AddSpriteSet(name, 0, 0, totalFrames, spriteWidth, spriteHeight, spriteSetWidth, spriteSetHeight);
-	}
-
-	spt<SpriteSet> SpriteSheet::AddSpriteSet(string name, int offsetX, int offsetY, int totalFrames, int spriteWidth, int spriteHeight, int spriteSetWidth, int spriteSetHeight) {
-		SpriteSet* sprite = new SpriteSet(this, name, offsetX, offsetY, totalFrames, spriteWidth, spriteHeight, spriteSetWidth, spriteSetHeight);
-		spt<SpriteSet> sptSprite = spt<SpriteSet>(sprite);
-
-		sprites.push_back(sptSprite);
-
-		return sptSprite;
-	}
-
-	bool SpriteSheet::RemoveSprite(spt<SpriteSet> sprite) {
-		auto found = find(sprites.begin(), sprites.end(), sprite);
-
-		if (found != sprites.end()) {
-			sprites.erase(found);
-			return true;
-		}
-		else return false;
-	}
-
-	void SpriteSheet::LoadFromXml(xml_node& xml) {
+	void SpriteSheet::LoadFromXml(xml_node& xml, string img, string atlasName) {
 		auto spriteSets = xml.children("spriteset");
 
-		string name = xml.attribute("name").as_string();
-		if (name.empty()) throw new IllegalArgumentException("SpriteSheet must have name specified!");
-		string img = xml.attribute("img").as_string();
-		if (img.empty()) throw new IllegalArgumentException("SpriteSheet must have img specified!");
-
+		string name = xml.attribute("name").as_string(atlasName.c_str());
+		
 		this->name = name;
-		// todo: maybe lazy load ?
-		this->spriteImage = CogGet2DImage(img);
+		this->spriteAtlas= CogGet2DImage(img);
+		this->spriteAtlasName = atlasName;
 
-		if (spriteSets.begin() == spriteSets.end()) {
-			// 0 spritesets -> attributes are directly in spritesheet node
-			int frames = xml.attribute("frames").as_int(0);
-			int spriteWidth = xml.attribute("sprite_width").as_int(0);
-			int spriteHeight = xml.attribute("sprite_height").as_int(0);
-			AddSpriteSet("default", frames, spriteWidth, spriteHeight);
-		}
-		else {
-			for (auto spriteSetNode : spriteSets) {
-				string name = spriteSetNode.attribute("name").as_string();
-				int frames = spriteSetNode.attribute("frames").as_int(0);
-				int spriteWidth = spriteSetNode.attribute("sprite_width").as_int(0);
-				int spriteHeight = spriteSetNode.attribute("sprite_height").as_int(0);
-
-				AddSpriteSet(name, frames, spriteWidth, spriteHeight);
-			}
-		}
+		this->totalFrames = xml.attribute("frames").as_int(0);
+		this->spriteWidth = xml.attribute("sprite_width").as_int(0);
+		this->spriteHeight = xml.attribute("sprite_height").as_int(0);
 	}
 
 } // namespace

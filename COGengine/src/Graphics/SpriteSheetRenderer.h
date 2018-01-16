@@ -1,22 +1,21 @@
 #pragma once
 
 #include "ofTexture.h"
-#include "SpriteSheetTexture.h"
 
 namespace Cog {
 
 	/**
 	* Flip direction of the rendered tile
 	*/
-	enum FlipDirection { 
-		NONE = 0, 
-		HORIZONTALLY = 1, 
-		VERTICALLY = 2, 
+	enum FlipDirection {
+		NONE = 0,
+		HORIZONTALLY = 1,
+		VERTICALLY = 2,
 		HORIZ_VERT = 3
 	};
 
 	/**
-	* Renderable sprite with given transform and texture coordinates
+	* Node sprite with given transform and texture coordinates
 	*/
 	struct SpriteTile {
 
@@ -43,7 +42,7 @@ namespace Cog {
 		int width;
 		// tile height
 		int height;
-		
+
 		// absolute position on the x axis
 		float posX;
 		// absolute position on the y axis
@@ -84,13 +83,13 @@ namespace Cog {
 		float* coords;
 		// color data
 		unsigned char * colors;
-		
+
 		// size of the buffer
 		int bufferSize;
 		// total number of sprites
 		int numSprites;
 
-		SpriteLayer(int zIndex) : zIndex(zIndex){
+		SpriteLayer(int zIndex) : zIndex(zIndex) {
 			texture = nullptr;
 			verts = nullptr;
 			coords = nullptr;
@@ -115,9 +114,10 @@ namespace Cog {
 		}
 	};
 
-
-	class SpriteSheetRenderer
-	{
+	/**
+	 * Class that renders sprites using OpenGL api
+	 */
+	class SpriteSheetRenderer {
 	protected:
 		float brushX;
 		float brushY;
@@ -127,15 +127,6 @@ namespace Cog {
 
 		SpriteSheetRenderer();
 		~SpriteSheetRenderer();
-
-		/**
-		* Allocates a new layer buffer
-		* @param sheetName name of a sheet or layer
-		* @param textureWidth width of the sheet image
-		* @param textureHeight height of the sheet image
-		* @param glScaleMode openGL scale mode (GL_LINEAR, GL_NEAREST etc)
-		*/
-		void Allocate(string sheetName, int textureWidth, int textureHeight, int glScaleMode);
 
 		/**
 		* Pastes sprite image to the texture under the buffer with given name
@@ -149,14 +140,6 @@ namespace Cog {
 		void PasteSpriteTexture(string fileName, string sheetName, int x, int y, int glType = GL_RGBA);
 
 		/**
-		* Loads a sprite sheet texture
-		* @param sheetName name of the sheet
-		* @param bufferSize maximum number of sprites for this buffer
-		* @param zIndex z-index of the layer
-		*/
-		void LoadTexture(SpriteSheetTexture * texture, string sheetName, int bufferSize, int zIndex);
-
-		/**
 		* Loads a texture
 		* @param texture texture to load
 		* @param sheetName name of the sheet
@@ -165,18 +148,6 @@ namespace Cog {
 		* @param isExternal indicator whether this texture is external and therefore it shouldn't be deleted
 		*/
 		void LoadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal = true);
-
-		/**
-		* Loads a texture from file and creates a sprite buffer
-		* @param fileName path to the file
-		* @param sheetName name of the new sheet
-		* @param bufferSize maximum number of sprites for this buffer
-		* @param width width of the sprite sheet
-		* @param height height of the sprite sheet
-		* @param glScaleMode opengl scale mode (GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST etc.)
-		* @param zIndex z-index of the layer
-		*/
-		void LoadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int glScaleMode, int zIndex);
 
 		/**
 		* Reallocates buffer with given name to the new size
@@ -212,11 +183,6 @@ namespace Cog {
 		* Clears texture of given sheet
 		*/
 		void ClearTexture(string sheetName);
-
-		/**
-		* Finishes texture of given sheet
-		*/
-		void FinishTexture(string sheetName);
 
 		/**
 		* Sets actual buffer that will be drawn
@@ -268,7 +234,7 @@ namespace Cog {
 		/**
 		* Creates vertices (two triangles) from given parameters
 		*/
-		void MakeQuad(int offset, float x1, float y1, float z1, float x2, float y2, float z2, 
+		void MakeQuad(int offset, float x1, float y1, float z1, float x2, float y2, float z2,
 			float x3, float y3, float z3, float x4, float y4, float z4);
 
 		/**
@@ -289,4 +255,4 @@ namespace Cog {
 		}
 	};
 
-}// namespace
+} // namespace

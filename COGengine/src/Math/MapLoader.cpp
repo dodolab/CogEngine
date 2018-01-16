@@ -99,7 +99,7 @@ namespace Cog {
 		int totalWidth = mapWidth*spriteWidth;
 		int totalHeight = mapHeight*spriteHeight;
 
-		auto image = spriteSheet->GetSpriteImage();
+		auto image = spriteSheet->GetSpriteAtlas();
 
 		// render to fbo and then save it as an image
 		ofFbo fbo = ofFbo();
@@ -115,7 +115,7 @@ namespace Cog {
 				string name = tile.name;
 				auto sprite = sprites[name][tile.index];
 				image->drawSubsection(i*spriteWidth, j*spriteHeight, spriteWidth, spriteHeight, 
-					sprite.GetPosX(), sprite.GetPosY(), spriteWidth, spriteHeight);
+					sprite.GetOffsetX(), sprite.GetOffsetY(), spriteWidth, spriteHeight);
 			}
 		}
 

@@ -97,6 +97,11 @@ namespace Cog {
 		void RenderRectangle(Node* owner);
 
 		/**
+		* Renders a circle
+		*/
+		void RenderCircle(Node* owner);
+
+		/**
 		* Renders a text
 		* @param owner node with text shape
 		*/

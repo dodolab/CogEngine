@@ -45,8 +45,7 @@ namespace Cog {
 
 				if (owner->HasMeshType(MESH_SPRITE)) {
 					// render as a SpriteMesh (better performance than Image, because of using the SpriteSheetManager)
-					auto spriteSet = owner->GetMesh<SpriteMesh>()->GetSpriteSet();
-					owner->GetMesh<SpriteMesh>()->SetSprite(Sprite(spriteSet, frameIndex));
+					owner->GetMesh<SpriteMesh>()->GetSprite().SetFrame(frameIndex);
 				}
 				else {
 					if (!owner->HasMeshType(MESH_IMAGE)) {

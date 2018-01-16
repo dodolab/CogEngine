@@ -4,6 +4,15 @@
 
 namespace Cog{
 
+	void Mesh::UpdateBoundingBox(Trans& transform) {
+		auto absPos = ofVec2f(transform.absPos.x, transform.absPos.y);
+		this->boundingBox.topLeft = absPos;
+		this->boundingBox.topRight = ofVec2f(absPos.x + this->GetWidth() * transform.absScale.x, absPos.y);
+		this->boundingBox.bottomLeft = ofVec2f(absPos.x, absPos.y + this->GetHeight() * transform.absScale.y);
+		this->boundingBox.bottomRight = ofVec2f(this->boundingBox.bottomLeft.x + this->GetWidth()* transform.absScale.x, this->boundingBox.bottomLeft.y);
+	}
+
+
 	void MultiSpriteMesh::Recalc() {
 
 		int minX = 0;
@@ -13,26 +22,27 @@ namespace Cog{
 		int mWidth = 0;
 		int mHeight = 0;
 
-		for (auto& spr : sprites) {
-			Sprite& crt = spr->sprite;
-			Trans& transform = spr->transform;
+		for (int i = 0; i<sprites.size(); i++) {
+			Sprite* spr = sprites[i];
+			Trans& transform = spr->GetTransform();
 
 			int posX = (int)transform.localPos.x;
 			int posY = (int)transform.localPos.y;
 
-			if (posX < minX) minX = posX;
-			if (posY < minY) minY = posY;
+			if (posX <= minX) minX = posX;
+			if (posY <= minY) minY = posY;
 
-			if (posX > maxX) {
+			if (posX >= maxX) {
 				maxX = posX;
-				mWidth = crt.GetWidth();
+				mWidth = spr->GetWidth();
 			}
 
-			if (posY > maxY) {
+			if (posY >= maxY) {
 				maxY = posY;
-				mHeight = crt.GetHeight();
+				mHeight = spr->GetHeight();
 			}
 		}
+
 		// set size of bounding box of all sprite coordinates
 		this->width = (maxX - minX) + mWidth;
 		this->height = (maxY - minY) + mHeight;
@@ -42,13 +52,13 @@ namespace Cog{
 
 	void MultiSpriteMesh::RefreshZIndex() {
 		sort(sprites.begin(), sprites.end(),
-			[](const spt<SpriteInst>&  a, const spt<SpriteInst>& b) -> bool
-		{
-			return a->transform.localPos.z < b->transform.localPos.z;
+			[](const Sprite*  a, const Sprite* b) -> bool {
+			return a->GetZIndex() < b->GetZIndex();
 		});
 	}
 
-	void BoundingBox::Recalc(Node* owner) {
+
+	void BoundingBoxMesh::Recalc(Node* owner) {
 
 		float minX = 1000000;
 		float minY = 1000000;

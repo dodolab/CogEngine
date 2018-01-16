@@ -84,7 +84,7 @@ namespace Cog {
 		* @param bbox bounding box
 		* @param touchVector position of the touch/mouse
 		*/
-		bool BoundingBoxHitTest(spt<BoundingBox> bbox, ofVec2f touchVector);
+		bool BoundingBoxHitTest(spt<BoundingBoxMesh> bbox, ofVec2f touchVector);
 
 		/**
 		* Tests precisely if the image has been hit

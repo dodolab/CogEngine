@@ -144,9 +144,6 @@
     <ClInclude Include="src\Core\Component.h">
       <Filter>src\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\AStarSearch.h">
-      <Filter>src\Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\SpriteSheetRenderer.h">
       <Filter>src\Graphics</Filter>
     </ClInclude>
@@ -154,9 +151,6 @@
       <Filter>src\Misc</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Sprite.h">
-      <Filter>src\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\SpriteSet.h">
       <Filter>src\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\SpriteSheet.h">
@@ -245,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="src\Behaviors\State.h">
       <Filter>src\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Attributes\Movement.h">
-      <Filter>src\Attributes</Filter>
     </ClInclude>
     <ClInclude Include="src\Behaviors\SteeringBehavior.h">
       <Filter>src\Behaviors</Filter>
@@ -390,9 +381,6 @@
     <ClInclude Include="src\Misc\EnumConverter.h">
       <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\GridGraph.h">
-      <Filter>src\Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\GridSpace.h">
       <Filter>src\Math</Filter>
     </ClInclude>
@@ -416,9 +404,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\Tile.h">
       <Filter>src\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\SpriteInst.h">
-      <Filter>src\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Attributes\Mesh.h">
       <Filter>src\Attributes</Filter>
@@ -640,6 +625,24 @@
       <Filter>libs\lua</Filter>
     </ClInclude>
     <ClInclude Include="src\ofxCogMain.h" />
+    <ClInclude Include="src\Core\BoundingBox.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Attributes\Dynamics.h">
+      <Filter>src\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\GridMap.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\List.h">
+      <Filter>src\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\PathFinder.h">
+      <Filter>src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Builders\TransformBuilder.h">
+      <Filter>src\Builders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\Environment.cpp">
@@ -668,9 +671,6 @@
     </ClCompile>
     <ClCompile Include="src\Core\TransformMath.cpp">
       <Filter>src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\SpriteSet.cpp">
-      <Filter>src\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\SceneSwitchManager.cpp">
       <Filter>src\Components</Filter>
@@ -798,9 +798,6 @@
     <ClCompile Include="src\Math\SteeringMath.cpp">
       <Filter>src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math\AStarSearch.cpp">
-      <Filter>src\Math</Filter>
-    </ClCompile>
     <ClCompile Include="src\Math\GridGraph.cpp">
       <Filter>src\Math</Filter>
     </ClCompile>
@@ -830,9 +827,6 @@
     </ClCompile>
     <ClCompile Include="src\Math\MapLoader.cpp">
       <Filter>src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\SpriteInst.cpp">
-      <Filter>src\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Attributes\Mesh.cpp">
       <Filter>src\Attributes</Filter>
@@ -1010,6 +1004,12 @@
     </ClCompile>
     <ClCompile Include="src\Core\Constants.cpp">
       <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\PathFinder.cpp">
+      <Filter>src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Builders\TransformBuilder.cpp">
+      <Filter>src\Builders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

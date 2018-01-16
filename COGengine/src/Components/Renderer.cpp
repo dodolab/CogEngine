@@ -4,6 +4,7 @@
 #include "Behavior.h"
 #include "Scene.h"
 #include "ofxTextLabel.h"
+#include "ofAppRunner.h"
 
 namespace Cog {
 
@@ -33,36 +34,53 @@ namespace Cog {
 	}
 
 	void Renderer::PushNode(Node* node) {
+		if (node->GetMesh()->IsVisible()) {
+			auto renderType = node->GetMesh()->GetMeshType();
+			auto& buffer = (renderType == MESH_SPRITE || renderType == MESH_MULTISPRITE)
+				? zIndexSheetBuffer : zIndexImageBuffer;
 
-		auto renderType = node->GetMesh()->GetMeshType();
-		auto& buffer = (renderType == MESH_SPRITE || renderType == MESH_MULTISPRITE)
-			? zIndexSheetBuffer : zIndexImageBuffer;
 
+			Trans& tr = node->GetTransform();
+			// zIndex will be taken always from local position
+			int zIndex = (int)(tr.localPos.z);
 
-		Trans& tr = node->GetTransform();
-		// zIndex will be taken always from local position
-		int zIndex = (int)(tr.localPos.z);
-
-		auto it = buffer.find(zIndex);
-		if (it != buffer.end()) {
-			(*it).second.push_back(node);
+			auto it = buffer.find(zIndex);
+			if (it != buffer.end()) {
+				(*it).second.push_back(node);
+			}
+			else {
+				buffer[zIndex].push_back(node);
+			}
 		}
-		else {
-			buffer[zIndex].push_back(node);
-		}
-
 	}
 
 	void Renderer::BeginRender() {
 		// set projection and clear background with black color
 		Vec2i virtualSize = CogGetVirtualScreenSize();
-		ofSetupScreenOrtho((float)virtualSize.x, (float)virtualSize.y, -1000.0f, 1000.0f);
+		// set projection and clear background with black color
+		ofSetupScreenOrtho(virtualSize.x, virtualSize.y, -1000.0f, 1000.0f);
 		ofBackground(0);
+
+		// init viewport
+		int screenWidth = ofGetWindowWidth();
+		int screenHeight = ofGetWindowHeight();
+
+		// handle custom aspect ratio
+		if (virtualSize.x != screenWidth) {
+			ofViewport((screenWidth - virtualSize.x) / 2, 0, (float)virtualSize.x, (float)virtualSize.y);
+		}
+		else if (virtualSize.y != screenHeight) {
+			ofViewport(0, (screenHeight - virtualSize.y) / 2, (float)virtualSize.x, (float)virtualSize.y);
+		}
+		else {
+			// back to actual viewport
+			ofViewport(0, 0, virtualSize.x, virtualSize.y);
+		}
 	}
 
 	void Renderer::EndRender() {
-		ofVec2f screenSize = CogGetScreenSize();
-		ofVec2f virtualSize = CogGetVirtualScreenSize();
+		ofVec2f screenSize = ofGetWindowSize();
+		Vec2i virtualSize = CogGetVirtualScreenSize();
 
 		ofLoadMatrix(ofMatrix4x4::newIdentityMatrix());
 		ofSetColor(0);
@@ -80,9 +98,9 @@ namespace Cog {
 		}
 		else if (virtualSize.y != screenSize.y) {
 			// draw top and bottom
-			ofViewport(0.0f, 0.0f,virtualSize.x,(screenSize.y - virtualSize.y) / 2);
+			ofViewport(0.0f, 0.0f, virtualSize.x, (screenSize.y - virtualSize.y) / 2);
 			ofDrawRectangle(0.0f, 0.0f, screenSize.x, screenSize.y);
-			ofViewport(0.0f, screenSize.y-(screenSize.y-virtualSize.y)/2, virtualSize.x, (screenSize.y - virtualSize.y) / 2);
+			ofViewport(0.0f, screenSize.y - (screenSize.y - virtualSize.y) / 2, virtualSize.x, (screenSize.y - virtualSize.y) / 2);
 			ofDrawRectangle(0.0f, 0.0f, screenSize.x, screenSize.y);
 			// back to actual viewport
 			ofViewport((screenSize.x - virtualSize.x) / 2, 0.0f, virtualSize.x, virtualSize.y);
@@ -130,6 +148,7 @@ namespace Cog {
 					switch (node->GetMesh()->GetMeshType()) {
 					case MESH_IMAGE:
 					case MESH_RECTANGLE:
+					case MESH_CIRCLE:
 					case MESH_TEXT:
 					case MESH_LABEL:
 					case MESH_BOUNDING_BOX:
@@ -167,6 +186,9 @@ namespace Cog {
 					break;
 				case MESH_RECTANGLE:
 					RenderRectangle(node);
+					break;
+				case MESH_CIRCLE:
+					RenderCircle(node);
 					break;
 				case MESH_TEXT:
 					RenderText(node);
@@ -207,7 +229,7 @@ namespace Cog {
 	}
 
 	void Renderer::RenderRectangle(Node* owner) {
-		spt<Rectangle> rect = static_pointer_cast<Rectangle>(owner->GetMesh());
+		spt<FRect> rect = static_pointer_cast<FRect>(owner->GetMesh());
 
 		if (rect->IsRenderable()) {
 			// load absolute matrix
@@ -235,6 +257,30 @@ namespace Cog {
 		}
 	}
 
+	void Renderer::RenderCircle(Node* owner) {
+		spt<FCircle> circ = static_pointer_cast<FCircle>(owner->GetMesh());
+		// calc absolute matrix
+		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
+		ofLoadMatrix(absM);
+
+		ofSetColor(0x000000ff);
+
+		ofColor color = circ->GetColor();
+		ofSetColor(color);
+
+
+		if (circ->IsNoFill()) {
+			ofNoFill();
+			ofSetLineWidth(1);
+		}
+		else {
+			ofFill();
+			ofSetLineWidth(0);
+		}
+
+		ofCircle(0, 0, circ->GetRadius());
+	}
+
 	void Renderer::RenderText(Node* owner) {
 		// load absolute matrix
 		ofMatrix4x4 absM = owner->GetTransform().CalcAbsMatrix();
@@ -257,8 +303,8 @@ namespace Cog {
 		// fill tile with all data and send it to the sprite manager
 		spriteTile.width = sprite.GetWidth();
 		spriteTile.height = sprite.GetHeight();
-		spriteTile.offsetX = sprite.GetPosX();
-		spriteTile.offsetY = sprite.GetPosY();
+		spriteTile.offsetX = sprite.GetOffsetX();
+		spriteTile.offsetY = sprite.GetOffsetY();
 
 		spriteTile.posX = trans.absPos.x +trans.absScale.x*spriteTile.width / 2.0f;  // [0,0] is topleft corner
 		spriteTile.posY = trans.absPos.y +trans.absScale.y*spriteTile.height / 2.0f;
@@ -279,19 +325,23 @@ namespace Cog {
 
 		spt<MultiSpriteMesh> shape = static_pointer_cast<MultiSpriteMesh>(owner->GetMesh());
 		renderer->SetActualBuffer(shape->GetLayerName());
-		
+
 		auto& sprites = shape->GetSprites();
+		Trans& ownerTransform = owner->GetTransform();
 
-		for (auto& spr : sprites) {
-			Sprite& sprite = spr->sprite;
-			Trans& trans = spr->transform;
+		// calc absolute transform
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites[i]->GetTransform().CalcAbsTransform(ownerTransform);
+		}
 
-			trans.CalcAbsTransform(owner->GetTransform());
+		for (int i = 0; i < sprites.size(); i++) {
+			Sprite* sprite = sprites[i];
+			Trans& trans = sprite->GetTransform();
 
-			spriteTile.width = sprite.GetWidth();
-			spriteTile.height = sprite.GetHeight();
-			spriteTile.offsetX = sprite.GetPosX();
-			spriteTile.offsetY = sprite.GetPosY();
+			spriteTile.width = sprite->GetWidth();
+			spriteTile.height = sprite->GetHeight();
+			spriteTile.offsetX = sprite->GetOffsetX();
+			spriteTile.offsetY = sprite->GetOffsetY();
 
 			spriteTile.posX = trans.absPos.x + trans.absScale.x*spriteTile.width / 2.0f;  // [0,0] is topleft corner
 			spriteTile.posY = trans.absPos.y + trans.absScale.y*spriteTile.height / 2.0f;
@@ -299,10 +349,9 @@ namespace Cog {
 			spriteTile.rotation = trans.rotation*DEG_TO_RAD;
 			spriteTile.scaleX = trans.absScale.x;
 			spriteTile.scaleY = trans.absScale.y;
-			
+
 			renderer->AddTile(spriteTile);
 		}
-
 		COGMEASURE_END("RENDER_PREPARE_MULTISPRITE");
 	}
 
@@ -350,7 +399,7 @@ namespace Cog {
 	}
 
 	void Renderer::RenderBoundingBox(Node* owner) {
-		spt<BoundingBox> shape = static_pointer_cast<BoundingBox>(owner->GetMesh());
+		spt<BoundingBoxMesh> shape = static_pointer_cast<BoundingBoxMesh>(owner->GetMesh());
 		
 		if (shape->IsRenderable()) {
 			// draw only when it is set as renderable

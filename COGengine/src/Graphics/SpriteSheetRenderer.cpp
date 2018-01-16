@@ -1,50 +1,21 @@
 #include "SpriteSheetRenderer.h"
-#include "Facade.h"
 #include "Utils.h"
 
 namespace Cog {
 
-	SpriteSheetRenderer::SpriteSheetRenderer()
-	{
+	SpriteSheetRenderer::SpriteSheetRenderer() {
 		buffers = map<string, SpriteLayer*>();
 		actualBuffer = nullptr;
 	}
 
-	SpriteSheetRenderer::~SpriteSheetRenderer()
-	{
+	SpriteSheetRenderer::~SpriteSheetRenderer() {
 		for (auto& buf : buffers) {
 			delete buf.second;
 		}
 	}
 
-	void SpriteSheetRenderer::Allocate(string sheetName, int textureWidth, int textureHeight, int glScaleMode)
-	{
-		SetActualBuffer(sheetName);
 
-		if (actualBuffer->texture == nullptr)
-		{
-			SetTexCoeffs(textureWidth, textureHeight);
-
-			SpriteSheetTexture * newTexture = new SpriteSheetTexture();
-			newTexture->allocate(textureWidth, textureHeight, GL_RGBA, glScaleMode);
-			actualBuffer->texture = (ofTexture*)newTexture;
-		}
-		else throw IllegalOperationException(string_format("Sheet %s is already allocated!", sheetName.c_str()));
-	}
-
-	void SpriteSheetRenderer::PasteSpriteTexture(string fileName, string sheetName, int x, int y, int glType)
-	{
-		SetActualBuffer(sheetName);
-		SpriteSheetTexture *cTexture = dynamic_cast<SpriteSheetTexture*>(actualBuffer->texture);
-		cTexture->PasteImage(x, y, fileName, glType);
-	}
-
-	void SpriteSheetRenderer::LoadTexture(SpriteSheetTexture * _texture, string sheetName, int bufferSize, int zIndex) {
-		LoadTexture((ofTexture *)_texture, sheetName, bufferSize, zIndex);
-	}
-
-	void SpriteSheetRenderer::LoadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal)
-	{
+	void SpriteSheetRenderer::LoadTexture(ofTexture * texture, string sheetName, int bufferSize, int zIndex, bool isExternal) {
 		if (buffers.count(sheetName) == 0) {
 			buffers[sheetName] = new SpriteLayer(zIndex);
 		}
@@ -57,22 +28,7 @@ namespace Cog {
 		SetTexCoeffs(texture->getWidth(), texture->getHeight());
 	}
 
-	void SpriteSheetRenderer::LoadTexture(string fileName, string sheetName, int bufferSize, int width, int height, int glScaleMode, int zIndex)
-	{
-		// add buffer if it doesn't exist
-		if (buffers.count(sheetName) == 0) {
-			buffers[sheetName] = new SpriteLayer(zIndex);
-		}
-
-		ReallocateBuffer(sheetName, bufferSize);
-		Allocate(sheetName, width, height, glScaleMode);
-		PasteSpriteTexture(fileName, sheetName, 0, 0);
-		FinishTexture(sheetName);
-		actualBuffer->textureIsExternal = false;
-	}
-
-	void SpriteSheetRenderer::ReallocateBuffer(string sheetName, int bufferSize)
-	{
+	void SpriteSheetRenderer::ReallocateBuffer(string sheetName, int bufferSize) {
 		SetActualBuffer(sheetName);
 
 		actualBuffer->bufferSize = bufferSize;
@@ -97,16 +53,14 @@ namespace Cog {
 		ClearTexture(sheetName);
 	}
 
-	bool SpriteSheetRenderer::AddTile(SpriteTile& tile)
-	{
+	bool SpriteSheetRenderer::AddTile(SpriteTile& tile) {
 		if (actualBuffer == nullptr || actualBuffer->texture == nullptr) {
-			throw IllegalOperationException("Cannot add tile since there is no texture loaded");
+			ofLogError("Cannot add tile since there is no texture loaded");
 			return false;
 		}
 
-		if (actualBuffer->numSprites >= actualBuffer->bufferSize)
-		{
-			throw IllegalOperationException(string_format("Texture buffer overflown! Maximum number of sprites is set to %d", actualBuffer->bufferSize));
+		if (actualBuffer->numSprites >= actualBuffer->bufferSize) {
+			ofLogError(string_format("Texture buffer overflown! Maximum number of sprites is set to %d", actualBuffer->bufferSize));
 			return false;
 		}
 
@@ -122,17 +76,15 @@ namespace Cog {
 		return true;
 	}
 
-	bool SpriteSheetRenderer::AddRect(float x, float y, float z, float w, float h, float scale, float rot, ofColor& col)
-	{
+	bool SpriteSheetRenderer::AddRect(float x, float y, float z, float w, float h, float scale, float rot, ofColor& col) {
 
 		if (actualBuffer == nullptr || actualBuffer->texture == nullptr) {
-			throw IllegalOperationException("Cannot add tile since there is no texture loaded");
+			ofLogError("Cannot add tile since there is no texture loaded");
 			return false;
 		}
 
-		if (actualBuffer->numSprites >= actualBuffer->bufferSize)
-		{
-			throw IllegalOperationException(string_format("Texture buffer overflown! Maximum number of sprites is set to %d", actualBuffer->bufferSize));
+		if (actualBuffer->numSprites >= actualBuffer->bufferSize) {
+			ofLogError(string_format("Texture buffer overflown! Maximum number of sprites is set to %d", actualBuffer->bufferSize));
 			return false;
 		}
 
@@ -156,34 +108,24 @@ namespace Cog {
 		return true;
 	}
 
-	void SpriteSheetRenderer::ClearCounters(string sheetName)
-	{
+	void SpriteSheetRenderer::ClearCounters(string sheetName) {
 		SetActualBuffer(sheetName);
 		actualBuffer->numSprites = 0;
 	}
 
-	void SpriteSheetRenderer::ClearTexture(string sheetName)
-	{
+	void SpriteSheetRenderer::ClearTexture(string sheetName) {
 		SetActualBuffer(sheetName);
 
-		if (actualBuffer->texture != nullptr)
-		{
+		if (actualBuffer->texture != nullptr) {
 			if (actualBuffer->textureIsExternal)
 				actualBuffer->texture = nullptr;
-			else
-			{
+			else {
 				delete actualBuffer->texture;
 				actualBuffer->texture = nullptr;
 			}
 		}
 	}
 
-	void SpriteSheetRenderer::FinishTexture(string sheetName)
-	{
-		SetActualBuffer(sheetName);
-		SpriteSheetTexture *cTexture = dynamic_cast<SpriteSheetTexture*>(actualBuffer->texture);
-		cTexture->Finish();
-	}
 
 	void SpriteSheetRenderer::SetActualBuffer(string sheetName) {
 		auto buff = buffers.find(sheetName);
@@ -192,8 +134,7 @@ namespace Cog {
 		else actualBuffer = nullptr;
 	}
 
-	void SpriteSheetRenderer::Draw()
-	{
+	void SpriteSheetRenderer::Draw() {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_COLOR_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -206,8 +147,7 @@ namespace Cog {
 		}
 
 		sort(buffs.begin(), buffs.end(),
-			[](const SpriteLayer*  a, const SpriteLayer* b) -> bool
-		{
+			[](const SpriteLayer*  a, const SpriteLayer* b) -> bool {
 			return a->zIndex < b->zIndex;
 		});
 
@@ -241,10 +181,10 @@ namespace Cog {
 		switch (tile.dir) {
 		case NONE:
 			// rounding errors elimination
-			x1 = tile.offsetX + 1;
-			y1 = tile.offsetY + 1;
-			x2 = tile.offsetX + tile.width - 1;
-			y2 = tile.offsetY + tile.height - 1;
+			x1 = tile.offsetX + 0.5f;
+			y1 = tile.offsetY + 0.5f;
+			x2 = tile.offsetX + tile.width - 0.5f;
+			y2 = tile.offsetY + tile.height - 0.5f;
 			break;
 		case HORIZONTALLY:
 			x1 = tile.offsetX + tile.width;
@@ -276,8 +216,7 @@ namespace Cog {
 		coords[coordOffset + 5] = coords[coordOffset + 9] = coords[coordOffset + 11] = y2*actualBuffer->textureCoeffY;
 	}
 
-	void SpriteSheetRenderer::AddTexCoords(FlipDirection f, float posX, float posY, float w, float h)
-	{
+	void SpriteSheetRenderer::AddTexCoords(FlipDirection f, float posX, float posY, float w, float h) {
 		int coordOffset = GetCoordOffset();
 
 		// for OPENGL-ES, the coefficients will clamp the w and h to range <0-1> 
@@ -356,7 +295,7 @@ namespace Cog {
 		}
 	}
 
-	void SpriteSheetRenderer::MakeQuad(int offset, float x1, float y1, float z1, 
+	void SpriteSheetRenderer::MakeQuad(int offset, float x1, float y1, float z1,
 		float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
 
 		float* verts = actualBuffer->verts;
@@ -387,4 +326,4 @@ namespace Cog {
 		colors[offset + 3] = colors[offset + 7] = colors[offset + 11] = colors[offset + 15] = colors[offset + 19] = colors[offset + 23] = col.a;
 	}
 
-}// namespace
+} // namespace

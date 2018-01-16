@@ -100,6 +100,7 @@ namespace Cog {
 #define MESH_SPRITE 6			/** 2D sprite */
 #define MESH_MULTISPRITE 7		/** Collection of sprites */
 #define MESH_BOUNDING_BOX 8		/** Box sizeable due to children nodes */
+#define MESH_CIRCLE 9			/** Circle */
 
 // Node running mode
 #define RUNMODE_RUNNING 1			/** active for update and draw loops */

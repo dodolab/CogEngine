@@ -142,10 +142,27 @@ namespace Cog {
 		if (xmlDoc) {
 			auto resources = xmlDoc->child("resources");
 
-			for (auto sheetNode : resources.children("spritesheet")) {
-				spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
-				spriteSheet->LoadFromXml(sheetNode);
-				this->StoreSpriteSheet(spriteSheet);
+			for (auto sheetNode : resources.children("spriteatlas")) {
+
+				string atlasName = sheetNode.attribute("name").as_string();
+				string img = sheetNode.attribute("img").as_string();
+				if (img.empty()) throw new IllegalArgumentException("Sprite atlas must have img specified!");
+
+				auto spriteSheets = sheetNode.children("spriteSheet");
+
+				if (spriteSheets.begin() == spriteSheets.end()) {
+					// no sprite sheet -> the sprite atlas itself is the only one sprite sheet 
+					spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
+					spriteSheet->LoadFromXml(sheetNode, atlasName, img);
+					this->StoreSpriteSheet(spriteSheet);
+				}
+				else {
+					for (auto spriteSheetDesc : spriteSheets) {
+						spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
+						spriteSheet->LoadFromXml(spriteSheetDesc, atlasName, img);
+						this->StoreSpriteSheet(spriteSheet);
+					}
+				}
 			}
 		}
 	}

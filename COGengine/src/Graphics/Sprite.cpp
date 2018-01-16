@@ -2,26 +2,36 @@
 
 namespace Cog {
 
+	Sprite::Sprite(spt<SpriteSheet> spriteSheet, int row, int column) : spriteSheet(spriteSheet) {
 
-	Sprite::Sprite(spt<SpriteSet> spriteSet, int row, int column) {
-
-		int columns = spriteSet->GetSpriteSetWidth() / spriteSet->GetSpriteWidth();
+		int columns = spriteSheet->GetSpriteSheetWidth() / spriteSheet->GetSpriteWidth();
 		this->frame = row*columns + column;
-		Recalc(spriteSet);
+		Recalc();
 	}
 
-	Sprite::Sprite(spt<SpriteSet> spriteSet, int frame) : frame(frame) {
-		Recalc(spriteSet);
+	Sprite::Sprite(spt<SpriteSheet> spriteSheet, int frame) : spriteSheet(spriteSheet), frame(frame) {
+		Recalc();
 	}
 
-	void Sprite::Recalc(spt<SpriteSet> spriteSet) {
-		width = spriteSet->GetSpriteWidth();
-		height = spriteSet->GetSpriteHeight();
 
-		int frameInGrid = 0;
+	Sprite::Sprite(spt<SpriteSheet> spriteSheet, int row, int column, const Trans& transform) : Sprite(spriteSheet, row, column) {
+		this->transform = transform;
+	}
+
+	Sprite::Sprite(spt<SpriteSheet> spriteSheet, int frame, const Trans& transform) : Sprite(spriteSheet, frame) {
+		this->transform = transform;
+	}
+
+
+
+	void Sprite::Recalc() {
+		width = spriteSheet->GetSpriteWidth();
+		height = spriteSheet->GetSpriteHeight();
+
+		int frameInGrid;
 		int totalFramesInGrid = 0;
 
-		if (spriteSet->GetSpriteSetWidth() == spriteSet->GetSpriteSheetWidth()) {
+		if (spriteSheet->GetSpriteSheetWidth() == spriteSheet->GetSpriteAtlasWidth()) {
 			// sprite set is continuous; it means that it begins somewhere and when it reaches the end 
 			// of the image, the next sprite will be at the beginning of the image
 			// EXAMPLE (x for sprite):
@@ -30,11 +40,11 @@ namespace Cog {
 			// x x * * *
 			// * * * * *
 			// * * * * *
-			int firstRowColumns = (spriteSet->GetSpriteSheetWidth() - spriteSet->GetOffsetX()) / width;
-			int otherRowsColumns = spriteSet->GetSpriteSheetWidth() / width;
+			int firstRowColumns = (spriteSheet->GetSpriteAtlasWidth() - spriteSheet->GetOffsetX()) / width;
+			int otherRowsColumns = spriteSheet->GetSpriteAtlasWidth() / width;
 
 			frameInGrid = frame + (otherRowsColumns - firstRowColumns);
-			totalFramesInGrid = (otherRowsColumns - firstRowColumns) + spriteSet->GetTotalFrames();
+			totalFramesInGrid = (otherRowsColumns - firstRowColumns) + spriteSheet->GetTotalFrames();
 		}
 		else {
 			// sprite forms a rectangle inside the sprite image
@@ -47,18 +57,17 @@ namespace Cog {
 			// * * * * *
 
 			frameInGrid = frame;
-			totalFramesInGrid = spriteSet->GetSpriteSetWidth() / width * spriteSet->GetSpriteSetHeight() / height;
+			totalFramesInGrid = spriteSheet->GetSpriteSheetWidth() / width * spriteSheet->GetSpriteSheetHeight() / height;
 		}
 
-		int columns = spriteSet->GetSpriteSetWidth() / width;
-		int rows = (totalFramesInGrid*width) / spriteSet->GetSpriteSetWidth();
+		int columns = spriteSheet->GetSpriteSheetWidth() / width;
+		int rows = (totalFramesInGrid*width) / spriteSheet->GetSpriteSheetWidth();
 
 		int column = frameInGrid%columns;
 		int row = rows == 1 ? 0 : frameInGrid / (columns);
 
-		posX = spriteSet->GetOffsetX() + column*width;
-		posY = spriteSet->GetOffsetY() + row*height;
+		offsetX = spriteSheet->GetOffsetX() + column*width;
+		offsetY = spriteSheet->GetOffsetY() + row*height;
 	}
-
 
 } // namespace

@@ -89,36 +89,21 @@ namespace Cog {
 		if (refHeight == 0) refHeight = CogGetScreenHeight();
 
 		// create bounding box
-		auto bbox = spt<BoundingBox>(new BoundingBox((float)refWidth, (float)refHeight, margin, renderable));
+		auto bbox = spt<BoundingBoxMesh>(new BoundingBoxMesh((float)refWidth, (float)refHeight, margin, renderable));
 		bbox->SetColor(color);
 		node->SetMesh(bbox);
 	}
 
-	spt<SpriteMesh> NodeBuilder::CreateSpriteMesh(Scene* scene, string layer, string spriteSet, int row, int column) {
-
-		LayerEnt layerEntity = scene->FindLayerSettings(layer);
-		string spriteSheetName = layerEntity.spriteSheetName;
+	spt<SpriteMesh> NodeBuilder::CreateSpriteMesh(Scene* scene, string layer, string spriteSheet, int row, int column) {
 
 		auto cache = GETCOMPONENT(Resources);
-		auto spriteSheet = cache->GetSpriteSheet(spriteSheetName);
+		auto sheet = cache->GetSpriteSheet(spriteSheet);
 
-		if (!spriteSheet) CogLogError("NodeBuilder", "Error while loading sprite sheet. SpriteSheet %s not found!", spriteSheetName.c_str());
+		if (!sheet) CogLogError("NodeBuilder", "Error while loading sprite sheet. SpriteSheet %s not found!", spriteSheet.c_str());
 
-		spt<SpriteSet> spriteSetEntity;
 
-		if (spriteSet.empty()) {
-			// load default
-			spriteSetEntity = spriteSheet->GetDefaultSpriteSet();
-		}
-		else {
-			// load by name
-			spriteSetEntity = spriteSheet->GetSpriteSetByName(spriteSet);
-		}
-
-		if (!spriteSetEntity) CogLogError("NodeBuilder", "Spriteset %s not found!", spriteSet.c_str());
-
-		Sprite sprite = Sprite(spriteSetEntity, row, column);
-		auto shape = spt<SpriteMesh>(new SpriteMesh(sprite, spriteSetEntity, layer));
+		Sprite sprite = Sprite(sheet, row, column);
+		auto shape = spt<SpriteMesh>(new SpriteMesh(sprite, layer));
 		return shape;
 	}
 
@@ -126,8 +111,8 @@ namespace Cog {
 		return CreateSpriteMesh(scene, layer, "", row, column);
 	}
 
-	spt<Rectangle> NodeBuilder::CreateRectangleMesh(ofVec2f size, ofColor color) {
-		spt<Rectangle> plane = spt<Rectangle>(new Rectangle(size.x, size.y));
+	spt<FRect> NodeBuilder::CreateRectangleMesh(ofVec2f size, ofColor color) {
+		spt<FRect> plane = spt<FRect>(new FRect(size.x, size.y));
 		plane->SetColor(color);
 		return plane;
 	}

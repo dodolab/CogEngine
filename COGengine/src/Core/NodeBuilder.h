@@ -140,18 +140,18 @@ namespace Cog {
 		* Creates a sprite mesh from a scene layer and given sprite set
 		* @param scene actual scene
 		* @param layer name of a layer in which the sprite will be rendered
-		* @param spriteSet name of the sprite set the sprite consists of
+		* @param spriteSheet name of the sprite sheet the sprite consists of
 		* @param row sprite row on the sprite sheet
 		* @param column sprite column on the sprite sheet
 		*/
-		spt<SpriteMesh> CreateSpriteMesh(Scene* scene, string layer, string spriteSet, int row, int column);
+		spt<SpriteMesh> CreateSpriteMesh(Scene* scene, string layer, string spriteSheet, int row, int column);
 
 		/**
 		* Creates a rectangle mesh 
 		* @param size rectangle size
 		* @param color rectangle color
 		*/
-		spt<Rectangle> CreateRectangleMesh(ofVec2f size, ofColor color);
+		spt<FRect> CreateRectangleMesh(ofVec2f size, ofColor color);
 
 		/**
 		* Creates a behavior from given description entity (usually loaded from xml)

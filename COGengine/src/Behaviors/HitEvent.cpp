@@ -122,15 +122,15 @@ namespace Cog {
 			hasHitTest = CShapeHitTest(owner->GetMesh<MultiSpriteMesh>(), touchTrans);
 		}
 		else if (owner->HasMeshType(MESH_RECTANGLE)) {
-			hasHitTest = CShapeHitTest(owner->GetMesh<Rectangle>(), touchTrans);
+			hasHitTest = CShapeHitTest(owner->GetMesh<FRect>(), touchTrans);
 		}
 		else if (owner->HasMeshType(MESH_BOUNDING_BOX)) {
-			hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBox>(), touchVector);
+			hasHitTest = BoundingBoxHitTest(owner->GetMesh<BoundingBoxMesh>(), touchVector);
 		}
 		return hasHitTest;
 	}
 
-	bool HitEvent::BoundingBoxHitTest(spt<BoundingBox> bbox, ofVec2f touchVector) {
+	bool HitEvent::BoundingBoxHitTest(spt<BoundingBoxMesh> bbox, ofVec2f touchVector) {
 		// recalculate bounding box first
 		bbox->Recalc(owner);
 		ofRectangle bboxRect = bbox->GetBoundingBox();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
-#include "Movement.h"
+#include "Dynamics.h"
 #include "Path.h"
 #include "SteeringMath.h"
 
@@ -24,7 +24,7 @@ namespace Cog {
 		/**
 		* Sets rotation direction according to the actual movement forces
 		*/
-		void SetRotationDirection(Movement& movement, Trans& transform, ofVec2f destination, float maxAcceleration, uint64 delta);
+		void SetRotationDirection(Dynamics* dynamics, Trans& transform, ofVec2f destination, float maxAcceleration, uint64 delta);
 
 	public:
 
@@ -114,17 +114,18 @@ namespace Cog {
 	class FollowBehavior : public SteeringBehavior {
 	private:
 		Path* path;
-		float currentPathPoint = 0;
-		float maxAcceleration = 0;
+		int currentPathIndex = 0;
 		float maxRadialAcceleration = 0;
 		// indicates how far from checkpoint may the character go
 		float pointTolerance = 0;
 		// indicates how far from the last checkpoint may the character stop
 		float finalPointTolerance = 0;
 		StrId forceId;
-		StrId seekDest = StrId(ATTR_STEERING_BEH_DEST);
 		StrId attrMovement = StrId(ATTR_MOVEMENT);
+		bool pathFinished = false;
 	public:
+		float maxAcceleration = 0;
+		float forceStrength = 1;
 
 		/**
 		* Creates a new follow behavior
@@ -134,10 +135,20 @@ namespace Cog {
 		* @param pointTolerance indicates how far from checkpoint may the character go
 		* @param finalPointTolerance indicates how far from the last checkpoint may the character stop
 		*/
-		FollowBehavior(Path * path, float maxAcceleration, float maxRadialAcceleration, float pointTolerance, float finalPointTolerance)
-			: path(path), maxAcceleration(maxAcceleration), maxRadialAcceleration(maxRadialAcceleration), 
-			pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance){
+		FollowBehavior(Path* path, float maxAcceleration, float maxRadialAcceleration, float pointTolerance, float finalPointTolerance)
+			: path(path), maxAcceleration(maxAcceleration), maxRadialAcceleration(maxRadialAcceleration),
+			pointTolerance(pointTolerance), finalPointTolerance(finalPointTolerance) {
 			forceId = StrId(this->GetId());
+		}
+
+		void ResetPath(Path* path) {
+			this->path = path;
+			this->currentPathIndex = 0;
+			this->pathFinished = false;
+		}
+
+		bool PathFinished() const {
+			return pathFinished || path->GetSegments().size() < 2;
 		}
 
 		void OnStart();

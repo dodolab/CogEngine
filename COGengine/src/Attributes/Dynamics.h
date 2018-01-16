@@ -8,7 +8,7 @@ namespace Cog {
 	/**
 	* Container for physical forces
 	*/
-	class Movement {
+	class Dynamics {
 	private:
 		// map of forces acting on the object
 		map<StrId, ofVec2f>* forces = nullptr;
@@ -17,7 +17,7 @@ namespace Cog {
 		float angularSpeed = 0;
 	public:
 
-		~Movement() {
+		~Dynamics() {
 			delete forces;
 		}
 
@@ -26,7 +26,7 @@ namespace Cog {
 		* Note: if more forces used, the acceleration vector is usually
 		* calculated, using the CalcForce method
 		*/
-		ofVec2f GetAcceleration() const {
+		ofVec2f& GetAcceleration() {
 			return acceleration;
 		}
 
@@ -42,7 +42,7 @@ namespace Cog {
 		/**
 		* Sets the force according to its key
 		* @param key key of the force
-		* @param force force to set 
+		* @param force force to set
 		*/
 		void SetForce(StrId key, ofVec2f force) {
 			if (forces == nullptr) forces = new map<StrId, ofVec2f>();
@@ -69,7 +69,7 @@ namespace Cog {
 		/**
 		* Gets velocity vector
 		*/
-		ofVec2f GetVelocity() const {
+		ofVec2f& GetVelocity() {
 			return velocity;
 		}
 
@@ -104,6 +104,15 @@ namespace Cog {
 			this->velocity = ofVec2f(0);
 			this->acceleration = ofVec2f(0);
 			this->angularSpeed = 0;
+		}
+
+		void UpdateVelocity(uint64_t delta, float gameSpeed) {
+			auto force = CalcForce();
+			velocity += force * delta * gameSpeed;
+		}
+
+		ofVec2f CalcDelta(uint64_t delta, float gameSpeed) const {
+			return velocity * delta * gameSpeed;
 		}
 	};
 

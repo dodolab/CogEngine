@@ -25,7 +25,7 @@ namespace Cog {
 		// notify renderer that we will use specific layers
 		for (auto layer : layers) {
 			auto spriteSheet = cache->GetSpriteSheet(layer.spriteSheetName);
-			renderer->AddTileLayer(spriteSheet->GetSpriteImage(), layer.name, layer.bufferSize, layer.zIndex);
+			renderer->AddTileLayer(spriteSheet->GetSpriteAtlas(), layer.name, layer.bufferSize, layer.zIndex);
 		}
 
 		initialized = true;

@@ -27,7 +27,7 @@ namespace Cog {
 		case MESH_NONE:
 		case MESH_RECTANGLE:
 		case MESH_BOUNDING_BOX:
-			auto rectShape = node->GetMesh<Rectangle>();
+			auto rectShape = node->GetMesh<FRect>();
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
 			nodeTransform.scale = ofVec3f(1);

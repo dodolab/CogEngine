@@ -246,7 +246,7 @@
     <ClInclude Include="src\AI\Simulator.h" />
     <ClInclude Include="src\AI\UCTAgent.h" />
     <ClInclude Include="src\Attributes\Flags.h" />
-    <ClInclude Include="src\Attributes\Movement.h" />
+    <ClInclude Include="src\Attributes\Dynamics.h" />
     <ClInclude Include="src\Attributes\Mesh.h" />
     <ClInclude Include="src\Attributes\StrId.h" />
     <ClInclude Include="src\Attributes\Transform.h" />
@@ -270,6 +270,7 @@
     <ClInclude Include="src\Behaviors\TransformAnim.h" />
     <ClInclude Include="src\Behaviors\Tween.h" />
     <ClInclude Include="src\Builders\TimeLineBuilder.h" />
+    <ClInclude Include="src\Builders\TransformBuilder.h" />
     <ClInclude Include="src\Communication\UpdateInfo.h" />
     <ClInclude Include="src\Communication\UpdateMessage.h" />
     <ClInclude Include="src\Communication\NetMessage.h" />
@@ -292,6 +293,7 @@
     <ClInclude Include="src\Core\Attr.h" />
     <ClInclude Include="src\Core\Behavior.h" />
     <ClInclude Include="src\Core\BehaviorCreator.h" />
+    <ClInclude Include="src\Core\BoundingBox.h" />
     <ClInclude Include="src\Core\ofxCogApp.h" />
     <ClInclude Include="src\Core\ofxCogEngine.h" />
     <ClInclude Include="src\Core\Component.h" />
@@ -323,18 +325,16 @@
     <ClInclude Include="src\Graphics\SheetAnim.h" />
     <ClInclude Include="src\Graphics\AnimLoader.h" />
     <ClInclude Include="src\Graphics\Sprite.h" />
-    <ClInclude Include="src\Graphics\SpriteInst.h" />
     <ClInclude Include="src\Graphics\SpriteSheetGenerator.h" />
-    <ClInclude Include="src\Graphics\SpriteSet.h" />
     <ClInclude Include="src\Graphics\SpriteSheet.h" />
     <ClInclude Include="src\Graphics\SpriteSheetRenderer.h" />
-    <ClInclude Include="src\Math\AStarSearch.h" />
     <ClInclude Include="src\Math\GridSpace.h" />
     <ClInclude Include="src\Math\EasingFunc.h" />
-    <ClInclude Include="src\Math\GridGraph.h" />
+    <ClInclude Include="src\Math\GridMap.h" />
     <ClInclude Include="src\Math\MapLoader.h" />
     <ClInclude Include="src\Math\NodeCellObject.h" />
     <ClInclude Include="src\Math\Path.h" />
+    <ClInclude Include="src\Math\PathFinder.h" />
     <ClInclude Include="src\Math\SteeringMath.h" />
     <ClInclude Include="src\Math\Tile.h" />
     <ClInclude Include="src\Misc\CoroutineContext.h" />
@@ -345,6 +345,7 @@
     <ClInclude Include="src\ofxCogMain.h" />
     <ClInclude Include="src\Scripting\BehaviorLua.h" />
     <ClInclude Include="src\Scripting\FacadeLua.h" />
+    <ClInclude Include="src\Scripting\List.h" />
     <ClInclude Include="src\Scripting\LuaMapper.h" />
     <ClInclude Include="src\Tests\CoroutineTest.h" />
     <ClInclude Include="src\Tests\EngineTest.h" />
@@ -534,6 +535,7 @@
     <ClCompile Include="src\Behaviors\TransformAnim.cpp" />
     <ClCompile Include="src\Behaviors\Tween.cpp" />
     <ClCompile Include="src\Builders\TimeLineBuilder.cpp" />
+    <ClCompile Include="src\Builders\TransformBuilder.cpp" />
     <ClCompile Include="src\Communication\UpdateMessage.cpp" />
     <ClCompile Include="src\Communication\NetMessage.cpp" />
     <ClCompile Include="src\Communication\NetReader.cpp" />
@@ -579,14 +581,12 @@
     <ClCompile Include="src\Graphics\SpriteSheet.cpp" />
     <ClCompile Include="src\Graphics\SpriteSheetGenerator.cpp" />
     <ClCompile Include="src\Graphics\SpriteSheetTexture.cpp" />
-    <ClCompile Include="src\Graphics\SpriteInst.cpp" />
-    <ClCompile Include="src\Graphics\SpriteSet.cpp" />
     <ClCompile Include="src\Graphics\SpriteSheetRenderer.cpp" />
-    <ClCompile Include="src\Math\AStarSearch.cpp" />
     <ClCompile Include="src\Math\EasingFunc.cpp" />
     <ClCompile Include="src\Math\GridGraph.cpp" />
     <ClCompile Include="src\Math\MapLoader.cpp" />
     <ClCompile Include="src\Math\Path.cpp" />
+    <ClCompile Include="src\Math\PathFinder.cpp" />
     <ClCompile Include="src\Math\SteeringMath.cpp" />
     <ClCompile Include="src\Misc\EnumConverter.cpp" />
     <ClCompile Include="src\Misc\TimeMeasure.cpp" />

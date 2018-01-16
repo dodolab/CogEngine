@@ -16,20 +16,20 @@ namespace Cog {
 
 	void Trans::CalcAbsTransform(Trans& parent) {
 		absScale = parent.absScale*scale;
-	    absRotation = rotation + parent.absRotation;
+		absRotation = rotation + parent.absRotation;
 		absPos = localPos*parent.absScale + parent.absPos;
 		absRotationCentroid = rotationCentroid * parent.absScale;
 
 		if (parent.absRotation != 0) {
 			// rotate around parent's center
-			
+
 			// calculate distance vector between local center and parent's center
-			ofVec2f distanceVector  =   (absPos + absRotationCentroid) - (parent.absPos + parent.absRotationCentroid);
+			ofVec2f distanceVector = (absPos + absRotationCentroid) - (parent.absPos + parent.absRotationCentroid);
 			float length = distanceVector.length();
 
 			// calculate angle between local center and parent's center 
-			float angle = ofDegToRad(parent.absRotation) + (atan2f(distanceVector.y, distanceVector.x));
-	
+			float angle = parent.absRotation + (atan2f(distanceVector.y, distanceVector.x));
+
 			// calculate rotation offset
 			ofVec3f rotPos = ofVec3f(length*(cos(angle)), length*(sin(angle)), localPos.z);
 
@@ -56,9 +56,9 @@ namespace Cog {
 		// translate to the center
 		matrix.translate(-absRotationCentroid / absScale);
 		// rotate around centroid
-		matrix.rotate(absRotation, 0, 0, 1);
+		matrix.rotate(ofRadToDeg(absRotation), 0, 0, 1);
 		// translate back -> object will be at the same location but rotated
-		matrix.translate(absRotationCentroid  / absScale);
+		matrix.translate(absRotationCentroid / absScale);
 		// scale and translate to the desired location
 		matrix.scale(absScale);
 		matrix.translate(absPos);
@@ -78,5 +78,6 @@ namespace Cog {
 
 		return matrix;
 	}
+
 
 } // namespace

@@ -5,6 +5,10 @@
 
 namespace Cog {
 
+	enum class VDirection {
+		NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST
+	};
+
 	/**
 	* 2D vector of integers
 	*/
@@ -122,6 +126,18 @@ namespace Cog {
 		*/
 		float Distancef(const Vec2i& a) {
 			return sqrt((a.x - x)*(a.x - x) + (a.y - y)*(a.y - y));
+		}
+
+		static VDirection GetDirection(Vec2i start, Vec2i end) {
+			if (start.x + 1 == end.x && start.y == end.y) return VDirection::EAST;
+			if (start.x + 1 == end.x && start.y + 1 == end.y) return VDirection::SOUTH_EAST;
+			if (start.x == end.x && start.y + 1 == end.y) return VDirection::SOUTH;
+			if (start.x - 1 == end.x && start.y + 1 == end.y) return VDirection::SOUTH_WEST;
+			if (start.x - 1 == end.x && start.y == end.y) return VDirection::WEST;
+			if (start.x - 1 == end.x && start.y - 1 == end.y) return VDirection::NORTH_WEST;
+			if (start.x == end.x && start.y - 1 == end.y) return VDirection::NORTH;
+			if (start.x + 1 == end.x && start.y - 1 == end.y) return VDirection::NORTH_EAST;
+
 		}
 	};
 
