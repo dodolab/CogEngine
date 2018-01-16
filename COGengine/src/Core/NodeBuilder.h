@@ -101,11 +101,11 @@ namespace Cog {
 		* @param scene scene whose layers contain the sprite
 		* @param node node to fill
 		* @param layer name of the layer the sprite should be rendered on
-		* @param spriteSet sprite set the sprite consists of
+		* @param spritesheet sprite sheet the sprite consists of
 		* @param row sprite row on the sprite sheet
 		* @param column sprite column on the sprite sheet
 		*/
-		void CreateSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column);
+		void CreateSpriteNode(Scene* scene, Node* node, string layer, string spritesheet, int row, int column);
 
 		/**
 		* Fills given node with rectangle mesh

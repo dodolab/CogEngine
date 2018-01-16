@@ -61,8 +61,8 @@ namespace Cog {
 		node->SetMesh(lab);
 	}
 
-	void NodeBuilder::CreateSpriteNode(Scene* scene, Node* node, string layer, string spriteSet, int row, int column) {
-		auto spriteShape = CreateSpriteMesh(scene, layer, spriteSet, row, column);
+	void NodeBuilder::CreateSpriteNode(Scene* scene, Node* node, string layer, string spritesheet, int row, int column) {
+		auto spriteShape = CreateSpriteMesh(scene, layer, spritesheet, row, column);
 		node->SetMesh(spriteShape);
 	}
 
@@ -360,11 +360,12 @@ namespace Cog {
 
 			if (layer.empty()) CogLogError("NodeBuilder", "Error while loading sprite sheet. Layer not specified (node %s)", node->GetTag().c_str());
 
-			string spriteSet = xml.attribute("spriteset").as_string();
+
+			string spritesheet = xml.attribute("spritesheet").as_string();
 			int row = xml.attribute("row").as_int(0);
 			int column = xml.attribute("column").as_int(0);
 
-			CreateSpriteNode(scene, node, layer, spriteSet, row, column);
+			CreateSpriteNode(scene, node, layer, spritesheet, row, column);
 		}
 		else if (renderType == MESH_BOUNDING_BOX) {
 			string colorStr = xml.attribute("color").as_string("0x000000");

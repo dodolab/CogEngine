@@ -6,6 +6,7 @@
 #include "TransformEnt.h"
 #include "BehaviorEnt.h"
 #include "AttribAnim.h"
+#include "SpriteSheetBuilder.h"
 
 namespace Cog {
 
@@ -137,6 +138,7 @@ namespace Cog {
 			}
 		}
 
+
 		string spriteSheetsPath = ofToDataPath(PATH_SPRITESHEETS);
 		xmlDoc = LoadResourcesXml(spriteSheetsPath);
 		if (xmlDoc) {
@@ -148,18 +150,20 @@ namespace Cog {
 				string img = sheetNode.attribute("img").as_string();
 				if (img.empty()) throw new IllegalArgumentException("Sprite atlas must have img specified!");
 
-				auto spriteSheets = sheetNode.children("spriteSheet");
+				auto spriteSheets = sheetNode.children("spritesheet");
+
+				SpriteSheetBuilder bld;
 
 				if (spriteSheets.begin() == spriteSheets.end()) {
 					// no sprite sheet -> the sprite atlas itself is the only one sprite sheet 
-					spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
-					spriteSheet->LoadFromXml(sheetNode, atlasName, img);
+					bld.LoadFromXml(sheetNode, img, atlasName);
+					spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(bld.Build());
 					this->StoreSpriteSheet(spriteSheet);
 				}
 				else {
 					for (auto spriteSheetDesc : spriteSheets) {
-						spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(new SpriteSheet());
-						spriteSheet->LoadFromXml(spriteSheetDesc, atlasName, img);
+						bld.LoadFromXml(spriteSheetDesc, img, atlasName);
+						spt<SpriteSheet> spriteSheet = spt<SpriteSheet>(bld.Build());
 						this->StoreSpriteSheet(spriteSheet);
 					}
 				}

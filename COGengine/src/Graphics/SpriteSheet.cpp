@@ -26,18 +26,4 @@ namespace Cog {
 		spriteAtlasHeight = spriteAtlas->getHeight();
 	}
 
-	void SpriteSheet::LoadFromXml(xml_node& xml, string img, string atlasName) {
-		auto spriteSets = xml.children("spriteset");
-
-		string name = xml.attribute("name").as_string(atlasName.c_str());
-		
-		this->name = name;
-		this->spriteAtlas= CogGet2DImage(img);
-		this->spriteAtlasName = atlasName;
-
-		this->totalFrames = xml.attribute("frames").as_int(0);
-		this->spriteWidth = xml.attribute("sprite_width").as_int(0);
-		this->spriteHeight = xml.attribute("sprite_height").as_int(0);
-	}
-
 } // namespace

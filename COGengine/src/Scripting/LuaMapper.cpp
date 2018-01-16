@@ -334,6 +334,7 @@ namespace Cog {
 			.addFunction("GetResourceStr", &Resources::GetResourceStr)
 			.endClass();
 
+
 		// Node
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Node>("Node")
@@ -368,8 +369,8 @@ namespace Cog {
 			.addFunction("GetSprite", reinterpret_cast<SpriteMesh*(Node::*)() const> (&Node::GetMeshPtr))
 			.addFunction("GetMultiSprite", reinterpret_cast<MultiSpriteMesh*(Node::*)() const> (&Node::GetMeshPtr))
 			.addFunction("GetText", reinterpret_cast<Text*(Node::*)() const> (&Node::GetMeshPtr))
+			.addFunction("SetImageMesh", &Node::SetImageMesh)
 			.endClass();
-
 
 
 		luabridge::getGlobalNamespace(L)
@@ -396,6 +397,20 @@ namespace Cog {
 			.addFunction("CogGetComponent_Stage", &FacadeLua::CogGetComponent<Stage>)
 			.addFunction("CogGetComponent_Resources", &FacadeLua::CogGetComponent<Resources>)
 			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
+
+
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Msg>("Msg")
+			.addFunction("GetAction", &Msg::GetAction)
+			.addFunction("GetContextNode", &Msg::GetContextNode)
+			.addProperty("contextNode", &Msg::GetContextNode)
+			.addFunction("GetParameter", &Msg::GetParameter)
+			.addFunction("GetRecipientId", &Msg::GetRecipientId)
+			.addFunction("GetSenderId", &Msg::GetSenderId)
+			.addFunction("HasAction", &Msg::HasAction)
+			.addFunction("HasContextNode", &Msg::HasContextNode)
+			.endClass();
+
 	}
 
 } // namespace

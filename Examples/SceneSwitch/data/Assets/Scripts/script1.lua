@@ -12,7 +12,7 @@ end
 function SceneSwitcher:OnMessage(msg)
 	if (msg:HasAction(StrId("ACT_BUTTON_CLICKED")))
 	then
-			stage = CogGetComponent("Stage")	
+			stage = CogGetComponent_Stage()	
 		    actualScene = stage.actualScene.name
 			newScene = (actualScene == "scene1" and  "scene2" or "scene1")
 			

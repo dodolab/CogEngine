@@ -143,7 +143,7 @@ namespace Cog {
 		int GetSpriteHeight() const {
 			return spriteHeight;
 		}
-
+		
 		/**
 		 * Gets width of this sprite sheet
 		 */
@@ -171,8 +171,6 @@ namespace Cog {
 		int GetSpriteAtlasHeight() const {
 			return spriteAtlasHeight;
 		}
-
-		void LoadFromXml(xml_node& xml, string name, string img);
 	};
 
 } // namespace

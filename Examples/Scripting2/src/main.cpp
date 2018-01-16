@@ -4,7 +4,6 @@
 #include "ofxTextLabel.h"
 #include "NetworkManager.h"
 #include "Mesh.h"
-#include "NetworkCommunicator.h"
 #include "NetMessage.h"
 #include "Interpolator.h"
 #include "AttribAnimator.h"
@@ -23,6 +22,7 @@ class ExampleApp : public ofxCogApp {
 	}
 
 };
+
 
 int main() {
 	ofSetupOpenGL(800, 450, OF_WINDOW);

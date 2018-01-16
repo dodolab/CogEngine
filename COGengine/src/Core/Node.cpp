@@ -83,6 +83,10 @@ namespace Cog {
 
 	}
 
+	void Node::SetImageMesh(string path) {
+		this->mesh = spt<Image>(new Image(CogPreload2DImage(path)));
+	}
+
 	void Node::UpdateTransform(bool deep) {
 
 		COGMEASURE_BEGIN("NODE_UPDATE_TRANSFORM");

@@ -13,11 +13,11 @@ ScriptExample2 = Behavior:Extend("ScriptExample2", {
 	Update = function(self, delta, absolute)
 		if (self.animate)
 		then
-			rot = self.owner.transform.rotation
-			self.owner.transform.rotation = self.owner.transform.rotation + 10
+			rot = self.owner:GetTransform().rotation
+			self.owner:GetTransform().rotation = self.owner:GetTransform().rotation + 10
 			if (rot > 360)
 			then
-				self.owner.transform.rotation = 0
+				self.owner:GetTransform().rotation = 0
 				self.animate = false
 				self:SendMessage(StrId("GREEN_ROTATION_COMPLETED"))
 			end

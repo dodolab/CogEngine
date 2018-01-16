@@ -21,7 +21,6 @@ public:
 		sceneNum = GETCOMPONENT(Stage)->GetScenes().size();
 	}
 
-
 	virtual void Update(const uint64 delta, const uint64 absolute) {
 		for (auto key : CogGetPressedKeys()) {
 			if (!key->IsProcessed()) {

@@ -70,9 +70,9 @@ namespace Cog
 		string GetStringValue() const {
 #ifdef _DEBUG
 			if (!strVal.empty()) return strVal;
-			auto fnd = strValues.find(val);
+			auto fnd = strValues().find(val);
 
-			if (fnd != strValues.end()) {
+			if (fnd != strValues().end()) {
 				return fnd->second;
 			}
 			return string("");
@@ -87,7 +87,11 @@ namespace Cog
 
 #ifdef _DEBUG
 		// value-string map for debug purposes such as logging
-		static map<unsigned, string>  strValues;
+		static map<unsigned, string>&  strValues() {
+			static map<unsigned, string>  vals;
+			return vals;
+		}
+
 		string strVal = "";
 #endif
 

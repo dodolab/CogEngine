@@ -4,13 +4,12 @@
 #include "ofxTextLabel.h"
 #include "NetworkManager.h"
 #include "Mesh.h"
-#include "NetworkCommunicator.h"
 #include "NetMessage.h"
 #include "Interpolator.h"
 #include "AttribAnimator.h"
 #include "UpdateMessage.h"
 #include "Move.h"
-#include "Movement.h"
+#include "Dynamics.h"
 #include "SteeringBehavior.h"
 #include "SpriteSheet.h"
 
@@ -21,16 +20,15 @@ private:
 	Node* viewNode = nullptr;
 	// models
 	vector<Node*> cars;
-	// sprite storage
-	vector<Sprite> spriteStorage;
-	// sprite set
-	spt<SpriteSet> spriteSet;
+	// sprite sheet
+	spt<SpriteSheet> spriteSheet;
 	Node* infoNode;
 	int carsSize;
 public:
 	SpriteBehavior() {
 
 	}
+
 
 	void OnInit() {
 		SubscribeForMessages(ACT_BUTTON_CLICKED);
@@ -43,14 +41,6 @@ public:
 		spt<MultiSpriteMesh> mesh = spt<MultiSpriteMesh>(new MultiSpriteMesh("cars"));
 		viewNode->SetMesh(mesh);
 
-		// fill sprite storage
-		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("cars");
-		spriteSet = spriteSheet->GetDefaultSpriteSet();
-
-		for (int i = 0; i < 8; i++) {
-			Sprite spr = Sprite(spriteSet, i);
-			this->spriteStorage.push_back(spr);
-		}
 
 		AddCars(10);
 	}
@@ -81,16 +71,16 @@ public:
 		for (int i = 0; i < cars.size(); i++) {
 			auto& model = cars[i];
 			auto& view = sprites[i];
-			view->transform = model->GetTransform();
+			view->SetTransform(model->GetTransform());
 
 			// each car has two frames -> with lights turned on and off,
 			// switch the sprite cca every 1s
 			if (ofRandom(0,1) < 0.005f) {
-				if (view->sprite.GetFrame() % 2 == 0) {
-					view->sprite = spriteStorage[view->sprite.GetFrame() + 1];
+				if (view->GetFrame() % 2 == 0) {
+					view->SetFrame(view->GetFrame() + 1);
 				}
 				else {
-					view->sprite = spriteStorage[view->sprite.GetFrame() - 1];
+					view->SetFrame(view->GetFrame() - 1);
 				}
 			}
 		}
@@ -100,9 +90,8 @@ public:
 
 	void AddCars(int num) {
 		TransformMath math;
-		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("cars");
-		auto spriteSet = spriteSheet->GetDefaultSpriteSet();
-
+		spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("cars");
+		
 
 		for (int i = 0; i < num; i++) {
 			Node* car = new Node("car");
@@ -110,7 +99,7 @@ public:
 			this->cars.push_back(car);
 
 			// rectangles are not rendered (instead of planes) and can be used for size calculations
-			auto rectangle = spt<Cog::Rectangle>(new Cog::Rectangle(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
+			auto rectangle = spt<Cog::FRect>(new Cog::FRect(spriteSheet->GetSpriteWidth(), spriteSheet->GetSpriteHeight()));
 			rectangle->SetIsRenderable(false);
 			car->SetMesh(rectangle);
 
@@ -128,19 +117,17 @@ public:
 
 			// add sprite into view with random car color
 			int randomCar = ofRandom(0, 4) * 2;
-			auto sprite = spriteStorage[randomCar];
-			// sprite instance contains sprite and transformation
-			auto spriteInstance = spt<SpriteInst>(new SpriteInst(sprite, trans));
-			this->viewNode->GetMesh<MultiSpriteMesh>()->AddSprite(spriteInstance);
+			Sprite* sprite = new Sprite(spriteSheet, randomCar, trans);
+			this->viewNode->GetMesh<MultiSpriteMesh>()->AddSprite(sprite);
 			
 			// set transformation of the model node
 			car->SetTransform(trans);
 
 			// insert steering behavior for random movement
-			auto movement = Movement();
+			auto movement = new Dynamics();
 			car->AddAttr(ATTR_MOVEMENT, movement);
 			car->AddBehavior(new Move(true));
-			car->AddBehavior(new WanderBehavior(300 * (ofRandomf() + 1), 50 * (ofRandomf() + 1), 1000000));
+			car->AddBehavior(new WanderBehavior(300 * (ofRandomf() + 1), 5000 * (ofRandomf() + 1), 1000000));
 		}
 	}
 

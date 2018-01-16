@@ -8,7 +8,7 @@ namespace Cog
 		val(Calculate(str))
 	{
 #ifdef _DEBUG
-		StrId::strValues[val] = string(str);
+		StrId::strValues()[val] = string(str);
 		this->strVal = str;
 #endif
 	}
@@ -17,7 +17,7 @@ namespace Cog
 		val(Calculate(str.c_str()))
 	{
 #ifdef _DEBUG
-		StrId::strValues[val] = str;
+		StrId::strValues()[val] = str;
 		this->strVal = str;
 #endif
 	}
@@ -39,8 +39,4 @@ namespace Cog
 		return hash;
 	}
 
-
-#ifdef _DEBUG
-	map<unsigned,string> StrId::strValues = map<unsigned, string>();
-#endif
 }

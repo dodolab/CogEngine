@@ -98,6 +98,10 @@ namespace Cog {
 			return transform;
 		}
 
+		void SetTransform(Trans& trans) {
+			this->transform = trans;
+		}
+
 		/**
 		 * Gets z-index
 		 */

@@ -91,24 +91,6 @@ namespace Cog {
 		}
 	};
 
-	class NetInputMessage;
-
-	/**
-	* Event invoked when a network message arrived
-	*/
-	class NetworkMsgEvent : public MsgPayload {
-	public:
-		spt<NetInputMessage> msg;
-
-		NetworkMsgEvent(spt<NetInputMessage> msg) : msg(msg) {
-
-		}
-
-		~NetworkMsgEvent(){
-
-		}
-	};
-
 	/**
 	* A common generic event with a value
 	*/

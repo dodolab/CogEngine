@@ -9,7 +9,7 @@
 	  
 			<!-- background image -->
 		    <node name="bgr" img="bgr2.jpg">
-				<mesh type="sprite" layer="background" />
+				<mesh type="sprite" layer="background" spritesheet="background" />
 				<behavior type="SpriteBehavior" /> <!-- main logic placed here -->
 				
 				<node name="cars">

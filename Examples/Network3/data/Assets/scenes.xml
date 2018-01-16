@@ -9,7 +9,7 @@
 	  
 			<!-- background image -->
 		    <node name="bgr">
-				<mesh type="sprite" layer="background" />
+				<mesh type="sprite" layer="background" spritesheet="background" />
 				<behavior type="NetworkBehavior" />
 				
 				<!-- info -->

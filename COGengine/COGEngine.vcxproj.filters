@@ -646,6 +646,9 @@
     <ClInclude Include="src\Scripting\LuaScripting.h">
       <Filter>src\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Builders\SpriteSheetBuilder.h">
+      <Filter>src\Builders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\Environment.cpp">
@@ -1016,6 +1019,9 @@
     </ClCompile>
     <ClCompile Include="src\Scripting\LuaScripting.cpp">
       <Filter>src\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Builders\SpriteSheetBuilder.cpp">
+      <Filter>src\Builders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

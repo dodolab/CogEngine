@@ -4,14 +4,14 @@
 #include "ofxTextLabel.h"
 #include "NetworkManager.h"
 #include "Mesh.h"
-#include "NetworkCommunicator.h"
+#include "NetworkClient.h"
+#include "NetworkHost.h"
 #include "NetMessage.h"
 #include "Interpolator.h"
 #include "AttribAnimator.h"
 #include "UpdateMessage.h"
 
 enum class NetworkType{NONE, CLIENT,SERVER};
-
 
 /**
 * Network message payload
@@ -38,11 +38,11 @@ public:
 	}
 
 	int GetDataLength() {
-		return sizeof(tDWORD);
+		return sizeof(ADWORD);
 	}
 
 	spt<NetOutputMessage> CreateMessage() {
-		auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0));
+		auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0,0));
 		outputMsg->SetAction(StrId("VALUE_MESSAGE")); // this identifies the message payload
 		outputMsg->SetData(this);
 		return outputMsg;
@@ -51,7 +51,8 @@ public:
 
 class NetworkBehavior : public Behavior {
 private:
-	NetworkCommunicator* communicator;
+	NetworkClient* client;
+	NetworkHost* host;
 	NetworkType netType = NetworkType::NONE;
 public:
 	NetworkBehavior()  {
@@ -60,19 +61,21 @@ public:
 
 	void OnInit() {
 		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_BUTTON_CLICKED);
-		communicator = new NetworkCommunicator();
-		REGISTER_COMPONENT(communicator);
+		client = new NetworkClient();
+		REGISTER_COMPONENT(client);
+		host = new NetworkHost();
+		REGISTER_COMPONENT(host);
 	}
 
 	void InitNetwork(NetworkType netType) {
 		this->netType = netType;
 
 		if (netType == NetworkType::SERVER) {
-			communicator->InitListening(1234, 11987);
+			host->InitHost(1234, 11987);
 		}
 		else {
-			communicator->InitBroadcast(1234, 11986, 11987);
-			communicator->SetAutoConnect(true);
+			client->InitClient(1234, 11986, 11987);
+			client->SetAutoConnect(true);
 		}
 	}
 
@@ -113,14 +116,19 @@ public:
 				int textNum = ofToInt(text->GetText());
 				auto valueMsg = new ValueMsg(textNum);
 				auto netMsg = valueMsg->CreateMessage();
-				communicator->PushMessageForSending(netMsg);
+				if (netType == NetworkType::CLIENT) {
+					client->PushMessageForSending(netMsg);
+				}
+				else {
+					host->PushMessageForSending(netMsg);
+				}
 			}
 		}
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED)) {
 			// set text according to the received value
-			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
-			auto netMsg = msgEvent->msg;
+			auto netMsg = msg.GetDataPtr<NetInputMessage>();
+
 			if (netMsg->GetAction() == StrId("VALUE_MESSAGE")) {
 				auto payload = netMsg->GetData<ValueMsg>();
 				int value = payload->value;
@@ -135,9 +143,14 @@ public:
 		if (CogGetFrameCounter() % 50 == 0) {
 			if (netType == NetworkType::CLIENT || netType == NetworkType::SERVER) {
 				// send just regular message, otherwise the other station will disconnect
-				auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0));
+				auto outputMsg = spt<NetOutputMessage>(new NetOutputMessage(0,0));
 				outputMsg->SetAction(StrId(12345));
-				communicator->PushMessageForSending(outputMsg);
+				if (netType == NetworkType::CLIENT) {
+					client->PushMessageForSending(outputMsg);
+				}
+				else {
+					host->PushMessageForSending(outputMsg);
+				}
 			}
 		}
 	}

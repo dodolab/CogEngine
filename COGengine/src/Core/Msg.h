@@ -260,7 +260,7 @@ namespace Cog {
 		/**
 		* Gets the node that is connected with this message
 		*/
-		Node* GetContextNode() {
+		Node* GetContextNode() const {
 			return contextNode;
 		}
 

@@ -1,6 +1,6 @@
 -- Enumerators
-TweenDirection_NONE = "NONE"
-TweenDirection_LEFT = "LEFT"
-TweenDirection_RIGHT = "RIGHT"
-TweenDirection_UP = "UP"
-TweenDirection_DOWN = "DOWN"
+TweenDirection_NONE = 1
+TweenDirection_LEFT = 2
+TweenDirection_RIGHT = 3
+TweenDirection_UP = 4
+TweenDirection_DOWN = 5

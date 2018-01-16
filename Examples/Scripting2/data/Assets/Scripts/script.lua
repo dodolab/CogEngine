@@ -5,6 +5,6 @@ function ScriptExample:OnInit()
 end
 
 function ScriptExample:Update(delta, absolute)
-	self.owner.transform.rotation = self.owner.transform.rotation+1
+	self.owner:GetTransform().rotation = self.owner:GetTransform().rotation+1
 end
 

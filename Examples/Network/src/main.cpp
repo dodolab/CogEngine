@@ -4,7 +4,8 @@
 #include "ofxTextLabel.h"
 #include "NetworkManager.h"
 #include "Mesh.h"
-#include "NetworkCommunicator.h"
+#include "NetworkClient.h"
+#include "NetworkHost.h"
 #include "NetMessage.h"
 #include "Interpolator.h"
 #include "AttribAnimator.h"
@@ -14,7 +15,8 @@ enum class NetworkType{NONE, CLIENT,SERVER};
 
 class NetworkBehavior : public Behavior {
 private:
-	NetworkCommunicator* communicator;
+	NetworkClient* client;
+	NetworkHost* host;
 	Interpolator* deltaUpdate;
 	NetworkType netType = NetworkType::NONE;
 public:
@@ -24,8 +26,10 @@ public:
 
 	void OnInit() {
 		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_BUTTON_CLICKED);
-		communicator = new NetworkCommunicator();
-		REGISTER_COMPONENT(communicator);
+		client = new NetworkClient();
+		REGISTER_COMPONENT(client);
+		host = new NetworkHost();
+		REGISTER_COMPONENT(host);
 	}
 
 	void InitNetwork(NetworkType netType) {
@@ -36,11 +40,11 @@ public:
 		}
 
 		if (netType == NetworkType::SERVER) {
-			communicator->InitListening(1234, 11987);
+			host->InitHost(1234, 11987);
 		}
 		else {
-			communicator->InitBroadcast(1234, 11986, 11987);
-			communicator->SetAutoConnect(true);
+			client->InitClient(1234, 11986, 11987);
+			client->SetAutoConnect(true);
 		}
 
 		if (netType == NetworkType::CLIENT) {
@@ -67,8 +71,7 @@ public:
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {
 			// push received message to Interpolator
-			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
-			auto netMsg = msgEvent->msg;
+			auto netMsg = msg.GetDataPtr<NetInputMessage>();
 			if (netMsg->GetAction() == NET_MSG_UPDATE) {
 
 				spt<UpdateMessage> updateMsg = netMsg->GetData<UpdateMessage>();
@@ -98,7 +101,7 @@ public:
 				updateInfo->GetContinuousValues()[StrId("POS_Y")] = owner->GetTransform().localPos.y;
 
 				UpdateMessage* msg = new UpdateMessage(updateInfo);
-				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1));
+				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1, 1));
 				netMsg->SetData(msg);
 				netMsg->SetAction(StrId(NET_MSG_UPDATE));
 
@@ -107,7 +110,7 @@ public:
 				auto pressedKeys = CogGetPressedKeys();
 				if (pressedKeys.size() == 0 || pressedKeys[0]->key != 'r') {
 					netMsg->SetMsgTime(absolute);
-					communicator->PushMessageForSending(netMsg);
+					host->PushMessageForSending(netMsg);
 				}
 
 				if (pressedKeys.size() != 0) {

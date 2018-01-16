@@ -4,13 +4,14 @@
 #include "ofxTextLabel.h"
 #include "NetworkManager.h"
 #include "Mesh.h"
-#include "NetworkCommunicator.h"
+#include "NetworkClient.h"
+#include "NetworkHost.h"
 #include "NetMessage.h"
 #include "Interpolator.h"
 #include "AttribAnimator.h"
 #include "UpdateMessage.h"
 #include "Move.h"
-#include "Movement.h"
+#include "Dynamics.h"
 #include "SteeringBehavior.h"
 #include "SpriteSheet.h"
 
@@ -18,7 +19,8 @@ enum class NetworkType { NONE, CLIENT, SERVER };
 
 class NetworkBehavior : public Behavior {
 private:
-	NetworkCommunicator* communicator;
+	NetworkHost* host;
+	NetworkClient* client;
 	Interpolator* deltaUpdate;
 	NetworkType netType = NetworkType::NONE;
 	int unitsNum = 0;
@@ -34,8 +36,10 @@ public:
 
 	void OnInit() {
 		SubscribeForMessages(ACT_NET_MESSAGE_RECEIVED, ACT_NET_DISCONNECTED, ACT_BUTTON_CLICKED);
-		communicator = new NetworkCommunicator();
-		REGISTER_COMPONENT(communicator);
+		host = new NetworkHost();
+		REGISTER_COMPONENT(host);
+		client = new NetworkClient();
+		REGISTER_COMPONENT(client);
 		unitsNum = CogGetProjectSettings().GetSettingVal<int>("scene_settings", "units");
 	}
 
@@ -61,21 +65,21 @@ public:
 		}
 
 		if (netType == NetworkType::SERVER) {
-			communicator->InitListening(1234, 11987);
+			host->InitHost(1234, 11987);
 		}
 		else {
-			communicator->InitBroadcast(1234, 11986, 11987);
-			communicator->SetAutoConnect(true);
+			client->InitClient(1234, 11986, 11987);
+			client->SetAutoConnect(true);
 		}
 
 		if (netType == NetworkType::SERVER) {
 			//  insert movement behaviors to the model nodes
 			for (auto unitModel : unitModels) {
-				auto movement = Movement();
+				auto movement = new Dynamics();
 				unitModel->AddAttr(ATTR_MOVEMENT, movement);
 				unitModel->AddBehavior(new Move(true));
 				// steering behavior for random walk
-				unitModel->AddBehavior(new WanderBehavior(300 * (ofRandomf() + 1), 50 * (ofRandomf() + 1), 1000000));
+				unitModel->AddBehavior(new WanderBehavior(300 * (ofRandomf() + 1), 5000 * (ofRandomf() + 1), 1000000));
 			}
 		}
 	}
@@ -102,8 +106,7 @@ public:
 
 		if (msg.HasAction(ACT_NET_MESSAGE_RECEIVED) && netType == NetworkType::CLIENT) {
 			// push received message to Interpolator
-			auto msgEvent = msg.GetDataPtr<NetworkMsgEvent>();
-			auto netMsg = msgEvent->msg;
+			auto netMsg = msg.GetDataPtr<NetInputMessage>();
 			if (netMsg->GetAction() == NET_MSG_UPDATE) {
 
 				spt<UpdateMessage> updateMsg = netMsg->GetData<UpdateMessage>();
@@ -165,7 +168,7 @@ public:
 				previous = deltas;
 
 				UpdateMessage* msg = new UpdateMessage(updateInfo);
-				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1));
+				spt<NetOutputMessage> netMsg = spt<NetOutputMessage>(new NetOutputMessage(1,0));
 				netMsg->SetData(msg);
 				netMsg->SetAction(StrId(NET_MSG_UPDATE));
 
@@ -173,7 +176,12 @@ public:
 				auto pressedKeys = CogGetPressedKeys();
 				if (pressedKeys.size() == 0 || pressedKeys[0]->key != 'r') {
 					netMsg->SetMsgTime(absolute);
-					communicator->PushMessageForSending(netMsg);
+					if (netType == NetworkType::SERVER) {
+						host->PushMessageForSending(netMsg);
+					}
+					else {
+						client->PushMessageForSending(netMsg);
+					}
 				}
 
 				if (pressedKeys.size() != 0) {
@@ -192,7 +200,7 @@ public:
 			auto model = unitModels[i];
 			auto view = sprites[i];
 
-			view->transform = model->GetTransform();
+			view->SetTransform(model->GetTransform());
 		}
 	}
 };
@@ -221,8 +229,7 @@ class ExampleApp : public ofxCogApp {
 		int units = CogGetProjectSettings().GetSettingVal<int>("scene_settings", "units");
 
 		// create sprite sheet
-		auto spriteSheet = GETCOMPONENT(Resources)->GetSpriteSheet("pawn");
-		auto spriteSet = spriteSheet->GetDefaultSpriteSet();
+		auto spriteSet = GETCOMPONENT(Resources)->GetSpriteSheet("pawn");
 
 		// all units will be displayed as sprites -> therefore they must be defined twice
 		// unit_view is a multisprite node that will display all units as sprites
@@ -242,7 +249,7 @@ class ExampleApp : public ofxCogApp {
 			// each unit will have separate node (and its own movement behavior)
 			Node* unitModel = new Node("unit_model");
 			background->AddChild(unitModel);
-			auto rectangle = spt<Cog::Rectangle>(new Cog::Rectangle(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
+			auto rectangle = spt<Cog::FRect>(new Cog::FRect(spriteSet->GetSpriteWidth(), spriteSet->GetSpriteHeight()));
 			rectangle->SetIsRenderable(false);
 			unitModel->SetMesh(rectangle);
 
@@ -260,8 +267,8 @@ class ExampleApp : public ofxCogApp {
 			math.CalcTransform(trans, unitModel, background, node2trans, 100, 50);
 
 			// add sprite into mesh
-			auto sprite = Sprite(spriteSet, 0);
-			mesh->AddSprite(spt<SpriteInst>(new SpriteInst(sprite, trans)));
+			auto sprite = new Sprite(spriteSet, 0, trans);
+			mesh->AddSprite(sprite);
 
 			// set transformation of the model node
 			unitModel->SetTransform(trans);

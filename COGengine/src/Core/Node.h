@@ -278,6 +278,11 @@ namespace Cog {
 		}
 
 		/**
+		* Sets image imesh directly from path
+		*/
+		void SetImageMesh(string path);
+
+		/**
 		* Returns true, if the shape is of the selected type
 		*/
 		bool HasMeshType(stenum type) {

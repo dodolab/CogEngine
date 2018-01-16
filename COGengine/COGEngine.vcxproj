@@ -269,6 +269,7 @@
     <ClInclude Include="src\Behaviors\SteeringBehavior.h" />
     <ClInclude Include="src\Behaviors\TransformAnim.h" />
     <ClInclude Include="src\Behaviors\Tween.h" />
+    <ClInclude Include="src\Builders\SpriteSheetBuilder.h" />
     <ClInclude Include="src\Builders\TimeLineBuilder.h" />
     <ClInclude Include="src\Builders\TransformBuilder.h" />
     <ClInclude Include="src\Communication\NetworkClient.h" />
@@ -535,6 +536,7 @@
     <ClCompile Include="src\Behaviors\SteeringBehavior.cpp" />
     <ClCompile Include="src\Behaviors\TransformAnim.cpp" />
     <ClCompile Include="src\Behaviors\Tween.cpp" />
+    <ClCompile Include="src\Builders\SpriteSheetBuilder.cpp" />
     <ClCompile Include="src\Builders\TimeLineBuilder.cpp" />
     <ClCompile Include="src\Builders\TransformBuilder.cpp" />
     <ClCompile Include="src\Communication\NetworkClient.cpp" />
