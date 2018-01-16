@@ -271,6 +271,8 @@
     <ClInclude Include="src\Behaviors\Tween.h" />
     <ClInclude Include="src\Builders\TimeLineBuilder.h" />
     <ClInclude Include="src\Builders\TransformBuilder.h" />
+    <ClInclude Include="src\Communication\NetworkClient.h" />
+    <ClInclude Include="src\Communication\NetworkHost.h" />
     <ClInclude Include="src\Communication\UpdateInfo.h" />
     <ClInclude Include="src\Communication\UpdateMessage.h" />
     <ClInclude Include="src\Communication\NetMessage.h" />
@@ -281,8 +283,6 @@
     <ClInclude Include="src\Components\InputHandler.h" />
     <ClInclude Include="src\Components\Logger.h" />
     <ClInclude Include="src\Components\Interpolator.h" />
-    <ClInclude Include="src\Components\LuaScripting.h" />
-    <ClInclude Include="src\Components\NetworkCommunicator.h" />
     <ClInclude Include="src\Components\ResourcesMgr.h" />
     <ClInclude Include="src\Components\Environment.h" />
     <ClInclude Include="src\Components\Renderer.h" />
@@ -347,6 +347,7 @@
     <ClInclude Include="src\Scripting\FacadeLua.h" />
     <ClInclude Include="src\Scripting\List.h" />
     <ClInclude Include="src\Scripting\LuaMapper.h" />
+    <ClInclude Include="src\Scripting\LuaScripting.h" />
     <ClInclude Include="src\Tests\CoroutineTest.h" />
     <ClInclude Include="src\Tests\EngineTest.h" />
     <ClInclude Include="src\Tests\EngineTestAssets.h" />
@@ -536,6 +537,8 @@
     <ClCompile Include="src\Behaviors\Tween.cpp" />
     <ClCompile Include="src\Builders\TimeLineBuilder.cpp" />
     <ClCompile Include="src\Builders\TransformBuilder.cpp" />
+    <ClCompile Include="src\Communication\NetworkClient.cpp" />
+    <ClCompile Include="src\Communication\NetworkHost.cpp" />
     <ClCompile Include="src\Communication\UpdateMessage.cpp" />
     <ClCompile Include="src\Communication\NetMessage.cpp" />
     <ClCompile Include="src\Communication\NetReader.cpp" />
@@ -544,8 +547,6 @@
     <ClCompile Include="src\Components\InputHandler.cpp" />
     <ClCompile Include="src\Components\Logger.cpp" />
     <ClCompile Include="src\Components\Interpolator.cpp" />
-    <ClCompile Include="src\Components\LuaScripting.cpp" />
-    <ClCompile Include="src\Components\NetworkCommunicator.cpp" />
     <ClCompile Include="src\Components\Renderer.cpp" />
     <ClCompile Include="src\Components\ResourcesMgr.cpp" />
     <ClCompile Include="src\Components\Environment.cpp" />
@@ -594,6 +595,7 @@
     <ClCompile Include="src\Scripting\BehaviorLua.cpp" />
     <ClCompile Include="src\Scripting\FacadeLua.cpp" />
     <ClCompile Include="src\Scripting\LuaMapper.cpp" />
+    <ClCompile Include="src\Scripting\LuaScripting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="data\COGAssets\Manifest.xml" />

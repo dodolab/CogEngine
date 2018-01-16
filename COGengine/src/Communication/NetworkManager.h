@@ -11,6 +11,11 @@ namespace Cog {
 	class NetWriter;
 
 	/**
+	* Type of a connection (TCP/UDP)
+	*/
+	enum class ConnectionType { CONN_TCP, CONN_UDP };
+
+	/**
 	* Container for network protocols such as TCP, UDP and HTTP
 	*/
 	class NetworkManager {
@@ -23,8 +28,8 @@ namespace Cog {
 		int udpListenPort = 0;
 
 		// receive buffers
-		NetReader* tcpBufferStream;
-		NetReader* udpBufferStream;
+		NetReader* tcpBufferStream = nullptr;
+		NetReader* udpBufferStream = nullptr;
 	public:
 
 		NetworkManager() {
@@ -189,18 +194,15 @@ namespace Cog {
 		*/
 		NetWriter* PrepareMessage(ABYTE applicationId, NetWriter* writer);
 
-#define MANAGER_UDP 0
-#define MANAGER_TCP 1
-
 		/**
 		* Tries to receive message as a NetReader
 		*/
-		NetReader* ReceiveMessage(ABYTE applicationId, int timeoutSec, int managerType);
+		NetReader* ReceiveMessage(ABYTE applicationId, int timeoutSec, ConnectionType connectionType);
 
 		/**
 		* Tries to receive message
 		*/
-		spt<NetInputMessage> ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, int managerType);
+		spt<NetInputMessage> ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, ConnectionType connectionType);
 
 	};
 

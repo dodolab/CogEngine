@@ -13,6 +13,9 @@
 #include "TransformMath.h"
 #include "Scene.h"
 #include "Stage.h"
+#include "TransformBuilder.h"
+#include "Dynamics.h"
+#include "AttribAnimator.h"
 
 using namespace luabridge;
 
@@ -24,7 +27,9 @@ namespace Cog {
 		// static functions
 		luabridge::getGlobalNamespace(L)
 			.addFunction("ofRandom", static_cast<float(*)(float, float)>(&ofRandom))
-			.addFunction("floor", static_cast<double(*)(double)>(&floor));
+			.addFunction("floor", static_cast<double(*)(double)>(&floor))
+			.addFunction("CheckTime", &CheckTimeUnsigned)
+			.addFunction("Modulo", &Modulo);
 
 		// ofVec2f
 		luabridge::getGlobalNamespace(L)
@@ -35,6 +40,8 @@ namespace Cog {
 			.addFunction(LUA_OPERATOR_EQ, static_cast<bool(ofVec2f::*)(const ofVec2f &)const>(&ofVec2f::operator==))
 			.addData("x", &ofVec2f::x)
 			.addData("y", &ofVec2f::y)
+			.addFunction("length", &ofVec2f::length)
+			.addFunction("lengthSquared", &ofVec2f::lengthSquared)
 			.endClass();
 
 		// ofVec3f
@@ -47,11 +54,38 @@ namespace Cog {
 			.addData("x", &ofVec3f::x)
 			.addData("y", &ofVec3f::y)
 			.addData("z", &ofVec3f::z)
+			.addFunction("length", &ofVec3f::length)
+			.addFunction("lengthSquared", &ofVec3f::lengthSquared)
+			.endClass();
+
+		// Bounding Box
+		luabridge::getGlobalNamespace(L)
+			.beginClass<BoundingBox>("BoundingBox")
+			.addConstructor<void(*)()>()
+			.addFunction("GetCenter", &BoundingBox::GetCenter)
+			.addFunction("GetSize", &BoundingBox::GetSize)
+			.addFunction("HorizontalIntersection", &BoundingBox::HorizontalIntersection)
+			.addFunction("Intersects", &BoundingBox::Intersects)
+			.addFunction("VerticalIntersection", &BoundingBox::VerticalIntersection)
+			.addData("topLeft", &BoundingBox::topLeft)
+			.addData("bottomLeft", &BoundingBox::bottomLeft)
+			.addData("topRight", &BoundingBox::topRight)
+			.addData("bottomRight", &BoundingBox::bottomRight)
+			.endClass();
+
+		// Mesh 
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Mesh>("Mesh")
+			.addFunction("IsVisible", &Mesh::IsVisible)
+			.addFunction("SetIsVisible", &Mesh::SetIsVisible)
+			.addFunction("GetBoundingBox", &Mesh::GetBoundingBox)
+			.addProperty("isVisible", &Mesh::IsVisible, &Mesh::SetIsVisible)
 			.endClass();
 
 		// Text mesh
 		luabridge::getGlobalNamespace(L)
-			.beginClass<Text>("Text")
+			.deriveClass<Text, Mesh>("Text")
+			.addProperty("text", &Text::GetText, &Text::SetText)
 			.addFunction("AppendLine", &Text::AppendLine)
 			.addFunction("AppendText", &Text::AppendText)
 			.addFunction("GetHeight", &Text::GetHeight)
@@ -64,9 +98,11 @@ namespace Cog {
 
 		// Image mesh
 		luabridge::getGlobalNamespace(L)
-			.beginClass<Image>("Image")
+			.deriveClass<Image, Mesh>("Image")
 			.addFunction("GetHeight", &Image::GetHeight)
+			.addProperty("height", &Image::GetHeight)
 			.addFunction("GetWidth", &Image::GetWidth)
+			.addProperty("width", &Image::GetWidth)
 			.endClass();
 
 		luabridge::getGlobalNamespace(L)
@@ -74,6 +110,41 @@ namespace Cog {
 			.addFunction("getWidth", &ofImage::getWidth)
 			.addFunction("getHeigt", &ofImage::getHeight)
 			.endClass();
+
+
+		// Sprite
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Sprite>("Sprite")
+			.addProperty("frame", &Sprite::GetFrame, &Sprite::SetFrame)
+			.addFunction("GetFrame", &Sprite::GetFrame)
+			.addFunction("SetFrame", &Sprite::SetFrame)
+			.addProperty("offsetX", &Sprite::GetOffsetX)
+			.addFunction("GetOffsetX", &Sprite::GetOffsetX)
+			.addProperty("offsetY", &Sprite::GetOffsetY)
+			.addFunction("GetOffsetY", &Sprite::GetOffsetY)
+			.addProperty("width", &Sprite::GetWidth)
+			.addFunction("GetWidth", &Sprite::GetWidth)
+			.addProperty("height", &Sprite::GetHeight)
+			.addFunction("GetHeight", &Sprite::GetHeight)
+			.addFunction("GetTransform", &Sprite::GetTransform)
+			.addFunction("CalcBoundingBox", &Sprite::CalcBoundingBoxPtr)
+			.endClass();
+
+		// Sprite mesh 
+		luabridge::getGlobalNamespace(L)
+			.deriveClass<SpriteMesh, Mesh>("SpriteMesh")
+			.addFunction("GetLayerName", &SpriteMesh::GetLayerName)
+			.addFunction("GetSprite", &SpriteMesh::GetSprite)
+			.endClass();
+
+		// Multi Sprite mesh 
+		luabridge::getGlobalNamespace(L)
+			.deriveClass<MultiSpriteMesh, Mesh>("MultiSpriteMesh")
+			.addFunction("GetSprite", &MultiSpriteMesh::GetSprite)
+			.addFunction("RemoveSprite", &MultiSpriteMesh::RemoveSprite)
+			.addFunction("GetSpritesNum", &MultiSpriteMesh::GetSpritesNum)
+			.endClass();
+
 
 		// Vec2i
 		luabridge::getGlobalNamespace(L)
@@ -83,6 +154,37 @@ namespace Cog {
 			.addData("y", &Vec2i::y)
 			.addFunction(LUA_OPERATOR_PLUS, static_cast<Vec2i(Vec2i::*)(const Vec2i &)const>(&Vec2i::operator+))
 			.addFunction(LUA_OPERATOR_EQ, static_cast<bool(Vec2i::*)(const Vec2i &)const>(&Vec2i::operator==))
+			.endClass();
+
+		// TransformBuilder
+		luabridge::getGlobalNamespace(L)
+			.beginClass<TransformBuilder>("TransformBuilder")
+			.addConstructor<void(*)()>()
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("AbsolutePosition", &TransformBuilder::AbsolutePosition)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("AbsoluteScale", &TransformBuilder::AbsoluteScale)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("Anchor", &TransformBuilder::Anchor)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("LocalPosition", &TransformBuilder::LocalPosition)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("LocalScale", &TransformBuilder::LocalScale)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("RelativePosition", &TransformBuilder::RelativePosition)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("RelativeScale", &TransformBuilder::RelativeScale)
+			.addFunction("Rotation", &TransformBuilder::Rotation)
+			.addFunction<TransformBuilder&(TransformBuilder::*)(ofVec2f)>("RotationCenter", &TransformBuilder::RotationCenter)
+			.addFunction("ZIndex", &TransformBuilder::ZIndex)
+			.addFunction("Calculate", &TransformBuilder::Calculate)
+			.addFunction<void(TransformBuilder::*)(Node*)>("Build", &TransformBuilder::Build)
+			.addFunction("BuildAndReset", &TransformBuilder::BuildAndReset)
+			.endClass();
+
+		// Dynamics
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Dynamics>("Dynamics")
+			.addFunction("GetAcceleration", &Dynamics::GetAcceleration)
+			.addFunction("SetAcceleration", &Dynamics::SetAcceleration)
+			.addFunction("GetVelocity", &Dynamics::GetVelocity)
+			.addFunction("SetVelocity", &Dynamics::SetVelocity)
+			.addProperty("angularSpeed", &Dynamics::GetAngularSpeed, &Dynamics::SetAngularSpeed)
+			.addFunction("GetAngularSpeed", &Dynamics::GetAngularSpeed)
+			.addFunction("SetAngularSpeed", &Dynamics::SetAngularSpeed)
 			.endClass();
 
 		// Trans
@@ -123,7 +225,8 @@ namespace Cog {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<StrId>("StrId")
 			.addConstructor<void(*)(string)>()
-			.LUA_REGFUNC(StrId, GetValue)
+			.addFunction("GetValue", &StrId::GetValue)
+			.addFunction("__eq", static_cast<bool(StrId::*)(const StrId &)const>(&StrId::operator==)) // override ==
 			.endClass();
 
 		// Flags proxy
@@ -184,6 +287,7 @@ namespace Cog {
 			.addFunction("FindNodeByNetworkId", &Scene::FindNodeByNetworkId)
 			.addFunction("FindNodeByTag", &Scene::FindNodeByTag)
 			.addProperty("name", &Scene::GetName, &Scene::SetName)
+			.addFunction("GetName", &Scene::GetName)
 			.addFunction("GetSceneNode", &Scene::GetSceneNode)
 			.addFunction("Initialized", &Scene::Initialized)
 			.addFunction("Loaded", &Scene::Loaded)
@@ -199,18 +303,18 @@ namespace Cog {
 			.beginClass<BehaviorLua>("BehaviorProxy")
 			.addConstructor<void(*)(void)>()
 			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
-			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
 			.addFunction("SendMessage", &BehaviorLua::SendMessage)
+			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
 			.addData("owner", &BehaviorLua::ownerLua)
 			.endClass();
 
-		/*
+		
 		luabridge::getGlobalNamespace(L)
 			.beginClass<AttribAnimator>("AttribAnimator")
 			.addConstructor<void(*)()>()
 			.addFunction("Load", &AttribAnimator::Load)
 			.endClass();
-			*/
+			
 
 		luabridge::getGlobalNamespace(L)
 			.deriveClass<Stage, Component>("Stage")
@@ -230,7 +334,68 @@ namespace Cog {
 			.addFunction("GetResourceStr", &Resources::GetResourceStr)
 			.endClass();
 
-		FacadeLua::InitLuaMapping(L);
+		// Node
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Node>("Node")
+			.addProperty("tag", &Node::GetTag, &Node::SetTag)
+			.addFunction("GetTag", &Node::GetTag)
+			.addFunction("SetTag", &Node::SetTag)
+			.addFunction("GetTransform", &Node::GetTransform)
+			.addFunction("SetTransform", &Node::SetTransform)
+			.addFunction<Node* (Node::*)() const>("GetParent", &Node::GetParent)
+			.addProperty("root", &Node::GetRoot)
+			.addFunction("GetRoot", &Node::GetRoot)
+			.addFunction("RemoveFromParent", &Node::RemoveFromParent)
+			.addProperty("scene", &Node::GetScene)
+			.addFunction("GetScene", &Node::GetScene)
+			.addFunction("HasAttr", &Node::HasAttr)
+			.addFunction("RemoveAttr", &Node::RemoveAttr)
+			.addFunction("AddAttrString", &Node::AddAttrString)
+			.addFunction("AddAttrInt", &Node::AddAttrInt)
+			.addFunction("AddAttrFloat", &Node::AddAttrFloat)
+			.addFunction("AddAttrVector2f", &Node::AddAttrVector2f)
+			.addFunction("AddAttrVector3f", &Node::AddAttrVector3f)
+			.addFunction("AddAttrVec2i", &Node::AddAttrVec2i)
+			.addFunction("AddAttrPtr", &Node::AddAttrPtr)
+			.addFunction("GetAttrString", &Node::GetAttrString)
+			.addFunction("GetAttrInt", &Node::GetAttrInt)
+			.addFunction("GetAttrFloat", &Node::GetAttrFloat)
+			.addFunction("GetAttrVector2f", &Node::GetAttrVector2f)
+			.addFunction("GetAttrVector3f", &Node::GetAttrVector3f)
+			.addFunction("GetAttrVec2i", &Node::GetAttrVec2i)
+			.addFunction("GetMesh", reinterpret_cast<Mesh*(Node::*)() const> (&Node::GetMeshPtr))
+			.addFunction("GetImage", reinterpret_cast<Image*(Node::*)() const> (&Node::GetMeshPtr))
+			.addFunction("GetSprite", reinterpret_cast<SpriteMesh*(Node::*)() const> (&Node::GetMeshPtr))
+			.addFunction("GetMultiSprite", reinterpret_cast<MultiSpriteMesh*(Node::*)() const> (&Node::GetMeshPtr))
+			.addFunction("GetText", reinterpret_cast<Text*(Node::*)() const> (&Node::GetMeshPtr))
+			.endClass();
+
+
+
+		luabridge::getGlobalNamespace(L)
+			.addFunction("CogGetAbsoluteTime", &FacadeLua::CogGetAbsoluteTime)
+			.addFunction("CogGetFrameCounter", &FacadeLua::CogGetFrameCounter)
+			.addFunction("CogGetMousePosition", &FacadeLua::CogGetMousePosition)
+			.addFunction("CogGetMouseScroll", &FacadeLua::CogGetMouseScroll)
+			.addFunction("CogGetScreenAspectRatio", &FacadeLua::CogGetScreenAspectRatio)
+			.addFunction("CogGetScreenHeight", &FacadeLua::CogGetScreenHeight)
+			.addFunction("CogGetScreenSize", &FacadeLua::CogGetScreenSize)
+			.addFunction("CogGetScreenWidth", &FacadeLua::CogGetScreenWidth)
+			.addFunction("CogGetVirtualAspectRatio", &FacadeLua::CogGetVirtualAspectRatio)
+			.addFunction("CogGetVirtualHeight", &FacadeLua::CogGetVirtualHeight)
+			.addFunction("CogGetVirtualScreenSize", &FacadeLua::CogGetVirtualScreenSize)
+			.addFunction("CogGetVirtualWidth", &FacadeLua::CogGetVirtualWidth)
+			.addFunction("CogIsKeyPressed", &FacadeLua::CogIsKeyPressed)
+			.addFunction("CogLogDebug", &FacadeLua::CogLogDebug)
+			.addFunction("CogLogError", &FacadeLua::CogLogError)
+			.addFunction("CogLogInfo", &FacadeLua::CogLogInfo)
+			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
+			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
+			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
+			.addFunction("CogPreloadXMLFile", &FacadeLua::CogPreloadXMLFile)
+			.addFunction("CogGetComponent_Stage", &FacadeLua::CogGetComponent<Stage>)
+			.addFunction("CogGetComponent_Resources", &FacadeLua::CogGetComponent<Resources>)
+			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
 	}
 
 } // namespace

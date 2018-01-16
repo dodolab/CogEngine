@@ -273,17 +273,11 @@
     <ClInclude Include="src\Communication\NetMessage.h">
       <Filter>src\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\NetworkCommunicator.h">
-      <Filter>src\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Tests\LuaTest.h">
       <Filter>src\Tests</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripting\BehaviorLua.h">
       <Filter>src\Scripting</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\LuaScripting.h">
-      <Filter>src\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Behaviors\Slider.h">
       <Filter>src\Behaviors</Filter>
@@ -643,6 +637,15 @@
     <ClInclude Include="src\Builders\TransformBuilder.h">
       <Filter>src\Builders</Filter>
     </ClInclude>
+    <ClInclude Include="src\Communication\NetworkClient.h">
+      <Filter>src\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Communication\NetworkHost.h">
+      <Filter>src\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\LuaScripting.h">
+      <Filter>src\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\Environment.cpp">
@@ -701,9 +704,6 @@
     </ClCompile>
     <ClCompile Include="src\Communication\NetMessage.cpp">
       <Filter>src\Communication</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\NetworkCommunicator.cpp">
-      <Filter>src\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Scripting\BehaviorLua.cpp">
       <Filter>src\Scripting</Filter>
@@ -838,9 +838,6 @@
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\InputHandler.cpp">
-      <Filter>src\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\LuaScripting.cpp">
       <Filter>src\Components</Filter>
     </ClCompile>
     <ClCompile Include="libs\ofxNetwork\ofxTCPClient.cpp">
@@ -1010,6 +1007,15 @@
     </ClCompile>
     <ClCompile Include="src\Builders\TransformBuilder.cpp">
       <Filter>src\Builders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Communication\NetworkHost.cpp">
+      <Filter>src\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Communication\NetworkClient.cpp">
+      <Filter>src\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scripting\LuaScripting.cpp">
+      <Filter>src\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

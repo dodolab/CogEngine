@@ -8,11 +8,11 @@ namespace Cog {
 
 	using namespace std;
 
-// max size of serialized string
-#define STR_MAX_SIZE 100000
+	// max size of serialized string
+#define STR_MAX_SIZE 10000
 
 	/**
-	* Reader of byte array received from net
+	* Reader of byte array received from internet
 	*/
 	class NetReader {
 	private:
@@ -42,7 +42,7 @@ namespace Cog {
 		NetReader(ABYTE* data, unsigned capacity);
 
 		~NetReader() {
-			if(!external) delete[] buffer;
+			if (!external) delete[] buffer;
 		}
 
 		/**
@@ -54,7 +54,7 @@ namespace Cog {
 		* Reads bit as a bool
 		*/
 		inline bool ReadBit() {
-			bool output = 0;
+			bool output = false;
 			ReadBit(output);
 			return output;
 		}
@@ -202,8 +202,9 @@ namespace Cog {
 
 	private:
 		inline bool FreeSpace(unsigned bits) {
-			return (bufferLength - (buffer-current)) * 8 - bitOffset >= bits;
+			return (bufferLength - (buffer - current)) * 8 - bitOffset >= bits;
 		}
 	};
+
 
 } // namespace

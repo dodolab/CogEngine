@@ -2,6 +2,7 @@
 
 #include "ofVec2f.h"
 #include "StrId.h"
+#include "Definitions.h"
 
 namespace Cog {
 
@@ -106,12 +107,12 @@ namespace Cog {
 			this->angularSpeed = 0;
 		}
 
-		void UpdateVelocity(uint64_t delta, float gameSpeed) {
+		void UpdateVelocity(uint64 delta, float gameSpeed) {
 			auto force = CalcForce();
 			velocity += force * delta * gameSpeed;
 		}
 
-		ofVec2f CalcDelta(uint64_t delta, float gameSpeed) const {
+		ofVec2f CalcDelta(uint64 delta, float gameSpeed) const {
 			return velocity * delta * gameSpeed;
 		}
 	};

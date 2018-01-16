@@ -22,7 +22,7 @@ namespace Cog {
 	void NetReader::ReadBit(bool& value) {
 		COGASSERT(FreeSpace(1), "NetReader", "Buffer length exceeded");
 
-		value = (*current & (1 << (7-bitOffset))) != 0;
+		value = (*current & (1 << (7 - bitOffset))) != 0;
 
 		bitOffset++;
 
@@ -68,12 +68,12 @@ namespace Cog {
 		COGASSERT(FreeSpace(32), "NetReader", "Buffer length exceeded");
 
 		ADWORD iVal = ReadDWord();
-		
+
 		value = *((float*)(&iVal));
 	}
 
 	void NetReader::ReadBytes(ABYTE* data, unsigned size) {
-		COGASSERT(FreeSpace(size*8), "NetReader", "Buffer length exceeded");
+		COGASSERT(FreeSpace(size * 8), "NetReader", "Buffer length exceeded");
 
 		if (bitOffset <= 0) {
 			// no offset
@@ -109,5 +109,6 @@ namespace Cog {
 		delete bytes;
 		return output;
 	}
+
 
 } // namespace

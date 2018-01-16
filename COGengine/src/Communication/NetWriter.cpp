@@ -15,7 +15,7 @@ namespace Cog {
 		COGASSERT(FreeSpace(1), "NetWriter", "Buffer length exceeded");
 
 		*current &= (0xFF << (8 - bitOffset));
-		*current |= ((value ? 1 : 0) << (7-bitOffset));
+		*current |= ((value ? 1 : 0) << (7 - bitOffset));
 		bitOffset++;
 
 		if (bitOffset >= 8) {
@@ -33,9 +33,9 @@ namespace Cog {
 		}
 		else {
 			// first part | second part
-			*current = (*current & (0xFF << (8-bitOffset))) | (value >> bitOffset);
+			*current = (*current & (0xFF << (8 - bitOffset))) | (value >> bitOffset);
 			IncrementCurrent();
-			*current = value << (8-bitOffset);
+			*current = value << (8 - bitOffset);
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace Cog {
 
 	void NetWriter::WriteFloat(float value) {
 		COGASSERT(FreeSpace(32), "NetWriter", "Buffer length exceeded");
-		
+
 		ADWORD ivalue = *((ADWORD*)&value);
 		WriteDWord(ivalue);
 	}
@@ -99,7 +99,7 @@ namespace Cog {
 
 		// write info about size separately
 		WriteDWord(str.size());
-		WriteBytes((ABYTE*)str.c_str(),str.size());
+		WriteBytes((ABYTE*)str.c_str(), str.size());
 	}
 
 	ABYTE* NetWriter::CopyData(unsigned& size) {
@@ -109,5 +109,6 @@ namespace Cog {
 		memcpy(data, buffer, size);
 		return data;
 	}
+
 
 } // namespace

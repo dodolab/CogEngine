@@ -77,7 +77,7 @@ namespace Cog
 		* @param deltaTime delta time since the last calculation
 		*/
 		ofVec2f Wander(Trans& transform, Dynamics* dynamics, ofVec2f& wanderTarget, float wanderRadius, float wanderDistance,
-			float wanderJitter, uint64_t deltaTime);
+			float wanderJitter, uint64 deltaTime);
 	};
 
 

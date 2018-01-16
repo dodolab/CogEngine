@@ -9,12 +9,12 @@ namespace Cog {
 	using namespace std;
 
 	/**
-	* Writer of byte array supposed to be sent over net
+	* Writer of byte array that is supposed to be sent to the remote endpoint
 	*/
 	class NetWriter {
 	private:
 		ABYTE* buffer;
-		// pointer to current byte in buffer
+		// pointer to the current byte in buffer
 		ABYTE* current;
 		// length of the buffer
 		unsigned bufferLength;
@@ -83,7 +83,7 @@ namespace Cog {
 		/**
 		* Gets pointer to the buffer
 		*/
-		ABYTE* GetBuffer() {
+		ABYTE* GetBuffer() const {
 			return buffer;
 		}
 
@@ -95,14 +95,14 @@ namespace Cog {
 		/**
 		* Gets capacity of the buffer in bits
 		*/
-		unsigned GetBufferBites() {
+		unsigned GetBufferBites() const {
 			return bufferLength;
 		}
 
 		/**
 		* Gets number of used bits
 		*/
-		unsigned GetUsedBites() {
+		unsigned GetUsedBites() const {
 			return (current - buffer) * 8 + bitOffset;
 		}
 
@@ -125,5 +125,6 @@ namespace Cog {
 			*current = 0;
 		}
 	};
+
 
 } // namespace

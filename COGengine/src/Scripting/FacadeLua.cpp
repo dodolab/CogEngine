@@ -113,30 +113,4 @@ namespace Cog {
 		return GETCOMPONENT(LuaScripting)->RegisterBehaviorPrototype(L);
 	}
 
-	void FacadeLua::InitLuaMapping(luabridge::lua_State* L) {
-		luabridge::getGlobalNamespace(L)
-			.addFunction("CogGetAbsoluteTime", &FacadeLua::CogGetAbsoluteTime)
-			.addFunction("CogGetFrameCounter", &FacadeLua::CogGetFrameCounter)
-			.addFunction("CogGetMousePosition", &FacadeLua::CogGetMousePosition)
-			.addFunction("CogGetMouseScroll", &FacadeLua::CogGetMouseScroll)
-			.addFunction("CogGetScreenAspectRatio", &FacadeLua::CogGetScreenAspectRatio)
-			.addFunction("CogGetScreenHeight", &FacadeLua::CogGetScreenHeight)
-			.addFunction("CogGetScreenSize", &FacadeLua::CogGetScreenSize)
-			.addFunction("CogGetScreenWidth", &FacadeLua::CogGetScreenWidth)
-			.addFunction("CogGetVirtualAspectRatio", &FacadeLua::CogGetVirtualAspectRatio)
-			.addFunction("CogGetVirtualHeight", &FacadeLua::CogGetVirtualHeight)
-			.addFunction("CogGetVirtualScreenSize", &FacadeLua::CogGetVirtualScreenSize)
-			.addFunction("CogGetVirtualWidth", &FacadeLua::CogGetVirtualWidth)
-			.addFunction("CogIsKeyPressed", &FacadeLua::CogIsKeyPressed)
-			.addFunction("CogLogDebug", &FacadeLua::CogLogDebug)
-			.addFunction("CogLogError", &FacadeLua::CogLogError)
-			.addFunction("CogLogInfo", &FacadeLua::CogLogInfo)
-			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
-			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
-			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
-			.addFunction("CogPreloadXMLFile", &FacadeLua::CogPreloadXMLFile)
-			.addFunction("CogGetComponent_Stage", &FacadeLua::CogGetComponent<Stage>)
-			.addFunction("CogGetComponent_Resources", &FacadeLua::CogGetComponent<Resources>)
-			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
-	}
 }

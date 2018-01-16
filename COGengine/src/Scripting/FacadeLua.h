@@ -65,8 +65,6 @@ namespace Cog {
 		* Registers behavior prototype that is called from Extend() function
 		*/
 		static int CogRegisterBehaviorPrototypeCt(luabridge::lua_State* L);
-
-		static void InitLuaMapping(luabridge::lua_State* L);
 	};
 
 } // namespace

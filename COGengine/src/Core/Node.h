@@ -251,14 +251,21 @@ namespace Cog {
 		/**
 		* Gets mesh object
 		*/
-		spt<Mesh> GetMesh() {
+		spt<Mesh> GetMesh() const {
 			return mesh;
+		}
+
+		/**
+		* Gets mesh object
+		*/
+		Mesh* GetMeshPtr() const {
+			return mesh.get();
 		}
 
 		/**
 		* Get mesh of selected type; must inherit from Mesh entity
 		*/
-		template<class T> spt<T> GetMesh() {
+		template<class T> spt<T> GetMesh() const {
 			auto spMesh = static_pointer_cast<T>(mesh);
 			return spMesh;
 		}
@@ -410,7 +417,7 @@ namespace Cog {
 		/**
 		* Gets pointer to the parent of this node
 		*/
-		Node* GetParent() {
+		Node* GetParent() const {
 			return parent;
 		}
 
@@ -425,28 +432,28 @@ namespace Cog {
 		* Finds the first predecessor of given object type
 		* @param type predecessor type {ROOT, SCENE, OBJECT}
 		*/
-		Node* FindPredecessor(stenum type);
+		Node* FindPredecessor(stenum type) const;
 
 		/**
 		* Gets the nearest parent which is a scene root (if exists)
 		*/
-		Node* GetSceneRoot() {
-			if (type == NODETYPE_SCENE) return this;
+		Node* GetSceneRoot() const {
+			if (type == NODETYPE_SCENE) return const_cast<Node*>(this);
 			else return FindPredecessor(NODETYPE_SCENE);
 		}
 
 		/**
 		* Gets the root of the whole stage
 		*/
-		Node* GetRoot() {
-			if (type == NODETYPE_ROOT) return this;
+		Node* GetRoot() const {
+			if (type == NODETYPE_ROOT) return const_cast<Node*>(this);
 			else return FindPredecessor(NODETYPE_ROOT);
 		}
 
 		/**
 		* Gets scene of this object
 		*/
-		Scene* GetScene() {
+		Scene* GetScene() const {
 			return scene;
 		}
 

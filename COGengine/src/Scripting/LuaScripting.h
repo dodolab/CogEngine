@@ -63,7 +63,7 @@ namespace Cog {
 		/**
 		* Registers component prototype that is called from Extend() function
 		*/
-		static int RegisterBehaviorPrototype(luabridge::lua_State* L);
+		int RegisterBehaviorPrototype(luabridge::lua_State* L);
 
 		virtual void Update(const uint64 delta, const uint64 absolute) {
 
@@ -75,7 +75,6 @@ namespace Cog {
 
 	protected:
 		void LoadAllScripts();
-		int RegisterBehaviorPrototypeCtInternal(luabridge::lua_State* L);
 	};
 
 }// namespace

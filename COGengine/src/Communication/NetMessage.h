@@ -4,36 +4,40 @@
 #include "NetReader.h"
 #include "NetWriter.h"
 #include "StrId.h"
+#include "MsgPayloads.h"
 
 namespace Cog {
 
 	/**
-	* Type of network message
+	* Enums fornetwork message
 	*/
 	enum class NetMsgType {
 		DISCOVER_REQUEST = 1,
 		DISCOVER_RESPONSE = 2,
 		CONNECT_REQUEST = 3,
 		CONNECT_RESPONSE = 4,
-		UPDATE = 5,
-		ACCEPT = 6,
-		DISCONNECT = 7
+		UPDATE = 5, // update messages, the alpha and omega of the whole communication
+		ACCEPT = 6, // message that only accepts a prevously sent reliable payload
+		DISCONNECT = 7,
+		BEACON = 8 // beep message used to let the server know the client is still here, event if it has nothing to send
 	};
 
 	/**
 	* Abstract base class for entities that are part of network message
-	* as a payload; both NetInputMessage and NetOutputMessage can contain
-	* a payload, consisting of this object
+	* as a payload; both NetInputMessage and NetOutputMessage may contain a payload
 	*/
 	class NetData {
 	public:
+
+		virtual ~NetData() = default;
+
 		/**
-		* Loads object from stream
+		* Loads object from a stream
 		*/
 		virtual void LoadFromStream(NetReader* reader) = 0;
 
 		/**
-		* Saves objects to stream
+		* Saves objects into a stream
 		*/
 		virtual void SaveToStream(NetWriter* writer) = 0;
 
@@ -44,24 +48,163 @@ namespace Cog {
 	};
 
 	/**
-	* Network message that arrived from remote point
+	* Base class for both NetInputMessage and NetOutputMessage, contains header data of all communication messages
 	*/
-	class NetInputMessage {
+	class NetMessage : public MsgPayload {
+	protected:
+		// synchronization id
+		ABYTE syncId = 0;
+		// confirmation id (id of a confirmed reliable message)
+		ABYTE confirmId = 0;
+		// either source or target peer id
+		ABYTE peerId = 0;
+		// type of message
+		NetMsgType msgType = NetMsgType::UPDATE;
+		// type of action
+		StrId action = StrId();
+		// time in which the message was sent
+		ADWORD msgTime = 0;
+		// if true, the message is required to be accepted by the client
+		bool isReliable = false;
+		// if true, the message contains an update sample
+		bool isUpdateSample = false;
+
+	public:
+		/**
+		* Gets synchronization id
+		*/
+		ABYTE GetSyncId() const {
+			return syncId;
+		}
+
+		/**
+		* Sets the synchronization id
+		*/
+		void SetSyncId(ABYTE syncId) {
+			this->syncId = syncId;
+		}
+
+		/**
+		* Gets the confirmation id
+		*/
+		ABYTE GetConfirmationId() const {
+			return confirmId;
+		}
+
+		/**
+		* Sets the confirmation id
+		*/
+		void SetConfirmationId(ABYTE confirmId) {
+			this->confirmId = confirmId;
+		}
+
+		/**
+		* Gets the peer id
+		*/
+		ABYTE GetPeerId() const {
+			return peerId;
+		}
+
+		/**
+		* Sets the peer id
+		*/
+		void SetPeerId(ABYTE peerId) {
+			this->peerId = peerId;
+		}
+
+		/**
+		* Gets the type of the message
+		*/
+		NetMsgType GetMsgType() const {
+			return msgType;
+		}
+
+		/**
+		* Sets the type of the message
+		*/
+		void SetMsgType(NetMsgType type) {
+			this->msgType = type;
+		}
+
+		/**
+		* Gets the time the message was sent
+		*/
+		ADWORD GetMsgTime() const {
+			return msgTime;
+		}
+
+		/**
+		* Sets the time the message was sent
+		*/
+		void SetMsgTime(ADWORD time) {
+			this->msgTime = time;
+		}
+
+		/**
+		* Gets the type of an action this message represents
+		*/
+		StrId GetAction() const {
+			return action;
+		}
+
+		/**
+		* Sets the type of an action this message represents
+		*/
+		void SetAction(StrId action) {
+			this->action = action;
+		}
+
+		/**
+		* Gets an indicator whether this message should be confirmed
+		*/
+		bool IsReliable() const {
+			return isReliable;
+		}
+
+		/**
+		* Sets an indicator whether this message should be confirmed
+		*/
+		void SetIsReliable(bool isReliable) {
+			this->isReliable = isReliable;
+		}
+
+		/**
+		* Gets an indicator whether this message contains an update sample (updates aren't usually required to be confirmed)
+		*/
+		bool IsUpdateSample() const {
+			return isUpdateSample;
+		}
+
+		/**
+		* Sets an indicator whether this message contains an update sample
+		*/
+		void SetIsUpdateSample(bool isUpdateSample) {
+			this->isUpdateSample = isUpdateSample;
+		}
+
+		/**
+		* Gets length of the header in bytes
+		*/
+		static constexpr int GetHeaderLength() {
+			return 	1 // sync id
+				+ 1 // confirmation id
+				+ 1 // peer id
+				+ 1 // msgType
+				+ 4 // action
+				+ 4 // msgTime
+				+ 1; // booleans + reserve
+		}
+	};
+
+	/**
+	* Network read-only message that was received
+	*/
+	class NetInputMessage : public NetMessage {
 	private:
 		// source ip address
 		string sourceIp;
 		// source port
 		int sourcePort;
-		// synchronization id
-		ABYTE syncId = 0;
-		// acceptation id (only for messages sent from clients to host)
-		ABYTE acceptedId = 0;
-		// type of message
-		NetMsgType msgType = NetMsgType::UPDATE;
-		// type of action
-		StrId action = StrId();
-		// the time at which the message was created
-		ADWORD msgTime = 0;
 		// data payload
 		ABYTE* data = nullptr;
 		// length of data payload
@@ -69,10 +212,10 @@ namespace Cog {
 
 	public:
 		/**
-		* Creates a new input message 
+		* Creates a new input message
 		* @param messageLength length of the data payload
 		*/
-		NetInputMessage(int messageLength){
+		NetInputMessage(int messageLength) {
 			this->dataLength = messageLength - GetHeaderLength();
 		}
 
@@ -115,41 +258,6 @@ namespace Cog {
 		}
 
 		/**
-		* Gets synchronization id
-		*/
-		ABYTE GetSyncId() const {
-			return syncId;
-		}
-
-		/**
-		* Gets acceptation id
-		*/
-		ABYTE GetAcceptedId() const {
-			return acceptedId;
-		}
-
-		/**
-		* Gets type of the message
-		*/
-		NetMsgType GetMsgType() const {
-			return msgType;
-		}
-
-		/**
-		* Gets message time
-		*/
-		ADWORD GetMsgTime() const {
-			return msgTime;
-		}
-
-		/**
-		* Gets type of action
-		*/
-		StrId GetAction() const {
-			return action;
-		}
-
-		/**
 		* Gets data payload
 		*/
 		ABYTE* GetData() const {
@@ -164,31 +272,21 @@ namespace Cog {
 		template<class T>
 		spt<T> GetData() {
 			auto netReader = new NetReader(data, GetDataLength());
-			spt<T> innerMsg = spt<T>(new T());
+			spt<T> innerMsg = std::make_shared<T>();
 			innerMsg->LoadFromStream(netReader);
 			return innerMsg;
 		}
 
 		/**
-		* Gets length of the whole message in bytes
+		* Gets the length of the whole message in bytes
 		*/
 		int GetMessageLength() const {
 			return GetHeaderLength() + GetDataLength();
 		}
 
-		/**
-		* Gets length of the header in bytes
-		*/
-		int GetHeaderLength() const {
-			return 	1 // sync id
-				+ 1 // accepted id
-				+ 1 // msgType
-				+ 4 // action
-				+ 4; // msgTime
-		}
 
 		/**
-		* Gets length of the data payload in bytes
+		* Gets the length of the data payload in bytes
 		*/
 		int GetDataLength() const {
 			return dataLength;
@@ -196,7 +294,7 @@ namespace Cog {
 
 
 		/**
-		* Loads the message from stream
+		* Loads the message from a stream
 		*/
 		void LoadFromStream(NetReader* reader);
 
@@ -205,32 +303,25 @@ namespace Cog {
 
 
 	/**
-	* Network message that is serialized into stream of bytes and sent
+	* Network message that is serialized into a stream of bytes and sent
 	* to the destination point
 	*/
-	class NetOutputMessage {
+	class NetOutputMessage : public NetMessage {
 	private:
-		// synchronization id
-		ABYTE syncId = 0;
-		// acceptation id
-		ABYTE acceptedId = 0;
-		// type of message
-		NetMsgType msgType = NetMsgType::UPDATE;
-		// type of action
-		StrId action = StrId();
-		// time in which the message was sent
-		ADWORD msgTime = 0;
+
 		// data payload
 		NetData* data = nullptr;
 
 	public:
+		NetOutputMessage() {}
 
 		/**
 		* Creates a new output message
 		* @param syncId synchronization id
 		*/
-		NetOutputMessage(ABYTE syncId) : syncId(syncId) {
-
+		NetOutputMessage(ABYTE syncId, ABYTE peerId) {
+			this->syncId = syncId;
+			this->peerId = peerId;
 		}
 
 		/**
@@ -238,94 +329,67 @@ namespace Cog {
 		* @param syncId synchronization id
 		* @param msgType type of the message
 		*/
-		NetOutputMessage(ABYTE syncId, NetMsgType msgType) 
-			: syncId(syncId), msgType(msgType) {
+		NetOutputMessage(ABYTE syncId, NetMsgType msgType) {
+			this->syncId = syncId;
+			this->msgType = msgType;
+		}
 
+		/**
+		* Creates a new output message
+		* @param syncId synchronization id
+		* @param peerId id of the peer to whom the message is intended
+		* @param msgType type of the message
+		*/
+		NetOutputMessage(ABYTE syncId, ABYTE peerId, NetMsgType msgType) {
+			this->syncId = syncId;
+			this->peerId = peerId;
+			this->msgType = msgType;
+		}
+
+		/**
+		* Creates a new output message
+		* @param action type of the action this message represents
+		* @param data data payload
+		* @param isUpdateSample indicator whether this message contains an update sample
+		* @param isReliable indicator whether this message should be confirmed by the host
+		*/
+		NetOutputMessage(StrId action, NetData* data, bool isUpdateSample, bool isReliable) {
+			this->action = action;
+			this->data = data;
+			this->isUpdateSample = isUpdateSample;
+			this->isReliable = isReliable;
+		}
+
+		/**
+		* Creates a new output message
+		* @param action type of the action this message represents
+		* @param data data payload
+		* @param time the time of creation of this message
+		* @param isUpdateSample indicator whether this message contains an update sample
+		* @param isReliable indicator whether this message should be confirmed by the host
+		*/
+		NetOutputMessage(StrId action, NetData* data, uint64 time, bool isUpdateSample, bool isReliable) {
+			this->action = action;
+			this->data = data;
+			this->msgTime = time;
+			this->isUpdateSample = isUpdateSample;
+			this->isReliable = isReliable;
 		}
 
 		~NetOutputMessage() {
 			delete data;
 		}
 
-		/**
-		* Gets synchronization id
-		*/
-		ABYTE GetSyncId() const {
-			return syncId;
-		}
 
 		/**
-		* Sets synchronization id
-		*/
-		void SetSyncId(ABYTE syncId) {
-			this->syncId = syncId;
-		}
-
-		/**
-		* Gets acceptation id
-		*/
-		ABYTE GetAcceptedId() const {
-			return acceptedId;
-		}
-
-		/**
-		* Sets acceptation id
-		*/
-		void SetAcceptedId(ABYTE id) {
-			this->acceptedId = id;
-		}
-
-		/**
-		* Gets type of the message
-		*/
-		NetMsgType GetMsgType() const {
-			return msgType;
-		}
-
-		/**
-		* Sets type of the message
-		*/
-		void SetMsgType(NetMsgType msgType) {
-			this->msgType = msgType;
-		}
-
-		/**
-		* Gets the time in which the message was sent
-		*/
-		ADWORD GetMsgTime() const {
-			return msgTime;
-		}
-
-		/**
-		* Sets the time in which the message will be sent
-		*/
-		void SetMsgTime(ADWORD time) {
-			this->msgTime = time;
-		}
-
-		/**
-		* Gets type of the action
-		*/
-		StrId GetAction() const {
-			return action;
-		}
-
-		/**
-		* Sets type of the action
-		*/
-		void SetAction(StrId action) {
-			this->action = action;
-		}
-
-		/**
-		* Gets data payload
+		* Gets the data payload
 		*/
 		NetData* GetData() const {
 			return data;
 		}
 
 		/**
-		* Sets data payload
+		* Sets the data payload
 		*/
 		void SetData(NetData* data) {
 			this->data = data;
@@ -334,20 +398,17 @@ namespace Cog {
 		/**
 		* Gets length of the message, including data payload (if attached)
 		*/
-		int GetMessageLength() {
+		int GetMessageLength() const {
 			return (data == nullptr ? 0 : data->GetDataLength())
-				+ 1 // sync id
-				+ 1 // accepted id
-				+ 1 // msgType
-				+ 4 // action
-				+ 4; // msgTime
+				+ GetHeaderLength();
 
 		}
-	
+
 		/**
-		* Saves data into stream
+		* Saves data into a stream
 		*/
-		void SaveToStream(NetWriter* writer);
+		void SaveToStream(NetWriter* writer) const;
 	};
+
 
 } // namespace

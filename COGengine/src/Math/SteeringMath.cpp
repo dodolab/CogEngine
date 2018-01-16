@@ -64,7 +64,7 @@ namespace Cog {
 	}
 
 	ofVec2f SteeringMath::Wander(Trans& transform, Dynamics* dynamics, ofVec2f& wanderTarget, float wanderRadius, float wanderDistance,
-		float wanderJitter, uint64_t deltaTime) {
+		float wanderJitter, uint64 deltaTime) {
 
 		ofVec2f randomVec = ofVec2f(ofRandomf(), ofRandomf());
 		wanderTarget += randomVec*(deltaTime*wanderJitter);

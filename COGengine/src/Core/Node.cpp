@@ -248,7 +248,7 @@ namespace Cog {
 	}
 
 
-	Node* Node::FindPredecessor(stenum type) {
+	Node* Node::FindPredecessor(stenum type) const {
 		Node* parent = this->parent;
 
 		while (parent != nullptr && parent->type != type) parent = parent->parent;
