@@ -6,8 +6,8 @@
 #include "NetMessage.h"
 #include "UpdateMessage.h"
 #include "Interpolator.h"
-#include "NetworkCommunicator.h"
-
+#include "NetworkHost.h"
+#include "NetworkClient.h"
 
 
 class DummyMessage {

@@ -270,58 +270,6 @@ namespace Cog {
 		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SWITCH, state1, state2)));
 	}
 
-	void Node::AddAttrString(StrId key, string val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrInt(StrId key, int val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrFloat(StrId key, float val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrVector2f(StrId key, ofVec2f val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrVector3f(StrId key, ofVec3f val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrVec2i(StrId key, Vec2i val) {
-		AddAttr(key, val);
-	}
-
-	void Node::AddAttrPtr(StrId key, void* pointer) {
-		AddAttr(key, pointer);
-	}
-
-	string Node::GetAttrString(StrId key) {
-		return GetAttr<string>(key);
-	}
-
-	int Node::GetAttrInt(StrId key) {
-		return GetAttr<int>(key);
-	}
-
-	float Node::GetAttrFloat(StrId key) {
-		return GetAttr<float>(key);
-	}
-
-	ofVec2f Node::GetAttrVector2f(StrId key) {
-		return GetAttr<ofVec2f>(key);
-	}
-
-	ofVec3f Node::GetAttrVector3f(StrId key) {
-		return GetAttr<ofVec3f>(key);
-	}
-
-	Vec2i Node::GetAttrVec2i(StrId key) {
-		return GetAttr<Vec2i>(key);
-	}
-
 	void* Node::GetAttrPtr(StrId key) {
 		auto it = attributes.find(key);
 		if (it != attributes.end()) {

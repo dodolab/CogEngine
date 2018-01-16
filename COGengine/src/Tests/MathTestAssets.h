@@ -1,8 +1,8 @@
 #pragma once
 
-#include "AStarSearch.h"
+#include "PathFinder.h"
 #include "GridSpace.h"
-#include "GridGraph.h"
+#include "GridMap.h"
 #include "Path.h"
 #include "SteeringMath.h"
 
@@ -11,16 +11,16 @@ using namespace Cog;
 class AStarWrapper {
 public:
 	AStarSearch search;
-	GridGraph grid;
+	GridMap grid;
 
 	AStarWrapper(int width, int height) {
-		grid = GridGraph(width, height);
+		grid = GridMap(MapType::TILE, 5, width, height);
 	}
 
 	void WriteGrid(){
 		for (int i = 0; i < grid.GetHeight(); i++) {
 			for (int j = 0; j < grid.GetWidth(); j++) {
-				bool isBlock = grid.HasBlock(j, i);
+				bool isBlock = grid.HasObstruction(j, i);
 				if (isBlock) cout << " X ";
 				else cout << " - ";
 			}
@@ -32,7 +32,7 @@ public:
 	void WritePath(vector<Vec2i>& path) {
 		for (int i = 0; i < grid.GetHeight(); i++) {
 			for (int j = 0; j < grid.GetWidth(); j++) {
-				bool isBlock = grid.HasBlock(j, i);
+				bool isBlock = grid.HasObstruction(j, i);
 				bool isPath = find(path.begin(), path.end(), Vec2i(j, i)) != path.end();
 				
 				if (isPath) cout << " o ";

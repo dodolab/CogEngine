@@ -548,35 +548,7 @@ namespace Cog {
 			}
 		}
 
-		// these methods are primarily for Lua mapping
-
-		void AddAttrString(StrId key, string val);
-
-		void AddAttrInt(StrId key, int val);
-
-		void AddAttrFloat(StrId key, float val);
-
-		void AddAttrVector2f(StrId key, ofVec2f val);
-
-		void AddAttrVector3f(StrId key, ofVec3f val);
-
-		void AddAttrVec2i(StrId key, Vec2i val);
-
-		void AddAttrPtr(StrId key, void* pointer);
-
-		string GetAttrString(StrId key);
-
-		int GetAttrInt(StrId key);
-
-		float GetAttrFloat(StrId key);
-
-		ofVec2f GetAttrVector2f(StrId key);
-
-		ofVec3f GetAttrVector3f(StrId key);
-
-		Vec2i GetAttrVec2i(StrId key);
-
-
+	
 		/**
 		* Gets a pointer attribute by its key
 		*/

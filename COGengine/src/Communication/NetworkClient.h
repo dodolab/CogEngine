@@ -220,6 +220,8 @@ namespace Cog {
 		*/
 		void InitClient(ABYTE applicationId, int clientPort, int hostPort, string hostIp = "");
 
+		/** Connects to host with given ip address */
+		void ConnectToHost(string ip, int port);
 
 		/**
 		* Pushes a message that will be sent with the next sending cycle
@@ -234,8 +236,6 @@ namespace Cog {
 		virtual void Update(uint64 delta, uint64 absolute);
 
 	protected:
-		/** Connects to host with given ip address */
-		void ConnectToHost(string ip, int port);
 		/** Update for discovering state */
 		void UpdateDiscovering(uint64 absolute);
 		/** Update for connecting state */

@@ -50,6 +50,7 @@ Behavior = {
 			subtype.Update = subtype.Update or self.Update
 			subtype.SubscribeForMessages = self.SubscribeForMessages
 			subtype.SendMessage = self.SendMessage
+			subtype.SendMsgWithData = self.SendMsgWithData -- override
 		else
 			subtype = self
 		end
@@ -78,6 +79,8 @@ Behavior = {
 	OnInit = function(self) end,
 	OnMessage = function(self, msg) end,
 	Update = function(self, delta, absolute) end,
-	SubscribeForMessages = function(self, ...) return self.proxy:SubscribeForMessages(...) end,
-	SendMessage = function(self, msg) return self.proxy:SendMessage(msg) end
+		-- methods that will call assigned proxy object
+	SubscribeForMessages = function(self, act) if(type(act) == "string") then act = StrId(act) end return self.proxy:SubscribeForMessages(act) end,
+	SendMessage = function(self, msg) if(type(msg) == "string") then return self.proxy:SendMessage(StrId(msg)) else return self.proxy:SendMessage(msg) end end,
+	SendMsgWithData = function(self, msg, data) if(type(msg) == "string") then return self.proxy:SendMsgWithData(StrId(msg), data) else return self.proxy:SendMsgWithData(msg, data) end end
 }

@@ -16,7 +16,6 @@
 #include "MonteCarloTest.h"	
 #include "CoroutineTest.h"
 #include "MathTest.h"
-#include "LuaTest.h"
 #include "TimelineTest.h"
 
 int main() {

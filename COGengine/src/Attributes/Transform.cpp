@@ -28,7 +28,7 @@ namespace Cog {
 			float length = distanceVector.length();
 
 			// calculate angle between local center and parent's center 
-			float angle = parent.absRotation + (atan2f(distanceVector.y, distanceVector.x));
+			float angle = ofDegToRad(parent.absRotation) + (atan2f(distanceVector.y, distanceVector.x));
 
 			// calculate rotation offset
 			ofVec3f rotPos = ofVec3f(length*(cos(angle)), length*(sin(angle)), localPos.z);
@@ -56,7 +56,7 @@ namespace Cog {
 		// translate to the center
 		matrix.translate(-absRotationCentroid / absScale);
 		// rotate around centroid
-		matrix.rotate(ofRadToDeg(absRotation), 0, 0, 1);
+		matrix.rotate(absRotation, 0, 0, 1);
 		// translate back -> object will be at the same location but rotated
 		matrix.translate(absRotationCentroid / absScale);
 		// scale and translate to the desired location

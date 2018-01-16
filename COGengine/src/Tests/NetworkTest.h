@@ -220,7 +220,7 @@ TEST_CASE("Network test")
 		auto writer = new NetWriter(200);
 		msg1.SaveToStream(writer);
 
-		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12));
+		auto msg = spt<NetOutputMessage>(new NetOutputMessage(12, 1));
 		msg->SetAction(StrId("MOJO"));
 		msg->SetMsgTime(12345);
 		msg->SetMsgType(NetMsgType::UPDATE);
@@ -291,8 +291,10 @@ TEST_CASE("Network test")
 
 	SECTION("Client connect test")
 	{
-		auto netCom = new NetworkCommunicator();
-		REGISTER_COMPONENT(netCom);
+		auto netClient = new NetworkClient();
+		REGISTER_COMPONENT(netClient);
+		auto netHost = new NetworkHost();
+		REGISTER_COMPONENT(netHost);
 		// init engine
 		ofxCogEngine::GetInstance().SetFps(20);
 		ofxCogEngine::GetInstance().Init();
@@ -301,23 +303,24 @@ TEST_CASE("Network test")
 		ofxCogEngine::GetInstance().stage->GetRootObject()->SubmitChanges(true);
 
 		// start server
-		netCom->InitListening(1000, 12345);
+		netHost->InitHost(1000, 12345);
 		
 		// start client
-		netCom->InitBroadcast(1000, 12346, 12345);
-		netCom->ConnectToPeer("127.0.0.1");
-
+		netClient->InitClient(1000, 12346, 12345);
+		netClient->ConnectToHost("127.0.0.1", 12345);
+		
 		// send message to server
-		auto msg = spt<NetOutputMessage>(new NetOutputMessage(1));
+		auto msg = spt<NetOutputMessage>(new NetOutputMessage(1, 1));
 		msg->SetMsgType(NetMsgType::CONNECT_REQUEST);
-		netCom->PushMessageForSending(msg);
+		netClient->PushMessageForSending(msg);
 
 
 		// update
 		ofxCogEngine::GetInstance().ResetFrameCounter();
-		ofxCogEngine::GetInstance().Update(10, 10);
+		ofxCogEngine::GetInstance().Update(10, 5000);
+		
 		// client should be connected
-		REQUIRE(!netCom->GetPeerIp().empty());
+		REQUIRE(netHost->GetPeersNum() != 0);
 	}
 }
 

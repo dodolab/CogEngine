@@ -17,20 +17,19 @@ TEST_CASE("MathTest")
 	SECTION("AStarSearch simple path test")
 	{
 		AStarWrapper wr = AStarWrapper(10,10);
-		wr.grid.AddBlocks(1, 0, 8, 8); // the path will go down and right
+		wr.grid.AddObstructions(1, 0, 8, 8); // the path will go down and right
 
-		REQUIRE(wr.grid.HasBlock(1,0));
-		REQUIRE(wr.grid.HasBlock(8, 8));
-		REQUIRE(wr.grid.HasBlock(5, 5));
-		REQUIRE(wr.grid.HasBlock(6, 6));
-		REQUIRE(!wr.grid.HasBlock(0, 5));
-		REQUIRE(!wr.grid.HasBlock(7, 9));
+		REQUIRE(wr.grid.HasObstruction(1,0));
+		REQUIRE(wr.grid.HasObstruction(8, 8));
+		REQUIRE(wr.grid.HasObstruction(5, 5));
+		REQUIRE(wr.grid.HasObstruction(6, 6));
+		REQUIRE(!wr.grid.HasObstruction(0, 5));
+		REQUIRE(!wr.grid.HasObstruction(7, 9));
 
-		AStarSearchContext context;
-		wr.search.Search(wr.grid, Vec2i(0, 0), Vec2i(9, 9), context, 0);
-		vector<Vec2i> path;
-		wr.search.CalcPathFromSteps(Vec2i(0, 0), Vec2i(9, 9), context.steps, path);
-		wr.WritePath(path);
+		PathFinderContext context;
+		wr.search.Search(wr.grid, Vec2i(0, 0), Vec2i(9, 9), context);
+		wr.WritePath(context.pathFound);
+		auto& path = context.pathFound;
 
 		REQUIRE(path.size() == 19);
 		REQUIRE(path[0] == Vec2i(0, 0));
@@ -44,15 +43,15 @@ TEST_CASE("MathTest")
 	{
 		// define zig-zag path
 		AStarWrapper wr = AStarWrapper(10, 10);
-		wr.grid.AddBlocks(1, 0, 1, 8);
-		wr.grid.AddBlocks(3, 1, 3, 9);
-		wr.grid.AddBlocks(5, 0, 5, 8);
-		wr.grid.AddBlocks(7, 1, 7, 9);
-		wr.grid.AddBlocks(9, 0, 9, 8);
-		AStarSearchContext context;
-		wr.search.Search(wr.grid, Vec2i(0, 0), Vec2i(9, 9), context, 0);
-		vector<Vec2i> path;
-		wr.search.CalcPathFromSteps(Vec2i(0, 0), Vec2i(9, 9), context.steps, path);
+		wr.grid.AddObstructions(1, 0, 1, 8);
+		wr.grid.AddObstructions(3, 1, 3, 9);
+		wr.grid.AddObstructions(5, 0, 5, 8);
+		wr.grid.AddObstructions(7, 1, 7, 9);
+		wr.grid.AddObstructions(9, 0, 9, 8);
+
+		PathFinderContext context;
+		wr.search.Search(wr.grid, Vec2i(0, 0), Vec2i(9, 9), context);
+		auto& path = context.pathFound;
 		wr.WritePath(path);
 
 		REQUIRE(path.size() == 55);
@@ -61,91 +60,6 @@ TEST_CASE("MathTest")
 		REQUIRE(path[1] == Vec2i(0, 1));
 		REQUIRE(path[23] == Vec2i(4, 1));
 		REQUIRE(path[47] == Vec2i(8, 3));
-	}
-
-	SECTION("AStarSearch test limited iterations")
-	{
-		AStarWrapper wr = AStarWrapper(10, 10);
-		wr.grid.AddBlocks(2, 1, 3, 3);
-		wr.grid.AddBlocks(2, 6, 3, 8);
-		wr.grid.AddBlocks(5, 4, 7, 9);
-		wr.grid.AddBlocks(2, 0, 7, 0);
-		wr.grid.AddBlocks(7, 5, 9, 6);
-		AStarSearchContext context;
-		wr.search.Search(wr.grid, Vec2i(0, 0), Vec2i(9, 0), context, 15);
-		vector<Vec2i> path;
-		wr.search.CalcPathFromSteps(Vec2i(0, 0), context.nearestBlock, context.steps, path);
-		wr.WritePath(path);
-
-		REQUIRE(path.size() == 13);
-		REQUIRE(path[0] == Vec2i(0, 0));
-		REQUIRE(path.back() == Vec2i(5, 1));
-		REQUIRE(path[1] == Vec2i(1, 0));
-		REQUIRE(path[8] == Vec2i(4, 4));
-		REQUIRE(path[10] == Vec2i(5, 3));
-	}
-
-	SECTION("Path point test")
-	{
-		// define rectangle
-		Path pth = Path(ofVec2f(0, 0), ofVec2f(1, 0));
-		pth.AddSegment(ofVec2f(1, 1));
-		pth.AddSegment(ofVec2f(0, 1));
-		pth.AddSegment(ofVec2f(0, 0));
-
-		int length = pth.GetPathLength();
-		int index;
-		float val;
-		// center of first segment
-		pth.CalcPathPoint(0, ofVec2f(0, 0.5f), index, val);
-		REQUIRE(index == 0);
-		REQUIRE(isEqual(val, 0));
-
-		// second third of first segment
-		pth.CalcPathPoint(0, ofVec2f(0.75f, 0), index, val);
-		REQUIRE(index == 0);
-		REQUIRE(isEqual(val, 0.75f));
-
-
-		// center of second segment, calculating from beginning
-		pth.CalcPathPoint(0, ofVec2f(1, 0.5f), index, val);
-		REQUIRE(index == 0);
-		REQUIRE(isEqual(val, 1.5f));
-
-		// center of second segment, calculating from the start of the second segment
-		pth.CalcPathPoint(1, ofVec2f(1, 0.5f), index, val);
-		REQUIRE(index == 1);
-		REQUIRE(isEqual(val, 1.5f));
-		
-		// center of the whole rectangle, calculating from beginning
-		pth.CalcPathPoint(0, ofVec2f(0.5f), index, val);
-		REQUIRE(index == 0);
-		REQUIRE(isEqual(val, 0.5f));
-		
-		// right of the rectangle, closer to the third point
-		pth.CalcPathPoint(0, ofVec2f(5,0.7f), index, val);
-		REQUIRE(index == 0);
-		REQUIRE(isEqual(val, 1.7f));
-
-		auto pos = pth.CalcPathPosition(0);
-		REQUIRE(isEqual(pos.x, 0));
-		REQUIRE(isEqual(pos.y, 0));
-
-		pos = pth.CalcPathPosition(1);
-		REQUIRE(isEqual(pos.x, 1));
-		REQUIRE(isEqual(pos.y, 0));
-
-		pos = pth.CalcPathPosition(2);
-		REQUIRE(isEqual(pos.x, 1));
-		REQUIRE(isEqual(pos.y, 1));
-
-		pos = pth.CalcPathPosition(3);
-		REQUIRE(isEqual(pos.x, 0));
-		REQUIRE(isEqual(pos.y, 1));
-
-		pos = pth.CalcPathPosition(4);
-		REQUIRE(isEqual(pos.x, 0));
-		REQUIRE(isEqual(pos.y, 0));
 	}
 
 	SECTION("GridSpace partition test")
