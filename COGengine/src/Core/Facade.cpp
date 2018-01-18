@@ -26,6 +26,14 @@ namespace Cog {
 		return ofxCogEngine::GetInstance().GetAbsoluteTime();
 	}
 
+	float CogGetGameSpeed() {
+		return ofxCogEngine::GetInstance().GetGameSpeed();
+	}
+
+	void CogSetGameSpeed(float gameSpeed) {
+		ofxCogEngine::GetInstance().SetGameSpeed(gameSpeed);
+	}
+
 	// =================== Environment ====================
 
 	void CogAddSound(Soundfx* sound) {
@@ -94,6 +102,18 @@ namespace Cog {
 
 	Vec2i CogGetVirtualScreenSize() {
 		return ofxCogEngine::GetInstance().environment->GetVirtualScreenSize();
+	}
+
+	ofVec2f CogGetNativeSize() {
+		return ofxCogEngine::GetInstance().environment->GetNativeSize();
+	}
+
+	void CogSetNativeSize(int width, int height) {
+		return ofxCogEngine::GetInstance().environment->SetNativeSize(width, height);
+	}
+
+	float CogGetNativeScale() {
+		return ofxCogEngine::GetInstance().environment->GetNativeScale();
 	}
 
 	void CogRunProcess(AsyncProcess* thread) {

@@ -96,6 +96,8 @@ namespace Cog {
 		}
 		else this->transform.SetAbsAsLocal();
 
+		this->mesh->UpdateBoundingBox(transform);
+
 		COGMEASURE_END("NODE_UPDATE_TRANSFORM");
 
 		if (deep) {

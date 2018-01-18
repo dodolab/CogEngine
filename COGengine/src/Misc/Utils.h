@@ -59,7 +59,7 @@ namespace Cog {
 	/**
 	* Combines values into the hash
 	*/
-	inline int HashCombine(int hash, int value) {
+	inline unsigned HashCombine(unsigned hash, unsigned value) {
 		return (hash + (324723947 + value)) ^ 93485734985;
 	}
 

@@ -18,6 +18,9 @@ namespace Cog {
 		ofVec2f rotationCentroid;
 		stenum sType = CALCTYPE_LOC;
 		float rotation;
+		int gridWidth = 0;
+		int gridHeight = 0;
+		bool checkSceneScale = true;
 	public:
 
 		TransformBuilder() {
@@ -78,6 +81,11 @@ namespace Cog {
 			return *this;
 		}
 
+		TransformBuilder& CheckSceneScale(bool check) {
+			this->checkSceneScale = check;
+			return *this;
+		}
+
 		TransformBuilder& RelativePosition(ofVec2f pos) {
 			this->pos = pos;
 			this->pType = CALCTYPE_PER;
@@ -87,6 +95,14 @@ namespace Cog {
 		TransformBuilder& RelativePosition(float x, float y) {
 			this->pos = ofVec2f(x, y);
 			this->pType = CALCTYPE_PER;
+			return *this;
+		}
+
+		TransformBuilder& GridPosition(float x, float y, int gridWidth, int gridHeight) {
+			this->pos = ofVec2f(x, y);
+			this->gridWidth = gridWidth;
+			this->gridHeight = gridHeight;
+			this->pType = CALCTYPE_GRID;
 			return *this;
 		}
 
@@ -115,8 +131,16 @@ namespace Cog {
 		}
 
 		TransformBuilder& RelativeScale(float x, float y) {
-			this->size = ofVec2f(x, y);;
+			this->size = ofVec2f(x, y);
 			this->sType = CALCTYPE_PER;
+			return *this;
+		}
+
+		TransformBuilder& GridScale(float width, float height, int gridWidth, int gridHeight) {
+			this->size = ofVec2f(width, height);
+			this->gridWidth = gridWidth;
+			this->gridHeight = gridHeight;
+			this->sType = CALCTYPE_GRID;
 			return *this;
 		}
 

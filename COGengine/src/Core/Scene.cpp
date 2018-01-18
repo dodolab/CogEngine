@@ -106,6 +106,16 @@ namespace Cog {
 		return LayerEnt();
 	}
 
+	/**
+	* Sets a custom width of this scene
+	*/
+	void SetCustomWidth(int width);
+
+	/**
+	* Sets a custom height of this scene
+	*/
+	void SetCustomHeight(int height);
+
 	void Scene::RegisterListener(StrId action, BaseComponent* listener) {
 
 		if (msgListeners.count(action) == 0) {
@@ -323,8 +333,8 @@ namespace Cog {
 	void Scene::CreateSceneNode() {
 		sceneNode = new Node(NODETYPE_SCENE, 0, name);
 		sceneNode->SetScene(this);
-		sceneNode->GetMesh()->SetWidth((float)CogGetScreenWidth());
-		sceneNode->GetMesh()->SetHeight((float)CogGetScreenHeight());
+		sceneNode->GetMesh()->SetWidth((float)CogGetVirtualWidth());
+		sceneNode->GetMesh()->SetHeight((float)CogGetVirtualHeight());
 	}
 
 	void Scene::SendMessageToBehaviors(Msg& msg, Node* actualNode) {

@@ -53,6 +53,12 @@ namespace Cog {
 		// initial width and height
 		int initialWidth = 0;
 		int initialHeight = 0;
+
+		// native width, customizable
+		int nativeWidth = 0;
+		// native height, customizable
+		int nativeHeight = 0;
+
 		// indicator whether sounds should be muted
 		bool muteSounds = false;
 	public:
@@ -254,6 +260,28 @@ namespace Cog {
 		void SetVirtualAspectRatio(float ratio) {
 			this->virtualAspectRatio = ratio;
 			RecalcVirtualSize();
+		}
+		
+		/**
+		* Gets native resolution
+		*/
+		ofVec2f GetNativeSize() const {
+			return ofVec2f(nativeWidth, nativeHeight);
+		}
+
+		/**
+		* Sets native resolution
+		*/
+		void SetNativeSize(int width, int height) {
+			this->nativeWidth = width;
+			this->nativeHeight = height;
+		}
+
+		/**
+		* Calculates native scale according to the native resolution
+		*/
+		float GetNativeScale() {
+			return screenOrient == ScreenOrient::PORTRAIT ? (initialWidth * 1.0f) / nativeWidth : (initialHeight * 1.0f) / nativeHeight;
 		}
 
 		/**

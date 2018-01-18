@@ -106,6 +106,11 @@ namespace Cog {
 			: Mesh(MESH_RECTANGLE, width, height) {
 		}
 
+		FRect(float width, float height, ofColor color)
+			: Mesh(MESH_RECTANGLE, width, height) {
+			this->color = color;
+		}
+
 		/**
 		* Gets indicator whether only borders should be drawn
 		*/

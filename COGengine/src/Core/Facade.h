@@ -34,70 +34,75 @@ namespace Cog {
 
 	// =================== ofxCogEngine ====================
 	
-	int CogGetFrameCounter();
-	uint64 CogGetAbsoluteTime();
+	extern int CogGetFrameCounter();
+	extern uint64 CogGetAbsoluteTime();
+	extern float CogGetGameSpeed();
+	extern void  CogSetGameSpeed(float gameSpeed);
 
 	// =================== Environment ====================
 	
-	void CogAddSound(Soundfx* sound);
-	void CogPlaySound(Soundfx* sound);
-	vector<InputAct*>& CogGetPressedKeys();
-	vector<InputAct*>& CogGetPressedPoints();
-	vector<Soundfx*>& CogGetPlayedSounds();
-	void CogStopAllSounds();
-	bool CogIsKeyPressed(int key);
-	Vec2i CogGetMousePosition();
-	Vec2i CogGetMouseScroll();
-	int CogGetScreenWidth();
-	int CogGetVirtualWidth();
-	int CogGetScreenHeight();
-	int CogGetVirtualHeight();
-	float CogGetVirtualAspectRatio();
-	float CogGetScreenAspectRatio();
-	Vec2i CogGetScreenSize();
-	Vec2i CogGetVirtualScreenSize();
-	void CogRunProcess(AsyncProcess* thread);
+	extern void CogAddSound(Soundfx* sound);
+	extern void CogPlaySound(Soundfx* sound);
+	extern vector<InputAct*>& CogGetPressedKeys();
+	extern vector<InputAct*>& CogGetPressedPoints();
+	extern vector<Soundfx*>& CogGetPlayedSounds();
+	extern void CogStopAllSounds();
+	extern bool CogIsKeyPressed(int key);
+	extern Vec2i CogGetMousePosition();
+	extern Vec2i CogGetMouseScroll();
+	extern int CogGetScreenWidth();
+	extern int CogGetVirtualWidth();
+	extern int CogGetScreenHeight();
+	extern int CogGetVirtualHeight();
+	extern float CogGetVirtualAspectRatio();
+	extern float CogGetScreenAspectRatio();
+	extern Vec2i CogGetScreenSize();
+	extern Vec2i CogGetVirtualScreenSize();
+	extern ofVec2f CogGetNativeSize();
+	extern void CogSetNativeSize(int width, int height);
+	extern float CogGetNativeScale();
 
+	extern void CogRunProcess(AsyncProcess* thread);
 	
 	// =================== Scene ========================
 	
-	void CogRegisterGlobalListener(StrId action, BaseComponent* listener);
-	void CogUnregisterGlobalListener(StrId action, BaseComponent* listener);
-	void CogSendMessage(Msg& msg);
+	extern void CogRegisterGlobalListener(StrId action, BaseComponent* listener);
+	extern void CogUnregisterGlobalListener(StrId action, BaseComponent* listener);
+	extern void CogSendMessage(Msg& msg);
 
 	// =================== Logger =========================
 
-	void CogLogError(const char* module, const char* format, ...);
-	void CogLogInfo(const char* module, const char* format, ...);
-	void CogLogTree(const char* module, int logLevel, const char* format, ...);
-	void CogLogDebug(const char* module, const char* format, ...);
-	void CogLoggerFlush();
+	extern void CogLogError(const char* module, const char* format, ...);
+	extern void CogLogInfo(const char* module, const char* format, ...);
+	extern void CogLogTree(const char* module, int logLevel, const char* format, ...);
+	extern void CogLogDebug(const char* module, const char* format, ...);
+	extern void CogLoggerFlush();
 
-	void CogWriteLogStage();
-	void CogWriteLogActualScene();
-	void CogWriteTimeReport(bool restart);
+	extern void CogWriteLogStage();
+	extern void CogWriteLogActualScene();
+	extern void CogWriteTimeReport(bool restart);
 
 	// =================== Renderer =========================
 	
-	void CogPushNodeForRendering(Node* node);
+	extern void CogPushNodeForRendering(Node* node);
 
 	// =================== Resources =======================
 
-	spt<ofImage> CogGet2DImage(string path);
-	spt<ofImage> CogPreload2DImage(string path);
-	spt<ofVboMesh> CogGetVboMesh(string path);
-	spt<ofTrueTypeFont> CogGetFont(string path, int size);
-	Soundfx* CogGetSound(string path);
-	spt<xml_document> CogPreloadXMLFile(string path);
-	spt<xml_document> CogLoadXMLFile(string path);
-	spt<GeneralAnim> CogGetAnimation(string name);
-	spt<SheetAnim> CogGetSheetAnimation(string name);
-	spt<AttribAnim> CogGetAttribAnimation(string name);
+	extern spt<ofImage> CogGet2DImage(string path);
+	extern spt<ofImage> CogPreload2DImage(string path);
+	extern spt<ofVboMesh> CogGetVboMesh(string path);
+	extern spt<ofTrueTypeFont> CogGetFont(string path, int size);
+	extern Soundfx* CogGetSound(string path);
+	extern spt<xml_document> CogPreloadXMLFile(string path);
+	extern spt<xml_document> CogLoadXMLFile(string path);
+	extern spt<GeneralAnim> CogGetAnimation(string name);
+	extern spt<SheetAnim> CogGetSheetAnimation(string name);
+	extern spt<AttribAnim> CogGetAttribAnimation(string name);
 		
-	void CogStoreAnimation(spt<SheetAnim> anim);
-	Settings& CogGetGlobalSettings();
-	Settings& CogGetDefaultSettings();
-	Settings& CogGetProjectSettings();
+	extern void CogStoreAnimation(spt<SheetAnim> anim);
+	extern Settings& CogGetGlobalSettings();
+	extern Settings& CogGetDefaultSettings();
+	extern Settings& CogGetProjectSettings();
 
 
 }// namespace

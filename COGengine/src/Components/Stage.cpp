@@ -63,6 +63,7 @@ namespace Cog {
 	void Stage::AddScene(Scene* scene, bool setAsActual) {
 
 		rootObject->AddChild(scene->GetSceneNode());
+		rootObject->SubmitChanges(false);
 
 		if (setAsActual) {
 			this->actualScene = scene;

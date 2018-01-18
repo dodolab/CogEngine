@@ -31,6 +31,7 @@ namespace Cog {
 		// frame counter
 		int frameCounter = 0;
 		int fps = 0;
+		float gameSpeed = 1;
 		// actions that should be executed after update loop
 		vector<function<void()>> actions;
 		uint64 lastAbsoluteTime = 0;
@@ -101,6 +102,20 @@ namespace Cog {
 		*/
 		uint64 GetAbsoluteTime() const {
 			return this->lastAbsoluteTime;
+		}
+
+		/**
+		* Gets the current game speed
+		*/
+		float GetGameSpeed() const {
+			return this->gameSpeed;
+		}
+
+		/**
+		* Sets the current game speed
+		*/
+		void SetGameSpeed(float gameSpeed) {
+			this->gameSpeed = gameSpeed;
 		}
 
 		/**

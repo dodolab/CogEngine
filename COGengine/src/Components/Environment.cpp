@@ -30,14 +30,14 @@ namespace Cog {
 				int dividerIndex = aspectRatio.find("/");
 
 				if (dividerIndex == string::npos) {
-					CogLogError("Environment","Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str());
+					CogLogError("Environment", "Error while parsing aspect ratio for environment; expected format xx/yy, found %s", aspectRatio.c_str());
 				}
 
 				float firstVal = ofToFloat(aspectRatio.substr(0, dividerIndex));
 				float secondVal = ofToFloat(aspectRatio.substr(dividerIndex + 1));
 
 				this->SetVirtualAspectRatio(firstVal / secondVal);
-				CogLogInfo("Environment", "Aspect ratio set as %s",aspectRatio.c_str());
+				CogLogInfo("Environment", "Aspect ratio set as %s", aspectRatio.c_str());
 			}
 		}
 
@@ -54,6 +54,8 @@ namespace Cog {
 		if (initialWidth == 0 && initialHeight == 0) {
 			initialWidth = newWidth;
 			initialHeight = newHeight;
+			nativeWidth = newWidth;
+			nativeHeight = newHeight;
 		}
 
 		screenSizeChanged = true;
@@ -64,9 +66,9 @@ namespace Cog {
 		aspectRatio = ((float)screenWidth) / screenHeight;
 		RecalcVirtualSize();
 
-		float realVirtual = ((virtualWidth)/((float)virtualHeight));
+		float realVirtual = ((virtualWidth) / ((float)virtualHeight));
 
-		COGLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f", 
+		COGLOGDEBUG("Environment", "Screen size set to %dx%d, virtual size %dx%d, aspect ratio %f ; virtual aspect ratio %f",
 			screenWidth, screenHeight, virtualWidth, virtualHeight, aspectRatio, realVirtual);
 
 		// send message that screen has been changed
@@ -83,6 +85,7 @@ namespace Cog {
 
 		return Vec2i(x, y);
 	}
+
 
 	void Environment::OnKeyAction(int key, bool pressed) {
 
@@ -110,7 +113,7 @@ namespace Cog {
 	}
 
 	void Environment::OnMultiTouchButton(int x, int y, int button, bool pressed) {
-		
+
 		FixTouchPosition(x, y);
 
 		if (pressed) {
@@ -136,7 +139,7 @@ namespace Cog {
 	}
 
 	void Environment::OnMultiTouchMotion(int x, int y, int button) {
-		
+
 		FixTouchPosition(x, y);
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
@@ -147,7 +150,7 @@ namespace Cog {
 	}
 
 	void Environment::OnSingleTouchButton(int x, int y, int button, bool pressed) {
-		
+
 		FixTouchPosition(x, y);
 
 		if (pressed) {
@@ -178,7 +181,7 @@ namespace Cog {
 	}
 
 	void Environment::OnSingleTouchMotion(int x, int y, int button) {
-		
+
 		FixTouchPosition(x, y);
 
 		for (auto it = pressedPoints.begin(); it != pressedPoints.end(); ++it) {
@@ -189,7 +192,7 @@ namespace Cog {
 	}
 
 	void Environment::RemoveEndedStuff() {
-		
+
 		screenSizeChanged = false;
 		scroll = Vec2i(0);
 		// remove released keys
@@ -257,9 +260,11 @@ namespace Cog {
 				if (aspectRatio < virtualAspectRatio) {
 					virtualWidth = screenWidth;
 					virtualHeight = (int)(screenWidth / virtualAspectRatio);
+					nativeHeight = nativeWidth / virtualAspectRatio; // keep native size in sync
 				}
 				else {
 					virtualWidth = (int)(screenHeight*virtualAspectRatio);
+					nativeWidth = nativeHeight * virtualAspectRatio; // keep native size in sync
 					virtualHeight = screenHeight;
 				}
 				break;
@@ -267,11 +272,13 @@ namespace Cog {
 
 				if (aspectRatio > virtualAspectRatio) {
 					virtualWidth = (int)(screenHeight * virtualAspectRatio);
+					nativeWidth = nativeHeight * virtualAspectRatio; // keep native size in sync
 					virtualHeight = screenHeight;
 				}
 				else {
 					virtualWidth = screenWidth;
 					virtualHeight = (int)(screenWidth / virtualAspectRatio);
+					nativeHeight = nativeWidth / virtualAspectRatio; // keep native size in sync
 				}
 
 				break;

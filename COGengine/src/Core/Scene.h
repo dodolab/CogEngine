@@ -70,6 +70,9 @@ namespace Cog
 		// viewport offset of the scene, used while switching
 		ofVec2f viewPortOffset = ofVec2f(0, 0);
 
+		// Custom scale. Is used when the scene has a fixed size
+		float customScale = 1;
+
 	public:
 
 		Scene(string name, bool isLazyLoaded);
@@ -242,6 +245,34 @@ namespace Cog
 		*/
 		void SetParentScene(Scene* parent) {
 			this->parentScene = parent;
+		}
+
+		/**
+		* Gets custom scale
+		*/
+		float GetCustomScale() {
+			return customScale;
+		}
+		
+		/**
+		* Sets a custom width of this scene
+		*/
+		void SetCustomWidth(int width) {
+			this->customScale = CogGetVirtualWidth() / width;
+			sceneNode->GetMesh<FRect>()->SetWidth(CogGetVirtualWidth() / customScale);
+			sceneNode->GetMesh<FRect>()->SetHeight(CogGetVirtualHeight() / customScale);
+			sceneNode->GetTransform().scale *= customScale;
+		}
+
+		/**
+		* Sets a custom height of this scene
+		*/
+		void SetCustomHeight(int height) {
+			this->customScale = CogGetVirtualHeight() / height;
+			
+			sceneNode->GetMesh<FRect>()->SetWidth(CogGetVirtualWidth() / customScale);
+			sceneNode->GetMesh<FRect>()->SetHeight(CogGetVirtualHeight() / customScale);
+			sceneNode->GetTransform().scale *= customScale;
 		}
 
 		/**
