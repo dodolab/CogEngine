@@ -14,30 +14,10 @@ namespace Cog {
 	void TransformBuilder::Build(Node* element) {
 
 		Node* parent = element->GetParent();
-		Trans nodeTransform = Trans(0, 0);
-
-		CalcTransform(nodeTransform, element, parent);
-
-
-		// for rectangles, width and height are set directly instead of scale
-		switch (element->GetMesh()->GetMeshType()) {
-		case MESH_NONE:
-		case MESH_RECTANGLE:
-		case MESH_BOUNDING_BOX:
-			auto rectShape = element->GetMesh<FRect>();
-			// auto scale must be reverted
-			if (checkSceneScale && parent == parent->GetSceneRoot() && parent->GetScene()->GetCustomScale() != 1) {
-				nodeTransform.scale *= parent->GetScene()->GetCustomScale();
-			}
-			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
-			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
-			nodeTransform.scale = ofVec3f(1);
-			break;
-		}
+		this->Build(element, parent);
 
 		// refresh transform (recalculate from parent)
-		nodeTransform.CalcAbsTransform(parent->GetTransform());
-		element->SetTransform(nodeTransform);
+		element->GetTransform().CalcAbsTransform(parent->GetTransform());
 	}
 
 	void TransformBuilder::Build(Node* element, Node* parent) {
@@ -54,6 +34,7 @@ namespace Cog {
 			if (checkSceneScale && parent == parent->GetSceneRoot() && parent->GetScene()->GetCustomScale() != 1) {
 				nodeTransform.scale *= parent->GetScene()->GetCustomScale();
 			}
+
 			rectShape->SetWidth(rectShape->GetWidth()*nodeTransform.scale.x);
 			rectShape->SetHeight(rectShape->GetHeight()*nodeTransform.scale.y);
 			nodeTransform.scale = ofVec3f(1);
@@ -80,6 +61,15 @@ namespace Cog {
 			// custom scale set -> we need to divide the local scale by the scale of the scene
 			// this happens when the scene has fixed size
 			scale /= parent->GetScene()->GetCustomScale();
+		}
+
+		if (checkNativeResolution && parent == parent->GetSceneRoot()) {
+			// images and sprite can depend on native resolution that references to a resolution where all textures should be mapped 1:1
+			switch (node->GetMesh()->GetMeshType()) {
+			case MESH_IMAGE:
+			case MESH_SPRITE:
+				scale *= CogGetNativeScale();
+			}
 		}
 
 		// calculate position

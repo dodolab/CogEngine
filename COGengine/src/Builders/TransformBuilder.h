@@ -21,6 +21,7 @@ namespace Cog {
 		int gridWidth = 0;
 		int gridHeight = 0;
 		bool checkSceneScale = true;
+		bool checkNativeResolution = true;
 	public:
 
 		TransformBuilder() {
@@ -83,6 +84,11 @@ namespace Cog {
 
 		TransformBuilder& CheckSceneScale(bool check) {
 			this->checkSceneScale = check;
+			return *this;
+		}
+
+		TransformBuilder& CheckNativeResolution(bool check) {
+			this->checkNativeResolution = check;
 			return *this;
 		}
 

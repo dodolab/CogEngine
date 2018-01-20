@@ -394,7 +394,7 @@ namespace Cog {
 	void Node::WriteInfo(int logLevel) {
 		CogLogTree("INFO_NODE", logLevel, "Node %s (%d)", this->tag.c_str(), this->id);
 
-#if DEBUG
+#if _DEBUG
 
 		if (attributes.size() > 0) CogLogTree("INFO_NODE", logLevel + 1, "Attributes:");
 

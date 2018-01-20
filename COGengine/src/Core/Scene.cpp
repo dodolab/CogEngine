@@ -59,10 +59,11 @@ namespace Cog {
 		stage->CopyGlobalListenersToScene(this);
 
 		// add new scene node to the parent
-		auto parent = sceneNode->GetParent();
+		auto root = sceneNode->GetParent();
 		this->sceneNode->RemoveFromParent(true);
+		root->SubmitChanges(true); // root needs to be updated immediately
 		CreateSceneNode();
-		parent->AddChild(this->sceneNode);
+		root->AddChild(this->sceneNode);
 
 		this->settings = Settings();
 	}
@@ -468,7 +469,7 @@ namespace Cog {
 
 		CogLogTree("INFO_SCENE", logLevel, "Scene %s info:", this->name.c_str());
 
-#if DEBUG
+#if _DEBUG
 
 		if (msgListeners.size() > 0) CogLogTree("INFO_SCENE", logLevel + 1, "Message listeners: %d", msgListeners.size());
 
