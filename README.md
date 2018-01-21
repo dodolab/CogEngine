@@ -35,6 +35,20 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 * [Tutorial](Docs/tutorial.md) - getting started
 * [Architecture](Docs/architecture.md) - brief description of the architecture
 
+## Component Architecture
+* The whole game is made of components
+* <code>Component</code> is an entity that defines functional behavior for the whole application or its part (is not attached to any game object)
+* <code>Behavior</code> is a component that is attached to a game object, defining its functionality
+* <code>Node</code> is a part of scene graph, represents a single entity (usually a game object)
+* <code>Attribute</code> is a generic attribute, kept in a collection the Node has a reference to
+* **The overall behavior of a particular game object is determined by the aggregation of its behaviors and attributes**
+
+## Component Architecture Example
+
+![scene1](Docs/scene_ex1.jpg)
+![scene2](Docs/scene_ex2.jpg)
+![scene3](Docs/scene_ex3.jpg)
+
 ## Compatibility
 
 Works with OpenFrameworks 0.9.8
