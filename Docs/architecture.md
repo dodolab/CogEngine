@@ -1,4 +1,5 @@
-#Architecture
+Architecture
+===================
 
 CogEngine is a game engine that uses component-oriented approach. Functionality of each game objects s defined by collection of behaviors the object contains. The Behavior class represents a component.  
 

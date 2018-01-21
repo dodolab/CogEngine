@@ -1,24 +1,35 @@
 ofxCogEngine
 ===================
 
+![logo](Docs/logo.png)
+
 ## What's the CogEngine?
 
-CogEngine stands for C++ component-oriented game engine. It can be used as a tool for creating 2D windows or mobile games. It is implemented as an [OpenFrameworks](http://openframeworks.cc) addon. Windows and Android platforms are supported.
+CogEngine stands for C++ component-oriented game engine. It can be used as a tool for creating 2D windows or mobile games. It is implemented as an [OpenFrameworks](http://openframeworks.cc) addon. 
+
+## Platforms
+* Windows
+* Linux
+* Android
 
 ## Features
-* Transformation components
+* Scene graph
+* ECS pattern (messaging, generic attributes, flags, behaviors, components)
 * Animations
 * Finite state machines
 * Goal-driven behavior components
 * Steering behaviors
 * Monte-Carlo tree search 
-* Path-finding
+* A* Path-finding
 * SQLite database
-* Easing functions
-* Networking for multiplayer
-* XML configuration
-* Binding to Lua scripting language
+* Custom networking protocol for multiplayer
+* XML and JSON parsers for certain components
+* Lua scripting language
 
+## Projects
+* <a href="https://github.com/dormantor/Hydroq" target="_blank">Hydroq</a>
+* <a href="https://github.com/dormantor/Paratrooper" target="_blank">Paratrooper clone</a>
+* <a href="https://github.com/dormantor/Arkanoid" target="_blank">Arkanoid clone</a>
 
 ## How to use it
 * [Tutorial](Docs/tutorial.md) - getting started
@@ -26,7 +37,7 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 
 ## Compatibility
 
-Works with OpenFrameworks 0.9.1
+Works with OpenFrameworks 0.9.8
 
 
 ## LICENSE and ATTRIBUTIONS

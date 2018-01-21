@@ -1,8 +1,10 @@
-#CogEngine tutorial
+CogEngine tutorial
+===================
 
 ## Installing CogEngine
+The simplest way is to install CogEngine as an Openframeworks addon. All includes will be generated automatically via the ProjectGenerator application.
 
-The simplest way to install CogEngine is to edit all *.sln files and set path to OpenFrameworks library (you can get OF here: http://openframeworks.cc/). Then you may open it in Visual Studio 2015 and compile it. In any case the MS Visual C++ Redistributable 2015 package is required to compile all projects, including OpenFrameworks.
+Preferred way for Windows is to edit all *.sln files and set path to OpenFrameworks library (you can get OF here: http://openframeworks.cc/). Then you may open it in Visual Studio 2017 and compile it, wherever it is located. In any case the MS Visual C++ Redistributable 2015 and 2017 package is required to compile all projects, including OpenFrameworks.
 
 Some projects may contain a data. In such case the data folder has to be copied into the bin directory after the compilation (Visual Studio has a script for it).
 
