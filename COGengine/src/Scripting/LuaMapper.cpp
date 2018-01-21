@@ -191,20 +191,23 @@ namespace Cog {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Trans>("Trans")
 			.addConstructor <void(*) (void)>()
-			.LUA_REGDATA(Trans, absPos)
-			.LUA_REGDATA(Trans, absRotation)
-			.LUA_REGDATA(Trans, absRotationCentroid)
-			.LUA_REGDATA(Trans, absScale)
-			.LUA_REGDATA(Trans, localPos)
-			.LUA_REGDATA(Trans, rotation)
-			.LUA_REGDATA(Trans, rotationCentroid)
-			.LUA_REGDATA(Trans, scale)
-			.LUA_REGDATA(Trans, absPos)
-			.LUA_REGFUNC(Trans, SetAbsAsLocal)
-			.LUA_REGFUNC(Trans, CalcAbsTransform)
-			.LUA_REGFUNC(Trans, CalcAngle)
-			.LUA_REGFUNC(Trans, SetRotationAsAngleToPosition)
+			.addData("absPos", &Trans::absPos)
+			.addData("absRotation", &Trans::absRotation)
+			.addData("absRotationCentroid", &Trans::absRotationCentroid)
+			.addData("absScale", &Trans::absScale)
+			.addData("localPos", &Trans::localPos)
+			.addFunction("GetLocalPos", &Trans::GetLocalPos)
+			.addData("rotation", &Trans::rotation)
+			.addData("rotationCentroid", &Trans::rotationCentroid)
+			.addData("scale", &Trans::scale)
+			.addFunction("GetScale", &Trans::GetScale)
+			.addData("absPos", &Trans::absPos)
+			.addFunction("SetAbsAsLocal", &Trans::SetAbsAsLocal)
+			.addFunction("CalcAbsTransform", &Trans::CalcAbsTransform)
+			.addFunction("CalcAngle", &Trans::CalcAngle)
+			.addFunction("SetRotationAsAngleToPosition", &Trans::SetRotationAsAngleToPosition)
 			.endClass();
+
 
 		// TransformEnt
 		luabridge::getGlobalNamespace(L)
@@ -304,6 +307,7 @@ namespace Cog {
 			.addConstructor<void(*)(void)>()
 			.addFunction("SubscribeForMessages", &BehaviorLua::SubscribeForMessagesLua)
 			.addFunction("SendMessage", &BehaviorLua::SendMessage)
+			.addFunction("SendMessageWithData", &BehaviorLua::SendMessageWithData)
 			.addCFunction("RegisterDelegate", &BehaviorLua::RegisterDelegateCt)
 			.addData("owner", &BehaviorLua::ownerLua)
 			.endClass();
@@ -314,7 +318,7 @@ namespace Cog {
 			.addConstructor<void(*)()>()
 			.addFunction("Load", &AttribAnimator::Load)
 			.endClass();
-			
+		
 
 		luabridge::getGlobalNamespace(L)
 			.deriveClass<Stage, Component>("Stage")
@@ -345,7 +349,9 @@ namespace Cog {
 			.addFunction("SetTransform", &Node::SetTransform)
 			.addFunction<Node* (Node::*)() const>("GetParent", &Node::GetParent)
 			.addProperty("root", &Node::GetRoot)
+			.addProperty("sceneRoot", &Node::GetSceneRoot)
 			.addFunction("GetRoot", &Node::GetRoot)
+			.addFunction("GetSceneRoot", &Node::GetSceneRoot)
 			.addFunction("RemoveFromParent", &Node::RemoveFromParent)
 			.addProperty("scene", &Node::GetScene)
 			.addFunction("GetScene", &Node::GetScene)
@@ -392,12 +398,16 @@ namespace Cog {
 			.addFunction("CogLogInfo", &FacadeLua::CogLogInfo)
 			.addFunction("CogSwitchBackToScene", &FacadeLua::CogSwitchBackToScene)
 			.addFunction("CogSwitchToScene", &FacadeLua::CogSwitchToScene)
+			.addFunction("CogPlaySound", &FacadeLua::CogPlaySound)
 			.addFunction("CogStopAllSounds", &FacadeLua::CogStopAllSounds)
 			.addFunction("CogPreloadXMLFile", &FacadeLua::CogPreloadXMLFile)
 			.addFunction("CogGetComponent_Stage", &FacadeLua::CogGetComponent<Stage>)
 			.addFunction("CogGetComponent_Resources", &FacadeLua::CogGetComponent<Resources>)
 			.addCFunction("CogRegisterBehaviorPrototype", &FacadeLua::CogRegisterBehaviorPrototypeCt);
 
+		luabridge::getGlobalNamespace(L)
+			.beginClass<MsgPayload>("MsgPayload")
+			.endClass();
 
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Msg>("Msg")

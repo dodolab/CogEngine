@@ -74,6 +74,14 @@ namespace Cog {
 		* Calculates local transformation matrix
 		*/
 		ofMatrix4x4 CalcMatrix();
+
+		ofVec3f& GetLocalPos() {
+			return localPos;
+		}
+
+		ofVec3f& GetScale() {
+			return scale;
+		}
 	};
 }// namespace
 

@@ -24,9 +24,9 @@ namespace Cog {
 		// identifier of the last sent message
 		ABYTE lastSentMsgId = 0;
 		// collection of not confirmed messages that will be re-sent repeatedly
-		map<ABYTE, spt<NetOutputMessage>> unconfirmedMessages;
+		map<ABYTE, RefCountedObjectPtr<NetOutputMessage>> unconfirmedMessages;
 		// collection of messages that will be sent during the next update cycle
-		vector<spt<NetOutputMessage>> messagesToSend;
+		vector<RefCountedObjectPtr<NetOutputMessage>> messagesToSend;
 		// indicator whether the client is marked as missing
 		bool postponed = false;
 	};
@@ -50,7 +50,7 @@ namespace Cog {
 		NetworkManager* network = nullptr;	// network communicator
 
 		// all peers mapped by their ids
-		map<ABYTE, spt<PeerContext>> peers;
+		map<ABYTE, RefCountedObjectPtr<PeerContext>> peers;
 		// number of sending cycles per second
 		float sendingFrequency = 10;
 		uint64 lastSendingTime = 0;
@@ -136,12 +136,12 @@ namespace Cog {
 		/**
 		* Pushes a message that will be sent with the next sending cycle
 		*/
-		void PushMessageForSending(spt<NetOutputMessage> msg);
+		void PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg);
 
 		/**
 		 * Pushes a message that will be sent directly to a given peer
 		 */
-		void PushMessageForSending(spt<NetOutputMessage> msg, int peerId);
+		void PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg, int peerId);
 
 		/**
 		* Closes the communication channel with a given peer
@@ -162,15 +162,15 @@ namespace Cog {
 		/** Update for communicating state */
 		void UpdateCommunicating(uint64 time);
 		/** Processes an incoming general message from a peer  */
-		void ProcessPeerMessage(spt<NetInputMessage> message, uint64 time);
+		void ProcessPeerMessage(RefCountedObjectPtr<NetInputMessage> message, uint64 time);
 		/** Processes an incoming update message from a peer  */
-		void ProcessUpdateMessage(spt<NetInputMessage> message, spt<PeerContext> peer);
+		void ProcessUpdateMessage(RefCountedObjectPtr<NetInputMessage> message, RefCountedObjectPtr<PeerContext> peer);
 
 
 		/**
 		* Sends queued messages and re-sends those that weren't still confirmed
 		*/
-		void SendMessages(uint64 time, spt<PeerContext> peer) const;
+		void SendMessages(uint64 time, RefCountedObjectPtr<PeerContext> peer) const;
 	};
 
 } // namespace

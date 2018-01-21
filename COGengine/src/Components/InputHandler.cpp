@@ -29,8 +29,8 @@ namespace Cog {
 			reqToHandle.touch->handlerNodeId = reqToHandle.owner->GetId();
 			reqToHandle.owner->SetState(StrId(STATE_HIT));
 
-			if (reqToHandle.handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(reqToHandle.touch)), reqToHandle.owner);
-			else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(reqToHandle.touch)), reqToHandle.owner, reqToHandle.handlerBehId);
+			if (reqToHandle.handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, new InputEvent(reqToHandle.touch), reqToHandle.owner);
+			else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, new InputEvent(reqToHandle.touch), reqToHandle.owner, reqToHandle.handlerBehId);
 
 			requests.clear();
 		}

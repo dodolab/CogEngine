@@ -47,6 +47,10 @@ namespace Cog {
 		Behavior::SendMessage(msg);
 	}
 
+	void BehaviorLua::SendMessageWithData(StrId msg, RefCountedObjectPtr<MsgPayload> data) {
+		Behavior::SendMessage(msg, data);
+	}
+
 	void BehaviorLua::SetOwnerLua() {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, reference);
 		LuaRef ref = LuaRef::fromStack(L, lua_gettop(L));

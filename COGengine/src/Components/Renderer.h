@@ -27,6 +27,7 @@ namespace Cog {
 
 	public:
 		Renderer() {
+			initPriority = InitPriority::MEDIUM;
 		}
 
 		void OnInit();

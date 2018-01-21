@@ -26,7 +26,7 @@ namespace Cog {
 		networkState = ClientState::DISCOVERING;
 	}
 
-	void NetworkClient::PushMessageForSending(spt<NetOutputMessage> msg) {
+	void NetworkClient::PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg) {
 
 		if (msg->IsUpdateSample() && msg->GetMsgTime() == 0) {
 			throw runtime_error("Update messages must have time configured");
@@ -46,7 +46,7 @@ namespace Cog {
 
 		if (network != nullptr) {
 			if (networkState == ClientState::COMMUNICATING) {
-				const auto msg = std::make_shared<NetOutputMessage>(0, this->clientId, NetMsgType::DISCONNECT);
+				const auto msg = new NetOutputMessage(0, this->clientId, NetMsgType::DISCONNECT);
 				network->SendUDPMessage(applicationId, msg);
 			}
 
@@ -95,7 +95,7 @@ namespace Cog {
 		if (CheckTime(lastBroadcastTime, absolute, broadcastingFrequency)) {
 			lastBroadcastTime = absolute;
 
-			const auto msg = std::make_shared<NetOutputMessage>(lastReceivedMsgId, 0, NetMsgType::DISCOVER_REQUEST);
+			const auto msg = new NetOutputMessage(lastReceivedMsgId, 0, NetMsgType::DISCOVER_REQUEST);
 
 			// send broadcast messsages to subnets 192.168, 10.16 and localhost
 			ofLogNotice("Network", "Broadcasting");
@@ -136,7 +136,7 @@ namespace Cog {
 		if (CheckTime(lastConnectingTime, absolute, connectingFrequency)) {
 			lastConnectingTime = absolute;
 			// send connection request. Client Id is 0 when not assigned yet, however in case of reconnect, the id is already set
-			const auto msg = std::make_shared<NetOutputMessage>(0, this->clientId, NetMsgType::CONNECT_REQUEST);
+			const auto msg = new NetOutputMessage(0, this->clientId, NetMsgType::CONNECT_REQUEST);
 			network->SendUDPMessage(applicationId, msg);
 		}
 
@@ -230,7 +230,7 @@ namespace Cog {
 		else if (!forConfirmationMessageIds.empty()) {
 			// send the rest confirmation messages separately
 			for (auto& acc : forConfirmationMessageIds) {
-				auto msg = std::make_shared<NetOutputMessage>(1, this->clientId, NetMsgType::ACCEPT);
+				auto msg = new NetOutputMessage(1, this->clientId, NetMsgType::ACCEPT);
 				msg->SetMsgTime(time);
 				msg->SetConfirmationId(acc);
 				network->SendUDPMessage(applicationId, msg);
@@ -241,13 +241,13 @@ namespace Cog {
 		else if (CheckTime(lastSendingTime, time, beepFrequency)) {
 			// if there is nothing to send, we have to send a beep message in order to have the server know we're still here
 			lastSendingTime = time;
-			auto msg = std::make_shared<NetOutputMessage>(1, this->clientId, NetMsgType::BEACON);
+			auto msg = new NetOutputMessage(1, this->clientId, NetMsgType::BEACON);
 			msg->SetMsgTime(time);
 			network->SendUDPMessage(applicationId, msg);
 		}
 	}
 
-	void NetworkClient::ProcessUpdateMessage(spt<NetInputMessage> message) {
+	void NetworkClient::ProcessUpdateMessage(RefCountedObjectPtr<NetInputMessage> message) {
 
 		if (message->IsReliable() && forConfirmationMessageIds.count(message->GetSyncId()) == 0) {
 			// got a reliable message that must be confirmed -> update collection of messages for acceptation

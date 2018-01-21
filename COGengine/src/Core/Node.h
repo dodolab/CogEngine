@@ -76,6 +76,13 @@ namespace Cog {
 		Node(string tag);
 
 		/**
+		 * Creates a new node
+		 * @param tag tag/name
+		 * @param mesh mesh of this node
+		 */
+		Node(string tag, spt<Mesh> mesh);
+
+		/**
 		* Creates a new node
 		* @param type object type {ROOT, SCENE, OBJECT}
 		* @param secondaryId secondary id
@@ -497,13 +504,13 @@ namespace Cog {
 		* @param key key of the attribute
 		* @param value reference
 		*/
-		template<class T> void AddAttr(StrId key, T value) {
+		template<class T> void AddAttr(StrId key, T value, bool isShared = false) {
 			if (HasAttr(key)) {
 				RemoveAttr(key, true);
 			}
 
-			attributes[key] = new AttrR<T>(key, value, this);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
+			attributes[key] = new AttrR<T>(key, value, this, isShared);
+			SendMessage(ACT_ATTR_CHANGED, new AttributeChangeEvent(key, AttrChangeType::ADD));
 		}
 
 		/**
@@ -511,13 +518,13 @@ namespace Cog {
 		* @param key key of the attribute
 		* @param value reference
 		*/
-		template<class T> bool AddAttrIfNotExists(StrId key, T value) {
+		template<class T> bool AddAttrIfNotExists(StrId key, T value, bool isShared = false) {
 			if (HasAttr(key)) {
 				return false;
 			}
 
-			attributes[key] = new AttrR<T>(key, value, this);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
+			attributes[key] = new AttrR<T>(key, value, this, isShared);
+			SendMessage(ACT_ATTR_CHANGED, new AttributeChangeEvent(key, AttrChangeType::ADD));
 			return true;
 		}
 
@@ -545,11 +552,11 @@ namespace Cog {
 			if (it != attributes.end()) {
 				AttrR<T>* attr = static_cast<AttrR<T>*>(it->second);
 				attr->SetValue(value);
-				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::MODIFY)));
+				SendMessage(ACT_ATTR_CHANGED, new AttributeChangeEvent(key, AttrChangeType::MODIFY));
 			}
 			else {
 				AddAttr(key, value);
-				SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::ADD)));
+				SendMessage(ACT_ATTR_CHANGED, new AttributeChangeEvent(key, AttrChangeType::ADD));
 			}
 		}
 
@@ -605,7 +612,7 @@ namespace Cog {
 		* @param action message action type
 		* @param data payload
 		*/
-		void SendMessage(StrId action, spt<MsgPayload> data);
+		void SendMessage(StrId action, RefCountedObjectPtr<MsgPayload> data);
 
 
 	public:

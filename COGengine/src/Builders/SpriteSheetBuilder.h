@@ -35,6 +35,9 @@ namespace Cog {
 
 		void LoadFromXml(xml_node& xml, string img, string atlasName);
 
+		void LoadFromJson(jsonxx::Object& obj, string img, string atlasName);
+
+
 		/**
 		 * Appends a sprite atlas
 		 */

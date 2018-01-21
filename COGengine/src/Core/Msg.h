@@ -4,6 +4,7 @@
 #include "StrId.h"
 #include "Definitions.h"
 #include "Constants.h"
+#include "RefCountedObject.h"
 
 
 namespace Cog {
@@ -64,7 +65,7 @@ namespace Cog {
 		// node that is connected with this message
 		Node* contextNode = nullptr;
 		// data payload
-		spt<MsgPayload> data = spt<MsgPayload>();
+		RefCountedObjectPtr<MsgPayload> data = RefCountedObjectPtr<MsgPayload>();
 		
 	public:
 
@@ -84,7 +85,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			int recipientId, TunnelingMode tunnelingMode, Node* contextNode, spt<MsgPayload> data);
+			int recipientId, TunnelingMode tunnelingMode, Node* contextNode, RefCountedObjectPtr<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -97,7 +98,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			TunnelingMode tunnelingMode, Node* contextNode, spt<MsgPayload> data);
+			TunnelingMode tunnelingMode, Node* contextNode, RefCountedObjectPtr<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -111,7 +112,7 @@ namespace Cog {
 		* @param data data payload
 		*/
 		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, 
-			TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, spt<MsgPayload> data);
+			TunnelingMode tunnelingMode, bool sendToWholeTree, Node* contextNode, RefCountedObjectPtr<MsgPayload> data);
 
 		/**
 		* Creates a new message
@@ -122,7 +123,7 @@ namespace Cog {
 		* @param contextNode node that is connected with this message
 		* @param data data payload
 		*/
-		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, spt<MsgPayload> data);
+		Msg(StrId action, MsgObjectType senderType, int senderId, MsgObjectType recipientType, Node* contextNode, RefCountedObjectPtr<MsgPayload> data);
 
 
 		~Msg() {
@@ -276,8 +277,8 @@ namespace Cog {
 		* Gets data payload
 		*/
 		template <class T>
-		spt<T> GetDataPtr() {
-			return static_pointer_cast<T>(data);
+		RefCountedObjectPtr<T> GetDataPtr() {
+			return static_cast<RefCountedObjectPtr<T>>(data);
 		}
 	};
 

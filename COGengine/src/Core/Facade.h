@@ -25,6 +25,7 @@ namespace Cog {
 	class GeneralAnim;
 	class AttribAnim;
 	class AsyncProcess;
+	class SpriteSheet;
 
 	ComponentStorage* CogGetComponentStorage();
 
@@ -98,7 +99,9 @@ namespace Cog {
 	extern spt<GeneralAnim> CogGetAnimation(string name);
 	extern spt<SheetAnim> CogGetSheetAnimation(string name);
 	extern spt<AttribAnim> CogGetAttribAnimation(string name);
-		
+	extern spt<SpriteSheet> CogGetSpriteSheet(string name);
+	extern void CogStoreSpriteSheet(spt<SpriteSheet> sheet);
+
 	extern void CogStoreAnimation(spt<SheetAnim> anim);
 	extern Settings& CogGetGlobalSettings();
 	extern Settings& CogGetDefaultSettings();

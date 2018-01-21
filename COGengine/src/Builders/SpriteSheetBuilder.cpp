@@ -21,6 +21,24 @@ namespace Cog {
 		this->totalFrames = xml.attribute("frames").as_int(1);
 	}
 
+	void SpriteSheetBuilder::LoadFromJson(jsonxx::Object& obj, string img, string atlasName) {
+		this->name = obj.get<jsonxx::String>("name", atlasName);
+		this->atlas = CogGet2DImage(img);
+
+		if (obj.has<jsonxx::Number>("offset_px_x")) {
+			this->offsetPxX = obj.get<jsonxx::Number>("offset_px_x", 0);
+			this->offsetPxY = obj.get<jsonxx::Number>("offset_px_y", 0);
+		}
+		else {
+			this->offsetBlockX = obj.get<jsonxx::Number>("offset_x", 0);
+			this->offsetBlockY = obj.get<jsonxx::Number>("offset_y", 0);
+		}
+
+		this->spriteWidth = obj.get<jsonxx::Number>("sprite_width", 0);
+		this->spriteHeight = obj.get<jsonxx::Number>("sprite_height", 0);
+		this->totalFrames = obj.get<jsonxx::Number>("frames", 1);
+	}
+
 	SpriteSheet* SpriteSheetBuilder::BuildAndReset() {
 		auto output = Build();
 		InitValues();

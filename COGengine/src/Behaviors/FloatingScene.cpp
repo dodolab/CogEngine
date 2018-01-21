@@ -32,7 +32,7 @@ namespace Cog {
 			}
 			else if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
 
-				spt<InputEvent> evt = msg.GetDataPtr<InputEvent>();
+				auto evt = msg.GetDataPtr<InputEvent>();
 
 				// handle only the first touch, because the message will be send
 				// twice with each touch separately

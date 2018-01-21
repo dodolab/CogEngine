@@ -233,6 +233,14 @@ namespace Cog {
 		return static_pointer_cast<AttribAnim>(CogGetAnimation(name));
 	}
 
+	spt<SpriteSheet> CogGetSpriteSheet(string name) {
+		return ofxCogEngine::GetInstance().resources->GetSpriteSheet(name);
+	}
+	
+	void CogStoreSpriteSheet(spt<SpriteSheet> sheet) {
+		ofxCogEngine::GetInstance().resources->StoreSpriteSheet(sheet);
+	}
+
 	void CogStoreAnimation(spt<SheetAnim> anim) {
 		ofxCogEngine::GetInstance().resources->StoreAnimation(anim);
 	}

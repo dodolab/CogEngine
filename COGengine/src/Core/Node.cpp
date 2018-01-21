@@ -13,6 +13,10 @@ namespace Cog {
 		if (!tag.empty()) SetTag(tag);
 	}
 
+	Node::Node(string tag, spt<Mesh> mesh) : Node(tag) {
+		this->mesh = mesh;
+	}
+
 	Node::Node(stenum type, int networkId, string tag) : type(type), networkId(networkId), id(idCounter++), transform(0, 0) {
 		if (!tag.empty()) SetTag(tag);
 	}
@@ -188,7 +192,7 @@ namespace Cog {
 		if (it != attributes.end()) {
 			Attr* attr = it->second;
 			attributes.erase(it);
-			SendMessage(ACT_ATTR_CHANGED, spt<AttributeChangeEvent>(new AttributeChangeEvent(key, AttrChangeType::REMOVE)));
+			SendMessage(ACT_ATTR_CHANGED, new AttributeChangeEvent(key, AttrChangeType::REMOVE));
 
 			if (erase) delete attr;
 			return true;
@@ -263,17 +267,17 @@ namespace Cog {
 
 	void Node::SetState(unsigned state) {
 		GetStates().SetState(state);
-		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SET, state)));
+		SendMessage(ACT_STATE_CHANGED, new FlagChangeEvent(FlagChangeType::SET, state));
 	}
 
 	void Node::ResetState(unsigned state) {
 		GetStates().ResetState(state);
-		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::RESET, state)));
+		SendMessage(ACT_STATE_CHANGED, new FlagChangeEvent(FlagChangeType::RESET, state));
 	}
 
 	void Node::SwitchState(unsigned state1, unsigned state2) {
 		GetStates().SwitchState(state1, state2);
-		SendMessage(ACT_STATE_CHANGED, spt<FlagChangeEvent>(new FlagChangeEvent(FlagChangeType::SWITCH, state1, state2)));
+		SendMessage(ACT_STATE_CHANGED, new FlagChangeEvent(FlagChangeType::SWITCH, state1, state2));
 	}
 
 	void* Node::GetAttrPtr(StrId key) {
@@ -384,7 +388,7 @@ namespace Cog {
 		childrenToRemove.clear();
 	}
 
-	void Node::SendMessage(StrId action, spt<MsgPayload> data) {
+	void Node::SendMessage(StrId action, RefCountedObjectPtr<MsgPayload> data) {
 		if (scene != nullptr) {
 			auto msg = Msg(action, MsgObjectType::NODE_ACTUAL, this->id, MsgObjectType::SUBSCRIBERS, this, data);
 			scene->SendMessage(msg);

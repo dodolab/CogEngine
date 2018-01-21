@@ -74,7 +74,7 @@ namespace Cog {
 		* @param applicationId application identifier
 		* @param msg msg to send
 		*/
-		void SendTCPMessage(ABYTE applicationId, spt<NetOutputMessage> msg);
+		void SendTCPMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg);
 
 		/**
 		* Sends TCP message
@@ -98,7 +98,7 @@ namespace Cog {
 		* and only the last message will be returned; this is appropriate for the case where this method is called only
 		* several times per second, so it is necessary to keep all buffers empty, otherwise they begin to fulfill the buffer
 		*/
-		spt<NetInputMessage> ReceiveTCPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer);
+		RefCountedObjectPtr<NetInputMessage> ReceiveTCPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer);
 
 		/**
 		* Closes TCP
@@ -144,7 +144,7 @@ namespace Cog {
 		* @param applicationId application identifier
 		* @param msg msg to send
 		*/
-		void SendUDPMessage(ABYTE applicationId, spt<NetOutputMessage> msg);
+		void SendUDPMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg);
 
 		/**
 		* Sends UDP message
@@ -168,7 +168,7 @@ namespace Cog {
 		* and only the last message will be returned; this is appropriate for the case where this method is called only
 		* several times per second, so it is necessary to keep all buffers empty, otherwise they begin to fulfill the buffer
 		*/
-		spt<NetInputMessage> ReceiveUDPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer);
+		RefCountedObjectPtr<NetInputMessage> ReceiveUDPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer);
 
 		/**
 		* Closes UDP
@@ -187,7 +187,7 @@ namespace Cog {
 		/**
 		* Prepares message for sending
 		*/
-		NetWriter* PrepareMessage(ABYTE applicationId, spt<NetOutputMessage> msg);
+		NetWriter* PrepareMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg);
 
 		/**
 		* Prepares message for sending by copying the writer and storing application id
@@ -202,7 +202,7 @@ namespace Cog {
 		/**
 		* Tries to receive message
 		*/
-		spt<NetInputMessage> ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, ConnectionType connectionType);
+		RefCountedObjectPtr<NetInputMessage> ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, ConnectionType connectionType);
 
 	};
 

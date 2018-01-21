@@ -53,6 +53,7 @@ namespace Cog {
 		static void CogLogInfo(string module, string message);
 		static void CogLogDebug(string module, string message);
 		
+		static void CogPlaySound(string snd);
 		static void CogStopAllSounds();
 
 		// =================== Resources =========================

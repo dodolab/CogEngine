@@ -133,10 +133,10 @@ namespace Cog {
 		from->GetSceneNode()->SetRunningMode(RUNMODE_RUNNING);
 		// send message to both scenes
 		auto msgFrom = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(), 
-			spt<CommonEvent<SceneSwitchInfo>>(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(finishOld))));
+			(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(finishOld))));
 
 		auto msgTo = Msg(ACT_SCENE_SWITCHED, MsgObjectType::COMPONENT, this->id, MsgObjectType::SUBSCRIBERS, to->GetSceneNode(),
-			spt<CommonEvent<SceneSwitchInfo>>(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(false)))); // always false
+			(new CommonEvent<SceneSwitchInfo>(SceneSwitchInfo(false)))); // always false
 
 		to->SendMessage(msgTo);
 		from->SendMessage(msgFrom);

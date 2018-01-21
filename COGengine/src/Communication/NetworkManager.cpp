@@ -23,7 +23,7 @@ namespace Cog {
 		tcpBufferStream = new NetReader(bufferSize);
 	}
 
-	void NetworkManager::SendTCPMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
+	void NetworkManager::SendTCPMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg) {
 		NetWriter* writer = PrepareMessage(applicationId, msg);
 		auto buffer = writer->GetBuffer();
 		tcpManager.Send((char*)buffer, writer->GetUsedBites() / 8);
@@ -41,7 +41,7 @@ namespace Cog {
 		return ReceiveMessage(applicationId, timeoutSec, ConnectionType::CONN_TCP);
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveTCPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
+	RefCountedObjectPtr<NetInputMessage> NetworkManager::ReceiveTCPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
 		return ReceiveMessage(applicationId, timeoutSec, emptyBuffer, ConnectionType::CONN_TCP);
 	}
 
@@ -63,7 +63,7 @@ namespace Cog {
 		udpBufferStream = new NetReader(bufferSize);
 	}
 
-	void NetworkManager::SendUDPMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
+	void NetworkManager::SendUDPMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg) {
 		NetWriter* writer = PrepareMessage(applicationId, msg);
 		auto buffer = writer->GetBuffer();
 		udpManager.Send((char*)buffer, writer->GetUsedBites() / 8);
@@ -81,11 +81,11 @@ namespace Cog {
 		return ReceiveMessage(applicationId, timeoutSec, ConnectionType::CONN_UDP);
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveUDPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
+	RefCountedObjectPtr<NetInputMessage> NetworkManager::ReceiveUDPMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer) {
 		return ReceiveMessage(applicationId, timeoutSec, emptyBuffer, ConnectionType::CONN_UDP);
 	}
 
-	NetWriter* NetworkManager::PrepareMessage(ABYTE applicationId, spt<NetOutputMessage> msg) {
+	NetWriter* NetworkManager::PrepareMessage(ABYTE applicationId, RefCountedObjectPtr<NetOutputMessage> msg) {
 		NetWriter* writer = new NetWriter(msg->GetMessageLength() + 1);
 		// write application id and the content
 		writer->WriteByte(applicationId);
@@ -136,13 +136,13 @@ namespace Cog {
 		}
 	}
 
-	spt<NetInputMessage> NetworkManager::ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, ConnectionType connectionType) {
+	RefCountedObjectPtr<NetInputMessage> NetworkManager::ReceiveMessage(ABYTE applicationId, int timeoutSec, bool emptyBuffer, ConnectionType connectionType) {
 		auto bufferStream = connectionType == ConnectionType::CONN_TCP ? tcpBufferStream : udpBufferStream;
 
 		auto time = ofGetElapsedTimeMillis();
 		int timeOutMillis = timeoutSec * 1000;
 
-		spt<NetInputMessage> receivedMsg = spt<NetInputMessage>();
+		RefCountedObjectPtr<NetInputMessage> receivedMsg = RefCountedObjectPtr<NetInputMessage>();
 
 		while (true) {
 
@@ -159,14 +159,14 @@ namespace Cog {
 
 			if (bytesBuff == -1) {
 				// error, return an empty messge
-				return spt<NetInputMessage>();
+				return receivedMsg;
 			}
 
 			if (bytesBuff > 0 && bufferStream->ReadByte() == applicationId) {
 				// size of content (minus just read byte)
 				unsigned int size = bytesBuff - 1;
 
-				receivedMsg = std::make_shared<NetInputMessage>(size);
+				receivedMsg = new NetInputMessage(size);
 				receivedMsg->LoadFromStream(bufferStream);
 				string ipAddress = "";
 				int port = 0;
@@ -183,7 +183,7 @@ namespace Cog {
 			}
 
 			if ((ofGetElapsedTimeMillis() - time) > timeOutMillis) {
-				return spt<NetInputMessage>();
+				return RefCountedObjectPtr<NetInputMessage>();
 			}
 		}
 	}

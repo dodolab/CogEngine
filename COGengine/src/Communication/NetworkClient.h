@@ -52,7 +52,7 @@ namespace Cog {
 		ABYTE lastSentMsgId = 0;
 
 		// collection of messages that will be sent in the next update
-		vector<spt<NetOutputMessage>> messagesToSend;
+		vector<RefCountedObjectPtr<NetOutputMessage>> messagesToSend;
 
 		// number of broadcasts per second
 		float broadcastingFrequency = 0.5f;
@@ -226,7 +226,7 @@ namespace Cog {
 		/**
 		* Pushes a message that will be sent with the next sending cycle
 		*/
-		void PushMessageForSending(spt<NetOutputMessage> msg);
+		void PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg);
 
 		/**
 		* Closes the connection
@@ -243,7 +243,7 @@ namespace Cog {
 		/** Update for communicating state */
 		void UpdateCommunicating(uint64 absolute);
 		/** Processes a message from the host */
-		void ProcessUpdateMessage(spt<NetInputMessage> message);
+		void ProcessUpdateMessage(RefCountedObjectPtr<NetInputMessage> message);
 
 		/**
 		* Sends queued messages and re-sends those that weren't still confirmed

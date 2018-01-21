@@ -50,14 +50,14 @@ namespace Cog {
 						// send messages according to actual state
 
 						if (hitStarted) {
-							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)));
-							else SendMessageToBehavior(ACT_OBJECT_HIT_ENDED, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_ENDED, new InputEvent(touch));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_ENDED, new InputEvent(touch), handlerBehId);
 						}
 						else {
 							// hit has been lost
 							hitLost = true;
-							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_LOST, spt<InputEvent>(new InputEvent(touch)));
-							else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_LOST, new InputEvent(touch));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_LOST, new InputEvent(touch), handlerBehId);
 						}
 
 						if (hitStarted && hitStartedTouchId == touch->touchId) {
@@ -77,13 +77,13 @@ namespace Cog {
 						if (hitLost) {
 							hitLost = false;
 							// hit started, lost and started again
-							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(touch)));
-							else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_STARTED, new InputEvent(touch));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_STARTED, new InputEvent(touch), handlerBehId);
 						}
 						else {
 							// hit started but not on first touch
-							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_OVER, spt<InputEvent>(new InputEvent(touch)));
-							else SendMessageToBehavior(ACT_OBJECT_HIT_OVER, spt<InputEvent>(new InputEvent(touch)), handlerBehId);
+							if (handlerBehId == -1) SendMessage(ACT_OBJECT_HIT_OVER, new InputEvent(touch));
+							else SendMessageToBehavior(ACT_OBJECT_HIT_OVER, new InputEvent(touch), handlerBehId);
 						}
 					}
 				}

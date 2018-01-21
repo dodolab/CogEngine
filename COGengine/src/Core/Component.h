@@ -12,7 +12,7 @@ namespace Cog {
 	* Initialization priority for components
 	*/
 	enum class InitPriority {
-		LOW = 0,	
+		LOW = 0,
 		MEDIUM = 1,		
 		HIGH = 2,
 		HIGHEST = 3
@@ -62,11 +62,11 @@ namespace Cog {
 		/** Sends message with custom context node to subscribers listening to selected action */
 		void SendMessage(StrId action, Node* contextNode) const;
 		/** Sends message with payload to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgPayload> data) const;
+		void SendMessage(StrId action, RefCountedObjectPtr<MsgPayload> data) const;
 		/** Sends message with payload and custom context node to subscribers listening to selected action */
-		void SendMessage(StrId action, spt<MsgPayload> data, Node* contextNode) const;
+		void SendMessage(StrId action, RefCountedObjectPtr<MsgPayload> data, Node* contextNode) const;
 		/** Sends message with payload and custom context node to recipient with selected id */
-		void SendMessageToBehavior(StrId action, spt<MsgPayload> data, Node* contextNode, int recipientId) const;
+		void SendMessageToBehavior(StrId action, RefCountedObjectPtr<MsgPayload> data, Node* contextNode, int recipientId) const;
 	};
 
 }// namespace

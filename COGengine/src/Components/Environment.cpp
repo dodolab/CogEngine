@@ -73,7 +73,7 @@ namespace Cog {
 
 		// send message that screen has been changed
 		if (ofxCogEngine::GetInstance().stage->GetActualScene() != nullptr) {
-			SendMessage(ACT_SCREEN_CHANGED, spt<ValueChangeEvent<Vec2i>>(new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize())));
+			SendMessage(ACT_SCREEN_CHANGED, new ValueChangeEvent<Vec2i>(originalSize, GetScreenSize()));
 		}
 	}
 

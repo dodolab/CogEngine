@@ -2,6 +2,7 @@
 
 #include "Definitions.h"
 #include "StrId.h"
+#include "RefCountedObject.h"
 
 namespace Cog {
 
@@ -13,8 +14,8 @@ namespace Cog {
 	/**
 	* Abstract class for all payloads
 	*/
-	class MsgPayload {
-
+	class MsgPayload : public RefCountedObject {
+		
 	};
 
 	/**

@@ -22,7 +22,7 @@ namespace Cog {
 		initialized = true;
 	}
 
-	void NetworkHost::PushMessageForSending(spt<NetOutputMessage> msg) {
+	void NetworkHost::PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg) {
 		if (this->GetPeersNum() > 0) {
 			if (msg->IsUpdateSample() && msg->GetMsgTime() == 0) {
 				throw runtime_error("Update messages must have time configured");
@@ -34,7 +34,7 @@ namespace Cog {
 		}
 	}
 
-	void NetworkHost::PushMessageForSending(spt<NetOutputMessage> msg, int peerId) {
+	void NetworkHost::PushMessageForSending(RefCountedObjectPtr<NetOutputMessage> msg, int peerId) {
 		if (this->GetPeersNum() > 0) {
 			if (msg->IsUpdateSample() && msg->GetMsgTime() == 0) {
 				throw runtime_error("Update messages must have time configured");
@@ -68,7 +68,7 @@ namespace Cog {
 		if (!initialized) throw runtime_error("Host is not initialized!");
 
 		const int newId = peerCounter++;
-		auto newPeerCtx = std::make_shared<PeerContext>();
+		auto newPeerCtx = new PeerContext();
 		newPeerCtx->peerIp = ip;
 		newPeerCtx->peerPort = port;
 		newPeerCtx->id = newId;
@@ -102,7 +102,7 @@ namespace Cog {
 
 					// use listener to answer this message
 					network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
-					const auto response = std::make_shared<NetOutputMessage>(1, 0, NetMsgType::DISCOVER_RESPONSE);
+					const auto response = new NetOutputMessage(1, 0, NetMsgType::DISCOVER_RESPONSE);
 					network->SendUDPMessage(applicationId, response);
 				}
 				else if (message->GetMsgType() == NetMsgType::CONNECT_REQUEST) {
@@ -116,7 +116,7 @@ namespace Cog {
 
 					// send confirmation message
 					network->SetupUDPSender(message->GetSourceIp(), message->GetSourcePort(), true);
-					const auto msg = std::make_shared<NetOutputMessage>(1, newPeerId, NetMsgType::CONNECT_RESPONSE);
+					const auto msg = new NetOutputMessage(1, newPeerId, NetMsgType::CONNECT_RESPONSE);
 					network->SendUDPMessage(applicationId, msg);
 				}
 			}
@@ -160,7 +160,7 @@ namespace Cog {
 		}
 	}
 
-	void NetworkHost::SendMessages(uint64 time, spt<PeerContext> ctx) const {
+	void NetworkHost::SendMessages(uint64 time, RefCountedObjectPtr<PeerContext> ctx) const {
 
 		network->SetupUDPSender(ctx->peerIp, ctx->peerPort, true);
 
@@ -194,7 +194,7 @@ namespace Cog {
 		}
 	}
 
-	void NetworkHost::ProcessPeerMessage(spt<NetInputMessage> message, uint64 time) {
+	void NetworkHost::ProcessPeerMessage(RefCountedObjectPtr<NetInputMessage> message, uint64 time) {
 
 		auto peer = peers.find(message->GetPeerId());
 		if (peer != peers.end()) {
@@ -214,7 +214,7 @@ namespace Cog {
 			else if (type == NetMsgType::CONNECT_REQUEST) {
 				ofLogNotice("Network", "Peer %s is reconnecting", message->GetSourceIp().c_str());
 				peerCtx->lastReceivedMsgTime = time;
-				const auto msg = std::make_shared<NetOutputMessage>(1, peerCtx->id, NetMsgType::CONNECT_RESPONSE);
+				const auto msg = new NetOutputMessage(1, peerCtx->id, NetMsgType::CONNECT_RESPONSE);
 				// notify other components
 				SendMessage(ACT_NET_CONNECTED, peerCtx);
 				network->SetupUDPSender(peerCtx->peerIp, peerCtx->peerPort, true);
@@ -227,7 +227,7 @@ namespace Cog {
 		}
 	}
 
-	void NetworkHost::ProcessUpdateMessage(spt<NetInputMessage> message, spt<PeerContext> peer) {
+	void NetworkHost::ProcessUpdateMessage(RefCountedObjectPtr<NetInputMessage> message, RefCountedObjectPtr<PeerContext> peer) {
 		const ABYTE acceptedMsgId = message->GetConfirmationId();
 		if (acceptedMsgId != 0) {
 			// got id of a confirmation message

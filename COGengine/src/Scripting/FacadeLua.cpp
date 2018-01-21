@@ -101,6 +101,10 @@ namespace Cog {
 		Cog::CogLogDebug(module.c_str(), message.c_str());
 	}
 
+	void FacadeLua::CogPlaySound(string sound) {
+		Cog::CogPlaySound(CogGetSound(sound));
+	}
+
 	void FacadeLua::CogStopAllSounds() {
 		Cog::CogStopAllSounds();
 	}

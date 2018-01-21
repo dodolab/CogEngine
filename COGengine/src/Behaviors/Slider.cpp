@@ -55,7 +55,7 @@ namespace Cog {
 				if (msg.HasAction(ACT_OBJECT_HIT_OVER)) {
 					
 					// set value according to the position of the mouse
-					spt<InputEvent> evt = msg.GetDataPtr<InputEvent>();
+					auto evt = msg.GetDataPtr<InputEvent>();
 					auto image = body->GetMesh<Image>();
 
 					int width = image->GetWidth();
@@ -71,7 +71,7 @@ namespace Cog {
 
 				}
 				else if (msg.HasAction(ACT_ATTR_CHANGED)) {
-					spt<AttributeChangeEvent> changeEvt = msg.GetDataPtr<AttributeChangeEvent>();
+					auto changeEvt = msg.GetDataPtr<AttributeChangeEvent>();
 					if (changeEvt->attribute == ATTR_SLIDER_VALUE) {
 						int percentage = owner->GetAttr<int>(ATTR_SLIDER_VALUE);
 						SetValue(percentage);

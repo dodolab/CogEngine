@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Behavior.h"
+#include "MsgPayloads.h"
 
 namespace luabridge {
 	struct lua_State;
@@ -30,6 +31,8 @@ namespace Cog {
 		int RegisterDelegateCt(luabridge::lua_State* L);
 
 		void SendMessage(StrId msg);
+
+		void SendMessageWithData(StrId msg, RefCountedObjectPtr<MsgPayload> data);
 
 		void SetOwnerLua();
 
