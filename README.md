@@ -26,6 +26,8 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 * XML and JSON parsers for certain components
 * Lua scripting language
 
+![mario](Docs/scene_xml.jpg)
+
 ## Projects
 * <a href="https://github.com/dormantor/Hydroq" target="_blank">Hydroq</a>
 * <a href="https://github.com/dormantor/Paratrooper" target="_blank">Paratrooper clone</a>
@@ -45,8 +47,16 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 
 ## Component Architecture Example
 
+Scene
+
 ![scene1](Docs/scene_ex1.jpg)
+
+Objects
+
 ![scene2](Docs/scene_ex2.jpg)
+
+Component architecture
+
 ![scene3](Docs/scene_ex3.jpg)
 
 ## Compatibility
