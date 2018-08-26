@@ -7,6 +7,8 @@ ofxCogEngine
 
 CogEngine stands for C++ component-oriented game engine. It can be used as a tool for creating 2D windows or mobile games. It is implemented as an [OpenFrameworks](http://openframeworks.cc) addon. 
 
+**Budget**: over 600 working hours
+
 ## Platforms
 * Windows
 * Linux
