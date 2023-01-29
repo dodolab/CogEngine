@@ -30,10 +30,25 @@ CogEngine stands for C++ component-oriented game engine. It can be used as a too
 
 ![mario](Docs/scene_xml.jpg)
 
+
 ## Projects
-* <a href="https://github.com/dormantor/Hydroq" target="_blank">Hydroq</a>
-* <a href="https://github.com/dormantor/Paratrooper" target="_blank">Paratrooper clone</a>
-* <a href="https://github.com/dormantor/Arkanoid" target="_blank">Arkanoid clone</a>
+- **Hydroq**
+  - RTS game with Monte Carlo AI
+  - available [here](https://github.com/dodolab/Hydroq)
+  - !!only works with the version 0.2 of this engine ([link](https://github.com/dodolab/CogEngine/releases/tag/0.2))
+
+![logo](Docs/Examples/hydroq.png)
+
+- **Arkanoid clone**
+  - included in the Example folder 
+
+![logo](Examples/Arkanoid/Data/screenshot.png)
+
+- **Paratrooper clone**
+  - included in the Example folder
+
+![logo](Examples/Paratrooper/Data/screenshot.png)
+
 
 ## How to use it
 * [Tutorial](Docs/tutorial.md) - getting started
@@ -67,6 +82,5 @@ Works with OpenFrameworks 0.9.8
 
 
 ## LICENSE and ATTRIBUTIONS
-
-ofxCogEngine is made available under the [MIT](http://opensource.org/licenses/MIT) license.
-ofxCogEngine bundles catch framework, lua scripting language, luabridge binder, sqlite and following OpenFrameworks addons: ofxNetwork, ofxSQLite, ofxTextLabel, ofxXmlSettings
+- ofxCogEngine is made available under the [MIT](http://opensource.org/licenses/MIT) license.
+- ofxCogEngine bundles catch framework, lua scripting language, luabridge binder, sqlite and following OpenFrameworks addons: ofxNetwork, ofxSQLite, ofxTextLabel, ofxXmlSettings
